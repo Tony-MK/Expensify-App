@@ -165,7 +165,7 @@ const MapView = forwardRef<MapViewHandle, ComponentProps>(
             }),
             [mapRef],
         );
-        
+
         return (
             <>
                 {!isOffline && Boolean(accessToken) && Boolean(currentPosition) ? (
@@ -181,7 +181,7 @@ const MapView = forwardRef<MapViewHandle, ComponentProps>(
                             mapboxAccessToken={accessToken}
                             // Issue #31665 - AdHoc environments implemented the 'script-src' content security policy (CSP),
                             // which the worker will violate. Hence, we will need to fetch a CSP safe version of the worker.
-                            workerUrl={CONFIG.ENVIRONMENT === CONST.ENVIRONMENT.ADHOC ? `https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl-csp-worker.js` : undefined }
+                            workerUrl={CONFIG.ENVIRONMENT === CONST.ENVIRONMENT.ADHOC ? `https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl-csp-worker.js` : undefined}
                             initialViewState={{
                                 longitude: currentPosition?.longitude,
                                 latitude: currentPosition?.latitude,
