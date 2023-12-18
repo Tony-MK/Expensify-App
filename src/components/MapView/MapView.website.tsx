@@ -177,9 +177,11 @@ const MapView = forwardRef<MapViewHandle, ComponentProps>(
                         <Map
                             onDrag={() => setUserInteractedWithMap(true)}
                             ref={setRef}
-                            mapLib={mapboxgl}
+                            mapLib={CONFIG.ENVIRONMENT !== CONST.ENVIRONMENT.ADHOC ? require('mapbox-gl/dist/mapbox-gl-csp') : mapboxgl}
                             mapboxAccessToken={accessToken}
-                            workerUrl={CONFIG.ENVIRONMENT === CONST.ENVIRONMENT.ADHOC ? `https://api.mapbox.com/mapbox-gl-js/v${mapboxgl.version}/mapbox-gl-csp-worker.js` : undefined}
+                            // Issue #31665 - AdHoc environments implemented the 'script-src' content security policy (CSP),
+                            // which the worker will violate. Hence, we will need to fetch a CSP safe version of the worker.
+                            workerClass={CONFIG.ENVIRONMENT !== CONST.ENVIRONMENT.ADHOC ? require('mapbox-gl/dist/mapbox-gl-csp-worker') : null}
                             initialViewState={{
                                 longitude: currentPosition?.longitude,
                                 latitude: currentPosition?.latitude,

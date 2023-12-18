@@ -169,6 +169,14 @@ const webpackConfig = ({envFile = '.env', platform = 'web'}) => ({
                     },
                 ],
             },
+
+            // Load CSP Safe Mapbox Workers Scripts
+            {
+                test: /mapbox-gl-csp-worker\.js$/,
+                exclude: /node_modules/,
+                type: 'asset',
+            },
+
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],

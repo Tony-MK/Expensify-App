@@ -32,7 +32,7 @@ module.exports = (env = {}) =>
 
         const config = merge(baseConfig, {
             mode: 'development',
-            devtool: 'eval-source-map',
+            devtool: 'source-map',
             devServer: {
                 static: {
                     directory: path.join(__dirname, '../../dist'),
@@ -44,14 +44,14 @@ module.exports = (env = {}) =>
                 ...proxySettings,
                 historyApiFallback: true,
                 port,
-                host: 'dev.new.expensify.com',
-                server: {
-                    type: 'https',
-                    options: {
-                        key: path.join(__dirname, 'key.pem'),
-                        cert: path.join(__dirname, 'certificate.pem'),
-                    },
-                },
+                // host: 'dev.new.expensify.com',
+                // server: {
+                //     type: 'https',
+                //     options: {
+                //         key: path.join(__dirname, 'key.pem'),
+                //         cert: path.join(__dirname, 'certificate.pem'),
+                //     },
+                // },
             },
             plugins: [
                 new DefinePlugin({

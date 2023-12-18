@@ -25,6 +25,7 @@ module.exports = (env) => {
 
     const mainProcessConfig = {
         mode: 'production',
+        devtool: 'source-map', // Added
         name: 'desktop-main',
         target: 'electron-main',
         entry: {
