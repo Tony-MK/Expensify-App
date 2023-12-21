@@ -48,6 +48,9 @@ function removeInvisibleCharacters(value: string): string {
 
     // Replace all non-breaking spaces with newlines
     result = result.replace(/\u00A0/g, '\n');
+    
+    // Remove all Hangul Filler characters
+    result = result.replace(/\u3164/g, '');
 
     // Remove characters from the (Cf) category that are not used for emojis
     result = result.replace(/[\u200E-\u200F]/g, '');
