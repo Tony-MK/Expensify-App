@@ -131,7 +131,7 @@ const FormProvider = forwardRef(
                 // Validate the input for html tags. It should supercede any other error
                 _.each(trimmedStringValues, (inputValue, inputID) => {
                     // If the input value is empty OR is non-string, we don't need to validate it for HTML tags
-                    if (!inputValue || !_.isString(inputValue)) {
+                    if (validateErrors[inputID] || !inputValue || !_.isString(inputValue)) {
                         return;
                     }
                     const foundHtmlTagIndex = inputValue.search(CONST.VALIDATE_FOR_HTML_TAG_REGEX);
