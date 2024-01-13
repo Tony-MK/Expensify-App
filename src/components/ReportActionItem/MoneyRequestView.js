@@ -150,7 +150,7 @@ function MoneyRequestView({report, parentReport, parentReportActions, policyCate
     const cardProgramName = isCardTransaction ? CardUtils.getCardDescription(transactionCardID) : '';
 
     // Flags for allowing or disallowing editing a money request
-    const isSettled = ReportUtils.isSettled(moneyRequestReport.reportID);
+    const isSettled = ReportUtils.isSettled(moneyRequestReport.reportID) && (isDistanceRequest || !TransactionUtils.hasReceipt(transaction) || !TransactionUtils.isReceiptBeingScanned(transaction));
     const isCancelled = moneyRequestReport && moneyRequestReport.isCancelledIOU;
 
     // Used for non-restricted fields such as: description, category, tag, billable, etc.

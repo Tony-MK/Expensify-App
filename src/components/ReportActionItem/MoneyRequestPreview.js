@@ -160,7 +160,7 @@ function MoneyRequestPreview(props) {
     const hasFieldErrors = TransactionUtils.hasMissingSmartscanFields(props.transaction);
     const isDistanceRequest = TransactionUtils.isDistanceRequest(props.transaction);
     const isExpensifyCardTransaction = TransactionUtils.isExpensifyCardTransaction(props.transaction);
-    const isSettled = ReportUtils.isSettled(props.iouReport.reportID);
+    const isSettled = ReportUtils.isSettled(props.iouReport.reportID) && (isDistanceRequest || !isScanning);
     const isDeleted = lodashGet(props.action, 'pendingAction', null) === CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
 
     // Show the merchant for IOUs and expenses only if they are custom or not related to scanning smartscan
@@ -210,7 +210,7 @@ function MoneyRequestPreview(props) {
         }
 
         let message = translate('iou.cash');
-        if (ReportUtils.isPaidGroupPolicyExpenseReport(props.iouReport) && ReportUtils.isReportApproved(props.iouReport) && !ReportUtils.isSettled(props.iouReport)) {
+        if (ReportUtils.isPaidGroupPolicyExpenseReport(props.iouReport) && ReportUtils.isReportApproved(props.iouReport) && !isSettled) {
             message += ` • ${translate('iou.approved')}`;
         } else if (props.iouReport.isWaitingOnBankAccount) {
             message += ` • ${translate('iou.pending')}`;
@@ -302,7 +302,7 @@ function MoneyRequestPreview(props) {
                                     >
                                         {displayAmount}
                                     </Text>
-                                    {ReportUtils.isSettled(props.iouReport.reportID) && !props.isBillSplit && (
+                                    {isSettled && !props.isBillSplit && (
                                         <View style={styles.defaultCheckmarkWrapper}>
                                             <Icon
                                                 src={Expensicons.Checkmark}

@@ -133,6 +133,9 @@ function ReportPreview(props) {
     const [hasOnlyDistanceRequests, setHasOnlyDistanceRequests] = useState(false);
     const [hasNonReimbursableTransactions, setHasNonReimbursableTransactions] = useState(false);
 
+    
+
+
     const managerID = props.iouReport.managerID || 0;
     const isCurrentUserManager = managerID === lodashGet(props.session, 'accountID');
     const {totalDisplaySpend, reimbursableSpend} = ReportUtils.getMoneyRequestSpendBreakdown(props.iouReport);
@@ -210,7 +213,7 @@ function ReportPreview(props) {
         }
         const managerName = isPolicyExpenseChat ? ReportUtils.getPolicyName(props.chatReport) : ReportUtils.getDisplayNameForParticipant(managerID, true);
         let paymentVerb = hasNonReimbursableTransactions ? 'iou.payerSpent' : 'iou.payerOwes';
-        if (iouSettled || props.iouReport.isWaitingOnBankAccount) {
+        if (iouSettled && !numberOfScanningReceipts || props.iouReport.isWaitingOnBankAccount) {
             paymentVerb = 'iou.payerPaid';
         }
         return props.translate(paymentVerb, {payer: managerName});
@@ -295,7 +298,7 @@ function ReportPreview(props) {
                             <View style={styles.flexRow}>
                                 <View style={[styles.flex1, styles.flexRow, styles.alignItemsCenter]}>
                                     <Text style={styles.textHeadline}>{getDisplayAmount()}</Text>
-                                    {ReportUtils.isSettled(props.iouReportID) && (
+                                    {ReportUtils.isSettled(props.iouReportID) && !numberOfScanningReceipts&& (
                                         <View style={styles.defaultCheckmarkWrapper}>
                                             <Icon
                                                 src={Expensicons.Checkmark}

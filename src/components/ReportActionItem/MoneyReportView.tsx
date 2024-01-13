@@ -15,6 +15,7 @@ import * as ReportUtils from '@libs/ReportUtils';
 import AnimatedEmptyStateBackground from '@pages/home/report/AnimatedEmptyStateBackground';
 import variables from '@styles/variables';
 import type {Report} from '@src/types/onyx';
+import * as TransactionUtils from '@libs/TransactionUtils';
 
 type MoneyReportViewProps = {
     /** The report currently being looked at */
@@ -30,7 +31,7 @@ function MoneyReportView({report, shouldShowHorizontalRule}: MoneyReportViewProp
     const StyleUtils = useStyleUtils();
     const {translate} = useLocalize();
     const {isSmallScreenWidth} = useWindowDimensions();
-    const isSettled = ReportUtils.isSettled(report.reportID);
+    const isSettled = ReportUtils.isSettled(report.reportID) && !ReportUtils.getTransactionsWithReceipts(report.reportID).some((transaction) => TransactionUtils.isReceiptBeingScanned(transaction));
 
     const {totalDisplaySpend, nonReimbursableSpend, reimbursableSpend} = ReportUtils.getMoneyRequestSpendBreakdown(report);
 
