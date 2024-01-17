@@ -298,6 +298,8 @@ function MoneyRequestView({report, parentReport, parentReportActions, policyCate
                         <MenuItemWithTopDescription
                             description={translate('common.distance')}
                             title={hasPendingWaypoints ? transactionMerchant.replace(CONST.REGEX.FIRST_SPACE, translate('common.tbd')) : transactionMerchant}
+                            brickRoadIndicator={lodashGet(transaction, 'errorFields.route', null) ? CONST.BRICK_ROAD_INDICATOR_STATUS.ERROR : ''}
+                            error={lodashValues(transaction, 'errorFields.route', ['']).at(0)}
                             interactive={canEditDistance}
                             shouldShowRightIcon={canEditDistance}
                             titleStyle={styles.flex1}

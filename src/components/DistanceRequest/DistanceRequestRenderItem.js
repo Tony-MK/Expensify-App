@@ -21,6 +21,12 @@ const propTypes = {
     /** The index of the item */
     item: PropTypes.string,
 
+    /** The index of the item */
+    error: PropTypes.string,
+
+    /** The index of the item */
+    brickRoadIndicator: PropTypes.string,
+
     /** Function to call when the secondary interaction is triggered */
     onSecondaryInteraction: PropTypes.func,
 
@@ -45,9 +51,11 @@ const defaultProps = {
     isActive: false,
     onPress: () => {},
     disabled: false,
+    error: '',
+    brickRoadIndicator: '',
 };
 
-function DistanceRequestRenderItem({waypoints, item, onSecondaryInteraction, getIndex, isActive, onPress, disabled}) {
+function DistanceRequestRenderItem({waypoints, item, onSecondaryInteraction, getIndex, isActive, onPress, disabled, error, brickRoadIndicator}) {
     const theme = useTheme();
     const {translate} = useLocalize();
     const numberOfWaypoints = _.size(waypoints);
@@ -84,6 +92,8 @@ function DistanceRequestRenderItem({waypoints, item, onSecondaryInteraction, get
             focused={isActive}
             key={item}
             disabled={disabled}
+            error={error}
+            brickRoadIndicator={brickRoadIndicator}
         />
     );
 }

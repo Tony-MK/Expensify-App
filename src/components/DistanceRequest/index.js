@@ -1,4 +1,5 @@
 import lodashGet from 'lodash/get';
+import lodashValues from 'lodash/values';
 import PropTypes from 'prop-types';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
@@ -96,6 +97,8 @@ function DistanceRequest({transactionID, report, transaction, route, isEditingRe
     const isRouteAbsentWithoutErrors = !hasRoute && !hasRouteError;
     const shouldFetchRoute = (isRouteAbsentWithoutErrors || haveValidatedWaypointsChanged) && !isLoadingRoute && _.size(validatedWaypoints) > 1;
     const transactionWasSaved = useRef(false);
+
+    const waypointError = hasRouteError ? lodashValues(transaction, 'errorFields.route').at(0) : lodashValues(transaction, 'errorFields.waypoints', ['']).at(0)
 
     useEffect(() => {
         MapboxToken.init();
@@ -232,6 +235,7 @@ function DistanceRequest({transactionID, report, transaction, route, isEditingRe
                     scrollEventThrottle={variables.distanceScrollEventThrottle}
                     ref={scrollViewRef}
                     renderItem={({item, drag, isActive, getIndex}) => (
+
                         <DistanceRequestRenderItem
                             waypoints={waypoints}
                             item={item}
@@ -240,6 +244,8 @@ function DistanceRequest({transactionID, report, transaction, route, isEditingRe
                             getIndex={getIndex}
                             onPress={navigateToWaypointEditPage}
                             disabled={isLoadingRoute}
+                            error={validatedWaypoints[item] ? waypointError : ''}
+                            brickRoadIndicator={validatedWaypoints[item]  ? CONST.BRICK_ROAD_INDICATOR_STATUS.ERROR : ''}
                         />
                     )}
                     ListFooterComponent={

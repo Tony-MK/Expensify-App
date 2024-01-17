@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import lodashGet from 'lodash/get';
+import lodashValues from 'lodash/values';
 import PropTypes from 'prop-types';
 import React, {useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
@@ -111,6 +112,7 @@ function IOURequestStepWaypoint({
         }
     }, [parsedWaypointIndex, waypointCount]);
 
+
     const locationBias = useLocationBias(allWaypoints, userLocation);
     const waypointAddress = lodashGet(currentWaypoint, 'address', '');
     // Hide the menu when there is only start and finish waypoint
@@ -119,6 +121,8 @@ function IOURequestStepWaypoint({
         isFocused &&
         (Number.isNaN(parsedWaypointIndex) || parsedWaypointIndex < 0 || parsedWaypointIndex > waypointCount || (filledWaypointCount < 2 && parsedWaypointIndex >= waypointCount));
 
+
+        
     const validate = (values) => {
         const errors = {};
         const waypointValue = values[`waypoint${pageIndex}`] || '';
@@ -188,6 +192,7 @@ function IOURequestStepWaypoint({
         Navigation.goBack(ROUTES.MONEY_REQUEST_CREATE_TAB_DISTANCE.getRoute(iouType, transactionID, reportID));
     };
 
+    
     return (
         <ScreenWrapper
             includeSafeAreaPaddingBottom={false}
@@ -237,6 +242,8 @@ function IOURequestStepWaypoint({
                             InputComponent={AddressSearch}
                             locationBias={locationBias}
                             canUseCurrentLocation
+                            errorText={"Hello"}
+                            error={"Hello"}
                             inputID={`waypoint${pageIndex}`}
                             ref={(e) => (textInput.current = e)}
                             hint={!isOffline ? 'distance.errors.selectSuggestedAddress' : ''}
