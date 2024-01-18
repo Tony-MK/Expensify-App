@@ -491,6 +491,7 @@ function openReport(
     newReportObject: Partial<Report> = {},
     parentReportActionID = '0',
     isFromDeepLink = false,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     participantAccountIDList: number[] = [],
 ) {
     if (!reportID) {
@@ -570,7 +571,7 @@ function openReport(
     const parameters: OpenReportParameters = {
         reportID,
         emailList: participantLoginList ? participantLoginList.join(',') : '',
-        accountIDList: participantAccountIDList ? participantAccountIDList.join(',') : '',
+        accountIDList: newReportObject?.participantAccountIDs ? newReportObject?.participantAccountIDs.join(',') : '',
         parentReportActionID,
         idempotencyKey: `${commandName}_${reportID}`,
     };
