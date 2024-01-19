@@ -2153,7 +2153,7 @@ function getTransactionReportName(reportAction: OnyxEntry<ReportAction>): string
 
     return Localize.translateLocal(ReportActionsUtils.isSentMoneyReportAction(reportAction) ? 'iou.threadSentMoneyReportName' : 'iou.threadRequestReportName', {
         formattedAmount: CurrencyUtils.convertToDisplayString(transactionDetails?.amount ?? 0, transactionDetails?.currency, TransactionUtils.isDistanceRequest(transaction)) ?? '',
-        comment: transactionDetails?.comment ?? '',
+        comment: !TransactionUtils.isDistanceRequest(transaction) && !TransactionUtils.isExpensifyCardTransaction(transaction) ? transactionDetails?.merchant ?? '' : transactionDetails?.comment ?? '',
     });
 }
 
