@@ -189,7 +189,7 @@ function ReportActionItemSingle({
         return (
             <UserDetailsTooltip
                 accountID={Number(actorAccountID ?? 0)}
-                delegateAccountID={Number(action.delegateAccountID ?? 0)}
+                delegateAccountID={isWorkspaceActor ? 0 : Number(action.delegateAccountID ?? 0)}
                 icon={icon}
             >
                 <View>
