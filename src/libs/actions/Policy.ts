@@ -616,6 +616,7 @@ function addMembersToWorkspace(invitedEmailsToAccountIDs: Record<string, number>
         optimisticMembersState[accountID] = {pendingAction: CONST.RED_BRICK_ROAD_PENDING_ACTION.ADD};
         failureMembersState[accountID] = {
             errors: ErrorUtils.getMicroSecondOnyxError('workspace.people.error.genericAdd'),
+            pendingAction: CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE,
         };
     });
 
