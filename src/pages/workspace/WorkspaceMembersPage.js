@@ -282,6 +282,7 @@ function WorkspaceMembersPage(props) {
      */
     const dismissError = useCallback(
         (item) => {
+            console.log(item);
             if (item.pendingAction === CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE) {
                 Policy.clearDeleteMemberError(props.route.params.policyID, item.accountID);
             } else {
@@ -485,7 +486,7 @@ function WorkspaceMembersPage(props) {
                             headerContent={getHeaderContent()}
                             onSelectRow={(item) => toggleUser(item.accountID)}
                             onSelectAll={() => toggleAllUsers(data)}
-                            onDismissError={dismissError}
+                            onDismissError={(item) => dismissError(item)}
                             showLoadingPlaceholder={!isOfflineAndNoMemberDataAvailable && (!OptionsListUtils.isPersonalDetailsReady(props.personalDetails) || _.isEmpty(props.policyMembers))}
                             showScrollIndicator
                             shouldPreventDefaultFocusOnSelectRow={!DeviceCapabilities.canUseTouchScreen()}
