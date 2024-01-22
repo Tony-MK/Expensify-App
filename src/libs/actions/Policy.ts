@@ -614,10 +614,10 @@ function addMembersToWorkspace(invitedEmailsToAccountIDs: Record<string, number>
     const failureMembersState: OnyxCollection<PolicyMember> = {};
     accountIDs.forEach((accountID) => {
         optimisticMembersState[accountID] = {pendingAction: CONST.RED_BRICK_ROAD_PENDING_ACTION.ADD};
-        failureMembersState[accountID] = {
-            errors: ErrorUtils.getMicroSecondOnyxError('workspace.people.error.genericAdd'),
-            pendingAction: CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE,
-        };
+        // failureMembersState[accountID] = null
+        //     errors: ErrorUtils.getMicroSecondOnyxError('workspace.people.error.genericAdd'),
+        //     ,
+        // };
     });
 
     const optimisticData: OnyxUpdate[] = [
@@ -656,14 +656,6 @@ function addMembersToWorkspace(invitedEmailsToAccountIDs: Record<string, number>
     ];
 
     const failureData: OnyxUpdate[] = [
-        {
-            onyxMethod: Onyx.METHOD.MERGE,
-            key: membersListKey,
-
-            // Convert to object with each key containing the error. We don’t
-            // need to remove the members since that is handled by onClose of OfflineWithFeedback.
-            value: failureMembersState,
-        },
         ...newPersonalDetailsOnyxData.finallyData,
         ...membersChats.onyxFailureData,
         ...announceRoomMembers.onyxFailureData,
