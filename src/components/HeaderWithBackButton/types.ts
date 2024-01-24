@@ -7,6 +7,7 @@ import type {PersonalDetails, Policy, Report} from '@src/types/onyx';
 import type ChildrenProps from '@src/types/utils/ChildrenProps';
 import type IconAsset from '@src/types/utils/IconAsset';
 
+
 type ThreeDotsMenuItem = {
     /** An icon element displayed on the left side */
     icon?: IconAsset;
@@ -27,6 +28,8 @@ type HeaderWithBackButtonProps = Partial<ChildrenProps> & {
 
     /** Title color */
     titleColor?: string;
+
+    shouldShowSubscriptAvatar?: boolean;
 
     /** Method to trigger when pressing download button of the header */
     onDownloadButtonPress?: () => void;

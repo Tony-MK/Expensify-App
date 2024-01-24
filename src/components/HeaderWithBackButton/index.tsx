@@ -31,6 +31,7 @@ function HeaderWithBackButton({
     report = null,
     policy,
     personalDetails = null,
+    shouldShowSubscriptAvatar = true,
     shouldShowAvatarWithDisplay = false,
     shouldShowBackButton = true,
     shouldShowBorderBottom = false,
@@ -105,6 +106,7 @@ function HeaderWithBackButton({
                         policy={policy}
                         personalDetails={personalDetails}
                         shouldEnableDetailPageNavigation={shouldEnableDetailPageNavigation}
+                        shouldShowSubscriptAvatar={shouldShowSubscriptAvatar}
                     />
                 ) : (
                     <Header

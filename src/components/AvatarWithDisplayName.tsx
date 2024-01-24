@@ -43,6 +43,9 @@ type AvatarWithDisplayNameProps = AvatarWithDisplayNamePropsWithOnyx & {
 
     /** Whether we should enable detail page navigation */
     shouldEnableDetailPageNavigation?: boolean;
+
+    /** Whether we should enable detail page navigation */
+    shouldShowSubscriptAvatar?: boolean;
 };
 
 function AvatarWithDisplayName({
@@ -52,6 +55,7 @@ function AvatarWithDisplayName({
     parentReportActions,
     isAnonymous = false,
     size = CONST.AVATAR_SIZE.DEFAULT,
+    shouldShowSubscriptAvatar = true, 
     shouldEnableDetailPageNavigation = false,
 }: AvatarWithDisplayNameProps) {
     const theme = useTheme();
@@ -64,7 +68,6 @@ function AvatarWithDisplayName({
     const icons = ReportUtils.getIcons(report, personalDetails, null, '', -1, policy);
     const ownerPersonalDetails = OptionsListUtils.getPersonalDetailsForAccountIDs(report?.ownerAccountID ? [report.ownerAccountID] : [], personalDetails);
     const displayNamesWithTooltips = ReportUtils.getDisplayNamesWithTooltips(Object.values(ownerPersonalDetails), false);
-    const shouldShowSubscriptAvatar = ReportUtils.shouldReportShowSubscript(report);
     const isExpenseRequest = ReportUtils.isExpenseRequest(report);
     const avatarBorderColor = isAnonymous ? theme.highlightBG : theme.componentBG;
 
@@ -113,7 +116,7 @@ function AvatarWithDisplayName({
                         accessibilityLabel={title}
                         role={CONST.ROLE.BUTTON}
                     >
-                        {shouldShowSubscriptAvatar ? (
+                        {shouldShowSubscriptAvatar && ReportUtils.shouldReportShowSubscript(report) ? (
                             <SubscriptAvatar
                                 backgroundColor={avatarBorderColor}
                                 mainAvatar={icons[0]}
@@ -128,7 +131,7 @@ function AvatarWithDisplayName({
                             />
                         )}
                     </PressableWithoutFeedback>
-                    <View style={[styles.flex1, styles.flexColumn, shouldShowSubscriptAvatar && !isExpenseRequest ? styles.ml4 : {}]}>
+                    <View style={[styles.flex1, styles.flexColumn, shouldShowSubscriptAvatar && ReportUtils.shouldReportShowSubscript(report) && !isExpenseRequest ? styles.ml4 : {}]}>
                         <DisplayNames
                             fullTitle={title}
                             displayNamesWithTooltips={displayNamesWithTooltips}
