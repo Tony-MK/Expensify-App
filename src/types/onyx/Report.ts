@@ -33,6 +33,8 @@ type Report = {
     /** Whether the user is not an admin of policyExpenseChat chat */
     isOwnPolicyExpenseChat?: boolean;
 
+    policyAvatar?: string;
+
     /** Whether the report is policyExpenseChat */
     isPolicyExpenseChat?: boolean;
 
