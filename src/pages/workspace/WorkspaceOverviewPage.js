@@ -1,7 +1,7 @@
 import lodashGet from 'lodash/get';
 import PropTypes from 'prop-types';
 import React, {useCallback} from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import _ from 'underscore';
 import Avatar from '@components/Avatar';
@@ -9,6 +9,7 @@ import AvatarWithImagePicker from '@components/AvatarWithImagePicker';
 import * as Expensicons from '@components/Icon/Expensicons';
 import MenuItemWithTopDescription from '@components/MenuItemWithTopDescription';
 import OfflineWithFeedback from '@components/OfflineWithFeedback';
+import PressableWithoutFocus from '@components/Pressable/PressableWithoutFocus';
 import Text from '@components/Text';
 import useLocalize from '@hooks/useLocalize';
 import useThemeStyles from '@hooks/useThemeStyles';
@@ -60,7 +61,21 @@ function WorkspaceOverviewPage({policy, currencyList, route}) {
     const onPressName = useCallback(() => Navigation.navigate(ROUTES.WORKSPACE_OVERVIEW_NAME.getRoute(policy.id)), [policy.id]);
 
     const policyName = lodashGet(policy, 'name', '');
-    const readOnly = !PolicyUtils.isPolicyAdmin(policy);
+    const isPolicyAdmin = PolicyUtils.isPolicyAdmin(policy);
+    const readOnly = !isPolicyAdmin;
+
+    // Avatar is being used by the  admins (AvatarWithImagePicker) and non-admins, who just  view the avatar.
+    const getAvatar = () => (
+        <Avatar
+            containerStyles={styles.avatarXLarge}
+            imageStyles={[styles.avatarXLarge, styles.alignSelfCenter]}
+            source={policy.avatar ? policy.avatar : ReportUtils.getDefaultWorkspaceAvatar(policyName)}
+            fallbackIcon={Expensicons.FallbackWorkspaceAvatar}
+            size={CONST.AVATAR_SIZE.XLARGE}
+            name={policyName}
+            type={CONST.ICON_TYPE_WORKSPACE}
+        />
+    );
 
     return (
         <WorkspacePageWithSections
@@ -74,38 +89,40 @@ function WorkspaceOverviewPage({policy, currencyList, route}) {
         >
             {(hasVBA) => (
                 <>
-                    <AvatarWithImagePicker
-                        onViewPhotoPress={() => Navigation.navigate(ROUTES.WORKSPACE_AVATAR.getRoute(policy.id))}
-                        source={lodashGet(policy, 'avatar')}
-                        size={CONST.AVATAR_SIZE.XLARGE}
-                        avatarStyle={styles.avatarXLarge}
-                        DefaultAvatar={() => (
-                            <Avatar
-                                containerStyles={styles.avatarXLarge}
-                                imageStyles={[styles.avatarXLarge, styles.alignSelfCenter]}
-                                source={policy.avatar ? policy.avatar : ReportUtils.getDefaultWorkspaceAvatar(policyName)}
-                                fallbackIcon={Expensicons.FallbackWorkspaceAvatar}
-                                size={CONST.AVATAR_SIZE.XLARGE}
-                                name={policyName}
-                                type={CONST.ICON_TYPE_WORKSPACE}
-                            />
-                        )}
-                        type={CONST.ICON_TYPE_WORKSPACE}
-                        fallbackIcon={Expensicons.FallbackWorkspaceAvatar}
-                        style={[styles.mb3, styles.mt5]}
-                        isUsingDefaultAvatar={!lodashGet(policy, 'avatar', null)}
-                        onImageSelected={(file) => Policy.updateWorkspaceAvatar(lodashGet(policy, 'id', ''), file)}
-                        onImageRemoved={() => Policy.deleteWorkspaceAvatar(lodashGet(policy, 'id', ''))}
-                        editorMaskImage={Expensicons.ImageCropSquareMask}
-                        pendingAction={lodashGet(policy, 'pendingFields.avatar', null)}
-                        errors={lodashGet(policy, 'errorFields.avatar', null)}
-                        onErrorClose={() => Policy.clearAvatarErrors(policy.id)}
-                        previewSource={UserUtils.getFullSizeAvatar(policy.avatar, '')}
-                        headerTitle={translate('workspace.common.workspaceAvatar')}
-                        originalFileName={policy.originalFileName}
-                        disabled={readOnly}
-                        disabledStyle={styles.cursorDefault}
-                    />
+                    {isPolicyAdmin ? (
+                        <AvatarWithImagePicker
+                            onViewPhotoPress={() => Navigation.navigate(ROUTES.WORKSPACE_AVATAR.getRoute(policy.id))}
+                            source={lodashGet(policy, 'avatar')}
+                            size={CONST.AVATAR_SIZE.XLARGE}
+                            avatarStyle={styles.avatarXLarge}
+                            DefaultAvatar={getAvatar()}
+                            type={CONST.ICON_TYPE_WORKSPACE}
+                            fallbackIcon={Expensicons.FallbackWorkspaceAvatar}
+                            isUsingDefaultAvatar={!lodashGet(policy, 'avatar', null)}
+                            onImageSelected={(file) => Policy.updateWorkspaceAvatar(lodashGet(policy, 'id', ''), file)}
+                            onImageRemoved={() => Policy.deleteWorkspaceAvatar(lodashGet(policy, 'id', ''))}
+                            editorMaskImage={Expensicons.ImageCropSquareMask}
+                            pendingAction={lodashGet(policy, 'pendingFields.avatar', null)}
+                            errors={lodashGet(policy, 'errorFields.avatar', null)}
+                            onErrorClose={() => Policy.clearAvatarErrors(policy.id)}
+                            previewSource={UserUtils.getFullSizeAvatar(policy.avatar, '')}
+                            headerTitle={translate('workspace.common.workspaceAvatar')}
+                            originalFileName={policy.originalFileName}
+                            disabled={readOnly}
+                            disabledStyle={styles.cursorDefault}
+                        />
+                    ) : (
+                        <View style={StyleSheet.flatten([styles.alignItemsCenter, styles.mb3, styles.mt5])}>
+                            <View style={[styles.pRelative, styles.avatarXLarge]}>
+                                <PressableWithoutFocus
+                                    onPress={() => Navigation.navigate(ROUTES.WORKSPACE_AVATAR.getRoute(policy.id))}
+                                    accessibilityLabel={policyName}
+                                >
+                                    {getAvatar()}
+                                </PressableWithoutFocus>
+                            </View>
+                        </View>
+                    )}
                     <OfflineWithFeedback pendingAction={lodashGet(policy, 'pendingFields.generalSettings')}>
                         <MenuItemWithTopDescription
                             title={policy.name}
