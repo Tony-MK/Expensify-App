@@ -79,6 +79,9 @@ import {isEmptyObject} from '@src/types/utils/EmptyObject';
 import * as Modal from './Modal';
 import * as Session from './Session';
 import * as Welcome from './Welcome';
+import * as TransactionUtils from '@libs/TransactionUtils';
+import { get } from 'lodash';
+import * as Transaction from '@userActions/Transaction';
 
 type SubscriberCallback = (isFromCurrentUser: boolean, reportActionID: string | undefined) => void;
 
@@ -1035,7 +1038,32 @@ function togglePinnedState(reportID: string, isPinnedChat: boolean) {
         pinnedValue,
     };
 
-    API.write(WRITE_COMMANDS.TOGGLE_PINNED_CHAT, parameters, {optimisticData});
+    const report = ReportUtils.getReport(reportID);
+    
+    const optimisticSplitTransactionThreadID = report && report.isOptimisticReport && report.parentReportActionID && ReportActionsUtils.isSplitBillAction(ReportActionsUtils.getReportAction(reportID, report.parentReportActionID)) 
+        ? ReportActionsUtils.getLinkedTransactionID(reportID, report.parentReportActionID) : null;
+
+    // eslint-disable-next-line rulesdir/no-api-side-effects-method
+    API.makeRequestWithSideEffects(WRITE_COMMANDS.TOGGLE_PINNED_CHAT, parameters, {optimisticData})
+        .then((response) => {
+            if (response?.jsonCode === CONST.JSON_CODE.SUCCESS || !optimisticSplitTransactionThreadID) {   
+                return;
+            }
+
+            // eslint-disable-next-line array-callback-return
+            ReportActionsUtils.getAllReportActions(reportID).filter((reportAction: ReportAction) => {
+                
+                if (!reportAction?.childReportID || reportID === reportAction.childReportID) {
+                    return;
+                }
+                const transaction = TransactionUtils.getLinkedTransaction(reportAction);
+                
+                if (transaction && transaction.comment?.source === CONST.IOU.TYPE.SPLIT && optimisticSplitTransactionThreadID === transaction.comment?.originalTransactionID) {
+                    togglePinnedState(reportAction.childReportID, !isPinnedChat);
+                    togglePinnedState(reportID, isPinnedChat);
+                }
+            });
+        });
 }
 
 /**
