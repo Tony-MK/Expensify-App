@@ -1039,28 +1039,39 @@ function togglePinnedState(reportID: string, isPinnedChat: boolean) {
     };
 
     const report = ReportUtils.getReport(reportID);
-    
-    const optimisticSplitTransactionThreadID = report && report.isOptimisticReport && report.parentReportActionID && ReportActionsUtils.isSplitBillAction(ReportActionsUtils.getReportAction(reportID, report.parentReportActionID)) 
-        ? ReportActionsUtils.getLinkedTransactionID(reportID, report.parentReportActionID) : null;
+        
+    const optimisticReportAction = report && report.isOptimisticReport && report.parentReportID && report.parentReportActionID ? ReportActionsUtils.getReportAction(report.parentReportID, report.parentReportActionID) : null;
+        
+    const optimistictransaction = optimisticReportAction ? TransactionUtils.getLinkedTransaction(optimisticReportAction) : null;
+
+    const originalSplitTransactionID = optimistictransaction && optimistictransaction.comment?.source === CONST.IOU.TYPE.SPLIT && optimistictransaction.comment?.originalTransactionID ? optimistictransaction.comment?.originalTransactionID  : null;
 
     // eslint-disable-next-line rulesdir/no-api-side-effects-method
-    API.makeRequestWithSideEffects(WRITE_COMMANDS.TOGGLE_PINNED_CHAT, parameters, {optimisticData})
+    API.makeRequestWithSideEffects(WRITE_COMMANDS.TOGGLE_PINNED_CHAT, parameters, {optimisticData}, CONST.API_REQUEST_TYPE.WRITE)
         .then((response) => {
-            if (response?.jsonCode === CONST.JSON_CODE.SUCCESS || !optimisticSplitTransactionThreadID) {   
+            console.log('response', response);
+            console.log('originalSplitTransactionID', originalSplitTransactionID);
+            if (response?.jsonCode === CONST.JSON_CODE.SUCCESS || !originalSplitTransactionID) {   
                 return;
             }
 
             // eslint-disable-next-line array-callback-return
-            ReportActionsUtils.getAllReportActions(reportID).filter((reportAction: ReportAction) => {
-                
+            ReportActionsUtils.getAllReportActions(report.parentReportID).filter((reportAction: ReportAction) => {
+                console.log('reportAction', reportAction);
+                console.log('reportAction?.childReportID', reportAction?.childReportID);
                 if (!reportAction?.childReportID || reportID === reportAction.childReportID) {
                     return;
                 }
                 const transaction = TransactionUtils.getLinkedTransaction(reportAction);
                 
-                if (transaction && transaction.comment?.source === CONST.IOU.TYPE.SPLIT && optimisticSplitTransactionThreadID === transaction.comment?.originalTransactionID) {
-                    togglePinnedState(reportAction.childReportID, !isPinnedChat);
-                    togglePinnedState(reportID, isPinnedChat);
+                if (transaction && transaction.comment?.source === CONST.IOU.TYPE.SPLIT && transaction.comment?.originalTransactionID === originalSplitTransactionID) {
+
+                    // Toggle the realistic report's pinned state
+                    togglePinnedState(reportAction.childReportID, pinnedValue);
+
+                    // Since we the optimistic report is going to be replaced be the real report, 
+                    // the optimistic report needs to be reverted to it's original "isPinned" state.
+                    Onyx.merge(`${ONYXKEYS.COLLECTION.REPORT}${reportID}`, {isPinned: false});
                 }
             });
         });
