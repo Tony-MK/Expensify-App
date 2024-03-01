@@ -3325,6 +3325,7 @@ function updateReportPreview(iouReport: OnyxEntry<Report>, reportPreviewAction: 
                 type: CONST.REPORT.MESSAGE.TYPE.COMMENT,
             },
         ],
+        created: DateUtils.getDBTime(),
         childLastMoneyRequestComment: comment || reportPreviewAction?.childLastMoneyRequestComment,
         childMoneyRequestCount: (reportPreviewAction?.childMoneyRequestCount ?? 0) + (isPayRequest ? 0 : 1),
         childRecentReceiptTransactionIDs: hasReceipt
