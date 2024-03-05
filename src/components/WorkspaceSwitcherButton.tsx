@@ -5,7 +5,7 @@ import useLocalize from '@hooks/useLocalize';
 import useTheme from '@hooks/useTheme';
 import interceptAnonymousUser from '@libs/interceptAnonymousUser';
 import Navigation from '@libs/Navigation/Navigation';
-import {getDefaultWorkspaceAvatar} from '@libs/ReportUtils';
+import {getDefaultWorkspaceAvatar, getReport, getPolicyName} from '@libs/ReportUtils';
 import CONST from '@src/CONST';
 import ONYXKEYS from '@src/ONYXKEYS';
 import ROUTES from '@src/ROUTES';
@@ -14,6 +14,8 @@ import * as Expensicons from './Icon/Expensicons';
 import {PressableWithFeedback} from './Pressable';
 import SubscriptAvatar from './SubscriptAvatar';
 import Tooltip from './Tooltip';
+import useCurrentReportID from '@hooks/useCurrentReportID';
+
 
 type WorkspaceSwitcherButtonOnyxProps = {
     policy: OnyxEntry<Policy>;
@@ -24,19 +26,22 @@ type WorkspaceSwitcherButtonProps = {activeWorkspaceID?: string} & WorkspaceSwit
 function WorkspaceSwitcherButton({activeWorkspaceID, policy}: WorkspaceSwitcherButtonProps) {
     const {translate} = useLocalize();
     const theme = useTheme();
+    const reportID  = useCurrentReportID();
 
     const {source, name, type} = useMemo(() => {
         if (!activeWorkspaceID) {
             return {source: Expensicons.ExpensifyAppIcon, name: CONST.WORKSPACE_SWITCHER.NAME, type: CONST.ICON_TYPE_AVATAR};
         }
 
-        const avatar = policy?.avatar ? policy.avatar : getDefaultWorkspaceAvatar(policy?.name);
+        const policyName = getPolicyName(getReport(reportID?.currentReportID), true, policy)
+
+        const avatar = policy?.avatar ? policy.avatar : getDefaultWorkspaceAvatar(policyName ?? '');
         return {
             source: avatar,
-            name: policy?.name ?? '',
+            name: policyName ?? '',
             type: CONST.ICON_TYPE_WORKSPACE,
         };
-    }, [policy, activeWorkspaceID]);
+    }, [policy, reportID, activeWorkspaceID]);
 
     return (
         <Tooltip text={translate('workspace.switcher.headerTitle')}>
@@ -76,3 +81,7 @@ export default withOnyx<WorkspaceSwitcherButtonProps, WorkspaceSwitcherButtonOny
         key: ({activeWorkspaceID}) => `${ONYXKEYS.COLLECTION.POLICY}${activeWorkspaceID}`,
     },
 })(WorkspaceSwitcherButton);
+function lodashGet(route: string, arg1: string) {
+    throw new Error('Function not implemented.');
+}
+
