@@ -124,4 +124,4 @@ export default function (
     };
 }
 
-export type {WithReportOrNotFoundProps};
+export type {WithReportOrNotFoundProps, WithReportOrNotFoundOnyxProps};
