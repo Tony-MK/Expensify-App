@@ -189,6 +189,7 @@ function getQueryHashes(query: SearchQueryJSON): {primaryHash: number; recentSea
     let orderedQuery = '';
     orderedQuery += `${CONST.SEARCH.SYNTAX_ROOT_KEYS.TYPE}:${query.type}`;
     orderedQuery += ` ${CONST.SEARCH.SYNTAX_ROOT_KEYS.STATUS}:${Array.isArray(query.status) ? query.status.join(',') : query.status}`;
+    
     const queryClone = cloneDeep(query);
 
     queryClone.flatFilters.forEach((filter) => {
