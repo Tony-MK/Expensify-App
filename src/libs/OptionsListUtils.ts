@@ -519,8 +519,9 @@ function getLastMessageTextForReport(report: OnyxEntry<Report>, lastActorDetails
     } else if (ReportActionUtils.isMoneyRequestAction(lastReportAction)) {
         const properSchemaForMoneyRequestMessage = ReportUtils.getReportPreviewMessage(report, lastReportAction, true, false, null, true);
         lastMessageTextFromReport = ReportUtils.formatReportLastMessageText(properSchemaForMoneyRequestMessage);
-    } else if (ReportActionUtils.isReportPreviewAction(lastReportAction)) {
-        const iouReport = ReportUtils.getReportOrDraftReport(ReportActionUtils.getIOUReportIDFromReportActionPreview(lastReportAction));
+    } else if (ReportActionUtils.isReportPreviewAction(lastReportAction) || report?.iouReportID && report?.lastActionType === CONST.REPORT.ACTIONS.TYPE.REPORT_PREVIEW) {
+        const iouReportID = ReportActionUtils.isReportPreviewAction(lastReportAction)  ? ReportActionUtils.getIOUReportIDFromReportActionPreview(lastReportAction) : report?.iouReportID;
+        const iouReport = ReportUtils.getReportOrDraftReport(iouReportID);
         const lastIOUMoneyReportAction = allSortedReportActions[iouReport?.reportID ?? '-1']?.find(
             (reportAction, key): reportAction is ReportAction<typeof CONST.REPORT.ACTIONS.TYPE.IOU> =>
                 ReportActionUtils.shouldReportActionBeVisible(reportAction, key, ReportUtils.canUserPerformWriteAction(report)) &&
