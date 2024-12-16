@@ -383,10 +383,10 @@ const tests = [
 ];
 
 /*
- * Test keywords with special characters and wrapped in quotes
+ * Test keywords with special characters such as urls which are wrapped in double quotes eg: "https://google.com"
  */
 
-const keywordTests = [
+const specialKeywordFilterTests = [
     {
         query: '" " "  "', // Multiple whitespaces wrapped in quotes
         expected: {
@@ -425,7 +425,7 @@ const keywordTests = [
             filters: {
                 operator: 'eq',
                 left: 'keyword',
-                right: ['"https://expensify.com"', 'to', '"https://new.expensify.com"'],
+                right: ['""https://expensify.com""', 'to', '""https://new.expensify.com""'],
             },
         },
     },
@@ -439,12 +439,12 @@ const keywordTests = [
             filters: {
                 operator: 'eq',
                 left: 'keyword',
-                right: ['""https://expensify.com', 'to', 'https://new.expensify.com""'],
+                right: ['"""https://expensify.com"', 'to', '"https://new.expensify.com"""'],
             },
         },
     },
     {
-        query: 'date>2024-01-01 from:usera@user.com "https://expensify.com" "https://new.expensify.com"',
+        query: 'date>2024-01-01 from:usera@user.com "https://expensify.com" "https://new.expensify.com"', // With other search filters
         expected: {
             type: 'expense',
             status: 'all',
@@ -482,8 +482,8 @@ describe('search parser', () => {
     });
 });
 
-describe('Testing search parser with special characters and wrapped in quotes.', () => {
-    test.each(keywordTests)(`parsing: $query`, ({query, expected}) => {
+describe('Testing search parser with keywords containg special characters ', () => {
+    test.each(specialKeywordFilterTests)(`parsing: $query`, ({query, expected}) => {
         const result = searchParser.parse(query) as SearchQueryJSON;
         expect(result).toEqual(expected);
     });

@@ -39,8 +39,8 @@ const operatorToCharMap = {
  * Returns string value wrapped in quotes "", if the value contains special characters.
  */
 function sanitizeSearchValue(str: string) {
-    const regexp = /[^A-Za-z0-9_@./#&+\-\\';:,"]/g;
-    if (regexp.test(str)) {
+    const regexp = /(?=.*[^A-Za-z0-9_@./#&+\-\\';,"])(?!^".*"$)/g;
+    if (regexp.test(str) && !/^"(.*)"$/.test(str)) {
         return `"${str}"`;
     }
     return str;

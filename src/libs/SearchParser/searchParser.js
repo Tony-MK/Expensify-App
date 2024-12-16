@@ -276,7 +276,7 @@ function peg$parse(input, options) {
       const keywordFilter = buildFilter(
         "eq",
         "keyword",
-        keywords.map((filter) => filter.right.replace(/^(['"])(.*)\1$/, '$2')).flat()
+        keywords.map((filter) => /^"([^"]+)"$/.test(filter.right) ? filter.right.replace(/^(['"])(.*)\1$/, '$2') : filter.right).flat()
       );
       if (keywordFilter.right.length > 0) {
         nonKeywords.push(keywordFilter);
