@@ -59,4 +59,4 @@ function useSubscriptionPrice(): number {
     return SUBSCRIPTION_PRICES[preferredCurrency][subscriptionPlan][privateSubscription.type];
 }
 
-export {useSubscriptionPrice, SUBSCRIPTION_PRICES};
+export default useSubscriptionPrice;
