@@ -2974,8 +2974,8 @@ const CONST = {
         },
         get PRICES() {
             return {
-                [CONST.PAYMENT_CARD_CURRENCY.USD]: {
-                    [CONST.POLICY.TYPE.CORPORATE]: {
+                [this.PAYMENT_CARD_CURRENCY.USD]: {
+                    [this.POLICY.TYPE.CORPORATE]: {
                         [CONST.SUBSCRIPTION.TYPE.ANNUAL]: 900,
                         [CONST.SUBSCRIPTION.TYPE.PAYPERUSE]: 1800,
                     },
