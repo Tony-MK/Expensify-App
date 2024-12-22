@@ -38,13 +38,10 @@ function UpgradeIntro({feature, onUpgrade, buttonDisabled, loading, isCategorizi
     const preferredCurrency = usePreferredCurrency();
 
     const formattedPrice = React.useMemo(() => {
-        const upgradeCurrency: keyof typeof CONST.SUBSCRIPTION.PRICES = Object.hasOwn(CONST.SUBSCRIPTION.PRICES, preferredCurrency)
+        const upgradeCurrency = Object.hasOwn(CONST.SUBSCRIPTION.PRICES, preferredCurrency)
             ? (preferredCurrency as keyof typeof CONST.SUBSCRIPTION.PRICES)
             : CONST.PAYMENT_CARD_CURRENCY.USD;
-        const upgradePlan: keyof (typeof CONST.SUBSCRIPTION.PRICES)[typeof upgradeCurrency] =
-            !isCategorizing || subscriptionPlan === CONST.POLICY.TYPE.CORPORATE ? CONST.POLICY.TYPE.CORPORATE : CONST.POLICY.TYPE.TEAM;
-        const annualPrice: number = CONST.SUBSCRIPTION.PRICES[upgradeCurrency][upgradePlan][CONST.SUBSCRIPTION.TYPE.ANNUAL];
-        return `${convertToShortDisplayString(annualPrice, upgradeCurrency)} `;
+        return `${convertToShortDisplayString(CONST.SUBSCRIPTION.PRICES[upgradeCurrency][!isCategorizing ? CONST.POLICY.TYPE.CORPORATE : CONST.POLICY.TYPE.TEAM][CONST.SUBSCRIPTION.TYPE.ANNUAL], upgradeCurrency)} `;
     }, [preferredCurrency, subscriptionPlan, isCategorizing]);
 
     const isIllustration = feature.icon in Illustrations;
