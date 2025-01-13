@@ -94,7 +94,7 @@ function saveWaypoint(transactionID: string, index: string, waypoint: RecentWayp
             },
         },
         // We want to reset the amount only for draft transactions (when creating the expense).
-        // When modifying an existing transaction, the amount will be updated on the actual IOU update operation.
+        // ation.
         ...(isDraft && {amount: CONST.IOU.DEFAULT_AMOUNT}),
         // Empty out errors when we're saving a new waypoint as this indicates the user is updating their input
         errorFields: {
