@@ -1,6 +1,6 @@
 # Overview
 
-"Sign in with Apple" and "Sign in with Google" are multi-platform sign-in methods. Both Apple and Google provide official tools, but we have to manage the fact that the behavior, APIs, and constraints for each of those tools varies quite a bit. The architecture of Apple and Google sign-in aims to provide as consistent a user experience and implementation as possible, but our options are limited by Apple and Google. This document will describe the user experience, tooling, and options available on each and why this feature is implemented the way it is.
+"Sign in with Apple" and "Sign in with Google" are multi-platform sign-in methods. Both Apple and Google provide official tools, but we have to manage the fact that the behavior, APIs, and constraints for each of those tools varies quite a bit. The architecture of Apple and Google sign-in aio provide as consistent a user experience and implementation as possible, but our options are limited by Apple and Google. This document will describe the user experience, tooling, and options available on each and why this feature is implemented the way it is.
 
 ## Terms
 
