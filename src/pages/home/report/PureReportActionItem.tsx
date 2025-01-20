@@ -117,7 +117,7 @@ import {acceptJoinRequest, declineJoinRequest} from '@userActions/Policy/Member'
 import {expandURLPreview} from '@userActions/Report';
 import type {IgnoreDirection} from '@userActions/ReportActions';
 import {isAnonymousUser, signOutAndRedirectToSignIn} from '@userActions/Session';
-import {getLastModifiedExpense, revert} from '@userActions/Transaction';
+import {extractValues, getOldTranscationValues, hasOldValue, revert} from '@userActions/Transaction';
 import {isBlockedFromConcierge} from '@userActions/User';
 import CONST from '@src/CONST';
 import type {IOUAction} from '@src/CONST';
@@ -403,16 +403,47 @@ function PureReportActionItem({
     );
 
     const onClose = () => {
-        let transactionID;
         if (isMoneyRequestAction(action)) {
-            transactionID = getOriginalMessage(action)?.IOUTransactionID;
-            revert(transactionID, getLastModifiedExpense(reportID));
+            const transactionID = getOriginalMessage(action)?.IOUTransactionID;
+            revert(transactionID, getOldTranscationValues(reportID));
+            if (transactionID) {
+                clearError(transactionID);
+            }
         } else if (isModifiedExpenseAction(action)) {
-            transactionID = getOriginalMessage(Object.values(getAllReportActions(reportID)).find(isMoneyRequestAction))?.IOUTransactionID;
-            revert(transactionID, getOriginalMessage(action));
-        }
-        if (transactionID) {
-            clearError(transactionID);
+            const reportActions = Object.values(getAllReportActions(reportID));
+            const originalModifiedExpenseMessage = getOriginalMessage(action);
+            if (originalModifiedExpenseMessage) {
+                const keywords: string[][] = [];
+                Object.keys(originalModifiedExpenseMessage).forEach((key) => {
+                    if (key.startsWith('old')) {
+                        return;
+                    }
+                    keywords.push([key.charAt(3).toLowerCase() + key.slice(4), key]);
+                });
+                if (
+                    !reportActions.some(
+                        (reportAction) =>
+                            isModifiedExpenseAction(action) &&
+                            Number(reportAction.reportActionID) > Number(action.reportActionID) &&
+                            keywords.some(([keyword, oldKeyword]) => hasOldValue(getOriginalMessage(action), keyword, oldKeyword)),
+                    )
+                ) {
+                    revert(
+                        getOriginalMessage(reportActions.find(isMoneyRequestAction))?.IOUTransactionID,
+                        extractValues(
+                            getOriginalMessage(action),
+                            keywords,
+                            reportActions.some(
+                                (reportAction) =>
+                                    !reportAction.errors &&
+                                    !reportAction.error &&
+                                    isModifiedExpenseAction(reportAction) &&
+                                    keywords.some(([keyword, oldKeyword]) => hasOldValue(getOriginalMessage(action), keyword, oldKeyword)),
+                            ),
+                        ),
+                    );
+                }
+            }
         }
         clearAllRelatedReportActionErrors(reportID, action);
     };

@@ -477,21 +477,78 @@ function clearError(transactionID: string) {
     Onyx.merge(`${ONYXKEYS.COLLECTION.TRANSACTION}${transactionID}`, {errors: null, errorFields: {route: null, waypoints: null, routes: null}});
 }
 
-function getLastModifiedExpense(reportID?: string): OriginalMessageModifiedExpense | undefined {
-    const modifiedExpenseActions = Object.values(ReportActionsUtils.getAllReportActions(reportID)).filter(ReportActionsUtils.isModifiedExpenseAction);
-    modifiedExpenseActions.sort((a, b) => Number(a.reportActionID) - Number(b.reportActionID));
-    return ReportActionsUtils.getOriginalMessage(modifiedExpenseActions.at(-1));
+function hasOldValue(reportActionOriginalMessage: OriginalMessageModifiedExpense | undefined, key: string, oldKey: string): boolean {
+    return !!reportActionOriginalMessage && key in reportActionOriginalMessage && oldKey in reportActionOriginalMessage;
 }
 
-function revert(transactionID?: string, originalMessage?: OriginalMessageModifiedExpense | undefined) {
-    const transaction = TransactionUtils.getTransaction(transactionID);
-
-    if (transaction && originalMessage?.oldAmount && originalMessage.oldCurrency && 'amount' in originalMessage && 'currency' in originalMessage) {
-        Onyx.merge(`${ONYXKEYS.COLLECTION.TRANSACTION}${transactionID}`, {
-            modifiedAmount: transaction?.amount && transaction?.amount < 0 ? -Math.abs(originalMessage.oldAmount) : originalMessage.oldAmount,
-            modifiedCurrency: originalMessage.oldCurrency,
-        });
+function extractValues(reportActionOriginalMessage: OriginalMessageModifiedExpense | undefined, keywords: string[][], isModified: boolean): Partial<Transaction> {
+    let details: Partial<Transaction> = {};
+    if (!reportActionOriginalMessage) {
+        return details;
     }
+    keywords.forEach(([keyword, oldKeyword]) => {
+        if (!hasOldValue(reportActionOriginalMessage, keyword, oldKeyword)) {
+            return;
+        }
+        const update: Record<string, unknown> = {};
+        Object.entries(reportActionOriginalMessage).forEach((entry) => {
+            const [oldKey, oldValue] = entry;
+            if (oldKey === oldKeyword) {
+                update[isModified && keyword in ['amount', 'currency', 'merchant'] ? `modified${keyword.charAt(0).toUpperCase() + keyword.slice(1)}` : keyword] = oldValue;
+            }
+        });
+        details = {...details, ...(update as Partial<Transaction>)};
+    });
+    return details;
+}
+function getOldTranscationValues(reportID: string): Partial<Transaction> {
+    let details: Partial<Transaction> = {};
+    const oldKeywords: string[] = [];
+    const modifiedExpenseActions = Object.values(ReportActionsUtils.getAllReportActions(reportID)).filter(ReportActionsUtils.isModifiedExpenseAction);
+    modifiedExpenseActions.sort((a, b) => Number(a.reportActionID) - Number(b.reportActionID));
+    modifiedExpenseActions.forEach((action) => {
+        const reportActionOriginalMessage = ReportActionsUtils.getOriginalMessage(action);
+        if (!reportActionOriginalMessage) {
+            return;
+        }
+        Object.keys(reportActionOriginalMessage).forEach((oldKey) => {
+            let isModified = false;
+            if (!oldKey.startsWith('old')) {
+                return;
+            }
+            if (!(oldKey in oldKeywords)) {
+                oldKeywords.push(oldKey);
+            } else if (action.error ?? action.errors) {
+                return;
+            } else {
+                isModified = true;
+            }
+            details = {...details, ...extractValues(reportActionOriginalMessage, [[oldKey.charAt(3).toLowerCase() + oldKey.slice(4), oldKey]], isModified)};
+        });
+    });
+    return details;
+}
+
+function revert(transactionID?: string, changes?: Partial<Transaction>) {
+    if (!changes) {
+        return;
+    }
+    const transaction = TransactionUtils.getTransaction(transactionID);
+    if (!transaction) {
+        return;
+    }
+    const data = {...changes};
+    if (transaction?.amount && transaction?.amount < 0) {
+        if (changes?.modifiedAmount) {
+            data.modifiedAmount = -Math.abs(changes.modifiedAmount);
+        }
+
+        if (changes?.amount) {
+            data.amount = -Math.abs(changes.amount);
+        }
+    }
+
+    Onyx.merge(`${ONYXKEYS.COLLECTION.TRANSACTION}${transactionID}`, data);
 }
 
 function markAsCash(transactionID: string | undefined, transactionThreadReportID: string | undefined) {
@@ -574,7 +631,9 @@ function getAllTransactions() {
 
 export {
     addStop,
+    extractValues,
     createInitialWaypoints,
+    getOldTranscationValues,
     saveWaypoint,
     removeWaypoint,
     getRoute,
@@ -589,6 +648,6 @@ export {
     sanitizeRecentWaypoints,
     getAllTransactionViolationsLength,
     getAllTransactions,
-    getLastModifiedExpense,
     revert,
+    hasOldValue,
 };
