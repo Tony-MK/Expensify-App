@@ -40,7 +40,14 @@ import {
     isActionOfType,
     isMoneyRequestAction,
 } from '@libs/ReportActionsUtils';
-import {buildOptimisticIOUReport, buildOptimisticIOUReportAction, buildTransactionThread, createDraftTransactionAndNavigateToParticipantSelector, isIOUReport} from '@libs/ReportUtils';
+import {
+    buildOptimisticInvoiceReport,
+    buildOptimisticIOUReport,
+    buildOptimisticIOUReportAction,
+    buildTransactionThread,
+    createDraftTransactionAndNavigateToParticipantSelector,
+    isIOUReport,
+} from '@libs/ReportUtils';
 import type {OptimisticChatReport} from '@libs/ReportUtils';
 import {buildOptimisticTransaction, getValidWaypoints, isDistanceRequest as isDistanceRequestUtil} from '@libs/TransactionUtils';
 import CONST from '@src/CONST';
@@ -3968,11 +3975,12 @@ describe('actions/IOU', () => {
                 role: CONST.POLICY.ROLE.ADMIN,
             });
 
-            const iouReport = buildOptimisticIOUReport(
-                policy?.ownerAccountID ?? CONST.DEFAULT_NUMBER_ID,
+            const iouReport = buildOptimisticInvoiceReport(
+                convertedInvoiceChat?.chatReportID ?? '',
+                policy?.id ?? '',
                 invoiceReceiver?.accountID,
+                '',
                 transaction?.amount ?? 100,
-                convertedInvoiceChat.chatReportID,
                 transaction?.currency ?? 'USD',
             );
 
