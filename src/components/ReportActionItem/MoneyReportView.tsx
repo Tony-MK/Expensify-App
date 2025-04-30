@@ -141,10 +141,8 @@ function MoneyReportView({report, policy, isCombinedReport = false, shouldShowTo
                                 }
 
                                 const fieldValue = reportField.value ?? reportField.defaultValue;
-                                const isTitleField = isReportFieldOfTypeTitle(reportField);
-                                const isFieldDisabled = (isTitleField && !isPolicyAdmin && isApproved) || isReportFieldDisabled(report, reportField, policy);
+                                const isFieldDisabled = isReportFieldDisabled(report, reportField, policy);
 
-                                
                                 const fieldKey = getReportFieldKey(reportField.fieldID);
 
                                 const violation = getFieldViolation(violations, reportField);

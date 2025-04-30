@@ -87,7 +87,6 @@ import {
     isMoneyRequest as isMoneyRequestUtil,
     isPolicyExpenseChat as isPolicyExpenseChatUtil,
     isPublicRoom as isPublicRoomUtil,
-    isReportApproved,
     isReportFieldDisabled,
     isReportFieldOfTypeTitle,
     isRootGroupChat as isRootGroupChatUtil,
@@ -227,7 +226,6 @@ function ReportDetailsPage({policies, report, route, reportMetadata}: ReportDeta
     const isMoneyRequestReport = useMemo(() => isMoneyRequestReportUtil(report), [report]);
     const isMoneyRequest = useMemo(() => isMoneyRequestUtil(report), [report]);
     const isInvoiceReport = useMemo(() => isInvoiceReportUtil(report), [report]);
-    const isApproved = useMemo(() => isReportApproved({report: report}), [report]);
     const isInvoiceRoom = useMemo(() => isInvoiceRoomUtil(report), [report]);
     const isTaskReport = useMemo(() => isTaskReportUtil(report), [report]);
     const isSelfDM = useMemo(() => isSelfDMUtil(report), [report]);
@@ -905,7 +903,7 @@ function ReportDetailsPage({policies, report, route, reportMetadata}: ReportDeta
         return fields.find((reportField) => isReportFieldOfTypeTitle(reportField));
     }, [report, policy?.fieldList]);
     const fieldKey = getReportFieldKey(titleField?.fieldID);
-    const isFieldDisabled =  isReportFieldDisabled(report, titleField, policy);
+    const isFieldDisabled = isReportFieldDisabled(report, titleField, policy);
 
     const shouldShowTitleField = caseID !== CASES.MONEY_REQUEST && !isFieldDisabled && isAdminOwnerApproverOrReportOwner(report, policy);
 
