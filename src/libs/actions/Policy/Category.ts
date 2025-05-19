@@ -1080,6 +1080,7 @@ function enablePolicyCategories(policyID: string, enabled: boolean, shouldGoBack
                 },
             },
         );
+
     }
     const onyxData: OnyxData = {
         optimisticData: [
@@ -1118,6 +1119,36 @@ function enablePolicyCategories(policyID: string, enabled: boolean, shouldGoBack
             },
         ],
     };
+
+
+    const policyUpdate: Partial<Policy> = {
+        areCategoriesEnabled: enabled,
+        pendingFields: {
+            areCategoriesEnabled: CONST.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+        },
+        ...( !enabled ? { requiresCategory: false } : {} ),
+    }
+
+    const policyCategories = allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`];
+
+    const policyCategoriesUpdate: Record<string, Partial<PolicyCategory>> = !enabled && policyCategories ?? {} : Object.fromEntries(
+        Object.entries(policyCategories).map(([categoryName]) => [
+            categoryName,
+            {
+                enabled: false,
+                pendingFields: {
+                    enabled: CONST.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+                },
+            }
+        ])
+    );
+
+    pushTransactionViolationsOnyxData(
+        onyxData, 
+        policyID, 
+        policyUpdate,
+        policyCategoriesUpdate
+    );
 
     if (onyxUpdatesToDisableCategories.length > 0) {
         onyxData.optimisticData?.push(...onyxUpdatesToDisableCategories);
