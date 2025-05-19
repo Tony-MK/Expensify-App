@@ -369,6 +369,7 @@ function setWorkspaceCategoryEnabled(policyID: string, categoriesToUpdate: Recor
         ],
     };
 
+    pushTransactionViolationsOnyxData(onyxData, policyID, shouldDisableRequiresCategory ? {requiresCategory: false} : {}, optimisticPolicyCategoriesData);
     appendSetupCategoriesOnboardingData(onyxData);
     if (shouldDisableRequiresCategory) {
         onyxData.optimisticData?.push({
@@ -1080,7 +1081,6 @@ function enablePolicyCategories(policyID: string, enabled: boolean, shouldGoBack
                 },
             },
         );
-
     }
     const onyxData: OnyxData = {
         optimisticData: [
@@ -1120,35 +1120,28 @@ function enablePolicyCategories(policyID: string, enabled: boolean, shouldGoBack
         ],
     };
 
-
     const policyUpdate: Partial<Policy> = {
         areCategoriesEnabled: enabled,
         pendingFields: {
             areCategoriesEnabled: CONST.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
         },
-        ...( !enabled ? { requiresCategory: false } : {} ),
-    }
+        ...(!enabled ? {requiresCategory: false} : {}),
+    };
 
     const policyCategories = allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`];
 
-    const policyCategoriesUpdate: Record<string, Partial<PolicyCategory>> = !enabled && policyCategories ? {} : Object.fromEntries(
-        Object.entries(policyCategories).map(([categoryName]) => [
-            categoryName,
-            {
-                enabled: false,
-                pendingFields: {
-                    enabled: CONST.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
-                },
-            }
-        ])
-    );
+    const policyCategoriesUpdate: Record<string, Partial<PolicyCategory>> = enabled || !policyCategories
+        ? {}
+        : Object.fromEntries(
+              Object.entries(policyCategories).map(([categoryName]) => [
+                  categoryName,
+                  {
+                      enabled: false,
+                  },
+              ]),
+          );
 
-    pushTransactionViolationsOnyxData(
-        onyxData, 
-        policyID, 
-        policyUpdate,
-        policyCategoriesUpdate
-    );
+    pushTransactionViolationsOnyxData(onyxData, policyID, policyUpdate, policyCategoriesUpdate);
 
     if (onyxUpdatesToDisableCategories.length > 0) {
         onyxData.optimisticData?.push(...onyxUpdatesToDisableCategories);
