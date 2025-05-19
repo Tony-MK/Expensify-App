@@ -1064,7 +1064,7 @@ function enablePolicyCategories(policyID: string, enabled: boolean, shouldGoBack
                 onyxMethod: Onyx.METHOD.MERGE,
                 key: `${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`,
                 value: Object.fromEntries(
-                    Object.entries(allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`] ?? {}).map(([categoryName]) => [
+                    Object.entries(allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`] ? {}).map(([categoryName]) => [
                         categoryName,
                         {
                             enabled: false,
