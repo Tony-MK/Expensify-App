@@ -1064,7 +1064,7 @@ function enablePolicyCategories(policyID: string, enabled: boolean, shouldGoBack
                 onyxMethod: Onyx.METHOD.MERGE,
                 key: `${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`,
                 value: Object.fromEntries(
-                    Object.entries(allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`] ? {}).map(([categoryName]) => [
+                    Object.entries(allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`] ?? {}).map(([categoryName]) => [
                         categoryName,
                         {
                             enabled: false,
@@ -1131,7 +1131,7 @@ function enablePolicyCategories(policyID: string, enabled: boolean, shouldGoBack
 
     const policyCategories = allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${policyID}`];
 
-    const policyCategoriesUpdate: Record<string, Partial<PolicyCategory>> = !enabled && policyCategories ?? {} : Object.fromEntries(
+    const policyCategoriesUpdate: Record<string, Partial<PolicyCategory>> = !enabled && policyCategories ? {} : Object.fromEntries(
         Object.entries(policyCategories).map(([categoryName]) => [
             categoryName,
             {
