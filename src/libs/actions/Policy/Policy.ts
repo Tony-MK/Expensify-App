@@ -3402,8 +3402,13 @@ const DISABLED_MAX_EXPENSE_VALUES: Pick<Policy, 'maxExpenseAmountNoReceipt' | 'm
     maxExpenseAge: CONST.DISABLED_MAX_EXPENSE_VALUE,
 };
 
+const DefaultProhibitedExpenses: ProhibitedExpenses = {
+    gambling: true,
+    adultEntertainment: true,
+};
 function enablePolicyRules(policyID: string, enabled: boolean, shouldGoBack = true) {
     const policy = getPolicy(policyID);
+    const prohibitedExpenses = enabled && !policy?.prohibitedExpenses ? DefaultProhibitedExpenses : policy?.prohibitedExpenses;
     const onyxData: OnyxData = {
         optimisticData: [
             {
@@ -3411,6 +3416,7 @@ function enablePolicyRules(policyID: string, enabled: boolean, shouldGoBack = tr
                 key: `${ONYXKEYS.COLLECTION.POLICY}${policyID}`,
                 value: {
                     areRulesEnabled: enabled,
+                    prohibitedExpenses,
                     preventSelfApproval: false,
                     ...(!enabled ? DISABLED_MAX_EXPENSE_VALUES : {}),
                     pendingFields: {
@@ -3435,6 +3441,7 @@ function enablePolicyRules(policyID: string, enabled: boolean, shouldGoBack = tr
                 onyxMethod: Onyx.METHOD.MERGE,
                 key: `${ONYXKEYS.COLLECTION.POLICY}${policyID}`,
                 value: {
+                    prohibitedExpenses: policy?.prohibitedExpenses,
                     areRulesEnabled: !enabled,
                     preventSelfApproval: policy?.preventSelfApproval,
                     ...(!enabled
