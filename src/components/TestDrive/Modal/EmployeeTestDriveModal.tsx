@@ -26,6 +26,7 @@ import CONST from '@src/CONST';
 import ROUTES from '@src/ROUTES';
 import type SCREENS from '@src/SCREENS';
 import BaseTestDriveModal from './BaseTestDriveModal';
+import Log from '@libs/Log';
 
 function EmployeeTestDriveModal() {
     const {translate} = useLocalize();
@@ -43,6 +44,7 @@ function EmployeeTestDriveModal() {
         const loginTrim = bossEmail.trim();
         if (!loginTrim || !Str.isValidEmail(loginTrim)) {
             setFormError(translate('common.error.email'));
+            Log.hmmm('User is trying to add an invalid boss\'s email', {bossEmail});
             return;
         }
 
