@@ -4300,6 +4300,51 @@ function getUpdateMoneyRequestParams(
             hasDependentTags(policy, policyTagList ?? {}),
             isInvoiceReportReportUtils(iouReport),
         );
+        
+        const optimisticDuplicates = (violationsOnyxData.value as OnyxTypes.TransactionViolation[] ?? []).find((violation) => violation.name === CONST.VIOLATIONS.DUPLICATED_TRANSACTION)?.data?.duplicates ?? [];
+        currentTransactionViolations.filter((violation) => violation?.name === CONST.VIOLATIONS.DUPLICATED_TRANSACTION).flatMap((violation) => violation?.data?.duplicates ?? []).forEach((duplicateTransactionID) => {
+            // If the transaction is duplicated, we need to remove the violation for the duplicate transaction
+            if (duplicateTransactionID in optimisticDuplicates){
+                return;
+            };
+            
+            const duplicateTransactionsViolations = allTransactionViolations[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${duplicateTransactionID}`];
+            if (!duplicateTransactionsViolations) {
+                return;
+            }
+
+            const duplicateViolation = duplicateTransactionsViolations.find((violation) => violation.name === CONST.VIOLATIONS.DUPLICATED_TRANSACTION);
+            if (!duplicateViolation?.data?.duplicates) {
+                return;
+            }
+
+            const duplicateTransactionIDs = duplicateViolation.data.duplicates.filter((duplicateID) => duplicateID !== transactionID);
+            
+            const optimisticViolations: OnyxTypes.TransactionViolations = duplicateTransactionsViolations.filter((violation) => violation.name !== CONST.VIOLATIONS.DUPLICATED_TRANSACTION);
+
+            if (duplicateTransactionIDs.length > 0) {
+                optimisticViolations.push({
+                    ...duplicateViolation,
+                    data: {
+                        ...duplicateViolation.data,
+                        duplicates: duplicateTransactionIDs,
+                    },
+                });
+            }
+
+            optimisticData.push({
+                onyxMethod: Onyx.METHOD.SET,
+                key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${duplicateTransactionID}`,
+                value: optimisticViolations.length > 0 ? optimisticViolations : null,
+            });
+
+            failureData.push({
+                onyxMethod: Onyx.METHOD.SET,
+                key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${duplicateTransactionID}`,
+                value: duplicateTransactionsViolations,
+            });
+        });
+        
         optimisticData.push(violationsOnyxData);
         failureData.push({
             onyxMethod: Onyx.METHOD.MERGE,
