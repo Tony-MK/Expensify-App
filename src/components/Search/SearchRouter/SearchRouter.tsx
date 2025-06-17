@@ -287,12 +287,17 @@ function SearchRouter({onRouterClose, shouldHideInputCaret, isSearchRouterDispla
                 }
             } else {
                 backHistory(() => {
-                    onRouterClose();
                     if (item?.reportID) {
                         Navigation.navigate(ROUTES.REPORT_WITH_ID.getRoute(item.reportID));
                     } else if ('login' in item) {
                         navigateToAndOpenReport(item.login ? [item.login] : [], false);
                     }
+                    // Defer closing the router/modal until after navigation starts
+                    Navigation.isNavigationReady().then(() => {
+                        InteractionManager.runAfterInteractions(() => {
+                            onRouterClose();
+                        });
+                    });
                 });
             }
         },

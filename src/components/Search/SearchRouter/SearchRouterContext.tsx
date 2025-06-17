@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
 import type {AnimatedTextInputRef} from '@components/RNTextInput';
 import isSearchTopmostFullScreenRoute from '@libs/Navigation/helpers/isSearchTopmostFullScreenRoute';
 import {navigationRef} from '@libs/Navigation/Navigation';
@@ -68,7 +68,7 @@ function SearchRouterContextProvider({children}: ChildrenProps) {
     }, []);
 
     const routerContext = useMemo(() => {
-        const openSearchRouter = () => {
+        const openSearchRouter = useCallback(() => {
             if (isBrowserWithHistory) {
                 window.history.pushState({isSearchModalOpen: true} satisfies HistoryState, '');
             }
@@ -80,8 +80,8 @@ function SearchRouterContextProvider({children}: ChildrenProps) {
                 false,
                 true,
             );
-        };
-        const closeSearchRouter = () => {
+        }, [setIsSearchRouterDisplayed]);
+        const closeSearchRouter = useCallback(() => {
             setIsSearchRouterDisplayed(false);
             searchRouterDisplayedRef.current = false;
             if (isBrowserWithHistory) {
@@ -90,12 +90,12 @@ function SearchRouterContextProvider({children}: ChildrenProps) {
                     window.history.replaceState({isSearchModalOpen: false} satisfies HistoryState, '');
                 }
             }
-        };
+        }, [setIsSearchRouterDisplayed]);
 
         // There are callbacks that live outside of React render-loop and interact with SearchRouter
         // So we need a function that is based on ref to correctly open/close it
         // When user is on `/search` page we focus the Input instead of showing router
-        const toggleSearch = () => {
+        const toggleSearch = useCallback(() => {
             const searchFullScreenRoutes = navigationRef.getRootState()?.routes.findLast((route) => route.name === NAVIGATORS.SEARCH_FULLSCREEN_NAVIGATOR);
             const lastRoute = searchFullScreenRoutes?.state?.routes?.at(-1);
             const isUserOnSearchPage = isSearchTopmostFullScreenRoute() && lastRoute?.name === SCREENS.SEARCH.ROOT;
@@ -111,15 +111,15 @@ function SearchRouterContextProvider({children}: ChildrenProps) {
             } else {
                 openSearchRouter();
             }
-        };
+        }, [openSearchRouter, closeSearchRouter]);
 
-        const registerSearchPageInput = (ref: AnimatedTextInputRef) => {
+        const registerSearchPageInput = useCallback((ref: AnimatedTextInputRef) => {
             searchPageInputRef.current = ref;
-        };
+        }, []);
 
-        const unregisterSearchPageInput = () => {
+        const unregisterSearchPageInput = useCallback(() => {
             searchPageInputRef.current = undefined;
-        };
+        }, []);
 
         return {
             isSearchRouterDisplayed,
