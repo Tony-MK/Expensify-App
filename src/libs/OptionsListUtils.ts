@@ -720,7 +720,7 @@ function getLastMessageTextForReport(
     report: OnyxEntry<Report>,
     lastActorDetails: Partial<PersonalDetails> | null,
     policy?: OnyxEntry<Policy>,
-    reportNameValuePairs?: OnyxInputOrEntry<ReportNameValuePairs>,
+    isReportArchived = false,
 ): string {
     const reportID = report?.reportID;
     const lastReportAction = reportID ? lastVisibleReportActions[reportID] : undefined;
@@ -729,7 +729,7 @@ function getLastMessageTextForReport(
     const lastOriginalReportAction = reportID ? lastReportActions[reportID] : undefined;
     let lastMessageTextFromReport = '';
 
-    if (isArchivedNonExpenseReport(report, !!reportNameValuePairs?.private_isArchived)) {
+    if (isArchivedNonExpenseReport(report, isReportArchived)) {
         const archiveReason =
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             (isClosedAction(lastOriginalReportAction) && getOriginalMessage(lastOriginalReportAction)?.reason) || CONST.REPORT.ARCHIVE_REASON.DEFAULT;
@@ -855,7 +855,7 @@ function getLastMessageTextForReport(
     // we do not want to show report closed in LHN for non archived report so use getReportLastMessage as fallback instead of lastMessageText from report
     if (
         reportID &&
-        !isArchivedReport(reportNameValuePairs) &&
+        !isReportArchived &&
         (report.lastActionType === CONST.REPORT.ACTIONS.TYPE.CLOSED || (lastOriginalReportAction?.reportActionID && isDeletedAction(lastOriginalReportAction)))
     ) {
         return lastMessageTextFromReport || (getReportLastMessage(reportID).lastMessageText ?? '');
@@ -970,7 +970,7 @@ function createOption(accountIDs: number[], personalDetails: OnyxInputOrEntry<Pe
         const lastActorAccountID = report.lastActorAccountID || lastAction?.actorAccountID;
         const lastActorDetails = lastActorAccountID ? (personalDetails?.[lastActorAccountID] ?? null) : null;
         const lastActorDisplayName = getLastActorDisplayName(lastActorDetails);
-        const lastMessageTextFromReport = getLastMessageTextForReport(report, lastActorDetails, undefined, reportNameValuePairs);
+        const lastMessageTextFromReport = getLastMessageTextForReport(report, lastActorDetails, undefined, !!reportNameValuePairs?.private_isArchived);
         let lastMessageText = lastMessageTextFromReport;
 
         const shouldDisplayLastActorName =
