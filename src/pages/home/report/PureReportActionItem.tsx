@@ -38,6 +38,7 @@ import Text from '@components/Text';
 import TextLink from '@components/TextLink';
 import UnreadActionIndicator from '@components/UnreadActionIndicator';
 import useLocalize from '@hooks/useLocalize';
+import useReportIsArchived from '@hooks/useReportIsArchived';
 import usePermissions from '@hooks/usePermissions';
 import usePrevious from '@hooks/usePrevious';
 import useResponsiveLayout from '@hooks/useResponsiveLayout';
@@ -142,7 +143,7 @@ import {
     getUpgradeWorkspaceMessage,
     getWhisperDisplayNames,
     getWorkspaceNameUpdatedMessage,
-    isArchivedNonExpenseReport,
+    isArchivedNonExpenseReport as isArchivedNonExpenseReportUtils,
     isChatThread,
     isCompletedTaskReport,
     isExpenseReport,
@@ -456,6 +457,8 @@ function PureReportActionItem({
         [StyleUtils, isReportActionLinked, theme.messageHighlightBG],
     );
 
+    const isReportArchived = useReportIsArchived(report?.reportID);
+    const isArchivedNonExpenseReport = isArchivedNonExpenseReportUtils(report, isReportArchived)
     const reportPreviewStyles = StyleUtils.getMoneyRequestReportPreviewStyle(shouldUseNarrowLayout, 1, undefined, undefined);
 
     const isDeletedParentAction = isDeletedParentActionUtils(action);
@@ -1236,8 +1239,8 @@ function PureReportActionItem({
                                     index={index}
                                     ref={composerTextInputRef}
                                     shouldDisableEmojiPicker={
-                                        (chatIncludesConcierge(report) && isBlockedFromConcierge(blockedFromConcierge)) ||
-                                        isArchivedNonExpenseReport(report, !!reportNameValuePairs?.private_isArchived)
+                                        isArchivedNonExpenseReport ||
+                                        (chatIncludesConcierge(report) && isBlockedFromConcierge(blockedFromConcierge))
                                     }
                                     isGroupPolicyReport={!!report?.policyID && report.policyID !== CONST.POLICY.ID_FAKE}
                                 />
