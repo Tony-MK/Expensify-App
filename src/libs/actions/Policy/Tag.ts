@@ -992,12 +992,7 @@ function renamePolicyTagList(
     API.write(WRITE_COMMANDS.RENAME_POLICY_TAG_LIST, parameters, onyxData);
 }
 
-function setPolicyRequiresTag(
-    policyID: string,
-    requiresTag: boolean,
-    policyCategories: PolicyCategories = {},
-    transactionViolations: OnyxCollection<TransactionViolations> = {},
-) {
+function setPolicyRequiresTag(policyID: string, requiresTag: boolean, policyCategories: PolicyCategories = {}, transactionViolations: OnyxCollection<TransactionViolations> = {}) {
     const policyTags = allPolicyTags?.[`${ONYXKEYS.COLLECTION.POLICY_TAGS}${policyID}`] ?? {};
     const policyUpdate: Partial<Policy> = {
         requiresTag,
