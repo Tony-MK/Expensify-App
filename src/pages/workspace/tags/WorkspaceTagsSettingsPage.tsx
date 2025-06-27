@@ -65,9 +65,9 @@ function WorkspaceTagsSettingsPage({route}: WorkspaceTagsSettingsPageProps) {
     const hasEnabledOptions = hasEnabledOptionsUtil(Object.values(policyTags ?? {}).flatMap(({tags}) => Object.values(tags)));
     const updateWorkspaceRequiresTag = useCallback(
         (value: boolean) => {
-            setPolicyRequiresTag(policyID, value, policyCategories, policyTags, allTransactionViolations);
+            setPolicyRequiresTag(policyID, value, policyCategories, allTransactionViolations);
         },
-        [policyID],
+        [policyID, policyCategories, allTransactionViolations],
     );
     const isQuickSettingsFlow = route.name === SCREENS.SETTINGS_TAGS.SETTINGS_TAGS_SETTINGS;
 

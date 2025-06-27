@@ -996,9 +996,9 @@ function setPolicyRequiresTag(
     policyID: string,
     requiresTag: boolean,
     policyCategories: PolicyCategories = {},
-    policyTags: PolicyTagLists = {},
     transactionViolations: OnyxCollection<TransactionViolations> = {},
 ) {
+    const policyTags = allPolicyTags?.[`${ONYXKEYS.COLLECTION.POLICY_TAGS}${policyID}`] ?? {};
     const policyUpdate: Partial<Policy> = {
         requiresTag,
         errors: {requiresTag: null},
