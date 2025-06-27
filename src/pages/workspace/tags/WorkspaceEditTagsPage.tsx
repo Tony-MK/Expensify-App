@@ -81,7 +81,7 @@ function WorkspaceEditTagsPage({route}: WorkspaceEditTagsPageProps) {
             }
             goBackToTagsSettings();
         },
-        [tagListName, goBackToTagsSettings, route.params.policyID, route.params.orderWeight, policyTags],
+        [tagListName, goBackToTagsSettings, route.params.policyID, route.params.orderWeight, policyTags, policyCategories, allTransactionViolations],
     );
 
     return (

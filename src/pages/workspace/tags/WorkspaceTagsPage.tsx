@@ -161,16 +161,16 @@ function WorkspaceTagsPage({route}: WorkspaceTagsPageProps) {
 
     const updateWorkspaceTagEnabled = useCallback(
         (value: boolean, tagName: string) => {
-            setWorkspaceTagEnabled(policyID, {[tagName]: {name: tagName, enabled: value}}, 0);
+            setWorkspaceTagEnabled(policyID, {[tagName]: {name: tagName, enabled: value}}, 0, policyCategories, allTransactionViolations);
         },
-        [policyID],
+        [policyID, policyCategories, allTransactionViolations],
     );
 
     const updateWorkspaceRequiresTag = useCallback(
         (value: boolean, orderWeight: number) => {
             setPolicyTagsRequired(policyID, value, orderWeight, policyTags, policyCategories, allTransactionViolations);
         },
-        [policyID],
+        [policyID, policyTags, policyCategories, allTransactionViolations],
     );
 
     const tagList = useMemo<TagListItem[]>(() => {
@@ -475,7 +475,7 @@ function WorkspaceTagsPage({route}: WorkspaceTagsPageProps) {
                         return;
                     }
                     setSelectedTags([]);
-                    setWorkspaceTagEnabled(policyID, tagsToDisable, 0);
+                    setWorkspaceTagEnabled(policyID, tagsToDisable, 0, policyCategories, allTransactionViolations);
                 },
             });
         }
@@ -487,7 +487,7 @@ function WorkspaceTagsPage({route}: WorkspaceTagsPageProps) {
                 value: CONST.POLICY.BULK_ACTION_TYPES.ENABLE,
                 onSelected: () => {
                     setSelectedTags([]);
-                    setWorkspaceTagEnabled(policyID, tagsToEnable, 0);
+                    setWorkspaceTagEnabled(policyID, tagsToEnable, 0, policyCategories, allTransactionViolations);
                 },
             });
         }

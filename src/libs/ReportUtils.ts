@@ -1840,18 +1840,22 @@ function pushTransactionViolationsOnyxData(
     policyCategoriesUpdate: Record<string, Partial<PolicyCategory>> = {},
     policyTagListsUpdate: Record<string, Partial<PolicyTagList>> = {},
 ): OnyxData {
-    if (isEmptyObject(policyUpdate) && (isEmptyObject(policyCategoriesUpdate) || isEmptyObject(policyTagListsUpdate))) {
+    if (isEmptyObject(policyUpdate) && isEmptyObject(policyCategoriesUpdate) && isEmptyObject(policyTagListsUpdate)) {
         return onyxData;
     }
-    const optimisticPolicyTagLists = Object.keys(policyTagLists).reduce<PolicyTagLists>((acc, tagName) => {
-        acc[tagName] = {...policyTagLists[tagName], ...(policyTagListsUpdate?.[tagName] ?? {})};
-        return acc;
-    }, {});
+    const optimisticPolicyTagLists = isEmptyObject(policyTagListsUpdate)
+        ? policyTagLists
+        : Object.keys(policyTagLists).reduce<PolicyTagLists>((acc, tagName) => {
+              acc[tagName] = {...policyTagLists[tagName], ...(policyTagListsUpdate?.[tagName] ?? {})};
+              return acc;
+          }, {});
 
-    const optimisticPolicyCategories = Object.keys(policyCategories).reduce<PolicyCategories>((acc, categoryName) => {
-        acc[categoryName] = {...policyCategories[categoryName], ...(policyCategoriesUpdate?.[categoryName] ?? {})};
-        return acc;
-    }, {});
+    const optimisticPolicyCategories = isEmptyObject(policyCategoriesUpdate)
+        ? policyCategories
+        : Object.keys(policyCategories).reduce<PolicyCategories>((acc, categoryName) => {
+              acc[categoryName] = {...policyCategories[categoryName], ...(policyCategoriesUpdate?.[categoryName] ?? {})};
+              return acc;
+          }, {});
 
     const optimisticPolicy = {...allPolicies?.[`${ONYXKEYS.COLLECTION.POLICY}${policyID}`], ...policyUpdate} as Policy;
     const hasDependentTags = hasDependentTagsPolicyUtils(optimisticPolicy, optimisticPolicyTagLists);

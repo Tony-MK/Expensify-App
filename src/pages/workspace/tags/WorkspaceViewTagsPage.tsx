@@ -119,7 +119,7 @@ function WorkspaceViewTagsPage({route}: WorkspaceViewTagsProps) {
         (value: boolean, tagName: string) => {
             setWorkspaceTagEnabled(policyID, {[tagName]: {name: tagName, enabled: value}}, route.params.orderWeight, policyCategories, allTransactionViolations);
         },
-        [policyID, route.params.orderWeight],
+        [policyID, route.params.orderWeight, policyCategories, allTransactionViolations],
     );
 
     const tagList = useMemo<TagListItem[]>(
