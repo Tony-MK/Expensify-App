@@ -3491,7 +3491,6 @@ describe('actions/IOU', () => {
                     },
                     policyTagList: {},
                     policyCategories: {},
-                    
                 });
             }
             await waitForBatchedUpdates();

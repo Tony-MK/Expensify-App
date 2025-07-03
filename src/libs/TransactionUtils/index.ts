@@ -3,7 +3,7 @@ import {deepEqual} from 'fast-equals';
 import lodashDeepClone from 'lodash/cloneDeep';
 import lodashHas from 'lodash/has';
 import lodashSet from 'lodash/set';
-import type {OnyxCollection, OnyxEntry, OnyxUpdate} from 'react-native-onyx';
+import type {OnyxCollection, OnyxEntry} from 'react-native-onyx';
 import Onyx from 'react-native-onyx';
 import type {ValueOf} from 'type-fest';
 import type {UnreportedExpenseListItemType} from '@components/SelectionList/types';
@@ -16,6 +16,7 @@ import DateUtils from '@libs/DateUtils';
 import DistanceRequestUtils from '@libs/DistanceRequestUtils';
 import {toLocaleDigit} from '@libs/LocaleDigitUtils';
 import {translateLocal} from '@libs/Localize';
+import Log from '@libs/Log';
 import {rand64, roundToTwoDecimalPlaces} from '@libs/NumberUtils';
 import {getPersonalDetailByEmail} from '@libs/PersonalDetailsUtils';
 import {
@@ -48,12 +49,11 @@ import ONYXKEYS from '@src/ONYXKEYS';
 import type {OnyxInputOrEntry, Policy, RecentWaypoint, Report, ReviewDuplicates, TaxRate, TaxRates, Transaction, TransactionViolation, TransactionViolations} from '@src/types/onyx';
 import type {Attendee, Participant, SplitExpense} from '@src/types/onyx/IOU';
 import type {Errors, PendingAction} from '@src/types/onyx/OnyxCommon';
+import type {OnyxData} from '@src/types/onyx/Request';
 import type {SearchPolicy, SearchReport, SearchTransaction} from '@src/types/onyx/SearchResults';
 import type {Comment, Receipt, TransactionChanges, TransactionCustomUnit, TransactionPendingFieldsKey, Waypoint, WaypointCollection} from '@src/types/onyx/Transaction';
 import {isEmptyObject} from '@src/types/utils/EmptyObject';
 import getDistanceInMeters from './getDistanceInMeters';
-import { OnyxData } from '@src/types/onyx/Request';
-import Log from '@libs/Log';
 
 type TransactionParams = {
     amount: number;
@@ -1327,14 +1327,14 @@ type FieldsToChange = {
  * Updates the duplicates DUPLICATED_TRANSACTION violation duplicate data by removing the transactionID
  * of a transaction that is either being deleted or updated.
  * @param transactionID - The ID of the transaction being deleted or updated.
- * @param allTransactionViolations - The collection of all transaction violations.
+ * @param transactionViolations - The collection of all transaction violations.
  */
-function updateDuplicatesTransactionsViolations(transactionID: string, allTransactionViolations: OnyxCollection<TransactionViolations>, onyxData: OnyxData) {
-    if (!transactionID || !allTransactionViolations) {
+function updateDuplicatesTransactionsViolations(transactionID: string, transactionViolations: OnyxCollection<TransactionViolations>, onyxData: OnyxData) {
+    if (!transactionID || !transactionViolations) {
         return;
     }
 
-    const currentTransactionViolations = allTransactionViolations[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`];
+    const currentTransactionViolations = transactionViolations[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`];
     if (!currentTransactionViolations || currentTransactionViolations.length === 0) {
         return;
     }
@@ -1346,11 +1346,9 @@ function updateDuplicatesTransactionsViolations(transactionID: string, allTransa
     if (duplicateIDs.length === 0) {
         return;
     }
-    
+
     // Filter out transactions assumed that they have be reviewed by removing settled and approved transactions
-    const duplicates = removeSettledAndApprovedTransactions(
-        Array.from(new Set(duplicateIDs)).map((id) => allTransactions?.[`${ONYXKEYS.COLLECTION.TRANSACTION}${id}`])
-    );
+    const duplicates = removeSettledAndApprovedTransactions(Array.from(new Set(duplicateIDs)).map((id) => allTransactions?.[`${ONYXKEYS.COLLECTION.TRANSACTION}${id}`]));
 
     if (duplicates.length === 0) {
         return;
@@ -1358,10 +1356,10 @@ function updateDuplicatesTransactionsViolations(transactionID: string, allTransa
 
     duplicates.forEach((duplicate) => {
         const duplicateID = duplicate.transactionID;
-        if (!duplicateID){
-            return
+        if (!duplicateID) {
+            return;
         }
-        const duplicateViolations = allTransactionViolations[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${duplicateID}`];
+        const duplicateViolations = transactionViolations[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${duplicateID}`];
         if (!duplicateViolations) {
             return;
         }
@@ -1378,8 +1376,8 @@ function updateDuplicatesTransactionsViolations(transactionID: string, allTransa
             return;
         }
 
-        const duplicateTransactionViolation = duplicateTransactionViolations[0];
-        if (!duplicateTransactionViolation?.data?.duplicates || duplicateTransactionViolation?.data?.duplicates.length == 0) {
+        const duplicateTransactionViolation = duplicateTransactionViolations.at(0);
+        if (!duplicateTransactionViolation?.data?.duplicates || duplicateTransactionViolation?.data?.duplicates.length === 0) {
             return;
         }
 

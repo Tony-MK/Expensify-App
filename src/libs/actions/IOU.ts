@@ -4318,9 +4318,10 @@ function getUpdateMoneyRequestParams(
     ) {
         const currentTransactionViolations = allTransactionViolations[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`] ?? [];
         const hasModifiedDate = 'date' in transactionChanges;
-        const optimisticViolations = hasModifiedAmount || hasModifiedDate
-            ? currentTransactionViolations.filter((violation) => violation.name !== CONST.VIOLATIONS.DUPLICATED_TRANSACTION)
-            : currentTransactionViolations;
+        const optimisticViolations =
+            hasModifiedAmount || hasModifiedDate
+                ? currentTransactionViolations.filter((violation) => violation.name !== CONST.VIOLATIONS.DUPLICATED_TRANSACTION)
+                : currentTransactionViolations;
         const violationsOnyxData = ViolationsUtils.getViolationsOnyxData(
             updatedTransaction,
             optimisticViolations,
@@ -7367,7 +7368,6 @@ type UpdateMoneyRequestAmountAndCurrencyParams = {
     policyCategories?: OnyxEntry<OnyxTypes.PolicyCategories>;
     taxCode: string;
     transactionViolations: OnyxCollection<OnyxTypes.TransactionViolations>;
-
 };
 
 /** Updates the amount and currency fields of an expense */
@@ -8066,7 +8066,13 @@ function deleteMoneyRequest(
     return urlToNavigateBack;
 }
 
-function deleteTrackExpense(chatReportID: string | undefined, transactionID: string | undefined, reportAction: OnyxTypes.ReportAction, isSingleTransactionView = false, violations: OnyxCollection<OnyxTypes.TransactionViolations> = {}) {
+function deleteTrackExpense(
+    chatReportID: string | undefined,
+    transactionID: string | undefined,
+    reportAction: OnyxTypes.ReportAction,
+    isSingleTransactionView = false,
+    violations: OnyxCollection<OnyxTypes.TransactionViolations> = {},
+) {
     if (!chatReportID || !transactionID) {
         return;
     }
