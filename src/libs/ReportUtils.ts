@@ -1880,14 +1880,19 @@ function pushTransactionViolationsOnyxData(
                 isReportAnInvoice,
             );
 
-            if (optimisticTransactionViolations) {
-                onyxData?.optimisticData?.push(optimisticTransactionViolations);
-                onyxData?.failureData?.push({
-                    onyxMethod: Onyx.METHOD.SET,
-                    key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transaction.transactionID}`,
-                    value: transactionViolations ?? null,
-                });
+            if (!onyxData?.optimisticData) {
+                onyxData.optimisticData = [];
             }
+            if (!onyxData?.failureData) {
+                onyxData.failureData = [];
+            }
+
+            onyxData.optimisticData.push(optimisticTransactionViolations);
+            onyxData.failureData.push({
+                onyxMethod: Onyx.METHOD.SET,
+                key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transaction.transactionID}`,
+                value: transactionViolations ?? null,
+            });
         });
     });
     return onyxData;
