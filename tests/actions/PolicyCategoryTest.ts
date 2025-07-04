@@ -5,10 +5,11 @@ import * as Category from '@src/libs/actions/Policy/Category';
 import ONYXKEYS from '@src/ONYXKEYS';
 import createRandomPolicy from '../utils/collections/policies';
 import createRandomPolicyCategories from '../utils/collections/policyCategory';
+import createRandomReport from '../utils/collections/reports';
+import createRandomTransaction from '../utils/collections/transaction';
 import * as TestHelper from '../utils/TestHelper';
 import type {MockFetch} from '../utils/TestHelper';
 import waitForBatchedUpdates from '../utils/waitForBatchedUpdates';
-import createRandomTransaction from 'tests/utils/collections/transaction';
 
 OnyxUpdateManager();
 describe('actions/PolicyCategory', () => {
@@ -246,32 +247,52 @@ describe('actions/PolicyCategory', () => {
         });
 
         it('Delete category when other expenses are using it', async () => {
-            const fakePolicy = { 
-                ...createRandomPolicy(0),
-                requiresCategory: true,
-            };
             const fakeCategories = createRandomPolicyCategories(3);
-            const fakeExpense = {
-                ...createRandomTransaction(0),
-                policyID: fakePolicy.id,
-                category: Object.keys(fakeCategories).at(0) ?? '',
-            };
             const categoryNameToDelete = Object.keys(fakeCategories).at(0) ?? '';
             const categoriesToDelete = [categoryNameToDelete];
+            const fakePolicy = {
+                ...createRandomPolicy(0),
+                requiresCategory: true,
+                areCategoriesEnabled: true,
+            };
+            const fakeReport = {
+                ...createRandomReport(0),
+                policyID: fakePolicy.id,
+                type: CONST.REPORT.TYPE.EXPENSE,
+                stateNum: CONST.REPORT.STATE_NUM.OPEN,
+                statusNum: CONST.REPORT.STATUS_NUM.OPEN,
+            };
+            const fakeTransaction = {
+                ...createRandomTransaction(0),
+                category: categoryNameToDelete,
+                reportID: fakeReport.reportID,
+                merchant: 'test merchant',
+                amount: 1000,
+                currency: CONST.CURRENCY.USD,
+            };
+
             mockFetch?.pause?.();
+            Onyx.set(`${ONYXKEYS.COLLECTION.REPORT}${fakeReport.reportID}`, fakeReport);
             Onyx.set(`${ONYXKEYS.COLLECTION.POLICY}${fakePolicy.id}`, fakePolicy);
             Onyx.set(`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${fakePolicy.id}`, fakeCategories);
-            Onyx.set(`${ONYXKEYS.COLLECTION.TRANSACTION}${fakeExpense.transactionID}`, fakeExpense);
+            Onyx.set(`${ONYXKEYS.COLLECTION.TRANSACTION}${fakeTransaction.transactionID}`, fakeTransaction);
+            await waitForBatchedUpdates();
+
             Category.deleteWorkspaceCategories(fakePolicy.id, categoriesToDelete);
             await waitForBatchedUpdates();
+
             await new Promise<void>((resolve) => {
                 const connection = Onyx.connect({
-                    key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${fakeExpense.transactionID}`,
+                    key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${fakeTransaction.transactionID}`,
                     waitForCollectionCallback: false,
                     callback: (transactionViolations) => {
                         Onyx.disconnect(connection);
+
+                        // Check if the transaction violation was created
+                        expect(transactionViolations).toBeDefined();
                         expect(transactionViolations?.length).toBe(1);
                         expect(transactionViolations?.at(0)?.name).toBe(CONST.VIOLATIONS.CATEGORY_OUT_OF_POLICY);
+
                         resolve();
                     },
                 });
