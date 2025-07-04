@@ -1860,6 +1860,9 @@ function pushTransactionViolationsOnyxData(
     const optimisticPolicy = {...allPolicies?.[`${ONYXKEYS.COLLECTION.POLICY}${policyID}`], ...policyUpdate} as Policy;
     const hasDependentTags = hasDependentTagsPolicyUtils(optimisticPolicy, optimisticPolicyTagLists);
 
+    const optimisticData: OnyxUpdate[] = [];
+    const failureData: OnyxUpdate[] = [];
+
     getAllPolicyReports(policyID).forEach((report) => {
         if (!report?.reportID) {
             return;
@@ -1880,21 +1883,33 @@ function pushTransactionViolationsOnyxData(
                 isReportAnInvoice,
             );
 
-            if (!onyxData?.optimisticData) {
-                onyxData.optimisticData = [];
-            }
-            if (!onyxData?.failureData) {
-                onyxData.failureData = [];
+            if (!optimisticTransactionViolations){
+                return;
             }
 
-            onyxData.optimisticData.push(optimisticTransactionViolations);
-            onyxData.failureData.push({
+            optimisticData.push(optimisticTransactionViolations);
+            failureData.push({
                 onyxMethod: Onyx.METHOD.SET,
                 key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transaction.transactionID}`,
                 value: transactionViolations ?? null,
             });
         });
     });
+
+    if (optimisticData.length > 0) {
+        onyxData.optimisticData = [
+            ...(onyxData?.optimisticData ?? []),
+            ...optimisticData,
+        ];
+    }
+
+    if (failureData.length > 0) {
+        onyxData.failureData = [
+            ...(onyxData?.failureData ?? []),
+            ...failureData,
+        ];
+    }
+
     return onyxData;
 }
 
