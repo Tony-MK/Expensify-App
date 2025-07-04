@@ -1860,42 +1860,65 @@ function pushTransactionViolationsOnyxData(
     const optimisticPolicy = {...allPolicies?.[`${ONYXKEYS.COLLECTION.POLICY}${policyID}`], ...policyUpdate} as Policy;
     const hasDependentTags = hasDependentTagsPolicyUtils(optimisticPolicy, optimisticPolicyTagLists);
 
-    getAllPolicyReports(policyID).forEach((report) => {
+    const processedTransactionIDs = new Set<string>();
+    const optimisticData: OnyxUpdate[] = [];
+    const failureData: OnyxUpdate[] = [];
+
+    const reports = getAllPolicyReports(policyID);
+
+    if (!reports || reports.length === 0) {
+        return onyxData;
+    }
+
+    for (const report of reports) {
         if (!report?.reportID) {
-            return;
+            continue;
         }
 
-        const isReportAnInvoice = isInvoiceReport(report);
+        const isInvoice = isInvoiceReport(report);
+        const transactions = getReportTransactions(report.reportID) ?? [];
 
-        getReportTransactions(report.reportID).forEach((transaction: Transaction) => {
-            const transactionViolations = allTransactionViolations?.[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transaction.transactionID}`];
+        for (const transaction of transactions) {
+            const transactionID = transaction?.transactionID;
+            if (!transactionID || processedTransactionIDs.has(transactionID)) {
+                continue;
+            }
 
-            const optimisticTransactionViolations = ViolationsUtils.getViolationsOnyxData(
+            processedTransactionIDs.add(transactionID);
+
+            const existingViolations = allTransactionViolations?.[`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`];
+
+            const optimisticViolations = ViolationsUtils.getViolationsOnyxData(
                 transaction,
-                transactionViolations ?? [],
+                existingViolations ?? [],
                 optimisticPolicy,
                 optimisticPolicyTagLists,
                 optimisticPolicyCategories,
                 hasDependentTags,
-                isReportAnInvoice,
+                isInvoice,
             );
 
-            if (!onyxData?.optimisticData) {
-                onyxData.optimisticData = [];
-            }
-            if (!onyxData?.failureData) {
-                onyxData.failureData = [];
+            if (!optimisticViolations) {
+                continue;
             }
 
-            onyxData.optimisticData.push(optimisticTransactionViolations);
-            onyxData.failureData.push({
+            optimisticData.push(optimisticViolations);
+            failureData.push({
                 onyxMethod: Onyx.METHOD.SET,
-                key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transaction.transactionID}`,
-                value: transactionViolations ?? null,
+                key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`,
+                value: existingViolations ?? null,
             });
-        });
-    });
-    return onyxData;
+        }
+    }
+    if (optimisticData.length === 0) {
+        return onyxData;
+    }
+    return {
+        ...onyxData,
+        optimisticData: optimisticData.length > 0 ? [...(onyxData?.optimisticData ?? []), ...optimisticData] : onyxData.optimisticData,
+
+        failureData: failureData.length > 0 ? [...(onyxData?.failureData ?? []), ...failureData] : onyxData.failureData,
+    };
 }
 
 /**
