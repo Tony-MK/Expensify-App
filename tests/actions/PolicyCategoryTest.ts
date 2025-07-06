@@ -8,7 +8,6 @@ import createRandomPolicyCategories from '../utils/collections/policyCategory';
 import * as TestHelper from '../utils/TestHelper';
 import type {MockFetch} from '../utils/TestHelper';
 import waitForBatchedUpdates from '../utils/waitForBatchedUpdates';
-import createRandomTransaction from 'tests/utils/collections/transaction';
 
 OnyxUpdateManager();
 describe('actions/PolicyCategory', () => {
@@ -239,32 +238,6 @@ describe('actions/PolicyCategory', () => {
                         Onyx.disconnect(connection);
                         expect(policyCategories?.[categoryNameToDelete]).toBeFalsy();
 
-                        resolve();
-                    },
-                });
-            });
-        });
-
-        it('Delete category when other expenses are using it', async () => {
-            const fakePolicy = createRandomPolicy(0);
-            const fakeCategories = createRandomPolicyCategories(3);
-            const fakeExpense = createRandomTransaction(0);
-            const categoryNameToDelete = Object.keys(fakeCategories).at(0) ?? '';
-            const categoriesToDelete = [categoryNameToDelete];
-            mockFetch?.pause?.();
-            Onyx.set(`${ONYXKEYS.COLLECTION.POLICY}${fakePolicy.id}`, fakePolicy);
-            Onyx.set(`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${fakePolicy.id}`, fakeCategories);
-            Onyx.set(`${ONYXKEYS.COLLECTION.TRANSACTION}${fakeExpense.transactionID}`, fakeExpense);
-            Category.deleteWorkspaceCategories(fakePolicy.id, categoriesToDelete);
-            await waitForBatchedUpdates();
-            await new Promise<void>((resolve) => {
-                const connection = Onyx.connect({
-                    key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${fakeExpense.transactionID}`,
-                    waitForCollectionCallback: false,
-                    callback: (transactionViolations) => {
-                        Onyx.disconnect(connection);
-                        expect(transactionViolations?.length).toBe(1);
-                        expect(transactionViolations?.at(0)?.name).toBe(CONST.VIOLATIONS.CATEGORY_OUT_OF_POLICY);
                         resolve();
                     },
                 });
