@@ -1870,18 +1870,18 @@ function pushTransactionViolationsOnyxData(
         return onyxData;
     }
 
-    for (const report of reports) {
+    reports.forEach((report) => {
         if (!report?.reportID) {
-            continue;
+            return;
         }
 
         const isInvoice = isInvoiceReport(report);
         const transactions = getReportTransactions(report.reportID) ?? [];
 
-        for (const transaction of transactions) {
+        transactions.forEach((transaction) => {
             const transactionID = transaction?.transactionID;
             if (!transactionID || processedTransactionIDs.has(transactionID)) {
-                continue;
+                return;
             }
 
             processedTransactionIDs.add(transactionID);
@@ -1898,25 +1898,23 @@ function pushTransactionViolationsOnyxData(
                 isInvoice,
             );
 
-            if (!optimisticViolations) {
-                continue;
+            if (optimisticViolations) {
+                optimisticData.push(optimisticViolations);
+                failureData.push({
+                    onyxMethod: Onyx.METHOD.SET,
+                    key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`,
+                    value: existingViolations ?? null,
+                });
             }
+        });
+    });
 
-            optimisticData.push(optimisticViolations);
-            failureData.push({
-                onyxMethod: Onyx.METHOD.SET,
-                key: `${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`,
-                value: existingViolations ?? null,
-            });
-        }
-    }
     if (optimisticData.length === 0) {
         return onyxData;
     }
     return {
         ...onyxData,
         optimisticData: optimisticData.length > 0 ? [...(onyxData?.optimisticData ?? []), ...optimisticData] : onyxData.optimisticData,
-
         failureData: failureData.length > 0 ? [...(onyxData?.failureData ?? []), ...failureData] : onyxData.failureData,
     };
 }
