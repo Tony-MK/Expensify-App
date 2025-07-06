@@ -246,16 +246,9 @@ describe('actions/PolicyCategory', () => {
         });
 
         it('Delete category when other expenses are using it', async () => {
-            const fakePolicy = { 
-                ...createRandomPolicy(0),
-                requiresCategory: true,
-            };
+            const fakePolicy = createRandomPolicy(0);
             const fakeCategories = createRandomPolicyCategories(3);
-            const fakeExpense = {
-                ...createRandomTransaction(0),
-                policyID: fakePolicy.id,
-                category: Object.keys(fakeCategories).at(0) ?? '',
-            };
+            const fakeExpense = createRandomTransaction(0);
             const categoryNameToDelete = Object.keys(fakeCategories).at(0) ?? '';
             const categoriesToDelete = [categoryNameToDelete];
             mockFetch?.pause?.();
