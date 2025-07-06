@@ -28,6 +28,7 @@ import {
     canHoldUnholdReportAction,
     findLastAccessedReport,
     getAllAncestorReportActions,
+    getAllPolicyReports,
     getApprovalChain,
     getChatByParticipants,
     getDefaultWorkspaceAvatar,
@@ -43,6 +44,7 @@ import {
     getReasonAndReportActionThatRequiresAttention,
     getReportIDFromLink,
     getReportName,
+    getReportTransactions,
     getWorkspaceIcon,
     getWorkspaceNameUpdatedMessage,
     hasReceiptError,
@@ -67,9 +69,10 @@ import initOnyxDerivedValues from '@userActions/OnyxDerived';
 import CONST from '@src/CONST';
 import IntlStore from '@src/languages/IntlStore';
 import ONYXKEYS from '@src/ONYXKEYS';
-import type {Beta, OnyxInputOrEntry, PersonalDetailsList, Policy, PolicyEmployeeList, Report, ReportAction, ReportNameValuePairs, Transaction} from '@src/types/onyx';
+import type {Beta, OnyxInputOrEntry, PersonalDetailsList, Policy, PolicyEmployeeList, Report, ReportAction, ReportNameValuePairs, Transaction, TransactionViolations} from '@src/types/onyx';
 import type {ErrorFields, Errors} from '@src/types/onyx/OnyxCommon';
 import type {Participant} from '@src/types/onyx/Report';
+import type {OnyxData} from '@src/types/onyx/Request';
 import {toCollectionDataSet} from '@src/types/utils/CollectionDataSet';
 import {actionR14932 as mockIOUAction} from '../../__mocks__/reportData/actions';
 import {chatReportR14932 as mockedChatReport, iouReportR14932 as mockIOUReport} from '../../__mocks__/reportData/reports';
@@ -78,6 +81,7 @@ import * as NumberUtils from '../../src/libs/NumberUtils';
 import {convertedInvoiceChat} from '../data/Invoice';
 import createRandomPolicy from '../utils/collections/policies';
 import createRandomPolicyCategories from '../utils/collections/policyCategory';
+import createRandomPolicyTags from '../utils/collections/policyTags';
 import createRandomReportAction from '../utils/collections/reportActions';
 import createRandomReport from '../utils/collections/reports';
 import createRandomTransaction from '../utils/collections/transaction';
@@ -3654,6 +3658,8 @@ describe('ReportUtils', () => {
                     category: fakePolicyCategoryNameToDelete,
                 },
             });
+
+            console.log(getAllPolicyReports(fakePolicyID).map((report) => getReportTransactions(report?.reportID)));
 
             const {optimisticData, failureData} = pushTransactionViolationsOnyxData({}, fakePolicyID, fakePolicyCategories, {}, {}, {}, fakePolicyCategoriesUpdate, {});
 
