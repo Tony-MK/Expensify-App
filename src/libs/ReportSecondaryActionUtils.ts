@@ -373,14 +373,14 @@ function isHoldAction(report: Report, chatReport: OnyxEntry<Report>, reportTrans
     return !!reportActions && isHoldActionForTransaction(report, transaction, reportActions);
 }
 
-function isRemoveHoldAction(report: Report, reportTransactions: Transaction[], reportActions?: ReportAction[], policy?: Policy): boolean {
+function isRemoveHoldAction(report: Report, chatReport: OnyxEntry<Report>, reportTransactions: Transaction[], reportActions?: ReportAction[], policy?: Policy): boolean {
     const isReportOnHold = reportTransactions.some(isOnHoldTransactionUtils);
 
     if (!isReportOnHold) {
         return false;
     }
 
-    const transactionThreadReportID = getOneTransactionThreadReportID(report.reportID, reportActions);
+    const transactionThreadReportID = getOneTransactionThreadReportID(report, chatReport, reportActions);
 
     if (!transactionThreadReportID) {
         return false;
@@ -599,8 +599,9 @@ function getSecondaryReportActions({
         options.push(CONST.REPORT.SECONDARY_ACTIONS.HOLD);
     }
 
-    if (isRemoveHoldAction(report, reportTransactions, reportActions, policy)) {
+    if (isRemoveHoldAction(report, chatReport, reportTransactions, reportActions, policy)) {
         options.push(CONST.REPORT.SECONDARY_ACTIONS.REMOVE_HOLD);
+    }
 
     if (isSplitAction(report, reportTransactions, policy)) {
         options.push(CONST.REPORT.SECONDARY_ACTIONS.SPLIT);
