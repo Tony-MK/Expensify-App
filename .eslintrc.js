@@ -245,6 +245,19 @@ module.exports = {
         ],
         'react-compiler/react-compiler': 'error',
 
+        'no-extra-semi' : 'error',
+        "semi": ["error", "never"],
+
+        // Disallow any raw text nodes in JSX
+        "react/jsx-no-literals": [
+            "error", {
+            // You can allow string literals in props (e.g. title="Hello")
+            "noStrings": false,
+            // Or be stricter: ban them everywhere
+            // "noStrings": true
+            }
+        ],
+
         // Disallow usage of certain functions and imports
         'no-restricted-syntax': [
             'error',
