@@ -43,6 +43,7 @@ import type {
     BeginningOfChatHistoryInvoiceRoomParams,
     BeginningOfChatHistoryPolicyExpenseChatParams,
     BeginningOfChatHistoryUserRoomParams,
+    BillableDefaultDescriptionParams,
     BillingBannerCardAuthenticationRequiredParams,
     BillingBannerCardExpiredParams,
     BillingBannerCardOnDisputeParams,
@@ -120,6 +121,7 @@ import type {
     ImportPerDiemRatesSuccessfulDescriptionParams,
     ImportTagsSuccessfulDescriptionParams,
     IncorrectZipFormatParams,
+    IndividualExpenseRulesSubtitleParams,
     InstantSummaryParams,
     IntacctMappingTitleParams,
     IntegrationExportParams,
@@ -190,6 +192,7 @@ import type {
     RoleNamesParams,
     RoomNameReservedErrorParams,
     RoomRenamedToParams,
+    RulesEnableWorkflowsParams,
     SecondaryLoginParams,
     SetTheDistanceMerchantParams,
     SetTheRequestParams,
@@ -260,6 +263,7 @@ import type {
     UpdatePolicyCustomUnitParams,
     UpdatePolicyCustomUnitTaxEnabledParams,
     UpdateRoleParams,
+    UpgradeSuccessMessageParams,
     UsePlusButtonParams,
     UserIsAlreadyMemberParams,
     UserSplitParams,
@@ -291,6 +295,7 @@ import type {
     WorkspaceMemberList,
     WorkspaceOwnerWillNeedToAddOrUpdatePaymentCardParams,
     WorkspaceRouteParams,
+    WorkspaceShareNoteParams,
     WorkspacesListRouteParams,
     WorkspaceYouMayJoin,
     YourPlanPriceParams,
@@ -3446,10 +3451,8 @@ const translations = {
             appliedOnExport: '未导入Expensify，已在导出时应用',
             shareNote: {
                 header: '与其他成员共享您的工作区',
-                content: {
-                    firstPart: '分享此二维码或复制下面的链接，以便成员轻松请求访问您的工作区。所有加入工作区的请求将显示在',
-                    secondPart: '供您审阅的空间。',
-                },
+                content: ({adminsRoomLink}: WorkspaceShareNoteParams) =>
+                    `分享此二维码或复制下面的链接，方便成员申请加入您的工作区。所有加入工作区的请求都将显示在 <a href="${adminsRoomLink}">${CONST.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS}</a> room 中供您查看。`,
             },
             connectTo: ({connectionName}: ConnectionNameParams) => `连接到${CONST.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
             createNewConnection: '创建新连接',
@@ -5371,11 +5374,10 @@ const translations = {
             upgradeToUnlock: '解锁此功能',
             completed: {
                 headline: `您的工作区已升级！`,
-                successMessage: ({policyName}: ReportPolicyNameParams) => `您已成功将 ${policyName} 升级到 Control 计划！`,
+                successMessage: ({policyName, subscriptionLink}: UpgradeSuccessMessageParams) =>
+                    `<centered-text>您已成功将 ${policyName} 升级到控制计划！<a href="${subscriptionLink}">查看订阅详情</a>。</centered-text>`,
                 categorizeMessage: `您已成功升级到 Collect 计划的工作区。现在您可以对费用进行分类了！`,
                 travelMessage: `您已成功升级到 Collect 计划的工作区。现在您可以开始预订和管理旅行了！`,
-                viewSubscription: '查看您的订阅',
-                moreDetails: '了解更多详情。',
                 gotIt: '知道了，谢谢',
             },
             commonFeatures: {
@@ -5443,7 +5445,8 @@ const translations = {
         rules: {
             individualExpenseRules: {
                 title: '费用',
-                subtitle: '为单个费用设置支出控制和默认值。您还可以创建规则以',
+                subtitle: ({categoriesPageLink, tagsPageLink}: IndividualExpenseRulesSubtitleParams) =>
+                    `<muted-text>为单项支出设置支出控制和默认值。您还可以为<a href="${categoriesPageLink}">类别</a>和<a href="${tagsPageLink}">标签</a>创建规则。</muted-text>`,
                 receiptRequiredAmount: '所需收据金额',
                 receiptRequiredAmountDescription: '当支出超过此金额时需要收据，除非被类别规则覆盖。',
                 maxExpenseAmount: '最大报销金额',
@@ -5455,18 +5458,9 @@ const translations = {
                     one: '1天',
                     other: (count: number) => `${count}天`,
                 }),
-                cashExpenseDefault: '现金支出默认值',
-                cashExpenseDefaultDescription: '选择如何创建现金支出。如果不是导入的公司卡交易，则视为现金支出。这包括手动创建的支出、收据、津贴、里程和工时支出。',
-                reimbursableDefault: '可报销',
-                reimbursableDefaultDescription: '支出通常会报销给员工',
-                nonReimbursableDefault: '不可报销',
-                nonReimbursableDefaultDescription: '支出偶尔会报销给员工',
-                alwaysReimbursable: '始终可报销',
-                alwaysReimbursableDescription: '支出始终会报销给员工',
-                alwaysNonReimbursable: '始终不可报销',
-                alwaysNonReimbursableDescription: '支出永远不会报销给员工',
                 billableDefault: '默认计费',
-                billableDefaultDescription: '选择现金和信用卡费用是否应默认可计费。可计费用在中启用或禁用。',
+                billableDefaultDescription: ({tagsPageLink}: BillableDefaultDescriptionParams) =>
+                    `<muted-text>C选择现金和信用卡支出是否默认可计费。可计费支出可在<a href="${tagsPageLink}">标签</a>中启用或禁用。</muted-text>`,
                 billable: '可计费的',
                 billableDescription: '费用通常会重新计费给客户。',
                 nonBillable: '非计费',
@@ -5530,8 +5524,7 @@ const translations = {
                     always: '始终要求收据',
                 },
                 defaultTaxRate: '默认税率',
-                goTo: '前往',
-                andEnableWorkflows: '并启用工作流程，然后添加审批以解锁此功能。',
+                enableWorkflows: ({moreFeaturesLink}: RulesEnableWorkflowsParams) => `转到[更多功能](${moreFeaturesLink})并启用工作流程，然后添加审批以解锁此功能。`,
             },
             customRules: {
                 title: '自定义规则',
@@ -5742,7 +5735,6 @@ const translations = {
             return `将月度报告提交日期更新为“${newValue}”（之前为“${oldValue}”）`;
         },
         updateDefaultBillable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) => `已将“重新向客户计费费用”更新为“${newValue}”（之前为“${oldValue}”）`,
-        updateDefaultReimbursable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) => `已将“现金支出默认值”更新为“${newValue}”（之前为“${oldValue}”）`,
         updateDefaultTitleEnforced: ({value}: UpdatedPolicyFieldWithValueParam) => `"强制执行默认报告标题" ${value ? 'on' : '关'}`,
         renamedWorkspaceNameAction: ({oldName, newName}: RenamedWorkspaceNameActionParams) => `已将此工作区的名称更新为“${newName}”（之前为“${oldName}”）`,
         updateWorkspaceDescription: ({newDescription, oldDescription}: UpdatedPolicyDescriptionParams) =>

@@ -43,6 +43,7 @@ import type {
     BeginningOfChatHistoryInvoiceRoomParams,
     BeginningOfChatHistoryPolicyExpenseChatParams,
     BeginningOfChatHistoryUserRoomParams,
+    BillableDefaultDescriptionParams,
     BillingBannerCardAuthenticationRequiredParams,
     BillingBannerCardExpiredParams,
     BillingBannerCardOnDisputeParams,
@@ -120,6 +121,7 @@ import type {
     ImportPerDiemRatesSuccessfulDescriptionParams,
     ImportTagsSuccessfulDescriptionParams,
     IncorrectZipFormatParams,
+    IndividualExpenseRulesSubtitleParams,
     InstantSummaryParams,
     IntacctMappingTitleParams,
     IntegrationExportParams,
@@ -190,6 +192,7 @@ import type {
     RoleNamesParams,
     RoomNameReservedErrorParams,
     RoomRenamedToParams,
+    RulesEnableWorkflowsParams,
     SecondaryLoginParams,
     SetTheDistanceMerchantParams,
     SetTheRequestParams,
@@ -260,6 +263,7 @@ import type {
     UpdatePolicyCustomUnitParams,
     UpdatePolicyCustomUnitTaxEnabledParams,
     UpdateRoleParams,
+    UpgradeSuccessMessageParams,
     UsePlusButtonParams,
     UserIsAlreadyMemberParams,
     UserSplitParams,
@@ -291,6 +295,7 @@ import type {
     WorkspaceMemberList,
     WorkspaceOwnerWillNeedToAddOrUpdatePaymentCardParams,
     WorkspaceRouteParams,
+    WorkspaceShareNoteParams,
     WorkspacesListRouteParams,
     WorkspaceYouMayJoin,
     YourPlanPriceParams,
@@ -3493,11 +3498,8 @@ const translations = {
             appliedOnExport: 'Não importado para o Expensify, aplicado na exportação',
             shareNote: {
                 header: 'Compartilhe seu espaço de trabalho com outros membros',
-                content: {
-                    firstPart:
-                        'Compartilhe este código QR ou copie o link abaixo para facilitar que os membros solicitem acesso ao seu espaço de trabalho. Todas as solicitações para ingressar no espaço de trabalho aparecerão na',
-                    secondPart: 'espaço para sua revisão.',
-                },
+                content: ({adminsRoomLink}: WorkspaceShareNoteParams) =>
+                    `Compartilhe este código QR ou copie o link abaixo para facilitar aos membros a solicitação de acesso ao seu espaço de trabalho. Todas as solicitações para ingressar no espaço de trabalho aparecerão na sala <a href="${adminsRoomLink}">${CONST.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS}</a> para sua análise.`,
             },
             connectTo: ({connectionName}: ConnectionNameParams) => `Conectar a ${CONST.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
             createNewConnection: 'Criar nova conexão',
@@ -5465,11 +5467,10 @@ const translations = {
             upgradeToUnlock: 'Desbloquear este recurso',
             completed: {
                 headline: `Você atualizou seu espaço de trabalho!`,
-                successMessage: ({policyName}: ReportPolicyNameParams) => `Você atualizou com sucesso ${policyName} para o plano Control!`,
+                successMessage: ({policyName, subscriptionLink}: UpgradeSuccessMessageParams) =>
+                    `<centered-text>Você atualizou com sucesso o ${policyName} para o plano Controle! <a href="${subscriptionLink}">Veja sua assinatura</a> para mais detalhes.</centered-text>`,
                 categorizeMessage: `Você atualizou com sucesso para um workspace no plano Collect. Agora você pode categorizar suas despesas!`,
                 travelMessage: `Você atualizou com sucesso para um espaço de trabalho no plano Collect. Agora você pode começar a reservar e gerenciar viagens!`,
-                viewSubscription: 'Ver sua assinatura',
-                moreDetails: 'para mais detalhes.',
                 gotIt: 'Entendi, obrigado',
             },
             commonFeatures: {
@@ -5539,7 +5540,8 @@ const translations = {
         rules: {
             individualExpenseRules: {
                 title: 'Despesas',
-                subtitle: 'Defina controles de gastos e padrões para despesas individuais. Você também pode criar regras para',
+                subtitle: ({categoriesPageLink, tagsPageLink}: IndividualExpenseRulesSubtitleParams) =>
+                    `<muted-text>Defina controles de gastos e padrões para despesas individuais. Você também pode criar regras para <a href="${categoriesPageLink}">categorias</a> e <a href="${tagsPageLink}">tags</a>.</muted-text>`,
                 receiptRequiredAmount: 'Valor necessário do recibo',
                 receiptRequiredAmountDescription: 'Exigir recibos quando o gasto exceder este valor, a menos que seja substituído por uma regra de categoria.',
                 maxExpenseAmount: 'Valor máximo da despesa',
@@ -5551,19 +5553,9 @@ const translations = {
                     one: '1 dia',
                     other: (count: number) => `${count} dias`,
                 }),
-                cashExpenseDefault: 'Despesa em dinheiro padrão',
-                cashExpenseDefaultDescription:
-                    'Escolha como as despesas em dinheiro devem ser criadas. Uma despesa é considerada em dinheiro se não for uma transação de cartão corporativo importada. Isso inclui despesas criadas manualmente, recibos, diárias, distância e despesas de tempo.',
-                reimbursableDefault: 'Reembolsável',
-                reimbursableDefaultDescription: 'Despesas geralmente são reembolsadas aos funcionários',
-                nonReimbursableDefault: 'Não reembolsável',
-                nonReimbursableDefaultDescription: 'Despesas às vezes são reembolsadas aos funcionários',
-                alwaysReimbursable: 'Sempre reembolsável',
-                alwaysReimbursableDescription: 'Despesas são sempre reembolsadas aos funcionários',
-                alwaysNonReimbursable: 'Nunca reembolsável',
-                alwaysNonReimbursableDescription: 'Despesas nunca são reembolsadas aos funcionários',
                 billableDefault: 'Padrão faturável',
-                billableDefaultDescription: 'Escolha se as despesas em dinheiro e cartão de crédito devem ser faturáveis por padrão. Despesas faturáveis são ativadas ou desativadas em',
+                billableDefaultDescription: ({tagsPageLink}: BillableDefaultDescriptionParams) =>
+                    `<muted-text>Escolha se as despesas em dinheiro e cartão de crédito devem ser faturáveis por padrão. As despesas faturáveis são ativadas ou desativadas nas <a href="${tagsPageLink}">tags</a>.</muted-text>`,
                 billable: 'Faturável',
                 billableDescription: 'Despesas são mais frequentemente refaturadas para clientes.',
                 nonBillable: 'Não faturável',
@@ -5630,8 +5622,8 @@ const translations = {
                     always: 'Sempre exigir recibos',
                 },
                 defaultTaxRate: 'Taxa de imposto padrão',
-                goTo: 'Ir para',
-                andEnableWorkflows: 'e habilite fluxos de trabalho, depois adicione aprovações para desbloquear este recurso.',
+                enableWorkflows: ({moreFeaturesLink}: RulesEnableWorkflowsParams) =>
+                    `Vá para [Mais recursos](${moreFeaturesLink}) e habilite os fluxos de trabalho, depois adicione aprovações para desbloquear esse recurso.`,
             },
             customRules: {
                 title: 'Regras personalizadas',
@@ -5850,8 +5842,6 @@ const translations = {
         },
         updateDefaultBillable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) =>
             `atualizou "Refaturar despesas para clientes" para "${newValue}" (anteriormente "${oldValue}")`,
-        updateDefaultReimbursable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) =>
-            `atualizou "Despesa em dinheiro padrão" para "${newValue}" (anteriormente "${oldValue}")`,
         updateDefaultTitleEnforced: ({value}: UpdatedPolicyFieldWithValueParam) => `transformado "Aplicar títulos padrão de relatórios" ${value ? 'em' : 'desligado'}`,
         renamedWorkspaceNameAction: ({oldName, newName}: RenamedWorkspaceNameActionParams) => `atualizou o nome deste espaço de trabalho para "${newName}" (anteriormente "${oldName}")`,
         updateWorkspaceDescription: ({newDescription, oldDescription}: UpdatedPolicyDescriptionParams) =>

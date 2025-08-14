@@ -43,6 +43,7 @@ import type {
     BeginningOfChatHistoryInvoiceRoomParams,
     BeginningOfChatHistoryPolicyExpenseChatParams,
     BeginningOfChatHistoryUserRoomParams,
+    BillableDefaultDescriptionParams,
     BillingBannerCardAuthenticationRequiredParams,
     BillingBannerCardExpiredParams,
     BillingBannerCardOnDisputeParams,
@@ -120,6 +121,7 @@ import type {
     ImportPerDiemRatesSuccessfulDescriptionParams,
     ImportTagsSuccessfulDescriptionParams,
     IncorrectZipFormatParams,
+    IndividualExpenseRulesSubtitleParams,
     InstantSummaryParams,
     IntacctMappingTitleParams,
     IntegrationExportParams,
@@ -190,6 +192,7 @@ import type {
     RoleNamesParams,
     RoomNameReservedErrorParams,
     RoomRenamedToParams,
+    RulesEnableWorkflowsParams,
     SecondaryLoginParams,
     SetTheDistanceMerchantParams,
     SetTheRequestParams,
@@ -260,6 +263,7 @@ import type {
     UpdatePolicyCustomUnitParams,
     UpdatePolicyCustomUnitTaxEnabledParams,
     UpdateRoleParams,
+    UpgradeSuccessMessageParams,
     UsePlusButtonParams,
     UserIsAlreadyMemberParams,
     UserSplitParams,
@@ -291,6 +295,7 @@ import type {
     WorkspaceMemberList,
     WorkspaceOwnerWillNeedToAddOrUpdatePaymentCardParams,
     WorkspaceRouteParams,
+    WorkspaceShareNoteParams,
     WorkspacesListRouteParams,
     WorkspaceYouMayJoin,
     YourPlanPriceParams,
@@ -3483,11 +3488,8 @@ const translations = {
             appliedOnExport: "Non importé dans Expensify, appliqué à l'exportation",
             shareNote: {
                 header: "Partagez votre espace de travail avec d'autres membres",
-                content: {
-                    firstPart:
-                        "Partagez ce code QR ou copiez le lien ci-dessous pour faciliter la demande d'accès des membres à votre espace de travail. Toutes les demandes pour rejoindre l'espace de travail apparaîtront dans le",
-                    secondPart: 'espace pour votre avis.',
-                },
+                content: ({adminsRoomLink}: WorkspaceShareNoteParams) =>
+                    `Partagez ce code QR ou copiez le lien ci-dessous pour permettre aux membres de demander facilement l'accès à votre espace de travail. Toutes les demandes d'adhésion à l'espace de travail s'afficheront dans la salle <a href="${adminsRoomLink}">${CONST.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS}</a> pour que vous puissiez les examiner.`,
             },
             connectTo: ({connectionName}: ConnectionNameParams) => `Se connecter à ${CONST.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
             createNewConnection: 'Créer une nouvelle connexion',
@@ -5470,11 +5472,10 @@ const translations = {
             upgradeToUnlock: 'Débloquez cette fonctionnalité',
             completed: {
                 headline: `Vous avez amélioré votre espace de travail !`,
-                successMessage: ({policyName}: ReportPolicyNameParams) => `Vous avez réussi à passer ${policyName} au plan Control !`,
+                successMessage: ({policyName, subscriptionLink}: UpgradeSuccessMessageParams) =>
+                    `<centered-text>Vous avez réussi à passer de ${policyName} au forfait Control ! <a href="${subscriptionLink}">Consultez votre abonnement</a> pour plus de détails.</centered-text>`,
                 categorizeMessage: `Vous avez réussi à passer à un espace de travail sur le plan Collect. Vous pouvez maintenant catégoriser vos dépenses !`,
                 travelMessage: `Vous avez réussi à passer à un espace de travail sur le plan Collect. Vous pouvez maintenant commencer à réserver et gérer vos voyages !`,
-                viewSubscription: 'Voir votre abonnement',
-                moreDetails: 'pour plus de détails.',
                 gotIt: 'Compris, merci',
             },
             commonFeatures: {
@@ -5543,7 +5544,8 @@ const translations = {
         rules: {
             individualExpenseRules: {
                 title: 'Dépenses',
-                subtitle: 'Définissez des contrôles de dépenses et des paramètres par défaut pour les dépenses individuelles. Vous pouvez également créer des règles pour',
+                subtitle: ({categoriesPageLink, tagsPageLink}: IndividualExpenseRulesSubtitleParams) =>
+                    `<muted-text>Définissez des contrôles de dépenses et des valeurs par défaut pour chaque dépense. Vous pouvez également créer des règles pour les <a href="${categoriesPageLink}">catégories</a> et <a href="${tagsPageLink}">tags</a>.</muted-text>`,
                 receiptRequiredAmount: 'Montant requis pour le reçu',
                 receiptRequiredAmountDescription: 'Exiger des reçus lorsque les dépenses dépassent ce montant, sauf si une règle de catégorie le remplace.',
                 maxExpenseAmount: 'Montant maximum de la dépense',
@@ -5555,20 +5557,9 @@ const translations = {
                     one: '1 jour',
                     other: (count: number) => `${count} jours`,
                 }),
-                cashExpenseDefault: 'Dépense en espèces par défaut',
-                cashExpenseDefaultDescription:
-                    'Choisissez comment les dépenses en espèces doivent être créées. Une dépense est considérée comme en espèces si elle n’est pas une transaction par carte d’entreprise importée. Cela inclut les dépenses créées manuellement, les reçus, les indemnités journalières, les frais kilométriques et les frais de temps.',
-                reimbursableDefault: 'Remboursable',
-                reimbursableDefaultDescription: 'Les dépenses sont généralement remboursées aux employés',
-                nonReimbursableDefault: 'Non remboursable',
-                nonReimbursableDefaultDescription: 'Les dépenses sont parfois remboursées aux employés',
-                alwaysReimbursable: 'Toujours remboursable',
-                alwaysReimbursableDescription: 'Les dépenses sont toujours remboursées aux employés',
-                alwaysNonReimbursable: 'Jamais remboursable',
-                alwaysNonReimbursableDescription: 'Les dépenses ne sont jamais remboursées aux employés',
                 billableDefault: 'Par défaut facturable',
-                billableDefaultDescription:
-                    'Choisissez si les dépenses en espèces et par carte de crédit doivent être facturables par défaut. Les dépenses facturables sont activées ou désactivées dans',
+                billableDefaultDescription: ({tagsPageLink}: BillableDefaultDescriptionParams) =>
+                    `<muted-text>Choisissez si les dépenses en espèces et par carte de crédit doivent être facturables par défaut. Les dépenses facturables sont activées ou désactivées dans les <a href="${tagsPageLink}">tags</a>.</muted-text>`,
                 billable: 'Facturable',
                 billableDescription: 'Les dépenses sont le plus souvent refacturées aux clients.',
                 nonBillable: 'Non-facturable',
@@ -5635,8 +5626,8 @@ const translations = {
                     always: 'Toujours exiger des reçus',
                 },
                 defaultTaxRate: 'Taux de taxe par défaut',
-                goTo: 'Aller à',
-                andEnableWorkflows: 'et activez les flux de travail, puis ajoutez des approbations pour débloquer cette fonctionnalité.',
+                enableWorkflows: ({moreFeaturesLink}: RulesEnableWorkflowsParams) =>
+                    `Accédez à [Plus de fonctionnalités](${moreFeaturesLink}) et activez les workflows, puis ajoutez des approbations pour débloquer cette fonctionnalité.`,
             },
             customRules: {
                 title: 'Règles personnalisées',
@@ -5856,8 +5847,6 @@ const translations = {
         },
         updateDefaultBillable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) =>
             `mis à jour "Refacturer les dépenses aux clients" à "${newValue}" (précédemment "${oldValue}")`,
-        updateDefaultReimbursable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) =>
-            `mis à jour "Dépense en espèces par défaut" en "${newValue}" (anciennement "${oldValue}")`,
         updateDefaultTitleEnforced: ({value}: UpdatedPolicyFieldWithValueParam) => `"Appliquer les titres de rapport par défaut" ${value ? 'sur' : 'désactivé'}`,
         renamedWorkspaceNameAction: ({oldName, newName}: RenamedWorkspaceNameActionParams) => `a mis à jour le nom de cet espace de travail en "${newName}" (précédemment "${oldName}")`,
         updateWorkspaceDescription: ({newDescription, oldDescription}: UpdatedPolicyDescriptionParams) =>

@@ -43,6 +43,7 @@ import type {
     BeginningOfChatHistoryInvoiceRoomParams,
     BeginningOfChatHistoryPolicyExpenseChatParams,
     BeginningOfChatHistoryUserRoomParams,
+    BillableDefaultDescriptionParams,
     BillingBannerCardAuthenticationRequiredParams,
     BillingBannerCardExpiredParams,
     BillingBannerCardOnDisputeParams,
@@ -120,6 +121,7 @@ import type {
     ImportPerDiemRatesSuccessfulDescriptionParams,
     ImportTagsSuccessfulDescriptionParams,
     IncorrectZipFormatParams,
+    IndividualExpenseRulesSubtitleParams,
     InstantSummaryParams,
     IntacctMappingTitleParams,
     IntegrationExportParams,
@@ -190,6 +192,7 @@ import type {
     RoleNamesParams,
     RoomNameReservedErrorParams,
     RoomRenamedToParams,
+    RulesEnableWorkflowsParams,
     SecondaryLoginParams,
     SetTheDistanceMerchantParams,
     SetTheRequestParams,
@@ -260,6 +263,7 @@ import type {
     UpdatePolicyCustomUnitParams,
     UpdatePolicyCustomUnitTaxEnabledParams,
     UpdateRoleParams,
+    UpgradeSuccessMessageParams,
     UsePlusButtonParams,
     UserIsAlreadyMemberParams,
     UserSplitParams,
@@ -291,6 +295,7 @@ import type {
     WorkspaceMemberList,
     WorkspaceOwnerWillNeedToAddOrUpdatePaymentCardParams,
     WorkspaceRouteParams,
+    WorkspaceShareNoteParams,
     WorkspacesListRouteParams,
     WorkspaceYouMayJoin,
     YourPlanPriceParams,
@@ -3475,11 +3480,8 @@ const translations = {
             appliedOnExport: 'Nicht in Expensify importiert, bei Export angewendet',
             shareNote: {
                 header: 'Teilen Sie Ihren Arbeitsbereich mit anderen Mitgliedern',
-                content: {
-                    firstPart:
-                        'Teilen Sie diesen QR-Code oder kopieren Sie den untenstehenden Link, um es Mitgliedern zu erleichtern, den Zugang zu Ihrem Arbeitsbereich anzufordern. Alle Anfragen zum Beitritt zum Arbeitsbereich werden im',
-                    secondPart: 'Raum für Ihre Bewertung.',
-                },
+                content: ({adminsRoomLink}: WorkspaceShareNoteParams) =>
+                    `Teilen Sie diesen QR-Code oder kopieren Sie den unten stehenden Link, um es Mitgliedern leicht zu machen, Zugang zu Ihrem Arbeitsbereich zu beantragen. Alle Anträge auf Zugang zum Arbeitsbereich werden im Raum <a href="${adminsRoomLink}">${CONST.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS}</a> zu Ihrer Überprüfung angezeigt.`,
             },
             connectTo: ({connectionName}: ConnectionNameParams) => `Mit ${CONST.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]} verbinden`,
             createNewConnection: 'Neue Verbindung erstellen',
@@ -5457,11 +5459,10 @@ const translations = {
             upgradeToUnlock: 'Diese Funktion freischalten',
             completed: {
                 headline: `Sie haben Ihren Arbeitsbereich aktualisiert!`,
-                successMessage: ({policyName}: ReportPolicyNameParams) => `Sie haben ${policyName} erfolgreich auf den Control-Plan hochgestuft!`,
+                successMessage: ({policyName, subscriptionLink}: UpgradeSuccessMessageParams) =>
+                    `<centered-text>Sie haben ${policyName} erfolgreich auf den Control-Tarif upgegradet! <a href="${subscriptionLink}">Sehen Sie sich Ihr Abonnement</a> für weitere Details an.</centered-text>`,
                 categorizeMessage: `Sie haben erfolgreich auf einen Workspace im Collect-Plan upgegradet. Jetzt können Sie Ihre Ausgaben kategorisieren!`,
                 travelMessage: `Sie haben erfolgreich auf einen Workspace im Collect-Plan aufgerüstet. Jetzt können Sie mit der Buchung und Verwaltung von Reisen beginnen!`,
-                viewSubscription: 'Abonnements anzeigen',
-                moreDetails: 'für mehr Details.',
                 gotIt: 'Verstanden, danke',
             },
             commonFeatures: {
@@ -5531,7 +5532,8 @@ const translations = {
         rules: {
             individualExpenseRules: {
                 title: 'Ausgaben',
-                subtitle: 'Legen Sie Ausgabenkontrollen und -standards für einzelne Ausgaben fest. Sie können auch Regeln für',
+                subtitle: ({categoriesPageLink, tagsPageLink}: IndividualExpenseRulesSubtitleParams) =>
+                    `<muted-text>Legen Sie Ausgabenkontrollen und Standardwerte für einzelne Ausgaben fest. Sie können auch Regeln für <a href="${categoriesPageLink}">kategorien</a> und <a href="${tagsPageLink}">tags</a> erstellen.</muted-text>`,
                 receiptRequiredAmount: 'Beleg erforderlicher Betrag',
                 receiptRequiredAmountDescription: 'Belege anfordern, wenn die Ausgaben diesen Betrag überschreiten, es sei denn, eine Kategorievorschrift hebt dies auf.',
                 maxExpenseAmount: 'Maximaler Ausgabenbetrag',
@@ -5543,19 +5545,9 @@ const translations = {
                     one: '1 Tag',
                     other: (count: number) => `${count} Tage`,
                 }),
-                cashExpenseDefault: 'Bargeldausgabe standard',
-                cashExpenseDefaultDescription:
-                    'Wählen Sie, wie Bargeldausgaben erstellt werden sollen. Eine Ausgabe gilt als Bargeldausgabe, wenn sie keine importierte Firmenkartentransaktion ist. Dazu gehören manuell erstellte Ausgaben, Belege, Pauschalen, Kilometer- und Zeitaufwand.',
-                reimbursableDefault: 'Erstattungsfähig',
-                reimbursableDefaultDescription: 'Ausgaben werden meistens an Mitarbeiter zurückgezahlt',
-                nonReimbursableDefault: 'Nicht erstattungsfähig',
-                nonReimbursableDefaultDescription: 'Ausgaben werden gelegentlich an Mitarbeiter zurückgezahlt',
-                alwaysReimbursable: 'Immer erstattungsfähig',
-                alwaysReimbursableDescription: 'Ausgaben werden immer an Mitarbeiter zurückgezahlt',
-                alwaysNonReimbursable: 'Nie erstattungsfähig',
-                alwaysNonReimbursableDescription: 'Ausgaben werden nie an Mitarbeiter zurückgezahlt',
                 billableDefault: 'Abrechnungsstandard',
-                billableDefaultDescription: 'Wählen Sie, ob Bar- und Kreditkartenausgaben standardmäßig abrechenbar sein sollen. Abrechenbare Ausgaben werden aktiviert oder deaktiviert in',
+                billableDefaultDescription: ({tagsPageLink}: BillableDefaultDescriptionParams) =>
+                    `<muted-text>Wählen Sie aus, ob Bar- und Kreditkartenausgaben standardmäßig abrechnungsfähig sein sollen. Abrechnungsfähige Ausgaben werden in <a href="${tagsPageLink}">Tags</a> aktiviert oder deaktiviert.</muted-text>`,
                 billable: 'Abrechenbar',
                 billableDescription: 'Spesen werden meist an Kunden weiterberechnet.',
                 nonBillable: 'Nicht abrechenbar',
@@ -5623,8 +5615,8 @@ const translations = {
                     always: 'Immer Belege anfordern',
                 },
                 defaultTaxRate: 'Standardsteuersatz',
-                goTo: 'Gehe zu',
-                andEnableWorkflows: 'und Workflows aktivieren, dann Genehmigungen hinzufügen, um diese Funktion freizuschalten.',
+                enableWorkflows: ({moreFeaturesLink}: RulesEnableWorkflowsParams) =>
+                    `Gehen Sie zu [Mehr Funktionen](${moreFeaturesLink}) und aktivieren Sie Workflows, dann fügen Sie Genehmigungen hinzu, um diese Funktion freizuschalten.`,
             },
             customRules: {
                 title: 'Benutzerdefinierte Regeln',
@@ -5844,7 +5836,6 @@ const translations = {
         },
         updateDefaultBillable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) =>
             `aktualisiert "Kosten an Kunden weiterberechnen" auf "${newValue}" (vorher "${oldValue}")`,
-        updateDefaultReimbursable: ({oldValue, newValue}: UpdatedPolicyFieldWithNewAndOldValueParams) => `aktualisiert "Bargeldausgabe Standard" auf "${newValue}" (vorher "${oldValue}")`,
         updateDefaultTitleEnforced: ({value}: UpdatedPolicyFieldWithValueParam) => `"Standardberichtstitel erzwingen" ${value ? 'on' : 'aus'}`,
         renamedWorkspaceNameAction: ({oldName, newName}: RenamedWorkspaceNameActionParams) => `hat den Namen dieses Arbeitsbereichs in "${newName}" geändert (vorher "${oldName}")`,
         updateWorkspaceDescription: ({newDescription, oldDescription}: UpdatedPolicyDescriptionParams) =>
