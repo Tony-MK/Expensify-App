@@ -190,7 +190,16 @@ function getForReportAction({
     }
 
     if (reportActionOriginalMessage?.movedFromReport) {
-        const reportName = getReportName(allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${reportActionOriginalMessage?.movedFromReport}`], undefined, undefined, undefined, undefined, undefined, undefined, false);
+        const reportName = getReportName(
+            allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${reportActionOriginalMessage?.movedFromReport}`],
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            false,
+        );
         return translateLocal('iou.movedFromReport', {reportName: reportName ?? ''});
     }
 
