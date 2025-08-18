@@ -673,7 +673,7 @@ describe('ReportUtils', () => {
                         ...baseArchivedPolicyExpenseChat,
                         isOwnPolicyExpenseChat: false,
                     };
-                    
+
                     await Onyx.merge(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${adminArchivedPolicyExpenseChat.reportID}`, reportNameValuePairs);
 
                     const {result: isReportArchived} = renderHook(() => useReportIsArchived(adminArchivedPolicyExpenseChat?.reportID));
@@ -2339,7 +2339,7 @@ describe('ReportUtils', () => {
             const betas = [CONST.BETAS.DEFAULT_ROOMS];
 
             await Onyx.merge(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${archivedReport.reportID}`, reportNameValuePairs);
-            
+
             const {result: isReportArchived} = renderHook(() => useReportIsArchived(archivedReport?.reportID));
 
             expect(
@@ -2370,7 +2370,7 @@ describe('ReportUtils', () => {
             const betas = [CONST.BETAS.DEFAULT_ROOMS];
 
             await Onyx.merge(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${archivedReport.reportID}`, reportNameValuePairs);
-            
+
             const {result: isReportArchived} = renderHook(() => useReportIsArchived(archivedReport?.reportID));
 
             expect(
