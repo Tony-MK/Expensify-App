@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import type {FormInputErrors, FormOnyxValues} from '@components/Form/types';
 import {useSearchContext} from '@components/Search/SearchContext';
+import useAncestorReportActions from '@hooks/useAncestorReportActions';
 import useLocalize from '@hooks/useLocalize';
 import useOnyx from '@hooks/useOnyx';
 import {clearErrorFields, clearErrors} from '@libs/actions/FormActions';
@@ -19,12 +20,11 @@ function SearchHoldReasonPage({route}: PlatformStackScreenProps<Omit<SearchRepor
     const {translate} = useLocalize();
     const {backTo = '', reportID} = route.params ?? {};
     const context = useSearchContext();
-    const [ancestorReportActions] = useAncestorReportActionIDs(reportID);
+    const ancestorReportActions = useAncestorReportActions(reportID);
     const [reports] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT}`, {canBeMissing: false});
     const [reportActions] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT_ACTIONS}${reportID}`, {canBeMissing: false});
     const [transactions] = useOnyx(`${ONYXKEYS.COLLECTION.TRANSACTION}`, {canBeMissing: false});
     const [transactionsViolations] = useOnyx(`${ONYXKEYS.COLLECTION.TRANSACTION_VIOLATIONS}`, {canBeMissing: true});
-    const [snapshot] = useOnyx(`${ONYXKEYS.COLLECTION.SNAPSHOT}${context.currentSearchHash}`, {canBeMissing: true});
 
     const onSubmit = useCallback(
         ({comment}: FormOnyxValues<typeof ONYXKEYS.FORMS.MONEY_REQUEST_HOLD_FORM>) => {
@@ -40,7 +40,7 @@ function SearchHoldReasonPage({route}: PlatformStackScreenProps<Omit<SearchRepor
 
             Navigation.goBack();
         },
-        [route.name, reportID, reports, reportActions, context, transactions, transactionsViolations, snapshot],
+        [route.name, reportID, reports, reportActions, context, transactions, transactionsViolations, ancestorReportActions],
     );
 
     const validate = useCallback(
@@ -50,7 +50,6 @@ function SearchHoldReasonPage({route}: PlatformStackScreenProps<Omit<SearchRepor
             if (!values.comment) {
                 errors.comment = translate('common.error.fieldRequired');
             }
-
             return errors;
         },
         [translate],
@@ -73,7 +72,3 @@ function SearchHoldReasonPage({route}: PlatformStackScreenProps<Omit<SearchRepor
 SearchHoldReasonPage.displayName = 'SearchHoldReasonPage';
 
 export default SearchHoldReasonPage;
-
-function useAncestorReportActionIDs(reportID: string): [any] {
-    throw new Error('Function not implemented.');
-}

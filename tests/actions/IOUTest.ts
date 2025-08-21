@@ -4,6 +4,7 @@ import {deepEqual} from 'fast-equals';
 import type {OnyxCollection, OnyxEntry, OnyxInputValue} from 'react-native-onyx';
 import Onyx from 'react-native-onyx';
 import OnyxListItemProvider from '@components/OnyxListItemProvider';
+import useAncestorReportActions from '@hooks/useAncestorReportActions';
 import useReportWithTransactionsAndViolations from '@hooks/useReportWithTransactionsAndViolations';
 import {
     addSplitExpenseField,
@@ -4691,6 +4692,7 @@ describe('actions/IOU', () => {
             return waitForBatchedUpdates()
                 .then(() => Onyx.multiSet({...reportCollection, ...transactionCollection, ...actionCollection}))
                 .then(() => {
+                    const {result} = renderHook(() => useAncestorReportActions(iouReport.reportID));
                     bulkHold(
                         comment,
                         iouReport.reportID,
@@ -4699,8 +4701,7 @@ describe('actions/IOU', () => {
                         [transaction1.transactionID, transaction2.transactionID],
                         transactionCollection,
                         {},
-                        -1,
-                        undefined,
+                        result.current,
                     );
                     return waitForBatchedUpdates();
                 })
@@ -4822,6 +4823,7 @@ describe('actions/IOU', () => {
             return waitForBatchedUpdates()
                 .then(() => Onyx.multiSet({...reportCollection, ...transactionCollection, ...actionCollection}))
                 .then(() => {
+                    const {result} = renderHook(() => useAncestorReportActions(iouReport.reportID));
                     bulkHold(
                         comment,
                         iouReport.reportID,
@@ -4830,8 +4832,7 @@ describe('actions/IOU', () => {
                         [transaction1.transactionID, transaction2.transactionID],
                         transactionCollection,
                         {},
-                        -1,
-                        undefined,
+                        result.current,
                     );
                     return waitForBatchedUpdates();
                 })

@@ -1,10 +1,10 @@
-import ONYXKEYS from "@src/ONYXKEYS";
-import { useOnyx } from "react-native-onyx";
-import { isReportPreviewAction, isSentMoneyReportAction, isTransactionThread } from "@libs/ReportActionsUtils";
-import { isEmptyObject } from "@github/libs/isEmptyObject";
-import ReportAction from "@src/types/onyx/ReportAction";
+import {useOnyx} from 'react-native-onyx';
+import {isEmptyObject} from '@github/libs/isEmptyObject';
+import {isReportPreviewAction, isSentMoneyReportAction, isTransactionThread} from '@libs/ReportActionsUtils';
+import ONYXKEYS from '@src/ONYXKEYS';
+import ReportAction from '@src/types/onyx/ReportAction';
 
-export function useAncestorReportActionIDs(reportID: string, includeTransactionThread = false): Record<string, ReportAction> {
+export default function useAncestorReportActions(reportID: string, includeTransactionThread = false): Record<string, ReportAction> {
     const [reports] = useOnyx(ONYXKEYS.COLLECTION.REPORT, {canBeMissing: false});
     const [reportActions] = useOnyx(ONYXKEYS.COLLECTION.REPORT_ACTIONS, {canBeMissing: false});
     const [report] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT}${reportID}`, {canBeMissing: false});
@@ -30,7 +30,7 @@ export function useAncestorReportActionIDs(reportID: string, includeTransactionT
 
         if (parentReportActionID) {
             const parentReportAction = reportActions[parentReportActionID]?.[parentReportActionID];
-            if (parentReportAction){
+            if (parentReportAction) {
                 ancestorReportActions[parentReportID] = parentReportAction;
             }
         }
@@ -43,4 +43,4 @@ export function useAncestorReportActionIDs(reportID: string, includeTransactionT
     }
 
     return ancestorReportActions;
-};
+}
