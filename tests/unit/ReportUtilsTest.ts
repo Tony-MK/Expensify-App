@@ -50,6 +50,7 @@ import {
     getReasonAndReportActionThatRequiresAttention,
     getReportIDFromLink,
     getReportName,
+    getReportNameInternal,
     getReportStatusTranslation,
     getWorkspaceIcon,
     getWorkspaceNameUpdatedMessage,
@@ -565,10 +566,10 @@ describe('ReportUtils', () => {
 
                 const {result: isReportArchived} = renderHook(() => useReportIsArchived(baseAdminsRoom.reportID));
 
-                expect(getReportName(baseAdminsRoom, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe('#admins (archived)');
+                expect(getReportName(baseAdminsRoom, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe('#admins (archived)');
 
                 return IntlStore.load(CONST.LOCALES.ES).then(() =>
-                    expect(getReportName(baseAdminsRoom, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe('#admins (archivado)'),
+                    expect(getReportName(baseAdminsRoom, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe('#admins (archivado)'),
                 );
             });
         });
@@ -657,14 +658,14 @@ describe('ReportUtils', () => {
 
                     await Onyx.merge(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${baseArchivedPolicyExpenseChat.reportID}`, reportNameValuePairs);
 
-                    const {result: isReportArchived} = renderHook(() => useReportIsArchived(memberArchivedPolicyExpenseChat?.reportID));
+                    const {result: isReportArchived} = renderHook(() => useReportIsArchived(memberArchivedPolicyExpenseChat.reportID));
 
-                    expect(getReportName(memberArchivedPolicyExpenseChat, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe(
+                    expect(getReportName(memberArchivedPolicyExpenseChat, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe(
                         `Ragnar Lothbrok's expenses (archived)`,
                     );
 
                     return IntlStore.load(CONST.LOCALES.ES).then(() =>
-                        expect(getReportName(memberArchivedPolicyExpenseChat, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe(
+                        expect(getReportName(memberArchivedPolicyExpenseChat, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe(
                             `Ragnar Lothbrok's gastos (archivado)`,
                         ),
                     );
@@ -679,8 +680,8 @@ describe('ReportUtils', () => {
                     await Onyx.merge(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${adminArchivedPolicyExpenseChat.reportID}`, reportNameValuePairs);
 
                     const {result: isReportArchived} = renderHook(() => useReportIsArchived(adminArchivedPolicyExpenseChat?.reportID));
-
-                    expect(getReportName(adminArchivedPolicyExpenseChat, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe(
+                  
+                    expect(getReportName(adminArchivedPolicyExpenseChat, undefined, undefined, undefined, undefined, undefined, isReportArchived.current)).toBe(
                         `Ragnar Lothbrok's expenses (archived)`,
                     );
 
@@ -729,7 +730,6 @@ describe('ReportUtils', () => {
                         targetAccountIDs: [1],
                     },
                 } as ReportAction;
-
                 expect(getReportName(threadOfRemovedRoomMemberAction, policy, removedParentReportAction)).toBe('removed ragnar@vikings.net');
             });
         });
@@ -870,7 +870,6 @@ describe('ReportUtils', () => {
                     automaticAction: true,
                 },
             } as ReportAction;
-
             expect(getReportName(expenseReport, policy, submittedParentReportAction)).toBe(
                 'approved via <a href="https://help.expensify.com/articles/new-expensify/workspaces/Set-up-rules#configure-expense-report-rules">workspace rules</a>',
             );
@@ -918,7 +917,6 @@ describe('ReportUtils', () => {
                     harvesting: true,
                 },
             } as ReportAction;
-
             expect(getReportName(expenseReport, policy, submittedParentReportAction)).toBe(
                 'submitted via <a href="https://help.expensify.com/articles/new-expensify/workspaces/Set-up-workflows#select-workflows">delay submissions</a>',
             );

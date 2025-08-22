@@ -76,6 +76,7 @@ function ReportWelcomeText({report, policy}: ReportWelcomeTextProps) {
                 )}`,
         )
         .join(', ');
+
     const reportName = getReportName(report, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived);
     const shouldShowUsePlusButtonText =
         moneyRequestOptions.includes(CONST.IOU.TYPE.PAY) ||
