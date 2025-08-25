@@ -109,6 +109,7 @@ import {
     isAdminRoom,
     isAnnounceRoom,
     isArchivedNonExpenseReport,
+    isArchivedReport,
     isChatRoom,
     isChatThread,
     isConciergeChatReport,
