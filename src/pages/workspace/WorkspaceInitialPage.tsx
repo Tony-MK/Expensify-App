@@ -514,14 +514,10 @@ function WorkspaceInitialPage({policyDraft, policy: policyProp, route}: Workspac
                             <OfflineWithFeedback pendingAction={reportPendingAction}>
                                 <MenuItem
                                     title={getReportName(
-                                        currentUserPolicyExpenseChat,
-                                        undefined,
-                                        undefined,
-                                        undefined,
-                                        undefined,
-                                        undefined,
-                                        undefined,
-                                        isCurrentUserPolicyExpenseChatReportArchived,
+                                        {
+                                            report : currentUserPolicyExpenseChat,
+                                        isReportArchived: isCurrentUserPolicyExpenseChatReportArchived,
+                                        }
                                     )}
                                     description={translate('workspace.common.workspace')}
                                     onPress={() => Navigation.navigate(ROUTES.REPORT_WITH_ID.getRoute(currentUserPolicyExpenseChat?.reportID))}

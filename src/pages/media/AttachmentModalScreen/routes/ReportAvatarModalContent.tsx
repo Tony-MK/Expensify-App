@@ -20,7 +20,7 @@ function ReportAvatarModalContent({navigation, route}: AttachmentModalScreenProp
         if (isGroupChat(report) && !isThread(report)) {
             return {
                 source: report?.avatarUrl ? getFullSizeAvatar(report.avatarUrl, 0) : getDefaultGroupAvatar(report?.reportID),
-                headerTitle: getReportName(report, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived),
+                headerTitle: getReportName({report, isReportArchived}),
                 isWorkspaceAvatar: false,
             };
         }

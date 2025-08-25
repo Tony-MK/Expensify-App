@@ -198,7 +198,7 @@ function FloatingActionButtonAndPopover({onHideCreateMenu, onShowCreateMenu, isT
 
     const quickActionSubtitle = useMemo(() => {
         return !hideQABSubtitle
-            ? (getReportName(quickActionReport, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived) ?? translate('quickAction.updateDestination'))
+            ? (getReportName({report: quickActionReport, isReportArchived}) ?? translate('quickAction.updateDestination'))
             : '';
         // eslint-disable-next-line react-compiler/react-compiler
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -376,7 +376,7 @@ function FloatingActionButtonAndPopover({onHideCreateMenu, onShowCreateMenu, isT
                     icon: Expensicons.ReceiptScan,
                     text: translate('quickAction.scanReceipt'),
                     description:
-                        getReportName(policyChatForActivePolicy, undefined, undefined, undefined, undefined, undefined, undefined, isPolicyChatForActivePolicyArchived) ??
+                        getReportName({report: policyChatForActivePolicy, isReportArchived: isPolicyChatForActivePolicyArchived}) ??
                         translate('quickAction.updateDestination'),
                     shouldCallAfterModalHide: shouldUseNarrowLayout,
                     onSelected,
