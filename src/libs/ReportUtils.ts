@@ -890,7 +890,7 @@ type GetReportNameParams = {
     transactions?: SearchTransaction[];
     reports?: SearchReport[];
     draftReports?: OnyxCollection<Report>;
-    reportAttributes?: ReportAttributesDerivedValue['reports']
+    reportAttributes?: ReportAttributesDerivedValue['reports'];
     isReportArchived?: boolean;
     policies?: SearchPolicy[];
 };
@@ -5125,17 +5125,10 @@ function generateReportName(report: OnyxEntry<Report>): string {
 /**
  * Get the title for a report.
  */
-function getReportName({
-    report,
-    policy,
-    parentReportActionParam,
-    personalDetails,
-    invoiceReceiverPolicy,
-    reportAttributes,
-    isReportArchived = false,
-}: GetReportNameParams): string {
+function getReportName({report, policy, parentReportActionParam, personalDetails, invoiceReceiverPolicy, reportAttributes, isReportArchived}: GetReportNameParams): string {
     // Check if we can use report name in derived values - only when we have report but no other params
-    const canUseDerivedValue = report && policy === undefined && parentReportActionParam === undefined && personalDetails === undefined && invoiceReceiverPolicy === undefined;
+    const canUseDerivedValue =
+        report && policy === undefined && parentReportActionParam === undefined && personalDetails === undefined && invoiceReceiverPolicy === undefined && isReportArchived === undefined;
     const attributes = reportAttributes ?? reportAttributesDerivedValue;
     const derivedNameExists = report && !!attributes?.[report.reportID]?.reportName;
     if (canUseDerivedValue && derivedNameExists) {
@@ -5144,11 +5137,11 @@ function getReportName({
 
     return getReportNameInternal({
         report,
-        policy, 
+        policy,
         parentReportActionParam,
         personalDetails,
         invoiceReceiverPolicy,
-        isReportArchived
+        isReportArchived,
     });
 }
 
@@ -5190,9 +5183,8 @@ function getReportNameInternal({
         parentReportAction = isThread(report) ? allReportActions?.[`${ONYXKEYS.COLLECTION.REPORT_ACTIONS}${report.parentReportID}`]?.[report.parentReportActionID] : undefined;
     }
 
-    const isArchived = isReportArchived || !!allReportNameValuePair?.[`${ONYXKEYS.COLLECTION.REPORT}${report?.reportID}`]?.private_isArchived;
     const parentReportActionMessage = getReportActionMessageReportUtils(parentReportAction);
-    const isArchivedNonExpense = isArchivedNonExpenseReport(report, isArchived);
+    const isArchivedNonExpense = isArchivedNonExpenseReport(report, isReportArchived);
 
     if (
         isActionOfType(parentReportAction, CONST.REPORT.ACTIONS.TYPE.SUBMITTED) ||
@@ -5397,7 +5389,7 @@ function getReportNameInternal({
                 reportOrID: report?.reportID,
                 reportAction: parentReportAction,
                 searchReports: reports,
-                isReportArchived: isArchived,
+                isReportArchived: isReportArchived,
             });
             return formatReportLastMessageText(modifiedMessage);
         }

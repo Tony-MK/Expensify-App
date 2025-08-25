@@ -39,7 +39,7 @@ function OptionRowLHNData({
     ...propsToForward
 }: OptionRowLHNDataProps) {
     const reportID = propsToForward.reportID;
-    const isReportArchived = useReportIsArchived(reportID || fullReport?.reportID);
+    const isReportArchived = useReportIsArchived(fullReport?.reportID ?? reportID);
     const currentReportIDValue = useCurrentReportID();
     const isReportFocused = isOptionFocused && currentReportIDValue?.currentReportID === reportID;
 
@@ -76,7 +76,6 @@ function OptionRowLHNData({
             invoiceReceiverPolicy,
             card,
             localeCompare,
-            isReportArchived,
         });
         // eslint-disable-next-line react-compiler/react-compiler
         if (deepEqual(item, optionItemRef.current)) {

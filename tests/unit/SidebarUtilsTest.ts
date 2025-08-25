@@ -911,7 +911,6 @@ describe('SidebarUtils', () => {
             const result = SidebarUtils.getOptionData({
                 report,
                 reportAttributes: undefined,
-                isReportArchived: false,
                 reportNameValuePairs: {},
                 personalDetails: {},
                 policy: undefined,
@@ -953,7 +952,6 @@ describe('SidebarUtils', () => {
                 const optionData = SidebarUtils.getOptionData({
                     report,
                     reportAttributes: undefined,
-                    isReportArchived: false,
                     reportNameValuePairs,
                     personalDetails: {},
                     policy,
@@ -985,6 +983,7 @@ describe('SidebarUtils', () => {
                 };
 
                 await Onyx.set(`${ONYXKEYS.COLLECTION.POLICY}1`, policy);
+                await Onyx.set(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report.reportID}`, reportNameValuePairs);
 
                 const {result: isReportArchived} = renderHook(() => useReportIsArchived(report.reportID));
 

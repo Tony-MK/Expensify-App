@@ -506,38 +506,46 @@ describe('ReportUtils', () => {
         describe('1:1 DM', () => {
             test('with displayName', () => {
                 expect(
-                    getReportName({report: {
-                        reportID: '',
-                        participants: buildParticipantsFromAccountIDs([currentUserAccountID, 1]),
-                    }}),
+                    getReportName({
+                        report: {
+                            reportID: '',
+                            participants: buildParticipantsFromAccountIDs([currentUserAccountID, 1]),
+                        },
+                    }),
                 ).toBe('Ragnar Lothbrok');
             });
 
             test('no displayName', () => {
                 expect(
-                    getReportName({report: {
-                        reportID: '',
-                        participants: buildParticipantsFromAccountIDs([currentUserAccountID, 2]),
-                    }}),
+                    getReportName({
+                        report: {
+                            reportID: '',
+                            participants: buildParticipantsFromAccountIDs([currentUserAccountID, 2]),
+                        },
+                    }),
                 ).toBe('floki@vikings.net');
             });
 
             test('SMS', () => {
                 expect(
-                    getReportName({report: {
-                        reportID: '',
-                        participants: buildParticipantsFromAccountIDs([currentUserAccountID, 4]),
-                    }}),
+                    getReportName({
+                        report: {
+                            reportID: '',
+                            participants: buildParticipantsFromAccountIDs([currentUserAccountID, 4]),
+                        },
+                    }),
                 ).toBe('(833) 240-3627');
             });
         });
 
         test('Group DM', () => {
             expect(
-                getReportName({report: {
-                    reportID: '',
-                    participants: buildParticipantsFromAccountIDs([currentUserAccountID, 1, 2, 3, 4]),
-                }}),
+                getReportName({
+                    report: {
+                        reportID: '',
+                        participants: buildParticipantsFromAccountIDs([currentUserAccountID, 1, 2, 3, 4]),
+                    },
+                }),
             ).toBe('Ragnar, floki@vikings.net, Lagertha, (833) 240-3627');
         });
 
@@ -567,9 +575,7 @@ describe('ReportUtils', () => {
 
                 expect(getReportName({report: baseAdminsRoom, isReportArchived: isReportArchived.current})).toBe('#admins (archived)');
 
-                return IntlStore.load(CONST.LOCALES.ES).then(() =>
-                    expect(getReportName({report: baseAdminsRoom, isReportArchived: isReportArchived.current})).toBe('#admins (archivado)'),
-                );
+                return IntlStore.load(CONST.LOCALES.ES).then(() => expect(getReportName({report: baseAdminsRoom, isReportArchived: isReportArchived.current})).toBe('#admins (archivado)'));
             });
         });
 
@@ -613,25 +619,29 @@ describe('ReportUtils', () => {
             describe('Active', () => {
                 test('as member', () => {
                     expect(
-                        getReportName({report: {
-                            reportID: '',
-                            chatType: CONST.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT,
-                            policyID: policy.id,
-                            isOwnPolicyExpenseChat: true,
-                            ownerAccountID: 1,
-                        }}),
+                        getReportName({
+                            report: {
+                                reportID: '',
+                                chatType: CONST.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT,
+                                policyID: policy.id,
+                                isOwnPolicyExpenseChat: true,
+                                ownerAccountID: 1,
+                            },
+                        }),
                     ).toBe(`Ragnar Lothbrok's expenses`);
                 });
 
                 test('as admin', () => {
                     expect(
-                        getReportName({report: {
-                            reportID: '',
-                            chatType: CONST.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT,
-                            policyID: policy.id,
-                            isOwnPolicyExpenseChat: false,
-                            ownerAccountID: 1,
-                        }}),
+                        getReportName({
+                            report: {
+                                reportID: '',
+                                chatType: CONST.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT,
+                                policyID: policy.id,
+                                isOwnPolicyExpenseChat: false,
+                                ownerAccountID: 1,
+                            },
+                        }),
                     ).toBe(`Ragnar Lothbrok's expenses`);
                 });
             });
@@ -659,14 +669,10 @@ describe('ReportUtils', () => {
 
                     const {result: isReportArchived} = renderHook(() => useReportIsArchived(memberArchivedPolicyExpenseChat.reportID));
 
-                    expect(getReportName({report: memberArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(
-                        `Ragnar Lothbrok's expenses (archived)`,
-                    );
+                    expect(getReportName({report: memberArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(`Ragnar Lothbrok's expenses (archived)`);
 
                     return IntlStore.load(CONST.LOCALES.ES).then(() =>
-                        expect(getReportName({report: memberArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(
-                            `Ragnar Lothbrok's gastos (archivado)`,
-                        ),
+                        expect(getReportName({report: memberArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(`Ragnar Lothbrok's gastos (archivado)`),
                     );
                 });
 
@@ -679,15 +685,11 @@ describe('ReportUtils', () => {
                     await Onyx.merge(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${adminArchivedPolicyExpenseChat.reportID}`, reportNameValuePairs);
 
                     const {result: isReportArchived} = renderHook(() => useReportIsArchived(adminArchivedPolicyExpenseChat?.reportID));
-                  
-                    expect(getReportName({report: adminArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(
-                        `Ragnar Lothbrok's expenses (archived)`,
-                    );
+
+                    expect(getReportName({report: adminArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(`Ragnar Lothbrok's expenses (archived)`);
 
                     return IntlStore.load(CONST.LOCALES.ES).then(() =>
-                        expect(getReportName({report: adminArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(
-                            `Ragnar Lothbrok's gastos (archivado)`,
-                        ),
+                        expect(getReportName({report: adminArchivedPolicyExpenseChat, isReportArchived: isReportArchived.current})).toBe(`Ragnar Lothbrok's gastos (archivado)`),
                     );
                 });
             });

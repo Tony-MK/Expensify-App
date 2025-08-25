@@ -16,8 +16,8 @@ import useDiffPrevious from './useDiffPrevious';
 import useLocalize from './useLocalize';
 import useOnyx from './useOnyx';
 import usePrevious from './usePrevious';
-import useResponsiveLayout from './useResponsiveLayout';
 import useReportIsArchived from './useReportIsArchived';
+import useResponsiveLayout from './useResponsiveLayout';
 
 type PartialPolicyForSidebar = Pick<OnyxTypes.Policy, 'type' | 'name' | 'avatarURL' | 'employeeList'>;
 

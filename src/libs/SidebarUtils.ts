@@ -405,12 +405,9 @@ function categorizeReportsForLHN(
         if (!report) {
             continue;
         }
-        
+
         const reportID = report.reportID;
-        const reportNameValuePairsKey = `${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${reportID}`;
-        const rNVPs = reportNameValuePairs?.[reportNameValuePairsKey];
-        const isReportArchived = !!rNVPs?.private_isArchived
-        const displayName = getReportName({report, isReportArchived});
+        const displayName = getReportName({report});
         const miniReport: MiniReport = {
             reportID,
             displayName,
@@ -421,7 +418,9 @@ function categorizeReportsForLHN(
         const requiresAttention = !!reportAttributes?.[reportID]?.requiresAttention;
         const hasErrors = !!report.hasErrorsOtherThanFailedReceipt;
         const hasDraft = !!reportID && !!draftReportComments?.[reportID];
-        const isArchived = isArchivedNonExpenseReport(report, isReportArchived);
+        const reportNameValuePairsKey = `${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${reportID}`;
+        const rNVPs = reportNameValuePairs?.[reportNameValuePairsKey];
+        const isArchived = isArchivedNonExpenseReport(report, !!rNVPs?.private_isArchived);
 
         precomputedReports.push({
             miniReport,
@@ -670,7 +669,7 @@ function getOptionData({
     invoiceReceiverPolicy,
     card,
     localeCompare,
-    isReportArchived = false,
+    isReportArchived,
 }: {
     report: OnyxEntry<Report>;
     oneTransactionThreadReport: OnyxEntry<Report>;
@@ -760,7 +759,7 @@ function getOptionData({
     result.parentReportID = report.parentReportID;
     result.isWaitingOnBankAccount = report.isWaitingOnBankAccount;
     result.notificationPreference = getReportNotificationPreference(report);
-    result.isAllowedToComment = canUserPerformWriteActionUtil(report, isReportArchived);
+    result.isAllowedToComment = canUserPerformWriteActionUtil(report, !!result.private_isArchived);
     result.chatType = report.chatType;
     result.isDeletedParentAction = report.isDeletedParentAction;
     result.isSelfDM = isSelfDM(report);
@@ -806,7 +805,7 @@ function getOptionData({
     const lastActorDisplayName = getLastActorDisplayName(lastActorDetails);
     let lastMessageTextFromReport = lastMessageTextFromReportProp;
     if (!lastMessageTextFromReport) {
-        lastMessageTextFromReport = getLastMessageTextForReport(report, lastActorDetails, policy, isReportArchived || !!result?.private_isArchived);
+        lastMessageTextFromReport = getLastMessageTextForReport(report, lastActorDetails, policy, isReportArchived);
     }
 
     // We need to remove sms domain in case the last message text has a phone number mention with sms domain.
@@ -848,7 +847,7 @@ function getOptionData({
                     : translateLocal('workspace.invite.removed');
             const users = translateLocal(targetAccountIDsLength > 1 ? 'common.members' : 'common.member')?.toLocaleLowerCase();
             result.alternateText = formatReportLastMessageText(`${actorDisplayName ?? lastActorDisplayName}: ${verb} ${targetAccountIDsLength} ${users}`);
-            const roomName = getReportName({report: allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${lastActionOriginalMessage?.reportID}`], isReportArchived}) || lastActionOriginalMessage?.roomName;
+            const roomName = getReportName({report: allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${lastActionOriginalMessage?.reportID}`]}) || lastActionOriginalMessage?.roomName;
             if (roomName) {
                 const preposition =
                     lastAction.actionName === CONST.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM || lastAction.actionName === CONST.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM
@@ -956,9 +955,7 @@ function getOptionData({
                     : getLastVisibleMessage(report.reportID, result.isAllowedToComment, {}, lastAction)?.lastMessageText;
 
             if (!result.alternateText) {
-                result.alternateText = formatReportLastMessageText(
-                    getWelcomeMessage(report, policy, localeCompare, isReportArchived || !!result?.private_isArchived).messageText ?? translateLocal('report.noActivityYet'),
-                );
+                result.alternateText = formatReportLastMessageText(getWelcomeMessage(report, policy, localeCompare, isReportArchived).messageText ?? translateLocal('report.noActivityYet'));
             }
         }
         result.alternateText = prefix + result.alternateText;
@@ -966,10 +963,10 @@ function getOptionData({
         if (!lastMessageText) {
             lastMessageText = formatReportLastMessageText(
                 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-                getWelcomeMessage(report, policy, localeCompare, isReportArchived || !!result?.private_isArchived).messageText || translateLocal('report.noActivityYet'),
+                getWelcomeMessage(report, policy, localeCompare, isReportArchived).messageText || translateLocal('report.noActivityYet'),
             );
         }
-        if (shouldShowLastActorDisplayName(report, lastActorDetails, lastAction) && !isReportArchived) {
+        if (shouldShowLastActorDisplayName(report, lastActorDetails, lastAction) && !result.private_isArchived) {
             result.alternateText = `${lastActorDisplayName}: ${formatReportLastMessageText(Parser.htmlToText(lastMessageText))}`;
         } else {
             result.alternateText = formatReportLastMessageText(Parser.htmlToText(lastMessageText));
@@ -988,7 +985,7 @@ function getOptionData({
         result.phoneNumber = personalDetail?.phoneNumber ?? '';
     }
 
-    const reportName = getReportName({report, isReportArchived: isReportArchived || !!result?.private_isArchived});
+    const reportName = getReportName({report, isReportArchived});
 
     result.text = reportName;
     result.subtitle = subtitle;
@@ -1002,7 +999,7 @@ function getOptionData({
         personalDetail?.accountID ?? CONST.DEFAULT_NUMBER_ID,
         policy,
         invoiceReceiverPolicy,
-        isReportArchived || !!result.private_isArchived,
+        !!result.private_isArchived,
     );
     result.displayNamesWithTooltips = displayNamesWithTooltips;
 
@@ -1080,7 +1077,7 @@ function getWelcomeMessage(
 /**
  * Get welcome message based on room type
  */
-function getRoomWelcomeMessage(report: OnyxEntry<Report>, isReportArchived = false, reportDetailsLink = ''): WelcomeMessage {
+function getRoomWelcomeMessage(report: OnyxEntry<Report>, isReportArchived?: boolean, reportDetailsLink = ''): WelcomeMessage {
     const welcomeMessage: WelcomeMessage = {};
     const workspaceName = getPolicyName({report});
     const reportName = getReportName({report, isReportArchived});

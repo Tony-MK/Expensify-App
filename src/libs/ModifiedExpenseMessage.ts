@@ -2,8 +2,8 @@ import isEmpty from 'lodash/isEmpty';
 import Onyx from 'react-native-onyx';
 import type {OnyxCollection, OnyxEntry} from 'react-native-onyx';
 import CONST from '@src/CONST';
-import ONYXKEYS from '@src/ONYXKEYS';
 import useReportIsArchived from '@src/hooks/useReportIsArchived';
+import ONYXKEYS from '@src/ONYXKEYS';
 import type {PolicyTagLists, Report, ReportAction} from '@src/types/onyx';
 import type {SearchReport} from '@src/types/onyx/SearchResults';
 import {convertToDisplayString} from './CurrencyUtils';
@@ -163,12 +163,12 @@ function getForReportAction({
     reportOrID,
     reportAction,
     searchReports,
-    isReportArchived = false,
+    isReportArchived,
 }: {
     reportOrID: string | SearchReport | undefined;
     reportAction: OnyxEntry<ReportAction>;
     searchReports?: SearchReport[];
-    isReportArchived: boolean;
+    isReportArchived?: boolean;
 }): string {
     if (!isModifiedExpenseAction(reportAction)) {
         return '';
@@ -188,7 +188,7 @@ function getForReportAction({
     if (reportActionOriginalMessage?.movedFromReport) {
         const reportName = getReportName({
             report: allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${reportActionOriginalMessage?.movedFromReport}`],
-            isReportArchived
+            isReportArchived,
         });
         return translateLocal('iou.movedFromReport', {reportName: reportName ?? ''});
     }
