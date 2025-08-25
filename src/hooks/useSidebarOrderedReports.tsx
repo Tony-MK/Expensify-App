@@ -128,6 +128,7 @@ function SidebarOrderedReportsContextProvider({
     }, [
         reportUpdates,
         isReportArchived,
+        reportNameValuePairsUpdates,
         transactionsUpdates,
         transactionViolationsUpdates,
         reportsDraftsUpdates,

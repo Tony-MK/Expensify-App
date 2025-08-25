@@ -204,7 +204,6 @@ import {
     isReopenedAction,
     isReportActionAttachment,
     isReportPreviewAction,
-    isRetractedAction,
     isReversedTransaction,
     isRoomChangeLogAction,
     isSentMoneyReportAction,
@@ -5389,7 +5388,7 @@ function getReportNameInternal({
                 reportOrID: report?.reportID,
                 reportAction: parentReportAction,
                 searchReports: reports,
-                isReportArchived: isReportArchived,
+                isReportArchived,
             });
             return formatReportLastMessageText(modifiedMessage);
         }
