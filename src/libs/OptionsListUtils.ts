@@ -766,7 +766,7 @@ function getLastMessageTextForReport(report: OnyxEntry<Report>, lastActorDetails
     } else if (isReportMessageAttachment({text: report?.lastMessageText ?? '', html: report?.lastMessageHtml, type: ''})) {
         lastMessageTextFromReport = `[${translateLocal('common.attachment')}]`;
     } else if (isModifiedExpenseAction(lastReportAction)) {
-        const properSchemaForModifiedExpenseMessage = ModifiedExpenseMessage.getForReportAction({reportOrID: report?.reportID, reportAction: lastReportAction, isReportArchived: isReportArchived});
+        const properSchemaForModifiedExpenseMessage = ModifiedExpenseMessage.getForReportAction({reportOrID: report?.reportID, reportAction: lastReportAction, isReportArchived});
         lastMessageTextFromReport = formatReportLastMessageText(properSchemaForModifiedExpenseMessage, true);
     } else if (isMovedTransactionAction(lastReportAction)) {
         const movedTransactionOriginalMessage = getOriginalMessage(lastReportAction) ?? {};
@@ -1006,7 +1006,7 @@ function createOption(
 
         reportName = showPersonalDetails
             ? getDisplayNameForParticipant({accountID: accountIDs.at(0)}) || formatPhoneNumber(personalDetail?.login ?? '')
-            : getReportName(report, undefined, undefined, undefined, undefined, undefined, transactions, isReportArchived || !!result?.private_isArchived);
+            : getReportName({report, isReportArchived: isReportArchived || !!result?.private_isArchived});
     } else {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         reportName = getDisplayNameForParticipant({accountID: accountIDs.at(0)}) || formatPhoneNumber(personalDetail?.login ?? '');
@@ -1025,7 +1025,16 @@ function createOption(
     }
 
     result.text = reportName;
-    result.icons = getIcons(report, personalDetails, personalDetail?.avatar, personalDetail?.login, personalDetail?.accountID, null, undefined, isReportArchived || !!result?.private_isArchived);
+    result.icons = getIcons(
+        report,
+        personalDetails,
+        personalDetail?.avatar,
+        personalDetail?.login,
+        personalDetail?.accountID,
+        null,
+        undefined,
+        isReportArchived || !!result?.private_isArchived,
+    );
     result.subtitle = subtitle;
 
     return result;
@@ -1053,7 +1062,7 @@ function getReportOption(participant: Participant, reportAttributesDerived?: Rep
     if (option.isSelfDM) {
         option.alternateText = translateLocal('reportActionsView.yourSpace');
     } else if (option.isInvoiceRoom) {
-        option.text = getReportName(report, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived);
+        option.text = getReportName({report, isReportArchived});
         option.alternateText = translateLocal('workspace.common.invoices');
     } else {
         option.text = getPolicyName({report});
@@ -1103,7 +1112,7 @@ function getReportDisplayOption(
     if (option.isSelfDM) {
         option.alternateText = translateLocal('reportActionsView.yourSpace');
     } else if (option.isInvoiceRoom) {
-        option.text = getReportName(report, undefined, undefined, undefined, undefined, undefined, undefined, isReportArchived);
+        option.text = getReportName({report, isReportArchived});
         option.alternateText = translateLocal('workspace.common.invoices');
     } else if (unknownUserDetails && !option.text) {
         option.text = unknownUserDetails.text ?? unknownUserDetails.login;

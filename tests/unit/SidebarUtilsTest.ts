@@ -985,6 +985,9 @@ describe('SidebarUtils', () => {
                 };
 
                 await Onyx.set(`${ONYXKEYS.COLLECTION.POLICY}1`, policy);
+                await Onyx.set(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report.reportID}`, reportNameValuePairs);
+
+                const {result: isReportArchived} = renderHook(() => useReportIsArchived(report.reportID));
 
                 const {result: isReportArchived} = renderHook(() => useReportIsArchived(report.reportID));
 

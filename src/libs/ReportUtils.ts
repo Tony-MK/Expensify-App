@@ -204,7 +204,6 @@ import {
     isReopenedAction,
     isReportActionAttachment,
     isReportPreviewAction,
-    isRetractedAction,
     isReversedTransaction,
     isRoomChangeLogAction,
     isSentMoneyReportAction,
@@ -890,6 +889,7 @@ type GetReportNameParams = {
     transactions?: SearchTransaction[];
     reports?: SearchReport[];
     draftReports?: OnyxCollection<Report>;
+    reportAttributes?: ReportAttributesDerivedValue['reports'];
     isReportArchived?: boolean;
     policies?: SearchPolicy[];
 };
@@ -4953,7 +4953,7 @@ function getInvoicePayerName(report: OnyxEntry<Report>, invoiceReceiverPolicy?: 
 /**
  * Parse html of reportAction into text
  */
-function parseReportActionHtmlToText(reportAction: OnyxEntry<ReportAction>, reportID: string | undefined, childReportID?: string): string {
+function parseReportActionHtmlToText(reportAction: OnyxEntry<ReportAction>, reportID: string | undefined, childReportID?: string, isReportArchived = false): string {
     if (!reportAction) {
         return '';
     }
@@ -4976,7 +4976,7 @@ function parseReportActionHtmlToText(reportAction: OnyxEntry<ReportAction>, repo
     for (const match of matches) {
         if (match[1] !== childReportID) {
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            reportIDToName[match[1]] = getReportName(getReportOrDraftReport(match[1])) ?? '';
+            reportIDToName[match[1]] = getReportName({report: getReportOrDraftReport(match[1]), isReportArchived}) ?? '';
         }
     }
 
@@ -5124,24 +5124,24 @@ function generateReportName(report: OnyxEntry<Report>): string {
 /**
  * Get the title for a report.
  */
-function getReportName(
-    report: OnyxEntry<Report>,
-    policy?: OnyxEntry<Policy>,
-    parentReportActionParam?: OnyxInputOrEntry<ReportAction>,
-    personalDetails?: Partial<PersonalDetailsList>,
-    invoiceReceiverPolicy?: OnyxEntry<Policy>,
-    reportAttributes?: ReportAttributesDerivedValue['reports'],
-    transactions?: SearchTransaction[],
-    isReportArchived = false,
-): string {
+function getReportName({report, policy, parentReportActionParam, personalDetails, invoiceReceiverPolicy, reportAttributes, isReportArchived}: GetReportNameParams): string {
     // Check if we can use report name in derived values - only when we have report but no other params
-    const canUseDerivedValue = report && policy === undefined && parentReportActionParam === undefined && personalDetails === undefined && invoiceReceiverPolicy === undefined;
+    const canUseDerivedValue =
+        report && policy === undefined && parentReportActionParam === undefined && personalDetails === undefined && invoiceReceiverPolicy === undefined && isReportArchived === undefined;
     const attributes = reportAttributes ?? reportAttributesDerivedValue;
     const derivedNameExists = report && !!attributes?.[report.reportID]?.reportName;
     if (canUseDerivedValue && derivedNameExists) {
         return attributes[report.reportID].reportName;
     }
-    return getReportNameInternal({report, policy, parentReportActionParam, personalDetails, invoiceReceiverPolicy, transactions, isReportArchived});
+  
+    return getReportNameInternal({
+        report,
+        policy,
+        parentReportActionParam,
+        personalDetails,
+        invoiceReceiverPolicy,
+        isReportArchived,
+    });
 }
 
 function getSearchReportName(props: GetReportNameParams): string {
@@ -5388,7 +5388,7 @@ function getReportNameInternal({
                 reportOrID: report?.reportID,
                 reportAction: parentReportAction,
                 searchReports: reports,
-                isReportArchived: isReportArchived,
+                isReportArchived,
             });
             return formatReportLastMessageText(modifiedMessage);
         }
@@ -5574,7 +5574,7 @@ function getParentNavigationSubtitle(report: OnyxEntry<Report>, isReportArchived
     }
 
     return {
-        reportName: getReportName(parentReport, undefined, undefined, undefined, undefined, undefined, undefined, isParentReportArchived),
+        reportName: getReportName({report: parentReport, isReportArchived: isParentReportArchived}),
         workspaceName: getPolicyName({report: parentReport, returnEmptyIfNotFound: true}),
     };
 }
@@ -6266,8 +6266,8 @@ function getDeletedTransactionMessage(action: ReportAction) {
     return message;
 }
 
-function getMovedTransactionMessage(report: OnyxEntry<Report>) {
-    const reportName = getReportName(report) ?? report?.reportName ?? '';
+function getMovedTransactionMessage(report: OnyxEntry<Report>, isReportArchived = false) {
+    const reportName = getReportName({report, isReportArchived}) ?? report?.reportName ?? '';
     const reportUrl = `${environmentURL}/r/${report?.reportID}`;
     const message = translateLocal('iou.movedTransaction', {
         reportUrl,
@@ -8560,10 +8560,20 @@ function shouldReportBeInOptionList(params: ShouldReportBeInOptionListParams) {
 /**
  * Attempts to find a report in onyx with the provided list of participants. Does not include threads, task, expense, room, and policy expense chat.
  */
-function getChatByParticipants(newParticipantList: number[], reports: OnyxCollection<Report> = allReports, shouldIncludeGroupChats = false): OnyxEntry<Report> {
+function getChatByParticipants(
+    newParticipantList: number[],
+    reports: OnyxCollection<Report> = allReports,
+    shouldIncludeGroupChats = false,
+    shouldExcludeClosedReports = false,
+    isReportArchived = false,
+): OnyxEntry<Report> {
     const sortedNewParticipantList = newParticipantList.sort();
     return Object.values(reports ?? {}).find((report) => {
         const participantAccountIDs = Object.keys(report?.participants ?? {});
+
+        if (shouldExcludeClosedReports && isReportArchived) {
+            return false;
+        }
 
         // Skip if it's not a 1:1 chat
         if (!shouldIncludeGroupChats && !isOneOnOneChat(report) && !isSystemChat(report)) {
@@ -11297,7 +11307,7 @@ function getGroupChatDraft() {
     return newGroupChatDraft;
 }
 
-function getChatListItemReportName(action: ReportAction & {reportName?: string}, report: SearchReport | undefined): string {
+function getChatListItemReportName(action: ReportAction & {reportName?: string}, report: SearchReport | undefined, isReportArchived = false): string {
     if (report && isInvoiceReport(report)) {
         const properInvoiceReport = report;
         properInvoiceReport.chatReportID = report.parentReportID;
@@ -11310,10 +11320,10 @@ function getChatListItemReportName(action: ReportAction & {reportName?: string},
     }
 
     if (report?.reportID) {
-        return getReportName(getReport(report?.reportID, allReports));
+        return getReportName({report: getReport(report?.reportID, allReports), isReportArchived});
     }
 
-    return getReportName(report);
+    return getReportName({report, isReportArchived});
 }
 
 /**
@@ -11403,27 +11413,12 @@ function hasReportBeenReopened(report: OnyxEntry<Report>, reportActions?: OnyxEn
     return reportActionList.some((action) => isReopenedAction(action));
 }
 
-function hasReportBeenRetracted(report: OnyxEntry<Report>, reportActions?: OnyxEntry<ReportActions> | ReportAction[]): boolean {
-    // If report object is provided and has the property, use it directly
-    if (report?.hasReportBeenRetracted !== undefined) {
-        return report.hasReportBeenRetracted;
-    }
-
-    // Fallback to checking actions for backward compatibility
-    if (!reportActions) {
-        return false;
-    }
-
-    const reportActionList = Array.isArray(reportActions) ? reportActions : Object.values(reportActions);
-    return reportActionList.some((action) => isRetractedAction(action));
-}
-
-function getMoneyReportPreviewName(action: ReportAction, iouReport: OnyxEntry<Report>, isInvoice?: boolean) {
+function getMoneyReportPreviewName(action: ReportAction, iouReport: OnyxEntry<Report>, isInvoice?: boolean, isReportArchived = false) {
     if (isInvoice && isActionOfType(action, CONST.REPORT.ACTIONS.TYPE.REPORT_PREVIEW)) {
         const originalMessage = getOriginalMessage(action);
         return originalMessage && translateLocal('iou.invoiceReportName', originalMessage);
     }
-    return getReportName(iouReport) || action.childReportName;
+    return getReportName({report: iouReport, isReportArchived}) || action.childReportName;
 }
 
 function selectArchivedReportsIdSet(all: Record<string, OnyxInputOrEntry<ReportNameValuePairs>> | null | undefined): ArchivedReportsIDSet {
@@ -11636,6 +11631,7 @@ export {
     getReportFieldKey,
     getReportIDFromLink,
     getReportName,
+    getReportNameInternal,
     getSearchReportName,
     getReportTransactions,
     reportTransactionsSelector,
@@ -11880,7 +11876,6 @@ export {
     pushTransactionViolationsOnyxData,
     navigateOnDeleteExpense,
     hasReportBeenReopened,
-    hasReportBeenRetracted,
     getMoneyReportPreviewName,
     getNextApproverAccountID,
     isWorkspaceTaskReport,
@@ -11893,6 +11888,7 @@ export {
 export type {
     Ancestor,
     DisplayNameWithTooltips,
+    GetReportNameParams,
     OptimisticAddCommentReportAction,
     OptimisticChatReport,
     OptimisticClosedReportAction,
