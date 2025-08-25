@@ -163,6 +163,8 @@ function IOURequestStepAmount({
         }
     };
 
+    const isReportArchived = useReportIsArchived(reportID);
+
     const navigateToNextPage = ({amount, paymentMethod}: AmountParams) => {
         isSaveButtonPressed.current = true;
         const amountInSmallestCurrencyUnits = convertToBackendAmount(Number.parseFloat(amount));
