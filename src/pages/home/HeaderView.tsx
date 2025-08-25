@@ -48,7 +48,6 @@ import {
     getReportName,
     hasReportNameError,
     isAdminRoom,
-    isArchivedReport,
     isChatRoom as isChatRoomReportUtils,
     isChatThread as isChatThreadReportUtils,
     isChatUsedForOnboarding as isChatUsedForOnboardingReportUtils,
@@ -110,7 +109,7 @@ function HeaderView({report, parentReportAction, onNavigationMenuButtonClicked, 
     const [account] = useOnyx(ONYXKEYS.ACCOUNT, {canBeMissing: true});
     const [reportNameValuePairs] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report?.reportID}`, {canBeMissing: true});
     const [reportMetadata] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT_METADATA}${report?.reportID}`, {canBeMissing: true});
-    const isReportArchived = isArchivedReport(reportNameValuePairs);
+    const isReportArchived = useReportIsArchived(report?.reportID);
 
     const {translate, localeCompare} = useLocalize();
     const theme = useTheme();
@@ -132,9 +131,16 @@ function HeaderView({report, parentReportAction, onNavigationMenuButtonClicked, 
     const isTaskReport = isTaskReportReportUtils(report);
     const reportHeaderData = !isTaskReport && !isChatThread && report?.parentReportID ? parentReport : report;
     // Use sorted display names for the title for group chats on native small screen widths
-    const title = getReportName(reportHeaderData, policy, parentReportAction, personalDetails, invoiceReceiverPolicy);
-    const subtitle = getChatRoomSubtitle(reportHeaderData);
     const isReportHeaderDataArchived = useReportIsArchived(reportHeaderData?.reportID);
+    const title = getReportName({
+        report: reportHeaderData,
+        policy,
+        parentReportActionParam: parentReportAction,
+        personalDetails,
+        invoiceReceiverPolicy,
+        isReportArchived: isReportHeaderDataArchived,
+    });
+    const subtitle = getChatRoomSubtitle(reportHeaderData);
     const parentNavigationSubtitleData = getParentNavigationSubtitle(reportHeaderData, isReportHeaderDataArchived);
     const reportDescription = Parser.htmlToText(getReportDescription(report));
     const policyName = getPolicyName({report, returnEmptyIfNotFound: true});

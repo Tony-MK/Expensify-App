@@ -16,6 +16,7 @@ import useDiffPrevious from './useDiffPrevious';
 import useLocalize from './useLocalize';
 import useOnyx from './useOnyx';
 import usePrevious from './usePrevious';
+import useReportIsArchived from './useReportIsArchived';
 import useResponsiveLayout from './useResponsiveLayout';
 
 type PartialPolicyForSidebar = Pick<OnyxTypes.Policy, 'type' | 'name' | 'avatarURL' | 'employeeList'>;
@@ -77,6 +78,7 @@ function SidebarOrderedReportsContextProvider({
     const {shouldUseNarrowLayout} = useResponsiveLayout();
     const {accountID} = useCurrentUserPersonalDetails();
     const currentReportIDValue = useCurrentReportID();
+    const isReportArchived = useReportIsArchived(currentReportIDValue?.currentReportID);
     const derivedCurrentReportID = currentReportIDForTests ?? currentReportIDValue?.currentReportIDFromPath ?? currentReportIDValue?.currentReportID;
     const prevDerivedCurrentReportID = usePrevious(derivedCurrentReportID);
 
@@ -125,6 +127,7 @@ function SidebarOrderedReportsContextProvider({
         return reportsToUpdate;
     }, [
         reportUpdates,
+        isReportArchived,
         reportNameValuePairsUpdates,
         transactionsUpdates,
         transactionViolationsUpdates,
@@ -155,9 +158,9 @@ function SidebarOrderedReportsContextProvider({
                 priorityMode === CONST.PRIORITY_MODE.GSD,
                 betas,
                 transactionViolations,
-                reportNameValuePairs,
                 reportAttributes,
                 drafts,
+                isReportArchived,
             );
         } else {
             reportsToDisplay = SidebarUtils.getReportsToDisplayInLHN(
@@ -167,9 +170,9 @@ function SidebarOrderedReportsContextProvider({
                 policies,
                 priorityMode,
                 transactionViolations,
-                reportNameValuePairs,
                 reportAttributes,
                 drafts,
+                isReportArchived,
             );
         }
         return reportsToDisplay;
@@ -243,7 +246,7 @@ function SidebarOrderedReportsContextProvider({
         policies,
         transactions,
         transactionViolations,
-        reportNameValuePairs,
+        isReportArchived,
         betas,
         reportAttributes,
         currentReportsToDisplay,
