@@ -163,11 +163,12 @@ function getForReportAction({
     reportAction,
     searchReports,
     isReportArchived,
+    isReportArchived = false,
 }: {
     reportOrID: string | SearchReport | undefined;
     reportAction: OnyxEntry<ReportAction>;
     searchReports?: SearchReport[];
-    isReportArchived?: boolean;
+    isReportArchived: boolean;
 }): string {
     if (!isModifiedExpenseAction(reportAction)) {
         return '';

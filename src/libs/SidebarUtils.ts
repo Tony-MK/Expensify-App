@@ -663,6 +663,7 @@ function getOptionData({
     reportNameValuePairs,
     personalDetails,
     policy,
+    isReportArchived = false,
     parentReportAction,
     lastMessageTextFromReport: lastMessageTextFromReportProp,
     invoiceReceiverPolicy,
@@ -675,6 +676,7 @@ function getOptionData({
     reportNameValuePairs: OnyxEntry<ReportNameValuePairs>;
     personalDetails: OnyxEntry<PersonalDetailsList>;
     policy: OnyxEntry<Policy> | undefined;
+    isReportArchived?: boolean;
     parentReportAction: OnyxEntry<ReportAction> | undefined;
     lastMessageTextFromReport?: string;
     invoiceReceiverPolicy?: OnyxEntry<Policy>;
@@ -998,7 +1000,7 @@ function getOptionData({
         personalDetail?.accountID ?? CONST.DEFAULT_NUMBER_ID,
         policy,
         invoiceReceiverPolicy,
-        !!result.private_isArchived,
+        isReportArchived || !!result.private_isArchived,
     );
     result.displayNamesWithTooltips = displayNamesWithTooltips;
 
