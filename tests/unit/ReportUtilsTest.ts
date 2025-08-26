@@ -1308,6 +1308,260 @@ describe('ReportUtils', () => {
                 expect(result).toContain('QuickBooks');
             });
         });
+
+        describe('Policy change log scenarios', () => {
+            test('should handle corporate upgrade action', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                };
+
+                const upgradeAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.CORPORATE_UPGRADE,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: upgradeAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toContain('upgraded');
+            });
+
+            test('should handle team downgrade action', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                };
+
+                const downgradeAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.TEAM_DOWNGRADE,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: downgradeAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toContain('downgraded');
+            });
+
+            test('should handle workspace name update action', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                };
+
+                const nameUpdateAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_NAME,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        oldName: 'Old Workspace',
+                        newName: 'New Workspace',
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: nameUpdateAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toContain('New Workspace');
+            });
+        });
+
+        describe('Money request scenarios', () => {
+            test('should handle paid elsewhere money request', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const payAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.IOU,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        type: CONST.IOU.REPORT_ACTION_TYPE.PAY,
+                        paymentType: CONST.IOU.PAYMENT_TYPE.ELSEWHERE,
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: payAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Paid elsewhere');
+            });
+
+            test('should handle VBBA payment with automatic action', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const vbbaPayAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.IOU,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        type: CONST.IOU.REPORT_ACTION_TYPE.PAY,
+                        paymentType: CONST.IOU.PAYMENT_TYPE.VBBA,
+                        automaticAction: true,
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: vbbaPayAction,
+                    personalDetails: fakePersonalDetails,
+                    policy: {
+                        id: 'policy1',
+                        achAccount: {
+                            accountNumber: '1234567890',
+                        },
+                    },
+                });
+
+                expect(result).toContain('Automatically paid');
+                expect(result).toContain('7890');
+            });
+        });
+
+        describe('Special report types', () => {
+            test('should handle task report with proper name formatting', () => {
+                const taskReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.TASK,
+                    reportName: '<b>HTML Task Name</b>',
+                };
+
+                const result = getReportNameInternal({
+                    report: taskReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('HTML Task Name');
+            });
+
+            test('should handle invoice report', () => {
+                const invoiceReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.INVOICE,
+                    ownerAccountID: 1,
+                    chatReportID: '2',
+                };
+
+                const result = getReportNameInternal({
+                    report: invoiceReport,
+                    personalDetails: fakePersonalDetails,
+                    policy: {
+                        id: 'policy1',
+                        name: 'Test Policy',
+                        type: CONST.POLICY.TYPE.CORPORATE,
+                    },
+                });
+
+                expect(typeof result).toBe('string');
+                expect(result.length).toBeGreaterThan(0);
+            });
+
+            test('should handle invoice room', () => {
+                const invoiceRoom: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                    chatType: CONST.REPORT.CHAT_TYPE.INVOICE,
+                    invoiceReceiver: {
+                        type: CONST.REPORT.INVOICE_RECEIVER_TYPE.INDIVIDUAL,
+                        accountID: 1,
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report: invoiceRoom,
+                    personalDetails: fakePersonalDetails,
+                    invoiceReceiverPolicy: {
+                        id: 'policy2',
+                        name: 'Receiver Policy',
+                        type: CONST.POLICY.TYPE.CORPORATE,
+                    },
+                });
+
+                expect(typeof result).toBe('string');
+                expect(result.length).toBeGreaterThan(0);
+            });
+        });
+
+        describe('Thread scenarios with moderation', () => {
+            test('should handle hidden message in thread', () => {
+                const threadReport: Report = {
+                    reportID: '1',
+                    parentReportID: '2',
+                    parentReportActionID: '3',
+                    type: CONST.REPORT.TYPE.CHAT,
+                };
+
+                const hiddenAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.ADD_COMMENT,
+                    actorAccountID: 1,
+                    reportActionID: '3',
+                    message: [
+                        {
+                            type: 'COMMENT',
+                            html: 'Hidden message',
+                            text: 'Hidden message',
+                            moderationDecision: {
+                                decision: CONST.MODERATION.MODERATOR_DECISION_HIDDEN,
+                            },
+                        },
+                    ],
+                };
+
+                const result = getReportNameInternal({
+                    report: threadReport,
+                    parentReportActionParam: hiddenAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Hidden message');
+            });
+        });
+
+        describe('Error handling', () => {
+            test('should handle null/undefined report gracefully', () => {
+                const result = getReportNameInternal({
+                    report: null,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('');
+            });
+
+            test('should handle empty personalDetails', () => {
+                const report: Report = {
+                    reportID: '1',
+                    participants: buildParticipantsFromAccountIDs([1]),
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    personalDetails: {},
+                });
+
+                expect(typeof result).toBe('string');
+            });
+        });
+    });
     });
 
     describe('Fallback scenarios', () => {
