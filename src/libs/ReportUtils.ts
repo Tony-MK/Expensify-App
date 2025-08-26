@@ -11567,6 +11567,7 @@ export {
     getReportFieldKey,
     getReportIDFromLink,
     getReportName,
+    getReportNameInternal,
     getSearchReportName,
     getReportTransactions,
     reportTransactionsSelector,

@@ -51,6 +51,7 @@ import {
     getReasonAndReportActionThatRequiresAttention,
     getReportIDFromLink,
     getReportName,
+    getReportNameInternal,
     getReportStatusTranslation,
     getWorkspaceIcon,
     getWorkspaceNameUpdatedMessage,
@@ -837,6 +838,474 @@ describe('ReportUtils', () => {
                 };
 
                 expect(getReportName(expenseChatReport)).toEqual("Ragnar Lothbrok's expenses");
+            });
+        });
+    });
+
+    describe('getReportNameInternal', () => {
+        beforeEach(() => {
+            return Onyx.merge(ONYXKEYS.PERSONAL_DETAILS_LIST, fakePersonalDetails);
+        });
+
+        afterEach(() => {
+            return Onyx.clear();
+        });
+
+        describe('Chat Thread scenarios', () => {
+            test('should return thread name for task report with cancelled task', () => {
+                const taskReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.TASK,
+                    managerID: 1,
+                    stateNum: CONST.REPORT.STATE_NUM.APPROVED,
+                    statusNum: CONST.REPORT.STATUS_NUM.APPROVED,
+                    reportName: 'Test Task',
+                };
+                
+                const parentReportAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.TASK_CANCELLED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                };
+
+                const result = getReportNameInternal({
+                    report: taskReport,
+                    parentReportActionParam: parentReportAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Deleted task');
+            });
+
+            test('should return formatted transaction thread name', () => {
+                const threadReport: Report = {
+                    reportID: '1',
+                    parentReportID: '2',
+                    parentReportActionID: '3',
+                    type: CONST.REPORT.TYPE.CHAT,
+                };
+
+                const transactionAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.IOU,
+                    actorAccountID: 1,
+                    reportActionID: '3',
+                    originalMessage: {
+                        IOUTransactionID: 'txn1',
+                        type: CONST.IOU.REPORT_ACTION_TYPE.CREATE,
+                        amount: 1000,
+                        currency: 'USD',
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report: threadReport,
+                    parentReportActionParam: transactionAction,
+                    personalDetails: fakePersonalDetails,
+                    transactions: [
+                        {
+                            transactionID: 'txn1',
+                            reportID: '2',
+                            amount: 1000,
+                            currency: 'USD',
+                            merchant: 'Test Merchant',
+                        },
+                    ],
+                });
+
+                expect(result).toContain('Test Merchant');
+            });
+
+            test('should return attachment label for attachment thread', () => {
+                const threadReport: Report = {
+                    reportID: '1',
+                    parentReportID: '2',
+                    parentReportActionID: '3',
+                    type: CONST.REPORT.TYPE.CHAT,
+                };
+
+                const attachmentAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.ADD_COMMENT,
+                    actorAccountID: 1,
+                    reportActionID: '3',
+                    message: [
+                        {
+                            type: 'COMMENT',
+                            html: '<img src="test.jpg" />',
+                            text: '[Attachment]',
+                        },
+                    ],
+                };
+
+                const result = getReportNameInternal({
+                    report: threadReport,
+                    parentReportActionParam: attachmentAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('[Attachment]');
+            });
+        });
+
+        describe('Submitted report scenarios', () => {
+            test('should return submitted message for submitted report', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const submittedAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.SUBMITTED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        message: 'Submit for approval',
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: submittedAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Submitted (Submit for approval)');
+            });
+
+            test('should return automatically submitted message for harvesting', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const harvestingAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.SUBMITTED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        harvesting: true,
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: harvestingAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Automatically submitted');
+            });
+        });
+
+        describe('Forwarded report scenarios', () => {
+            test('should return forwarded message for forwarded report', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const forwardedAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.FORWARDED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {},
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: forwardedAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Forwarded');
+            });
+
+            test('should return automatically forwarded message for automatic forwarding', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const autoForwardedAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.FORWARDED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        automaticAction: true,
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: autoForwardedAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Automatically forwarded');
+            });
+        });
+
+        describe('Other report action scenarios', () => {
+            test('should return rejected message for rejected report', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const rejectedAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.REJECTED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: rejectedAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Rejected');
+            });
+
+            test('should return approved message for approved report', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const approvedAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.APPROVED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {},
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: approvedAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Approved');
+            });
+
+            test('should return automatically approved message for automatic approval', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                };
+
+                const autoApprovedAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.APPROVED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        automaticAction: true,
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: autoApprovedAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Automatically approved');
+            });
+        });
+
+        describe('Different report types', () => {
+            test('should return group chat name for group chat', () => {
+                const groupChatReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                    chatType: CONST.REPORT.CHAT_TYPE.GROUP,
+                    participants: buildParticipantsFromAccountIDs([1, 2, 3]),
+                };
+
+                const result = getReportNameInternal({
+                    report: groupChatReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toContain('Ragnar');
+            });
+
+            test('should return chat room name for chat room', () => {
+                const chatRoomReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                    chatType: CONST.REPORT.CHAT_TYPE.POLICY_ROOM,
+                    reportName: '#test-room',
+                };
+
+                const result = getReportNameInternal({
+                    report: chatRoomReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('#test-room');
+            });
+
+            test('should return policy expense chat name for policy expense chat', () => {
+                const policyExpenseChatReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                    chatType: CONST.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT,
+                    ownerAccountID: 1,
+                    policyID: 'policy1',
+                };
+
+                const result = getReportNameInternal({
+                    report: policyExpenseChatReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe("Ragnar Lothbrok's expenses");
+            });
+
+            test('should return money request report name for money request', () => {
+                const moneyRequestReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.IOU,
+                    iouReportID: '1',
+                    ownerAccountID: 1,
+                };
+
+                const result = getReportNameInternal({
+                    report: moneyRequestReport,
+                    personalDetails: fakePersonalDetails,
+                    policy: {
+                        id: 'policy1',
+                        name: 'Test Policy',
+                        type: CONST.POLICY.TYPE.CORPORATE,
+                    },
+                });
+
+                expect(result).toContain('Ragnar');
+            });
+
+            test('should return self DM name for self DM', () => {
+                const selfDMReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                    chatType: CONST.REPORT.CHAT_TYPE.SELF_DM,
+                    participants: buildParticipantsFromAccountIDs([currentUserAccountID]),
+                };
+
+                const result = getReportNameInternal({
+                    report: selfDMReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toContain('(you)');
+            });
+
+            test('should return Concierge name for Concierge chat', () => {
+                const conciergeReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                    participants: buildParticipantsFromAccountIDs([CONST.ACCOUNT_ID.CONCIERGE]),
+                };
+
+                const result = getReportNameInternal({
+                    report: conciergeReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Concierge');
+            });
+        });
+
+        describe('Archived report scenarios', () => {
+            test('should append archived suffix for archived non-expense reports', () => {
+                const archivedReport: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.CHAT,
+                    chatType: CONST.REPORT.CHAT_TYPE.POLICY_ROOM,
+                    reportName: '#archived-room',
+                };
+
+                const result = getReportNameInternal({
+                    report: archivedReport,
+                    isReportArchived: true,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('#archived-room (archived)');
+            });
+        });
+
+        describe('Fallback scenarios', () => {
+            test('should return participant-based name when no specific type matches', () => {
+                const genericReport: Report = {
+                    reportID: '1',
+                    participants: buildParticipantsFromAccountIDs([currentUserAccountID, 1]),
+                };
+
+                const result = getReportNameInternal({
+                    report: genericReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Ragnar Lothbrok');
+            });
+
+            test('should return report.reportName as fallback when no participants available', () => {
+                const reportWithName: Report = {
+                    reportID: '1',
+                    reportName: 'Fallback Report Name',
+                    participants: {},
+                };
+
+                const result = getReportNameInternal({
+                    report: reportWithName,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('Fallback Report Name');
+            });
+
+            test('should return empty string when no name can be determined', () => {
+                const emptyReport: Report = {
+                    reportID: '1',
+                    reportName: '',
+                    participants: {},
+                };
+
+                const result = getReportNameInternal({
+                    report: emptyReport,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toBe('');
+            });
+        });
+
+        describe('Integration scenarios', () => {
+            test('should handle integration sync failed action', () => {
+                const report: Report = {
+                    reportID: '1',
+                    type: CONST.REPORT.TYPE.EXPENSE,
+                    policyID: 'policy1',
+                };
+
+                const integrationFailedAction: ReportAction = {
+                    actionName: CONST.REPORT.ACTIONS.TYPE.INTEGRATION_SYNC_FAILED,
+                    actorAccountID: 1,
+                    reportActionID: '1',
+                    originalMessage: {
+                        label: 'QuickBooks',
+                        errorMessage: 'Sync failed',
+                    },
+                };
+
+                const result = getReportNameInternal({
+                    report,
+                    parentReportActionParam: integrationFailedAction,
+                    personalDetails: fakePersonalDetails,
+                });
+
+                expect(result).toContain('QuickBooks');
             });
         });
     });
