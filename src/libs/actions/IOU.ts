@@ -11322,12 +11322,9 @@ function bulkHold(
     const failureData: OnyxUpdate[] = [];
     const holdData: HoldData = {};
 
-    Object.entries(transactions).forEach(([transactionOnyxKey, transaction]) => {
+    Object.entries(transactions).forEach(([_, transaction]) => {
         const transactionID = transaction?.transactionID;
         if (!transactionID || !transactionsIOUActions[transactionID]) {
-            Log.warn(
-                `[IOU] Trying to hold transaction that does not have an IOU Action. Transaction Onyx Key: ${transactionOnyxKey}, TransactionID: ${transactionID}, Transaction reportID: ${transaction?.reportID}`,
-            );
             return;
         }
 

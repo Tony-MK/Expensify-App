@@ -10,25 +10,22 @@ import type ReportsAndReportAction from './types';
  * It traverses up the report hierarchy using parentReportID and parentReportActionID.
  *
  * @param reportID - The ID of the report for which to fetch ancestor reports and actions.
- * @param includeTransactionThreadReportActions - Whether to include transaction-thread actions.
+ * @param includeTransactionThreads - Whether to include transaction threads.
  */
 
 function useAncestorReportsAndReportActions(
     reportID: string,
-    includeTransactionThreadReportActions = false,
+    includeTransactionThreads = false,
 ): {report: OnyxEntry<Report>; ancestorReportsAndReportActions: ReportsAndReportAction[]} {
     const [ancestorReports] = useOnyx(ONYXKEYS.COLLECTION.REPORT, {
         canBeMissing: false,
         selector: (allReports) => {
             const reports: OnyxCollection<OnyxEntry<Report>> = {};
-            if (!allReports) {
-                return reports;
-            }
+            let currentReport = allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${reportID}`];
 
-            let currentReport = allReports[`${ONYXKEYS.COLLECTION.REPORT}${reportID}`];
             while (currentReport) {
                 reports[`${ONYXKEYS.COLLECTION.REPORT}${currentReport.reportID}`] = currentReport;
-                currentReport = allReports[`${ONYXKEYS.COLLECTION.REPORT}${currentReport.parentReportID}`];
+                currentReport = allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${currentReport.parentReportID}`];
             }
             return reports;
         },
@@ -52,7 +49,7 @@ function useAncestorReportsAndReportActions(
                     // except for sent-money and report-preview actions. ReportActionsListItemRenderer does not render
                     // the ReportActionItemParentAction when the parent (first) action is a transaction-thread (unless it's a sent-money action)
                     // or a report-preview action, so we skip those ancestors to match the renderer's behavior.
-                    (!includeTransactionThreadReportActions &&
+                    (!includeTransactionThreads &&
                         ((isTransactionThread(parentReportAction) && !isSentMoneyReportAction(parentReportAction)) || isReportPreviewAction(parentReportAction)))
                 ) {
                     break;
@@ -63,7 +60,9 @@ function useAncestorReportsAndReportActions(
 
                 /*
                 As we traverse up the report hierarchy, we need to reassign `parentReportActionID`
-                to the parent's own `parentReportActionID`. Otherwise, the same report action will be pushed repeatedly, causing
+                to the parent's own `parentReportActionID`. 
+                
+                Otherwise, the same report action will be pushed repeatedly, causing
                 `ancestorReportsAndReportActions` to contain malformed data.
 
                 Example of malformed data:
