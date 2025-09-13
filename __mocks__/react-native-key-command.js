@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.unregisterKeyCommands = exports.registerKeyCommands = exports.eventEmitter = exports.constants = exports.addListener = void 0;
+const registerKeyCommands = () => { };
+exports.registerKeyCommands = registerKeyCommands;
+const unregisterKeyCommands = () => { };
+exports.unregisterKeyCommands = unregisterKeyCommands;
+const constants = {};
+exports.constants = constants;
+const eventEmitter = () => { };
+exports.eventEmitter = eventEmitter;
+const addListener = () => () => { };
+exports.addListener = addListener;

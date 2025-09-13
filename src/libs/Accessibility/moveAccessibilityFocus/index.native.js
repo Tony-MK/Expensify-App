@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_native_1 = require("react-native");
+const moveAccessibilityFocus = (ref) => {
+    if (!ref) {
+        return;
+    }
+    react_native_1.AccessibilityInfo.sendAccessibilityEvent(ref, 'focus');
+};
+exports.default = moveAccessibilityFocus;

@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const useSafeAreaInsets_1 = require("@hooks/useSafeAreaInsets");
+const const_1 = require("./const");
+function useEmptyViewHeaderHeight(isSmallScreenWidth, areHeaderButtonsDisplayed) {
+    const safeAreaInsets = (0, useSafeAreaInsets_1.default)();
+    const BUTTONS_HEIGHT = areHeaderButtonsDisplayed ? const_1.BUTTON_HEIGHT + const_1.BUTTON_MARGIN : 0;
+    return isSmallScreenWidth ? const_1.HEADER_HEIGHT + BUTTONS_HEIGHT + safeAreaInsets.top : const_1.HEADER_HEIGHT;
+}
+exports.default = useEmptyViewHeaderHeight;
