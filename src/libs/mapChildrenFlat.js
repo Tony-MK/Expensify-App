@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
+const react_1 = require("react");
 /**
  * Maps over the children of a React component and extracts the result of the mapping if there is only one child.
  *
@@ -15,11 +15,11 @@ var react_1 = require("react");
  *   return modifiedChild;
  * });
  */
-var mapChildrenFlat = function (element, fn) {
+const mapChildrenFlat = (element, fn) => {
     if (typeof element === 'function') {
         return element(false);
     }
-    var mappedChildren = react_1.default.Children.map(element, fn);
+    const mappedChildren = react_1.default.Children.map(element, fn);
     if (Array.isArray(mappedChildren) && mappedChildren.length === 1) {
         return mappedChildren.at(0);
     }

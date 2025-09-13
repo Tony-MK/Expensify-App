@@ -1,56 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
-var Expensicons = require("@components/Icon/Expensicons");
-var InteractiveStepWrapper_1 = require("@components/InteractiveStepWrapper");
-var SelectionList_1 = require("@components/SelectionList");
-var UserListItem_1 = require("@components/SelectionList/UserListItem");
-var Text_1 = require("@components/Text");
-var useCardFeeds_1 = require("@hooks/useCardFeeds");
-var useCardsList_1 = require("@hooks/useCardsList");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CardUtils_1 = require("@libs/CardUtils");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var tokenizedSearch_1 = require("@libs/tokenizedSearch");
-var Navigation_1 = require("@navigation/Navigation");
-var CompanyCards_1 = require("@userActions/CompanyCards");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var MINIMUM_MEMBER_TO_SHOW_SEARCH = 8;
-function AssigneeStep(_a) {
-    var _b, _c, _d, _e;
-    var policy = _a.policy, feed = _a.feed;
-    var _f = (0, useLocalize_1.default)(), translate = _f.translate, formatPhoneNumber = _f.formatPhoneNumber, localeCompare = _f.localeCompare;
-    var styles = (0, useThemeStyles_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var assignCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ASSIGN_CARD, { canBeMissing: true })[0];
-    var workspaceCardFeeds = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: false })[0];
-    var countryCode = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false })[0];
-    var list = (0, useCardsList_1.default)(policy === null || policy === void 0 ? void 0 : policy.id, feed)[0];
-    var cardFeeds = (0, useCardFeeds_1.default)(policy === null || policy === void 0 ? void 0 : policy.id)[0];
-    var filteredCardList = (0, CardUtils_1.getFilteredCardList)(list, (_c = (_b = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _b === void 0 ? void 0 : _b.oAuthAccountDetails) === null || _c === void 0 ? void 0 : _c[feed], workspaceCardFeeds);
-    var isEditing = assignCard === null || assignCard === void 0 ? void 0 : assignCard.isEditing;
-    var _g = (0, react_1.useState)((_e = (_d = assignCard === null || assignCard === void 0 ? void 0 : assignCard.data) === null || _d === void 0 ? void 0 : _d.email) !== null && _e !== void 0 ? _e : ''), selectedMember = _g[0], setSelectedMember = _g[1];
-    var _h = (0, useDebouncedState_1.default)(''), searchTerm = _h[0], debouncedSearchTerm = _h[1], setSearchTerm = _h[2];
-    var _j = (0, react_1.useState)(false), shouldShowError = _j[0], setShouldShowError = _j[1];
-    var selectMember = function (assignee) {
-        var _a;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
+const Expensicons = require("@components/Icon/Expensicons");
+const InteractiveStepWrapper_1 = require("@components/InteractiveStepWrapper");
+const SelectionList_1 = require("@components/SelectionList");
+const UserListItem_1 = require("@components/SelectionList/UserListItem");
+const Text_1 = require("@components/Text");
+const useCardFeeds_1 = require("@hooks/useCardFeeds");
+const useCardsList_1 = require("@hooks/useCardsList");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CardUtils_1 = require("@libs/CardUtils");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const tokenizedSearch_1 = require("@libs/tokenizedSearch");
+const Navigation_1 = require("@navigation/Navigation");
+const CompanyCards_1 = require("@userActions/CompanyCards");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const MINIMUM_MEMBER_TO_SHOW_SEARCH = 8;
+function AssigneeStep({ policy, feed }) {
+    const { translate, formatPhoneNumber, localeCompare } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [assignCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ASSIGN_CARD, { canBeMissing: true });
+    const [workspaceCardFeeds] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: false });
+    const [countryCode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false });
+    const [list] = (0, useCardsList_1.default)(policy?.id, feed);
+    const [cardFeeds] = (0, useCardFeeds_1.default)(policy?.id);
+    const filteredCardList = (0, CardUtils_1.getFilteredCardList)(list, cardFeeds?.settings?.oAuthAccountDetails?.[feed], workspaceCardFeeds);
+    const isEditing = assignCard?.isEditing;
+    const [selectedMember, setSelectedMember] = (0, react_1.useState)(assignCard?.data?.email ?? '');
+    const [searchTerm, debouncedSearchTerm, setSearchTerm] = (0, useDebouncedState_1.default)('');
+    const [shouldShowError, setShouldShowError] = (0, react_1.useState)(false);
+    const selectMember = (assignee) => {
         react_native_1.Keyboard.dismiss();
-        setSelectedMember((_a = assignee.login) !== null && _a !== void 0 ? _a : '');
+        setSelectedMember(assignee.login ?? '');
         setShouldShowError(false);
     };
-    var submit = function () {
-        var _a;
-        var nextStep = CONST_1.default.COMPANY_CARD.STEP.CARD;
-        if (selectedMember === ((_a = assignCard === null || assignCard === void 0 ? void 0 : assignCard.data) === null || _a === void 0 ? void 0 : _a.email)) {
+    const submit = () => {
+        let nextStep = CONST_1.default.COMPANY_CARD.STEP.CARD;
+        if (selectedMember === assignCard?.data?.email) {
             (0, CompanyCards_1.setAssignCardStepAndData)({
                 currentStep: isEditing ? CONST_1.default.COMPANY_CARD.STEP.CONFIRMATION : nextStep,
                 isEditing: false,
@@ -61,9 +57,9 @@ function AssigneeStep(_a) {
             setShouldShowError(true);
             return;
         }
-        var personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(selectedMember);
-        var memberName = (personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.firstName) ? personalDetail.firstName : personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.login;
-        var data = {
+        const personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(selectedMember);
+        const memberName = personalDetail?.firstName ? personalDetail.firstName : personalDetail?.login;
+        const data = {
             email: selectedMember,
             cardName: (0, CardUtils_1.getDefaultCardName)(memberName),
         };
@@ -74,11 +70,11 @@ function AssigneeStep(_a) {
         }
         (0, CompanyCards_1.setAssignCardStepAndData)({
             currentStep: isEditing ? CONST_1.default.COMPANY_CARD.STEP.CONFIRMATION : nextStep,
-            data: data,
+            data,
             isEditing: false,
         });
     };
-    var handleBackButtonPress = function () {
+    const handleBackButtonPress = () => {
         if (isEditing) {
             (0, CompanyCards_1.setAssignCardStepAndData)({
                 currentStep: CONST_1.default.COMPANY_CARD.STEP.CONFIRMATION,
@@ -88,42 +84,39 @@ function AssigneeStep(_a) {
         }
         Navigation_1.default.goBack();
     };
-    var shouldShowSearchInput = (policy === null || policy === void 0 ? void 0 : policy.employeeList) && Object.keys(policy.employeeList).length >= MINIMUM_MEMBER_TO_SHOW_SEARCH;
-    var textInputLabel = shouldShowSearchInput ? translate('workspace.card.issueNewCard.findMember') : undefined;
-    var membersDetails = (0, react_1.useMemo)(function () {
-        var _a;
-        var membersList = [];
-        if (!(policy === null || policy === void 0 ? void 0 : policy.employeeList)) {
+    const shouldShowSearchInput = policy?.employeeList && Object.keys(policy.employeeList).length >= MINIMUM_MEMBER_TO_SHOW_SEARCH;
+    const textInputLabel = shouldShowSearchInput ? translate('workspace.card.issueNewCard.findMember') : undefined;
+    const membersDetails = (0, react_1.useMemo)(() => {
+        let membersList = [];
+        if (!policy?.employeeList) {
             return membersList;
         }
-        Object.entries((_a = policy.employeeList) !== null && _a !== void 0 ? _a : {}).forEach(function (_a) {
-            var _b;
-            var email = _a[0], policyEmployee = _a[1];
+        Object.entries(policy.employeeList ?? {}).forEach(([email, policyEmployee]) => {
             if ((0, PolicyUtils_1.isDeletedPolicyEmployee)(policyEmployee, isOffline)) {
                 return;
             }
-            var personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(email);
+            const personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(email);
             membersList.push({
                 keyForList: email,
-                text: personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.displayName,
+                text: personalDetail?.displayName,
                 alternateText: email,
                 login: email,
-                accountID: personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.accountID,
+                accountID: personalDetail?.accountID,
                 isSelected: selectedMember === email,
                 icons: [
                     {
-                        source: (_b = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.avatar) !== null && _b !== void 0 ? _b : Expensicons.FallbackAvatar,
+                        source: personalDetail?.avatar ?? Expensicons.FallbackAvatar,
                         name: formatPhoneNumber(email),
                         type: CONST_1.default.ICON_TYPE_AVATAR,
-                        id: personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.accountID,
+                        id: personalDetail?.accountID,
                     },
                 ],
             });
         });
         membersList = (0, OptionsListUtils_1.sortAlphabetically)(membersList, 'text', localeCompare);
         return membersList;
-    }, [isOffline, policy === null || policy === void 0 ? void 0 : policy.employeeList, selectedMember, formatPhoneNumber, localeCompare]);
-    var sections = (0, react_1.useMemo)(function () {
+    }, [isOffline, policy?.employeeList, selectedMember, formatPhoneNumber, localeCompare]);
+    const sections = (0, react_1.useMemo)(() => {
         if (!debouncedSearchTerm) {
             return [
                 {
@@ -132,8 +125,8 @@ function AssigneeStep(_a) {
                 },
             ];
         }
-        var searchValue = (0, OptionsListUtils_1.getSearchValueForPhoneOrEmail)(debouncedSearchTerm, countryCode).toLowerCase();
-        var filteredOptions = (0, tokenizedSearch_1.default)(membersDetails, searchValue, function (option) { var _a, _b; return [(_a = option.text) !== null && _a !== void 0 ? _a : '', (_b = option.alternateText) !== null && _b !== void 0 ? _b : '']; });
+        const searchValue = (0, OptionsListUtils_1.getSearchValueForPhoneOrEmail)(debouncedSearchTerm, countryCode).toLowerCase();
+        const filteredOptions = (0, tokenizedSearch_1.default)(membersDetails, searchValue, (option) => [option.text ?? '', option.alternateText ?? '']);
         return [
             {
                 title: undefined,
@@ -142,8 +135,8 @@ function AssigneeStep(_a) {
             },
         ];
     }, [membersDetails, debouncedSearchTerm, countryCode]);
-    var headerMessage = (0, react_1.useMemo)(function () {
-        var searchValue = debouncedSearchTerm.trim().toLowerCase();
+    const headerMessage = (0, react_1.useMemo)(() => {
+        const searchValue = debouncedSearchTerm.trim().toLowerCase();
         return (0, OptionsListUtils_1.getHeaderMessage)(sections[0].data.length !== 0, false, searchValue);
     }, [debouncedSearchTerm, sections]);
     return (<InteractiveStepWrapper_1.default wrapperID={AssigneeStep.displayName} handleBackButtonPress={handleBackButtonPress} startStepIndex={0} stepNames={CONST_1.default.COMPANY_CARD.STEP_NAMES} headerTitle={translate('workspace.companyCards.assignCard')} enableEdgeToEdgeBottomSafeAreaPadding>

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     AMOUNT: 'amount',
     TAX_AMOUNT: 'taxAmount',
     TAX_CODE: 'taxCode',

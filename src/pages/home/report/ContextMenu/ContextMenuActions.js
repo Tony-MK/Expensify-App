@@ -1,38 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RestrictedReadOnlyContextMenuActions = void 0;
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var Expensicons = require("@components/Icon/Expensicons");
-var MiniQuickEmojiReactions_1 = require("@components/Reactions/MiniQuickEmojiReactions");
-var QuickEmojiReactions_1 = require("@components/Reactions/QuickEmojiReactions");
-var addEncryptedAuthTokenToURL_1 = require("@libs/addEncryptedAuthTokenToURL");
-var Browser_1 = require("@libs/Browser");
-var Clipboard_1 = require("@libs/Clipboard");
-var EmailUtils_1 = require("@libs/EmailUtils");
-var Environment_1 = require("@libs/Environment/Environment");
-var fileDownload_1 = require("@libs/fileDownload");
-var getAttachmentDetails_1 = require("@libs/fileDownload/getAttachmentDetails");
-var Localize_1 = require("@libs/Localize");
-var ModifiedExpenseMessage_1 = require("@libs/ModifiedExpenseMessage");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Parser_1 = require("@libs/Parser");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReportActionComposeFocusManager_1 = require("@libs/ReportActionComposeFocusManager");
-var ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var TaskUtils_1 = require("@libs/TaskUtils");
-var Download_1 = require("@userActions/Download");
-var Report_1 = require("@userActions/Report");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-var keyboard_1 = require("@src/utils/keyboard");
-var ReportActionContextMenu_1 = require("./ReportActionContextMenu");
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const Expensicons = require("@components/Icon/Expensicons");
+const MiniQuickEmojiReactions_1 = require("@components/Reactions/MiniQuickEmojiReactions");
+const QuickEmojiReactions_1 = require("@components/Reactions/QuickEmojiReactions");
+const addEncryptedAuthTokenToURL_1 = require("@libs/addEncryptedAuthTokenToURL");
+const Browser_1 = require("@libs/Browser");
+const Clipboard_1 = require("@libs/Clipboard");
+const EmailUtils_1 = require("@libs/EmailUtils");
+const Environment_1 = require("@libs/Environment/Environment");
+const fileDownload_1 = require("@libs/fileDownload");
+const getAttachmentDetails_1 = require("@libs/fileDownload/getAttachmentDetails");
+const Localize_1 = require("@libs/Localize");
+const ModifiedExpenseMessage_1 = require("@libs/ModifiedExpenseMessage");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Parser_1 = require("@libs/Parser");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReportActionComposeFocusManager_1 = require("@libs/ReportActionComposeFocusManager");
+const ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const TaskUtils_1 = require("@libs/TaskUtils");
+const Download_1 = require("@userActions/Download");
+const Report_1 = require("@userActions/Report");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+const keyboard_1 = require("@src/utils/keyboard");
+const ReportActionContextMenu_1 = require("./ReportActionContextMenu");
 /** Gets the HTML version of the message in an action */
 function getActionHtml(reportAction) {
-    var _a, _b, _c, _d;
-    var message = Array.isArray(reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) ? ((_b = (_a = reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) === null || _a === void 0 ? void 0 : _a.at(-1)) !== null && _b !== void 0 ? _b : null) : ((_c = reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) !== null && _c !== void 0 ? _c : null);
-    return (_d = message === null || message === void 0 ? void 0 : message.html) !== null && _d !== void 0 ? _d : '';
+    const message = Array.isArray(reportAction?.message) ? (reportAction?.message?.at(-1) ?? null) : (reportAction?.message ?? null);
+    return message?.html ?? '';
 }
 /** Sets the HTML string to Clipboard */
 function setClipboardMessage(content) {
@@ -45,22 +44,18 @@ function setClipboardMessage(content) {
     else {
         // Use markdown format text for the plain text(clipboard type "text/plain") to ensure consistency across all platforms.
         // More info: https://github.com/Expensify/App/issues/53718
-        var markdownText = Parser_1.default.htmlToMarkdown(content);
+        const markdownText = Parser_1.default.htmlToMarkdown(content);
         Clipboard_1.default.setHtml(content, markdownText);
     }
 }
 // A list of all the context actions in this menu.
-var ContextMenuActions = [
+const ContextMenuActions = [
     {
         isAnonymousAction: false,
-        shouldShow: function (_a) {
-            var type = _a.type, reportAction = _a.reportAction;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && !!reportAction && 'message' in reportAction && !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction);
-        },
-        renderContent: function (closePopover, _a) {
-            var reportID = _a.reportID, reportAction = _a.reportAction, closeManually = _a.close, openContextMenu = _a.openContextMenu, setIsEmojiPickerActive = _a.setIsEmojiPickerActive;
-            var isMini = !closePopover;
-            var closeContextMenu = function (onHideCallback) {
+        shouldShow: ({ type, reportAction }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && !!reportAction && 'message' in reportAction && !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction),
+        renderContent: (closePopover, { reportID, reportAction, close: closeManually, openContextMenu, setIsEmojiPickerActive }) => {
+            const isMini = !closePopover;
+            const closeContextMenu = (onHideCallback) => {
                 if (isMini) {
                     closeManually();
                     if (onHideCallback) {
@@ -71,98 +66,84 @@ var ContextMenuActions = [
                     (0, ReportActionContextMenu_1.hideContextMenu)(false, onHideCallback);
                 }
             };
-            var toggleEmojiAndCloseMenu = function (emoji, existingReactions) {
+            const toggleEmojiAndCloseMenu = (emoji, existingReactions) => {
                 (0, Report_1.toggleEmojiReaction)(reportID, reportAction, emoji, existingReactions);
                 closeContextMenu();
-                setIsEmojiPickerActive === null || setIsEmojiPickerActive === void 0 ? void 0 : setIsEmojiPickerActive(false);
+                setIsEmojiPickerActive?.(false);
             };
             if (isMini) {
-                return (<MiniQuickEmojiReactions_1.default key="MiniQuickEmojiReactions" onEmojiSelected={toggleEmojiAndCloseMenu} onPressOpenPicker={function () {
+                return (<MiniQuickEmojiReactions_1.default key="MiniQuickEmojiReactions" onEmojiSelected={toggleEmojiAndCloseMenu} onPressOpenPicker={() => {
                         openContextMenu();
-                        setIsEmojiPickerActive === null || setIsEmojiPickerActive === void 0 ? void 0 : setIsEmojiPickerActive(true);
-                    }} onEmojiPickerClosed={function () {
+                        setIsEmojiPickerActive?.(true);
+                    }} onEmojiPickerClosed={() => {
                         closeContextMenu();
-                        setIsEmojiPickerActive === null || setIsEmojiPickerActive === void 0 ? void 0 : setIsEmojiPickerActive(false);
-                    }} reportActionID={reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID} reportAction={reportAction}/>);
+                        setIsEmojiPickerActive?.(false);
+                    }} reportActionID={reportAction?.reportActionID} reportAction={reportAction}/>);
             }
-            return (<QuickEmojiReactions_1.default key="BaseQuickEmojiReactions" closeContextMenu={closeContextMenu} onEmojiSelected={toggleEmojiAndCloseMenu} reportActionID={reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID} reportAction={reportAction} setIsEmojiPickerActive={setIsEmojiPickerActive}/>);
+            return (<QuickEmojiReactions_1.default key="BaseQuickEmojiReactions" closeContextMenu={closeContextMenu} onEmojiSelected={toggleEmojiAndCloseMenu} reportActionID={reportAction?.reportActionID} reportAction={reportAction} setIsEmojiPickerActive={setIsEmojiPickerActive}/>);
         },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'reportActionContextMenu.replyInThread',
         icon: Expensicons.ChatBubbleReply,
-        shouldShow: function (_a) {
-            var type = _a.type, reportAction = _a.reportAction, reportID = _a.reportID, isThreadReportParentAction = _a.isThreadReportParentAction, isArchivedRoom = _a.isArchivedRoom;
+        shouldShow: ({ type, reportAction, reportID, isThreadReportParentAction, isArchivedRoom }) => {
             if (type !== CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION || !reportID) {
                 return false;
             }
             return !(0, ReportUtils_1.shouldDisableThread)(reportAction, reportID, isThreadReportParentAction, isArchivedRoom);
         },
-        onPress: function (closePopover, _a) {
-            var reportAction = _a.reportAction, reportID = _a.reportID;
-            var originalReportID = (0, ReportUtils_1.getOriginalReportID)(reportID, reportAction);
+        onPress: (closePopover, { reportAction, reportID }) => {
+            const originalReportID = (0, ReportUtils_1.getOriginalReportID)(reportID, reportAction);
             if (closePopover) {
-                (0, ReportActionContextMenu_1.hideContextMenu)(false, function () {
-                    keyboard_1.default.dismiss().then(function () {
-                        (0, Report_1.navigateToAndOpenChildReport)(reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID, reportAction, originalReportID);
+                (0, ReportActionContextMenu_1.hideContextMenu)(false, () => {
+                    keyboard_1.default.dismiss().then(() => {
+                        (0, Report_1.navigateToAndOpenChildReport)(reportAction?.childReportID, reportAction, originalReportID);
                     });
                 });
                 return;
             }
-            (0, Report_1.navigateToAndOpenChildReport)(reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID, reportAction, originalReportID);
+            (0, Report_1.navigateToAndOpenChildReport)(reportAction?.childReportID, reportAction, originalReportID);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'reportActionContextMenu.markAsUnread',
         icon: Expensicons.ChatBubbleUnread,
         successIcon: Expensicons.Checkmark,
-        shouldShow: function (_a) {
-            var type = _a.type, isUnreadChat = _a.isUnreadChat;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION || (type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && !isUnreadChat);
-        },
-        onPress: function (closePopover, _a) {
-            var reportAction = _a.reportAction, reportID = _a.reportID;
+        shouldShow: ({ type, isUnreadChat }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION || (type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && !isUnreadChat),
+        onPress: (closePopover, { reportAction, reportID }) => {
             (0, Report_1.markCommentAsUnread)(reportID, reportAction);
             if (closePopover) {
                 (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
             }
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'reportActionContextMenu.markAsRead',
         icon: Expensicons.Mail,
         successIcon: Expensicons.Checkmark,
-        shouldShow: function (_a) {
-            var type = _a.type, isUnreadChat = _a.isUnreadChat;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && isUnreadChat;
-        },
-        onPress: function (closePopover, _a) {
-            var reportID = _a.reportID;
+        shouldShow: ({ type, isUnreadChat }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && isUnreadChat,
+        onPress: (closePopover, { reportID }) => {
             (0, Report_1.readNewestAction)(reportID, true);
             if (closePopover) {
                 (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
             }
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'reportActionContextMenu.editAction',
         icon: Expensicons.Pencil,
-        shouldShow: function (_a) {
-            var type = _a.type, reportAction = _a.reportAction, isArchivedRoom = _a.isArchivedRoom, isChronosReport = _a.isChronosReport, moneyRequestAction = _a.moneyRequestAction;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && ((0, ReportUtils_1.canEditReportAction)(reportAction) || (0, ReportUtils_1.canEditReportAction)(moneyRequestAction)) && !isArchivedRoom && !isChronosReport;
-        },
-        onPress: function (closePopover, _a) {
-            var reportID = _a.reportID, reportAction = _a.reportAction, draftMessage = _a.draftMessage, moneyRequestAction = _a.moneyRequestAction;
+        shouldShow: ({ type, reportAction, isArchivedRoom, isChronosReport, moneyRequestAction }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && ((0, ReportUtils_1.canEditReportAction)(reportAction) || (0, ReportUtils_1.canEditReportAction)(moneyRequestAction)) && !isArchivedRoom && !isChronosReport,
+        onPress: (closePopover, { reportID, reportAction, draftMessage, moneyRequestAction }) => {
             if ((0, ReportActionsUtils_1.isMoneyRequestAction)(reportAction) || (0, ReportActionsUtils_1.isMoneyRequestAction)(moneyRequestAction)) {
-                var editExpense = function () {
-                    var childReportID = reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID;
+                const editExpense = () => {
+                    const childReportID = reportAction?.childReportID;
                     (0, Report_1.openReport)(childReportID);
                     Navigation_1.default.navigate(ROUTES_1.default.REPORT_WITH_ID.getRoute(childReportID));
                 };
@@ -173,7 +154,7 @@ var ContextMenuActions = [
                 editExpense();
                 return;
             }
-            var editAction = function () {
+            const editAction = () => {
                 if (!draftMessage) {
                     (0, Report_1.saveReportActionDraft)(reportID, reportAction, Parser_1.default.htmlToMarkdown(getActionHtml(reportAction)));
                 }
@@ -189,59 +170,50 @@ var ContextMenuActions = [
             // No popover to hide, call editAction immediately
             editAction();
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'iou.unhold',
         icon: Expensicons.Stopwatch,
-        shouldShow: function (_a) {
-            var type = _a.type, moneyRequestAction = _a.moneyRequestAction, areHoldRequirementsMet = _a.areHoldRequirementsMet;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && areHoldRequirementsMet && (0, ReportUtils_1.canHoldUnholdReportAction)(moneyRequestAction).canUnholdRequest;
-        },
-        onPress: function (closePopover, _a) {
-            var moneyRequestAction = _a.moneyRequestAction;
+        shouldShow: ({ type, moneyRequestAction, areHoldRequirementsMet }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && areHoldRequirementsMet && (0, ReportUtils_1.canHoldUnholdReportAction)(moneyRequestAction).canUnholdRequest,
+        onPress: (closePopover, { moneyRequestAction }) => {
             if (closePopover) {
-                (0, ReportActionContextMenu_1.hideContextMenu)(false, function () { return (0, ReportUtils_1.changeMoneyRequestHoldStatus)(moneyRequestAction); });
+                (0, ReportActionContextMenu_1.hideContextMenu)(false, () => (0, ReportUtils_1.changeMoneyRequestHoldStatus)(moneyRequestAction));
                 return;
             }
             // No popover to hide, call changeMoneyRequestHoldStatus immediately
             (0, ReportUtils_1.changeMoneyRequestHoldStatus)(moneyRequestAction);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'iou.hold',
         icon: Expensicons.Stopwatch,
-        shouldShow: function (_a) {
-            var type = _a.type, moneyRequestAction = _a.moneyRequestAction, areHoldRequirementsMet = _a.areHoldRequirementsMet;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && areHoldRequirementsMet && (0, ReportUtils_1.canHoldUnholdReportAction)(moneyRequestAction).canHoldRequest;
-        },
-        onPress: function (closePopover, _a) {
-            var moneyRequestAction = _a.moneyRequestAction;
+        shouldShow: ({ type, moneyRequestAction, areHoldRequirementsMet }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && areHoldRequirementsMet && (0, ReportUtils_1.canHoldUnholdReportAction)(moneyRequestAction).canHoldRequest,
+        onPress: (closePopover, { moneyRequestAction }) => {
             if (closePopover) {
-                (0, ReportActionContextMenu_1.hideContextMenu)(false, function () { return (0, ReportUtils_1.changeMoneyRequestHoldStatus)(moneyRequestAction); });
+                (0, ReportActionContextMenu_1.hideContextMenu)(false, () => (0, ReportUtils_1.changeMoneyRequestHoldStatus)(moneyRequestAction));
                 return;
             }
             // No popover to hide, call changeMoneyRequestHoldStatus immediately
             (0, ReportUtils_1.changeMoneyRequestHoldStatus)(moneyRequestAction);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'reportActionContextMenu.joinThread',
         icon: Expensicons.Bell,
-        shouldShow: function (_a) {
-            var reportAction = _a.reportAction, isArchivedRoom = _a.isArchivedRoom, isThreadReportParentAction = _a.isThreadReportParentAction;
-            var childReportNotificationPreference = (0, ReportUtils_1.getChildReportNotificationPreference)(reportAction);
-            var isDeletedAction = (0, ReportActionsUtils_1.isDeletedAction)(reportAction);
-            var shouldDisplayThreadReplies = (0, ReportUtils_1.shouldDisplayThreadReplies)(reportAction, isThreadReportParentAction);
-            var subscribed = childReportNotificationPreference !== 'hidden';
-            var isWhisperAction = (0, ReportActionsUtils_1.isWhisperAction)(reportAction) || (0, ReportActionsUtils_1.isActionableTrackExpense)(reportAction);
-            var isExpenseReportAction = (0, ReportActionsUtils_1.isMoneyRequestAction)(reportAction) || (0, ReportActionsUtils_1.isReportPreviewAction)(reportAction);
-            var isTaskAction = (0, ReportActionsUtils_1.isCreatedTaskReportAction)(reportAction);
+        shouldShow: ({ reportAction, isArchivedRoom, isThreadReportParentAction }) => {
+            const childReportNotificationPreference = (0, ReportUtils_1.getChildReportNotificationPreference)(reportAction);
+            const isDeletedAction = (0, ReportActionsUtils_1.isDeletedAction)(reportAction);
+            const shouldDisplayThreadReplies = (0, ReportUtils_1.shouldDisplayThreadReplies)(reportAction, isThreadReportParentAction);
+            const subscribed = childReportNotificationPreference !== 'hidden';
+            const isWhisperAction = (0, ReportActionsUtils_1.isWhisperAction)(reportAction) || (0, ReportActionsUtils_1.isActionableTrackExpense)(reportAction);
+            const isExpenseReportAction = (0, ReportActionsUtils_1.isMoneyRequestAction)(reportAction) || (0, ReportActionsUtils_1.isReportPreviewAction)(reportAction);
+            const isTaskAction = (0, ReportActionsUtils_1.isCreatedTaskReportAction)(reportAction);
             return (!subscribed &&
                 !isWhisperAction &&
                 !isTaskAction &&
@@ -249,21 +221,20 @@ var ContextMenuActions = [
                 !isThreadReportParentAction &&
                 (shouldDisplayThreadReplies || (!isDeletedAction && !isArchivedRoom)));
         },
-        onPress: function (closePopover, _a) {
-            var reportAction = _a.reportAction, reportID = _a.reportID;
-            var childReportNotificationPreference = (0, ReportUtils_1.getChildReportNotificationPreference)(reportAction);
-            var originalReportID = (0, ReportUtils_1.getOriginalReportID)(reportID, reportAction);
+        onPress: (closePopover, { reportAction, reportID }) => {
+            const childReportNotificationPreference = (0, ReportUtils_1.getChildReportNotificationPreference)(reportAction);
+            const originalReportID = (0, ReportUtils_1.getOriginalReportID)(reportID, reportAction);
             if (closePopover) {
-                (0, ReportActionContextMenu_1.hideContextMenu)(false, function () {
+                (0, ReportActionContextMenu_1.hideContextMenu)(false, () => {
                     ReportActionComposeFocusManager_1.default.focus();
-                    (0, Report_1.toggleSubscribeToChildReport)(reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID, reportAction, originalReportID, childReportNotificationPreference);
+                    (0, Report_1.toggleSubscribeToChildReport)(reportAction?.childReportID, reportAction, originalReportID, childReportNotificationPreference);
                 });
                 return;
             }
             ReportActionComposeFocusManager_1.default.focus();
-            (0, Report_1.toggleSubscribeToChildReport)(reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID, reportAction, originalReportID, childReportNotificationPreference);
+            (0, Report_1.toggleSubscribeToChildReport)(reportAction?.childReportID, reportAction, originalReportID, childReportNotificationPreference);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: true,
@@ -271,16 +242,12 @@ var ContextMenuActions = [
         icon: Expensicons.Copy,
         successTextTranslateKey: 'reportActionContextMenu.copied',
         successIcon: Expensicons.Checkmark,
-        shouldShow: function (_a) {
-            var type = _a.type;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.LINK;
-        },
-        onPress: function (closePopover, _a) {
-            var selection = _a.selection;
+        shouldShow: ({ type }) => type === CONST_1.default.CONTEXT_MENU_TYPES.LINK,
+        onPress: (closePopover, { selection }) => {
             Clipboard_1.default.setString(selection);
             (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
         },
-        getDescription: function (selection) { return selection; },
+        getDescription: (selection) => selection,
     },
     {
         isAnonymousAction: true,
@@ -288,16 +255,12 @@ var ContextMenuActions = [
         icon: Expensicons.Copy,
         successTextTranslateKey: 'reportActionContextMenu.copied',
         successIcon: Expensicons.Checkmark,
-        shouldShow: function (_a) {
-            var type = _a.type;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.TEXT;
-        },
-        onPress: function (closePopover, _a) {
-            var selection = _a.selection;
+        shouldShow: ({ type }) => type === CONST_1.default.CONTEXT_MENU_TYPES.TEXT,
+        onPress: (closePopover, { selection }) => {
             Clipboard_1.default.setString(selection);
             (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
         },
-        getDescription: function () { return undefined; },
+        getDescription: () => undefined,
     },
     {
         isAnonymousAction: true,
@@ -305,16 +268,12 @@ var ContextMenuActions = [
         icon: Expensicons.Copy,
         successTextTranslateKey: 'reportActionContextMenu.copied',
         successIcon: Expensicons.Checkmark,
-        shouldShow: function (_a) {
-            var type = _a.type;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.EMAIL;
-        },
-        onPress: function (closePopover, _a) {
-            var selection = _a.selection;
+        shouldShow: ({ type }) => type === CONST_1.default.CONTEXT_MENU_TYPES.EMAIL,
+        onPress: (closePopover, { selection }) => {
             Clipboard_1.default.setString(EmailUtils_1.default.trimMailTo(selection));
             (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
         },
-        getDescription: function (selection) { return EmailUtils_1.default.prefixMailSeparatorsWithBreakOpportunities(EmailUtils_1.default.trimMailTo(selection !== null && selection !== void 0 ? selection : '')); },
+        getDescription: (selection) => EmailUtils_1.default.prefixMailSeparatorsWithBreakOpportunities(EmailUtils_1.default.trimMailTo(selection ?? '')),
     },
     {
         isAnonymousAction: true,
@@ -322,48 +281,43 @@ var ContextMenuActions = [
         icon: Expensicons.Copy,
         successTextTranslateKey: 'reportActionContextMenu.copied',
         successIcon: Expensicons.Checkmark,
-        shouldShow: function (_a) {
-            var type = _a.type, reportAction = _a.reportAction;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && !(0, ReportActionsUtils_1.isReportActionAttachment)(reportAction) && !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction) && !(0, ReportActionsUtils_1.isTripPreview)(reportAction);
-        },
+        shouldShow: ({ type, reportAction }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && !(0, ReportActionsUtils_1.isReportActionAttachment)(reportAction) && !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction) && !(0, ReportActionsUtils_1.isTripPreview)(reportAction),
         // If return value is true, we switch the `text` and `icon` on
         // `ContextMenuItem` with `successText` and `successIcon` which will fall back to
         // the `text` and `icon`
-        onPress: function (closePopover, _a) {
-            var _b, _c, _d, _e, _f, _g, _h;
-            var reportAction = _a.reportAction, transaction = _a.transaction, selection = _a.selection, report = _a.report, reportID = _a.reportID, card = _a.card, originalReport = _a.originalReport, isTryNewDotNVPDismissed = _a.isTryNewDotNVPDismissed, movedFromReport = _a.movedFromReport, movedToReport = _a.movedToReport;
-            var isReportPreviewAction = (0, ReportActionsUtils_1.isReportPreviewAction)(reportAction);
-            var messageHtml = getActionHtml(reportAction);
-            var messageText = (0, ReportActionsUtils_1.getReportActionMessageText)(reportAction);
-            var isAttachment = (0, ReportActionsUtils_1.isReportActionAttachment)(reportAction);
+        onPress: (closePopover, { reportAction, transaction, selection, report, reportID, card, originalReport, isTryNewDotNVPDismissed, movedFromReport, movedToReport }) => {
+            const isReportPreviewAction = (0, ReportActionsUtils_1.isReportPreviewAction)(reportAction);
+            const messageHtml = getActionHtml(reportAction);
+            const messageText = (0, ReportActionsUtils_1.getReportActionMessageText)(reportAction);
+            const isAttachment = (0, ReportActionsUtils_1.isReportActionAttachment)(reportAction);
             if (!isAttachment) {
-                var content = selection || messageHtml;
+                const content = selection || messageHtml;
                 if (isReportPreviewAction) {
-                    var iouReportID = (0, ReportActionsUtils_1.getIOUReportIDFromReportActionPreview)(reportAction);
-                    var displayMessage = (0, ReportUtils_1.getReportPreviewMessage)(iouReportID, reportAction);
+                    const iouReportID = (0, ReportActionsUtils_1.getIOUReportIDFromReportActionPreview)(reportAction);
+                    const displayMessage = (0, ReportUtils_1.getReportPreviewMessage)(iouReportID, reportAction);
                     Clipboard_1.default.setString(displayMessage);
                 }
                 else if ((0, ReportActionsUtils_1.isTaskAction)(reportAction)) {
-                    var _j = (0, TaskUtils_1.getTaskReportActionMessage)(reportAction), text = _j.text, html = _j.html;
-                    var displayMessage = html !== null && html !== void 0 ? html : text;
+                    const { text, html } = (0, TaskUtils_1.getTaskReportActionMessage)(reportAction);
+                    const displayMessage = html ?? text;
                     setClipboardMessage(displayMessage);
                 }
                 else if ((0, ReportActionsUtils_1.isModifiedExpenseAction)(reportAction)) {
-                    var modifyExpenseMessage = (0, ModifiedExpenseMessage_1.getForReportAction)({
-                        reportAction: reportAction,
-                        policyID: report === null || report === void 0 ? void 0 : report.policyID,
-                        movedFromReport: movedFromReport,
-                        movedToReport: movedToReport,
+                    const modifyExpenseMessage = (0, ModifiedExpenseMessage_1.getForReportAction)({
+                        reportAction,
+                        policyID: report?.policyID,
+                        movedFromReport,
+                        movedToReport,
                     });
                     Clipboard_1.default.setString(modifyExpenseMessage);
                 }
                 else if ((0, ReportActionsUtils_1.isReimbursementDeQueuedOrCanceledAction)(reportAction)) {
-                    var expenseReportID = ((_b = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction)) !== null && _b !== void 0 ? _b : {}).expenseReportID;
-                    var displayMessage = (0, ReportUtils_1.getReimbursementDeQueuedOrCanceledActionMessage)(reportAction, expenseReportID);
+                    const { expenseReportID } = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction) ?? {};
+                    const displayMessage = (0, ReportUtils_1.getReimbursementDeQueuedOrCanceledActionMessage)(reportAction, expenseReportID);
                     Clipboard_1.default.setString(displayMessage);
                 }
                 else if ((0, ReportActionsUtils_1.isMoneyRequestAction)(reportAction)) {
-                    var displayMessage = (0, ReportUtils_1.getIOUReportActionDisplayMessage)(reportAction, transaction);
+                    const displayMessage = (0, ReportUtils_1.getIOUReportActionDisplayMessage)(reportAction, transaction);
                     if (displayMessage === Parser_1.default.htmlToText(displayMessage)) {
                         Clipboard_1.default.setString(displayMessage);
                     }
@@ -372,59 +326,59 @@ var ContextMenuActions = [
                     }
                 }
                 else if ((0, ReportActionsUtils_1.isCreatedTaskReportAction)(reportAction)) {
-                    var taskPreviewMessage = (0, TaskUtils_1.getTaskCreatedMessage)(reportAction, true);
+                    const taskPreviewMessage = (0, TaskUtils_1.getTaskCreatedMessage)(reportAction, true);
                     Clipboard_1.default.setString(taskPreviewMessage);
                 }
                 else if ((0, ReportActionsUtils_1.isMemberChangeAction)(reportAction)) {
-                    var logMessage = (_c = (0, ReportActionsUtils_1.getMemberChangeMessageFragment)(reportAction, ReportUtils_1.getReportName).html) !== null && _c !== void 0 ? _c : '';
+                    const logMessage = (0, ReportActionsUtils_1.getMemberChangeMessageFragment)(reportAction, ReportUtils_1.getReportName).html ?? '';
                     setClipboardMessage(logMessage);
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_NAME) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_NAME) {
                     Clipboard_1.default.setString(expensify_common_1.Str.htmlDecode((0, ReportUtils_1.getWorkspaceNameUpdatedMessage)(reportAction)));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DESCRIPTION) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DESCRIPTION) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceDescriptionUpdatedMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CURRENCY) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CURRENCY) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceCurrencyUpdateMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_AUTO_REPORTING_FREQUENCY) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_AUTO_REPORTING_FREQUENCY) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceFrequencyUpdateMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_CATEGORY ||
-                    (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CATEGORY ||
-                    (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CATEGORY ||
-                    (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.SET_CATEGORY_NAME) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_CATEGORY ||
+                    reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CATEGORY ||
+                    reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CATEGORY ||
+                    reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.SET_CATEGORY_NAME) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceCategoryUpdateMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG_LIST_NAME) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG_LIST_NAME) {
                     Clipboard_1.default.setString((0, PolicyUtils_1.getCleanedTagName)((0, ReportActionsUtils_1.getTagListNameUpdatedMessage)(reportAction)));
                 }
                 else if ((0, ReportActionsUtils_1.isTagModificationAction)(reportAction.actionName)) {
                     Clipboard_1.default.setString((0, PolicyUtils_1.getCleanedTagName)((0, ReportActionsUtils_1.getWorkspaceTagUpdateMessage)(reportAction)));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CUSTOM_UNIT) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CUSTOM_UNIT) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceCustomUnitUpdatedMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_CUSTOM_UNIT_RATE) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_CUSTOM_UNIT_RATE) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceCustomUnitRateAddedMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CUSTOM_UNIT_RATE) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CUSTOM_UNIT_RATE) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceCustomUnitRateUpdatedMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CUSTOM_UNIT_RATE) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CUSTOM_UNIT_RATE) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceCustomUnitRateDeletedMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_REPORT_FIELD) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_REPORT_FIELD) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceReportFieldAddMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_REPORT_FIELD) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_REPORT_FIELD) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceReportFieldUpdateMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_REPORT_FIELD) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_REPORT_FIELD) {
                     Clipboard_1.default.setString((0, ReportActionsUtils_1.getWorkspaceReportFieldDeleteMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_FIELD) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_FIELD) {
                     setClipboardMessage((0, ReportActionsUtils_1.getWorkspaceUpdateFieldMessage)(reportAction));
                 }
                 else if (reportAction.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_MAX_EXPENSE_AMOUNT_NO_RECEIPT) {
@@ -446,10 +400,10 @@ var ContextMenuActions = [
                     setClipboardMessage((0, ReportUtils_1.getUnreportedTransactionMessage)());
                 }
                 else if ((0, ReportActionsUtils_1.isReimbursementQueuedAction)(reportAction)) {
-                    Clipboard_1.default.setString((0, ReportUtils_1.getReimbursementQueuedActionMessage)({ reportAction: reportAction, reportOrID: reportID, shouldUseShortDisplayName: false }));
+                    Clipboard_1.default.setString((0, ReportUtils_1.getReimbursementQueuedActionMessage)({ reportAction, reportOrID: reportID, shouldUseShortDisplayName: false }));
                 }
                 else if ((0, ReportActionsUtils_1.isActionableMentionWhisper)(reportAction)) {
-                    var mentionWhisperMessage = (0, ReportActionsUtils_1.getActionableMentionWhisperMessage)(reportAction);
+                    const mentionWhisperMessage = (0, ReportActionsUtils_1.getActionableMentionWhisperMessage)(reportAction);
                     setClipboardMessage(mentionWhisperMessage);
                 }
                 else if ((0, ReportActionsUtils_1.isActionableTrackExpense)(reportAction)) {
@@ -461,16 +415,16 @@ var ContextMenuActions = [
                 else if ((0, ReportActionsUtils_1.isActionOfType)(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.SUBMITTED) ||
                     (0, ReportActionsUtils_1.isActionOfType)(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.SUBMITTED_AND_CLOSED) ||
                     (0, ReportActionsUtils_1.isMarkAsClosedAction)(reportAction)) {
-                    var harvesting = !(0, ReportActionsUtils_1.isMarkAsClosedAction)(reportAction) ? ((_e = (_d = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction)) === null || _d === void 0 ? void 0 : _d.harvesting) !== null && _e !== void 0 ? _e : false) : false;
+                    const harvesting = !(0, ReportActionsUtils_1.isMarkAsClosedAction)(reportAction) ? ((0, ReportActionsUtils_1.getOriginalMessage)(reportAction)?.harvesting ?? false) : false;
                     if (harvesting) {
                         setClipboardMessage((0, Localize_1.translateLocal)('iou.automaticallySubmitted'));
                     }
                     else {
-                        Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.submitted', { memo: (_f = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction)) === null || _f === void 0 ? void 0 : _f.message }));
+                        Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.submitted', { memo: (0, ReportActionsUtils_1.getOriginalMessage)(reportAction)?.message }));
                     }
                 }
                 else if ((0, ReportActionsUtils_1.isActionOfType)(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.APPROVED)) {
-                    var automaticAction = ((_g = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction)) !== null && _g !== void 0 ? _g : {}).automaticAction;
+                    const { automaticAction } = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction) ?? {};
                     if (automaticAction) {
                         setClipboardMessage((0, Localize_1.translateLocal)('iou.automaticallyApproved'));
                     }
@@ -482,7 +436,7 @@ var ContextMenuActions = [
                     Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.unapproved'));
                 }
                 else if ((0, ReportActionsUtils_1.isActionOfType)(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.FORWARDED)) {
-                    var automaticAction = ((_h = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction)) !== null && _h !== void 0 ? _h : {}).automaticAction;
+                    const { automaticAction } = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction) ?? {};
                     if (automaticAction) {
                         setClipboardMessage((0, Localize_1.translateLocal)('iou.automaticallyForwarded'));
                     }
@@ -490,72 +444,72 @@ var ContextMenuActions = [
                         Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.forwarded'));
                     }
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.REJECTED) {
-                    var displayMessage = (0, ReportUtils_1.getRejectedReportMessage)();
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REJECTED) {
+                    const displayMessage = (0, ReportUtils_1.getRejectedReportMessage)();
                     Clipboard_1.default.setString(displayMessage);
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.CORPORATE_UPGRADE) {
-                    var displayMessage = (0, ReportUtils_1.getUpgradeWorkspaceMessage)();
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.CORPORATE_UPGRADE) {
+                    const displayMessage = (0, ReportUtils_1.getUpgradeWorkspaceMessage)();
                     Clipboard_1.default.setString(displayMessage);
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.TEAM_DOWNGRADE) {
-                    var displayMessage = (0, ReportUtils_1.getDowngradeWorkspaceMessage)();
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.TEAM_DOWNGRADE) {
+                    const displayMessage = (0, ReportUtils_1.getDowngradeWorkspaceMessage)();
                     Clipboard_1.default.setString(displayMessage);
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.HOLD) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.HOLD) {
                     Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.heldExpense'));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.UNHOLD) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.UNHOLD) {
                     Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.unheldExpense'));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.REJECTEDTRANSACTION_THREAD) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REJECTEDTRANSACTION_THREAD) {
                     Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.reject.reportActions.rejectedExpense'));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.REJECTED_TRANSACTION_MARKASRESOLVED) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REJECTED_TRANSACTION_MARKASRESOLVED) {
                     Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.reject.reportActions.markedAsResolved'));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.RETRACTED) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.RETRACTED) {
                     Clipboard_1.default.setString((0, Localize_1.translateLocal)('iou.retracted'));
                 }
                 else if ((0, ReportActionsUtils_1.isOldDotReportAction)(reportAction)) {
-                    var oldDotActionMessage = (0, ReportActionsUtils_1.getMessageOfOldDotReportAction)(reportAction);
+                    const oldDotActionMessage = (0, ReportActionsUtils_1.getMessageOfOldDotReportAction)(reportAction);
                     Clipboard_1.default.setString(oldDotActionMessage);
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.DISMISSED_VIOLATION) {
-                    var originalMessage = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction);
-                    var reason = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.reason;
-                    var violationName = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.violationName;
-                    Clipboard_1.default.setString((0, Localize_1.translateLocal)("violationDismissal.".concat(violationName, ".").concat(reason)));
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.DISMISSED_VIOLATION) {
+                    const originalMessage = (0, ReportActionsUtils_1.getOriginalMessage)(reportAction);
+                    const reason = originalMessage?.reason;
+                    const violationName = originalMessage?.violationName;
+                    Clipboard_1.default.setString((0, Localize_1.translateLocal)(`violationDismissal.${violationName}.${reason}`));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.RESOLVED_DUPLICATES) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.RESOLVED_DUPLICATES) {
                     Clipboard_1.default.setString((0, Localize_1.translateLocal)('violations.resolvedDuplicates'));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_INTEGRATION) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_INTEGRATION) {
                     setClipboardMessage((0, ReportActionsUtils_1.getExportIntegrationMessageHTML)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.UPDATE_ROOM_DESCRIPTION) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.UPDATE_ROOM_DESCRIPTION) {
                     setClipboardMessage((0, ReportActionsUtils_1.getUpdateRoomDescriptionMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_EMPLOYEE) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_EMPLOYEE) {
                     setClipboardMessage((0, ReportActionsUtils_1.getPolicyChangeLogAddEmployeeMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_EMPLOYEE) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_EMPLOYEE) {
                     setClipboardMessage((0, ReportActionsUtils_1.getPolicyChangeLogUpdateEmployee)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_EMPLOYEE) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_EMPLOYEE) {
                     setClipboardMessage((0, ReportActionsUtils_1.getPolicyChangeLogDeleteMemberMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.DELETED_TRANSACTION) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.DELETED_TRANSACTION) {
                     setClipboardMessage((0, ReportUtils_1.getDeletedTransactionMessage)(reportAction));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.REOPENED) {
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REOPENED) {
                     setClipboardMessage((0, ReportActionsUtils_1.getReopenedMessage)());
                 }
                 else if ((0, ReportActionsUtils_1.isActionOfType)(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.INTEGRATION_SYNC_FAILED)) {
-                    setClipboardMessage((0, ReportActionsUtils_1.getIntegrationSyncFailedMessage)(reportAction, report === null || report === void 0 ? void 0 : report.policyID, isTryNewDotNVPDismissed));
+                    setClipboardMessage((0, ReportActionsUtils_1.getIntegrationSyncFailedMessage)(reportAction, report?.policyID, isTryNewDotNVPDismissed));
                 }
                 else if ((0, ReportActionsUtils_1.isCardIssuedAction)(reportAction)) {
-                    setClipboardMessage((0, ReportActionsUtils_1.getCardIssuedMessage)({ reportAction: reportAction, shouldRenderHTML: true, policyID: report === null || report === void 0 ? void 0 : report.policyID, expensifyCard: card }));
+                    setClipboardMessage((0, ReportActionsUtils_1.getCardIssuedMessage)({ reportAction, shouldRenderHTML: true, policyID: report?.policyID, expensifyCard: card }));
                 }
                 else if ((0, ReportActionsUtils_1.isActionOfType)(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_INTEGRATION)) {
                     setClipboardMessage((0, ReportActionsUtils_1.getAddedConnectionMessage)(reportAction));
@@ -587,17 +541,17 @@ var ContextMenuActions = [
                 else if ((0, ReportActionsUtils_1.isMovedAction)(reportAction)) {
                     setClipboardMessage((0, ReportUtils_1.getMovedActionMessage)(reportAction, originalReport));
                 }
-                else if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.CHANGE_POLICY) {
-                    var displayMessage = (0, ReportUtils_1.getPolicyChangeMessage)(reportAction);
+                else if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CHANGE_POLICY) {
+                    const displayMessage = (0, ReportUtils_1.getPolicyChangeMessage)(reportAction);
                     Clipboard_1.default.setString(displayMessage);
                 }
                 else if ((0, ReportActionsUtils_1.isActionableJoinRequest)(reportAction)) {
-                    var displayMessage = (0, ReportActionsUtils_1.getJoinRequestMessage)(reportAction);
+                    const displayMessage = (0, ReportActionsUtils_1.getJoinRequestMessage)(reportAction);
                     Clipboard_1.default.setString(displayMessage);
                 }
                 else if (content) {
-                    setClipboardMessage(content.replace(/(<mention-user>)(.*?)(<\/mention-user>)/gi, function (match, openTag, innerContent, closeTag) {
-                        var modifiedContent = expensify_common_1.Str.removeSMSDomain(innerContent) || '';
+                    setClipboardMessage(content.replace(/(<mention-user>)(.*?)(<\/mention-user>)/gi, (match, openTag, innerContent, closeTag) => {
+                        const modifiedContent = expensify_common_1.Str.removeSMSDomain(innerContent) || '';
                         return openTag + modifiedContent + closeTag || '';
                     }));
                 }
@@ -609,7 +563,7 @@ var ContextMenuActions = [
                 (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
             }
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: true,
@@ -617,87 +571,73 @@ var ContextMenuActions = [
         icon: Expensicons.LinkCopy,
         successIcon: Expensicons.Checkmark,
         successTextTranslateKey: 'reportActionContextMenu.copied',
-        shouldShow: function (_a) {
-            var type = _a.type, reportAction = _a.reportAction, menuTarget = _a.menuTarget;
-            var isAttachment = (0, ReportActionsUtils_1.isReportActionAttachment)(reportAction);
+        shouldShow: ({ type, reportAction, menuTarget }) => {
+            const isAttachment = (0, ReportActionsUtils_1.isReportActionAttachment)(reportAction);
             // Only hide the copy link menu item when context menu is opened over img element.
-            var isAttachmentTarget = (menuTarget === null || menuTarget === void 0 ? void 0 : menuTarget.current) && 'tagName' in menuTarget.current && (menuTarget === null || menuTarget === void 0 ? void 0 : menuTarget.current.tagName) === 'IMG' && isAttachment;
+            const isAttachmentTarget = menuTarget?.current && 'tagName' in menuTarget.current && menuTarget?.current.tagName === 'IMG' && isAttachment;
             return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION && !isAttachmentTarget && !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction);
         },
-        onPress: function (closePopover, _a) {
-            var reportAction = _a.reportAction, reportID = _a.reportID;
-            var originalReportID = (0, ReportUtils_1.getOriginalReportID)(reportID, reportAction);
-            (0, Environment_1.getEnvironmentURL)().then(function (environmentURL) {
-                var reportActionID = reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID;
-                Clipboard_1.default.setString("".concat(environmentURL, "/r/").concat(originalReportID, "/").concat(reportActionID));
+        onPress: (closePopover, { reportAction, reportID }) => {
+            const originalReportID = (0, ReportUtils_1.getOriginalReportID)(reportID, reportAction);
+            (0, Environment_1.getEnvironmentURL)().then((environmentURL) => {
+                const reportActionID = reportAction?.reportActionID;
+                Clipboard_1.default.setString(`${environmentURL}/r/${originalReportID}/${reportActionID}`);
             });
             (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'common.pin',
         icon: Expensicons.Pin,
-        shouldShow: function (_a) {
-            var type = _a.type, isPinnedChat = _a.isPinnedChat;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && !isPinnedChat;
-        },
-        onPress: function (closePopover, _a) {
-            var reportID = _a.reportID;
+        shouldShow: ({ type, isPinnedChat }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && !isPinnedChat,
+        onPress: (closePopover, { reportID }) => {
             (0, Report_1.togglePinnedState)(reportID, false);
             if (closePopover) {
                 (0, ReportActionContextMenu_1.hideContextMenu)(false, ReportActionComposeFocusManager_1.default.focus);
             }
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'common.unPin',
         icon: Expensicons.Pin,
-        shouldShow: function (_a) {
-            var type = _a.type, isPinnedChat = _a.isPinnedChat;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && isPinnedChat;
-        },
-        onPress: function (closePopover, _a) {
-            var reportID = _a.reportID;
+        shouldShow: ({ type, isPinnedChat }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && isPinnedChat,
+        onPress: (closePopover, { reportID }) => {
             (0, Report_1.togglePinnedState)(reportID, true);
             if (closePopover) {
                 (0, ReportActionContextMenu_1.hideContextMenu)(false, ReportActionComposeFocusManager_1.default.focus);
             }
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'reportActionContextMenu.flagAsOffensive',
         icon: Expensicons.Flag,
-        shouldShow: function (_a) {
-            var type = _a.type, reportAction = _a.reportAction, isArchivedRoom = _a.isArchivedRoom, isChronosReport = _a.isChronosReport, reportID = _a.reportID;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION &&
-                (0, ReportUtils_1.canFlagReportAction)(reportAction, reportID) &&
-                !isArchivedRoom &&
-                !isChronosReport &&
-                (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actorAccountID) !== CONST_1.default.ACCOUNT_ID.CONCIERGE;
-        },
-        onPress: function (closePopover, _a) {
-            var reportID = _a.reportID, reportAction = _a.reportAction;
+        shouldShow: ({ type, reportAction, isArchivedRoom, isChronosReport, reportID }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION &&
+            (0, ReportUtils_1.canFlagReportAction)(reportAction, reportID) &&
+            !isArchivedRoom &&
+            !isChronosReport &&
+            reportAction?.actorAccountID !== CONST_1.default.ACCOUNT_ID.CONCIERGE,
+        onPress: (closePopover, { reportID, reportAction }) => {
             if (!reportID) {
                 return;
             }
-            var activeRoute = Navigation_1.default.getActiveRoute();
+            const activeRoute = Navigation_1.default.getActiveRoute();
             if (closePopover) {
-                (0, ReportActionContextMenu_1.hideContextMenu)(false, function () {
-                    keyboard_1.default.dismiss().then(function () {
-                        Navigation_1.default.navigate(ROUTES_1.default.FLAG_COMMENT.getRoute(reportID, reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID, activeRoute));
+                (0, ReportActionContextMenu_1.hideContextMenu)(false, () => {
+                    keyboard_1.default.dismiss().then(() => {
+                        Navigation_1.default.navigate(ROUTES_1.default.FLAG_COMMENT.getRoute(reportID, reportAction?.reportActionID, activeRoute));
                     });
                 });
                 return;
             }
-            Navigation_1.default.navigate(ROUTES_1.default.FLAG_COMMENT.getRoute(reportID, reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID, activeRoute));
+            Navigation_1.default.navigate(ROUTES_1.default.FLAG_COMMENT.getRoute(reportID, reportAction?.reportActionID, activeRoute));
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: true,
@@ -705,30 +645,27 @@ var ContextMenuActions = [
         icon: Expensicons.Download,
         successTextTranslateKey: 'common.download',
         successIcon: Expensicons.Download,
-        shouldShow: function (_a) {
-            var reportAction = _a.reportAction, isOffline = _a.isOffline;
-            var isAttachment = (0, ReportActionsUtils_1.isReportActionAttachment)(reportAction);
-            var html = getActionHtml(reportAction);
-            var isUploading = html.includes(CONST_1.default.ATTACHMENT_OPTIMISTIC_SOURCE_ATTRIBUTE);
-            return isAttachment && !isUploading && !!(reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID) && !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction) && !isOffline;
+        shouldShow: ({ reportAction, isOffline }) => {
+            const isAttachment = (0, ReportActionsUtils_1.isReportActionAttachment)(reportAction);
+            const html = getActionHtml(reportAction);
+            const isUploading = html.includes(CONST_1.default.ATTACHMENT_OPTIMISTIC_SOURCE_ATTRIBUTE);
+            return isAttachment && !isUploading && !!reportAction?.reportActionID && !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction) && !isOffline;
         },
-        onPress: function (closePopover, _a) {
-            var _b;
-            var reportAction = _a.reportAction;
-            var html = getActionHtml(reportAction);
-            var _c = (0, getAttachmentDetails_1.default)(html), originalFileName = _c.originalFileName, sourceURL = _c.sourceURL;
-            var sourceURLWithAuth = (0, addEncryptedAuthTokenToURL_1.default)(sourceURL !== null && sourceURL !== void 0 ? sourceURL : '');
-            var sourceID = ((_b = sourceURL === null || sourceURL === void 0 ? void 0 : sourceURL.match(CONST_1.default.REGEX.ATTACHMENT_ID)) !== null && _b !== void 0 ? _b : [])[1];
+        onPress: (closePopover, { reportAction }) => {
+            const html = getActionHtml(reportAction);
+            const { originalFileName, sourceURL } = (0, getAttachmentDetails_1.default)(html);
+            const sourceURLWithAuth = (0, addEncryptedAuthTokenToURL_1.default)(sourceURL ?? '');
+            const sourceID = (sourceURL?.match(CONST_1.default.REGEX.ATTACHMENT_ID) ?? [])[1];
             (0, Download_1.setDownload)(sourceID, true);
-            var anchorRegex = CONST_1.default.REGEX_LINK_IN_ANCHOR;
-            var isAnchorTag = anchorRegex.test(html);
-            (0, fileDownload_1.default)(sourceURLWithAuth, originalFileName !== null && originalFileName !== void 0 ? originalFileName : '', '', isAnchorTag && (0, Browser_1.isMobileSafari)()).then(function () { return (0, Download_1.setDownload)(sourceID, false); });
+            const anchorRegex = CONST_1.default.REGEX_LINK_IN_ANCHOR;
+            const isAnchorTag = anchorRegex.test(html);
+            (0, fileDownload_1.default)(sourceURLWithAuth, originalFileName ?? '', '', isAnchorTag && (0, Browser_1.isMobileSafari)()).then(() => (0, Download_1.setDownload)(sourceID, false));
             if (closePopover) {
                 (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
             }
         },
-        getDescription: function () { },
-        shouldDisable: function (download) { var _a; return (_a = download === null || download === void 0 ? void 0 : download.isDownloading) !== null && _a !== void 0 ? _a : false; },
+        getDescription: () => { },
+        shouldDisable: (download) => download?.isDownloading ?? false,
     },
     {
         isAnonymousAction: true,
@@ -736,27 +673,19 @@ var ContextMenuActions = [
         icon: Expensicons.Copy,
         successTextTranslateKey: 'reportActionContextMenu.copied',
         successIcon: Expensicons.Checkmark,
-        shouldShow: function (_a) {
-            var type = _a.type, isProduction = _a.isProduction;
-            return type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && !isProduction;
-        },
-        onPress: function (closePopover, _a) {
-            var report = _a.report;
+        shouldShow: ({ type, isProduction }) => type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT && !isProduction,
+        onPress: (closePopover, { report }) => {
             Clipboard_1.default.setString(JSON.stringify(report, null, 4));
             (0, ReportActionContextMenu_1.hideContextMenu)(true, ReportActionComposeFocusManager_1.default.focus);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: true,
         textTranslateKey: 'debug.debug',
         icon: Expensicons.Bug,
-        shouldShow: function (_a) {
-            var type = _a.type, isDebugModeEnabled = _a.isDebugModeEnabled;
-            return [CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION, CONST_1.default.CONTEXT_MENU_TYPES.REPORT].some(function (value) { return value === type; }) && !!isDebugModeEnabled;
-        },
-        onPress: function (closePopover, _a) {
-            var reportID = _a.reportID, reportAction = _a.reportAction;
+        shouldShow: ({ type, isDebugModeEnabled }) => [CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION, CONST_1.default.CONTEXT_MENU_TYPES.REPORT].some((value) => value === type) && !!isDebugModeEnabled,
+        onPress: (closePopover, { reportID, reportAction }) => {
             if (reportAction) {
                 Navigation_1.default.navigate(ROUTES_1.default.DEBUG_REPORT_ACTION.getRoute(reportID, reportAction.reportActionID));
             }
@@ -765,61 +694,52 @@ var ContextMenuActions = [
             }
             (0, ReportActionContextMenu_1.hideContextMenu)(false, ReportActionComposeFocusManager_1.default.focus);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: false,
         textTranslateKey: 'reportActionContextMenu.deleteAction',
         icon: Expensicons.Trashcan,
-        shouldShow: function (_a) {
-            var _b;
-            var type = _a.type, reportAction = _a.reportAction, isArchivedRoom = _a.isArchivedRoom, isChronosReport = _a.isChronosReport, reportID = _a.reportID, moneyRequestAction = _a.moneyRequestAction, iouTransaction = _a.iouTransaction;
-            // Until deleting parent threads is supported in FE, we will prevent the user from deleting a thread parent
-            return !!reportID &&
-                type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION &&
-                (0, ReportUtils_1.canDeleteReportAction)(moneyRequestAction !== null && moneyRequestAction !== void 0 ? moneyRequestAction : reportAction, (0, ReportActionsUtils_1.isMoneyRequestAction)(moneyRequestAction) ? (_b = (0, ReportActionsUtils_1.getOriginalMessage)(moneyRequestAction)) === null || _b === void 0 ? void 0 : _b.IOUReportID : reportID, iouTransaction) &&
-                !isArchivedRoom &&
-                !isChronosReport &&
-                !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction);
-        },
-        onPress: function (closePopover, _a) {
-            var _b;
-            var reportIDParam = _a.reportID, reportAction = _a.reportAction, moneyRequestAction = _a.moneyRequestAction;
+        shouldShow: ({ type, reportAction, isArchivedRoom, isChronosReport, reportID, moneyRequestAction, iouTransaction }) => 
+        // Until deleting parent threads is supported in FE, we will prevent the user from deleting a thread parent
+        !!reportID &&
+            type === CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION &&
+            (0, ReportUtils_1.canDeleteReportAction)(moneyRequestAction ?? reportAction, (0, ReportActionsUtils_1.isMoneyRequestAction)(moneyRequestAction) ? (0, ReportActionsUtils_1.getOriginalMessage)(moneyRequestAction)?.IOUReportID : reportID, iouTransaction) &&
+            !isArchivedRoom &&
+            !isChronosReport &&
+            !(0, ReportActionsUtils_1.isMessageDeleted)(reportAction),
+        onPress: (closePopover, { reportID: reportIDParam, reportAction, moneyRequestAction }) => {
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            var reportID = (0, ReportActionsUtils_1.isMoneyRequestAction)(moneyRequestAction) ? ((_b = (0, ReportActionsUtils_1.getOriginalMessage)(moneyRequestAction)) === null || _b === void 0 ? void 0 : _b.IOUReportID) || reportIDParam : reportIDParam;
+            const reportID = (0, ReportActionsUtils_1.isMoneyRequestAction)(moneyRequestAction) ? (0, ReportActionsUtils_1.getOriginalMessage)(moneyRequestAction)?.IOUReportID || reportIDParam : reportIDParam;
             if (closePopover) {
                 // Hide popover, then call showDeleteConfirmModal
-                (0, ReportActionContextMenu_1.hideContextMenu)(false, function () { return (0, ReportActionContextMenu_1.showDeleteModal)(reportID, moneyRequestAction !== null && moneyRequestAction !== void 0 ? moneyRequestAction : reportAction); });
+                (0, ReportActionContextMenu_1.hideContextMenu)(false, () => (0, ReportActionContextMenu_1.showDeleteModal)(reportID, moneyRequestAction ?? reportAction));
                 return;
             }
             // No popover to hide, call showDeleteConfirmModal immediately
-            (0, ReportActionContextMenu_1.showDeleteModal)(reportID, moneyRequestAction !== null && moneyRequestAction !== void 0 ? moneyRequestAction : reportAction);
+            (0, ReportActionContextMenu_1.showDeleteModal)(reportID, moneyRequestAction ?? reportAction);
         },
-        getDescription: function () { },
+        getDescription: () => { },
     },
     {
         isAnonymousAction: true,
         textTranslateKey: 'reportActionContextMenu.menu',
         icon: Expensicons.ThreeDots,
-        shouldShow: function (_a) {
-            var isMini = _a.isMini;
-            return isMini;
-        },
-        onPress: function (closePopover, _a) {
-            var openOverflowMenu = _a.openOverflowMenu, event = _a.event, openContextMenu = _a.openContextMenu, anchorRef = _a.anchorRef;
-            openOverflowMenu(event, anchorRef !== null && anchorRef !== void 0 ? anchorRef : { current: null });
+        shouldShow: ({ isMini }) => isMini,
+        onPress: (closePopover, { openOverflowMenu, event, openContextMenu, anchorRef }) => {
+            openOverflowMenu(event, anchorRef ?? { current: null });
             openContextMenu();
         },
-        getDescription: function () { },
+        getDescription: () => { },
         shouldPreventDefaultFocusOnPress: false,
     },
 ];
-var restrictedReadOnlyActions = [
+const restrictedReadOnlyActions = [
     'reportActionContextMenu.replyInThread',
     'reportActionContextMenu.editAction',
     'reportActionContextMenu.joinThread',
     'reportActionContextMenu.deleteAction',
 ];
-var RestrictedReadOnlyContextMenuActions = ContextMenuActions.filter(function (action) { return 'textTranslateKey' in action && restrictedReadOnlyActions.includes(action.textTranslateKey); });
+const RestrictedReadOnlyContextMenuActions = ContextMenuActions.filter((action) => 'textTranslateKey' in action && restrictedReadOnlyActions.includes(action.textTranslateKey));
 exports.RestrictedReadOnlyContextMenuActions = RestrictedReadOnlyContextMenuActions;
 exports.default = ContextMenuActions;

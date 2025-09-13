@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getJSONInput = getJSONInput;
 exports.getStringInput = getStringInput;
 exports.convertToNumber = convertToNumber;
-var core = require("@actions/core");
+const core = require("@actions/core");
 /**
  * Safely parse a JSON input to a GitHub Action.
  *
@@ -13,7 +13,7 @@ var core = require("@actions/core");
  *                         Not required if the {required: true} option is given in the second arg to this function.
  */
 function getJSONInput(name, options, defaultValue) {
-    var input = core.getInput(name, options);
+    const input = core.getInput(name, options);
     if (input) {
         return JSON.parse(input);
     }
@@ -23,7 +23,7 @@ function getJSONInput(name, options, defaultValue) {
  * Safely access a string input to a GitHub Action, or fall back on a default if the string is empty.
  */
 function getStringInput(name, options, defaultValue) {
-    var input = core.getInput(name, options);
+    const input = core.getInput(name, options);
     if (!input) {
         return defaultValue;
     }

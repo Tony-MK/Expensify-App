@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var App_1 = require("@libs/actions/App");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var useOnyx_1 = require("./useOnyx");
-var usePrevious_1 = require("./usePrevious");
+const react_1 = require("react");
+const App_1 = require("@libs/actions/App");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const useOnyx_1 = require("./useOnyx");
+const usePrevious_1 = require("./usePrevious");
 function usePriorityMode() {
-    var priorityMode = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIORITY_MODE, { canBeMissing: true })[0];
-    var allReportsWithDraftComments = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT_DRAFT_COMMENT, { canBeMissing: true })[0];
-    var prevPriorityMode = (0, usePrevious_1.default)(priorityMode);
-    (0, react_1.useEffect)(function () {
+    const [priorityMode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIORITY_MODE, { canBeMissing: true });
+    const [allReportsWithDraftComments] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT_DRAFT_COMMENT, { canBeMissing: true });
+    const prevPriorityMode = (0, usePrevious_1.default)(priorityMode);
+    (0, react_1.useEffect)(() => {
         if (!(prevPriorityMode === CONST_1.default.PRIORITY_MODE.GSD && priorityMode === CONST_1.default.PRIORITY_MODE.DEFAULT)) {
             return;
         }

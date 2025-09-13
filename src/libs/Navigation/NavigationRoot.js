@@ -1,58 +1,46 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var ScrollOffsetContextProvider_1 = require("@components/ScrollOffsetContextProvider");
-var useCurrentReportID_1 = require("@hooks/useCurrentReportID");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemePreference_1 = require("@hooks/useThemePreference");
-var Firebase_1 = require("@libs/Firebase");
-var Fullstory_1 = require("@libs/Fullstory");
-var Log_1 = require("@libs/Log");
-var onboardingSelectors_1 = require("@libs/onboardingSelectors");
-var shouldOpenLastVisitedPath_1 = require("@libs/shouldOpenLastVisitedPath");
-var Url_1 = require("@libs/Url");
-var App_1 = require("@userActions/App");
-var Welcome_1 = require("@userActions/Welcome");
-var OnboardingFlow_1 = require("@userActions/Welcome/OnboardingFlow");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var AppNavigator_1 = require("./AppNavigator");
-var usePreserveNavigatorState_1 = require("./AppNavigator/createSplitNavigator/usePreserveNavigatorState");
-var getAdaptedStateFromPath_1 = require("./helpers/getAdaptedStateFromPath");
-var isNavigatorName_1 = require("./helpers/isNavigatorName");
-var lastVisitedTabPathUtils_1 = require("./helpers/lastVisitedTabPathUtils");
-var linkingConfig_1 = require("./linkingConfig");
-var Navigation_1 = require("./Navigation");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const ScrollOffsetContextProvider_1 = require("@components/ScrollOffsetContextProvider");
+const useCurrentReportID_1 = require("@hooks/useCurrentReportID");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemePreference_1 = require("@hooks/useThemePreference");
+const Firebase_1 = require("@libs/Firebase");
+const Fullstory_1 = require("@libs/Fullstory");
+const Log_1 = require("@libs/Log");
+const onboardingSelectors_1 = require("@libs/onboardingSelectors");
+const shouldOpenLastVisitedPath_1 = require("@libs/shouldOpenLastVisitedPath");
+const Url_1 = require("@libs/Url");
+const App_1 = require("@userActions/App");
+const Welcome_1 = require("@userActions/Welcome");
+const OnboardingFlow_1 = require("@userActions/Welcome/OnboardingFlow");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const AppNavigator_1 = require("./AppNavigator");
+const usePreserveNavigatorState_1 = require("./AppNavigator/createSplitNavigator/usePreserveNavigatorState");
+const getAdaptedStateFromPath_1 = require("./helpers/getAdaptedStateFromPath");
+const isNavigatorName_1 = require("./helpers/isNavigatorName");
+const lastVisitedTabPathUtils_1 = require("./helpers/lastVisitedTabPathUtils");
+const linkingConfig_1 = require("./linkingConfig");
+const Navigation_1 = require("./Navigation");
 /**
  * Intercept navigation state changes and log it
  */
 function parseAndLogRoute(state) {
-    var _a, _b;
     if (!state) {
         return;
     }
-    var currentPath = (0, native_1.getPathFromState)(state, linkingConfig_1.linkingConfig.config);
-    var focusedRoute = (0, native_1.findFocusedRoute)(state);
-    if (focusedRoute && !CONST_1.default.EXCLUDE_FROM_LAST_VISITED_PATH.includes(focusedRoute === null || focusedRoute === void 0 ? void 0 : focusedRoute.name)) {
+    const currentPath = (0, native_1.getPathFromState)(state, linkingConfig_1.linkingConfig.config);
+    const focusedRoute = (0, native_1.findFocusedRoute)(state);
+    if (focusedRoute && !CONST_1.default.EXCLUDE_FROM_LAST_VISITED_PATH.includes(focusedRoute?.name)) {
         (0, App_1.updateLastVisitedPath)(currentPath);
-        if (currentPath.startsWith("/".concat(ROUTES_1.default.ONBOARDING_ROOT.route))) {
+        if (currentPath.startsWith(`/${ROUTES_1.default.ONBOARDING_ROOT.route}`)) {
             (0, Welcome_1.updateOnboardingLastVisitedPath)(currentPath);
         }
     }
@@ -64,43 +52,42 @@ function parseAndLogRoute(state) {
         Log_1.default.info('Navigating to route', false, { path: currentPath });
     }
     Navigation_1.default.setIsNavigationReady();
-    if ((0, isNavigatorName_1.isWorkspacesTabScreenName)((_a = state.routes.at(-1)) === null || _a === void 0 ? void 0 : _a.name)) {
+    if ((0, isNavigatorName_1.isWorkspacesTabScreenName)(state.routes.at(-1)?.name)) {
         (0, lastVisitedTabPathUtils_1.saveWorkspacesTabPathToSessionStorage)(currentPath);
     }
-    else if (((_b = state.routes.at(-1)) === null || _b === void 0 ? void 0 : _b.name) === NAVIGATORS_1.default.SETTINGS_SPLIT_NAVIGATOR) {
+    else if (state.routes.at(-1)?.name === NAVIGATORS_1.default.SETTINGS_SPLIT_NAVIGATOR) {
         (0, lastVisitedTabPathUtils_1.saveSettingsTabPathToSessionStorage)(currentPath);
     }
     // Fullstory Page navigation tracking
-    var focusedRouteName = focusedRoute === null || focusedRoute === void 0 ? void 0 : focusedRoute.name;
+    const focusedRouteName = focusedRoute?.name;
     if (focusedRouteName) {
         new Fullstory_1.default.Page(focusedRouteName, { path: currentPath }).start();
     }
 }
-function NavigationRoot(_a) {
-    var authenticated = _a.authenticated, lastVisitedPath = _a.lastVisitedPath, initialUrl = _a.initialUrl, onReady = _a.onReady;
-    var firstRenderRef = (0, react_1.useRef)(true);
-    var themePreference = (0, useThemePreference_1.default)();
-    var cleanStaleScrollOffsets = (0, react_1.useContext)(ScrollOffsetContextProvider_1.ScrollOffsetContext).cleanStaleScrollOffsets;
-    var currentReportIDValue = (0, useCurrentReportID_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var _b = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, {
+function NavigationRoot({ authenticated, lastVisitedPath, initialUrl, onReady }) {
+    const firstRenderRef = (0, react_1.useRef)(true);
+    const themePreference = (0, useThemePreference_1.default)();
+    const { cleanStaleScrollOffsets } = (0, react_1.useContext)(ScrollOffsetContextProvider_1.ScrollOffsetContext);
+    const currentReportIDValue = (0, useCurrentReportID_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [isOnboardingCompleted = true] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, {
         selector: onboardingSelectors_1.hasCompletedGuidedSetupFlowSelector,
         canBeMissing: true,
-    })[0], isOnboardingCompleted = _b === void 0 ? true : _b;
-    var _c = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_INTRO_SELECTED, {
+    });
+    const [wasInvitedToNewDot = false] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_INTRO_SELECTED, {
         selector: onboardingSelectors_1.wasInvitedToNewDotSelector,
         canBeMissing: true,
-    })[0], wasInvitedToNewDot = _c === void 0 ? false : _c;
-    var hasNonPersonalPolicy = (0, useOnyx_1.default)(ONYXKEYS_1.default.HAS_NON_PERSONAL_POLICY, { canBeMissing: true })[0];
-    var currentOnboardingPurposeSelected = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true })[0];
-    var currentOnboardingCompanySize = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_COMPANY_SIZE, { canBeMissing: true })[0];
-    var onboardingInitialPath = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_LAST_VISITED_PATH, { canBeMissing: true })[0];
-    var previousAuthenticated = (0, usePrevious_1.default)(authenticated);
-    var initialState = (0, react_1.useMemo)(function () {
-        var path = initialUrl ? (0, Url_1.getPathFromURL)(initialUrl) : null;
-        if ((path === null || path === void 0 ? void 0 : path.includes(ROUTES_1.default.MIGRATED_USER_WELCOME_MODAL.route)) && (0, shouldOpenLastVisitedPath_1.default)(lastVisitedPath) && isOnboardingCompleted && authenticated) {
-            Navigation_1.default.isNavigationReady().then(function () {
+    });
+    const [hasNonPersonalPolicy] = (0, useOnyx_1.default)(ONYXKEYS_1.default.HAS_NON_PERSONAL_POLICY, { canBeMissing: true });
+    const [currentOnboardingPurposeSelected] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true });
+    const [currentOnboardingCompanySize] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_COMPANY_SIZE, { canBeMissing: true });
+    const [onboardingInitialPath] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_LAST_VISITED_PATH, { canBeMissing: true });
+    const previousAuthenticated = (0, usePrevious_1.default)(authenticated);
+    const initialState = (0, react_1.useMemo)(() => {
+        const path = initialUrl ? (0, Url_1.getPathFromURL)(initialUrl) : null;
+        if (path?.includes(ROUTES_1.default.MIGRATED_USER_WELCOME_MODAL.route) && (0, shouldOpenLastVisitedPath_1.default)(lastVisitedPath) && isOnboardingCompleted && authenticated) {
+            Navigation_1.default.isNavigationReady().then(() => {
                 Navigation_1.default.navigate(ROUTES_1.default.MIGRATED_USER_WELCOME_MODAL.getRoute());
             });
             return (0, getAdaptedStateFromPath_1.default)(lastVisitedPath, linkingConfig_1.linkingConfig.config);
@@ -108,20 +95,20 @@ function NavigationRoot(_a) {
         if (!account || account.isFromPublicDomain) {
             return;
         }
-        var shouldShowRequire2FAPage = !!(account === null || account === void 0 ? void 0 : account.needsTwoFactorAuthSetup) && !account.requiresTwoFactorAuth;
+        const shouldShowRequire2FAPage = !!account?.needsTwoFactorAuthSetup && !account.requiresTwoFactorAuth;
         if (shouldShowRequire2FAPage) {
             return (0, getAdaptedStateFromPath_1.default)(ROUTES_1.default.REQUIRE_TWO_FACTOR_AUTH, linkingConfig_1.linkingConfig.config);
         }
-        var isTransitioning = path === null || path === void 0 ? void 0 : path.includes(ROUTES_1.default.TRANSITION_BETWEEN_APPS);
+        const isTransitioning = path?.includes(ROUTES_1.default.TRANSITION_BETWEEN_APPS);
         // If the user haven't completed the flow, we want to always redirect them to the onboarding flow.
         // We also make sure that the user is authenticated, isn't part of a group workspace, isn't in the transition flow & wasn't invited to NewDot.
         if (!CONFIG_1.default.IS_HYBRID_APP && !hasNonPersonalPolicy && !isOnboardingCompleted && !wasInvitedToNewDot && authenticated && !isTransitioning) {
             return (0, getAdaptedStateFromPath_1.default)((0, OnboardingFlow_1.getOnboardingInitialPath)({
                 isUserFromPublicDomain: !!account.isFromPublicDomain,
                 hasAccessiblePolicies: !!account.hasAccessibleDomainPolicies,
-                currentOnboardingPurposeSelected: currentOnboardingPurposeSelected,
-                currentOnboardingCompanySize: currentOnboardingCompanySize,
-                onboardingInitialPath: onboardingInitialPath,
+                currentOnboardingPurposeSelected,
+                currentOnboardingCompanySize,
+                onboardingInitialPath,
             }), linkingConfig_1.linkingConfig.config);
         }
         // If there is no lastVisitedPath, we can do early return. We won't modify the default behavior.
@@ -140,9 +127,12 @@ function NavigationRoot(_a) {
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, []);
     // https://reactnavigation.org/docs/themes
-    var navigationTheme = (0, react_1.useMemo)(function () {
-        var defaultNavigationTheme = themePreference === CONST_1.default.THEME.DARK ? native_1.DarkTheme : native_1.DefaultTheme;
-        return __assign(__assign({}, defaultNavigationTheme), { colors: __assign(__assign({}, defaultNavigationTheme.colors), { 
+    const navigationTheme = (0, react_1.useMemo)(() => {
+        const defaultNavigationTheme = themePreference === CONST_1.default.THEME.DARK ? native_1.DarkTheme : native_1.DefaultTheme;
+        return {
+            ...defaultNavigationTheme,
+            colors: {
+                ...defaultNavigationTheme.colors,
                 /**
                  * We want to have a stack with variable size of screens in RHP.
                  * The stack is the size of the biggest screen in RHP. Screens that should be smaller will reduce it's size with margin.
@@ -150,9 +140,11 @@ function NavigationRoot(_a) {
                  * background: transparent is used to make bottom of the card stack transparent.
                  * To make sure that everything is correct, we will use theme.appBG in the screen wrapper.
                  */
-                background: 'transparent' }) });
+                background: 'transparent',
+            },
+        };
     }, [themePreference]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (firstRenderRef.current) {
             // we don't want to make the report back button go back to LHN if the user
             // started on the small screen so we don't set it on the first render
@@ -168,36 +160,42 @@ function NavigationRoot(_a) {
         }
         Navigation_1.default.setShouldPopToSidebar(true);
     }, [shouldUseNarrowLayout]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // Since the NAVIGATORS.REPORTS_SPLIT_NAVIGATOR url is "/" and it has to be used as an URL for SignInPage,
         // this navigator should be the only one in the navigation state after logout.
-        var hasUserLoggedOut = !authenticated && !!previousAuthenticated;
+        const hasUserLoggedOut = !authenticated && !!previousAuthenticated;
         if (!hasUserLoggedOut || !Navigation_1.navigationRef.isReady()) {
             return;
         }
-        var rootState = Navigation_1.navigationRef.getRootState();
-        var lastRoute = rootState.routes.at(-1);
+        const rootState = Navigation_1.navigationRef.getRootState();
+        const lastRoute = rootState.routes.at(-1);
         if (!lastRoute) {
             return;
         }
         // REPORTS_SPLIT_NAVIGATOR will persist after user logout, because it is used both for logged-in and logged-out users
         // That's why for ReportsSplit we need to explicitly clear params when resetting navigation state,
         // However in case other routes (related to login/logout) appear in nav state, then we want to preserve params for those
-        var isReportSplitNavigatorMounted = lastRoute.name === NAVIGATORS_1.default.REPORTS_SPLIT_NAVIGATOR;
-        Navigation_1.navigationRef.reset(__assign(__assign({}, rootState), { index: 0, routes: [
-                __assign(__assign({}, lastRoute), { params: isReportSplitNavigatorMounted ? undefined : lastRoute.params }),
-            ] }));
+        const isReportSplitNavigatorMounted = lastRoute.name === NAVIGATORS_1.default.REPORTS_SPLIT_NAVIGATOR;
+        Navigation_1.navigationRef.reset({
+            ...rootState,
+            index: 0,
+            routes: [
+                {
+                    ...lastRoute,
+                    params: isReportSplitNavigatorMounted ? undefined : lastRoute.params,
+                },
+            ],
+        });
     }, [authenticated, previousAuthenticated]);
-    var handleStateChange = function (state) {
-        var _a;
+    const handleStateChange = (state) => {
         if (!state) {
             return;
         }
-        var currentRoute = Navigation_1.navigationRef.getCurrentRoute();
-        Firebase_1.default.log("[NAVIGATION] screen: ".concat(currentRoute === null || currentRoute === void 0 ? void 0 : currentRoute.name, ", params: ").concat(JSON.stringify((_a = currentRoute === null || currentRoute === void 0 ? void 0 : currentRoute.params) !== null && _a !== void 0 ? _a : {})));
+        const currentRoute = Navigation_1.navigationRef.getCurrentRoute();
+        Firebase_1.default.log(`[NAVIGATION] screen: ${currentRoute?.name}, params: ${JSON.stringify(currentRoute?.params ?? {})}`);
         // Performance optimization to avoid context consumers to delay first render
-        setTimeout(function () {
-            currentReportIDValue === null || currentReportIDValue === void 0 ? void 0 : currentReportIDValue.updateCurrentReportID(state);
+        setTimeout(() => {
+            currentReportIDValue?.updateCurrentReportID(state);
         }, 0);
         parseAndLogRoute(state);
         // We want to clean saved scroll offsets for screens that aren't anymore in the state.

@@ -1,31 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var getButtonState_1 = require("@libs/getButtonState");
-var CONST_1 = require("@src/CONST");
-var Button_1 = require("./Button");
-var Hoverable_1 = require("./Hoverable");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
-var RenderHTML_1 = require("./RenderHTML");
-var Text_1 = require("./Text");
-var Tooltip_1 = require("./Tooltip");
-function Banner(_a) {
-    var text = _a.text, content = _a.content, _b = _a.icon, icon = _b === void 0 ? Expensicons.Exclamation : _b, onClose = _a.onClose, onPress = _a.onPress, onButtonPress = _a.onButtonPress, containerStyles = _a.containerStyles, textStyles = _a.textStyles, _c = _a.shouldRenderHTML, shouldRenderHTML = _c === void 0 ? false : _c, _d = _a.shouldShowIcon, shouldShowIcon = _d === void 0 ? false : _d, _e = _a.shouldShowCloseButton, shouldShowCloseButton = _e === void 0 ? false : _e, _f = _a.shouldShowButton, shouldShowButton = _f === void 0 ? false : _f;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const getButtonState_1 = require("@libs/getButtonState");
+const CONST_1 = require("@src/CONST");
+const Button_1 = require("./Button");
+const Hoverable_1 = require("./Hoverable");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
+const RenderHTML_1 = require("./RenderHTML");
+const Text_1 = require("./Text");
+const Tooltip_1 = require("./Tooltip");
+function Banner({ text, content, icon = Expensicons.Exclamation, onClose, onPress, onButtonPress, containerStyles, textStyles, shouldRenderHTML = false, shouldShowIcon = false, shouldShowCloseButton = false, shouldShowButton = false, }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     return (<Hoverable_1.default>
-            {function (isHovered) {
-            var isClickable = onClose && onPress;
-            var shouldHighlight = isClickable && isHovered;
+            {(isHovered) => {
+            const isClickable = onClose && onPress;
+            const shouldHighlight = isClickable && isHovered;
             return (<react_native_1.View style={[
                     styles.flexRow,
                     styles.alignItemsCenter,

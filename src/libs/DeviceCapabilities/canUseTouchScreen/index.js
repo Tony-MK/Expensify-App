@@ -5,9 +5,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent
  */
-var canUseTouchScreen = function () {
-    var _a;
-    var hasTouchScreen = false;
+const canUseTouchScreen = () => {
+    let hasTouchScreen = false;
     // TypeScript removed support for msMaxTouchPoints, this doesn't mean however that
     // this property doesn't exist - hence the use of ExtendedNavigator to ensure
     // that the functionality doesn't change
@@ -20,7 +19,7 @@ var canUseTouchScreen = function () {
     }
     else {
         // Same case as for Navigator - TypeScript thinks that matchMedia is obligatory property of window although it may not be
-        var mQ = (_a = window.matchMedia) === null || _a === void 0 ? void 0 : _a.call(window, '(pointer:coarse)');
+        const mQ = window.matchMedia?.('(pointer:coarse)');
         if (mQ && mQ.media === '(pointer:coarse)') {
             hasTouchScreen = !!mQ.matches;
         }
@@ -29,7 +28,7 @@ var canUseTouchScreen = function () {
         }
         else {
             // Only as a last resort, fall back to user agent sniffing
-            var UA = navigator.userAgent;
+            const UA = navigator.userAgent;
             hasTouchScreen = /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) || /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA);
         }
     }

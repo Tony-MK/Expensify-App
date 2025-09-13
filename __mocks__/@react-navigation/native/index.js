@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -26,53 +15,58 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.usePreventRemove = exports.useFocusEffect = exports.useRoute = exports.useScrollToTop = exports.useLinkTo = exports.useLinkProps = exports.useLinkBuilder = exports.ThemeProvider = exports.DefaultTheme = exports.DarkTheme = exports.ServerContainer = exports.NavigationContainer = exports.LinkingContext = exports.Link = exports.triggerTransitionEnd = exports.useLocale = exports.useNavigation = exports.useTheme = exports.useIsFocused = void 0;
-var createAddListenerMock_1 = require("../../../tests/utils/createAddListenerMock");
-var isJestEnv = process.env.NODE_ENV === 'test';
-var realReactNavigation = isJestEnv ? jest.requireActual('@react-navigation/native') : require('@react-navigation/native');
-var useIsFocused = isJestEnv ? realReactNavigation.useIsFocused : function () { return true; };
+const createAddListenerMock_1 = require("../../../tests/utils/createAddListenerMock");
+const isJestEnv = process.env.NODE_ENV === 'test';
+const realReactNavigation = isJestEnv ? jest.requireActual('@react-navigation/native') : require('@react-navigation/native');
+const useIsFocused = isJestEnv ? realReactNavigation.useIsFocused : () => true;
 exports.useIsFocused = useIsFocused;
-var useTheme = isJestEnv ? realReactNavigation.useTheme : function () { return ({}); };
+const useTheme = isJestEnv ? realReactNavigation.useTheme : () => ({});
 exports.useTheme = useTheme;
-var useLocale = isJestEnv ? realReactNavigation.useTheme : function () { return ({}); };
+const useLocale = isJestEnv ? realReactNavigation.useTheme : () => ({});
 exports.useLocale = useLocale;
-var _a = isJestEnv
+const { triggerTransitionEnd, addListener } = isJestEnv
     ? (0, createAddListenerMock_1.default)()
     : {
-        triggerTransitionEnd: function () { },
-        addListener: function () { },
-    }, triggerTransitionEnd = _a.triggerTransitionEnd, addListener = _a.addListener;
+        triggerTransitionEnd: () => { },
+        addListener: () => { },
+    };
 exports.triggerTransitionEnd = triggerTransitionEnd;
-var realOrMockedUseNavigation = isJestEnv ? realReactNavigation.useNavigation : {};
-var useNavigation = function () { return (__assign(__assign({}, realOrMockedUseNavigation), { navigate: isJestEnv ? jest.fn() : function () { }, getState: function () { return ({
+const realOrMockedUseNavigation = isJestEnv ? realReactNavigation.useNavigation : {};
+const useNavigation = () => ({
+    ...realOrMockedUseNavigation,
+    navigate: isJestEnv ? jest.fn() : () => { },
+    getState: () => ({
         routes: [],
-    }); }, addListener: addListener })); };
+    }),
+    addListener,
+});
 exports.useNavigation = useNavigation;
 __exportStar(require("@react-navigation/core"), exports);
-var Link = isJestEnv ? realReactNavigation.Link : function () { return null; };
+const Link = isJestEnv ? realReactNavigation.Link : () => null;
 exports.Link = Link;
-var LinkingContext = isJestEnv ? realReactNavigation.LinkingContext : function () { return null; };
+const LinkingContext = isJestEnv ? realReactNavigation.LinkingContext : () => null;
 exports.LinkingContext = LinkingContext;
-var NavigationContainer = isJestEnv ? realReactNavigation.NavigationContainer : function () { return null; };
+const NavigationContainer = isJestEnv ? realReactNavigation.NavigationContainer : () => null;
 exports.NavigationContainer = NavigationContainer;
-var ServerContainer = isJestEnv ? realReactNavigation.ServerContainer : function () { return null; };
+const ServerContainer = isJestEnv ? realReactNavigation.ServerContainer : () => null;
 exports.ServerContainer = ServerContainer;
-var DarkTheme = isJestEnv ? realReactNavigation.DarkTheme : {};
+const DarkTheme = isJestEnv ? realReactNavigation.DarkTheme : {};
 exports.DarkTheme = DarkTheme;
-var DefaultTheme = isJestEnv ? realReactNavigation.DefaultTheme : {};
+const DefaultTheme = isJestEnv ? realReactNavigation.DefaultTheme : {};
 exports.DefaultTheme = DefaultTheme;
-var ThemeProvider = isJestEnv ? realReactNavigation.ThemeProvider : function () { return null; };
+const ThemeProvider = isJestEnv ? realReactNavigation.ThemeProvider : () => null;
 exports.ThemeProvider = ThemeProvider;
-var useLinkBuilder = isJestEnv ? realReactNavigation.useLinkBuilder : function () { return null; };
+const useLinkBuilder = isJestEnv ? realReactNavigation.useLinkBuilder : () => null;
 exports.useLinkBuilder = useLinkBuilder;
-var useLinkProps = isJestEnv ? realReactNavigation.useLinkProps : function () { return null; };
+const useLinkProps = isJestEnv ? realReactNavigation.useLinkProps : () => null;
 exports.useLinkProps = useLinkProps;
-var useLinkTo = isJestEnv ? realReactNavigation.useLinkTo : function () { return null; };
+const useLinkTo = isJestEnv ? realReactNavigation.useLinkTo : () => null;
 exports.useLinkTo = useLinkTo;
-var useScrollToTop = isJestEnv ? realReactNavigation.useScrollToTop : function () { return null; };
+const useScrollToTop = isJestEnv ? realReactNavigation.useScrollToTop : () => null;
 exports.useScrollToTop = useScrollToTop;
-var useRoute = isJestEnv ? realReactNavigation.useRoute : function () { return ({ params: {} }); };
+const useRoute = isJestEnv ? realReactNavigation.useRoute : () => ({ params: {} });
 exports.useRoute = useRoute;
-var useFocusEffect = isJestEnv ? realReactNavigation.useFocusEffect : function (callback) { return callback(); };
+const useFocusEffect = isJestEnv ? realReactNavigation.useFocusEffect : (callback) => callback();
 exports.useFocusEffect = useFocusEffect;
-var usePreventRemove = isJestEnv ? jest.fn() : function () { };
+const usePreventRemove = isJestEnv ? jest.fn() : () => { };
 exports.usePreventRemove = usePreventRemove;

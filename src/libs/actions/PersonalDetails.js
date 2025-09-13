@@ -1,13 +1,4 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearAvatarErrors = clearAvatarErrors;
 exports.deleteAvatar = deleteAvatar;
@@ -25,137 +16,131 @@ exports.updatePronouns = updatePronouns;
 exports.updateSelectedTimezone = updateSelectedTimezone;
 exports.updatePersonalDetailsAndShipExpensifyCards = updatePersonalDetailsAndShipExpensifyCards;
 exports.clearPersonalDetailsErrors = clearPersonalDetailsErrors;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var DateUtils_1 = require("@libs/DateUtils");
-var ErrorUtils = require("@libs/ErrorUtils");
-var LoginUtils = require("@libs/LoginUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PersonalDetailsUtils = require("@libs/PersonalDetailsUtils");
-var UserUtils = require("@libs/UserUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var currentUserEmail = '';
-var currentUserAccountID = -1;
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const DateUtils_1 = require("@libs/DateUtils");
+const ErrorUtils = require("@libs/ErrorUtils");
+const LoginUtils = require("@libs/LoginUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PersonalDetailsUtils = require("@libs/PersonalDetailsUtils");
+const UserUtils = require("@libs/UserUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+let currentUserEmail = '';
+let currentUserAccountID = -1;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (val) {
-        var _a, _b;
-        currentUserEmail = (_a = val === null || val === void 0 ? void 0 : val.email) !== null && _a !== void 0 ? _a : '';
-        currentUserAccountID = (_b = val === null || val === void 0 ? void 0 : val.accountID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID;
+    callback: (val) => {
+        currentUserEmail = val?.email ?? '';
+        currentUserAccountID = val?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
     },
 });
 function updatePronouns(pronouns) {
-    var _a;
     if (!currentUserAccountID) {
         return;
     }
-    var parameters = { pronouns: pronouns };
+    const parameters = { pronouns };
     API.write(types_1.WRITE_COMMANDS.UPDATE_PRONOUNS, parameters, {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-                value: (_a = {},
-                    _a[currentUserAccountID] = {
-                        pronouns: pronouns,
+                value: {
+                    [currentUserAccountID]: {
+                        pronouns,
                     },
-                    _a),
+                },
             },
         ],
     });
 }
 function setDisplayName(firstName, lastName, formatPhoneNumber) {
-    var _a;
     if (!currentUserAccountID) {
         return;
     }
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, (_a = {},
-        _a[currentUserAccountID] = {
-            firstName: firstName,
-            lastName: lastName,
-            displayName: PersonalDetailsUtils.createDisplayName(currentUserEmail !== null && currentUserEmail !== void 0 ? currentUserEmail : '', {
-                firstName: firstName,
-                lastName: lastName,
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, {
+        [currentUserAccountID]: {
+            firstName,
+            lastName,
+            displayName: PersonalDetailsUtils.createDisplayName(currentUserEmail ?? '', {
+                firstName,
+                lastName,
             }, formatPhoneNumber),
         },
-        _a));
+    });
 }
 function updateDisplayName(firstName, lastName, formatPhoneNumber) {
-    var _a;
     if (!currentUserAccountID) {
         return;
     }
-    var parameters = { firstName: firstName, lastName: lastName };
+    const parameters = { firstName, lastName };
     API.write(types_1.WRITE_COMMANDS.UPDATE_DISPLAY_NAME, parameters, {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-                value: (_a = {},
-                    _a[currentUserAccountID] = {
-                        firstName: firstName,
-                        lastName: lastName,
-                        displayName: PersonalDetailsUtils.createDisplayName(currentUserEmail !== null && currentUserEmail !== void 0 ? currentUserEmail : '', {
-                            firstName: firstName,
-                            lastName: lastName,
+                value: {
+                    [currentUserAccountID]: {
+                        firstName,
+                        lastName,
+                        displayName: PersonalDetailsUtils.createDisplayName(currentUserEmail ?? '', {
+                            firstName,
+                            lastName,
                         }, formatPhoneNumber),
                     },
-                    _a),
+                },
             },
         ],
     });
 }
 function updateLegalName(legalFirstName, legalLastName, formatPhoneNumber, currentUserPersonalDetail) {
-    var _a;
-    var parameters = { legalFirstName: legalFirstName, legalLastName: legalLastName };
-    var optimisticData = [
+    const parameters = { legalFirstName, legalLastName };
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS,
             value: {
-                legalFirstName: legalFirstName,
-                legalLastName: legalLastName,
+                legalFirstName,
+                legalLastName,
             },
         },
     ];
     // In case the user does not have a display name, we will update the display name based on the legal name
-    if (!(currentUserPersonalDetail === null || currentUserPersonalDetail === void 0 ? void 0 : currentUserPersonalDetail.firstName) && !(currentUserPersonalDetail === null || currentUserPersonalDetail === void 0 ? void 0 : currentUserPersonalDetail.lastName)) {
+    if (!currentUserPersonalDetail?.firstName && !currentUserPersonalDetail?.lastName) {
         optimisticData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-            value: (_a = {},
-                _a[currentUserAccountID] = {
-                    displayName: PersonalDetailsUtils.createDisplayName(currentUserEmail !== null && currentUserEmail !== void 0 ? currentUserEmail : '', {
+            value: {
+                [currentUserAccountID]: {
+                    displayName: PersonalDetailsUtils.createDisplayName(currentUserEmail ?? '', {
                         firstName: legalFirstName,
                         lastName: legalLastName,
                     }, formatPhoneNumber),
                     firstName: legalFirstName,
                     lastName: legalLastName,
                 },
-                _a),
+            },
         });
     }
     API.write(types_1.WRITE_COMMANDS.UPDATE_LEGAL_NAME, parameters, {
-        optimisticData: optimisticData,
+        optimisticData,
     });
     Navigation_1.default.goBack();
 }
 /**
  * @param dob - date of birth
  */
-function updateDateOfBirth(_a) {
-    var dob = _a.dob;
-    var parameters = { dob: dob };
+function updateDateOfBirth({ dob }) {
+    const parameters = { dob };
     API.write(types_1.WRITE_COMMANDS.UPDATE_DATE_OF_BIRTH, parameters, {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS,
                 value: {
-                    dob: dob,
+                    dob,
                 },
             },
         ],
@@ -163,14 +148,14 @@ function updateDateOfBirth(_a) {
     Navigation_1.default.goBack();
 }
 function updatePhoneNumber(phoneNumber, currentPhoneNumber) {
-    var parameters = { phoneNumber: phoneNumber };
+    const parameters = { phoneNumber };
     API.write(types_1.WRITE_COMMANDS.UPDATE_PHONE_NUMBER, parameters, {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS,
                 value: {
-                    phoneNumber: phoneNumber,
+                    phoneNumber,
                 },
             },
         ],
@@ -196,7 +181,7 @@ function clearPhoneNumberError() {
     });
 }
 function updateAddress(addresses, street, street2, city, state, zip, country) {
-    var parameters = {
+    const parameters = {
         homeAddressStreet: street,
         addressStreet2: street2,
         homeAddressCity: city,
@@ -215,16 +200,17 @@ function updateAddress(addresses, street, street2, city, state, zip, country) {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS,
                 value: {
-                    addresses: __spreadArray(__spreadArray([], addresses, true), [
+                    addresses: [
+                        ...addresses,
                         {
                             street: PersonalDetailsUtils.getFormattedStreet(street, street2),
-                            city: city,
-                            state: state,
-                            zip: zip,
-                            country: country,
+                            city,
+                            state,
+                            zip,
+                            country,
                             current: true,
                         },
-                    ], false),
+                    ],
                 },
             },
         ],
@@ -236,12 +222,11 @@ function updateAddress(addresses, street, street2, city, state, zip, country) {
  * selected timezone if set to automatically update.
  */
 function updateAutomaticTimezone(timezone) {
-    var _a;
     if (!currentUserAccountID) {
         return;
     }
-    var formattedTimezone = DateUtils_1.default.formatToSupportedTimezone(timezone);
-    var parameters = {
+    const formattedTimezone = DateUtils_1.default.formatToSupportedTimezone(timezone);
+    const parameters = {
         timezone: JSON.stringify(formattedTimezone),
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_AUTOMATIC_TIMEZONE, parameters, {
@@ -249,11 +234,11 @@ function updateAutomaticTimezone(timezone) {
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-                value: (_a = {},
-                    _a[currentUserAccountID] = {
+                value: {
+                    [currentUserAccountID]: {
                         timezone: formattedTimezone,
                     },
-                    _a),
+                },
             },
         ],
     });
@@ -263,11 +248,10 @@ function updateAutomaticTimezone(timezone) {
  * initial Timezone page.
  */
 function updateSelectedTimezone(selectedTimezone) {
-    var _a;
-    var timezone = {
+    const timezone = {
         selected: selectedTimezone,
     };
-    var parameters = {
+    const parameters = {
         timezone: JSON.stringify(timezone),
     };
     if (currentUserAccountID) {
@@ -276,11 +260,11 @@ function updateSelectedTimezone(selectedTimezone) {
                 {
                     onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                     key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-                    value: (_a = {},
-                        _a[currentUserAccountID] = {
-                            timezone: timezone,
+                    value: {
+                        [currentUserAccountID]: {
+                            timezone,
                         },
-                        _a),
+                    },
                 },
             ],
         });
@@ -293,58 +277,55 @@ function updateSelectedTimezone(selectedTimezone) {
  * but the profile page will use other info (e.g. contact methods and pronouns) if they are already available in Onyx
  */
 function openPublicProfilePage(accountID) {
-    var _a, _b, _c;
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_METADATA,
-            value: (_a = {},
-                _a[accountID] = {
+            value: {
+                [accountID]: {
                     isLoading: true,
                 },
-                _a),
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_METADATA,
-            value: (_b = {},
-                _b[accountID] = {
+            value: {
+                [accountID]: {
                     isLoading: false,
                 },
-                _b),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_METADATA,
-            value: (_c = {},
-                _c[accountID] = {
+            value: {
+                [accountID]: {
                     isLoading: false,
                 },
-                _c),
+            },
         },
     ];
-    var parameters = { accountID: accountID };
-    API.read(types_1.READ_COMMANDS.OPEN_PUBLIC_PROFILE_PAGE, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    const parameters = { accountID };
+    API.read(types_1.READ_COMMANDS.OPEN_PUBLIC_PROFILE_PAGE, parameters, { optimisticData, successData, failureData });
 }
 /**
  * Updates the user's avatar image
  */
 function updateAvatar(file, currentUserPersonalDetails) {
-    var _a, _b, _c;
-    var _d;
     if (!currentUserAccountID) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-            value: (_a = {},
-                _a[currentUserAccountID] = {
+            value: {
+                [currentUserAccountID]: {
                     avatar: file.uri,
                     avatarThumbnail: file.uri,
                     originalFileName: file.name,
@@ -357,86 +338,84 @@ function updateAvatar(file, currentUserPersonalDetails) {
                     },
                     fallbackIcon: file.uri,
                 },
-                _a),
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-            value: (_b = {},
-                _b[currentUserAccountID] = {
+            value: {
+                [currentUserAccountID]: {
                     pendingFields: {
                         avatar: null,
                     },
                 },
-                _b),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-            value: (_c = {},
-                _c[currentUserAccountID] = {
-                    avatar: currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.avatar,
-                    avatarThumbnail: (_d = currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.avatarThumbnail) !== null && _d !== void 0 ? _d : currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.avatar,
+            value: {
+                [currentUserAccountID]: {
+                    avatar: currentUserPersonalDetails?.avatar,
+                    avatarThumbnail: currentUserPersonalDetails?.avatarThumbnail ?? currentUserPersonalDetails?.avatar,
                     pendingFields: {
                         avatar: null,
                     },
                 },
-                _c),
+            },
         },
     ];
-    var parameters = { file: file };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_USER_AVATAR, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    const parameters = { file };
+    API.write(types_1.WRITE_COMMANDS.UPDATE_USER_AVATAR, parameters, { optimisticData, successData, failureData });
 }
 /**
  * Replaces the user's avatar image with a default avatar
  */
 function deleteAvatar(currentUserPersonalDetails) {
-    var _a, _b;
     if (!currentUserAccountID) {
         return;
     }
     // We want to use the old dot avatar here as this affects both platforms.
-    var defaultAvatar = UserUtils.getDefaultAvatarURL(currentUserAccountID);
-    var optimisticData = [
+    const defaultAvatar = UserUtils.getDefaultAvatarURL(currentUserAccountID);
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-            value: (_a = {},
-                _a[currentUserAccountID] = {
+            value: {
+                [currentUserAccountID]: {
                     avatar: defaultAvatar,
                     fallbackIcon: null,
                 },
-                _a),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-            value: (_b = {},
-                _b[currentUserAccountID] = {
-                    avatar: currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.avatar,
-                    fallbackIcon: currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.fallbackIcon,
+            value: {
+                [currentUserAccountID]: {
+                    avatar: currentUserPersonalDetails?.avatar,
+                    fallbackIcon: currentUserPersonalDetails?.fallbackIcon,
                 },
-                _b),
+            },
         },
     ];
-    API.write(types_1.WRITE_COMMANDS.DELETE_USER_AVATAR, null, { optimisticData: optimisticData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.DELETE_USER_AVATAR, null, { optimisticData, failureData });
 }
 /**
  * Clear error and pending fields for the current user's avatar
  */
 function clearAvatarErrors() {
-    var _a;
     if (!currentUserAccountID) {
         return;
     }
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, (_a = {},
-        _a[currentUserAccountID] = {
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, {
+        [currentUserAccountID]: {
             errorFields: {
                 avatar: null,
             },
@@ -444,7 +423,7 @@ function clearAvatarErrors() {
                 avatar: null,
             },
         },
-        _a));
+    });
 }
 /**
  * Clear errors for the current user's personal details
@@ -455,19 +434,18 @@ function clearPersonalDetailsErrors() {
     });
 }
 function updatePersonalDetailsAndShipExpensifyCards(values, validateCode, countryCode) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-    var parameters = {
-        legalFirstName: (_b = (_a = values.legalFirstName) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : '',
-        legalLastName: (_d = (_c = values.legalLastName) === null || _c === void 0 ? void 0 : _c.trim()) !== null && _d !== void 0 ? _d : '',
-        phoneNumber: LoginUtils.appendCountryCodeWithCountryCode((_f = (_e = values.phoneNumber) === null || _e === void 0 ? void 0 : _e.trim()) !== null && _f !== void 0 ? _f : '', countryCode),
+    const parameters = {
+        legalFirstName: values.legalFirstName?.trim() ?? '',
+        legalLastName: values.legalLastName?.trim() ?? '',
+        phoneNumber: LoginUtils.appendCountryCodeWithCountryCode(values.phoneNumber?.trim() ?? '', countryCode),
         addressCity: values.city.trim(),
-        addressStreet: (_h = (_g = values.addressLine1) === null || _g === void 0 ? void 0 : _g.trim()) !== null && _h !== void 0 ? _h : '',
-        addressStreet2: (_k = (_j = values.addressLine2) === null || _j === void 0 ? void 0 : _j.trim()) !== null && _k !== void 0 ? _k : '',
-        addressZip: (_m = (_l = values.zipPostCode) === null || _l === void 0 ? void 0 : _l.trim().toUpperCase()) !== null && _m !== void 0 ? _m : '',
+        addressStreet: values.addressLine1?.trim() ?? '',
+        addressStreet2: values.addressLine2?.trim() ?? '',
+        addressZip: values.zipPostCode?.trim().toUpperCase() ?? '',
         addressCountry: values.country,
         addressState: values.state.trim(),
         dob: values.dob,
-        validateCode: validateCode,
+        validateCode,
     };
     API.write(types_1.WRITE_COMMANDS.SET_PERSONAL_DETAILS_AND_SHIP_EXPENSIFY_CARDS, parameters, {
         optimisticData: [

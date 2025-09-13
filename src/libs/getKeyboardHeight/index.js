@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var getKeyboardHeight = function (height) { return height; };
+const getKeyboardHeight = (height) => height;
 exports.default = getKeyboardHeight;

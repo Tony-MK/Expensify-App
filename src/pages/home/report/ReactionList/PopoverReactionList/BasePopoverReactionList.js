@@ -1,30 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var PopoverWithMeasuredContent_1 = require("@components/PopoverWithMeasuredContent");
-var withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
-var useBasePopoverReactionList_1 = require("@hooks/useBasePopoverReactionList");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var BaseReactionList_1 = require("@pages/home/report/ReactionList/BaseReactionList");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function BasePopoverReactionList(_a, ref) {
-    var emojiName = _a.emojiName, reportActionID = _a.reportActionID, currentUserPersonalDetails = _a.currentUserPersonalDetails;
-    var preferredLocale = (0, useLocalize_1.default)().preferredLocale;
+const react_1 = require("react");
+const PopoverWithMeasuredContent_1 = require("@components/PopoverWithMeasuredContent");
+const withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
+const useBasePopoverReactionList_1 = require("@hooks/useBasePopoverReactionList");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const BaseReactionList_1 = require("@pages/home/report/ReactionList/BaseReactionList");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function BasePopoverReactionList({ emojiName, reportActionID, currentUserPersonalDetails }, ref) {
+    const { preferredLocale } = (0, useLocalize_1.default)();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var reactionReportActionID = reportActionID || CONST_1.default.DEFAULT_NUMBER_ID;
-    var emojiReactions = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS_REACTIONS).concat(reactionReportActionID), { canBeMissing: true })[0];
-    var _b = (0, useBasePopoverReactionList_1.default)({
-        emojiName: emojiName,
-        emojiReactions: emojiReactions,
+    const reactionReportActionID = reportActionID || CONST_1.default.DEFAULT_NUMBER_ID;
+    const [emojiReactions] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS_REACTIONS}${reactionReportActionID}`, { canBeMissing: true });
+    const { isPopoverVisible, hideReactionList, showReactionList, popoverAnchorPosition, reactionListRef, getReactionInformation } = (0, useBasePopoverReactionList_1.default)({
+        emojiName,
+        emojiReactions,
         accountID: currentUserPersonalDetails.accountID,
-        reportActionID: reportActionID,
-        preferredLocale: preferredLocale,
-    }), isPopoverVisible = _b.isPopoverVisible, hideReactionList = _b.hideReactionList, showReactionList = _b.showReactionList, popoverAnchorPosition = _b.popoverAnchorPosition, reactionListRef = _b.reactionListRef, getReactionInformation = _b.getReactionInformation;
+        reportActionID,
+        preferredLocale,
+    });
     // Get the reaction information
-    var _c = getReactionInformation(), emojiCodes = _c.emojiCodes, reactionCount = _c.reactionCount, hasUserReacted = _c.hasUserReacted, users = _c.users, isReady = _c.isReady;
-    (0, react_1.useImperativeHandle)(ref, function () { return ({ hideReactionList: hideReactionList, showReactionList: showReactionList }); });
+    const { emojiCodes, reactionCount, hasUserReacted, users, isReady } = getReactionInformation();
+    (0, react_1.useImperativeHandle)(ref, () => ({ hideReactionList, showReactionList }));
     return (<PopoverWithMeasuredContent_1.default isVisible={isPopoverVisible && isReady} onClose={hideReactionList} anchorPosition={popoverAnchorPosition} animationIn="fadeIn" disableAnimation={false} shouldSetModalVisibility={false} fullscreen anchorRef={reactionListRef}>
             <BaseReactionList_1.default isVisible users={users} emojiName={emojiName} emojiCodes={emojiCodes} emojiCount={reactionCount} onClose={hideReactionList} hasUserReacted={hasUserReacted}/>
         </PopoverWithMeasuredContent_1.default>);

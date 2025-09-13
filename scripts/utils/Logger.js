@@ -1,71 +1,38 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.formatLink = exports.success = exports.error = exports.note = exports.warn = exports.info = exports.log = void 0;
-var COLOR_DIM = '\x1b[2m';
-var COLOR_RESET = '\x1b[0m';
-var COLOR_YELLOW = '\x1b[33m';
-var COLOR_RED = '\x1b[31m';
-var COLOR_GREEN = '\x1b[32m';
-var log = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    console.debug.apply(console, args);
+const COLOR_DIM = '\x1b[2m';
+const COLOR_RESET = '\x1b[0m';
+const COLOR_YELLOW = '\x1b[33m';
+const COLOR_RED = '\x1b[31m';
+const COLOR_GREEN = '\x1b[32m';
+const log = (...args) => {
+    console.debug(...args);
 };
 exports.log = log;
-var info = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    log.apply(void 0, __spreadArray(['▶️'], args, false));
+const info = (...args) => {
+    log('▶️', ...args);
 };
 exports.info = info;
-var success = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray(['✅', COLOR_GREEN], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const success = (...args) => {
+    const lines = ['✅', COLOR_GREEN, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.success = success;
-var warn = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray(['⚠️', COLOR_YELLOW], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const warn = (...args) => {
+    const lines = ['⚠️', COLOR_YELLOW, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.warn = warn;
-var note = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray([COLOR_DIM], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const note = (...args) => {
+    const lines = [COLOR_DIM, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.note = note;
-var error = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray(['🔴', COLOR_RED], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const error = (...args) => {
+    const lines = ['🔴', COLOR_RED, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.error = error;
-var formatLink = function (name, url) { return "\u001B]8;;".concat(url, "\u001B\\").concat(name, "\u001B]8;;\u001B\\"); };
+const formatLink = (name, url) => `\x1b]8;;${url}\x1b\\${name}\x1b]8;;\x1b\\`;
 exports.formatLink = formatLink;

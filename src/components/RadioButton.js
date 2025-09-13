@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
-function RadioButton(_a) {
-    var isChecked = _a.isChecked, onPress = _a.onPress, accessibilityLabel = _a.accessibilityLabel, _b = _a.hasError, hasError = _b === void 0 ? false : _b, _c = _a.disabled, disabled = _c === void 0 ? false : _c, _d = _a.shouldUseNewStyle, shouldUseNewStyle = _d === void 0 ? false : _d;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
+const react_1 = require("react");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
+function RadioButton({ isChecked, onPress, accessibilityLabel, hasError = false, disabled = false, shouldUseNewStyle = false }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
     if (shouldUseNewStyle) {
         return (<PressableWithFeedback_1.default disabled={disabled} onPress={onPress} hoverDimmingValue={1} pressDimmingValue={1} accessibilityLabel={accessibilityLabel} role={CONST_1.default.ROLE.RADIO} style={[
                 styles.newRadioButtonContainer,

@@ -1,71 +1,69 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var home_fade_gradient_svg_1 = require("@assets/images/home-fade-gradient.svg");
-var ImageSVG_1 = require("@components/ImageSVG");
-var ScrollView_1 = require("@components/ScrollView");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSafeAreaInsets_1 = require("@hooks/useSafeAreaInsets");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var Browser_1 = require("@libs/Browser");
-var DomUtils_1 = require("@libs/DomUtils");
-var getPlatform_1 = require("@libs/getPlatform");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const home_fade_gradient_svg_1 = require("@assets/images/home-fade-gradient.svg");
+const ImageSVG_1 = require("@components/ImageSVG");
+const ScrollView_1 = require("@components/ScrollView");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSafeAreaInsets_1 = require("@hooks/useSafeAreaInsets");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const Browser_1 = require("@libs/Browser");
+const DomUtils_1 = require("@libs/DomUtils");
+const getPlatform_1 = require("@libs/getPlatform");
 // eslint-disable-next-line no-restricted-imports
-var theme_1 = require("@styles/theme");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var BackgroundImage_1 = require("./BackgroundImage");
-var Footer_1 = require("./Footer");
-var SignInPageContent_1 = require("./SignInPageContent");
-var SignInPageHero_1 = require("./SignInPageHero");
-var signInPageStyles_1 = require("./signInPageStyles");
-function SignInPageLayout(_a) {
-    var customHeadline = _a.customHeadline, customHeroBody = _a.customHeroBody, _b = _a.shouldShowWelcomeHeader, shouldShowWelcomeHeader = _b === void 0 ? false : _b, welcomeHeader = _a.welcomeHeader, _c = _a.welcomeText, welcomeText = _c === void 0 ? '' : _c, _d = _a.shouldShowWelcomeText, shouldShowWelcomeText = _d === void 0 ? false : _d, _e = _a.navigateFocus, navigateFocus = _e === void 0 ? function () { } : _e, children = _a.children, ref = _a.ref;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var _f = (0, useSafeAreaInsets_1.default)(), topInsets = _f.top, bottomInsets = _f.bottom;
-    var scrollViewRef = (0, react_1.useRef)(null);
-    var windowHeight = (0, useWindowDimensions_1.default)().windowHeight;
-    var _g = (0, useResponsiveLayout_1.default)(), shouldUseNarrowLayout = _g.shouldUseNarrowLayout, isMediumScreenWidth = _g.isMediumScreenWidth, isLargeScreenWidth = _g.isLargeScreenWidth;
-    var _h = (0, react_1.useMemo)(function () { return ({
+const theme_1 = require("@styles/theme");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const BackgroundImage_1 = require("./BackgroundImage");
+const Footer_1 = require("./Footer");
+const SignInPageContent_1 = require("./SignInPageContent");
+const SignInPageHero_1 = require("./SignInPageHero");
+const signInPageStyles_1 = require("./signInPageStyles");
+function SignInPageLayout({ customHeadline, customHeroBody, shouldShowWelcomeHeader = false, welcomeHeader, welcomeText = '', shouldShowWelcomeText = false, navigateFocus = () => { }, children, ref, }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { top: topInsets, bottom: bottomInsets } = (0, useSafeAreaInsets_1.default)();
+    const scrollViewRef = (0, react_1.useRef)(null);
+    const { windowHeight } = (0, useWindowDimensions_1.default)();
+    const { shouldUseNarrowLayout, isMediumScreenWidth, isLargeScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const { containerStyles, contentContainerStyles } = (0, react_1.useMemo)(() => ({
         containerStyles: shouldUseNarrowLayout ? [styles.flex1] : [styles.flex1, styles.signInPageInner],
         contentContainerStyles: [styles.flex1, shouldUseNarrowLayout ? styles.flexColumn : styles.flexRow],
-    }); }, [shouldUseNarrowLayout, styles]), containerStyles = _h.containerStyles, contentContainerStyles = _h.contentContainerStyles;
+    }), [shouldUseNarrowLayout, styles]);
     // To scroll on both mobile and web, we need to set the container height manually
-    var containerHeight = windowHeight - topInsets - bottomInsets;
-    var scrollPageToTop = function (animated) {
-        if (animated === void 0) { animated = false; }
+    const containerHeight = windowHeight - topInsets - bottomInsets;
+    const scrollPageToTop = (animated = false) => {
         if (!scrollViewRef.current) {
             return;
         }
-        scrollViewRef.current.scrollTo({ y: 0, animated: animated });
+        scrollViewRef.current.scrollTo({ y: 0, animated });
     };
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        scrollPageToTop: scrollPageToTop,
-    }); });
-    var scrollViewStyles = (0, react_1.useMemo)(function () { return (0, signInPageStyles_1.default)(styles); }, [styles]);
-    var backgroundImageHeight = Math.max(variables_1.default.signInContentMinHeight, containerHeight);
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        scrollPageToTop,
+    }));
+    const scrollViewStyles = (0, react_1.useMemo)(() => (0, signInPageStyles_1.default)(styles), [styles]);
+    const backgroundImageHeight = Math.max(variables_1.default.signInContentMinHeight, containerHeight);
     /*
     SignInPageLayout always has a dark theme regardless of the app theme. ThemeProvider sets auto-fill input styles globally so different ThemeProviders conflict and auto-fill input styles are incorrectly applied for this component.
     Add a class to `body` when this component stays mounted and remove it when the component dismounts.
     A new styleID is added with dark theme text with more specific css selector using this added cssClass.
     */
-    var cssClass = 'sign-in-page-layout';
-    DomUtils_1.default.addCSS(DomUtils_1.default.getAutofilledInputStyle(theme_1.default[CONST_1.default.THEME.DARK].text, ".".concat(cssClass)), 'sign-in-autofill-input');
-    (0, react_1.useEffect)(function () {
-        var isWeb = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.WEB;
-        var isDesktop = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.DESKTOP;
+    const cssClass = 'sign-in-page-layout';
+    DomUtils_1.default.addCSS(DomUtils_1.default.getAutofilledInputStyle(theme_1.default[CONST_1.default.THEME.DARK].text, `.${cssClass}`), 'sign-in-autofill-input');
+    (0, react_1.useEffect)(() => {
+        const isWeb = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.WEB;
+        const isDesktop = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.DESKTOP;
         if (!isWeb && !isDesktop) {
             return;
         }
         // add css class to body only for web and desktop
         document.body.classList.add(cssClass);
-        return function () {
+        return () => {
             document.body.classList.remove(cssClass);
         };
     }, []);

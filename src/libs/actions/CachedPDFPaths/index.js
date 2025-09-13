@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearByKey = exports.add = void 0;
-var add = function () { return Promise.resolve(); };
+const add = () => Promise.resolve();
 exports.add = add;
-var clearByKey = function () { };
+const clearByKey = () => { };
 exports.clearByKey = clearByKey;

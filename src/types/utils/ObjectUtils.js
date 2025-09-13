@@ -5,5 +5,5 @@ function typedEntries(obj) {
     return Object.entries(obj);
 }
 exports.default = {
-    typedEntries: typedEntries,
+    typedEntries,
 };

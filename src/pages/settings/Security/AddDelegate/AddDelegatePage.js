@@ -1,102 +1,88 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var OptionListContextProvider_1 = require("@components/OptionListContextProvider");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SelectionList_1 = require("@components/SelectionList");
-var UserListItem_1 = require("@components/SelectionList/UserListItem");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Report_1 = require("@libs/actions/Report");
-var memoize_1 = require("@libs/memoize");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var memoizedGetValidOptions = (0, memoize_1.default)(OptionsListUtils_1.getValidOptions, { maxSize: 5, monitoringName: 'AddDelegatePage.getValidOptions' });
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const OptionListContextProvider_1 = require("@components/OptionListContextProvider");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SelectionList_1 = require("@components/SelectionList");
+const UserListItem_1 = require("@components/SelectionList/UserListItem");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Report_1 = require("@libs/actions/Report");
+const memoize_1 = require("@libs/memoize");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const memoizedGetValidOptions = (0, memoize_1.default)(OptionsListUtils_1.getValidOptions, { maxSize: 5, monitoringName: 'AddDelegatePage.getValidOptions' });
 function useOptions() {
-    var _a;
-    var betas = (0, OnyxListItemProvider_1.useBetas)();
-    var _b = (0, react_1.useState)(true), isLoading = _b[0], setIsLoading = _b[1];
-    var _c = (0, useDebouncedState_1.default)(''), searchValue = _c[0], debouncedSearchValue = _c[1], setSearchValue = _c[2];
-    var _d = (0, OptionListContextProvider_1.useOptionsList)(), optionsList = _d.options, areOptionsInitialized = _d.areOptionsInitialized;
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var countryCode = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false })[0];
-    var existingDelegates = (0, react_1.useMemo)(function () {
-        var _a, _b;
-        return (_b = (_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegates) === null || _b === void 0 ? void 0 : _b.reduce(function (prev, _a) {
-            var email = _a.email;
-            // eslint-disable-next-line no-param-reassign
-            prev[email] = true;
-            return prev;
-        }, {});
-    }, [(_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegates]);
-    var defaultOptions = (0, react_1.useMemo)(function () {
-        var _a = memoizedGetValidOptions({
+    const betas = (0, OnyxListItemProvider_1.useBetas)();
+    const [isLoading, setIsLoading] = (0, react_1.useState)(true);
+    const [searchValue, debouncedSearchValue, setSearchValue] = (0, useDebouncedState_1.default)('');
+    const { options: optionsList, areOptionsInitialized } = (0, OptionListContextProvider_1.useOptionsList)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [countryCode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false });
+    const existingDelegates = (0, react_1.useMemo)(() => account?.delegatedAccess?.delegates?.reduce((prev, { email }) => {
+        // eslint-disable-next-line no-param-reassign
+        prev[email] = true;
+        return prev;
+    }, {}), [account?.delegatedAccess?.delegates]);
+    const defaultOptions = (0, react_1.useMemo)(() => {
+        const { recentReports, personalDetails, userToInvite, currentUserOption } = memoizedGetValidOptions({
             reports: optionsList.reports,
             personalDetails: optionsList.personalDetails,
         }, {
-            betas: betas,
-            excludeLogins: __assign(__assign({}, CONST_1.default.EXPENSIFY_EMAILS_OBJECT), existingDelegates),
-        }), recentReports = _a.recentReports, personalDetails = _a.personalDetails, userToInvite = _a.userToInvite, currentUserOption = _a.currentUserOption;
-        var headerMessage = (0, OptionsListUtils_1.getHeaderMessage)(((recentReports === null || recentReports === void 0 ? void 0 : recentReports.length) || 0) + ((personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails.length) || 0) !== 0, !!userToInvite, '');
+            betas,
+            excludeLogins: { ...CONST_1.default.EXPENSIFY_EMAILS_OBJECT, ...existingDelegates },
+        });
+        const headerMessage = (0, OptionsListUtils_1.getHeaderMessage)((recentReports?.length || 0) + (personalDetails?.length || 0) !== 0, !!userToInvite, '');
         if (isLoading) {
             // eslint-disable-next-line react-compiler/react-compiler
             setIsLoading(false);
         }
         return {
-            userToInvite: userToInvite,
-            recentReports: recentReports,
-            personalDetails: personalDetails,
-            currentUserOption: currentUserOption,
-            headerMessage: headerMessage,
+            userToInvite,
+            recentReports,
+            personalDetails,
+            currentUserOption,
+            headerMessage,
         };
     }, [optionsList.reports, optionsList.personalDetails, betas, existingDelegates, isLoading]);
-    var options = (0, react_1.useMemo)(function () {
-        var _a, _b;
-        var filteredOptions = (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchValue.trim(), countryCode, {
-            excludeLogins: __assign(__assign({}, CONST_1.default.EXPENSIFY_EMAILS_OBJECT), existingDelegates),
+    const options = (0, react_1.useMemo)(() => {
+        const filteredOptions = (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchValue.trim(), countryCode, {
+            excludeLogins: { ...CONST_1.default.EXPENSIFY_EMAILS_OBJECT, ...existingDelegates },
             maxRecentReportsToShow: CONST_1.default.IOU.MAX_RECENT_REPORTS_TO_SHOW,
         });
-        var headerMessage = (0, OptionsListUtils_1.getHeaderMessage)((((_a = filteredOptions.recentReports) === null || _a === void 0 ? void 0 : _a.length) || 0) + (((_b = filteredOptions.personalDetails) === null || _b === void 0 ? void 0 : _b.length) || 0) !== 0, !!filteredOptions.userToInvite, debouncedSearchValue);
-        return __assign(__assign({}, filteredOptions), { headerMessage: headerMessage });
+        const headerMessage = (0, OptionsListUtils_1.getHeaderMessage)((filteredOptions.recentReports?.length || 0) + (filteredOptions.personalDetails?.length || 0) !== 0, !!filteredOptions.userToInvite, debouncedSearchValue);
+        return {
+            ...filteredOptions,
+            headerMessage,
+        };
     }, [debouncedSearchValue, defaultOptions, existingDelegates, countryCode]);
-    return __assign(__assign({}, options), { searchValue: searchValue, debouncedSearchValue: debouncedSearchValue, setSearchValue: setSearchValue, areOptionsInitialized: areOptionsInitialized });
+    return { ...options, searchValue, debouncedSearchValue, setSearchValue, areOptionsInitialized };
 }
 function AddDelegatePage() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var isSearchingForReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true })[0];
-    var _a = useOptions(), userToInvite = _a.userToInvite, recentReports = _a.recentReports, personalDetails = _a.personalDetails, searchValue = _a.searchValue, debouncedSearchValue = _a.debouncedSearchValue, setSearchValue = _a.setSearchValue, headerMessage = _a.headerMessage, areOptionsInitialized = _a.areOptionsInitialized;
-    var sections = (0, react_1.useMemo)(function () {
-        var sectionsList = [];
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [isSearchingForReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true });
+    const { userToInvite, recentReports, personalDetails, searchValue, debouncedSearchValue, setSearchValue, headerMessage, areOptionsInitialized } = useOptions();
+    const sections = (0, react_1.useMemo)(() => {
+        const sectionsList = [];
         sectionsList.push({
             title: translate('common.recents'),
             data: recentReports,
-            shouldShow: (recentReports === null || recentReports === void 0 ? void 0 : recentReports.length) > 0,
+            shouldShow: recentReports?.length > 0,
         });
         sectionsList.push({
             title: translate('common.contacts'),
             data: personalDetails,
-            shouldShow: (personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails.length) > 0,
+            shouldShow: personalDetails?.length > 0,
         });
         if (userToInvite) {
             sectionsList.push({
@@ -105,21 +91,28 @@ function AddDelegatePage() {
                 shouldShow: true,
             });
         }
-        return sectionsList.map(function (section) { return (__assign(__assign({}, section), { data: section.data.map(function (option) {
-                var _a, _b, _c, _d, _e, _f;
-                return (__assign(__assign({}, option), { text: (_a = option.text) !== null && _a !== void 0 ? _a : '', alternateText: (_b = option.alternateText) !== null && _b !== void 0 ? _b : undefined, keyForList: (_c = option.keyForList) !== null && _c !== void 0 ? _c : '', isDisabled: (_d = option.isDisabled) !== null && _d !== void 0 ? _d : undefined, login: (_e = option.login) !== null && _e !== void 0 ? _e : undefined, shouldShowSubscript: (_f = option.shouldShowSubscript) !== null && _f !== void 0 ? _f : undefined }));
-            }) })); });
+        return sectionsList.map((section) => ({
+            ...section,
+            data: section.data.map((option) => ({
+                ...option,
+                text: option.text ?? '',
+                alternateText: option.alternateText ?? undefined,
+                keyForList: option.keyForList ?? '',
+                isDisabled: option.isDisabled ?? undefined,
+                login: option.login ?? undefined,
+                shouldShowSubscript: option.shouldShowSubscript ?? undefined,
+            })),
+        }));
     }, [personalDetails, recentReports, translate, userToInvite]);
-    var onSelectRow = (0, react_1.useCallback)(function (option) {
-        var _a;
-        Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_ROLE.getRoute((_a = option === null || option === void 0 ? void 0 : option.login) !== null && _a !== void 0 ? _a : ''));
+    const onSelectRow = (0, react_1.useCallback)((option) => {
+        Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_ROLE.getRoute(option?.login ?? ''));
     }, []);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         (0, Report_1.searchInServer)(debouncedSearchValue);
     }, [debouncedSearchValue]);
     return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom={false} testID={AddDelegatePage.displayName}>
             <DelegateNoAccessWrapper_1.default accessDeniedVariants={[CONST_1.default.DELEGATE.DENIED_ACCESS_VARIANTS.DELEGATE]}>
-                <HeaderWithBackButton_1.default title={translate('delegate.addCopilot')} onBackButtonPress={function () { return Navigation_1.default.goBack(); }}/>
+                <HeaderWithBackButton_1.default title={translate('delegate.addCopilot')} onBackButtonPress={() => Navigation_1.default.goBack()}/>
                 <react_native_1.View style={[styles.flex1, styles.w100, styles.pRelative]}>
                     <SelectionList_1.default sections={areOptionsInitialized ? sections : []} ListItem={UserListItem_1.default} onSelectRow={onSelectRow} shouldSingleExecuteRowSelect onChangeText={setSearchValue} textInputValue={searchValue} headerMessage={headerMessage} textInputLabel={translate('selectionList.nameEmailOrPhoneNumber')} showLoadingPlaceholder={!areOptionsInitialized} isLoadingNewOptions={!!isSearchingForReports}/>
                 </react_native_1.View>

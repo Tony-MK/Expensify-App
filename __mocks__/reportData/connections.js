@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var syncOptions = {
+const syncOptions = {
     crossSubsidiaryCustomers: false,
     enableNewCategories: true,
     exportJournalsTo: 'JOURNALS_APPROVED_NONE',
@@ -22,7 +22,7 @@ var syncOptions = {
     hasChosenSyncReimbursedReportsOption: false,
     syncCategories: true,
 };
-var netSuiteConnection = {
+const netSuiteConnection = {
     netsuite: {
         // cspell:disable-next-line
         accountID: 'TESTACC68486',
@@ -54,7 +54,7 @@ var netSuiteConnection = {
                 payableAcct: '',
                 reimbursableExpensesExportDestination: 'EXPENSE_REPORT',
                 subsidiary: 'Honeycomb Mfg.',
-                syncOptions: syncOptions,
+                syncOptions,
                 reimbursablePayableAccount: '44492',
             },
             data: {
@@ -179,5 +179,5 @@ var netSuiteConnection = {
         verified: true,
     },
 };
-var connections = netSuiteConnection;
+const connections = netSuiteConnection;
 exports.default = connections;

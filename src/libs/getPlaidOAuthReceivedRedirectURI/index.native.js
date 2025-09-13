@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var getPlaidOAuthReceivedRedirectURI = function () { return undefined; };
+const getPlaidOAuthReceivedRedirectURI = () => undefined;
 exports.default = getPlaidOAuthReceivedRedirectURI;

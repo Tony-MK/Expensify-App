@@ -1,30 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var DomUtils_1 = require("@libs/DomUtils");
-var getButtonState_1 = require("@libs/getButtonState");
-var ReportActionComposeFocusManager_1 = require("@libs/ReportActionComposeFocusManager");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
-var PopoverAnchorTooltip_1 = require("./Tooltip/PopoverAnchorTooltip");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const DomUtils_1 = require("@libs/DomUtils");
+const getButtonState_1 = require("@libs/getButtonState");
+const ReportActionComposeFocusManager_1 = require("@libs/ReportActionComposeFocusManager");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
+const PopoverAnchorTooltip_1 = require("./Tooltip/PopoverAnchorTooltip");
 /**
  * Component that renders a mini context menu item with a
  * pressable. Also renders a tooltip when hovering the item.
  */
-function BaseMiniContextMenuItem(_a) {
-    var tooltipText = _a.tooltipText, onPress = _a.onPress, children = _a.children, _b = _a.isDelayButtonStateComplete, isDelayButtonStateComplete = _b === void 0 ? true : _b, _c = _a.shouldPreventDefaultFocusOnPress, shouldPreventDefaultFocusOnPress = _c === void 0 ? true : _c, ref = _a.ref;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
+function BaseMiniContextMenuItem({ tooltipText, onPress, children, isDelayButtonStateComplete = true, shouldPreventDefaultFocusOnPress = true, ref }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
     return (<PopoverAnchorTooltip_1.default text={tooltipText} shouldRender>
-            <PressableWithoutFeedback_1.default ref={ref} onPress={onPress} onMouseDown={function (event) {
+            <PressableWithoutFeedback_1.default ref={ref} onPress={onPress} onMouseDown={(event) => {
             if (!ReportActionComposeFocusManager_1.default.isFocused() && !ReportActionComposeFocusManager_1.default.isEditFocused()) {
-                var activeElement = DomUtils_1.default.getActiveElement();
+                const activeElement = DomUtils_1.default.getActiveElement();
                 if (activeElement instanceof HTMLElement) {
-                    activeElement === null || activeElement === void 0 ? void 0 : activeElement.blur();
+                    activeElement?.blur();
                 }
                 return;
             }
@@ -36,17 +35,14 @@ function BaseMiniContextMenuItem(_a) {
             if (shouldPreventDefaultFocusOnPress) {
                 event.preventDefault();
             }
-        }} accessibilityLabel={tooltipText} role={CONST_1.default.ROLE.BUTTON} style={function (_a) {
-            var hovered = _a.hovered, pressed = _a.pressed;
-            return [
-                styles.reportActionContextMenuMiniButton,
-                StyleUtils.getButtonBackgroundColorStyle((0, getButtonState_1.default)(hovered, pressed, isDelayButtonStateComplete), true),
-                isDelayButtonStateComplete && styles.cursorDefault,
-            ];
-        }}>
-                {function (pressableState) { return (<react_native_1.View style={[StyleUtils.getWidthAndHeightStyle(variables_1.default.iconSizeNormal), styles.alignItemsCenter, styles.justifyContentCenter]}>
+        }} accessibilityLabel={tooltipText} role={CONST_1.default.ROLE.BUTTON} style={({ hovered, pressed }) => [
+            styles.reportActionContextMenuMiniButton,
+            StyleUtils.getButtonBackgroundColorStyle((0, getButtonState_1.default)(hovered, pressed, isDelayButtonStateComplete), true),
+            isDelayButtonStateComplete && styles.cursorDefault,
+        ]}>
+                {(pressableState) => (<react_native_1.View style={[StyleUtils.getWidthAndHeightStyle(variables_1.default.iconSizeNormal), styles.alignItemsCenter, styles.justifyContentCenter]}>
                         {typeof children === 'function' ? children(pressableState) : children}
-                    </react_native_1.View>); }}
+                    </react_native_1.View>)}
             </PressableWithoutFeedback_1.default>
         </PopoverAnchorTooltip_1.default>);
 }

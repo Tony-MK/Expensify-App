@@ -1,47 +1,45 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var AmountForm_1 = require("@components/AmountForm");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var InteractiveStepWrapper_1 = require("@components/InteractiveStepWrapper");
-var Text_1 = require("@components/Text");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Card_1 = require("@libs/actions/Card");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var IssueNewExpensifyCardForm_1 = require("@src/types/form/IssueNewExpensifyCardForm");
-function LimitStep(_a) {
-    var _b, _c, _d;
-    var policyID = _a.policyID, stepNames = _a.stepNames, startStepIndex = _a.startStepIndex;
-    var translate = (0, useLocalize_1.default)().translate;
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var styles = (0, useThemeStyles_1.default)();
-    var issueNewCard = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD).concat(policyID), { canBeMissing: true })[0];
-    var isEditing = issueNewCard === null || issueNewCard === void 0 ? void 0 : issueNewCard.isEditing;
-    var submit = (0, react_1.useCallback)(function (values) {
-        var limit = (0, CurrencyUtils_1.convertToBackendAmount)(Number(values === null || values === void 0 ? void 0 : values.limit));
+const react_1 = require("react");
+const AmountForm_1 = require("@components/AmountForm");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const InteractiveStepWrapper_1 = require("@components/InteractiveStepWrapper");
+const Text_1 = require("@components/Text");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Card_1 = require("@libs/actions/Card");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const IssueNewExpensifyCardForm_1 = require("@src/types/form/IssueNewExpensifyCardForm");
+function LimitStep({ policyID, stepNames, startStepIndex }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [issueNewCard] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD}${policyID}`, { canBeMissing: true });
+    const isEditing = issueNewCard?.isEditing;
+    const submit = (0, react_1.useCallback)((values) => {
+        const limit = (0, CurrencyUtils_1.convertToBackendAmount)(Number(values?.limit));
         (0, Card_1.setIssueNewCardStepAndData)({
             step: isEditing ? CONST_1.default.EXPENSIFY_CARD.STEP.CONFIRMATION : CONST_1.default.EXPENSIFY_CARD.STEP.CARD_NAME,
-            data: { limit: limit },
+            data: { limit },
             isEditing: false,
-            policyID: policyID,
+            policyID,
         });
     }, [isEditing, policyID]);
-    var handleBackButtonPress = (0, react_1.useCallback)(function () {
+    const handleBackButtonPress = (0, react_1.useCallback)(() => {
         if (isEditing) {
-            (0, Card_1.setIssueNewCardStepAndData)({ step: CONST_1.default.EXPENSIFY_CARD.STEP.CONFIRMATION, isEditing: false, policyID: policyID });
+            (0, Card_1.setIssueNewCardStepAndData)({ step: CONST_1.default.EXPENSIFY_CARD.STEP.CONFIRMATION, isEditing: false, policyID });
             return;
         }
-        (0, Card_1.setIssueNewCardStepAndData)({ step: CONST_1.default.EXPENSIFY_CARD.STEP.LIMIT_TYPE, policyID: policyID });
+        (0, Card_1.setIssueNewCardStepAndData)({ step: CONST_1.default.EXPENSIFY_CARD.STEP.LIMIT_TYPE, policyID });
     }, [isEditing, policyID]);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [IssueNewExpensifyCardForm_1.default.LIMIT]);
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [IssueNewExpensifyCardForm_1.default.LIMIT]);
         // We only want integers to be sent as the limit
         if (!Number(values.limit)) {
             errors.limit = translate('iou.error.invalidAmount');
@@ -57,7 +55,7 @@ function LimitStep(_a) {
     return (<InteractiveStepWrapper_1.default wrapperID={LimitStep.displayName} shouldEnablePickerAvoiding={false} shouldEnableMaxHeight headerTitle={translate('workspace.card.issueCard')} handleBackButtonPress={handleBackButtonPress} startStepIndex={startStepIndex} stepNames={stepNames} enableEdgeToEdgeBottomSafeAreaPadding>
             <Text_1.default style={[styles.textHeadlineLineHeightXXL, styles.ph5, styles.mv3]}>{translate('workspace.card.issueNewCard.setLimit')}</Text_1.default>
             <FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.ISSUE_NEW_EXPENSIFY_CARD_FORM} submitButtonText={translate(isEditing ? 'common.confirm' : 'common.next')} shouldHideFixErrorsAlert onSubmit={submit} style={[styles.flex1]} submitButtonStyles={[styles.mh5, styles.mt0]} submitFlexEnabled={false} disablePressOnEnter={false} validate={validate} enabledWhenOffline addBottomSafeAreaPadding>
-                <InputWrapper_1.default InputComponent={AmountForm_1.default} defaultValue={(0, CurrencyUtils_1.convertToFrontendAmountAsString)((_b = issueNewCard === null || issueNewCard === void 0 ? void 0 : issueNewCard.data) === null || _b === void 0 ? void 0 : _b.limit, (_c = issueNewCard === null || issueNewCard === void 0 ? void 0 : issueNewCard.data) === null || _c === void 0 ? void 0 : _c.currency, false)} isCurrencyPressable={false} currency={(_d = issueNewCard === null || issueNewCard === void 0 ? void 0 : issueNewCard.data) === null || _d === void 0 ? void 0 : _d.currency} inputID={IssueNewExpensifyCardForm_1.default.LIMIT} ref={inputCallbackRef}/>
+                <InputWrapper_1.default InputComponent={AmountForm_1.default} defaultValue={(0, CurrencyUtils_1.convertToFrontendAmountAsString)(issueNewCard?.data?.limit, issueNewCard?.data?.currency, false)} isCurrencyPressable={false} currency={issueNewCard?.data?.currency} inputID={IssueNewExpensifyCardForm_1.default.LIMIT} ref={inputCallbackRef}/>
             </FormProvider_1.default>
         </InteractiveStepWrapper_1.default>);
 }

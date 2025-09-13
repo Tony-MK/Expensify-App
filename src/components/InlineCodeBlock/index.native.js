@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Text_1 = require("@components/Text");
+const react_1 = require("react");
+const Text_1 = require("@components/Text");
 /**
  * Retrieves the text content from a Text or Phrasing node.
  *
@@ -14,11 +14,10 @@ function getCurrentData(defaultRendererProps) {
     if ('data' in defaultRendererProps.tnode) {
         return defaultRendererProps.tnode.data;
     }
-    return defaultRendererProps.tnode.children.map(function (child) { return ('data' in child ? child.data : ''); }).join('');
+    return defaultRendererProps.tnode.children.map((child) => ('data' in child ? child.data : '')).join('');
 }
-function InlineCodeBlock(_a) {
-    var TDefaultRenderer = _a.TDefaultRenderer, defaultRendererProps = _a.defaultRendererProps, textStyle = _a.textStyle, boxModelStyle = _a.boxModelStyle;
-    var data = getCurrentData(defaultRendererProps);
+function InlineCodeBlock({ TDefaultRenderer, defaultRendererProps, textStyle, boxModelStyle }) {
+    const data = getCurrentData(defaultRendererProps);
     return (<TDefaultRenderer 
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...defaultRendererProps}>

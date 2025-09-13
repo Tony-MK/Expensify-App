@@ -1,110 +1,115 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var utils_1 = require("./Button/utils");
-var DisplayNames_1 = require("./DisplayNames");
-var ParentNavigationSubtitle_1 = require("./ParentNavigationSubtitle");
-var PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
-var ReportActionAvatars_1 = require("./ReportActionAvatars");
-var Text_1 = require("./Text");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const utils_1 = require("./Button/utils");
+const DisplayNames_1 = require("./DisplayNames");
+const ParentNavigationSubtitle_1 = require("./ParentNavigationSubtitle");
+const PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
+const ReportActionAvatars_1 = require("./ReportActionAvatars");
+const Text_1 = require("./Text");
 function getCustomDisplayName(shouldUseCustomSearchTitleName, report, title, displayNamesWithTooltips, transactions, shouldUseFullTitle, customSearchDisplayStyle, regularStyle, isAnonymous, isMoneyRequestOrReport) {
-    var _a;
-    var reportName = (_a = report === null || report === void 0 ? void 0 : report.reportName) !== null && _a !== void 0 ? _a : CONST_1.default.REPORT.DEFAULT_REPORT_NAME;
-    var isIOUOrInvoice = (report === null || report === void 0 ? void 0 : report.type) === CONST_1.default.REPORT.TYPE.IOU || (report === null || report === void 0 ? void 0 : report.type) === CONST_1.default.REPORT.TYPE.INVOICE;
-    var hasTransactions = transactions.length > 0;
+    const reportName = report?.reportName ?? CONST_1.default.REPORT.DEFAULT_REPORT_NAME;
+    const isIOUOrInvoice = report?.type === CONST_1.default.REPORT.TYPE.IOU || report?.type === CONST_1.default.REPORT.TYPE.INVOICE;
+    const hasTransactions = transactions.length > 0;
     function getDisplayProps() {
-        var baseProps = {
-            displayNamesWithTooltips: displayNamesWithTooltips,
+        const baseProps = {
+            displayNamesWithTooltips,
             tooltipEnabled: true,
             numberOfLines: 1,
         };
         if (shouldUseCustomSearchTitleName) {
-            var styleProps = {
+            const styleProps = {
                 textStyles: customSearchDisplayStyle,
             };
             if (!hasTransactions) {
-                return __assign(__assign({ fullTitle: reportName, shouldUseFullTitle: shouldUseFullTitle }, baseProps), styleProps);
+                return {
+                    fullTitle: reportName,
+                    shouldUseFullTitle,
+                    ...baseProps,
+                    ...styleProps,
+                };
             }
             if (isIOUOrInvoice) {
-                return __assign(__assign({ fullTitle: title, shouldUseFullTitle: true }, baseProps), styleProps);
+                return {
+                    fullTitle: title,
+                    shouldUseFullTitle: true,
+                    ...baseProps,
+                    ...styleProps,
+                };
             }
-            return __assign(__assign({ fullTitle: reportName, shouldUseFullTitle: shouldUseFullTitle }, baseProps), styleProps);
+            return {
+                fullTitle: reportName,
+                shouldUseFullTitle,
+                ...baseProps,
+                ...styleProps,
+            };
         }
-        return __assign({ fullTitle: title, textStyles: regularStyle, shouldUseFullTitle: isMoneyRequestOrReport || isAnonymous }, baseProps);
+        return {
+            fullTitle: title,
+            textStyles: regularStyle,
+            shouldUseFullTitle: isMoneyRequestOrReport || isAnonymous,
+            ...baseProps,
+        };
     }
-    var _b = getDisplayProps(), fullTitle = _b.fullTitle, textStyles = _b.textStyles, displayNamesWithTooltipsProp = _b.displayNamesWithTooltips, tooltipEnabled = _b.tooltipEnabled, numberOfLines = _b.numberOfLines, shouldUseFullTitleProp = _b.shouldUseFullTitle;
+    const { fullTitle, textStyles, displayNamesWithTooltips: displayNamesWithTooltipsProp, tooltipEnabled, numberOfLines, shouldUseFullTitle: shouldUseFullTitleProp } = getDisplayProps();
     return (<DisplayNames_1.default fullTitle={fullTitle} displayNamesWithTooltips={displayNamesWithTooltipsProp} tooltipEnabled={tooltipEnabled} numberOfLines={numberOfLines} textStyles={textStyles} shouldUseFullTitle={shouldUseFullTitleProp}/>);
 }
-function AvatarWithDisplayName(_a) {
-    var _b;
-    var report = _a.report, _c = _a.isAnonymous, isAnonymous = _c === void 0 ? false : _c, _d = _a.size, size = _d === void 0 ? CONST_1.default.AVATAR_SIZE.DEFAULT : _d, _e = _a.shouldEnableDetailPageNavigation, shouldEnableDetailPageNavigation = _e === void 0 ? false : _e, _f = _a.shouldEnableAvatarNavigation, shouldEnableAvatarNavigation = _f === void 0 ? true : _f, _g = _a.shouldUseCustomSearchTitleName, shouldUseCustomSearchTitleName = _g === void 0 ? false : _g, _h = _a.transactions, transactions = _h === void 0 ? [] : _h, _j = _a.openParentReportInCurrentTab, openParentReportInCurrentTab = _j === void 0 ? false : _j, avatarBorderColorProp = _a.avatarBorderColor, _k = _a.shouldDisplayStatus, shouldDisplayStatus = _k === void 0 ? false : _k;
-    var localeCompare = (0, useLocalize_1.default)().localeCompare;
-    var parentReportActions = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(report === null || report === void 0 ? void 0 : report.parentReportID), { canEvict: false, canBeMissing: false })[0];
-    var personalDetails = ((_b = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { canBeMissing: false })) !== null && _b !== void 0 ? _b : CONST_1.default.EMPTY_OBJECT)[0];
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var parentReport = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(report === null || report === void 0 ? void 0 : report.parentReportID), { canBeMissing: true })[0];
-    var invoiceReceiverPolicy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat((parentReport === null || parentReport === void 0 ? void 0 : parentReport.invoiceReceiver) && 'policyID' in parentReport.invoiceReceiver ? parentReport.invoiceReceiver.policyID : undefined), { canBeMissing: true })[0];
-    var reportAttributes = (0, useOnyx_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_ATTRIBUTES, { selector: function (attributes) { return attributes === null || attributes === void 0 ? void 0 : attributes.reports; }, canBeMissing: false })[0];
-    var parentReportActionParam = (report === null || report === void 0 ? void 0 : report.parentReportActionID) ? parentReportActions === null || parentReportActions === void 0 ? void 0 : parentReportActions[report.parentReportActionID] : undefined;
-    var title = (0, ReportUtils_1.getReportName)(report, undefined, parentReportActionParam, personalDetails, invoiceReceiverPolicy, reportAttributes);
-    var isParentReportArchived = (0, useReportIsArchived_1.default)(report === null || report === void 0 ? void 0 : report.parentReportID);
-    var isReportArchived = (0, useReportIsArchived_1.default)(report === null || report === void 0 ? void 0 : report.reportID);
-    var subtitle = (0, ReportUtils_1.getChatRoomSubtitle)(report, true, isReportArchived);
-    var parentNavigationSubtitleData = (0, ReportUtils_1.getParentNavigationSubtitle)(report, isParentReportArchived);
-    var isMoneyRequestOrReport = (0, ReportUtils_1.isMoneyRequestReport)(report) || (0, ReportUtils_1.isMoneyRequest)(report) || (0, ReportUtils_1.isTrackExpenseReport)(report) || (0, ReportUtils_1.isInvoiceReport)(report);
-    var ownerPersonalDetails = (0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)((report === null || report === void 0 ? void 0 : report.ownerAccountID) ? [report.ownerAccountID] : [], personalDetails);
-    var displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)(Object.values(ownerPersonalDetails), false, localeCompare);
-    var avatarBorderColor = avatarBorderColorProp !== null && avatarBorderColorProp !== void 0 ? avatarBorderColorProp : (isAnonymous ? theme.highlightBG : theme.componentBG);
-    var statusText = shouldDisplayStatus ? (0, ReportUtils_1.getReportStatusTranslation)(report === null || report === void 0 ? void 0 : report.stateNum, report === null || report === void 0 ? void 0 : report.statusNum) : undefined;
-    var actorAccountID = (0, react_1.useRef)(null);
-    (0, react_1.useEffect)(function () {
-        var _a;
-        if (!(report === null || report === void 0 ? void 0 : report.parentReportActionID)) {
+function AvatarWithDisplayName({ report, isAnonymous = false, size = CONST_1.default.AVATAR_SIZE.DEFAULT, shouldEnableDetailPageNavigation = false, shouldEnableAvatarNavigation = true, shouldUseCustomSearchTitleName = false, transactions = [], openParentReportInCurrentTab = false, avatarBorderColor: avatarBorderColorProp, shouldDisplayStatus = false, }) {
+    const { localeCompare } = (0, useLocalize_1.default)();
+    const [parentReportActions] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${report?.parentReportID}`, { canEvict: false, canBeMissing: false });
+    const [personalDetails] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { canBeMissing: false }) ?? CONST_1.default.EMPTY_OBJECT;
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const [parentReport] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT}${report?.parentReportID}`, { canBeMissing: true });
+    const [invoiceReceiverPolicy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${parentReport?.invoiceReceiver && 'policyID' in parentReport.invoiceReceiver ? parentReport.invoiceReceiver.policyID : undefined}`, { canBeMissing: true });
+    const [reportAttributes] = (0, useOnyx_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_ATTRIBUTES, { selector: (attributes) => attributes?.reports, canBeMissing: false });
+    const parentReportActionParam = report?.parentReportActionID ? parentReportActions?.[report.parentReportActionID] : undefined;
+    const title = (0, ReportUtils_1.getReportName)(report, undefined, parentReportActionParam, personalDetails, invoiceReceiverPolicy, reportAttributes);
+    const isParentReportArchived = (0, useReportIsArchived_1.default)(report?.parentReportID);
+    const isReportArchived = (0, useReportIsArchived_1.default)(report?.reportID);
+    const subtitle = (0, ReportUtils_1.getChatRoomSubtitle)(report, true, isReportArchived);
+    const parentNavigationSubtitleData = (0, ReportUtils_1.getParentNavigationSubtitle)(report, isParentReportArchived);
+    const isMoneyRequestOrReport = (0, ReportUtils_1.isMoneyRequestReport)(report) || (0, ReportUtils_1.isMoneyRequest)(report) || (0, ReportUtils_1.isTrackExpenseReport)(report) || (0, ReportUtils_1.isInvoiceReport)(report);
+    const ownerPersonalDetails = (0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(report?.ownerAccountID ? [report.ownerAccountID] : [], personalDetails);
+    const displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)(Object.values(ownerPersonalDetails), false, localeCompare);
+    const avatarBorderColor = avatarBorderColorProp ?? (isAnonymous ? theme.highlightBG : theme.componentBG);
+    const statusText = shouldDisplayStatus ? (0, ReportUtils_1.getReportStatusTranslation)(report?.stateNum, report?.statusNum) : undefined;
+    const actorAccountID = (0, react_1.useRef)(null);
+    (0, react_1.useEffect)(() => {
+        if (!report?.parentReportActionID) {
             return;
         }
-        var parentReportAction = parentReportActions === null || parentReportActions === void 0 ? void 0 : parentReportActions[report === null || report === void 0 ? void 0 : report.parentReportActionID];
-        actorAccountID.current = (_a = parentReportAction === null || parentReportAction === void 0 ? void 0 : parentReportAction.actorAccountID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID;
+        const parentReportAction = parentReportActions?.[report?.parentReportActionID];
+        actorAccountID.current = parentReportAction?.actorAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
     }, [parentReportActions, report]);
-    var goToDetailsPage = (0, react_1.useCallback)(function () {
+    const goToDetailsPage = (0, react_1.useCallback)(() => {
         (0, ReportUtils_1.navigateToDetailsPage)(report, Navigation_1.default.getActiveRoute());
     }, [report]);
-    var showActorDetails = (0, react_1.useCallback)(function () {
+    const showActorDetails = (0, react_1.useCallback)(() => {
         // We should navigate to the details page if the report is a IOU/expense report
         if (shouldEnableDetailPageNavigation) {
             goToDetailsPage();
             return;
         }
-        if ((0, ReportUtils_1.isExpenseReport)(report) && (report === null || report === void 0 ? void 0 : report.ownerAccountID)) {
+        if ((0, ReportUtils_1.isExpenseReport)(report) && report?.ownerAccountID) {
             Navigation_1.default.navigate(ROUTES_1.default.PROFILE.getRoute(report.ownerAccountID));
             return;
         }
-        if ((0, ReportUtils_1.isIOUReport)(report) && (report === null || report === void 0 ? void 0 : report.reportID)) {
+        if ((0, ReportUtils_1.isIOUReport)(report) && report?.reportID) {
             Navigation_1.default.navigate(ROUTES_1.default.REPORT_PARTICIPANTS.getRoute(report.reportID));
             return;
         }
@@ -115,14 +120,14 @@ function AvatarWithDisplayName(_a) {
                 return;
             }
         }
-        if (report === null || report === void 0 ? void 0 : report.reportID) {
+        if (report?.reportID) {
             // Report detail route is added as fallback but based on the current implementation this route won't be executed
             Navigation_1.default.navigate(ROUTES_1.default.REPORT_WITH_ID_DETAILS.getRoute(report.reportID));
         }
     }, [report, shouldEnableDetailPageNavigation, goToDetailsPage]);
-    var shouldUseFullTitle = isMoneyRequestOrReport || isAnonymous;
-    var multipleAvatars = (<ReportActionAvatars_1.default singleAvatarContainerStyle={[styles.actionAvatar, styles.mr3]} subscriptAvatarBorderColor={avatarBorderColor} size={size} secondaryAvatarContainerStyle={StyleUtils.getBackgroundAndBorderStyle(avatarBorderColor)} reportID={report === null || report === void 0 ? void 0 : report.reportID}/>);
-    var headerView = (<react_native_1.View style={[styles.appContentHeaderTitle, styles.flex1]}>
+    const shouldUseFullTitle = isMoneyRequestOrReport || isAnonymous;
+    const multipleAvatars = (<ReportActionAvatars_1.default singleAvatarContainerStyle={[styles.actionAvatar, styles.mr3]} subscriptAvatarBorderColor={avatarBorderColor} size={size} secondaryAvatarContainerStyle={StyleUtils.getBackgroundAndBorderStyle(avatarBorderColor)} reportID={report?.reportID}/>);
+    const headerView = (<react_native_1.View style={[styles.appContentHeaderTitle, styles.flex1]}>
             {!!report && !!title && (<react_native_1.View style={[styles.flex1, styles.flexRow, styles.alignItemsCenter, styles.justifyContentBetween]}>
                     <react_native_1.View accessibilityLabel={title}>
                         {shouldEnableAvatarNavigation ? (<PressableWithoutFeedback_1.default onPress={showActorDetails} accessibilityLabel={title} role={(0, utils_1.getButtonRole)(true)}>
@@ -132,7 +137,7 @@ function AvatarWithDisplayName(_a) {
 
                     <react_native_1.View style={[styles.flex1, styles.flexColumn]}>
                         {getCustomDisplayName(shouldUseCustomSearchTitleName, report, title, displayNamesWithTooltips, transactions, shouldUseFullTitle, [styles.headerText, styles.pre], [isAnonymous ? styles.headerAnonymousFooter : styles.headerText, styles.pre], isAnonymous, isMoneyRequestOrReport)}
-                        {Object.keys(parentNavigationSubtitleData).length > 0 && (<ParentNavigationSubtitle_1.default parentNavigationSubtitleData={parentNavigationSubtitleData} parentReportID={report === null || report === void 0 ? void 0 : report.parentReportID} parentReportActionID={report === null || report === void 0 ? void 0 : report.parentReportActionID} pressableStyles={[styles.alignSelfStart, styles.mw100]} openParentReportInCurrentTab={openParentReportInCurrentTab} statusText={statusText}/>)}
+                        {Object.keys(parentNavigationSubtitleData).length > 0 && (<ParentNavigationSubtitle_1.default parentNavigationSubtitleData={parentNavigationSubtitleData} parentReportID={report?.parentReportID} parentReportActionID={report?.parentReportActionID} pressableStyles={[styles.alignSelfStart, styles.mw100]} openParentReportInCurrentTab={openParentReportInCurrentTab} statusText={statusText}/>)}
                         {!!subtitle && (<Text_1.default style={[styles.sidebarLinkText, styles.optionAlternateText, styles.textLabelSupporting, styles.pre]} numberOfLines={1}>
                                 {subtitle}
                             </Text_1.default>)}

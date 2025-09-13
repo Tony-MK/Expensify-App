@@ -1,70 +1,61 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var AttachmentModal_1 = require("@components/AttachmentModal");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var IOU_1 = require("@libs/actions/IOU");
-var Report_1 = require("@libs/actions/Report");
-var MergeTransactionUtils_1 = require("@libs/MergeTransactionUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReceiptUtils_1 = require("@libs/ReceiptUtils");
-var ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var tryResolveUrlFromApiRoot_1 = require("@libs/tryResolveUrlFromApiRoot");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-function TransactionReceipt(_a) {
-    var _b, _c, _d, _e, _f;
-    var route = _a.route;
-    var reportID = route.params.reportID;
-    var transactionID = route.params.transactionID;
-    var action = 'action' in route.params ? route.params.action : undefined;
-    var iouType = 'iouType' in route.params ? route.params.iouType : undefined;
-    var report = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(reportID), { canBeMissing: true })[0];
-    var transactionMain = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(transactionID), { canBeMissing: true })[0];
-    var transactionDraft = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_DRAFT).concat(transactionID), { canBeMissing: true })[0];
-    var _g = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_METADATA).concat(reportID), { canBeMissing: true })[0], reportMetadata = _g === void 0 ? CONST_1.default.DEFAULT_REPORT_METADATA : _g;
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var mergeTransactionID = 'mergeTransactionID' in route.params ? route.params.mergeTransactionID : undefined;
-    var isFromReviewDuplicates = 'isFromReviewDuplicates' in route.params ? route.params.isFromReviewDuplicates === 'true' : undefined;
-    var mergeTransaction = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.MERGE_TRANSACTION).concat(mergeTransactionID), { canBeMissing: true })[0];
-    var isDraftTransaction = !!action;
+const react_1 = require("react");
+const AttachmentModal_1 = require("@components/AttachmentModal");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const IOU_1 = require("@libs/actions/IOU");
+const Report_1 = require("@libs/actions/Report");
+const MergeTransactionUtils_1 = require("@libs/MergeTransactionUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReceiptUtils_1 = require("@libs/ReceiptUtils");
+const ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const tryResolveUrlFromApiRoot_1 = require("@libs/tryResolveUrlFromApiRoot");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+function TransactionReceipt({ route }) {
+    const reportID = route.params.reportID;
+    const transactionID = route.params.transactionID;
+    const action = 'action' in route.params ? route.params.action : undefined;
+    const iouType = 'iouType' in route.params ? route.params.iouType : undefined;
+    const [report] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT}${reportID}`, { canBeMissing: true });
+    const [transactionMain] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${transactionID}`, { canBeMissing: true });
+    const [transactionDraft] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION_DRAFT}${transactionID}`, { canBeMissing: true });
+    const [reportMetadata = CONST_1.default.DEFAULT_REPORT_METADATA] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_METADATA}${reportID}`, { canBeMissing: true });
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const mergeTransactionID = 'mergeTransactionID' in route.params ? route.params.mergeTransactionID : undefined;
+    const isFromReviewDuplicates = 'isFromReviewDuplicates' in route.params ? route.params.isFromReviewDuplicates === 'true' : undefined;
+    const [mergeTransaction] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.MERGE_TRANSACTION}${mergeTransactionID}`, { canBeMissing: true });
+    const isDraftTransaction = !!action;
     // Determine which transaction to use based on the scenario
-    var transaction;
+    let transaction;
     if (isDraftTransaction) {
         transaction = transactionDraft;
     }
     else if (mergeTransactionID && mergeTransaction && transactionMain) {
         // If we have a merge transaction, we need to use the receipt from the merge transaction
-        transaction = __assign(__assign({}, transactionMain), { receipt: mergeTransaction.receipt, filename: (0, MergeTransactionUtils_1.getReceiptFileName)(mergeTransaction.receipt) });
+        transaction = {
+            ...transactionMain,
+            receipt: mergeTransaction.receipt,
+            filename: (0, MergeTransactionUtils_1.getReceiptFileName)(mergeTransaction.receipt),
+        };
     }
     else {
         transaction = transactionMain;
     }
-    var receiptURIs = (0, ReceiptUtils_1.getThumbnailAndImageURIs)(transaction);
-    var isLocalFile = receiptURIs.isLocalFile;
-    var readonly = route.params.readonly === 'true';
-    var imageSource = isDraftTransaction ? (_b = transactionDraft === null || transactionDraft === void 0 ? void 0 : transactionDraft.receipt) === null || _b === void 0 ? void 0 : _b.source : (0, tryResolveUrlFromApiRoot_1.default)((_c = receiptURIs.image) !== null && _c !== void 0 ? _c : '');
-    var parentReportAction = (0, ReportActionsUtils_1.getReportAction)(report === null || report === void 0 ? void 0 : report.parentReportID, report === null || report === void 0 ? void 0 : report.parentReportActionID);
-    var canEditReceipt = (0, ReportUtils_1.canEditFieldOfMoneyRequest)(parentReportAction, CONST_1.default.EDIT_REQUEST_FIELD.RECEIPT);
-    var canDeleteReceipt = (0, ReportUtils_1.canEditFieldOfMoneyRequest)(parentReportAction, CONST_1.default.EDIT_REQUEST_FIELD.RECEIPT, true);
-    var isEReceipt = transaction && !(0, TransactionUtils_1.hasReceiptSource)(transaction) && (0, TransactionUtils_1.hasEReceipt)(transaction);
-    var isTrackExpenseAction = (0, ReportActionsUtils_1.isTrackExpenseAction)(parentReportAction);
-    (0, react_1.useEffect)(function () {
+    const receiptURIs = (0, ReceiptUtils_1.getThumbnailAndImageURIs)(transaction);
+    const isLocalFile = receiptURIs.isLocalFile;
+    const readonly = route.params.readonly === 'true';
+    const imageSource = isDraftTransaction ? transactionDraft?.receipt?.source : (0, tryResolveUrlFromApiRoot_1.default)(receiptURIs.image ?? '');
+    const parentReportAction = (0, ReportActionsUtils_1.getReportAction)(report?.parentReportID, report?.parentReportActionID);
+    const canEditReceipt = (0, ReportUtils_1.canEditFieldOfMoneyRequest)(parentReportAction, CONST_1.default.EDIT_REQUEST_FIELD.RECEIPT);
+    const canDeleteReceipt = (0, ReportUtils_1.canEditFieldOfMoneyRequest)(parentReportAction, CONST_1.default.EDIT_REQUEST_FIELD.RECEIPT, true);
+    const isEReceipt = transaction && !(0, TransactionUtils_1.hasReceiptSource)(transaction) && (0, TransactionUtils_1.hasEReceipt)(transaction);
+    const isTrackExpenseAction = (0, ReportActionsUtils_1.isTrackExpenseAction)(parentReportAction);
+    (0, react_1.useEffect)(() => {
         if ((!!report && !!transaction) || isDraftTransaction) {
             return;
         }
@@ -72,28 +63,25 @@ function TransactionReceipt(_a) {
         // I'm disabling the warning, as it expects to use exhaustive deps, even though we want this useEffect to run only on the first render.
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, []);
-    var receiptPath = (_d = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _d === void 0 ? void 0 : _d.source;
-    (0, react_1.useEffect)(function () {
-        var _a;
+    const receiptPath = transaction?.receipt?.source;
+    (0, react_1.useEffect)(() => {
         if (!isDraftTransaction || !iouType || !transaction) {
             return;
         }
-        var requestType = (0, TransactionUtils_1.getRequestType)(transaction, isBetaEnabled(CONST_1.default.BETAS.MANUAL_DISTANCE));
-        var receiptFilename = transaction === null || transaction === void 0 ? void 0 : transaction.filename;
-        var receiptType = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _a === void 0 ? void 0 : _a.type;
-        (0, IOU_1.navigateToStartStepIfScanFileCannotBeRead)(receiptFilename, receiptPath, function () { }, requestType, iouType, transactionID, reportID, receiptType, function () {
-            return Navigation_1.default.goBack(ROUTES_1.default.MONEY_REQUEST_STEP_SCAN.getRoute(CONST_1.default.IOU.ACTION.CREATE, iouType, transactionID, reportID, ROUTES_1.default.MONEY_REQUEST_STEP_CONFIRMATION.getRoute(action, iouType, transactionID, reportID)));
-        });
+        const requestType = (0, TransactionUtils_1.getRequestType)(transaction, isBetaEnabled(CONST_1.default.BETAS.MANUAL_DISTANCE));
+        const receiptFilename = transaction?.filename;
+        const receiptType = transaction?.receipt?.type;
+        (0, IOU_1.navigateToStartStepIfScanFileCannotBeRead)(receiptFilename, receiptPath, () => { }, requestType, iouType, transactionID, reportID, receiptType, () => Navigation_1.default.goBack(ROUTES_1.default.MONEY_REQUEST_STEP_SCAN.getRoute(CONST_1.default.IOU.ACTION.CREATE, iouType, transactionID, reportID, ROUTES_1.default.MONEY_REQUEST_STEP_CONFIRMATION.getRoute(action, iouType, transactionID, reportID))));
         // eslint-disable-next-line react-compiler/react-compiler
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receiptPath]);
-    var moneyRequestReportID = (0, ReportUtils_1.isMoneyRequestReport)(report) ? report === null || report === void 0 ? void 0 : report.reportID : report === null || report === void 0 ? void 0 : report.parentReportID;
-    var isTrackExpenseReport = (0, ReportUtils_1.isTrackExpenseReport)(report);
+    const moneyRequestReportID = (0, ReportUtils_1.isMoneyRequestReport)(report) ? report?.reportID : report?.parentReportID;
+    const isTrackExpenseReport = (0, ReportUtils_1.isTrackExpenseReport)(report);
     // eslint-disable-next-line rulesdir/no-negated-variables
-    var shouldShowNotFoundPage = isTrackExpenseReport || isDraftTransaction || (transaction === null || transaction === void 0 ? void 0 : transaction.reportID) === CONST_1.default.REPORT.SPLIT_REPORT_ID || isFromReviewDuplicates
+    const shouldShowNotFoundPage = isTrackExpenseReport || isDraftTransaction || transaction?.reportID === CONST_1.default.REPORT.SPLIT_REPORT_ID || isFromReviewDuplicates
         ? !transaction
-        : moneyRequestReportID !== (transaction === null || transaction === void 0 ? void 0 : transaction.reportID);
-    return (<AttachmentModal_1.default source={imageSource} isAuthTokenRequired={!isLocalFile && !isDraftTransaction} report={report} isReceiptAttachment canEditReceipt={((canEditReceipt && !readonly) || isDraftTransaction) && !((_e = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _e === void 0 ? void 0 : _e.isTestDriveReceipt)} canDeleteReceipt={canDeleteReceipt && !readonly && !isDraftTransaction && !((_f = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _f === void 0 ? void 0 : _f.isTestDriveReceipt)} allowDownload={!isEReceipt} isTrackExpenseAction={isTrackExpenseAction} originalFileName={isDraftTransaction ? transaction === null || transaction === void 0 ? void 0 : transaction.filename : receiptURIs === null || receiptURIs === void 0 ? void 0 : receiptURIs.filename} defaultOpen iouAction={action} iouType={iouType} draftTransactionID={isDraftTransaction ? transactionID : undefined} onModalClose={Navigation_1.default.dismissModal} isLoading={!transaction && (reportMetadata === null || reportMetadata === void 0 ? void 0 : reportMetadata.isLoadingInitialReportActions)} shouldShowNotFoundPage={shouldShowNotFoundPage}/>);
+        : moneyRequestReportID !== transaction?.reportID;
+    return (<AttachmentModal_1.default source={imageSource} isAuthTokenRequired={!isLocalFile && !isDraftTransaction} report={report} isReceiptAttachment canEditReceipt={((canEditReceipt && !readonly) || isDraftTransaction) && !transaction?.receipt?.isTestDriveReceipt} canDeleteReceipt={canDeleteReceipt && !readonly && !isDraftTransaction && !transaction?.receipt?.isTestDriveReceipt} allowDownload={!isEReceipt} isTrackExpenseAction={isTrackExpenseAction} originalFileName={isDraftTransaction ? transaction?.filename : receiptURIs?.filename} defaultOpen iouAction={action} iouType={iouType} draftTransactionID={isDraftTransaction ? transactionID : undefined} onModalClose={Navigation_1.default.dismissModal} isLoading={!transaction && reportMetadata?.isLoadingInitialReportActions} shouldShowNotFoundPage={shouldShowNotFoundPage}/>);
 }
 TransactionReceipt.displayName = 'TransactionReceipt';
 exports.default = TransactionReceipt;

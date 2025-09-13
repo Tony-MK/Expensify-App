@@ -1,24 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-function IOURequestRedirectToStartPage(_a) {
-    var _b = _a.route.params, iouType = _b.iouType, iouRequestType = _b.iouRequestType;
-    var isIouTypeValid = Object.values(CONST_1.default.IOU.TYPE).includes(iouType);
-    var isIouRequestTypeValid = Object.values(CONST_1.default.IOU.REQUEST_TYPE).includes(iouRequestType);
-    (0, react_1.useEffect)(function () {
+const react_1 = require("react");
+const FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+function IOURequestRedirectToStartPage({ route: { params: { iouType, iouRequestType }, }, }) {
+    const isIouTypeValid = Object.values(CONST_1.default.IOU.TYPE).includes(iouType);
+    const isIouRequestTypeValid = Object.values(CONST_1.default.IOU.REQUEST_TYPE).includes(iouRequestType);
+    (0, react_1.useEffect)(() => {
         if (!isIouTypeValid || !isIouRequestTypeValid) {
             return;
         }
         // Dismiss this modal because the redirects below will open a new modal and there shouldn't be two modals stacked on top of each other.
         Navigation_1.default.dismissModal();
         // Redirect the person to the right start page using a random reportID
-        var optimisticReportID = (0, ReportUtils_1.generateReportID)();
+        const optimisticReportID = (0, ReportUtils_1.generateReportID)();
         if (iouRequestType === CONST_1.default.IOU.REQUEST_TYPE.DISTANCE) {
             Navigation_1.default.navigate(ROUTES_1.default.MONEY_REQUEST_CREATE_TAB_DISTANCE.getRoute(CONST_1.default.IOU.ACTION.CREATE, iouType, CONST_1.default.IOU.OPTIMISTIC_TRANSACTION_ID, optimisticReportID));
         }

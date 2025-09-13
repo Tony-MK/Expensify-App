@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Session_1 = require("@userActions/Session");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Session_1 = require("@userActions/Session");
+const CONST_1 = require("@src/CONST");
 function SignInButton() {
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    return (<PressableWithoutFeedback_1.default accessibilityLabel={translate('sidebarScreen.buttonMySettings')} role={CONST_1.default.ROLE.BUTTON} onPress={function () { return (0, Session_1.signOutAndRedirectToSignIn)(); }}>
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    return (<PressableWithoutFeedback_1.default accessibilityLabel={translate('sidebarScreen.buttonMySettings')} role={CONST_1.default.ROLE.BUTTON} onPress={() => (0, Session_1.signOutAndRedirectToSignIn)()}>
             <react_native_1.View style={(styles.signInButtonAvatar, styles.ph2)}>
-                <Button_1.default success text={translate('common.signIn')} onPress={function () {
+                <Button_1.default success text={translate('common.signIn')} onPress={() => {
             (0, Session_1.signOutAndRedirectToSignIn)();
         }}/>
             </react_native_1.View>

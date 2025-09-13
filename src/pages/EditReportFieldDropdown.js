@@ -1,34 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var SelectionList_1 = require("@components/SelectionList");
-var RadioListItem_1 = require("@components/SelectionList/RadioListItem");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useTheme_1 = require("@hooks/useTheme");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var ReportFieldOptionsListUtils_1 = require("@libs/ReportFieldOptionsListUtils");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function EditReportFieldDropdownPage(_a) {
-    var onSubmit = _a.onSubmit, fieldKey = _a.fieldKey, fieldValue = _a.fieldValue, fieldOptions = _a.fieldOptions;
-    var recentlyUsedReportFields = (0, useOnyx_1.default)(ONYXKEYS_1.default.RECENTLY_USED_REPORT_FIELDS, { canBeMissing: true })[0];
-    var _b = (0, useDebouncedState_1.default)(''), searchValue = _b[0], debouncedSearchValue = _b[1], setSearchValue = _b[2];
-    var theme = (0, useTheme_1.default)();
-    var _c = (0, useLocalize_1.default)(), translate = _c.translate, localeCompare = _c.localeCompare;
-    var recentlyUsedOptions = (0, react_1.useMemo)(function () { var _a, _b; return (_b = (_a = recentlyUsedReportFields === null || recentlyUsedReportFields === void 0 ? void 0 : recentlyUsedReportFields[fieldKey]) === null || _a === void 0 ? void 0 : _a.sort(localeCompare)) !== null && _b !== void 0 ? _b : []; }, [recentlyUsedReportFields, fieldKey, localeCompare]);
-    var itemRightSideComponent = (0, react_1.useCallback)(function (item) {
+const react_1 = require("react");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const SelectionList_1 = require("@components/SelectionList");
+const RadioListItem_1 = require("@components/SelectionList/RadioListItem");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useTheme_1 = require("@hooks/useTheme");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const ReportFieldOptionsListUtils_1 = require("@libs/ReportFieldOptionsListUtils");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function EditReportFieldDropdownPage({ onSubmit, fieldKey, fieldValue, fieldOptions }) {
+    const [recentlyUsedReportFields] = (0, useOnyx_1.default)(ONYXKEYS_1.default.RECENTLY_USED_REPORT_FIELDS, { canBeMissing: true });
+    const [searchValue, debouncedSearchValue, setSearchValue] = (0, useDebouncedState_1.default)('');
+    const theme = (0, useTheme_1.default)();
+    const { translate, localeCompare } = (0, useLocalize_1.default)();
+    const recentlyUsedOptions = (0, react_1.useMemo)(() => recentlyUsedReportFields?.[fieldKey]?.sort(localeCompare) ?? [], [recentlyUsedReportFields, fieldKey, localeCompare]);
+    const itemRightSideComponent = (0, react_1.useCallback)((item) => {
         if (item.text === fieldValue) {
             return (<Icon_1.default src={Expensicons.Checkmark} fill={theme.iconSuccessFill}/>);
         }
         return null;
     }, [theme.iconSuccessFill, fieldValue]);
-    var _d = (0, react_1.useMemo)(function () {
-        var _a, _b, _c;
-        var validFieldOptions = (_a = fieldOptions === null || fieldOptions === void 0 ? void 0 : fieldOptions.filter(function (option) { return !!option; })) === null || _a === void 0 ? void 0 : _a.sort(localeCompare);
-        var policyReportFieldOptions = (0, ReportFieldOptionsListUtils_1.getReportFieldOptionsSection)({
+    const [sections, headerMessage] = (0, react_1.useMemo)(() => {
+        const validFieldOptions = fieldOptions?.filter((option) => !!option)?.sort(localeCompare);
+        const policyReportFieldOptions = (0, ReportFieldOptionsListUtils_1.getReportFieldOptionsSection)({
             searchValue: debouncedSearchValue,
             selectedOptions: [
                 {
@@ -38,17 +36,14 @@ function EditReportFieldDropdownPage(_a) {
                 },
             ],
             options: validFieldOptions,
-            recentlyUsedOptions: recentlyUsedOptions,
+            recentlyUsedOptions,
         });
-        var policyReportFieldData = (_c = (_b = policyReportFieldOptions.at(0)) === null || _b === void 0 ? void 0 : _b.data) !== null && _c !== void 0 ? _c : [];
-        var header = (0, OptionsListUtils_1.getHeaderMessageForNonUserList)(policyReportFieldData.length > 0, debouncedSearchValue);
+        const policyReportFieldData = policyReportFieldOptions.at(0)?.data ?? [];
+        const header = (0, OptionsListUtils_1.getHeaderMessageForNonUserList)(policyReportFieldData.length > 0, debouncedSearchValue);
         return [policyReportFieldOptions, header];
-    }, [fieldOptions, localeCompare, debouncedSearchValue, fieldValue, recentlyUsedOptions]), sections = _d[0], headerMessage = _d[1];
-    var selectedOptionKey = (0, react_1.useMemo)(function () { var _a, _b, _c, _d; return (_d = (_c = ((_b = (_a = sections.at(0)) === null || _a === void 0 ? void 0 : _a.data) !== null && _b !== void 0 ? _b : []).filter(function (option) { return option.searchText === fieldValue; })) === null || _c === void 0 ? void 0 : _c.at(0)) === null || _d === void 0 ? void 0 : _d.keyForList; }, [sections, fieldValue]);
-    return (<SelectionList_1.default textInputValue={searchValue} textInputLabel={translate('common.search')} sections={sections !== null && sections !== void 0 ? sections : []} onSelectRow={function (option) {
-        var _a;
-        return onSubmit((_a = {}, _a[fieldKey] = !(option === null || option === void 0 ? void 0 : option.text) || fieldValue === option.text ? '' : option.text, _a));
-    }} initiallyFocusedOptionKey={selectedOptionKey !== null && selectedOptionKey !== void 0 ? selectedOptionKey : undefined} onChangeText={setSearchValue} headerMessage={headerMessage} ListItem={RadioListItem_1.default} isRowMultilineSupported rightHandSideComponent={itemRightSideComponent}/>);
+    }, [fieldOptions, localeCompare, debouncedSearchValue, fieldValue, recentlyUsedOptions]);
+    const selectedOptionKey = (0, react_1.useMemo)(() => (sections.at(0)?.data ?? []).filter((option) => option.searchText === fieldValue)?.at(0)?.keyForList, [sections, fieldValue]);
+    return (<SelectionList_1.default textInputValue={searchValue} textInputLabel={translate('common.search')} sections={sections ?? []} onSelectRow={(option) => onSubmit({ [fieldKey]: !option?.text || fieldValue === option.text ? '' : option.text })} initiallyFocusedOptionKey={selectedOptionKey ?? undefined} onChangeText={setSearchValue} headerMessage={headerMessage} ListItem={RadioListItem_1.default} isRowMultilineSupported rightHandSideComponent={itemRightSideComponent}/>);
 }
 EditReportFieldDropdownPage.displayName = 'EditReportFieldDropdownPage';
 exports.default = EditReportFieldDropdownPage;

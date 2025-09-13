@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var navBarManager = {
-    setButtonStyle: function (style) {
+const react_native_1 = require("react-native");
+const navBarManager = {
+    setButtonStyle: (style) => {
         react_native_1.NativeModules.RNNavBarManager.setButtonStyle(style);
     },
-    getType: function () {
+    getType: () => {
         return react_native_1.NativeModules.RNNavBarManager.getType();
     },
 };

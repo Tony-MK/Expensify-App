@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // eslint-disable-next-line no-restricted-imports
-var fontWeight_1 = require("@styles/utils/FontUtils/fontWeight");
-var fontFamily = {
+const fontWeight_1 = require("@styles/utils/FontUtils/fontWeight");
+const fontFamily = {
     SYSTEM: {
         fontFamily: 'System',
         fontStyle: 'normal',

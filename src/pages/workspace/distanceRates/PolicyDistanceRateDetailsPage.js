@@ -1,57 +1,44 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Expensicons = require("@components/Icon/Expensicons");
-var MenuItem_1 = require("@components/MenuItem");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Switch_1 = require("@components/Switch");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var DistanceRate_1 = require("@userActions/Policy/DistanceRate");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-function PolicyDistanceRateDetailsPage(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z;
-    var route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _0 = (0, react_1.useState)(false), isWarningModalVisible = _0[0], setIsWarningModalVisible = _0[1];
-    var _1 = (0, react_1.useState)(false), isDeleteModalVisible = _1[0], setIsDeleteModalVisible = _1[1];
-    var policyID = route.params.policyID;
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(route.params.policyID), { canBeMissing: true })[0];
-    var rateID = route.params.rateID;
-    var customUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
-    var rate = customUnit === null || customUnit === void 0 ? void 0 : customUnit.rates[rateID];
-    var customUnitID = customUnit === null || customUnit === void 0 ? void 0 : customUnit.customUnitID;
-    var policyReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, {
-        selector: function (reports) {
-            return Object.values(reports !== null && reports !== void 0 ? reports : {}).reduce(function (reportIDs, report) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Expensicons = require("@components/Icon/Expensicons");
+const MenuItem_1 = require("@components/MenuItem");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Switch_1 = require("@components/Switch");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const DistanceRate_1 = require("@userActions/Policy/DistanceRate");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+function PolicyDistanceRateDetailsPage({ route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [isWarningModalVisible, setIsWarningModalVisible] = (0, react_1.useState)(false);
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = (0, react_1.useState)(false);
+    const policyID = route.params.policyID;
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${route.params.policyID}`, { canBeMissing: true });
+    const rateID = route.params.rateID;
+    const customUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
+    const rate = customUnit?.rates[rateID];
+    const customUnitID = customUnit?.customUnitID;
+    const [policyReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, {
+        selector: (reports) => {
+            return Object.values(reports ?? {}).reduce((reportIDs, report) => {
                 if (report && report.policyID === policyID) {
                     reportIDs.add(report.reportID);
                 }
@@ -59,115 +46,112 @@ function PolicyDistanceRateDetailsPage(_a) {
             }, new Set());
         },
         canBeMissing: true,
-    })[0];
-    var eligibleTransactionIDs = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
-        selector: function (transactions) {
-            return Object.values(transactions !== null && transactions !== void 0 ? transactions : {}).reduce(function (transactionIDs, transaction) {
-                var _a, _b, _c, _d, _e, _f;
+    });
+    const [eligibleTransactionIDs] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
+        selector: (transactions) => {
+            return Object.values(transactions ?? {}).reduce((transactionIDs, transaction) => {
                 if (transaction &&
                     transaction.reportID &&
-                    (policyReports === null || policyReports === void 0 ? void 0 : policyReports.has(transaction.reportID)) &&
+                    policyReports?.has(transaction.reportID) &&
                     customUnitID &&
-                    ((_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _a === void 0 ? void 0 : _a.customUnit) === null || _b === void 0 ? void 0 : _b.customUnitID) === customUnitID &&
-                    ((_d = (_c = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _c === void 0 ? void 0 : _c.customUnit) === null || _d === void 0 ? void 0 : _d.customUnitRateID) &&
-                    ((_f = (_e = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _e === void 0 ? void 0 : _e.customUnit) === null || _f === void 0 ? void 0 : _f.customUnitRateID) === rateID) {
-                    transactionIDs.add(transaction === null || transaction === void 0 ? void 0 : transaction.transactionID);
+                    transaction?.comment?.customUnit?.customUnitID === customUnitID &&
+                    transaction?.comment?.customUnit?.customUnitRateID &&
+                    transaction?.comment?.customUnit?.customUnitRateID === rateID) {
+                    transactionIDs.add(transaction?.transactionID);
                 }
                 return transactionIDs;
             }, new Set());
         },
         canBeMissing: true,
-    })[0];
-    var transactionViolations = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, {
-        selector: function (violations) {
+    });
+    const [transactionViolations] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, {
+        selector: (violations) => {
             if (!eligibleTransactionIDs || eligibleTransactionIDs.size === 0) {
                 return undefined;
             }
-            return Object.fromEntries(Object.entries(violations !== null && violations !== void 0 ? violations : {}).filter(function (_a) {
-                var key = _a[0];
-                var id = key.replace(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, '');
-                return eligibleTransactionIDs === null || eligibleTransactionIDs === void 0 ? void 0 : eligibleTransactionIDs.has(id);
+            return Object.fromEntries(Object.entries(violations ?? {}).filter(([key]) => {
+                const id = key.replace(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, '');
+                return eligibleTransactionIDs?.has(id);
             }));
         },
         canBeMissing: true,
-    })[0];
-    var currency = (_b = rate === null || rate === void 0 ? void 0 : rate.currency) !== null && _b !== void 0 ? _b : CONST_1.default.CURRENCY.USD;
-    var taxClaimablePercentage = (_c = rate === null || rate === void 0 ? void 0 : rate.attributes) === null || _c === void 0 ? void 0 : _c.taxClaimablePercentage;
-    var taxRateExternalID = (_d = rate === null || rate === void 0 ? void 0 : rate.attributes) === null || _d === void 0 ? void 0 : _d.taxRateExternalID;
-    var isDistanceTrackTaxEnabled = !!((_e = customUnit === null || customUnit === void 0 ? void 0 : customUnit.attributes) === null || _e === void 0 ? void 0 : _e.taxEnabled);
-    var isPolicyTrackTaxEnabled = !!((_f = policy === null || policy === void 0 ? void 0 : policy.tax) === null || _f === void 0 ? void 0 : _f.trackingEnabled);
-    var taxRate = taxRateExternalID && ((_g = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _g === void 0 ? void 0 : _g.taxes[taxRateExternalID]) ? "".concat((_j = (_h = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _h === void 0 ? void 0 : _h.taxes[taxRateExternalID]) === null || _j === void 0 ? void 0 : _j.name, " (").concat((_l = (_k = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _k === void 0 ? void 0 : _k.taxes[taxRateExternalID]) === null || _l === void 0 ? void 0 : _l.value, ")") : '';
+    });
+    const currency = rate?.currency ?? CONST_1.default.CURRENCY.USD;
+    const taxClaimablePercentage = rate?.attributes?.taxClaimablePercentage;
+    const taxRateExternalID = rate?.attributes?.taxRateExternalID;
+    const isDistanceTrackTaxEnabled = !!customUnit?.attributes?.taxEnabled;
+    const isPolicyTrackTaxEnabled = !!policy?.tax?.trackingEnabled;
+    const taxRate = taxRateExternalID && policy?.taxRates?.taxes[taxRateExternalID] ? `${policy?.taxRates?.taxes[taxRateExternalID]?.name} (${policy?.taxRates?.taxes[taxRateExternalID]?.value})` : '';
     // Rates can be disabled or deleted as long as in the remaining rates there is always at least one enabled rate and there are no pending delete action
-    var canDisableOrDeleteRate = Object.values((_m = customUnit === null || customUnit === void 0 ? void 0 : customUnit.rates) !== null && _m !== void 0 ? _m : {}).some(function (distanceRate) { return (distanceRate === null || distanceRate === void 0 ? void 0 : distanceRate.enabled) && rateID !== (distanceRate === null || distanceRate === void 0 ? void 0 : distanceRate.customUnitRateID) && (distanceRate === null || distanceRate === void 0 ? void 0 : distanceRate.pendingAction) !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE; });
-    var errorFields = rate === null || rate === void 0 ? void 0 : rate.errorFields;
+    const canDisableOrDeleteRate = Object.values(customUnit?.rates ?? {}).some((distanceRate) => distanceRate?.enabled && rateID !== distanceRate?.customUnitRateID && distanceRate?.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE);
+    const errorFields = rate?.errorFields;
     if (!rate) {
         return <NotFoundPage_1.default />;
     }
-    var editRateName = function () {
+    const editRateName = () => {
         Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_DISTANCE_RATE_NAME_EDIT.getRoute(policyID, rateID));
     };
-    var editRateValue = function () {
+    const editRateValue = () => {
         Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_DISTANCE_RATE_EDIT.getRoute(policyID, rateID));
     };
-    var editTaxReclaimableValue = function () {
+    const editTaxReclaimableValue = () => {
         Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_DISTANCE_RATE_TAX_RECLAIMABLE_ON_EDIT.getRoute(policyID, rateID));
     };
-    var editTaxRateValue = function () {
+    const editTaxRateValue = () => {
         Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_DISTANCE_RATE_TAX_RATE_EDIT.getRoute(policyID, rateID));
     };
-    var toggleRate = function () {
-        if (!(rate === null || rate === void 0 ? void 0 : rate.enabled) || canDisableOrDeleteRate) {
-            (0, DistanceRate_1.setPolicyDistanceRatesEnabled)(policyID, customUnit, [__assign(__assign({}, rate), { enabled: !(rate === null || rate === void 0 ? void 0 : rate.enabled) })]);
+    const toggleRate = () => {
+        if (!rate?.enabled || canDisableOrDeleteRate) {
+            (0, DistanceRate_1.setPolicyDistanceRatesEnabled)(policyID, customUnit, [{ ...rate, enabled: !rate?.enabled }]);
         }
         else {
             setIsWarningModalVisible(true);
         }
     };
-    var deleteRate = function () {
+    const deleteRate = () => {
         Navigation_1.default.goBack();
-        (0, DistanceRate_1.deletePolicyDistanceRates)(policyID, customUnit, [rateID], Array.from(eligibleTransactionIDs !== null && eligibleTransactionIDs !== void 0 ? eligibleTransactionIDs : []), transactionViolations);
+        (0, DistanceRate_1.deletePolicyDistanceRates)(policyID, customUnit, [rateID], Array.from(eligibleTransactionIDs ?? []), transactionViolations);
         setIsDeleteModalVisible(false);
     };
-    var rateValueToDisplay = (0, CurrencyUtils_1.convertAmountToDisplayString)(rate === null || rate === void 0 ? void 0 : rate.rate, currency);
-    var taxClaimableValueToDisplay = taxClaimablePercentage && rate.rate ? (0, CurrencyUtils_1.convertAmountToDisplayString)(taxClaimablePercentage * rate.rate, currency) : '';
-    var unitToDisplay = translate("common.".concat((_p = (_o = customUnit === null || customUnit === void 0 ? void 0 : customUnit.attributes) === null || _o === void 0 ? void 0 : _o.unit) !== null && _p !== void 0 ? _p : CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES));
-    var clearErrorFields = function (fieldName) {
-        var _a;
-        (0, DistanceRate_1.clearPolicyDistanceRateErrorFields)(policyID, customUnit.customUnitID, rateID, __assign(__assign({}, errorFields), (_a = {}, _a[fieldName] = null, _a)));
+    const rateValueToDisplay = (0, CurrencyUtils_1.convertAmountToDisplayString)(rate?.rate, currency);
+    const taxClaimableValueToDisplay = taxClaimablePercentage && rate.rate ? (0, CurrencyUtils_1.convertAmountToDisplayString)(taxClaimablePercentage * rate.rate, currency) : '';
+    const unitToDisplay = translate(`common.${customUnit?.attributes?.unit ?? CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES}`);
+    const clearErrorFields = (fieldName) => {
+        (0, DistanceRate_1.clearPolicyDistanceRateErrorFields)(policyID, customUnit.customUnitID, rateID, { ...errorFields, [fieldName]: null });
     };
     return (<AccessOrNotFoundWrapper_1.default accessVariants={[CONST_1.default.POLICY.ACCESS_VARIANTS.ADMIN, CONST_1.default.POLICY.ACCESS_VARIANTS.PAID]} policyID={policyID} featureName={CONST_1.default.POLICY.MORE_FEATURES.ARE_DISTANCE_RATES_ENABLED}>
             <ScreenWrapper_1.default testID={PolicyDistanceRateDetailsPage.displayName} enableEdgeToEdgeBottomSafeAreaPadding style={[styles.defaultModalContainer]}>
-                <HeaderWithBackButton_1.default title={"".concat(rateValueToDisplay, " / ").concat(translate("common.".concat((_r = (_q = customUnit === null || customUnit === void 0 ? void 0 : customUnit.attributes) === null || _q === void 0 ? void 0 : _q.unit) !== null && _r !== void 0 ? _r : CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES)))}/>
+                <HeaderWithBackButton_1.default title={`${rateValueToDisplay} / ${translate(`common.${customUnit?.attributes?.unit ?? CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES}`)}`}/>
                 <ScrollView_1.default contentContainerStyle={styles.flexGrow1} addBottomSafeAreaPadding>
-                    <OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate !== null && rate !== void 0 ? rate : {}, 'enabled')} pendingAction={(_s = rate === null || rate === void 0 ? void 0 : rate.pendingFields) === null || _s === void 0 ? void 0 : _s.enabled} errorRowStyles={styles.mh5} onClose={function () { return clearErrorFields('enabled'); }}>
+                    <OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate ?? {}, 'enabled')} pendingAction={rate?.pendingFields?.enabled} errorRowStyles={styles.mh5} onClose={() => clearErrorFields('enabled')}>
                         <react_native_1.View style={[styles.flexRow, styles.justifyContentBetween, styles.p5]}>
                             <Text_1.default>{translate('workspace.distanceRates.enableRate')}</Text_1.default>
-                            <Switch_1.default isOn={(_t = rate === null || rate === void 0 ? void 0 : rate.enabled) !== null && _t !== void 0 ? _t : false} onToggle={toggleRate} accessibilityLabel={translate('workspace.distanceRates.enableRate')} showLockIcon={!canDisableOrDeleteRate}/>
+                            <Switch_1.default isOn={rate?.enabled ?? false} onToggle={toggleRate} accessibilityLabel={translate('workspace.distanceRates.enableRate')} showLockIcon={!canDisableOrDeleteRate}/>
                         </react_native_1.View>
                     </OfflineWithFeedback_1.default>
-                    <OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate !== null && rate !== void 0 ? rate : {}, 'name')} pendingAction={(_u = rate === null || rate === void 0 ? void 0 : rate.pendingFields) === null || _u === void 0 ? void 0 : _u.name} errorRowStyles={styles.mh5} onClose={function () { return clearErrorFields('name'); }}>
+                    <OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate ?? {}, 'name')} pendingAction={rate?.pendingFields?.name} errorRowStyles={styles.mh5} onClose={() => clearErrorFields('name')}>
                         <MenuItemWithTopDescription_1.default shouldShowRightIcon title={rate.name} description={translate('common.name')} descriptionTextStyle={styles.textNormal} onPress={editRateName}/>
                     </OfflineWithFeedback_1.default>
-                    <OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate !== null && rate !== void 0 ? rate : {}, 'rate')} pendingAction={(_w = (_v = rate === null || rate === void 0 ? void 0 : rate.pendingFields) === null || _v === void 0 ? void 0 : _v.rate) !== null && _w !== void 0 ? _w : (_x = rate === null || rate === void 0 ? void 0 : rate.pendingFields) === null || _x === void 0 ? void 0 : _x.currency} errorRowStyles={styles.mh5} onClose={function () { return clearErrorFields('rate'); }}>
-                        <MenuItemWithTopDescription_1.default shouldShowRightIcon title={"".concat(rateValueToDisplay, " / ").concat(unitToDisplay)} description={translate('workspace.distanceRates.rate')} descriptionTextStyle={styles.textNormal} onPress={editRateValue}/>
+                    <OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate ?? {}, 'rate')} pendingAction={rate?.pendingFields?.rate ?? rate?.pendingFields?.currency} errorRowStyles={styles.mh5} onClose={() => clearErrorFields('rate')}>
+                        <MenuItemWithTopDescription_1.default shouldShowRightIcon title={`${rateValueToDisplay} / ${unitToDisplay}`} description={translate('workspace.distanceRates.rate')} descriptionTextStyle={styles.textNormal} onPress={editRateValue}/>
                     </OfflineWithFeedback_1.default>
-                    {isDistanceTrackTaxEnabled && isPolicyTrackTaxEnabled && (<OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate, 'taxRateExternalID')} pendingAction={(_y = rate === null || rate === void 0 ? void 0 : rate.pendingFields) === null || _y === void 0 ? void 0 : _y.taxRateExternalID} errorRowStyles={styles.mh5} onClose={function () { return clearErrorFields('taxRateExternalID'); }}>
+                    {isDistanceTrackTaxEnabled && isPolicyTrackTaxEnabled && (<OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate, 'taxRateExternalID')} pendingAction={rate?.pendingFields?.taxRateExternalID} errorRowStyles={styles.mh5} onClose={() => clearErrorFields('taxRateExternalID')}>
                             <react_native_1.View style={styles.w100}>
                                 <MenuItemWithTopDescription_1.default title={taxRate} description={translate('workspace.taxes.taxRate')} shouldShowRightIcon onPress={editTaxRateValue}/>
                             </react_native_1.View>
                         </OfflineWithFeedback_1.default>)}
-                    {isDistanceTrackTaxEnabled && !!taxRate && isPolicyTrackTaxEnabled && (<OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate, 'taxClaimablePercentage')} pendingAction={(_z = rate === null || rate === void 0 ? void 0 : rate.pendingFields) === null || _z === void 0 ? void 0 : _z.taxClaimablePercentage} errorRowStyles={styles.mh5} onClose={function () { return clearErrorFields('taxClaimablePercentage'); }}>
+                    {isDistanceTrackTaxEnabled && !!taxRate && isPolicyTrackTaxEnabled && (<OfflineWithFeedback_1.default errors={(0, ErrorUtils_1.getLatestErrorField)(rate, 'taxClaimablePercentage')} pendingAction={rate?.pendingFields?.taxClaimablePercentage} errorRowStyles={styles.mh5} onClose={() => clearErrorFields('taxClaimablePercentage')}>
                             <MenuItemWithTopDescription_1.default shouldShowRightIcon title={taxClaimableValueToDisplay} description={translate('workspace.taxes.taxReclaimableOn')} descriptionTextStyle={styles.textNormal} onPress={editTaxReclaimableValue}/>
                         </OfflineWithFeedback_1.default>)}
-                    <MenuItem_1.default icon={Expensicons.Trashcan} title={translate('common.delete')} onPress={function () {
+                    <MenuItem_1.default icon={Expensicons.Trashcan} title={translate('common.delete')} onPress={() => {
             if (canDisableOrDeleteRate) {
                 setIsDeleteModalVisible(true);
                 return;
             }
             setIsWarningModalVisible(true);
         }}/>
-                    <ConfirmModal_1.default onConfirm={function () { return setIsWarningModalVisible(false); }} onCancel={function () { return setIsWarningModalVisible(false); }} isVisible={isWarningModalVisible} title={translate('workspace.distanceRates.oopsNotSoFast')} prompt={translate('workspace.distanceRates.workspaceNeeds')} confirmText={translate('common.buttonConfirm')} shouldShowCancelButton={false}/>
-                    <ConfirmModal_1.default title={translate('workspace.distanceRates.deleteDistanceRate')} isVisible={isDeleteModalVisible} onConfirm={deleteRate} onCancel={function () { return setIsDeleteModalVisible(false); }} prompt={translate('workspace.distanceRates.areYouSureDelete', { count: 1 })} confirmText={translate('common.delete')} cancelText={translate('common.cancel')} danger/>
+                    <ConfirmModal_1.default onConfirm={() => setIsWarningModalVisible(false)} onCancel={() => setIsWarningModalVisible(false)} isVisible={isWarningModalVisible} title={translate('workspace.distanceRates.oopsNotSoFast')} prompt={translate('workspace.distanceRates.workspaceNeeds')} confirmText={translate('common.buttonConfirm')} shouldShowCancelButton={false}/>
+                    <ConfirmModal_1.default title={translate('workspace.distanceRates.deleteDistanceRate')} isVisible={isDeleteModalVisible} onConfirm={deleteRate} onCancel={() => setIsDeleteModalVisible(false)} prompt={translate('workspace.distanceRates.areYouSureDelete', { count: 1 })} confirmText={translate('common.delete')} cancelText={translate('common.cancel')} danger/>
                 </ScrollView_1.default>
             </ScreenWrapper_1.default>
         </AccessOrNotFoundWrapper_1.default>);

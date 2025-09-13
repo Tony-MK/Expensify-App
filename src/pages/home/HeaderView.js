@@ -1,103 +1,101 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var date_fns_1 = require("date-fns");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var CaretWrapper_1 = require("@components/CaretWrapper");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var DisplayNames_1 = require("@components/DisplayNames");
-var Icon_1 = require("@components/Icon");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var LoadingBar_1 = require("@components/LoadingBar");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var OnboardingHelpDropdownButton_1 = require("@components/OnboardingHelpDropdownButton");
-var ParentNavigationSubtitle_1 = require("@components/ParentNavigationSubtitle");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var ReportActionAvatars_1 = require("@components/ReportActionAvatars");
-var ReportHeaderSkeletonView_1 = require("@components/ReportHeaderSkeletonView");
-var SearchButton_1 = require("@components/Search/SearchRouter/SearchButton");
-var HelpButton_1 = require("@components/SidePanel/HelpComponents/HelpButton");
-var TaskHeaderActionButton_1 = require("@components/TaskHeaderActionButton");
-var Text_1 = require("@components/Text");
-var Tooltip_1 = require("@components/Tooltip");
-var useHasTeam2025Pricing_1 = require("@hooks/useHasTeam2025Pricing");
-var useLoadingBarVisibility_1 = require("@hooks/useLoadingBarVisibility");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePolicy_1 = require("@hooks/usePolicy");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSubscriptionPlan_1 = require("@hooks/useSubscriptionPlan");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Fullstory_1 = require("@libs/Fullstory");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var Parser_1 = require("@libs/Parser");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
-var EarlyDiscountBanner_1 = require("@pages/settings/Subscription/CardSection/BillingBanner/EarlyDiscountBanner");
-var FreeTrial_1 = require("@pages/settings/Subscription/FreeTrial");
-var Report_1 = require("@userActions/Report");
-var Session_1 = require("@userActions/Session");
-var Task_1 = require("@userActions/Task");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var SCREENS_1 = require("@src/SCREENS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function HeaderView(_a) {
-    var _b, _c, _d, _e, _f;
-    var report = _a.report, parentReportAction = _a.parentReportAction, onNavigationMenuButtonClicked = _a.onNavigationMenuButtonClicked, _g = _a.shouldUseNarrowLayout, shouldUseNarrowLayout = _g === void 0 ? false : _g;
+const native_1 = require("@react-navigation/native");
+const date_fns_1 = require("date-fns");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const CaretWrapper_1 = require("@components/CaretWrapper");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const DisplayNames_1 = require("@components/DisplayNames");
+const Icon_1 = require("@components/Icon");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const LoadingBar_1 = require("@components/LoadingBar");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const OnboardingHelpDropdownButton_1 = require("@components/OnboardingHelpDropdownButton");
+const ParentNavigationSubtitle_1 = require("@components/ParentNavigationSubtitle");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const ReportActionAvatars_1 = require("@components/ReportActionAvatars");
+const ReportHeaderSkeletonView_1 = require("@components/ReportHeaderSkeletonView");
+const SearchButton_1 = require("@components/Search/SearchRouter/SearchButton");
+const HelpButton_1 = require("@components/SidePanel/HelpComponents/HelpButton");
+const TaskHeaderActionButton_1 = require("@components/TaskHeaderActionButton");
+const Text_1 = require("@components/Text");
+const Tooltip_1 = require("@components/Tooltip");
+const useHasTeam2025Pricing_1 = require("@hooks/useHasTeam2025Pricing");
+const useLoadingBarVisibility_1 = require("@hooks/useLoadingBarVisibility");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePolicy_1 = require("@hooks/usePolicy");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSubscriptionPlan_1 = require("@hooks/useSubscriptionPlan");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Fullstory_1 = require("@libs/Fullstory");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const Parser_1 = require("@libs/Parser");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
+const EarlyDiscountBanner_1 = require("@pages/settings/Subscription/CardSection/BillingBanner/EarlyDiscountBanner");
+const FreeTrial_1 = require("@pages/settings/Subscription/FreeTrial");
+const Report_1 = require("@userActions/Report");
+const Session_1 = require("@userActions/Session");
+const Task_1 = require("@userActions/Task");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const SCREENS_1 = require("@src/SCREENS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function HeaderView({ report, parentReportAction, onNavigationMenuButtonClicked, shouldUseNarrowLayout = false }) {
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var isSmallScreenWidth = (0, useResponsiveLayout_1.default)().isSmallScreenWidth;
-    var route = (0, native_1.useRoute)();
-    var _h = react_1.default.useState(false), isDeleteTaskConfirmModalVisible = _h[0], setIsDeleteTaskConfirmModalVisible = _h[1];
-    var invoiceReceiverPolicyID = (report === null || report === void 0 ? void 0 : report.invoiceReceiver) && 'policyID' in report.invoiceReceiver ? report.invoiceReceiver.policyID : undefined;
-    var invoiceReceiverPolicy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(invoiceReceiverPolicyID), { canBeMissing: true })[0];
-    var parentReport = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat((_b = (0, getNonEmptyStringOnyxID_1.default)(report === null || report === void 0 ? void 0 : report.parentReportID)) !== null && _b !== void 0 ? _b : (0, getNonEmptyStringOnyxID_1.default)(report === null || report === void 0 ? void 0 : report.reportID)), { canBeMissing: true })[0];
-    var policy = (0, usePolicy_1.default)(report === null || report === void 0 ? void 0 : report.policyID);
-    var personalDetails = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { canBeMissing: true })[0];
-    var shouldShowLoadingBar = (0, useLoadingBarVisibility_1.default)();
-    var firstDayFreeTrial = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_FIRST_DAY_FREE_TRIAL, { canBeMissing: true })[0];
-    var lastDayFreeTrial = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_DAY_FREE_TRIAL, { canBeMissing: true })[0];
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var reportNameValuePairs = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(report === null || report === void 0 ? void 0 : report.reportID), { canBeMissing: true })[0];
-    var reportMetadata = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_METADATA).concat(report === null || report === void 0 ? void 0 : report.reportID), { canBeMissing: true })[0];
-    var isReportArchived = (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs);
-    var _j = (0, useLocalize_1.default)(), translate = _j.translate, localeCompare = _j.localeCompare;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var isSelfDM = (0, ReportUtils_1.isSelfDM)(report);
-    var isGroupChat = (0, ReportUtils_1.isGroupChat)(report) || (0, ReportUtils_1.isDeprecatedGroupDM)(report, isReportArchived);
-    var introSelected = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_INTRO_SELECTED, { canBeMissing: true })[0];
-    var allParticipants = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, false, true, undefined, reportMetadata);
-    var shouldAddEllipsis = (allParticipants === null || allParticipants === void 0 ? void 0 : allParticipants.length) > CONST_1.default.DISPLAY_PARTICIPANTS_LIMIT;
-    var participants = allParticipants.slice(0, CONST_1.default.DISPLAY_PARTICIPANTS_LIMIT);
-    var isMultipleParticipant = participants.length > 1;
-    var participantPersonalDetails = (0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participants, personalDetails);
-    var displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)(participantPersonalDetails, isMultipleParticipant, localeCompare, undefined, isSelfDM);
-    var isChatThread = (0, ReportUtils_1.isChatThread)(report);
-    var isChatRoom = (0, ReportUtils_1.isChatRoom)(report);
-    var isPolicyExpenseChat = (0, ReportUtils_1.isPolicyExpenseChat)(report);
-    var isTaskReport = (0, ReportUtils_1.isTaskReport)(report);
-    var reportHeaderData = !isTaskReport && !isChatThread && (report === null || report === void 0 ? void 0 : report.parentReportID) ? parentReport : report;
+    const { isSmallScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const route = (0, native_1.useRoute)();
+    const [isDeleteTaskConfirmModalVisible, setIsDeleteTaskConfirmModalVisible] = react_1.default.useState(false);
+    const invoiceReceiverPolicyID = report?.invoiceReceiver && 'policyID' in report.invoiceReceiver ? report.invoiceReceiver.policyID : undefined;
+    const [invoiceReceiverPolicy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${invoiceReceiverPolicyID}`, { canBeMissing: true });
+    const [parentReport] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT}${(0, getNonEmptyStringOnyxID_1.default)(report?.parentReportID) ?? (0, getNonEmptyStringOnyxID_1.default)(report?.reportID)}`, { canBeMissing: true });
+    const policy = (0, usePolicy_1.default)(report?.policyID);
+    const [personalDetails] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { canBeMissing: true });
+    const shouldShowLoadingBar = (0, useLoadingBarVisibility_1.default)();
+    const [firstDayFreeTrial] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_FIRST_DAY_FREE_TRIAL, { canBeMissing: true });
+    const [lastDayFreeTrial] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_DAY_FREE_TRIAL, { canBeMissing: true });
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [reportNameValuePairs] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report?.reportID}`, { canBeMissing: true });
+    const [reportMetadata] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_METADATA}${report?.reportID}`, { canBeMissing: true });
+    const isReportArchived = (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs);
+    const { translate, localeCompare } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const isSelfDM = (0, ReportUtils_1.isSelfDM)(report);
+    const isGroupChat = (0, ReportUtils_1.isGroupChat)(report) || (0, ReportUtils_1.isDeprecatedGroupDM)(report, isReportArchived);
+    const [introSelected] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_INTRO_SELECTED, { canBeMissing: true });
+    const allParticipants = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, false, true, undefined, reportMetadata);
+    const shouldAddEllipsis = allParticipants?.length > CONST_1.default.DISPLAY_PARTICIPANTS_LIMIT;
+    const participants = allParticipants.slice(0, CONST_1.default.DISPLAY_PARTICIPANTS_LIMIT);
+    const isMultipleParticipant = participants.length > 1;
+    const participantPersonalDetails = (0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participants, personalDetails);
+    const displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)(participantPersonalDetails, isMultipleParticipant, localeCompare, undefined, isSelfDM);
+    const isChatThread = (0, ReportUtils_1.isChatThread)(report);
+    const isChatRoom = (0, ReportUtils_1.isChatRoom)(report);
+    const isPolicyExpenseChat = (0, ReportUtils_1.isPolicyExpenseChat)(report);
+    const isTaskReport = (0, ReportUtils_1.isTaskReport)(report);
+    const reportHeaderData = !isTaskReport && !isChatThread && report?.parentReportID ? parentReport : report;
     // Use sorted display names for the title for group chats on native small screen widths
-    var title = (0, ReportUtils_1.getReportName)(reportHeaderData, policy, parentReportAction, personalDetails, invoiceReceiverPolicy);
-    var isReportHeaderDataArchived = (0, useReportIsArchived_1.default)(reportHeaderData === null || reportHeaderData === void 0 ? void 0 : reportHeaderData.reportID);
-    var subtitle = (0, ReportUtils_1.getChatRoomSubtitle)(reportHeaderData, false, isReportHeaderDataArchived);
-    var isParentReportHeaderDataArchived = (0, useReportIsArchived_1.default)(reportHeaderData === null || reportHeaderData === void 0 ? void 0 : reportHeaderData.parentReportID);
-    var parentNavigationSubtitleData = (0, ReportUtils_1.getParentNavigationSubtitle)(reportHeaderData, isParentReportHeaderDataArchived);
-    var reportDescription = Parser_1.default.htmlToText((0, ReportUtils_1.getReportDescription)(report));
-    var policyName = (0, ReportUtils_1.getPolicyName)({ report: report, returnEmptyIfNotFound: true });
-    var policyDescription = (0, ReportUtils_1.getPolicyDescriptionText)(policy);
-    var isPersonalExpenseChat = isPolicyExpenseChat && (0, ReportUtils_1.isCurrentUserSubmitter)(report);
-    var hasTeam2025Pricing = (0, useHasTeam2025Pricing_1.default)();
-    var subscriptionPlan = (0, useSubscriptionPlan_1.default)();
-    var displayNamesFSClass = Fullstory_1.default.getChatFSClass(personalDetails, report);
-    var shouldShowSubtitle = function () {
+    const title = (0, ReportUtils_1.getReportName)(reportHeaderData, policy, parentReportAction, personalDetails, invoiceReceiverPolicy);
+    const isReportHeaderDataArchived = (0, useReportIsArchived_1.default)(reportHeaderData?.reportID);
+    const subtitle = (0, ReportUtils_1.getChatRoomSubtitle)(reportHeaderData, false, isReportHeaderDataArchived);
+    const isParentReportHeaderDataArchived = (0, useReportIsArchived_1.default)(reportHeaderData?.parentReportID);
+    const parentNavigationSubtitleData = (0, ReportUtils_1.getParentNavigationSubtitle)(reportHeaderData, isParentReportHeaderDataArchived);
+    const reportDescription = Parser_1.default.htmlToText((0, ReportUtils_1.getReportDescription)(report));
+    const policyName = (0, ReportUtils_1.getPolicyName)({ report, returnEmptyIfNotFound: true });
+    const policyDescription = (0, ReportUtils_1.getPolicyDescriptionText)(policy);
+    const isPersonalExpenseChat = isPolicyExpenseChat && (0, ReportUtils_1.isCurrentUserSubmitter)(report);
+    const hasTeam2025Pricing = (0, useHasTeam2025Pricing_1.default)();
+    const subscriptionPlan = (0, useSubscriptionPlan_1.default)();
+    const displayNamesFSClass = Fullstory_1.default.getChatFSClass(personalDetails, report);
+    const shouldShowSubtitle = () => {
         if (!subtitle) {
             return false;
         }
@@ -112,17 +110,17 @@ function HeaderView(_a) {
         }
         return true;
     };
-    var shouldShowGuideBooking = !!account &&
-        ((_c = account === null || account === void 0 ? void 0 : account.guideDetails) === null || _c === void 0 ? void 0 : _c.email) !== CONST_1.default.EMAIL.CONCIERGE &&
-        !!((_d = account === null || account === void 0 ? void 0 : account.guideDetails) === null || _d === void 0 ? void 0 : _d.calendarLink) &&
+    const shouldShowGuideBooking = !!account &&
+        account?.guideDetails?.email !== CONST_1.default.EMAIL.CONCIERGE &&
+        !!account?.guideDetails?.calendarLink &&
         (0, ReportUtils_1.isAdminRoom)(report) &&
         !!(0, ReportUtils_1.canUserPerformWriteAction)(report, isReportArchived) &&
         !isChatThread &&
-        (introSelected === null || introSelected === void 0 ? void 0 : introSelected.companySize) !== CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO;
-    var join = (0, Session_1.callFunctionIfActionIsAllowed)(function () { return (0, Report_1.joinRoom)(report); });
-    var canJoin = (0, ReportUtils_1.canJoinChat)(report, parentReportAction, policy, isReportArchived);
-    var joinButton = (<Button_1.default success text={translate('common.join')} onPress={join}/>);
-    var renderAdditionalText = function () {
+        introSelected?.companySize !== CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO;
+    const join = (0, Session_1.callFunctionIfActionIsAllowed)(() => (0, Report_1.joinRoom)(report));
+    const canJoin = (0, ReportUtils_1.canJoinChat)(report, parentReportAction, policy, isReportArchived);
+    const joinButton = (<Button_1.default success text={translate('common.join')} onPress={join}/>);
+    const renderAdditionalText = () => {
         if (shouldShowSubtitle() || isPersonalExpenseChat || !policyName || !(0, EmptyObject_1.isEmptyObject)(parentNavigationSubtitleData) || isSelfDM) {
             return null;
         }
@@ -133,28 +131,28 @@ function HeaderView(_a) {
     };
     // If the onboarding report is directly loaded, shouldShowDiscountBanner can return wrong value as it is not
     // linked to the react lifecycle directly. Wait for trial dates to load, before calculating.
-    var shouldShowDiscount = (0, react_1.useMemo)(function () { return (0, SubscriptionUtils_1.shouldShowDiscountBanner)(hasTeam2025Pricing, subscriptionPlan) && !isReportArchived; }, 
+    const shouldShowDiscount = (0, react_1.useMemo)(() => (0, SubscriptionUtils_1.shouldShowDiscountBanner)(hasTeam2025Pricing, subscriptionPlan) && !isReportArchived, 
     // eslint-disable-next-line react-compiler/react-compiler
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [firstDayFreeTrial, lastDayFreeTrial, hasTeam2025Pricing, reportNameValuePairs, subscriptionPlan]);
-    var shouldShowSubscript = (0, ReportUtils_1.shouldReportShowSubscript)(report, isReportArchived);
-    var defaultSubscriptSize = (0, ReportUtils_1.isExpenseRequest)(report) ? CONST_1.default.AVATAR_SIZE.SMALL_NORMAL : CONST_1.default.AVATAR_SIZE.DEFAULT;
-    var brickRoadIndicator = (0, ReportUtils_1.hasReportNameError)(report) ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : '';
-    var shouldDisableDetailPage = (0, ReportUtils_1.shouldDisableDetailPage)(report);
-    var shouldUseGroupTitle = isGroupChat && (!!(report === null || report === void 0 ? void 0 : report.reportName) || !isMultipleParticipant);
-    var isLoading = !(report === null || report === void 0 ? void 0 : report.reportID) || !title;
-    var isParentReportLoading = !!(report === null || report === void 0 ? void 0 : report.parentReportID) && !parentReport;
-    var isReportInRHP = route.name === SCREENS_1.default.SEARCH.REPORT_RHP;
-    var shouldDisplaySearchRouter = !isReportInRHP || isSmallScreenWidth;
-    var onboardingPurposeSelected = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true })[0];
-    var isChatUsedForOnboarding = (0, ReportUtils_1.isChatUsedForOnboarding)(report, onboardingPurposeSelected);
-    var shouldShowRegisterForWebinar = (introSelected === null || introSelected === void 0 ? void 0 : introSelected.companySize) === CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO && (isChatUsedForOnboarding || ((0, ReportUtils_1.isAdminRoom)(report) && !isChatThread));
-    var shouldShowOnBoardingHelpDropdownButton = (shouldShowRegisterForWebinar || shouldShowGuideBooking) && !isReportArchived;
-    var shouldShowEarlyDiscountBanner = shouldShowDiscount && isChatUsedForOnboarding;
-    var latestScheduledCall = (_e = reportNameValuePairs === null || reportNameValuePairs === void 0 ? void 0 : reportNameValuePairs.calendlyCalls) === null || _e === void 0 ? void 0 : _e.at(-1);
-    var hasActiveScheduledCall = latestScheduledCall && !(0, date_fns_1.isPast)(latestScheduledCall.eventTime) && latestScheduledCall.status !== CONST_1.default.SCHEDULE_CALL_STATUS.CANCELLED;
-    var onboardingHelpDropdownButton = (<OnboardingHelpDropdownButton_1.default reportID={report === null || report === void 0 ? void 0 : report.reportID} shouldUseNarrowLayout={shouldUseNarrowLayout} shouldShowRegisterForWebinar={shouldShowRegisterForWebinar} shouldShowGuideBooking={shouldShowGuideBooking} hasActiveScheduledCall={hasActiveScheduledCall}/>);
-    var multipleAvatars = (<ReportActionAvatars_1.default reportID={report === null || report === void 0 ? void 0 : report.reportID} size={shouldShowSubscript ? defaultSubscriptSize : undefined} singleAvatarContainerStyle={[styles.actionAvatar, styles.mr3]}/>);
+    const shouldShowSubscript = (0, ReportUtils_1.shouldReportShowSubscript)(report, isReportArchived);
+    const defaultSubscriptSize = (0, ReportUtils_1.isExpenseRequest)(report) ? CONST_1.default.AVATAR_SIZE.SMALL_NORMAL : CONST_1.default.AVATAR_SIZE.DEFAULT;
+    const brickRoadIndicator = (0, ReportUtils_1.hasReportNameError)(report) ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : '';
+    const shouldDisableDetailPage = (0, ReportUtils_1.shouldDisableDetailPage)(report);
+    const shouldUseGroupTitle = isGroupChat && (!!report?.reportName || !isMultipleParticipant);
+    const isLoading = !report?.reportID || !title;
+    const isParentReportLoading = !!report?.parentReportID && !parentReport;
+    const isReportInRHP = route.name === SCREENS_1.default.SEARCH.REPORT_RHP;
+    const shouldDisplaySearchRouter = !isReportInRHP || isSmallScreenWidth;
+    const [onboardingPurposeSelected] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true });
+    const isChatUsedForOnboarding = (0, ReportUtils_1.isChatUsedForOnboarding)(report, onboardingPurposeSelected);
+    const shouldShowRegisterForWebinar = introSelected?.companySize === CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO && (isChatUsedForOnboarding || ((0, ReportUtils_1.isAdminRoom)(report) && !isChatThread));
+    const shouldShowOnBoardingHelpDropdownButton = (shouldShowRegisterForWebinar || shouldShowGuideBooking) && !isReportArchived;
+    const shouldShowEarlyDiscountBanner = shouldShowDiscount && isChatUsedForOnboarding;
+    const latestScheduledCall = reportNameValuePairs?.calendlyCalls?.at(-1);
+    const hasActiveScheduledCall = latestScheduledCall && !(0, date_fns_1.isPast)(latestScheduledCall.eventTime) && latestScheduledCall.status !== CONST_1.default.SCHEDULE_CALL_STATUS.CANCELLED;
+    const onboardingHelpDropdownButton = (<OnboardingHelpDropdownButton_1.default reportID={report?.reportID} shouldUseNarrowLayout={shouldUseNarrowLayout} shouldShowRegisterForWebinar={shouldShowRegisterForWebinar} shouldShowGuideBooking={shouldShowGuideBooking} hasActiveScheduledCall={hasActiveScheduledCall}/>);
+    const multipleAvatars = (<ReportActionAvatars_1.default reportID={report?.reportID} size={shouldShowSubscript ? defaultSubscriptSize : undefined} singleAvatarContainerStyle={[styles.actionAvatar, styles.mr3]}/>);
     return (<>
             <react_native_1.View style={[styles.borderBottom]} dataSet={{ dragArea: true }}>
                 <react_native_1.View style={[styles.appContentHeader, styles.pr3]}>
@@ -167,13 +165,13 @@ function HeaderView(_a) {
                                     </Tooltip_1.default>
                                 </PressableWithoutFeedback_1.default>)}
                             <react_native_1.View style={[styles.flex1, styles.flexRow, styles.alignItemsCenter, styles.justifyContentBetween]}>
-                                <PressableWithoutFeedback_1.default onPress={function () { return (0, ReportUtils_1.navigateToDetailsPage)(report, Navigation_1.default.getReportRHPActiveRoute(), true); }} style={[styles.flexRow, styles.alignItemsCenter, styles.flex1]} disabled={shouldDisableDetailPage} accessibilityLabel={title} role={CONST_1.default.ROLE.BUTTON}>
-                                    {shouldShowSubscript ? multipleAvatars : <OfflineWithFeedback_1.default pendingAction={(_f = report === null || report === void 0 ? void 0 : report.pendingFields) === null || _f === void 0 ? void 0 : _f.avatar}>{multipleAvatars}</OfflineWithFeedback_1.default>}
+                                <PressableWithoutFeedback_1.default onPress={() => (0, ReportUtils_1.navigateToDetailsPage)(report, Navigation_1.default.getReportRHPActiveRoute(), true)} style={[styles.flexRow, styles.alignItemsCenter, styles.flex1]} disabled={shouldDisableDetailPage} accessibilityLabel={title} role={CONST_1.default.ROLE.BUTTON}>
+                                    {shouldShowSubscript ? multipleAvatars : <OfflineWithFeedback_1.default pendingAction={report?.pendingFields?.avatar}>{multipleAvatars}</OfflineWithFeedback_1.default>}
                                     <react_native_1.View fsClass={CONST_1.default.FULLSTORY.CLASS.UNMASK} style={[styles.flex1, styles.flexColumn]}>
                                         <CaretWrapper_1.default>
                                             <DisplayNames_1.default fullTitle={title} displayNamesWithTooltips={displayNamesWithTooltips} tooltipEnabled numberOfLines={1} textStyles={[styles.headerText, styles.pre]} shouldUseFullTitle={isChatRoom || isPolicyExpenseChat || isChatThread || isTaskReport || shouldUseGroupTitle || isReportArchived} renderAdditionalText={renderAdditionalText} shouldAddEllipsis={shouldAddEllipsis} forwardedFSClass={displayNamesFSClass}/>
                                         </CaretWrapper_1.default>
-                                        {!(0, EmptyObject_1.isEmptyObject)(parentNavigationSubtitleData) && (<ParentNavigationSubtitle_1.default parentNavigationSubtitleData={parentNavigationSubtitleData} parentReportID={reportHeaderData === null || reportHeaderData === void 0 ? void 0 : reportHeaderData.parentReportID} parentReportActionID={reportHeaderData === null || reportHeaderData === void 0 ? void 0 : reportHeaderData.parentReportActionID} pressableStyles={[styles.alignSelfStart, styles.mw100]}/>)}
+                                        {!(0, EmptyObject_1.isEmptyObject)(parentNavigationSubtitleData) && (<ParentNavigationSubtitle_1.default parentNavigationSubtitleData={parentNavigationSubtitleData} parentReportID={reportHeaderData?.parentReportID} parentReportActionID={reportHeaderData?.parentReportActionID} pressableStyles={[styles.alignSelfStart, styles.mw100]}/>)}
                                         {shouldShowSubtitle() && (<Text_1.default style={[styles.sidebarLinkText, styles.optionAlternateText, styles.textLabelSupporting]} numberOfLines={1}>
                                                 {subtitle}
                                             </Text_1.default>)}
@@ -201,10 +199,10 @@ function HeaderView(_a) {
                                 <HelpButton_1.default style={styles.ml2}/>
                                 {shouldDisplaySearchRouter && <SearchButton_1.default />}
                             </react_native_1.View>
-                            <ConfirmModal_1.default isVisible={isDeleteTaskConfirmModalVisible} onConfirm={function () {
+                            <ConfirmModal_1.default isVisible={isDeleteTaskConfirmModalVisible} onConfirm={() => {
                 setIsDeleteTaskConfirmModalVisible(false);
                 (0, Task_1.deleteTask)(report, isReportArchived);
-            }} onCancel={function () { return setIsDeleteTaskConfirmModalVisible(false); }} title={translate('task.deleteTask')} prompt={translate('task.deleteConfirmation')} confirmText={translate('common.delete')} cancelText={translate('common.cancel')} danger shouldEnableNewFocusManagement/>
+            }} onCancel={() => setIsDeleteTaskConfirmModalVisible(false)} title={translate('task.deleteTask')} prompt={translate('task.deleteConfirmation')} confirmText={translate('common.delete')} cancelText={translate('common.cancel')} danger shouldEnableNewFocusManagement/>
                         </react_native_1.View>)}
                 </react_native_1.View>
                 {!isParentReportLoading && !isLoading && canJoin && shouldUseNarrowLayout && <react_native_1.View style={[styles.ph5, styles.pb2]}>{joinButton}</react_native_1.View>}

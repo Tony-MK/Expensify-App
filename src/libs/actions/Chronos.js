@@ -1,54 +1,53 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeEvent = void 0;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var removeEvent = function (reportID, reportActionID, eventID, events) {
-    var _a, _b, _c;
-    var optimisticData = [
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const removeEvent = (reportID, reportActionID, eventID, events) => {
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID),
-            value: (_a = {},
-                _a[reportActionID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`,
+            value: {
+                [reportActionID]: {
                     pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                     originalMessage: {
-                        events: events.filter(function (event) { return event.id !== eventID; }),
+                        events: events.filter((event) => event.id !== eventID),
                     },
                 },
-                _a),
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID),
-            value: (_b = {},
-                _b[reportActionID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`,
+            value: {
+                [reportActionID]: {
                     pendingAction: null,
                 },
-                _b),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID),
-            value: (_c = {},
-                _c[reportActionID] = {
-                    originalMessage: { events: events },
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`,
+            value: {
+                [reportActionID]: {
+                    originalMessage: { events },
                     pendingAction: null,
                 },
-                _c),
+            },
         },
     ];
-    var parameters = {
+    const parameters = {
         googleEventID: eventID,
-        reportActionID: reportActionID,
+        reportActionID,
     };
-    API.write(types_1.WRITE_COMMANDS.CHRONOS_REMOVE_OOO_EVENT, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.CHRONOS_REMOVE_OOO_EVENT, parameters, { optimisticData, successData, failureData });
 };
 exports.removeEvent = removeEvent;

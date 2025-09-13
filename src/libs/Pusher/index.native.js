@@ -1,46 +1,46 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pusher_websocket_react_native_1 = require("@pusher/pusher-websocket-react-native");
-var isObject_1 = require("lodash/isObject");
-var react_native_1 = require("react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var Log_1 = require("@libs/Log");
-var Session_1 = require("@userActions/Session");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EventType_1 = require("./EventType");
-var shouldForceOffline = false;
+const pusher_websocket_react_native_1 = require("@pusher/pusher-websocket-react-native");
+const isObject_1 = require("lodash/isObject");
+const react_native_1 = require("react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const Log_1 = require("@libs/Log");
+const Session_1 = require("@userActions/Session");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EventType_1 = require("./EventType");
+let shouldForceOffline = false;
 // We have used `connectWithoutView` here because it is not connected to any UI
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.NETWORK,
-    callback: function (network) {
+    callback: (network) => {
         if (!network) {
             return;
         }
         shouldForceOffline = !!network.shouldForceOffline;
     },
 });
-var socket;
-var pusherSocketID;
-var socketEventCallbacks = [];
-var resolveInitPromise;
-var initPromise = new Promise(function (resolve) {
+let socket;
+let pusherSocketID;
+const socketEventCallbacks = [];
+let resolveInitPromise;
+let initPromise = new Promise((resolve) => {
     resolveInitPromise = resolve;
 });
-var eventsBoundToChannels = new Map();
-var channels = {};
+const eventsBoundToChannels = new Map();
+let channels = {};
 /**
  * Trigger each of the socket event callbacks with the event information
  */
 function callSocketEventCallbacks(eventName, data) {
-    socketEventCallbacks.forEach(function (cb) { return cb(eventName, data); });
+    socketEventCallbacks.forEach((cb) => cb(eventName, data));
 }
 /**
  * Initialize our pusher lib
  * @returns resolves when Pusher has connected
  */
 function init(args) {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         if (socket) {
             resolve();
             return;
@@ -49,9 +49,9 @@ function init(args) {
         socket.init({
             apiKey: args.appKey,
             cluster: args.cluster,
-            onConnectionStateChange: function (currentState, previousState) {
+            onConnectionStateChange: (currentState, previousState) => {
                 if (currentState === CONST_1.default.PUSHER.STATE.CONNECTED) {
-                    socket === null || socket === void 0 ? void 0 : socket.getSocketId().then(function (id) {
+                    socket?.getSocketId().then((id) => {
                         pusherSocketID = id;
                         callSocketEventCallbacks('connected');
                         resolve();
@@ -62,8 +62,8 @@ function init(args) {
                 }
                 callSocketEventCallbacks('state_change', { previous: previousState, current: currentState });
             },
-            onError: function (message) { return callSocketEventCallbacks('error', { data: { message: message } }); },
-            onAuthorizer: function (channelName, socketId) { return (0, Session_1.authenticatePusher)(socketId, channelName); },
+            onError: (message) => callSocketEventCallbacks('error', { data: { message } }),
+            onAuthorizer: (channelName, socketId) => (0, Session_1.authenticatePusher)(socketId, channelName),
         });
         socket.connect();
     }).then(resolveInitPromise);
@@ -87,11 +87,11 @@ function parseEventData(eventData) {
         return eventData;
     }
     if (typeof eventData !== 'string') {
-        Log_1.default.alert('[Pusher] Event data is neither object nor string', { eventData: eventData });
+        Log_1.default.alert('[Pusher] Event data is neither object nor string', { eventData });
         return null;
     }
     try {
-        var firstParse = JSON.parse(eventData);
+        const firstParse = JSON.parse(eventData);
         // If result is still a string, it was double-encoded - parse again
         if (typeof firstParse === 'string') {
             return JSON.parse(firstParse);
@@ -101,7 +101,7 @@ function parseEventData(eventData) {
     catch (error) {
         Log_1.default.alert('[Pusher] Failed to parse event data', {
             error: error instanceof Error ? error.message : 'Unknown error',
-            eventData: eventData,
+            eventData,
         });
         return null;
     }
@@ -109,19 +109,17 @@ function parseEventData(eventData) {
 /**
  * Binds an event callback to a channel + eventName
  */
-function bindEventToChannel(channel, eventName, eventCallback) {
-    var _a;
-    if (eventCallback === void 0) { eventCallback = function () { }; }
+function bindEventToChannel(channel, eventName, eventCallback = () => { }) {
     if (!eventName) {
         return;
     }
-    var chunkedDataEvents = {};
-    var callback = function (eventData) {
+    const chunkedDataEvents = {};
+    const callback = (eventData) => {
         if (shouldForceOffline) {
             Log_1.default.info('[Pusher] Ignoring a Push event because shouldForceOffline = true');
             return;
         }
-        var data = parseEventData(eventData);
+        const data = parseEventData(eventData);
         if (!data) {
             // Error already logged in parseEventData
             return;
@@ -138,7 +136,7 @@ function bindEventToChannel(channel, eventName, eventCallback) {
             chunkedDataEvents[data.id] = { chunks: [], receivedFinal: false };
         }
         // Add it to the rolling list.
-        var chunkedEvent = chunkedDataEvents[data.id];
+        const chunkedEvent = chunkedDataEvents[data.id];
         if (data.index !== undefined) {
             chunkedEvent.chunks[data.index] = data.chunk;
         }
@@ -166,85 +164,79 @@ function bindEventToChannel(channel, eventName, eventCallback) {
     if (!eventsBoundToChannels.has(channel)) {
         eventsBoundToChannels.set(channel, new Map());
     }
-    (_a = eventsBoundToChannels.get(channel)) === null || _a === void 0 ? void 0 : _a.set(eventName, callback);
+    eventsBoundToChannels.get(channel)?.set(eventName, callback);
 }
 /**
  * Subscribe to a channel and an event
  */
-function subscribe(channelName, eventName, eventCallback, onResubscribe) {
-    if (eventCallback === void 0) { eventCallback = function () { }; }
-    if (onResubscribe === void 0) { onResubscribe = function () { }; }
-    return initPromise.then(function () {
-        return new Promise(function (resolve, reject) {
-            react_native_1.InteractionManager.runAfterInteractions(function () {
-                // We cannot call subscribe() before init(). Prevent any attempt to do this on dev.
-                if (!socket) {
-                    throw new Error("[Pusher] instance not found. Pusher.subscribe()\n            most likely has been called before Pusher.init()");
-                }
-                Log_1.default.info('[Pusher] Attempting to subscribe to channel', false, { channelName: channelName, eventName: eventName });
-                if (!channels[channelName]) {
-                    channels[channelName] = CONST_1.default.PUSHER.CHANNEL_STATUS.SUBSCRIBING;
-                    socket.subscribe({
-                        channelName: channelName,
-                        onEvent: function (event) {
-                            var _a;
-                            var callback = (_a = eventsBoundToChannels.get(event.channelName)) === null || _a === void 0 ? void 0 : _a.get(event.eventName);
-                            callback === null || callback === void 0 ? void 0 : callback(event.data);
-                        },
-                        onSubscriptionSucceeded: function () {
-                            channels[channelName] = CONST_1.default.PUSHER.CHANNEL_STATUS.SUBSCRIBED;
-                            bindEventToChannel(channelName, eventName, eventCallback);
-                            resolve();
-                            // When subscribing for the first time we register a success callback that can be
-                            // called multiple times when the subscription succeeds again in the future
-                            // e.g. as a result of Pusher disconnecting and reconnecting. This callback does
-                            // not fire on the first subscription_succeeded event.
-                            onResubscribe();
-                        },
-                        onSubscriptionError: function (name, message) {
-                            delete channels[channelName];
-                            Log_1.default.hmmm('[Pusher] Issue authenticating with Pusher during subscribe attempt.', {
-                                channelName: channelName,
-                                message: message,
-                            });
-                            reject(message);
-                        },
-                    });
-                }
-                else {
-                    bindEventToChannel(channelName, eventName, eventCallback);
-                    resolve();
-                }
-            });
+function subscribe(channelName, eventName, eventCallback = () => { }, onResubscribe = () => { }) {
+    return initPromise.then(() => new Promise((resolve, reject) => {
+        react_native_1.InteractionManager.runAfterInteractions(() => {
+            // We cannot call subscribe() before init(). Prevent any attempt to do this on dev.
+            if (!socket) {
+                throw new Error(`[Pusher] instance not found. Pusher.subscribe()
+            most likely has been called before Pusher.init()`);
+            }
+            Log_1.default.info('[Pusher] Attempting to subscribe to channel', false, { channelName, eventName });
+            if (!channels[channelName]) {
+                channels[channelName] = CONST_1.default.PUSHER.CHANNEL_STATUS.SUBSCRIBING;
+                socket.subscribe({
+                    channelName,
+                    onEvent: (event) => {
+                        const callback = eventsBoundToChannels.get(event.channelName)?.get(event.eventName);
+                        callback?.(event.data);
+                    },
+                    onSubscriptionSucceeded: () => {
+                        channels[channelName] = CONST_1.default.PUSHER.CHANNEL_STATUS.SUBSCRIBED;
+                        bindEventToChannel(channelName, eventName, eventCallback);
+                        resolve();
+                        // When subscribing for the first time we register a success callback that can be
+                        // called multiple times when the subscription succeeds again in the future
+                        // e.g. as a result of Pusher disconnecting and reconnecting. This callback does
+                        // not fire on the first subscription_succeeded event.
+                        onResubscribe();
+                    },
+                    onSubscriptionError: (name, message) => {
+                        delete channels[channelName];
+                        Log_1.default.hmmm('[Pusher] Issue authenticating with Pusher during subscribe attempt.', {
+                            channelName,
+                            message,
+                        });
+                        reject(message);
+                    },
+                });
+            }
+            else {
+                bindEventToChannel(channelName, eventName, eventCallback);
+                resolve();
+            }
         });
-    });
+    }));
 }
 /**
  * Unsubscribe from a channel and optionally a specific event
  */
-function unsubscribe(channelName, eventName) {
-    var _a, _b;
-    if (eventName === void 0) { eventName = ''; }
-    var channel = getChannel(channelName);
+function unsubscribe(channelName, eventName = '') {
+    const channel = getChannel(channelName);
     if (!channel) {
-        Log_1.default.hmmm('[Pusher] Attempted to unsubscribe or unbind from a channel, but Pusher-JS has no knowledge of it', { channelName: channelName, eventName: eventName });
+        Log_1.default.hmmm('[Pusher] Attempted to unsubscribe or unbind from a channel, but Pusher-JS has no knowledge of it', { channelName, eventName });
         return;
     }
     if (eventName) {
-        Log_1.default.info('[Pusher] Unbinding event', false, { eventName: eventName, channelName: channelName });
-        (_a = eventsBoundToChannels.get(channelName)) === null || _a === void 0 ? void 0 : _a.delete(eventName);
-        if (((_b = eventsBoundToChannels.get(channelName)) === null || _b === void 0 ? void 0 : _b.size) === 0) {
-            Log_1.default.info("[Pusher] After unbinding ".concat(eventName, " from channel ").concat(channelName, ", no other events were bound to that channel. Unsubscribing..."), false);
+        Log_1.default.info('[Pusher] Unbinding event', false, { eventName, channelName });
+        eventsBoundToChannels.get(channelName)?.delete(eventName);
+        if (eventsBoundToChannels.get(channelName)?.size === 0) {
+            Log_1.default.info(`[Pusher] After unbinding ${eventName} from channel ${channelName}, no other events were bound to that channel. Unsubscribing...`, false);
             eventsBoundToChannels.delete(channelName);
             delete channels[channelName];
-            socket === null || socket === void 0 ? void 0 : socket.unsubscribe({ channelName: channelName });
+            socket?.unsubscribe({ channelName });
         }
     }
     else {
-        Log_1.default.info('[Pusher] Unsubscribing from channel', false, { channelName: channelName });
+        Log_1.default.info('[Pusher] Unsubscribing from channel', false, { channelName });
         eventsBoundToChannels.delete(channelName);
         delete channels[channelName];
-        socket === null || socket === void 0 ? void 0 : socket.unsubscribe({ channelName: channelName });
+        socket?.unsubscribe({ channelName });
     }
 }
 /**
@@ -279,7 +271,7 @@ function sendEvent(channelName, eventName, payload) {
         Log_1.default.info('[Pusher] Ignoring a Send event because shouldForceOffline = true');
         return;
     }
-    socket === null || socket === void 0 ? void 0 : socket.trigger({ channelName: channelName, eventName: eventName, data: JSON.stringify(payload) });
+    socket?.trigger({ channelName, eventName, data: JSON.stringify(payload) });
 }
 /**
  * Register a method that will be triggered when a socket event happens (like disconnecting)
@@ -300,7 +292,7 @@ function disconnect() {
     pusherSocketID = '';
     channels = {};
     eventsBoundToChannels.clear();
-    initPromise = new Promise(function (resolve) {
+    initPromise = new Promise((resolve) => {
         resolveInitPromise = resolve;
     });
 }
@@ -323,20 +315,20 @@ if (window) {
     /**
      * Pusher socket for debugging purposes
      */
-    window.getPusherInstance = function () { return socket; };
+    window.getPusherInstance = () => socket;
 }
-var MobilePusher = {
-    init: init,
-    subscribe: subscribe,
-    unsubscribe: unsubscribe,
-    getChannel: getChannel,
-    isSubscribed: isSubscribed,
-    isAlreadySubscribing: isAlreadySubscribing,
-    sendEvent: sendEvent,
-    disconnect: disconnect,
-    reconnect: reconnect,
-    registerSocketEventCallback: registerSocketEventCallback,
+const MobilePusher = {
+    init,
+    subscribe,
+    unsubscribe,
+    getChannel,
+    isSubscribed,
+    isAlreadySubscribing,
+    sendEvent,
+    disconnect,
+    reconnect,
+    registerSocketEventCallback,
     TYPE: EventType_1.default,
-    getPusherSocketID: getPusherSocketID,
+    getPusherSocketID,
 };
 exports.default = MobilePusher;

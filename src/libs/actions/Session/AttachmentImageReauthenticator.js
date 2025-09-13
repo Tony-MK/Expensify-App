@@ -1,23 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_onyx_1 = require("react-native-onyx");
-var Authentication_1 = require("@libs/Authentication");
-var Log_1 = require("@libs/Log");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var isOffline = false;
-var active = false;
-var currentActiveSession = {};
-var timer;
+const react_native_onyx_1 = require("react-native-onyx");
+const Authentication_1 = require("@libs/Authentication");
+const Log_1 = require("@libs/Log");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+let isOffline = false;
+let active = false;
+let currentActiveSession = {};
+let timer;
 // The delay before requesting a reauthentication once activated
 // When the session is expired we will give it this time to reauthenticate via normal flows, like the Reauthentication middleware, in an attempt to not duplicate authentication requests
 // also, this is an arbitrary number so we may tweak as needed
-var TIMING_BEFORE_REAUTHENTICATION_MS = 3500; // 3.5s
+const TIMING_BEFORE_REAUTHENTICATION_MS = 3500; // 3.5s
 // We subscribe to network's online/offline status
 // We do not depend on updates on the UI to check for the offline status
 // So we can use `connectWithoutView` here.
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.NETWORK,
-    callback: function (network) {
+    callback: (network) => {
         if (!network) {
             return;
         }
@@ -29,7 +29,7 @@ react_native_onyx_1.default.connectWithoutView({
 // So we can use `connectWithoutView` here.
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (value) {
+    callback: (value) => {
         if (!value || isSameSession(value) || !active) {
             return;
         }
@@ -62,8 +62,8 @@ function tryReauthenticate() {
     if (isOffline || !active) {
         return;
     }
-    (0, Authentication_1.reauthenticate)().catch(function (error) {
-        Log_1.default.hmmm('Could not reauthenticate attachment image or receipt', { error: error });
+    (0, Authentication_1.reauthenticate)().catch((error) => {
+        Log_1.default.hmmm('Could not reauthenticate attachment image or receipt', { error });
     });
 }
 exports.default = activate;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var whiteSpace = {
+const whiteSpace = {
     noWrap: {
         whiteSpace: 'nowrap',
     },

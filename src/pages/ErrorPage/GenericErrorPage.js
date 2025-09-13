@@ -1,39 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var expensify_wordmark_svg_1 = require("@assets/images/expensify-wordmark.svg");
-var Button_1 = require("@components/Button");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var ImageSVG_1 = require("@components/ImageSVG");
-var SafeAreaConsumer_1 = require("@components/SafeAreaConsumer");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useIsAuthenticated_1 = require("@hooks/useIsAuthenticated");
-var useLocalize_1 = require("@hooks/useLocalize");
-var usePageRefresh_1 = require("@hooks/usePageRefresh");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var Session_1 = require("@userActions/Session");
-var CONST_1 = require("@src/CONST");
-var ErrorBodyText_1 = require("./ErrorBodyText");
-function GenericErrorPage(_a) {
-    var _b;
-    var error = _a.error;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var isAuthenticated = (0, useIsAuthenticated_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isChunkLoadError = (error === null || error === void 0 ? void 0 : error.name) === CONST_1.default.CHUNK_LOAD_ERROR || /Loading chunk [\d]+ failed/.test((_b = error === null || error === void 0 ? void 0 : error.message) !== null && _b !== void 0 ? _b : '');
-    var refreshPage = (0, usePageRefresh_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const expensify_wordmark_svg_1 = require("@assets/images/expensify-wordmark.svg");
+const Button_1 = require("@components/Button");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const ImageSVG_1 = require("@components/ImageSVG");
+const SafeAreaConsumer_1 = require("@components/SafeAreaConsumer");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useIsAuthenticated_1 = require("@hooks/useIsAuthenticated");
+const useLocalize_1 = require("@hooks/useLocalize");
+const usePageRefresh_1 = require("@hooks/usePageRefresh");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const Session_1 = require("@userActions/Session");
+const CONST_1 = require("@src/CONST");
+const ErrorBodyText_1 = require("./ErrorBodyText");
+function GenericErrorPage({ error }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const isAuthenticated = (0, useIsAuthenticated_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const isChunkLoadError = error?.name === CONST_1.default.CHUNK_LOAD_ERROR || /Loading chunk [\d]+ failed/.test(error?.message ?? '');
+    const refreshPage = (0, usePageRefresh_1.default)();
     return (<SafeAreaConsumer_1.default>
-            {function (_a) {
-            var paddingBottom = _a.paddingBottom;
-            return (<react_native_1.View style={[styles.flex1, styles.pt10, styles.ph5, StyleUtils.getErrorPageContainerStyle(Number(paddingBottom))]}>
+            {({ paddingBottom }) => (<react_native_1.View style={[styles.flex1, styles.pt10, styles.ph5, StyleUtils.getErrorPageContainerStyle(Number(paddingBottom))]}>
                     <react_native_1.View style={[styles.flex1, styles.alignItemsCenter, styles.justifyContentCenter]}>
                         <react_native_1.View>
                             <react_native_1.View style={styles.mb5}>
@@ -45,19 +41,19 @@ function GenericErrorPage(_a) {
                             <react_native_1.View style={styles.mb5}>
                                 <ErrorBodyText_1.default />
                                 <Text_1.default>
-                                    {"".concat(translate('genericErrorPage.body.helpTextConcierge'), " ")}
-                                    <TextLink_1.default href={"mailto:".concat(CONST_1.default.EMAIL.CONCIERGE)} style={[styles.link]}>
+                                    {`${translate('genericErrorPage.body.helpTextConcierge')} `}
+                                    <TextLink_1.default href={`mailto:${CONST_1.default.EMAIL.CONCIERGE}`} style={[styles.link]}>
                                         {CONST_1.default.EMAIL.CONCIERGE}
                                     </TextLink_1.default>
                                 </Text_1.default>
                             </react_native_1.View>
                             <react_native_1.View style={[styles.flexRow]}>
                                 <react_native_1.View style={[styles.flex1, styles.flexRow]}>
-                                    <Button_1.default success text={translate('genericErrorPage.refresh')} style={styles.mr3} onPress={function () { return refreshPage(isChunkLoadError); }}/>
-                                    {isAuthenticated && (<Button_1.default text={translate('initialSettingsPage.signOut')} onPress={function () {
-                        (0, Session_1.signOutAndRedirectToSignIn)();
-                        refreshPage();
-                    }}/>)}
+                                    <Button_1.default success text={translate('genericErrorPage.refresh')} style={styles.mr3} onPress={() => refreshPage(isChunkLoadError)}/>
+                                    {isAuthenticated && (<Button_1.default text={translate('initialSettingsPage.signOut')} onPress={() => {
+                    (0, Session_1.signOutAndRedirectToSignIn)();
+                    refreshPage();
+                }}/>)}
                                 </react_native_1.View>
                             </react_native_1.View>
                         </react_native_1.View>
@@ -67,8 +63,7 @@ function GenericErrorPage(_a) {
                             <ImageSVG_1.default contentFit="contain" src={expensify_wordmark_svg_1.default} height={30} width={80} fill={theme.text}/>
                         </react_native_1.View>
                     </react_native_1.View>
-                </react_native_1.View>);
-        }}
+                </react_native_1.View>)}
         </SafeAreaConsumer_1.default>);
 }
 GenericErrorPage.displayName = 'ErrorPage';

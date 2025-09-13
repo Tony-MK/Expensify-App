@@ -1,31 +1,22 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var fast_equals_1 = require("fast-equals");
-var isObject_1 = require("lodash/isObject");
-var transform_1 = require("lodash/transform");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_performance_1 = require("react-native-performance");
-var CONST_1 = require("@src/CONST");
-var isE2ETestSession_1 = require("./E2E/isE2ETestSession");
-var getComponentDisplayName_1 = require("./getComponentDisplayName");
-var Metrics_1 = require("./Metrics");
+const fast_equals_1 = require("fast-equals");
+const isObject_1 = require("lodash/isObject");
+const transform_1 = require("lodash/transform");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_performance_1 = require("react-native-performance");
+const CONST_1 = require("@src/CONST");
+const isE2ETestSession_1 = require("./E2E/isE2ETestSession");
+const getComponentDisplayName_1 = require("./getComponentDisplayName");
+const Metrics_1 = require("./Metrics");
 /**
  * Deep diff between two objects. Useful for figuring out what changed about an object from one render to the next so
  * that state and props updates can be optimized.
  */
 function diffObject(object, base) {
     function changes(obj, comparisonObject) {
-        return (0, transform_1.default)(obj, function (result, value, key) {
+        return (0, transform_1.default)(obj, (result, value, key) => {
             if ((0, fast_equals_1.deepEqual)(value, comparisonObject[key])) {
                 return;
             }
@@ -52,8 +43,8 @@ function measureFailSafe(measureName, startOrMeasureOptions, endMark) {
  */
 function measureTTI(endMark) {
     // Make sure TTI is captured when the app is really usable
-    react_native_1.InteractionManager.runAfterInteractions(function () {
-        requestAnimationFrame(function () {
+    react_native_1.InteractionManager.runAfterInteractions(() => {
+        requestAnimationFrame(() => {
             measureFailSafe('TTI', 'nativeLaunchStart', endMark);
             // We don't want an alert to show:
             // - on builds with performance metrics collection disabled by a feature flag
@@ -68,8 +59,8 @@ function measureTTI(endMark) {
 /*
  * Monitor native marks that we want to put on the timeline
  */
-var nativeMarksObserver = new react_native_performance_1.PerformanceObserver(function (list, _observer) {
-    list.getEntries().forEach(function (entry) {
+const nativeMarksObserver = new react_native_performance_1.PerformanceObserver((list, _observer) => {
+    list.getEntries().forEach((entry) => {
         if (entry.name === 'nativeLaunchEnd') {
             measureFailSafe('nativeLaunch', 'nativeLaunchStart', 'nativeLaunchEnd');
         }
@@ -93,8 +84,7 @@ var nativeMarksObserver = new react_native_performance_1.PerformanceObserver(fun
         }
     });
 });
-function setNativeMarksObserverEnabled(enabled) {
-    if (enabled === void 0) { enabled = false; }
+function setNativeMarksObserverEnabled(enabled = false) {
     if (!enabled) {
         nativeMarksObserver.disconnect();
         return;
@@ -105,23 +95,22 @@ function setNativeMarksObserverEnabled(enabled) {
 /**
  * Monitor for "_end" marks and capture "_start" to "_end" measures, including events recorded in the native layer before the app fully initializes.
  */
-var customMarksObserver = new react_native_performance_1.PerformanceObserver(function (list) {
-    list.getEntriesByType('mark').forEach(function (mark) {
+const customMarksObserver = new react_native_performance_1.PerformanceObserver((list) => {
+    list.getEntriesByType('mark').forEach((mark) => {
         if (mark.name.endsWith('_end')) {
-            var end = mark.name;
-            var name_1 = end.replace(/_end$/, '');
-            var start = "".concat(name_1, "_start");
-            measureFailSafe(name_1, start, end);
+            const end = mark.name;
+            const name = end.replace(/_end$/, '');
+            const start = `${name}_start`;
+            measureFailSafe(name, start, end);
         }
         // Capture any custom measures or metrics below
-        if (mark.name === "".concat(CONST_1.default.TIMING.SIDEBAR_LOADED, "_end")) {
+        if (mark.name === `${CONST_1.default.TIMING.SIDEBAR_LOADED}_end`) {
             measureFailSafe('contentAppeared_To_screenTTI', 'contentAppeared', mark.name);
             measureTTI(mark.name);
         }
     });
 });
-function setCustomMarksObserverEnabled(enabled) {
-    if (enabled === void 0) { enabled = false; }
+function setCustomMarksObserverEnabled(enabled = false) {
     if (!enabled) {
         customMarksObserver.disconnect();
         return;
@@ -130,7 +119,18 @@ function setCustomMarksObserverEnabled(enabled) {
     customMarksObserver.observe({ type: 'mark', buffered: true });
 }
 function getPerformanceMetrics() {
-    return __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], react_native_performance_1.default.getEntriesByName('nativeLaunch'), true), react_native_performance_1.default.getEntriesByName('nativeLaunchEnd_To_appCreationStart'), true), react_native_performance_1.default.getEntriesByName('appCreation'), true), react_native_performance_1.default.getEntriesByName('appCreationEnd_To_contentAppeared'), true), react_native_performance_1.default.getEntriesByName('contentAppeared_To_screenTTI'), true), react_native_performance_1.default.getEntriesByName('runJsBundle'), true), react_native_performance_1.default.getEntriesByName('jsBundleDownload'), true), react_native_performance_1.default.getEntriesByName('TTI'), true), react_native_performance_1.default.getEntriesByName('regularAppStart'), true), react_native_performance_1.default.getEntriesByName('appStartedToReady'), true).filter(function (entry) { return entry.duration > 0; });
+    return [
+        ...react_native_performance_1.default.getEntriesByName('nativeLaunch'),
+        ...react_native_performance_1.default.getEntriesByName('nativeLaunchEnd_To_appCreationStart'),
+        ...react_native_performance_1.default.getEntriesByName('appCreation'),
+        ...react_native_performance_1.default.getEntriesByName('appCreationEnd_To_contentAppeared'),
+        ...react_native_performance_1.default.getEntriesByName('contentAppeared_To_screenTTI'),
+        ...react_native_performance_1.default.getEntriesByName('runJsBundle'),
+        ...react_native_performance_1.default.getEntriesByName('jsBundleDownload'),
+        ...react_native_performance_1.default.getEntriesByName('TTI'),
+        ...react_native_performance_1.default.getEntriesByName('regularAppStart'),
+        ...react_native_performance_1.default.getEntriesByName('appStartedToReady'),
+    ].filter((entry) => entry.duration > 0);
 }
 function getPerformanceMeasures() {
     return react_native_performance_1.default.getEntriesByType('measure');
@@ -139,31 +139,31 @@ function getPerformanceMeasures() {
  * Outputs performance stats. We alert these so that they are easy to access in release builds.
  */
 function printPerformanceMetrics() {
-    var stats = getPerformanceMetrics();
-    var statsAsText = stats.map(function (entry) { return "\u2022 ".concat(entry.name, ": ").concat(entry.duration.toFixed(1), "ms"); }).join('\n');
+    const stats = getPerformanceMetrics();
+    const statsAsText = stats.map((entry) => `\u2022 ${entry.name}: ${entry.duration.toFixed(1)}ms`).join('\n');
     if (stats.length > 0) {
         react_native_1.Alert.alert('Performance', statsAsText);
     }
 }
 function subscribeToMeasurements(callback) {
-    var observer = new react_native_performance_1.PerformanceObserver(function (list) {
+    const observer = new react_native_performance_1.PerformanceObserver((list) => {
         list.getEntriesByType('measure').forEach(callback);
     });
     observer.observe({ type: 'measure', buffered: true });
-    return function () { return observer.disconnect(); };
+    return () => observer.disconnect();
 }
 /**
  * Add a start mark to the performance entries
  */
 function markStart(name, detail) {
-    return react_native_performance_1.default.mark("".concat(name, "_start"), { detail: detail });
+    return react_native_performance_1.default.mark(`${name}_start`, { detail });
 }
 /**
  * Add an end mark to the performance entries
  * A measure between start and end is captured automatically
  */
 function markEnd(name, detail) {
-    return react_native_performance_1.default.mark("".concat(name, "_end"), { detail: detail });
+    return react_native_performance_1.default.mark(`${name}_end`, { detail });
 }
 /**
  * Put data emitted by Profiler components on the timeline
@@ -179,27 +179,26 @@ function traceRender(id, phase, actualDuration, baseDuration, startTime, commitT
         start: startTime,
         duration: actualDuration,
         detail: {
-            phase: phase,
-            baseDuration: baseDuration,
-            commitTime: commitTime,
+            phase,
+            baseDuration,
+            commitTime,
         },
     });
 }
 /**
  * A HOC that captures render timings of the Wrapped component
  */
-function withRenderTrace(_a) {
-    var id = _a.id;
+function withRenderTrace({ id }) {
     if (!(0, Metrics_1.default)()) {
-        return function (WrappedComponent) { return WrappedComponent; };
+        return (WrappedComponent) => WrappedComponent;
     }
-    return function (WrappedComponent) {
-        var WithRenderTrace = (0, react_1.forwardRef)(function (props, ref) { return (<react_1.Profiler id={id} onRender={traceRender}>
+    return (WrappedComponent) => {
+        const WithRenderTrace = (0, react_1.forwardRef)((props, ref) => (<react_1.Profiler id={id} onRender={traceRender}>
                 <WrappedComponent 
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...props} ref={ref}/>
-            </react_1.Profiler>); });
-        WithRenderTrace.displayName = "withRenderTrace(".concat((0, getComponentDisplayName_1.default)(WrappedComponent), ")");
+            </react_1.Profiler>));
+        WithRenderTrace.displayName = `withRenderTrace(${(0, getComponentDisplayName_1.default)(WrappedComponent)})`;
         return WithRenderTrace;
     };
 }
@@ -214,16 +213,16 @@ function disableMonitoring() {
     setCustomMarksObserverEnabled(false);
 }
 exports.default = {
-    diffObject: diffObject,
-    measureFailSafe: measureFailSafe,
-    measureTTI: measureTTI,
-    enableMonitoring: enableMonitoring,
-    disableMonitoring: disableMonitoring,
-    getPerformanceMetrics: getPerformanceMetrics,
-    getPerformanceMeasures: getPerformanceMeasures,
-    printPerformanceMetrics: printPerformanceMetrics,
-    subscribeToMeasurements: subscribeToMeasurements,
-    markStart: markStart,
-    markEnd: markEnd,
-    withRenderTrace: withRenderTrace,
+    diffObject,
+    measureFailSafe,
+    measureTTI,
+    enableMonitoring,
+    disableMonitoring,
+    getPerformanceMetrics,
+    getPerformanceMeasures,
+    printPerformanceMetrics,
+    subscribeToMeasurements,
+    markStart,
+    markEnd,
+    withRenderTrace,
 };

@@ -2,30 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // Import Animated directly from 'react-native' as animations are used with navigation.
 // eslint-disable-next-line no-restricted-imports
-var react_native_1 = require("react-native");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSidePanel_1 = require("@hooks/useSidePanel");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var variables_1 = require("@styles/variables");
-var useModalCardStyleInterpolator = function () {
-    var _a = (0, useResponsiveLayout_1.default)(), shouldUseNarrowLayout = _a.shouldUseNarrowLayout, onboardingIsMediumOrLargerScreenWidth = _a.onboardingIsMediumOrLargerScreenWidth;
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var sidePanelOffset = (0, useSidePanel_1.default)().sidePanelOffset;
-    var modalCardStyleInterpolator = function (_a) {
-        var _b = _a.props, progress = _b.current.progress, inverted = _b.inverted, screen = _b.layouts.screen, _c = _a.isOnboardingModal, isOnboardingModal = _c === void 0 ? false : _c, _d = _a.isFullScreenModal, isFullScreenModal = _d === void 0 ? false : _d, _e = _a.shouldFadeScreen, shouldFadeScreen = _e === void 0 ? false : _e, _f = _a.shouldAnimateSidePanel, shouldAnimateSidePanel = _f === void 0 ? false : _f, _g = _a.outputRangeMultiplier, outputRangeMultiplier = _g === void 0 ? 1 : _g, _h = _a.animationEnabled, animationEnabled = _h === void 0 ? true : _h;
+const react_native_1 = require("react-native");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSidePanel_1 = require("@hooks/useSidePanel");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const variables_1 = require("@styles/variables");
+const useModalCardStyleInterpolator = () => {
+    const { shouldUseNarrowLayout, onboardingIsMediumOrLargerScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { sidePanelOffset } = (0, useSidePanel_1.default)();
+    const modalCardStyleInterpolator = ({ props: { current: { progress }, inverted, layouts: { screen }, }, isOnboardingModal = false, isFullScreenModal = false, shouldFadeScreen = false, shouldAnimateSidePanel = false, outputRangeMultiplier = 1, animationEnabled = true, }) => {
         if (isOnboardingModal ? onboardingIsMediumOrLargerScreenWidth : shouldFadeScreen) {
             return {
                 cardStyle: { opacity: progress },
             };
         }
-        var translateX = react_native_1.Animated.multiply(react_native_1.Animated.multiply(progress.interpolate({
+        const translateX = react_native_1.Animated.multiply(react_native_1.Animated.multiply(progress.interpolate({
             inputRange: [0, 1],
             outputRange: [shouldUseNarrowLayout ? screen.width : variables_1.default.sideBarWidth, 0],
             extrapolate: 'clamp',
         }), outputRangeMultiplier), inverted);
-        var cardStyle = StyleUtils.getCardStyles(screen.width);
+        const cardStyle = StyleUtils.getCardStyles(screen.width);
         if (animationEnabled && (!isFullScreenModal || shouldUseNarrowLayout)) {
-            cardStyle.transform = [{ translateX: translateX }];
+            cardStyle.transform = [{ translateX }];
         }
         if (shouldAnimateSidePanel) {
             cardStyle.paddingRight = sidePanelOffset.current;
@@ -34,7 +33,7 @@ var useModalCardStyleInterpolator = function () {
             containerStyle: {
                 overflow: 'hidden',
             },
-            cardStyle: cardStyle,
+            cardStyle,
         };
     };
     return modalCardStyleInterpolator;

@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useNetworkWithOfflineStatus;
-var react_1 = require("react");
-var useLocalize_1 = require("./useLocalize");
-var useNetwork_1 = require("./useNetwork");
-var usePrevious_1 = require("./usePrevious");
+const react_1 = require("react");
+const useLocalize_1 = require("./useLocalize");
+const useNetwork_1 = require("./useNetwork");
+const usePrevious_1 = require("./usePrevious");
 function useNetworkWithOfflineStatus() {
-    var _a = (0, useNetwork_1.default)(), isOffline = _a.isOffline, lastOfflineAtFromOnyx = _a.lastOfflineAt;
-    var prevIsOffline = (0, usePrevious_1.default)(isOffline);
-    var getLocalDateFromDatetime = (0, useLocalize_1.default)().getLocalDateFromDatetime;
+    const { isOffline, lastOfflineAt: lastOfflineAtFromOnyx } = (0, useNetwork_1.default)();
+    const prevIsOffline = (0, usePrevious_1.default)(isOffline);
+    const { getLocalDateFromDatetime } = (0, useLocalize_1.default)();
     // The last time/date the user went/was offline. If the user was never offline, it is set to undefined.
-    var lastOfflineAt = (0, react_1.useRef)(isOffline ? getLocalDateFromDatetime(lastOfflineAtFromOnyx) : undefined);
+    const lastOfflineAt = (0, react_1.useRef)(isOffline ? getLocalDateFromDatetime(lastOfflineAtFromOnyx) : undefined);
     // The last time/date the user went/was online. If the user was never online, it is set to undefined.
-    var lastOnlineAt = (0, react_1.useRef)(isOffline ? undefined : getLocalDateFromDatetime());
-    (0, react_1.useEffect)(function () {
+    const lastOnlineAt = (0, react_1.useRef)(isOffline ? undefined : getLocalDateFromDatetime());
+    (0, react_1.useEffect)(() => {
         // If the user has just gone offline (was online before but is now offline), update `lastOfflineAt` with the current local date/time.
         if (isOffline && !prevIsOffline) {
             lastOfflineAt.current = getLocalDateFromDatetime();
@@ -23,5 +23,5 @@ function useNetworkWithOfflineStatus() {
             lastOnlineAt.current = getLocalDateFromDatetime();
         }
     }, [isOffline, getLocalDateFromDatetime, prevIsOffline]);
-    return { isOffline: isOffline, lastOfflineAt: lastOfflineAt, lastOnlineAt: lastOnlineAt };
+    return { isOffline, lastOfflineAt, lastOnlineAt };
 }

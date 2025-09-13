@@ -1,89 +1,80 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PhoneNumber_1 = require("@libs/PhoneNumber");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PhoneNumber_1 = require("@libs/PhoneNumber");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
  * @param publicRoomReportID - This is the global reportID for the public room, we'll ignore the optimistic one
  */
 function referTeachersUniteVolunteer(partnerUserID, firstName, lastName, policyID, publicRoomReportID) {
-    var optimisticPublicRoom = (0, ReportUtils_1.buildOptimisticChatReport)({
+    const optimisticPublicRoom = (0, ReportUtils_1.buildOptimisticChatReport)({
         participantList: [],
         reportName: CONST_1.default.TEACHERS_UNITE.PUBLIC_ROOM_NAME,
         chatType: CONST_1.default.REPORT.CHAT_TYPE.POLICY_ROOM,
-        policyID: policyID,
+        policyID,
     });
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(publicRoomReportID),
-            value: __assign(__assign({}, optimisticPublicRoom), { reportID: publicRoomReportID, policyName: CONST_1.default.TEACHERS_UNITE.POLICY_NAME }),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT}${publicRoomReportID}`,
+            value: {
+                ...optimisticPublicRoom,
+                reportID: publicRoomReportID,
+                policyName: CONST_1.default.TEACHERS_UNITE.POLICY_NAME,
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_METADATA).concat(publicRoomReportID),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_METADATA}${publicRoomReportID}`,
             value: {
                 isOptimisticReport: false,
             },
         },
     ];
-    var parameters = {
+    const parameters = {
         reportID: publicRoomReportID,
-        firstName: firstName,
-        lastName: lastName,
-        partnerUserID: partnerUserID,
+        firstName,
+        lastName,
+        partnerUserID,
     };
-    API.write(types_1.WRITE_COMMANDS.REFER_TEACHERS_UNITE_VOLUNTEER, parameters, { optimisticData: optimisticData });
+    API.write(types_1.WRITE_COMMANDS.REFER_TEACHERS_UNITE_VOLUNTEER, parameters, { optimisticData });
     Navigation_1.default.dismissModalWithReport({ reportID: publicRoomReportID });
 }
 /**
  * Optimistically creates a policyExpenseChat for the school principal and passes data to AddSchoolPrincipal
  */
 function addSchoolPrincipal(firstName, partnerUserID, lastName, policyID, localCurrencyCode, sessionEmail, sessionAccountID) {
-    var _a, _b, _c, _d;
-    var _e, _f, _g, _h;
-    var policyName = CONST_1.default.TEACHERS_UNITE.POLICY_NAME;
-    var loggedInEmail = (0, PhoneNumber_1.addSMSDomainIfPhoneNumber)(sessionEmail);
-    var reportCreationData = {};
-    var expenseChatData = (0, ReportUtils_1.buildOptimisticChatReport)({
+    const policyName = CONST_1.default.TEACHERS_UNITE.POLICY_NAME;
+    const loggedInEmail = (0, PhoneNumber_1.addSMSDomainIfPhoneNumber)(sessionEmail);
+    const reportCreationData = {};
+    const expenseChatData = (0, ReportUtils_1.buildOptimisticChatReport)({
         participantList: [sessionAccountID],
         reportName: '',
         chatType: CONST_1.default.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT,
-        policyID: policyID,
+        policyID,
         ownerAccountID: sessionAccountID,
         isOwnPolicyExpenseChat: true,
         oldPolicyName: policyName,
     });
-    var expenseChatReportID = expenseChatData.reportID;
-    var expenseReportCreatedAction = (0, ReportUtils_1.buildOptimisticCreatedReportAction)(sessionEmail);
-    var expenseReportActionData = (_a = {},
-        _a[expenseReportCreatedAction.reportActionID] = expenseReportCreatedAction,
-        _a);
+    const expenseChatReportID = expenseChatData.reportID;
+    const expenseReportCreatedAction = (0, ReportUtils_1.buildOptimisticCreatedReportAction)(sessionEmail);
+    const expenseReportActionData = {
+        [expenseReportCreatedAction.reportActionID]: expenseReportCreatedAction,
+    };
     reportCreationData[loggedInEmail] = {
         reportID: expenseChatReportID,
         reportActionID: expenseReportCreatedAction.reportActionID,
     };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 id: policyID,
                 isPolicyExpenseChatEnabled: true,
@@ -93,38 +84,41 @@ function addSchoolPrincipal(firstName, partnerUserID, lastName, policyID, localC
                 owner: sessionEmail,
                 // This will be fixed as part of https://github.com/Expensify/Expensify/issues/507850
                 // eslint-disable-next-line deprecation/deprecation
-                outputCurrency: (_g = (_f = (_e = (0, PolicyUtils_1.getPolicy)(policyID)) === null || _e === void 0 ? void 0 : _e.outputCurrency) !== null && _f !== void 0 ? _f : localCurrencyCode) !== null && _g !== void 0 ? _g : CONST_1.default.CURRENCY.USD,
-                employeeList: (_b = {},
-                    _b[sessionEmail] = {
+                outputCurrency: (0, PolicyUtils_1.getPolicy)(policyID)?.outputCurrency ?? localCurrencyCode ?? CONST_1.default.CURRENCY.USD,
+                employeeList: {
+                    [sessionEmail]: {
                         role: CONST_1.default.POLICY.ROLE.USER,
                         errors: {},
                     },
-                    _b),
+                },
                 pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD,
             },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(expenseChatReportID),
-            value: __assign({ pendingFields: {
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT}${expenseChatReportID}`,
+            value: {
+                pendingFields: {
                     addWorkspaceRoom: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD,
-                } }, expenseChatData),
+                },
+                ...expenseChatData,
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(expenseChatReportID),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${expenseChatReportID}`,
             value: expenseReportActionData,
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: { pendingAction: null },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(expenseChatReportID),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT}${expenseChatReportID}`,
             value: {
                 pendingFields: {
                     addWorkspaceRoom: null,
@@ -134,48 +128,48 @@ function addSchoolPrincipal(firstName, partnerUserID, lastName, policyID, localC
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_METADATA).concat(expenseChatReportID),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_METADATA}${expenseChatReportID}`,
             value: {
                 isOptimisticReport: false,
             },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(expenseChatReportID),
-            value: (_c = {},
-                _c[(_h = Object.keys(expenseChatData).at(0)) !== null && _h !== void 0 ? _h : ''] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${expenseChatReportID}`,
+            value: {
+                [Object.keys(expenseChatData).at(0) ?? '']: {
                     pendingAction: null,
                 },
-                _c),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-            value: (_d = {},
-                _d[sessionEmail] = null,
-                _d),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+            value: {
+                [sessionEmail]: null,
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(expenseChatReportID),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT}${expenseChatReportID}`,
             value: null,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(expenseChatReportID),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${expenseChatReportID}`,
             value: null,
         },
     ];
-    var parameters = {
-        firstName: firstName,
-        lastName: lastName,
-        partnerUserID: partnerUserID,
-        policyID: policyID,
+    const parameters = {
+        firstName,
+        lastName,
+        partnerUserID,
+        policyID,
         reportCreationData: JSON.stringify(reportCreationData),
     };
-    API.write(types_1.WRITE_COMMANDS.ADD_SCHOOL_PRINCIPAL, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.ADD_SCHOOL_PRINCIPAL, parameters, { optimisticData, successData, failureData });
     Navigation_1.default.dismissModalWithReport({ reportID: expenseChatReportID });
 }
-exports.default = { referTeachersUniteVolunteer: referTeachersUniteVolunteer, addSchoolPrincipal: addSchoolPrincipal };
+exports.default = { referTeachersUniteVolunteer, addSchoolPrincipal };

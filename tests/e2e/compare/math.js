@@ -10,7 +10,7 @@ exports.computeProbability = exports.computeZ = void 0;
  * Based on :: https://github.com/v8/v8/blob/master/test/benchmarks/csuite/compare-baseline.py
  *
  */
-var computeZ = function (baselineMean, baselineStdev, currentMean, runs) {
+const computeZ = (baselineMean, baselineStdev, currentMean, runs) => {
     if (baselineStdev === 0) {
         return 1000;
     }
@@ -23,7 +23,7 @@ exports.computeZ = computeZ;
  * Based on :: https://github.com/v8/v8/blob/master/test/benchmarks/csuite/compare-baseline.py
  *
  */
-var computeProbability = function (z) {
+const computeProbability = (z) => {
     // p 0.005: two sided < 0.01
     if (z > 2.575829) {
         return 0;

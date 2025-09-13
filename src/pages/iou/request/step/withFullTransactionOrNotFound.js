@@ -1,29 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
-var useOnyx_1 = require("@hooks/useOnyx");
-var getComponentDisplayName_1 = require("@libs/getComponentDisplayName");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var IOUUtils_1 = require("@libs/IOUUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
+const useOnyx_1 = require("@hooks/useOnyx");
+const getComponentDisplayName_1 = require("@libs/getComponentDisplayName");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const IOUUtils_1 = require("@libs/IOUUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
 function default_1(WrappedComponent) {
     // eslint-disable-next-line rulesdir/no-negated-variables
     function WithFullTransactionOrNotFound(props) {
-        var route = props.route;
-        var transactionID = route.params.transactionID;
-        var userAction = 'action' in route.params && route.params.action ? route.params.action : CONST_1.default.IOU.ACTION.CREATE;
-        var _a = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), { canBeMissing: true }), transaction = _a[0], transactionResult = _a[1];
-        var _b = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_DRAFT).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), { canBeMissing: true }), transactionDraft = _b[0], transactionDraftResult = _b[1];
-        var isLoadingTransaction = (0, isLoadingOnyxValue_1.default)(transactionResult, transactionDraftResult);
-        var splitTransactionDraft = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.SPLIT_TRANSACTION_DRAFT).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), { canBeMissing: true })[0];
-        var userType = 'iouType' in route.params && route.params.iouType ? route.params.iouType : CONST_1.default.IOU.TYPE.CREATE;
-        var isFocused = (0, native_1.useIsFocused)();
-        var transactionDraftData = userType === CONST_1.default.IOU.TYPE.SPLIT_EXPENSE ? splitTransactionDraft : transactionDraft;
+        const { route } = props;
+        const transactionID = route.params.transactionID;
+        const userAction = 'action' in route.params && route.params.action ? route.params.action : CONST_1.default.IOU.ACTION.CREATE;
+        const [transaction, transactionResult] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, { canBeMissing: true });
+        const [transactionDraft, transactionDraftResult] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION_DRAFT}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, { canBeMissing: true });
+        const isLoadingTransaction = (0, isLoadingOnyxValue_1.default)(transactionResult, transactionDraftResult);
+        const [splitTransactionDraft] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.SPLIT_TRANSACTION_DRAFT}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, { canBeMissing: true });
+        const userType = 'iouType' in route.params && route.params.iouType ? route.params.iouType : CONST_1.default.IOU.TYPE.CREATE;
+        const isFocused = (0, native_1.useIsFocused)();
+        const transactionDraftData = userType === CONST_1.default.IOU.TYPE.SPLIT_EXPENSE ? splitTransactionDraft : transactionDraft;
         // If the transaction does not have a transactionID, then the transaction no longer exists in Onyx as a full transaction and the not-found page should be shown.
         // In addition, the not-found page should be shown only if the component screen's route is active (i.e. is focused).
         // This is to prevent it from showing when the modal is being dismissed while navigating to a different route (e.g. on requesting money).
@@ -34,6 +34,6 @@ function default_1(WrappedComponent) {
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...props} transaction={(0, IOUUtils_1.shouldUseTransactionDraft)(userAction, userType) ? transactionDraftData : transaction} isLoadingTransaction={isLoadingTransaction}/>);
     }
-    WithFullTransactionOrNotFound.displayName = "withFullTransactionOrNotFound(".concat((0, getComponentDisplayName_1.default)(WrappedComponent), ")");
+    WithFullTransactionOrNotFound.displayName = `withFullTransactionOrNotFound(${(0, getComponentDisplayName_1.default)(WrappedComponent)})`;
     return WithFullTransactionOrNotFound;
 }

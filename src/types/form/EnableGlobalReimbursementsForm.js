@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     BUSINESS_REGISTRATION_INCORPORATION_NUMBER: 'businessRegistrationIncorporationNumber',
     BUSINESS_CATEGORY: 'natureOfBusiness',
     APPLICANT_TYPE_ID: 'applicantTypeId',

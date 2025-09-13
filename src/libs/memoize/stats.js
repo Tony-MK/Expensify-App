@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Log_1 = require("@libs/Log");
+const Log_1 = require("@libs/Log");
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isMemoizeStatsEntry(entry) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return entry.didHit !== undefined && entry.processingTime !== undefined;
 }
-var MemoizeStats = /** @class */ (function () {
-    function MemoizeStats(enabled) {
+class MemoizeStats {
+    constructor(enabled) {
         /**
          * Number of calls to the memoized function. Both cache hits and misses are counted.
          */
@@ -32,12 +32,12 @@ var MemoizeStats = /** @class */ (function () {
         this.isEnabled = enabled;
     }
     // See https://en.wikipedia.org/wiki/Moving_average#Cumulative_average
-    MemoizeStats.prototype.calculateCumulativeAvg = function (avg, length, value) {
-        var result = (avg * (length - 1) + value) / length;
+    calculateCumulativeAvg(avg, length, value) {
+        const result = (avg * (length - 1) + value) / length;
         // If the length is 0, we return the average. For example, when calculating average cache retrieval time, hits may be 0, and in that case we want to return the current average cache retrieval time
         return Number.isFinite(result) ? result : avg;
-    };
-    MemoizeStats.prototype.cumulateEntry = function (entry) {
+    }
+    cumulateEntry(entry) {
         this.calls++;
         this.cacheSize = entry.cacheSize;
         if (entry.didHit) {
@@ -47,8 +47,8 @@ var MemoizeStats = /** @class */ (function () {
         else {
             this.avgFnTime = this.calculateCumulativeAvg(this.avgFnTime, this.calls - this.hits, entry.processingTime);
         }
-    };
-    MemoizeStats.prototype.saveEntry = function (entry) {
+    }
+    saveEntry(entry) {
         if (!this.isEnabled) {
             return;
         }
@@ -57,40 +57,38 @@ var MemoizeStats = /** @class */ (function () {
             return;
         }
         return this.cumulateEntry(entry);
-    };
-    MemoizeStats.prototype.createEntry = function () {
-        var _this = this;
+    }
+    createEntry() {
         // If monitoring is disabled, return a dummy object that does nothing
         if (!this.isEnabled) {
             return {
-                track: function () { },
-                get: function () { },
-                save: function () { },
-                trackTime: function () { },
+                track: () => { },
+                get: () => { },
+                save: () => { },
+                trackTime: () => { },
             };
         }
-        var entry = {};
+        const entry = {};
         return {
-            track: function (cacheProp, value) {
+            track: (cacheProp, value) => {
                 entry[cacheProp] = value;
             },
-            trackTime: function (cacheProp, startTime, endTime) {
-                if (endTime === void 0) { endTime = performance.now(); }
+            trackTime: (cacheProp, startTime, endTime = performance.now()) => {
                 entry[cacheProp] = endTime - startTime;
             },
-            get: function (cacheProp) { return entry[cacheProp]; },
-            save: function () { return _this.saveEntry(entry); },
+            get: (cacheProp) => entry[cacheProp],
+            save: () => this.saveEntry(entry),
         };
-    };
-    MemoizeStats.prototype.startMonitoring = function () {
+    }
+    startMonitoring() {
         this.isEnabled = true;
         this.calls = 0;
         this.hits = 0;
         this.avgCacheTime = 0;
         this.avgFnTime = 0;
         this.cacheSize = 0;
-    };
-    MemoizeStats.prototype.stopMonitoring = function () {
+    }
+    stopMonitoring() {
         this.isEnabled = false;
         return {
             calls: this.calls,
@@ -99,7 +97,6 @@ var MemoizeStats = /** @class */ (function () {
             avgFnTime: this.avgFnTime,
             cacheSize: this.cacheSize,
         };
-    };
-    return MemoizeStats;
-}());
+    }
+}
 exports.default = MemoizeStats;

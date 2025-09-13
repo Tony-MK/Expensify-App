@@ -21,7 +21,7 @@ var iOS;
      * Enum of foreground notification options.
      */
     // eslint-disable-next-line no-restricted-syntax, rulesdir/no-inline-named-export
-    var ForegroundPresentationOption;
+    let ForegroundPresentationOption;
     (function (ForegroundPresentationOption) {
         /**
          * Play the sound associated with the notification.
@@ -43,32 +43,32 @@ var iOS;
         ForegroundPresentationOption["Banner"] = "banner";
     })(ForegroundPresentationOption = iOS.ForegroundPresentationOption || (iOS.ForegroundPresentationOption = {}));
 })(iOS || (exports.iOS = iOS = {}));
-var pushIOS = jest.fn().mockImplementation(function () { return ({
+const pushIOS = jest.fn().mockImplementation(() => ({
     setBadgeNumber: jest.fn(),
     setForegroundPresentationOptions: jest.fn(),
     setForegroundPresentationOptionsCallback: jest.fn(),
-}); })();
-var pushAndroid = jest.fn().mockImplementation(function () { return ({
+}))();
+const pushAndroid = jest.fn().mockImplementation(() => ({
     setForegroundDisplayPredicate: jest.fn(),
-}); })();
-var push = jest.fn().mockImplementation(function () { return ({
+}))();
+const push = jest.fn().mockImplementation(() => ({
     iOS: pushIOS,
     android: pushAndroid,
-    enableUserNotifications: function () { return Promise.resolve(false); },
+    enableUserNotifications: () => Promise.resolve(false),
     clearNotifications: jest.fn(),
-    getNotificationStatus: function () { return Promise.resolve({ airshipOptIn: false, systemEnabled: false, airshipEnabled: false }); },
-    getActiveNotifications: function () { return Promise.resolve([]); },
-}); })();
-var contact = jest.fn().mockImplementation(function () { return ({
+    getNotificationStatus: () => Promise.resolve({ airshipOptIn: false, systemEnabled: false, airshipEnabled: false }),
+    getActiveNotifications: () => Promise.resolve([]),
+}))();
+const contact = jest.fn().mockImplementation(() => ({
     identify: jest.fn(),
-    getNamedUserId: function () { return Promise.resolve(undefined); },
+    getNamedUserId: () => Promise.resolve(undefined),
     reset: jest.fn(),
     module: jest.fn(),
-}); })();
-var Airship = {
+}))();
+const Airship = {
     addListener: jest.fn(),
     removeAllListeners: jest.fn(),
-    push: push,
-    contact: contact,
+    push,
+    contact,
 };
 exports.default = Airship;

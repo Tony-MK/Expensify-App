@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var textRef = function (ref) { return ref; };
+const textRef = (ref) => ref;
 exports.default = textRef;

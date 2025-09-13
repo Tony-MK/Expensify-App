@@ -1,64 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AutoEmailLink_1 = require("@components/AutoEmailLink");
-var Button_1 = require("@components/Button");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Icon_1 = require("@components/Icon");
-var Illustrations = require("@components/Icon/Illustrations");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var OnboardingMergingAccountBlockedView_1 = require("@components/OnboardingMergingAccountBlockedView");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Browser_1 = require("@libs/Browser");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var getOperatingSystem_1 = require("@libs/getOperatingSystem");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Session_1 = require("@userActions/Session");
-var Welcome_1 = require("@userActions/Welcome");
-var CONST_1 = require("@src/CONST");
-var Log_1 = require("@src/libs/Log");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var OnboardingWorkEmailForm_1 = require("@src/types/form/OnboardingWorkEmailForm");
-function BaseOnboardingWorkEmail(_a) {
-    var shouldUseNativeStyles = _a.shouldUseNativeStyles;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var onboardingValues = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true })[0];
-    var formValue = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORK_EMAIL_FORM, { canBeMissing: true })[0];
-    var workEmail = formValue === null || formValue === void 0 ? void 0 : formValue[OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL];
-    var onboardingErrorMessage = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ERROR_MESSAGE, { canBeMissing: true })[0];
-    var isVsb = onboardingValues && 'signupQualifier' in onboardingValues && onboardingValues.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
-    var isSmb = (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.signupQualifier) === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
-    var onboardingIsMediumOrLargerScreenWidth = (0, useResponsiveLayout_1.default)().onboardingIsMediumOrLargerScreenWidth;
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var _b = (0, react_1.useState)(false), shouldValidateOnChange = _b[0], setShouldValidateOnChange = _b[1];
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var ICON_SIZE = 48;
-    var operatingSystem = (0, getOperatingSystem_1.default)();
-    var isFocused = (0, native_1.useIsFocused)();
-    (0, react_1.useEffect)(function () {
+const native_1 = require("@react-navigation/native");
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AutoEmailLink_1 = require("@components/AutoEmailLink");
+const Button_1 = require("@components/Button");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Icon_1 = require("@components/Icon");
+const Illustrations = require("@components/Icon/Illustrations");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const OnboardingMergingAccountBlockedView_1 = require("@components/OnboardingMergingAccountBlockedView");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Browser_1 = require("@libs/Browser");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const getOperatingSystem_1 = require("@libs/getOperatingSystem");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Session_1 = require("@userActions/Session");
+const Welcome_1 = require("@userActions/Welcome");
+const CONST_1 = require("@src/CONST");
+const Log_1 = require("@src/libs/Log");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const OnboardingWorkEmailForm_1 = require("@src/types/form/OnboardingWorkEmailForm");
+function BaseOnboardingWorkEmail({ shouldUseNativeStyles }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [onboardingValues] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true });
+    const [formValue] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORK_EMAIL_FORM, { canBeMissing: true });
+    const workEmail = formValue?.[OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL];
+    const [onboardingErrorMessage] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ERROR_MESSAGE, { canBeMissing: true });
+    const isVsb = onboardingValues && 'signupQualifier' in onboardingValues && onboardingValues.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
+    const isSmb = onboardingValues?.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
+    const { onboardingIsMediumOrLargerScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const [shouldValidateOnChange, setShouldValidateOnChange] = (0, react_1.useState)(false);
+    const { isOffline } = (0, useNetwork_1.default)();
+    const ICON_SIZE = 48;
+    const operatingSystem = (0, getOperatingSystem_1.default)();
+    const isFocused = (0, native_1.useIsFocused)();
+    (0, react_1.useEffect)(() => {
         (0, Welcome_1.setOnboardingErrorMessage)('');
     }, []);
-    (0, react_1.useEffect)(function () {
-        if ((onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.shouldValidate) === undefined && (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergeAccountStepCompleted) === undefined) {
+    (0, react_1.useEffect)(() => {
+        if (onboardingValues?.shouldValidate === undefined && onboardingValues?.isMergeAccountStepCompleted === undefined) {
             return;
         }
         (0, Welcome_1.setOnboardingErrorMessage)('');
-        if (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.shouldValidate) {
+        if (onboardingValues?.shouldValidate) {
             Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_WORK_EMAIL_VALIDATION.getRoute());
             return;
         }
@@ -72,34 +71,33 @@ function BaseOnboardingWorkEmail(_a) {
             Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_EMPLOYEES.getRoute(), { forceReplace: true });
             return;
         }
-        if (!(onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergeAccountStepSkipped)) {
+        if (!onboardingValues?.isMergeAccountStepSkipped) {
             Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_PRIVATE_DOMAIN.getRoute(), { forceReplace: true });
             return;
         }
         Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_PURPOSE.getRoute(), { forceReplace: true });
-    }, [onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.shouldValidate, isVsb, isSmb, isFocused, onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergeAccountStepCompleted, onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergeAccountStepSkipped]);
-    var submitWorkEmail = (0, react_1.useCallback)(function (values) {
+    }, [onboardingValues?.shouldValidate, isVsb, isSmb, isFocused, onboardingValues?.isMergeAccountStepCompleted, onboardingValues?.isMergeAccountStepSkipped]);
+    const submitWorkEmail = (0, react_1.useCallback)((values) => {
         (0, Session_1.AddWorkEmail)(values[OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL]);
     }, []);
-    var validate = function (values) {
-        var _a;
+    const validate = (values) => {
         if (!shouldValidateOnChange) {
             setShouldValidateOnChange(true);
         }
-        var userEmail = values[OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL];
-        var errors = {};
-        var emailParts = userEmail.split('@');
-        var domain = (_a = emailParts.at(1)) !== null && _a !== void 0 ? _a : '';
+        const userEmail = values[OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL];
+        const errors = {};
+        const emailParts = userEmail.split('@');
+        const domain = emailParts.at(1) ?? '';
         if ((expensify_common_1.PUBLIC_DOMAINS_SET.has(domain.toLowerCase()) || !expensify_common_1.Str.isValidEmail(userEmail)) && !isOffline) {
-            Log_1.default.hmmm('User is trying to add an invalid work email', { userEmail: userEmail, domain: domain });
+            Log_1.default.hmmm('User is trying to add an invalid work email', { userEmail, domain });
             (0, ErrorUtils_1.addErrorMessage)(errors, OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL, translate('onboarding.workEmailValidationError.publicEmail'));
         }
-        if (isOffline !== null && isOffline !== void 0 ? isOffline : false) {
+        if (isOffline ?? false) {
             (0, ErrorUtils_1.addErrorMessage)(errors, OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL, translate('onboarding.workEmailValidationError.offline'));
         }
         return errors;
     };
-    var section = [
+    const section = [
         {
             icon: Illustrations.EnvelopeReceipt,
             titleTranslationKey: 'onboarding.workEmail.explanationModal.descriptionOne',
@@ -116,10 +114,10 @@ function BaseOnboardingWorkEmail(_a) {
     ];
     return (<ScreenWrapper_1.default shouldEnableMaxHeight={!(0, Browser_1.isMobileSafari)()} shouldAvoidScrollOnVirtualViewport={!(0, Browser_1.isMobileSafari)()} includeSafeAreaPaddingBottom testID="BaseOnboardingWorkEmail" style={[styles.defaultModalContainer, shouldUseNativeStyles && styles.pt8]}>
             <HeaderWithBackButton_1.default progressBarPercentage={10} shouldShowBackButton={false}/>
-            {(onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergingAccountBlocked) ? (<react_native_1.View style={[styles.flex1, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5]}>
+            {onboardingValues?.isMergingAccountBlocked ? (<react_native_1.View style={[styles.flex1, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5]}>
                     <OnboardingMergingAccountBlockedView_1.default workEmail={workEmail} isVsb={isVsb}/>
-                </react_native_1.View>) : (<FormProvider_1.default style={[styles.flexGrow1, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5]} formID={ONYXKEYS_1.default.FORMS.ONBOARDING_WORK_EMAIL_FORM} validate={validate} onSubmit={submitWorkEmail} submitButtonText={translate('onboarding.workEmail.addWorkEmail')} enabledWhenOffline submitFlexEnabled shouldValidateOnBlur={false} shouldValidateOnChange={shouldValidateOnChange} shouldTrimValues={false} footerContent={<OfflineWithFeedback_1.default shouldDisplayErrorAbove style={styles.mb3} errors={onboardingErrorMessage ? { addWorkEmailError: onboardingErrorMessage } : undefined} errorRowStyles={[styles.mt2, styles.textWrap]} onClose={function () { return (0, Welcome_1.setOnboardingErrorMessage)(''); }}>
-                            <Button_1.default large text={translate('common.skip')} testID="onboardingPrivateEmailSkipButton" onPress={function () {
+                </react_native_1.View>) : (<FormProvider_1.default style={[styles.flexGrow1, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5]} formID={ONYXKEYS_1.default.FORMS.ONBOARDING_WORK_EMAIL_FORM} validate={validate} onSubmit={submitWorkEmail} submitButtonText={translate('onboarding.workEmail.addWorkEmail')} enabledWhenOffline submitFlexEnabled shouldValidateOnBlur={false} shouldValidateOnChange={shouldValidateOnChange} shouldTrimValues={false} footerContent={<OfflineWithFeedback_1.default shouldDisplayErrorAbove style={styles.mb3} errors={onboardingErrorMessage ? { addWorkEmailError: onboardingErrorMessage } : undefined} errorRowStyles={[styles.mt2, styles.textWrap]} onClose={() => (0, Welcome_1.setOnboardingErrorMessage)('')}>
+                            <Button_1.default large text={translate('common.skip')} testID="onboardingPrivateEmailSkipButton" onPress={() => {
                     (0, Welcome_1.setOnboardingErrorMessage)('');
                     (0, Welcome_1.setOnboardingMergeAccountStepValue)(true, true);
                 }}/>
@@ -132,7 +130,7 @@ function BaseOnboardingWorkEmail(_a) {
                             <Text_1.default style={[styles.textNormal, styles.colorMuted]}>{translate('onboarding.workEmail.subtitle')}</Text_1.default>
                         </react_native_1.View>
                         <react_native_1.View>
-                            {section.map(function (item) {
+                            {section.map((item) => {
                 return (<react_native_1.View key={item.titleTranslationKey} style={[styles.mt2, styles.mb3]}>
                                         <react_native_1.View style={[styles.flexRow, styles.alignItemsCenter, styles.flex1]}>
                                             <Icon_1.default src={item.icon} height={ICON_SIZE} width={ICON_SIZE} additionalStyles={[styles.mr3]}/>
@@ -148,7 +146,7 @@ function BaseOnboardingWorkEmail(_a) {
                     <react_native_1.View style={[styles.mb4, styles.pt3]}>
                         <InputWrapper_1.default InputComponent={TextInput_1.default} 
         // We do not want to auto-focus for mobile platforms
-        ref={operatingSystem !== CONST_1.default.OS.ANDROID && operatingSystem !== CONST_1.default.OS.IOS ? inputCallbackRef : undefined} name="fname" inputID={OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL} label={translate('common.workEmail')} aria-label={translate('common.workEmail')} role={CONST_1.default.ROLE.PRESENTATION} defaultValue={workEmail !== null && workEmail !== void 0 ? workEmail : ''} shouldSaveDraft maxLength={CONST_1.default.LOGIN_CHARACTER_LIMIT} spellCheck={false}/>
+        ref={operatingSystem !== CONST_1.default.OS.ANDROID && operatingSystem !== CONST_1.default.OS.IOS ? inputCallbackRef : undefined} name="fname" inputID={OnboardingWorkEmailForm_1.default.ONBOARDING_WORK_EMAIL} label={translate('common.workEmail')} aria-label={translate('common.workEmail')} role={CONST_1.default.ROLE.PRESENTATION} defaultValue={workEmail ?? ''} shouldSaveDraft maxLength={CONST_1.default.LOGIN_CHARACTER_LIMIT} spellCheck={false}/>
                     </react_native_1.View>
                 </FormProvider_1.default>)}
         </ScreenWrapper_1.default>);

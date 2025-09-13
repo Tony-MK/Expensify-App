@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var EmojiUtils_1 = require("@libs/EmojiUtils");
+const EmojiUtils_1 = require("@libs/EmojiUtils");
 // Mock the Emojis module
-jest.mock('@assets/emojis', function () { return ({
+jest.mock('@assets/emojis', () => ({
     emojiCodeTableWithSkinTones: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         '😀': {
@@ -55,18 +55,18 @@ jest.mock('@assets/emojis', function () { return ({
             keywords: ['hand', 'thumb', 'up'],
         },
     },
-}); });
-describe('processFrequentlyUsedEmojis', function () {
-    it('should return empty array when input is undefined', function () {
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(undefined);
+}));
+describe('processFrequentlyUsedEmojis', () => {
+    it('should return empty array when input is undefined', () => {
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(undefined);
         expect(result).toEqual([]);
     });
-    it('should return empty array when input is empty array', function () {
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)([]);
+    it('should return empty array when input is empty array', () => {
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)([]);
         expect(result).toEqual([]);
     });
-    it('should process valid emoji list correctly', function () {
-        var input = [
+    it('should process valid emoji list correctly', () => {
+        const input = [
             {
                 code: '😀',
                 name: 'grinning_face',
@@ -80,7 +80,7 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 2000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(2);
         expect(result.at(0)).toEqual({
             code: '😀',
@@ -97,8 +97,8 @@ describe('processFrequentlyUsedEmojis', function () {
             lastUpdatedAt: 2000,
         });
     });
-    it('should fill in missing code using name lookup', function () {
-        var input = [
+    it('should fill in missing code using name lookup', () => {
+        const input = [
             {
                 code: '',
                 name: 'grinning_face',
@@ -106,7 +106,7 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 1000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(1);
         expect(result.at(0)).toEqual({
             code: '😀',
@@ -116,8 +116,8 @@ describe('processFrequentlyUsedEmojis', function () {
             lastUpdatedAt: 1000,
         });
     });
-    it('should fill in missing name using code lookup', function () {
-        var input = [
+    it('should fill in missing name using code lookup', () => {
+        const input = [
             {
                 code: '👋',
                 name: '',
@@ -125,7 +125,7 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 2000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(1);
         expect(result.at(0)).toEqual({
             code: '👋',
@@ -135,9 +135,8 @@ describe('processFrequentlyUsedEmojis', function () {
             lastUpdatedAt: 2000,
         });
     });
-    it('should filter out emojis that do not exist in emojiCodeTableWithSkinTones', function () {
-        var _a;
-        var input = [
+    it('should filter out emojis that do not exist in emojiCodeTableWithSkinTones', () => {
+        const input = [
             {
                 code: '😀',
                 name: 'grinning_face',
@@ -151,12 +150,12 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 2000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(1);
-        expect((_a = result.at(0)) === null || _a === void 0 ? void 0 : _a.code).toBe('😀');
+        expect(result.at(0)?.code).toBe('😀');
     });
-    it('should merge duplicate emojis and sum their counts', function () {
-        var input = [
+    it('should merge duplicate emojis and sum their counts', () => {
+        const input = [
             {
                 code: '😀',
                 name: 'grinning_face',
@@ -170,7 +169,7 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 2000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(1);
         expect(result.at(0)).toEqual({
             code: '😀',
@@ -180,9 +179,8 @@ describe('processFrequentlyUsedEmojis', function () {
             lastUpdatedAt: 2000,
         });
     });
-    it('should sort by count in descending order', function () {
-        var _a, _b, _c;
-        var input = [
+    it('should sort by count in descending order', () => {
+        const input = [
             {
                 code: '😀',
                 name: 'grinning_face',
@@ -202,15 +200,14 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 3000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(3);
-        expect((_a = result.at(0)) === null || _a === void 0 ? void 0 : _a.code).toBe('👋');
-        expect((_b = result.at(1)) === null || _b === void 0 ? void 0 : _b.code).toBe('😀');
-        expect((_c = result.at(2)) === null || _c === void 0 ? void 0 : _c.code).toBe('👍');
+        expect(result.at(0)?.code).toBe('👋');
+        expect(result.at(1)?.code).toBe('😀');
+        expect(result.at(2)?.code).toBe('👍');
     });
-    it('should sort by lastUpdatedAt in descending order when counts are equal', function () {
-        var _a, _b, _c;
-        var input = [
+    it('should sort by lastUpdatedAt in descending order when counts are equal', () => {
+        const input = [
             {
                 code: '😀',
                 name: 'grinning_face',
@@ -230,15 +227,14 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 2000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(3);
-        expect((_a = result.at(0)) === null || _a === void 0 ? void 0 : _a.code).toBe('👋');
-        expect((_b = result.at(1)) === null || _b === void 0 ? void 0 : _b.code).toBe('👍');
-        expect((_c = result.at(2)) === null || _c === void 0 ? void 0 : _c.code).toBe('😀');
+        expect(result.at(0)?.code).toBe('👋');
+        expect(result.at(1)?.code).toBe('👍');
+        expect(result.at(2)?.code).toBe('😀');
     });
-    it('should handle complex scenario with mixed data quality', function () {
-        var _a, _b, _c, _d, _e;
-        var input = [
+    it('should handle complex scenario with mixed data quality', () => {
+        const input = [
             {
                 code: '😀',
                 name: 'grinning_face',
@@ -270,12 +266,12 @@ describe('processFrequentlyUsedEmojis', function () {
                 lastUpdatedAt: 4000,
             },
         ];
-        var result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
+        const result = (0, EmojiUtils_1.processFrequentlyUsedEmojis)(input);
         expect(result).toHaveLength(3);
-        expect((_a = result.at(0)) === null || _a === void 0 ? void 0 : _a.code).toBe('👍');
-        expect((_b = result.at(1)) === null || _b === void 0 ? void 0 : _b.code).toBe('😀');
-        expect((_c = result.at(2)) === null || _c === void 0 ? void 0 : _c.code).toBe('👋');
-        expect((_d = result.at(1)) === null || _d === void 0 ? void 0 : _d.count).toBe(7);
-        expect((_e = result.at(1)) === null || _e === void 0 ? void 0 : _e.lastUpdatedAt).toBe(1500);
+        expect(result.at(0)?.code).toBe('👍');
+        expect(result.at(1)?.code).toBe('😀');
+        expect(result.at(2)?.code).toBe('👋');
+        expect(result.at(1)?.count).toBe(7);
+        expect(result.at(1)?.lastUpdatedAt).toBe(1500);
     });
 });

@@ -1,23 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@dnd-kit/core");
-var modifiers_1 = require("@dnd-kit/modifiers");
-var sortable_1 = require("@dnd-kit/sortable");
-var react_1 = require("react");
-var ScrollView_1 = require("@components/ScrollView");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var SortableItem_1 = require("./SortableItem");
-var minimumActivationDistance = 5; // pointer must move at least this much before starting to drag
+const core_1 = require("@dnd-kit/core");
+const modifiers_1 = require("@dnd-kit/modifiers");
+const sortable_1 = require("@dnd-kit/sortable");
+const react_1 = require("react");
+const ScrollView_1 = require("@components/ScrollView");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const SortableItem_1 = require("./SortableItem");
+const minimumActivationDistance = 5; // pointer must move at least this much before starting to drag
 /**
  * Draggable (vertical) list using dnd-kit. Dragging is restricted to the vertical axis only
  *
  */
-function DraggableList(_a) {
-    var _b = _a.data, data = _b === void 0 ? [] : _b, renderItem = _a.renderItem, keyExtractor = _a.keyExtractor, onDragEndCallback = _a.onDragEnd, 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    ListFooterComponent = _a.ListFooterComponent, ref = _a.ref;
-    var styles = (0, useThemeStyles_1.default)();
-    var items = data.map(function (item, index) {
+function DraggableList({ data = [], renderItem, keyExtractor, onDragEnd: onDragEndCallback, 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+ListFooterComponent, ref, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const items = data.map((item, index) => {
         return keyExtractor(item, index);
     });
     /**
@@ -25,27 +24,27 @@ function DraggableList(_a) {
      * It will reorder the list and call the callback function
      * to notify the parent component about the change
      */
-    var onDragEnd = function (event) {
-        var active = event.active, over = event.over;
+    const onDragEnd = (event) => {
+        const { active, over } = event;
         if (over !== null && active.id !== over.id) {
-            var oldIndex = items.indexOf(active.id.toString());
-            var newIndex = items.indexOf(over.id.toString());
-            var reorderedItems = (0, sortable_1.arrayMove)(data, oldIndex, newIndex);
-            onDragEndCallback === null || onDragEndCallback === void 0 ? void 0 : onDragEndCallback({ data: reorderedItems });
+            const oldIndex = items.indexOf(active.id.toString());
+            const newIndex = items.indexOf(over.id.toString());
+            const reorderedItems = (0, sortable_1.arrayMove)(data, oldIndex, newIndex);
+            onDragEndCallback?.({ data: reorderedItems });
         }
     };
-    var sortableItems = data.map(function (item, index) {
-        var key = keyExtractor(item, index);
+    const sortableItems = data.map((item, index) => {
+        const key = keyExtractor(item, index);
         return (<SortableItem_1.default id={key} key={key}>
                 {renderItem({
-                item: item,
-                getIndex: function () { return index; },
+                item,
+                getIndex: () => index,
                 isActive: false,
-                drag: function () { },
+                drag: () => { },
             })}
             </SortableItem_1.default>);
     });
-    var sensors = [
+    const sensors = [
         (0, core_1.useSensor)(core_1.PointerSensor, {
             activationConstraint: {
                 distance: minimumActivationDistance,

@@ -1,27 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var SingleFieldStep_1 = require("@components/SubStepForms/SingleFieldStep");
-var useEnterSignerInfoStepFormSubmit_1 = require("@hooks/useEnterSignerInfoStepFormSubmit");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EnterSignerInfoForm_1 = require("@src/types/form/EnterSignerInfoForm");
-function JobTitle(_a) {
-    var _b;
-    var onNext = _a.onNext, onMove = _a.onMove, isEditing = _a.isEditing;
-    var translate = (0, useLocalize_1.default)().translate;
-    var enterSignerInfoFormDraft = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ENTER_SINGER_INFO_FORM_DRAFT, { canBeMissing: false })[0];
-    var inputID = EnterSignerInfoForm_1.default.SIGNER_JOB_TITLE;
-    var defaultValue = String((_b = enterSignerInfoFormDraft === null || enterSignerInfoFormDraft === void 0 ? void 0 : enterSignerInfoFormDraft[inputID]) !== null && _b !== void 0 ? _b : '');
-    var validate = (0, react_1.useCallback)(function (values) {
+const react_1 = require("react");
+const SingleFieldStep_1 = require("@components/SubStepForms/SingleFieldStep");
+const useEnterSignerInfoStepFormSubmit_1 = require("@hooks/useEnterSignerInfoStepFormSubmit");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EnterSignerInfoForm_1 = require("@src/types/form/EnterSignerInfoForm");
+function JobTitle({ onNext, onMove, isEditing }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const [enterSignerInfoFormDraft] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ENTER_SINGER_INFO_FORM_DRAFT, { canBeMissing: false });
+    const inputID = EnterSignerInfoForm_1.default.SIGNER_JOB_TITLE;
+    const defaultValue = String(enterSignerInfoFormDraft?.[inputID] ?? '');
+    const validate = (0, react_1.useCallback)((values) => {
         return (0, ValidationUtils_1.getFieldRequiredErrors)(values, [inputID]);
     }, [inputID]);
-    var handleSubmit = (0, useEnterSignerInfoStepFormSubmit_1.default)({
+    const handleSubmit = (0, useEnterSignerInfoStepFormSubmit_1.default)({
         fieldIds: [inputID],
-        onNext: onNext,
+        onNext,
         shouldSaveDraft: isEditing,
     });
     return (<SingleFieldStep_1.default isEditing={isEditing} onNext={onNext} onMove={onMove} formID={ONYXKEYS_1.default.FORMS.ENTER_SINGER_INFO_FORM} formTitle={translate('signerInfoStep.whatsYourJobTitle')} validate={validate} onSubmit={handleSubmit} inputId={inputID} inputLabel={translate('signerInfoStep.jobTitle')} inputMode={CONST_1.default.INPUT_MODE.TEXT} defaultValue={defaultValue} shouldShowHelpLinks={false}/>);

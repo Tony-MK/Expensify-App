@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.scrollToRight = exports.moveSelectionToEnd = exports.scrollToBottom = void 0;
-var scrollToBottom = function (input) {
+const scrollToBottom = (input) => {
     if (!('scrollTop' in input)) {
         return;
     }
@@ -9,7 +9,7 @@ var scrollToBottom = function (input) {
     input.scrollTop = input.scrollHeight;
 };
 exports.scrollToBottom = scrollToBottom;
-var scrollToRight = function (input) {
+const scrollToRight = (input) => {
     if (!('scrollLeft' in input)) {
         return;
     }
@@ -18,11 +18,11 @@ var scrollToRight = function (input) {
     input.scrollLeft = input.scrollWidth;
 };
 exports.scrollToRight = scrollToRight;
-var moveSelectionToEnd = function (input) {
+const moveSelectionToEnd = (input) => {
     if (!('setSelectionRange' in input)) {
         return;
     }
-    var length = input.value.length;
+    const length = input.value.length;
     input.setSelectionRange(length, length);
 };
 exports.moveSelectionToEnd = moveSelectionToEnd;

@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.invalidMCC = exports.Utilities = exports.Miscellaneous = exports.Taxi = exports.Services = exports.Rental = exports.Meals = exports.Mail = exports.Hotel = exports.Groceries = exports.Goods = exports.Gas = exports.Commuter = exports.Airlines = exports.Default = void 0;
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var EReceiptThumbnail_1 = require("@components/EReceiptThumbnail");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const EReceiptThumbnail_1 = require("@components/EReceiptThumbnail");
 /**
  * We use the Component Story Format for writing stories. Follow the docs here:
  *
  * https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
  */
-var story = {
+const story = {
     title: 'Components/EReceiptThumbnail',
     component: EReceiptThumbnail_1.default,
 };
@@ -36,77 +36,77 @@ function Template(props) {
             </react_native_1.View>
         </react_native_1.View>);
 }
-var Default = Template.bind({});
+const Default = Template.bind({});
 exports.Default = Default;
 Default.args = {
     transactionID: 'FAKE_1',
 };
-var Airlines = Template.bind({});
+const Airlines = Template.bind({});
 exports.Airlines = Airlines;
 Airlines.args = {
     transactionID: 'FAKE_2',
 };
-var Commuter = Template.bind({});
+const Commuter = Template.bind({});
 exports.Commuter = Commuter;
 Commuter.args = {
     transactionID: 'FAKE_3',
 };
-var Gas = Template.bind({});
+const Gas = Template.bind({});
 exports.Gas = Gas;
 Gas.args = {
     transactionID: 'FAKE_4',
 };
-var Goods = Template.bind({});
+const Goods = Template.bind({});
 exports.Goods = Goods;
 Goods.args = {
     transactionID: 'FAKE_5',
 };
-var Groceries = Template.bind({});
+const Groceries = Template.bind({});
 exports.Groceries = Groceries;
 Groceries.args = {
     transactionID: 'FAKE_6',
 };
-var Hotel = Template.bind({});
+const Hotel = Template.bind({});
 exports.Hotel = Hotel;
 Hotel.args = {
     transactionID: 'FAKE_7',
 };
-var Mail = Template.bind({});
+const Mail = Template.bind({});
 exports.Mail = Mail;
 Mail.args = {
     transactionID: 'FAKE_8',
 };
-var Meals = Template.bind({});
+const Meals = Template.bind({});
 exports.Meals = Meals;
 Meals.args = {
     transactionID: 'FAKE_9',
 };
-var Rental = Template.bind({});
+const Rental = Template.bind({});
 exports.Rental = Rental;
 Rental.args = {
     transactionID: 'FAKE_10',
 };
-var Services = Template.bind({});
+const Services = Template.bind({});
 exports.Services = Services;
 Services.args = {
     transactionID: 'FAKE_11',
 };
-var Taxi = Template.bind({});
+const Taxi = Template.bind({});
 exports.Taxi = Taxi;
 Taxi.args = {
     transactionID: 'FAKE_12',
 };
-var Miscellaneous = Template.bind({});
+const Miscellaneous = Template.bind({});
 exports.Miscellaneous = Miscellaneous;
 Miscellaneous.args = {
     transactionID: 'FAKE_13',
 };
-var Utilities = Template.bind({});
+const Utilities = Template.bind({});
 exports.Utilities = Utilities;
 Utilities.args = {
     transactionID: 'FAKE_14',
 };
-var invalidMCC = Template.bind({});
+const invalidMCC = Template.bind({});
 exports.invalidMCC = invalidMCC;
 invalidMCC.args = {
     transactionID: 'FAKE_15',

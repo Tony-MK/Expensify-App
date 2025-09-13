@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var Text_1 = require("@components/Text");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function EmojiWithTooltip(_a) {
-    var emojiCode = _a.emojiCode, _b = _a.style, style = _b === void 0 ? {} : _b, _c = _a.isMedium, isMedium = _c === void 0 ? false : _c;
-    var styles = (0, useThemeStyles_1.default)();
+const react_native_1 = require("react-native");
+const Text_1 = require("@components/Text");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function EmojiWithTooltip({ emojiCode, style = {}, isMedium = false }) {
+    const styles = (0, useThemeStyles_1.default)();
     return isMedium ? (<Text_1.default style={style}>
             <react_native_1.View>
                 <Text_1.default style={styles.emojisWithTextFontSizeAligned}>{emojiCode}</Text_1.default>

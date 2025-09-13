@@ -1,28 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_hybrid_app_1 = require("@expensify/react-native-hybrid-app");
-var react_native_onyx_1 = require("react-native-onyx");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var lastVisitedTabPathUtils_1 = require("@libs/Navigation/helpers/lastVisitedTabPathUtils");
-var CONFIG_1 = require("@src/CONFIG");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var HybridApp_1 = require("./HybridApp");
-var Policy_1 = require("./Policy/Policy");
-var currentIsOffline;
-var currentShouldForceOffline;
+const react_native_hybrid_app_1 = require("@expensify/react-native-hybrid-app");
+const react_native_onyx_1 = require("react-native-onyx");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const lastVisitedTabPathUtils_1 = require("@libs/Navigation/helpers/lastVisitedTabPathUtils");
+const CONFIG_1 = require("@src/CONFIG");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const HybridApp_1 = require("./HybridApp");
+const Policy_1 = require("./Policy/Policy");
+let currentIsOffline;
+let currentShouldForceOffline;
 // We use connectWithoutView here because we only need to track network state for sign-in redirect logic, which is not connected to any changes on the UI layer
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.NETWORK,
-    callback: function (network) {
-        currentIsOffline = network === null || network === void 0 ? void 0 : network.isOffline;
-        currentShouldForceOffline = network === null || network === void 0 ? void 0 : network.shouldForceOffline;
+    callback: (network) => {
+        currentIsOffline = network?.isOffline;
+        currentShouldForceOffline = network?.shouldForceOffline;
     },
 });
 function clearStorageAndRedirect(errorMessage) {
     // Under certain conditions, there are key-values we'd like to keep in storage even when a user is logged out.
     // We pass these into the clear() method in order to avoid having to reset them on a delayed tick and getting
     // flashes of unwanted default state.
-    var keysToPreserve = [];
+    const keysToPreserve = [];
     keysToPreserve.push(ONYXKEYS_1.default.NVP_PREFERRED_LOCALE);
     keysToPreserve.push(ONYXKEYS_1.default.ARE_TRANSLATIONS_LOADING);
     keysToPreserve.push(ONYXKEYS_1.default.PREFERRED_THEME);
@@ -35,7 +35,7 @@ function clearStorageAndRedirect(errorMessage) {
     if (currentIsOffline && !currentShouldForceOffline) {
         keysToPreserve.push(ONYXKEYS_1.default.NETWORK);
     }
-    return react_native_onyx_1.default.clear(keysToPreserve).then(function () {
+    return react_native_onyx_1.default.clear(keysToPreserve).then(() => {
         if (CONFIG_1.default.IS_HYBRID_APP) {
             (0, HybridApp_1.resetSignInFlow)();
             react_native_hybrid_app_1.default.signOutFromOldDot();
@@ -57,7 +57,7 @@ function clearStorageAndRedirect(errorMessage) {
  * @param [errorMessage] error message to be displayed on the sign in page
  */
 function redirectToSignIn(errorMessage) {
-    return clearStorageAndRedirect(errorMessage).then(function () {
+    return clearStorageAndRedirect(errorMessage).then(() => {
         (0, lastVisitedTabPathUtils_1.clearSessionStorage)();
     });
 }

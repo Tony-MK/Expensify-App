@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var useScrollEnabled = function () { return undefined; };
+const useScrollEnabled = () => undefined;
 exports.default = useScrollEnabled;

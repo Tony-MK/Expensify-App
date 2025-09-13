@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fastMerge_1 = require("expensify-common/dist/fastMerge");
-var react_1 = require("react");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var Log_1 = require("@libs/Log");
-var executeOnUIRuntimeSync_1 = require("./executeOnUIRuntimeSync");
+const fastMerge_1 = require("expensify-common/dist/fastMerge");
+const react_1 = require("react");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const Log_1 = require("@libs/Log");
+const executeOnUIRuntimeSync_1 = require("./executeOnUIRuntimeSync");
 // When you need to debug state machine change this to true
-var DEBUG_MODE = false;
+const DEBUG_MODE = false;
 // eslint-disable-next-line @typescript-eslint/unbound-method
-var client = (0, react_native_reanimated_1.runOnJS)(Log_1.default.client);
+const client = (0, react_native_reanimated_1.runOnJS)(Log_1.default.client);
 /**
  * A hook that creates a state machine that can be used with Reanimated Worklets, useful for when you need to keep the native thread and JS tightly in-sync.
  * You can transition state from worklets running on the UI thread, or from the JS thread.
@@ -61,36 +61,36 @@ var client = (0, react_native_reanimated_1.runOnJS)(Log_1.default.client);
  * @returns an object containing the current state, a transition function, and a reset function
  */
 function useWorkletStateMachine(stateMachine, initialState) {
-    var currentState = (0, react_native_reanimated_1.useSharedValue)(initialState);
-    var log = (0, react_1.useCallback)(function (message, params) {
+    const currentState = (0, react_native_reanimated_1.useSharedValue)(initialState);
+    const log = (0, react_1.useCallback)((message, params) => {
         'worklet';
         if (!DEBUG_MODE) {
             return;
         }
         // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/restrict-template-expressions
-        client("[StateMachine] ".concat(message, ". Params: ").concat(JSON.stringify(params)));
+        client(`[StateMachine] ${message}. Params: ${JSON.stringify(params)}`);
     }, []);
-    var transitionWorklet = (0, react_1.useCallback)(function (action) {
+    const transitionWorklet = (0, react_1.useCallback)((action) => {
         'worklet';
         if (!action) {
             throw new Error('state machine action is required');
         }
-        var state = currentState.get();
-        log("Current STATE: ".concat(state.current.state));
-        log("Next ACTION: ".concat(action.type), action.payload);
-        var nextMachine = stateMachine[state.current.state];
+        const state = currentState.get();
+        log(`Current STATE: ${state.current.state}`);
+        log(`Next ACTION: ${action.type}`, action.payload);
+        const nextMachine = stateMachine[state.current.state];
         if (!nextMachine) {
-            log("No next machine found for state: ".concat(state.current.state));
+            log(`No next machine found for state: ${state.current.state}`);
             return;
         }
-        var nextState = nextMachine[action.type];
+        const nextState = nextMachine[action.type];
         if (!nextState) {
-            log("No next state found for action: ".concat(action.type));
+            log(`No next state found for action: ${action.type}`);
             return;
         }
         // save previous payload or merge the new payload with the previous payload
-        var nextPayload = typeof action.payload === 'undefined' ? state.current.payload : (0, fastMerge_1.default)(state.current.payload, action.payload);
-        log("Next STATE: ".concat(nextState), nextPayload);
+        const nextPayload = typeof action.payload === 'undefined' ? state.current.payload : (0, fastMerge_1.default)(state.current.payload, action.payload);
+        log(`Next STATE: ${nextState}`, nextPayload);
         currentState.set({
             previous: state.current,
             current: {
@@ -99,22 +99,22 @@ function useWorkletStateMachine(stateMachine, initialState) {
             },
         });
     }, [currentState, log, stateMachine]);
-    var resetWorklet = (0, react_1.useCallback)(function () {
+    const resetWorklet = (0, react_1.useCallback)(() => {
         'worklet';
         log('RESET STATE MACHINE');
         currentState.set(initialState);
     }, [currentState, initialState, log]);
-    var reset = (0, react_1.useCallback)(function () {
+    const reset = (0, react_1.useCallback)(() => {
         (0, react_native_reanimated_1.runOnUI)(resetWorklet)();
     }, [resetWorklet]);
-    var transition = (0, react_1.useCallback)(function (action) {
+    const transition = (0, react_1.useCallback)((action) => {
         (0, executeOnUIRuntimeSync_1.default)(transitionWorklet)(action);
     }, [transitionWorklet]);
     return {
-        currentState: currentState,
-        transitionWorklet: transitionWorklet,
-        transition: transition,
-        reset: reset,
+        currentState,
+        transitionWorklet,
+        transition,
+        reset,
     };
 }
 exports.default = useWorkletStateMachine;

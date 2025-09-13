@@ -1,33 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var date_fns_1 = require("date-fns");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var DateUtils_1 = require("@libs/DateUtils");
-var SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
-var CONST_1 = require("@src/CONST");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function getBillingStatus(_a) {
-    var _b, _c, _d, _e;
-    var translate = _a.translate, stripeCustomerId = _a.stripeCustomerId, accountData = _a.accountData, purchase = _a.purchase;
-    var cardEnding = (_c = ((_b = accountData === null || accountData === void 0 ? void 0 : accountData.cardNumber) !== null && _b !== void 0 ? _b : '')) === null || _c === void 0 ? void 0 : _c.slice(-4);
-    var amountOwed = (0, SubscriptionUtils_1.getAmountOwed)();
-    var subscriptionStatus = (0, SubscriptionUtils_1.getSubscriptionStatus)(stripeCustomerId);
-    var endDate = (0, SubscriptionUtils_1.getOverdueGracePeriodDate)();
-    var endDateFormatted = endDate ? DateUtils_1.default.formatWithUTCTimeZone((0, date_fns_1.fromUnixTime)(endDate).toUTCString(), CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT) : null;
-    var isCurrentCardExpired = DateUtils_1.default.isCardExpired((_d = accountData === null || accountData === void 0 ? void 0 : accountData.cardMonth) !== null && _d !== void 0 ? _d : 0, (_e = accountData === null || accountData === void 0 ? void 0 : accountData.cardYear) !== null && _e !== void 0 ? _e : 0);
-    var purchaseAmount = purchase === null || purchase === void 0 ? void 0 : purchase.message.billableAmount;
-    var purchaseCurrency = purchase === null || purchase === void 0 ? void 0 : purchase.currency;
-    var purchaseDate = purchase === null || purchase === void 0 ? void 0 : purchase.created;
-    var isBillingFailed = (purchase === null || purchase === void 0 ? void 0 : purchase.message.billingType) === CONST_1.default.BILLING.TYPE_FAILED_2018;
-    var purchaseDateFormatted = purchaseDate ? DateUtils_1.default.formatWithUTCTimeZone(purchaseDate, CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT) : undefined;
-    var purchaseAmountWithCurrency = (0, CurrencyUtils_1.convertAmountToDisplayString)(purchaseAmount, purchaseCurrency);
-    switch (subscriptionStatus === null || subscriptionStatus === void 0 ? void 0 : subscriptionStatus.status) {
+const date_fns_1 = require("date-fns");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const DateUtils_1 = require("@libs/DateUtils");
+const SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
+const CONST_1 = require("@src/CONST");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function getBillingStatus({ translate, stripeCustomerId, accountData, purchase }) {
+    const cardEnding = (accountData?.cardNumber ?? '')?.slice(-4);
+    const amountOwed = (0, SubscriptionUtils_1.getAmountOwed)();
+    const subscriptionStatus = (0, SubscriptionUtils_1.getSubscriptionStatus)(stripeCustomerId);
+    const endDate = (0, SubscriptionUtils_1.getOverdueGracePeriodDate)();
+    const endDateFormatted = endDate ? DateUtils_1.default.formatWithUTCTimeZone((0, date_fns_1.fromUnixTime)(endDate).toUTCString(), CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT) : null;
+    const isCurrentCardExpired = DateUtils_1.default.isCardExpired(accountData?.cardMonth ?? 0, accountData?.cardYear ?? 0);
+    const purchaseAmount = purchase?.message.billableAmount;
+    const purchaseCurrency = purchase?.currency;
+    const purchaseDate = purchase?.created;
+    const isBillingFailed = purchase?.message.billingType === CONST_1.default.BILLING.TYPE_FAILED_2018;
+    const purchaseDateFormatted = purchaseDate ? DateUtils_1.default.formatWithUTCTimeZone(purchaseDate, CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT) : undefined;
+    const purchaseAmountWithCurrency = (0, CurrencyUtils_1.convertAmountToDisplayString)(purchaseAmount, purchaseCurrency);
+    switch (subscriptionStatus?.status) {
         case SubscriptionUtils_1.PAYMENT_STATUS.POLICY_OWNER_WITH_AMOUNT_OWED:
             return {
                 title: translate('subscription.billingBanner.policyOwnerAmountOwed.title'),
-                subtitle: translate('subscription.billingBanner.policyOwnerAmountOwed.subtitle', { date: endDateFormatted !== null && endDateFormatted !== void 0 ? endDateFormatted : '' }),
+                subtitle: translate('subscription.billingBanner.policyOwnerAmountOwed.subtitle', { date: endDateFormatted ?? '' }),
                 isError: true,
                 isRetryAvailable: true,
             };
@@ -46,7 +44,7 @@ function getBillingStatus(_a) {
         case SubscriptionUtils_1.PAYMENT_STATUS.OWNER_OF_POLICY_UNDER_INVOICING:
             return {
                 title: translate('subscription.billingBanner.policyOwnerUnderInvoicing.title'),
-                subtitle: translate('subscription.billingBanner.policyOwnerUnderInvoicing.subtitle', { date: endDateFormatted !== null && endDateFormatted !== void 0 ? endDateFormatted : '' }),
+                subtitle: translate('subscription.billingBanner.policyOwnerUnderInvoicing.subtitle', { date: endDateFormatted ?? '' }),
                 isError: true,
                 isAddButtonDark: true,
             };
@@ -60,28 +58,28 @@ function getBillingStatus(_a) {
         case SubscriptionUtils_1.PAYMENT_STATUS.BILLING_DISPUTE_PENDING:
             return {
                 title: translate('subscription.billingBanner.billingDisputePending.title'),
-                subtitle: translate('subscription.billingBanner.billingDisputePending.subtitle', { amountOwed: amountOwed, cardEnding: cardEnding }),
+                subtitle: translate('subscription.billingBanner.billingDisputePending.subtitle', { amountOwed, cardEnding }),
                 isError: true,
                 isRetryAvailable: false,
             };
         case SubscriptionUtils_1.PAYMENT_STATUS.CARD_AUTHENTICATION_REQUIRED:
             return {
                 title: translate('subscription.billingBanner.cardAuthenticationRequired.title'),
-                subtitle: translate('subscription.billingBanner.cardAuthenticationRequired.subtitle', { cardEnding: cardEnding }),
+                subtitle: translate('subscription.billingBanner.cardAuthenticationRequired.subtitle', { cardEnding }),
                 isError: true,
                 isAuthenticationRequired: true,
             };
         case SubscriptionUtils_1.PAYMENT_STATUS.INSUFFICIENT_FUNDS:
             return {
                 title: translate('subscription.billingBanner.insufficientFunds.title'),
-                subtitle: translate('subscription.billingBanner.insufficientFunds.subtitle', { amountOwed: amountOwed }),
+                subtitle: translate('subscription.billingBanner.insufficientFunds.subtitle', { amountOwed }),
                 isError: true,
                 isRetryAvailable: true,
             };
         case SubscriptionUtils_1.PAYMENT_STATUS.CARD_EXPIRED:
             return {
                 title: translate('subscription.billingBanner.cardExpired.title'),
-                subtitle: translate('subscription.billingBanner.cardExpired.subtitle', { amountOwed: amountOwed }),
+                subtitle: translate('subscription.billingBanner.cardExpired.subtitle', { amountOwed }),
                 isError: true,
                 isRetryAvailable: !isCurrentCardExpired,
             };
@@ -116,8 +114,8 @@ function getBillingStatus(_a) {
  * @returns - The next billing date in 'yyyy-MM-dd' format.
  */
 function getNextBillingDate() {
-    var today = new Date();
-    var nextBillingDate = (0, date_fns_1.startOfMonth)((0, date_fns_1.addMonths)(today, 1));
+    const today = new Date();
+    const nextBillingDate = (0, date_fns_1.startOfMonth)((0, date_fns_1.addMonths)(today, 1));
     return (0, date_fns_1.format)(nextBillingDate, CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT);
 }
-exports.default = { getBillingStatus: getBillingStatus, getNextBillingDate: getNextBillingDate };
+exports.default = { getBillingStatus, getNextBillingDate };

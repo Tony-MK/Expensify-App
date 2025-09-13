@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var CategoryOptionListUtils_1 = require("@libs/CategoryOptionListUtils");
-var CategoryUtils_1 = require("@libs/CategoryUtils");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var SelectionList_1 = require("./SelectionList");
-var RadioListItem_1 = require("./SelectionList/RadioListItem");
-function CategoryPicker(_a) {
-    var selectedCategory = _a.selectedCategory, policyID = _a.policyID, onSubmit = _a.onSubmit, _b = _a.addBottomSafeAreaPadding, addBottomSafeAreaPadding = _b === void 0 ? false : _b, contentContainerStyle = _a.contentContainerStyle;
-    var policyCategories = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES).concat(policyID), { canBeMissing: true })[0];
-    var policyCategoriesDraft = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES_DRAFT).concat(policyID), { canBeMissing: true })[0];
-    var policyRecentlyUsedCategories = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_RECENTLY_USED_CATEGORIES).concat(policyID), { canBeMissing: true })[0];
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var _c = (0, useLocalize_1.default)(), translate = _c.translate, localeCompare = _c.localeCompare;
-    var _d = (0, useDebouncedState_1.default)(''), searchValue = _d[0], debouncedSearchValue = _d[1], setSearchValue = _d[2];
-    var offlineMessage = isOffline ? "".concat(translate('common.youAppearToBeOffline'), " ").concat(translate('search.resultsAreLimited')) : '';
-    var selectedOptions = (0, react_1.useMemo)(function () {
+const react_1 = require("react");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const CategoryOptionListUtils_1 = require("@libs/CategoryOptionListUtils");
+const CategoryUtils_1 = require("@libs/CategoryUtils");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const SelectionList_1 = require("./SelectionList");
+const RadioListItem_1 = require("./SelectionList/RadioListItem");
+function CategoryPicker({ selectedCategory, policyID, onSubmit, addBottomSafeAreaPadding = false, contentContainerStyle }) {
+    const [policyCategories] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES}${policyID}`, { canBeMissing: true });
+    const [policyCategoriesDraft] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES_DRAFT}${policyID}`, { canBeMissing: true });
+    const [policyRecentlyUsedCategories] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_RECENTLY_USED_CATEGORIES}${policyID}`, { canBeMissing: true });
+    const { isOffline } = (0, useNetwork_1.default)();
+    const { translate, localeCompare } = (0, useLocalize_1.default)();
+    const [searchValue, debouncedSearchValue, setSearchValue] = (0, useDebouncedState_1.default)('');
+    const offlineMessage = isOffline ? `${translate('common.youAppearToBeOffline')} ${translate('search.resultsAreLimited')}` : '';
+    const selectedOptions = (0, react_1.useMemo)(() => {
         if (!selectedCategory) {
             return [];
         }
@@ -34,26 +33,25 @@ function CategoryPicker(_a) {
             },
         ];
     }, [selectedCategory]);
-    var _e = (0, react_1.useMemo)(function () {
-        var _a, _b, _c, _d;
-        var categories = (_a = policyCategories !== null && policyCategories !== void 0 ? policyCategories : policyCategoriesDraft) !== null && _a !== void 0 ? _a : {};
-        var validPolicyRecentlyUsedCategories = (_b = policyRecentlyUsedCategories === null || policyRecentlyUsedCategories === void 0 ? void 0 : policyRecentlyUsedCategories.filter) === null || _b === void 0 ? void 0 : _b.call(policyRecentlyUsedCategories, function (p) { return !(0, EmptyObject_1.isEmptyObject)(p); });
-        var categoryOptions = (0, CategoryOptionListUtils_1.getCategoryListSections)({
+    const [sections, headerMessage, shouldShowTextInput] = (0, react_1.useMemo)(() => {
+        const categories = policyCategories ?? policyCategoriesDraft ?? {};
+        const validPolicyRecentlyUsedCategories = policyRecentlyUsedCategories?.filter?.((p) => !(0, EmptyObject_1.isEmptyObject)(p));
+        const categoryOptions = (0, CategoryOptionListUtils_1.getCategoryListSections)({
             searchValue: debouncedSearchValue,
-            selectedOptions: selectedOptions,
-            categories: categories,
-            localeCompare: localeCompare,
+            selectedOptions,
+            categories,
+            localeCompare,
             recentlyUsedCategories: validPolicyRecentlyUsedCategories,
         });
-        var categoryData = (_d = (_c = categoryOptions === null || categoryOptions === void 0 ? void 0 : categoryOptions.at(0)) === null || _c === void 0 ? void 0 : _c.data) !== null && _d !== void 0 ? _d : [];
-        var header = (0, OptionsListUtils_1.getHeaderMessageForNonUserList)(categoryData.length > 0, debouncedSearchValue);
-        var categoriesCount = (0, CategoryUtils_1.getEnabledCategoriesCount)(categories);
-        var isCategoriesCountBelowThreshold = categoriesCount < CONST_1.default.STANDARD_LIST_ITEM_LIMIT;
-        var showInput = !isCategoriesCountBelowThreshold;
+        const categoryData = categoryOptions?.at(0)?.data ?? [];
+        const header = (0, OptionsListUtils_1.getHeaderMessageForNonUserList)(categoryData.length > 0, debouncedSearchValue);
+        const categoriesCount = (0, CategoryUtils_1.getEnabledCategoriesCount)(categories);
+        const isCategoriesCountBelowThreshold = categoriesCount < CONST_1.default.STANDARD_LIST_ITEM_LIMIT;
+        const showInput = !isCategoriesCountBelowThreshold;
         return [categoryOptions, header, showInput];
-    }, [policyRecentlyUsedCategories, debouncedSearchValue, selectedOptions, policyCategories, policyCategoriesDraft, localeCompare]), sections = _e[0], headerMessage = _e[1], shouldShowTextInput = _e[2];
-    var selectedOptionKey = (0, react_1.useMemo)(function () { var _a, _b, _c; return (_c = ((_b = (_a = sections === null || sections === void 0 ? void 0 : sections.at(0)) === null || _a === void 0 ? void 0 : _a.data) !== null && _b !== void 0 ? _b : []).filter(function (category) { return category.searchText === selectedCategory; }).at(0)) === null || _c === void 0 ? void 0 : _c.keyForList; }, [sections, selectedCategory]);
-    return (<SelectionList_1.default sections={sections} headerMessage={headerMessage} textInputValue={searchValue} textInputLabel={shouldShowTextInput ? translate('common.search') : undefined} textInputHint={offlineMessage} onChangeText={setSearchValue} onSelectRow={onSubmit} ListItem={RadioListItem_1.default} initiallyFocusedOptionKey={selectedOptionKey !== null && selectedOptionKey !== void 0 ? selectedOptionKey : undefined} isRowMultilineSupported addBottomSafeAreaPadding={addBottomSafeAreaPadding} contentContainerStyle={contentContainerStyle}/>);
+    }, [policyRecentlyUsedCategories, debouncedSearchValue, selectedOptions, policyCategories, policyCategoriesDraft, localeCompare]);
+    const selectedOptionKey = (0, react_1.useMemo)(() => (sections?.at(0)?.data ?? []).filter((category) => category.searchText === selectedCategory).at(0)?.keyForList, [sections, selectedCategory]);
+    return (<SelectionList_1.default sections={sections} headerMessage={headerMessage} textInputValue={searchValue} textInputLabel={shouldShowTextInput ? translate('common.search') : undefined} textInputHint={offlineMessage} onChangeText={setSearchValue} onSelectRow={onSubmit} ListItem={RadioListItem_1.default} initiallyFocusedOptionKey={selectedOptionKey ?? undefined} isRowMultilineSupported addBottomSafeAreaPadding={addBottomSafeAreaPadding} contentContainerStyle={contentContainerStyle}/>);
 }
 CategoryPicker.displayName = 'CategoryPicker';
 exports.default = CategoryPicker;

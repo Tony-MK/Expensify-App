@@ -1,25 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var Expensicons = require("@components/Icon/Expensicons");
-var ScrollView_1 = require("@components/ScrollView");
-var SwipeInterceptPanResponder_1 = require("@components/SwipeInterceptPanResponder");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useThrottledButtonState_1 = require("@hooks/useThrottledButtonState");
-var Clipboard_1 = require("@libs/Clipboard");
-var DebugUtils_1 = require("@libs/DebugUtils");
-function DebugJSON(_a) {
-    var data = _a.data;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _b = (0, useThrottledButtonState_1.default)(), isThrottledButtonActive = _b[0], setThrottledButtonInactive = _b[1];
-    var json = (0, react_1.useMemo)(function () { return DebugUtils_1.default.stringifyJSON(data); }, [data]);
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const Expensicons = require("@components/Icon/Expensicons");
+const ScrollView_1 = require("@components/ScrollView");
+const SwipeInterceptPanResponder_1 = require("@components/SwipeInterceptPanResponder");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useThrottledButtonState_1 = require("@hooks/useThrottledButtonState");
+const Clipboard_1 = require("@libs/Clipboard");
+const DebugUtils_1 = require("@libs/DebugUtils");
+function DebugJSON({ data }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [isThrottledButtonActive, setThrottledButtonInactive] = (0, useThrottledButtonState_1.default)();
+    const json = (0, react_1.useMemo)(() => DebugUtils_1.default.stringifyJSON(data), [data]);
     return (<ScrollView_1.default style={styles.mt5} contentContainerStyle={[styles.gap5, styles.ph5]}>
-            <Button_1.default isDisabled={!isThrottledButtonActive} text={isThrottledButtonActive ? translate('reportActionContextMenu.copyOnyxData') : translate('reportActionContextMenu.copied')} onPress={function () {
+            <Button_1.default isDisabled={!isThrottledButtonActive} text={isThrottledButtonActive ? translate('reportActionContextMenu.copyOnyxData') : translate('reportActionContextMenu.copied')} onPress={() => {
             Clipboard_1.default.setString(json);
             setThrottledButtonInactive();
         }} icon={Expensicons.Copy}/>

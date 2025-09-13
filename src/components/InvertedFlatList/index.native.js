@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var BaseInvertedFlatList_1 = require("./BaseInvertedFlatList");
-var CellRendererComponent_1 = require("./CellRendererComponent");
+const react_1 = require("react");
+const BaseInvertedFlatList_1 = require("./BaseInvertedFlatList");
+const CellRendererComponent_1 = require("./CellRendererComponent");
 function BaseInvertedFlatListWithRef(props, ref) {
     return (<BaseInvertedFlatList_1.default 
     // eslint-disable-next-line react/jsx-props-no-spreading

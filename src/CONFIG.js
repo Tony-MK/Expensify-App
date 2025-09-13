@@ -1,16 +1,15 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_hybrid_app_1 = require("@expensify/react-native-hybrid-app");
-var react_native_1 = require("react-native");
-var react_native_config_1 = require("react-native-config");
-var CONST_1 = require("./CONST");
-var getPlatform_1 = require("./libs/getPlatform");
-var UrlUtils_1 = require("./libs/UrlUtils");
+const react_native_hybrid_app_1 = require("@expensify/react-native-hybrid-app");
+const react_native_1 = require("react-native");
+const react_native_config_1 = require("react-native-config");
+const CONST_1 = require("./CONST");
+const getPlatform_1 = require("./libs/getPlatform");
+const UrlUtils_1 = require("./libs/UrlUtils");
 // react-native-config doesn't trim whitespace on iOS for some reason so we
 // add a trim() call to prevent headaches
-var get = function (config, key, defaultValue) { var _a; return ((_a = config === null || config === void 0 ? void 0 : config[key]) !== null && _a !== void 0 ? _a : defaultValue).trim(); };
-var getDefaultLegacyPartnerConfig = function () {
+const get = (config, key, defaultValue) => (config?.[key] ?? defaultValue).trim();
+const getDefaultLegacyPartnerConfig = () => {
     // eslint-disable-next-line no-restricted-properties
     if (!react_native_hybrid_app_1.default.isHybridApp()) {
         return { name: '', password: '' };
@@ -28,18 +27,18 @@ var getDefaultLegacyPartnerConfig = function () {
     };
 };
 // Set default values to contributor friendly values to make development work out of the box without an .env file
-var ENVIRONMENT = get(react_native_config_1.default, 'ENVIRONMENT', CONST_1.default.ENVIRONMENT.DEV);
-var newExpensifyURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'NEW_EXPENSIFY_URL', 'https://new.expensify.com/'));
-var expensifyURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'EXPENSIFY_URL', 'https://www.expensify.com/'));
-var stagingExpensifyURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'STAGING_EXPENSIFY_URL', 'https://staging.expensify.com/'));
-var stagingSecureExpensifyUrl = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'STAGING_SECURE_EXPENSIFY_URL', 'https://staging-secure.expensify.com/'));
-var ngrokURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'NGROK_URL', ''));
-var secureNgrokURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'SECURE_NGROK_URL', ''));
-var secureExpensifyUrl = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'SECURE_EXPENSIFY_URL', 'https://secure.expensify.com/'));
-var useNgrok = get(react_native_config_1.default, 'USE_NGROK', 'false') === 'true';
-var useWebProxy = get(react_native_config_1.default, 'USE_WEB_PROXY', 'true') === 'true';
-var expensifyComWithProxy = (0, getPlatform_1.default)() === 'web' && useWebProxy ? '/' : expensifyURL;
-var googleGeolocationAPIKey = get(react_native_config_1.default, 'GCP_GEOLOCATION_API_KEY', '');
+const ENVIRONMENT = get(react_native_config_1.default, 'ENVIRONMENT', CONST_1.default.ENVIRONMENT.DEV);
+const newExpensifyURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'NEW_EXPENSIFY_URL', 'https://new.expensify.com/'));
+const expensifyURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'EXPENSIFY_URL', 'https://www.expensify.com/'));
+const stagingExpensifyURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'STAGING_EXPENSIFY_URL', 'https://staging.expensify.com/'));
+const stagingSecureExpensifyUrl = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'STAGING_SECURE_EXPENSIFY_URL', 'https://staging-secure.expensify.com/'));
+const ngrokURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'NGROK_URL', ''));
+const secureNgrokURL = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'SECURE_NGROK_URL', ''));
+const secureExpensifyUrl = (0, UrlUtils_1.default)(get(react_native_config_1.default, 'SECURE_EXPENSIFY_URL', 'https://secure.expensify.com/'));
+const useNgrok = get(react_native_config_1.default, 'USE_NGROK', 'false') === 'true';
+const useWebProxy = get(react_native_config_1.default, 'USE_WEB_PROXY', 'true') === 'true';
+const expensifyComWithProxy = (0, getPlatform_1.default)() === 'web' && useWebProxy ? '/' : expensifyURL;
+const googleGeolocationAPIKey = get(react_native_config_1.default, 'GCP_GEOLOCATION_API_KEY', '');
 // Throw errors on dev if config variables are not set correctly
 if (ENVIRONMENT === CONST_1.default.ENVIRONMENT.DEV) {
     if (!useNgrok && expensifyURL.includes('dev') && !secureExpensifyUrl.includes('dev')) {
@@ -49,15 +48,15 @@ if (ENVIRONMENT === CONST_1.default.ENVIRONMENT.DEV) {
         throw new Error('SECURE_NGROK_URL must be defined in .env when USE_NGROK=true');
     }
 }
-var secureURLRoot = useNgrok && secureNgrokURL ? secureNgrokURL : secureExpensifyUrl;
+const secureURLRoot = useNgrok && secureNgrokURL ? secureNgrokURL : secureExpensifyUrl;
 // Ngrok helps us avoid many of our cross-domain issues with connecting to our API
 // and is required for viewing images on mobile and for developing on android
 // To enable, set the USE_NGROK value to true in .env and update the NGROK_URL
-var expensifyURLRoot = useNgrok && ngrokURL ? ngrokURL : expensifyComWithProxy;
+const expensifyURLRoot = useNgrok && ngrokURL ? ngrokURL : expensifyComWithProxy;
 exports.default = {
     APP_NAME: 'NewExpensify',
     AUTH_TOKEN_EXPIRATION_TIME: 1000 * 60 * 90,
-    ENVIRONMENT: ENVIRONMENT,
+    ENVIRONMENT,
     EXPENSIFY: {
         // Note: This will be EXACTLY what is set for EXPENSIFY_URL whether the proxy is enabled or not.
         EXPENSIFY_URL: expensifyURL,
@@ -79,8 +78,8 @@ exports.default = {
         EXPENSIFY_CASH_REFERER: 'ecash',
         CONCIERGE_URL_PATHNAME: 'concierge/',
         DEVPORTAL_URL_PATHNAME: '_devportal/',
-        CONCIERGE_URL: "".concat(expensifyURL, "concierge/"),
-        SAML_URL: "".concat(expensifyURL, "authentication/saml/login"),
+        CONCIERGE_URL: `${expensifyURL}concierge/`,
+        SAML_URL: `${expensifyURL}authentication/saml/login`,
     },
     IS_IN_PRODUCTION: react_native_1.Platform.OS === 'web' ? process.env.NODE_ENV === 'production' : !__DEV__,
     IS_IN_STAGING: ENVIRONMENT === CONST_1.default.ENVIRONMENT.STAGING,
@@ -97,13 +96,13 @@ exports.default = {
     },
     CAPTURE_METRICS: get(react_native_config_1.default, 'CAPTURE_METRICS', 'false') === 'true',
     ONYX_METRICS: get(react_native_config_1.default, 'ONYX_METRICS', 'false') === 'true',
-    DEV_PORT: (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8082,
+    DEV_PORT: process.env.PORT ?? 8082,
     E2E_TESTING: get(react_native_config_1.default, 'E2E_TESTING', 'false') === 'true',
     SEND_CRASH_REPORTS: get(react_native_config_1.default, 'SEND_CRASH_REPORTS', 'false') === 'true',
     IS_USING_WEB_PROXY: (0, getPlatform_1.default)() === 'web' && useWebProxy,
     APPLE_SIGN_IN: {
         SERVICE_ID: 'com.chat.expensify.chat.AppleSignIn',
-        REDIRECT_URI: "".concat(newExpensifyURL, "appleauth"),
+        REDIRECT_URI: `${newExpensifyURL}appleauth`,
     },
     GOOGLE_SIGN_IN: {
         // cspell:disable-next-line

@@ -1,23 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var BasePopoverReactionList_1 = require("./BasePopoverReactionList");
+const react_1 = require("react");
+const BasePopoverReactionList_1 = require("./BasePopoverReactionList");
 function PopoverReactionList(props, ref) {
-    var innerReactionListRef = (0, react_1.useRef)(null);
-    var _a = (0, react_1.useState)(''), reactionListReportActionID = _a[0], setReactionListReportActionID = _a[1];
-    var _b = (0, react_1.useState)(''), reactionListEmojiName = _b[0], setReactionListEmojiName = _b[1];
-    var showReactionList = function (event, reactionListAnchor, emojiName, reportActionID) {
-        var _a;
+    const innerReactionListRef = (0, react_1.useRef)(null);
+    const [reactionListReportActionID, setReactionListReportActionID] = (0, react_1.useState)('');
+    const [reactionListEmojiName, setReactionListEmojiName] = (0, react_1.useState)('');
+    const showReactionList = (event, reactionListAnchor, emojiName, reportActionID) => {
         setReactionListReportActionID(reportActionID);
         setReactionListEmojiName(emojiName);
-        (_a = innerReactionListRef.current) === null || _a === void 0 ? void 0 : _a.showReactionList(event, reactionListAnchor);
+        innerReactionListRef.current?.showReactionList(event, reactionListAnchor);
     };
-    var hideReactionList = function () {
-        var _a;
-        (_a = innerReactionListRef.current) === null || _a === void 0 ? void 0 : _a.hideReactionList();
+    const hideReactionList = () => {
+        innerReactionListRef.current?.hideReactionList();
     };
-    var isActiveReportAction = function (actionID) { return !!actionID && reactionListReportActionID === actionID; };
-    (0, react_1.useImperativeHandle)(ref, function () { return ({ showReactionList: showReactionList, hideReactionList: hideReactionList, isActiveReportAction: isActiveReportAction }); });
+    const isActiveReportAction = (actionID) => !!actionID && reactionListReportActionID === actionID;
+    (0, react_1.useImperativeHandle)(ref, () => ({ showReactionList, hideReactionList, isActiveReportAction }));
     return (<BasePopoverReactionList_1.default ref={innerReactionListRef} reportActionID={reactionListReportActionID} emojiName={reactionListEmojiName}/>);
 }
 PopoverReactionList.displayName = 'PopoverReactionList';

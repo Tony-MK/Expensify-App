@@ -1,34 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var useInitial_1 = require("@hooks/useInitial");
-var useOnyx_1 = require("@hooks/useOnyx");
-var PlaidConnectionStep_1 = require("@pages/workspace/companyCards/addNew/PlaidConnectionStep");
-var BankConnection_1 = require("@pages/workspace/companyCards/BankConnection");
-var withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
-var CompanyCards_1 = require("@userActions/CompanyCards");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var AssigneeStep_1 = require("./AssigneeStep");
-var CardNameStep_1 = require("./CardNameStep");
-var CardSelectionStep_1 = require("./CardSelectionStep");
-var ConfirmationStep_1 = require("./ConfirmationStep");
-var TransactionStartDateStep_1 = require("./TransactionStartDateStep");
-function AssignCardFeedPage(_a) {
-    var _b, _c, _d, _e;
-    var route = _a.route, policy = _a.policy;
-    var assignCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ASSIGN_CARD, { canBeMissing: true })[0];
-    var currentStep = assignCard === null || assignCard === void 0 ? void 0 : assignCard.currentStep;
-    var feed = decodeURIComponent((_b = route.params) === null || _b === void 0 ? void 0 : _b.feed);
-    var backTo = (_c = route.params) === null || _c === void 0 ? void 0 : _c.backTo;
-    var policyID = policy === null || policy === void 0 ? void 0 : policy.id;
-    var isActingAsDelegate = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: function (account) { var _a; return !!((_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegate); }, canBeMissing: true })[0];
-    var firstAssigneeEmail = (0, useInitial_1.default)((_d = assignCard === null || assignCard === void 0 ? void 0 : assignCard.data) === null || _d === void 0 ? void 0 : _d.email);
-    var shouldUseBackToParam = !firstAssigneeEmail || firstAssigneeEmail === ((_e = assignCard === null || assignCard === void 0 ? void 0 : assignCard.data) === null || _e === void 0 ? void 0 : _e.email);
-    (0, react_1.useEffect)(function () {
-        return function () {
+const react_1 = require("react");
+const DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const useInitial_1 = require("@hooks/useInitial");
+const useOnyx_1 = require("@hooks/useOnyx");
+const PlaidConnectionStep_1 = require("@pages/workspace/companyCards/addNew/PlaidConnectionStep");
+const BankConnection_1 = require("@pages/workspace/companyCards/BankConnection");
+const withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
+const CompanyCards_1 = require("@userActions/CompanyCards");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const AssigneeStep_1 = require("./AssigneeStep");
+const CardNameStep_1 = require("./CardNameStep");
+const CardSelectionStep_1 = require("./CardSelectionStep");
+const ConfirmationStep_1 = require("./ConfirmationStep");
+const TransactionStartDateStep_1 = require("./TransactionStartDateStep");
+function AssignCardFeedPage({ route, policy }) {
+    const [assignCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ASSIGN_CARD, { canBeMissing: true });
+    const currentStep = assignCard?.currentStep;
+    const feed = decodeURIComponent(route.params?.feed);
+    const backTo = route.params?.backTo;
+    const policyID = policy?.id;
+    const [isActingAsDelegate] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: (account) => !!account?.delegatedAccess?.delegate, canBeMissing: true });
+    const firstAssigneeEmail = (0, useInitial_1.default)(assignCard?.data?.email);
+    const shouldUseBackToParam = !firstAssigneeEmail || firstAssigneeEmail === assignCard?.data?.email;
+    (0, react_1.useEffect)(() => {
+        return () => {
             (0, CompanyCards_1.clearAssignCardStepAndData)();
         };
     }, []);

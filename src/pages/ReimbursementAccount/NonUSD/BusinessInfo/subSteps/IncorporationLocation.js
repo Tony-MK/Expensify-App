@@ -1,59 +1,56 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("expensify-common/dist/CONST");
-var react_1 = require("react");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var PushRowWithModal_1 = require("@components/PushRowWithModal");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReimbursementAccountStepFormSubmit_1 = require("@hooks/useReimbursementAccountStepFormSubmit");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var getSubStepValues_1 = require("@pages/ReimbursementAccount/utils/getSubStepValues");
-var CONST_2 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
-var _a = ReimbursementAccountForm_1.default.ADDITIONAL_DATA.CORPAY, FORMATION_INCORPORATION_COUNTRY_CODE = _a.FORMATION_INCORPORATION_COUNTRY_CODE, FORMATION_INCORPORATION_STATE = _a.FORMATION_INCORPORATION_STATE, COMPANY_COUNTRY_CODE = _a.COMPANY_COUNTRY_CODE, COMPANY_STATE = _a.COMPANY_STATE;
-var STEP_FIELDS = [FORMATION_INCORPORATION_COUNTRY_CODE, FORMATION_INCORPORATION_STATE];
-var PROVINCES_LIST_OPTIONS = Object.keys(CONST_1.CONST.PROVINCES).reduce(function (acc, key) {
+const CONST_1 = require("expensify-common/dist/CONST");
+const react_1 = require("react");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const PushRowWithModal_1 = require("@components/PushRowWithModal");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReimbursementAccountStepFormSubmit_1 = require("@hooks/useReimbursementAccountStepFormSubmit");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const getSubStepValues_1 = require("@pages/ReimbursementAccount/utils/getSubStepValues");
+const CONST_2 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
+const { FORMATION_INCORPORATION_COUNTRY_CODE, FORMATION_INCORPORATION_STATE, COMPANY_COUNTRY_CODE, COMPANY_STATE } = ReimbursementAccountForm_1.default.ADDITIONAL_DATA.CORPAY;
+const STEP_FIELDS = [FORMATION_INCORPORATION_COUNTRY_CODE, FORMATION_INCORPORATION_STATE];
+const PROVINCES_LIST_OPTIONS = Object.keys(CONST_1.CONST.PROVINCES).reduce((acc, key) => {
     acc[CONST_1.CONST.PROVINCES[key].provinceISO] = CONST_1.CONST.PROVINCES[key].provinceName;
     return acc;
 }, {});
-var STATES_LIST_OPTIONS = Object.keys(CONST_1.CONST.STATES).reduce(function (acc, key) {
+const STATES_LIST_OPTIONS = Object.keys(CONST_1.CONST.STATES).reduce((acc, key) => {
     acc[CONST_1.CONST.STATES[key].stateISO] = CONST_1.CONST.STATES[key].stateName;
     return acc;
 }, {});
-var isCountryWithSelectableState = function (countryCode) { return countryCode === CONST_2.default.COUNTRY.US || countryCode === CONST_2.default.COUNTRY.CA; };
-function IncorporationLocation(_a) {
-    var onNext = _a.onNext, isEditing = _a.isEditing;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT)[0];
-    var reimbursementAccountDraft = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT)[0];
-    var onyxValues = (0, react_1.useMemo)(function () {
-        return (0, getSubStepValues_1.default)({ FORMATION_INCORPORATION_COUNTRY_CODE: FORMATION_INCORPORATION_COUNTRY_CODE, FORMATION_INCORPORATION_STATE: FORMATION_INCORPORATION_STATE, COMPANY_COUNTRY: COMPANY_COUNTRY_CODE, COMPANY_STATE: COMPANY_STATE }, reimbursementAccountDraft, reimbursementAccount);
-    }, [reimbursementAccount, reimbursementAccountDraft]);
-    var incorporationCountryInitialValue = onyxValues[FORMATION_INCORPORATION_COUNTRY_CODE] !== '' ? onyxValues[FORMATION_INCORPORATION_COUNTRY_CODE] : onyxValues[COMPANY_COUNTRY_CODE];
-    var businessAddressStateDefaultValue = isCountryWithSelectableState(onyxValues[COMPANY_COUNTRY_CODE]) ? onyxValues[COMPANY_STATE] : '';
-    var incorporationStateInitialValue = onyxValues[FORMATION_INCORPORATION_STATE] !== '' ? onyxValues[FORMATION_INCORPORATION_STATE] : businessAddressStateDefaultValue;
-    var _b = (0, react_1.useState)(incorporationCountryInitialValue), selectedCountry = _b[0], setSelectedCountry = _b[1];
-    var _c = (0, react_1.useState)(incorporationStateInitialValue), selectedState = _c[0], setSelectedState = _c[1];
-    var shouldGatherState = isCountryWithSelectableState(selectedCountry);
-    var validate = (0, react_1.useCallback)(function (values) {
+const isCountryWithSelectableState = (countryCode) => countryCode === CONST_2.default.COUNTRY.US || countryCode === CONST_2.default.COUNTRY.CA;
+function IncorporationLocation({ onNext, isEditing }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT);
+    const [reimbursementAccountDraft] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT);
+    const onyxValues = (0, react_1.useMemo)(() => (0, getSubStepValues_1.default)({ FORMATION_INCORPORATION_COUNTRY_CODE, FORMATION_INCORPORATION_STATE, COMPANY_COUNTRY: COMPANY_COUNTRY_CODE, COMPANY_STATE }, reimbursementAccountDraft, reimbursementAccount), [reimbursementAccount, reimbursementAccountDraft]);
+    const incorporationCountryInitialValue = onyxValues[FORMATION_INCORPORATION_COUNTRY_CODE] !== '' ? onyxValues[FORMATION_INCORPORATION_COUNTRY_CODE] : onyxValues[COMPANY_COUNTRY_CODE];
+    const businessAddressStateDefaultValue = isCountryWithSelectableState(onyxValues[COMPANY_COUNTRY_CODE]) ? onyxValues[COMPANY_STATE] : '';
+    const incorporationStateInitialValue = onyxValues[FORMATION_INCORPORATION_STATE] !== '' ? onyxValues[FORMATION_INCORPORATION_STATE] : businessAddressStateDefaultValue;
+    const [selectedCountry, setSelectedCountry] = (0, react_1.useState)(incorporationCountryInitialValue);
+    const [selectedState, setSelectedState] = (0, react_1.useState)(incorporationStateInitialValue);
+    const shouldGatherState = isCountryWithSelectableState(selectedCountry);
+    const validate = (0, react_1.useCallback)((values) => {
         return (0, ValidationUtils_1.getFieldRequiredErrors)(values, shouldGatherState ? STEP_FIELDS : [FORMATION_INCORPORATION_COUNTRY_CODE]);
     }, [shouldGatherState]);
-    var handleSubmit = (0, useReimbursementAccountStepFormSubmit_1.default)({
+    const handleSubmit = (0, useReimbursementAccountStepFormSubmit_1.default)({
         fieldIds: STEP_FIELDS,
-        onNext: onNext,
+        onNext,
         shouldSaveDraft: true,
     });
-    var handleSelectingCountry = function (country) {
+    const handleSelectingCountry = (country) => {
         setSelectedCountry(typeof country === 'string' ? country : '');
         setSelectedState('');
     };
-    var handleSelectingState = function (state) {
+    const handleSelectingState = (state) => {
         setSelectedState(typeof state === 'string' ? state : '');
     };
     return (<FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM} submitButtonText={translate(isEditing ? 'common.confirm' : 'common.next')} onSubmit={handleSubmit} validate={validate} style={[styles.flexGrow1]} submitButtonStyles={[styles.mh5]} shouldHideFixErrorsAlert={!shouldGatherState}>

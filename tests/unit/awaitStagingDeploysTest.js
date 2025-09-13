@@ -1,35 +1,24 @@
 "use strict";
 /* eslint-disable @typescript-eslint/naming-convention */
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @jest-environment node
  */
-var core = require("@actions/core");
-var awaitStagingDeploys_1 = require("@github/actions/javascript/awaitStagingDeploys/awaitStagingDeploys");
-var GithubUtils_1 = require("@github/libs/GithubUtils");
-var asMutable_1 = require("@src/types/utils/asMutable");
+const core = require("@actions/core");
+const awaitStagingDeploys_1 = require("@github/actions/javascript/awaitStagingDeploys/awaitStagingDeploys");
+const GithubUtils_1 = require("@github/libs/GithubUtils");
+const asMutable_1 = require("@src/types/utils/asMutable");
 // Lower poll rate to speed up tests
-var TEST_POLL_RATE = 1;
-var COMPLETED_WORKFLOW = { status: 'completed' };
-var INCOMPLETE_WORKFLOW = { status: 'in_progress' };
-var consoleSpy = jest.spyOn(console, 'log');
-var mockGetInput = jest.fn();
-var mockListDeploysForTag = jest.fn();
-var mockListDeploys = jest.fn();
-var mockListPreDeploys = jest.fn();
-var mockListWorkflowRuns = jest.fn().mockImplementation(function (args) {
-    var defaultReturn = Promise.resolve({ data: { workflow_runs: [] } });
+const TEST_POLL_RATE = 1;
+const COMPLETED_WORKFLOW = { status: 'completed' };
+const INCOMPLETE_WORKFLOW = { status: 'in_progress' };
+const consoleSpy = jest.spyOn(console, 'log');
+const mockGetInput = jest.fn();
+const mockListDeploysForTag = jest.fn();
+const mockListDeploys = jest.fn();
+const mockListPreDeploys = jest.fn();
+const mockListWorkflowRuns = jest.fn().mockImplementation((args) => {
+    const defaultReturn = Promise.resolve({ data: { workflow_runs: [] } });
     if (!args.workflow_id) {
         return defaultReturn;
     }
@@ -44,24 +33,30 @@ var mockListWorkflowRuns = jest.fn().mockImplementation(function (args) {
     }
     return defaultReturn;
 });
-jest.mock('@github/libs/CONST', function () { return (__assign(__assign({}, jest.requireActual('@github/libs/CONST')), { POLL_RATE: TEST_POLL_RATE })); });
-beforeAll(function () {
+jest.mock('@github/libs/CONST', () => ({
+    ...jest.requireActual('@github/libs/CONST'),
+    POLL_RATE: TEST_POLL_RATE,
+}));
+beforeAll(() => {
     // Mock core module
     (0, asMutable_1.default)(core).getInput = mockGetInput;
     // Mock octokit module
-    var mockOctokit = {
+    const mockOctokit = {
         rest: {
-            actions: __assign(__assign({}, GithubUtils_1.default.internalOctokit), { listWorkflowRuns: mockListWorkflowRuns }),
+            actions: {
+                ...GithubUtils_1.default.internalOctokit,
+                listWorkflowRuns: mockListWorkflowRuns,
+            },
         },
     };
     GithubUtils_1.default.internalOctokit = mockOctokit;
 });
-beforeEach(function () {
+beforeEach(() => {
     consoleSpy.mockClear();
 });
-describe('awaitStagingDeploys', function () {
-    test('Should wait for all running staging deploys to finish', function () {
-        mockGetInput.mockImplementation(function () { return undefined; });
+describe('awaitStagingDeploys', () => {
+    test('Should wait for all running staging deploys to finish', () => {
+        mockGetInput.mockImplementation(() => undefined);
         // First ping
         mockListDeploys.mockResolvedValueOnce({
             data: {
@@ -106,7 +101,7 @@ describe('awaitStagingDeploys', function () {
                 workflow_runs: [COMPLETED_WORKFLOW],
             },
         });
-        return (0, awaitStagingDeploys_1.default)().then(function () {
+        return (0, awaitStagingDeploys_1.default)().then(() => {
             expect(consoleSpy).toHaveBeenCalledTimes(4);
             expect(consoleSpy).toHaveBeenNthCalledWith(1, 'Found 2 staging deploys still running...');
             expect(consoleSpy).toHaveBeenNthCalledWith(2, 'Found 1 staging deploy still running...');
@@ -114,8 +109,8 @@ describe('awaitStagingDeploys', function () {
             expect(consoleSpy).toHaveBeenLastCalledWith('No current staging deploys found');
         });
     });
-    test('Should only wait for a specific staging deploy to finish', function () {
-        mockGetInput.mockImplementation(function () { return 'my-tag'; });
+    test('Should only wait for a specific staging deploy to finish', () => {
+        mockGetInput.mockImplementation(() => 'my-tag');
         // First ping
         mockListDeploysForTag.mockResolvedValueOnce({
             data: {
@@ -164,7 +159,7 @@ describe('awaitStagingDeploys', function () {
                 workflow_runs: [COMPLETED_WORKFLOW, COMPLETED_WORKFLOW, INCOMPLETE_WORKFLOW],
             },
         });
-        return (0, awaitStagingDeploys_1.default)().then(function () {
+        return (0, awaitStagingDeploys_1.default)().then(() => {
             expect(consoleSpy).toHaveBeenCalledTimes(3);
             expect(consoleSpy).toHaveBeenNthCalledWith(1, 'Found 1 staging deploy still running...');
             expect(consoleSpy).toHaveBeenNthCalledWith(2, 'Found 1 staging deploy still running...');

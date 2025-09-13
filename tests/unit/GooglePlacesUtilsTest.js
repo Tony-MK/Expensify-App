@@ -1,21 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention */
-var GooglePlacesUtils = require("@src/libs/GooglePlacesUtils");
-var standardObjectToFind = {
+const GooglePlacesUtils = require("@src/libs/GooglePlacesUtils");
+const standardObjectToFind = {
     sublocality: 'long_name',
     administrative_area_level_1: 'short_name',
     postal_code: 'long_name',
     'does-not-exist': 'long_name',
 };
-var objectWithCountryToFind = {
+const objectWithCountryToFind = {
     sublocality: 'long_name',
     administrative_area_level_1: 'short_name',
     postal_code: 'long_name',
     'does-not-exist': 'long_name',
     country: 'long_name',
 };
-var addressComponents = [
+const addressComponents = [
     {
         long_name: 'Bushwick',
         short_name: 'Bushwick',
@@ -42,10 +42,10 @@ var addressComponents = [
         types: ['postal_code'],
     },
 ];
-var autoCompleteTerms = [{ value: 'Bangladesh Border Road' }, { value: 'Bangladesh' }];
-describe('GooglePlacesUtilsTest', function () {
-    describe('getAddressComponents', function () {
-        it('should find address components by type', function () {
+const autoCompleteTerms = [{ value: 'Bangladesh Border Road' }, { value: 'Bangladesh' }];
+describe('GooglePlacesUtilsTest', () => {
+    describe('getAddressComponents', () => {
+        it('should find address components by type', () => {
             expect(GooglePlacesUtils.getAddressComponents(addressComponents, { sublocality: 'long_name' })).toStrictEqual({ sublocality: 'Brooklyn' });
             expect(GooglePlacesUtils.getAddressComponents(addressComponents, { administrative_area_level_1: 'short_name' })).toStrictEqual({ administrative_area_level_1: 'NY' });
             expect(GooglePlacesUtils.getAddressComponents(addressComponents, { postal_code: 'long_name' })).toStrictEqual({ postal_code: '11206' });
@@ -58,8 +58,8 @@ describe('GooglePlacesUtilsTest', function () {
             });
         });
     });
-    describe('getAddressComponentsWithCountry', function () {
-        it('should find address components by type', function () {
+    describe('getAddressComponentsWithCountry', () => {
+        it('should find address components by type', () => {
             expect(GooglePlacesUtils.getAddressComponents(addressComponents, { sublocality: 'long_name' })).toStrictEqual({ sublocality: 'Brooklyn' });
             expect(GooglePlacesUtils.getAddressComponents(addressComponents, { administrative_area_level_1: 'short_name' })).toStrictEqual({ administrative_area_level_1: 'NY' });
             expect(GooglePlacesUtils.getAddressComponents(addressComponents, { postal_code: 'long_name' })).toStrictEqual({ postal_code: '11206' });
@@ -74,8 +74,8 @@ describe('GooglePlacesUtilsTest', function () {
             });
         });
     });
-    describe('getPlaceAutocompleteTerms', function () {
-        it('should find auto complete terms', function () {
+    describe('getPlaceAutocompleteTerms', () => {
+        it('should find auto complete terms', () => {
             expect(GooglePlacesUtils.getPlaceAutocompleteTerms(autoCompleteTerms)).toStrictEqual({
                 country: 'Bangladesh',
                 state: 'Bangladesh Border Road',

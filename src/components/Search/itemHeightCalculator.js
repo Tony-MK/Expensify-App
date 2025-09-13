@@ -2,27 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateItemHeight = calculateItemHeight;
 exports.createItemHeightCalculator = createItemHeightCalculator;
-var SearchUIUtils_1 = require("@libs/SearchUIUtils");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var itemHeights_1 = require("./itemHeights");
+const SearchUIUtils_1 = require("@libs/SearchUIUtils");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const itemHeights_1 = require("./itemHeights");
 /**
  * Checks if a transaction item has violations that require extra height
  */
 function transactionHasViolations(item) {
-    var _a;
-    var hasFieldErrors = (0, TransactionUtils_1.hasMissingSmartscanFields)(item);
-    var amountMissing = (0, TransactionUtils_1.isAmountMissing)(item);
-    var merchantMissing = (0, TransactionUtils_1.isMerchantMissing)(item);
-    var hasViolationsCheck = (_a = item.hasViolation) !== null && _a !== void 0 ? _a : !!item.errors;
+    const hasFieldErrors = (0, TransactionUtils_1.hasMissingSmartscanFields)(item);
+    const amountMissing = (0, TransactionUtils_1.isAmountMissing)(item);
+    const merchantMissing = (0, TransactionUtils_1.isMerchantMissing)(item);
+    const hasViolationsCheck = item.hasViolation ?? !!item.errors;
     return hasFieldErrors || (amountMissing && merchantMissing) || hasViolationsCheck;
 }
 /**
  * Calculates height for report action items (chat messages)
  */
 function getReportActionItemHeight(item) {
-    var actionName = item.actionName;
+    const actionName = item.actionName;
     if (actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW) {
         return itemHeights_1.default.CHAT.REPORT_PREVIEW;
     }
@@ -32,10 +31,10 @@ function getReportActionItemHeight(item) {
  * Calculates height for transaction items
  */
 function getTransactionItemHeight(item, config) {
-    var isLargeScreenWidth = config.isLargeScreenWidth, shouldUseNarrowLayout = config.shouldUseNarrowLayout;
-    var itemAction = item.action;
-    var isItemActionView = itemAction === CONST_1.default.SEARCH.ACTION_TYPES.VIEW;
-    var heightConstants;
+    const { isLargeScreenWidth, shouldUseNarrowLayout } = config;
+    const itemAction = item.action;
+    const isItemActionView = itemAction === CONST_1.default.SEARCH.ACTION_TYPES.VIEW;
+    let heightConstants;
     if (shouldUseNarrowLayout) {
         // For narrow screens without drawer (mobile or collapsed desktop)
         heightConstants = isItemActionView ? itemHeights_1.default.NARROW_WITHOUT_DRAWER.STANDARD : itemHeights_1.default.NARROW_WITHOUT_DRAWER.WITH_BUTTON;
@@ -49,7 +48,7 @@ function getTransactionItemHeight(item, config) {
         heightConstants = itemHeights_1.default.WIDE.STANDARD;
     }
     // Add extra height for violations (Review required marker)
-    var violationHeightAdjustment = transactionHasViolations(item) ? variables_1.default.searchViolationWarningMarkHeight : 0;
+    const violationHeightAdjustment = transactionHasViolations(item) ? variables_1.default.searchViolationWarningMarkHeight : 0;
     return heightConstants + violationHeightAdjustment;
 }
 /**
@@ -57,17 +56,17 @@ function getTransactionItemHeight(item, config) {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getReportListItemHeight(item, config) {
-    var isLargeScreenWidth = config.isLargeScreenWidth;
+    const { isLargeScreenWidth } = config;
     if (!item.transactions || item.transactions.length === 0) {
         return Math.max(itemHeights_1.default.HEADER, 1);
     }
-    var baseReportItemHeight = isLargeScreenWidth
+    const baseReportItemHeight = isLargeScreenWidth
         ? variables_1.default.searchOptionRowMargin + variables_1.default.searchOptionRowBaseHeight + variables_1.default.searchOptionRowLargeFooterHeight
         : variables_1.default.searchOptionRowMargin + variables_1.default.searchOptionRowBaseHeight + variables_1.default.searchOptionRowSmallFooterHeight;
-    var transactionHeight = isLargeScreenWidth ? variables_1.default.searchOptionRowTransactionHeightLargeScreen : variables_1.default.searchOptionRowTransactionHeightSmallScreen;
-    var hasViolationsInReport = item.transactions.some(transactionHasViolations);
-    var violationHeightAdjustment = hasViolationsInReport ? variables_1.default.searchViolationWarningMarkHeight : 0;
-    var calculatedHeight = baseReportItemHeight + item.transactions.length * transactionHeight + variables_1.default.optionRowListItemPadding + variables_1.default.searchOptionRowMargin + violationHeightAdjustment;
+    const transactionHeight = isLargeScreenWidth ? variables_1.default.searchOptionRowTransactionHeightLargeScreen : variables_1.default.searchOptionRowTransactionHeightSmallScreen;
+    const hasViolationsInReport = item.transactions.some(transactionHasViolations);
+    const violationHeightAdjustment = hasViolationsInReport ? variables_1.default.searchViolationWarningMarkHeight : 0;
+    const calculatedHeight = baseReportItemHeight + item.transactions.length * transactionHeight + variables_1.default.optionRowListItemPadding + variables_1.default.searchOptionRowMargin + violationHeightAdjustment;
     return Math.max(calculatedHeight, itemHeights_1.default.HEADER, 1);
 }
 /**
@@ -99,5 +98,5 @@ function calculateItemHeight(item, config) {
  * Factory function to create a height calculator with pre-configured settings
  */
 function createItemHeightCalculator(config) {
-    return function (item) { return calculateItemHeight(item, config); };
+    return (item) => calculateItemHeight(item, config);
 }

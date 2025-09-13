@@ -1,4 +1,4 @@
 "use strict";
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-var fs = require('memfs').fs;
+const { fs } = require('memfs');
 module.exports = fs;

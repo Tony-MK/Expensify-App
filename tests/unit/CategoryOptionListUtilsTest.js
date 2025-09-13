@@ -1,29 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention */
-var CategoryOptionListUtils_1 = require("@libs/CategoryOptionListUtils");
-var CONST_1 = require("@src/CONST");
-var IntlStore_1 = require("@src/languages/IntlStore");
-var TestHelper_1 = require("../utils/TestHelper");
-var waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
-describe('CategoryOptionListUtils', function () {
-    beforeAll(function () {
+const CategoryOptionListUtils_1 = require("@libs/CategoryOptionListUtils");
+const CONST_1 = require("@src/CONST");
+const IntlStore_1 = require("@src/languages/IntlStore");
+const TestHelper_1 = require("../utils/TestHelper");
+const waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
+describe('CategoryOptionListUtils', () => {
+    beforeAll(() => {
         IntlStore_1.default.load(CONST_1.default.LOCALES.DEFAULT);
         return (0, waitForBatchedUpdates_1.default)();
     });
-    it('getCategoryListSections()', function () {
-        var search = 'Food';
-        var emptySearch = '';
-        var wrongSearch = 'bla bla';
-        var employeeSearch = 'Employee Office';
-        var recentlyUsedCategories = ['Taxi', 'Restaurant'];
-        var selectedOptions = [
+    it('getCategoryListSections()', () => {
+        const search = 'Food';
+        const emptySearch = '';
+        const wrongSearch = 'bla bla';
+        const employeeSearch = 'Employee Office';
+        const recentlyUsedCategories = ['Taxi', 'Restaurant'];
+        const selectedOptions = [
             {
                 name: 'Medical',
                 enabled: true,
             },
         ];
-        var smallCategoriesList = {
+        const smallCategoriesList = {
             Taxi: {
                 enabled: false,
                 name: 'Taxi',
@@ -75,7 +75,7 @@ describe('CategoryOptionListUtils', function () {
                 pendingAction: undefined,
             },
         };
-        var smallResultList = [
+        const smallResultList = [
             {
                 title: '',
                 shouldShow: false,
@@ -120,7 +120,7 @@ describe('CategoryOptionListUtils', function () {
                 indexOffset: 4,
             },
         ];
-        var smallSearchResultList = [
+        const smallSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -147,7 +147,7 @@ describe('CategoryOptionListUtils', function () {
                 ],
             },
         ];
-        var smallWrongSearchResultList = [
+        const smallWrongSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -155,7 +155,7 @@ describe('CategoryOptionListUtils', function () {
                 data: [],
             },
         ];
-        var largeCategoriesList = {
+        const largeCategoriesList = {
             Taxi: {
                 enabled: false,
                 name: 'Taxi',
@@ -283,7 +283,7 @@ describe('CategoryOptionListUtils', function () {
                 origin: '',
             },
         };
-        var largeResultList = [
+        const largeResultList = [
             {
                 title: '',
                 shouldShow: false,
@@ -423,7 +423,7 @@ describe('CategoryOptionListUtils', function () {
                 ],
             },
         ];
-        var largeSearchResultList = [
+        const largeSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -459,7 +459,7 @@ describe('CategoryOptionListUtils', function () {
                 ],
             },
         ];
-        var largeWrongSearchResultList = [
+        const largeWrongSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -467,8 +467,8 @@ describe('CategoryOptionListUtils', function () {
                 data: [],
             },
         ];
-        var emptyCategoriesList = {};
-        var emptySelectedResultList = [
+        const emptyCategoriesList = {};
+        const emptySelectedResultList = [
             {
                 title: '',
                 shouldShow: false,
@@ -486,7 +486,7 @@ describe('CategoryOptionListUtils', function () {
                 ],
             },
         ];
-        var employeeSearchResultList = [
+        const employeeSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -504,47 +504,47 @@ describe('CategoryOptionListUtils', function () {
                 ],
             },
         ];
-        var smallResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
+        const smallResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
             searchValue: emptySearch,
             localeCompare: TestHelper_1.localeCompare,
             categories: smallCategoriesList,
         });
         expect(smallResult).toStrictEqual(smallResultList);
-        var smallSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: search, categories: smallCategoriesList, localeCompare: TestHelper_1.localeCompare });
+        const smallSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: search, categories: smallCategoriesList, localeCompare: TestHelper_1.localeCompare });
         expect(smallSearchResult).toStrictEqual(smallSearchResultList);
-        var smallWrongSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: wrongSearch, categories: smallCategoriesList, localeCompare: TestHelper_1.localeCompare });
+        const smallWrongSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: wrongSearch, categories: smallCategoriesList, localeCompare: TestHelper_1.localeCompare });
         expect(smallWrongSearchResult).toStrictEqual(smallWrongSearchResultList);
-        var employeeSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: employeeSearch, categories: smallCategoriesList, localeCompare: TestHelper_1.localeCompare });
+        const employeeSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: employeeSearch, categories: smallCategoriesList, localeCompare: TestHelper_1.localeCompare });
         expect(employeeSearchResult).toStrictEqual(employeeSearchResultList);
-        var largeResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
+        const largeResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
             searchValue: emptySearch,
-            selectedOptions: selectedOptions,
+            selectedOptions,
             categories: largeCategoriesList,
-            recentlyUsedCategories: recentlyUsedCategories,
+            recentlyUsedCategories,
             localeCompare: TestHelper_1.localeCompare,
         });
         expect(largeResult).toStrictEqual(largeResultList);
-        var largeSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
+        const largeSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
             searchValue: search,
-            selectedOptions: selectedOptions,
+            selectedOptions,
             categories: largeCategoriesList,
-            recentlyUsedCategories: recentlyUsedCategories,
+            recentlyUsedCategories,
             localeCompare: TestHelper_1.localeCompare,
         });
         expect(largeSearchResult).toStrictEqual(largeSearchResultList);
-        var largeWrongSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
+        const largeWrongSearchResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({
             searchValue: wrongSearch,
-            selectedOptions: selectedOptions,
+            selectedOptions,
             categories: largeCategoriesList,
-            recentlyUsedCategories: recentlyUsedCategories,
+            recentlyUsedCategories,
             localeCompare: TestHelper_1.localeCompare,
         });
         expect(largeWrongSearchResult).toStrictEqual(largeWrongSearchResultList);
-        var emptyResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: search, selectedOptions: selectedOptions, categories: emptyCategoriesList, localeCompare: TestHelper_1.localeCompare });
+        const emptyResult = (0, CategoryOptionListUtils_1.getCategoryListSections)({ searchValue: search, selectedOptions, categories: emptyCategoriesList, localeCompare: TestHelper_1.localeCompare });
         expect(emptyResult).toStrictEqual(emptySelectedResultList);
     });
-    it('getCategoryOptionTree()', function () {
-        var categories = {
+    it('getCategoryOptionTree()', () => {
+        const categories = {
             Meals: {
                 enabled: true,
                 name: 'Meals',
@@ -606,7 +606,7 @@ describe('CategoryOptionListUtils', function () {
                 name: 'A: B: C: D: E',
             },
         };
-        var result = [
+        const result = [
             {
                 text: 'Meals',
                 keyForList: 'Meals',
@@ -788,7 +788,7 @@ describe('CategoryOptionListUtils', function () {
                 pendingAction: undefined,
             },
         ];
-        var resultOneLine = [
+        const resultOneLine = [
             {
                 text: 'Meals',
                 keyForList: 'Meals',
@@ -928,8 +928,8 @@ describe('CategoryOptionListUtils', function () {
         expect((0, CategoryOptionListUtils_1.getCategoryOptionTree)(categories)).toStrictEqual(result);
         expect((0, CategoryOptionListUtils_1.getCategoryOptionTree)(categories, true)).toStrictEqual(resultOneLine);
     });
-    it('sortCategories', function () {
-        var categoriesIncorrectOrdering = {
+    it('sortCategories', () => {
+        const categoriesIncorrectOrdering = {
             Taxi: {
                 name: 'Taxi',
                 enabled: false,
@@ -1000,7 +1000,7 @@ describe('CategoryOptionListUtils', function () {
                 enabled: true,
             },
         };
-        var result = [
+        const result = [
             {
                 name: 'Taxes',
                 enabled: true,
@@ -1087,7 +1087,7 @@ describe('CategoryOptionListUtils', function () {
                 pendingAction: undefined,
             },
         ];
-        var categoriesIncorrectOrdering2 = {
+        const categoriesIncorrectOrdering2 = {
             'Cars: BMW': {
                 enabled: false,
                 name: 'Cars: BMW',
@@ -1145,7 +1145,7 @@ describe('CategoryOptionListUtils', function () {
                 name: 'Cars: Audi',
             },
         };
-        var result2 = [
+        const result2 = [
             {
                 enabled: true,
                 name: 'Cars: Audi',
@@ -1217,7 +1217,7 @@ describe('CategoryOptionListUtils', function () {
                 pendingAction: undefined,
             },
         ];
-        var categoriesIncorrectOrdering3 = {
+        const categoriesIncorrectOrdering3 = {
             'Movies: Mr. Nobody': {
                 enabled: true,
                 name: 'Movies: Mr. Nobody',
@@ -1243,7 +1243,7 @@ describe('CategoryOptionListUtils', function () {
                 name: 'More.Many.dots.on.the.way.',
             },
         };
-        var result3 = [
+        const result3 = [
             {
                 enabled: true,
                 name: 'Dr. House',

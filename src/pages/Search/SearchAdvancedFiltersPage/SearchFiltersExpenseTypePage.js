@@ -1,40 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SearchMultipleSelectionPicker_1 = require("@components/Search/SearchMultipleSelectionPicker");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var SearchUIUtils_1 = require("@libs/SearchUIUtils");
-var Search_1 = require("@userActions/Search");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SearchMultipleSelectionPicker_1 = require("@components/Search/SearchMultipleSelectionPicker");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const SearchUIUtils_1 = require("@libs/SearchUIUtils");
+const Search_1 = require("@userActions/Search");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
 function SearchFiltersExpenseTypePage() {
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var searchAdvancedFiltersForm = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true })[0];
-    var initiallySelectedItems = (0, react_1.useMemo)(function () {
-        var _a;
-        return (_a = searchAdvancedFiltersForm === null || searchAdvancedFiltersForm === void 0 ? void 0 : searchAdvancedFiltersForm.expenseType) === null || _a === void 0 ? void 0 : _a.filter(function (expenseType) { return Object.values(CONST_1.default.SEARCH.TRANSACTION_TYPE).includes(expenseType); }).map(function (expenseType) {
-            var expenseTypeName = translate((0, SearchUIUtils_1.getExpenseTypeTranslationKey)(expenseType));
-            return { name: expenseTypeName, value: expenseType };
-        });
-    }, [searchAdvancedFiltersForm, translate]);
-    var allExpenseTypes = Object.values(CONST_1.default.SEARCH.TRANSACTION_TYPE);
-    var expenseTypesItems = (0, react_1.useMemo)(function () {
-        return allExpenseTypes.map(function (expenseType) {
-            var expenseTypeName = translate((0, SearchUIUtils_1.getExpenseTypeTranslationKey)(expenseType));
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [searchAdvancedFiltersForm] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true });
+    const initiallySelectedItems = (0, react_1.useMemo)(() => searchAdvancedFiltersForm?.expenseType
+        ?.filter((expenseType) => Object.values(CONST_1.default.SEARCH.TRANSACTION_TYPE).includes(expenseType))
+        .map((expenseType) => {
+        const expenseTypeName = translate((0, SearchUIUtils_1.getExpenseTypeTranslationKey)(expenseType));
+        return { name: expenseTypeName, value: expenseType };
+    }), [searchAdvancedFiltersForm, translate]);
+    const allExpenseTypes = Object.values(CONST_1.default.SEARCH.TRANSACTION_TYPE);
+    const expenseTypesItems = (0, react_1.useMemo)(() => {
+        return allExpenseTypes.map((expenseType) => {
+            const expenseTypeName = translate((0, SearchUIUtils_1.getExpenseTypeTranslationKey)(expenseType));
             return { name: expenseTypeName, value: expenseType };
         });
     }, [allExpenseTypes, translate]);
-    var updateExpenseTypeFilter = (0, react_1.useCallback)(function (values) { return (0, Search_1.updateAdvancedFilters)({ expenseType: values }); }, []);
+    const updateExpenseTypeFilter = (0, react_1.useCallback)((values) => (0, Search_1.updateAdvancedFilters)({ expenseType: values }), []);
     return (<ScreenWrapper_1.default testID={SearchFiltersExpenseTypePage.displayName} shouldShowOfflineIndicatorInWideScreen offlineIndicatorStyle={styles.mtAuto} includeSafeAreaPaddingBottom={false} shouldEnableMaxHeight>
-            <HeaderWithBackButton_1.default title={translate('search.expenseType')} onBackButtonPress={function () {
+            <HeaderWithBackButton_1.default title={translate('search.expenseType')} onBackButtonPress={() => {
             Navigation_1.default.goBack(ROUTES_1.default.SEARCH_ADVANCED_FILTERS.getRoute());
         }}/>
             <react_native_1.View style={[styles.flex1]}>

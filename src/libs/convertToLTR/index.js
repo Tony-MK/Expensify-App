@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var convertToLTR = function (text) { return text; };
+const convertToLTR = (text) => text;
 exports.default = convertToLTR;

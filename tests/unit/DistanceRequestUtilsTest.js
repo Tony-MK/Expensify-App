@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var DistanceRequestUtils_1 = require("@libs/DistanceRequestUtils");
-var CONST_1 = require("@src/CONST");
-var FAKE_POLICY = {
+const DistanceRequestUtils_1 = require("@libs/DistanceRequestUtils");
+const CONST_1 = require("@src/CONST");
+const FAKE_POLICY = {
     id: 'CEEEDB0EC660F71A',
     name: 'Test',
     role: 'admin',
@@ -54,72 +54,71 @@ var FAKE_POLICY = {
         },
     },
 };
-describe('DistanceRequestUtils', function () {
-    describe('getDistanceRequestAmount', function () {
+describe('DistanceRequestUtils', () => {
+    describe('getDistanceRequestAmount', () => {
         test.each([
             [350, 8605.146, 'mi', 65.5],
             [561, 8605.146, 'km', 65.1],
-        ])('Correctly calculates amount %s for %s%s at a rate of %s per unit', function (expectedResult, distance, unit, rate) {
+        ])('Correctly calculates amount %s for %s%s at a rate of %s per unit', (expectedResult, distance, unit, rate) => {
             expect(DistanceRequestUtils_1.default.getDistanceRequestAmount(distance, unit, rate)).toBe(expectedResult);
         });
     });
-    describe('getCustomUnitRateID', function () {
-        it('returns Fake P2P custom unit rateID if reportID is undefined', function () {
-            var reportID = undefined;
-            var isPolicyExpenseChat = false;
-            var result = DistanceRequestUtils_1.default.getCustomUnitRateID({
-                reportID: reportID,
-                isPolicyExpenseChat: isPolicyExpenseChat,
+    describe('getCustomUnitRateID', () => {
+        it('returns Fake P2P custom unit rateID if reportID is undefined', () => {
+            const reportID = undefined;
+            const isPolicyExpenseChat = false;
+            const result = DistanceRequestUtils_1.default.getCustomUnitRateID({
+                reportID,
+                isPolicyExpenseChat,
                 policy: undefined,
                 lastSelectedDistanceRates: undefined,
             });
             expect(result).toBe(CONST_1.default.CUSTOM_UNITS.FAKE_P2P_ID);
         });
-        it('returns Fake P2P custom unit rateID if isPolicyExpenseChat is false', function () {
-            var reportID = '1234';
-            var isPolicyExpenseChat = false;
-            var result = DistanceRequestUtils_1.default.getCustomUnitRateID({
-                reportID: reportID,
-                isPolicyExpenseChat: isPolicyExpenseChat,
+        it('returns Fake P2P custom unit rateID if isPolicyExpenseChat is false', () => {
+            const reportID = '1234';
+            const isPolicyExpenseChat = false;
+            const result = DistanceRequestUtils_1.default.getCustomUnitRateID({
+                reportID,
+                isPolicyExpenseChat,
                 policy: undefined,
                 lastSelectedDistanceRates: undefined,
             });
             expect(result).toBe(CONST_1.default.CUSTOM_UNITS.FAKE_P2P_ID);
         });
-        it('returns Fake P2P custom unit rateID if policy is undefined', function () {
-            var reportID = '1234';
-            var isPolicyExpenseChat = true;
-            var result = DistanceRequestUtils_1.default.getCustomUnitRateID({
-                reportID: reportID,
-                isPolicyExpenseChat: isPolicyExpenseChat,
+        it('returns Fake P2P custom unit rateID if policy is undefined', () => {
+            const reportID = '1234';
+            const isPolicyExpenseChat = true;
+            const result = DistanceRequestUtils_1.default.getCustomUnitRateID({
+                reportID,
+                isPolicyExpenseChat,
                 policy: undefined,
                 lastSelectedDistanceRates: undefined,
             });
             expect(result).toBe(CONST_1.default.CUSTOM_UNITS.FAKE_P2P_ID);
         });
-        it('returns policy default rateID custom unit rateID if lastSelectedDistanceRates is undefined', function () {
-            var reportID = '1234';
-            var isPolicyExpenseChat = true;
-            var result = DistanceRequestUtils_1.default.getCustomUnitRateID({
-                reportID: reportID,
-                isPolicyExpenseChat: isPolicyExpenseChat,
+        it('returns policy default rateID custom unit rateID if lastSelectedDistanceRates is undefined', () => {
+            const reportID = '1234';
+            const isPolicyExpenseChat = true;
+            const result = DistanceRequestUtils_1.default.getCustomUnitRateID({
+                reportID,
+                isPolicyExpenseChat,
                 policy: FAKE_POLICY,
                 lastSelectedDistanceRates: undefined,
             });
             expect(result).toBe('222AAF6B93BCB');
         });
-        it('returns policy last selected rateID custom unit rateID if lastSelectedDistanceRates is defined', function () {
-            var _a;
-            var reportID = '1234';
-            var isPolicyExpenseChat = true;
-            var lastSelectedDistanceRates = (_a = {},
-                _a[FAKE_POLICY.id] = 'B593F3FBBB0BD',
-                _a);
-            var result = DistanceRequestUtils_1.default.getCustomUnitRateID({
-                reportID: reportID,
-                isPolicyExpenseChat: isPolicyExpenseChat,
+        it('returns policy last selected rateID custom unit rateID if lastSelectedDistanceRates is defined', () => {
+            const reportID = '1234';
+            const isPolicyExpenseChat = true;
+            const lastSelectedDistanceRates = {
+                [FAKE_POLICY.id]: 'B593F3FBBB0BD',
+            };
+            const result = DistanceRequestUtils_1.default.getCustomUnitRateID({
+                reportID,
+                isPolicyExpenseChat,
                 policy: FAKE_POLICY,
-                lastSelectedDistanceRates: lastSelectedDistanceRates,
+                lastSelectedDistanceRates,
             });
             expect(result).toBe('B593F3FBBB0BD');
         });

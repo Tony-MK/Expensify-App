@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var useOnyx_1 = require("./useOnyx");
+const react_1 = require("react");
+const ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const useOnyx_1 = require("./useOnyx");
 /**
  * Shows not found page when:
  * - Split bill: User is not the original actor OR transaction is incomplete
@@ -14,28 +14,28 @@ var useOnyx_1 = require("./useOnyx");
  * - Money request: Action is not a money request OR user cannot edit it
  */
 // eslint-disable-next-line rulesdir/no-negated-variables
-var useShowNotFoundPageInIOUStep = function (action, iouType, reportActionID, report, transaction) {
-    var isEditing = action === CONST_1.default.IOU.ACTION.EDIT;
-    var isSplitBill = iouType === CONST_1.default.IOU.TYPE.SPLIT;
-    var isSplitExpense = iouType === CONST_1.default.IOU.TYPE.SPLIT_EXPENSE;
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true })[0];
-    var reportActionsReportID = (0, react_1.useMemo)(function () {
-        var actionsReportID;
+const useShowNotFoundPageInIOUStep = (action, iouType, reportActionID, report, transaction) => {
+    const isEditing = action === CONST_1.default.IOU.ACTION.EDIT;
+    const isSplitBill = iouType === CONST_1.default.IOU.TYPE.SPLIT;
+    const isSplitExpense = iouType === CONST_1.default.IOU.TYPE.SPLIT_EXPENSE;
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true });
+    const reportActionsReportID = (0, react_1.useMemo)(() => {
+        let actionsReportID;
         if (isEditing) {
-            actionsReportID = iouType === CONST_1.default.IOU.TYPE.SPLIT ? report === null || report === void 0 ? void 0 : report.reportID : report === null || report === void 0 ? void 0 : report.parentReportID;
+            actionsReportID = iouType === CONST_1.default.IOU.TYPE.SPLIT ? report?.reportID : report?.parentReportID;
         }
         return actionsReportID;
-    }, [isEditing, iouType, report === null || report === void 0 ? void 0 : report.reportID, report === null || report === void 0 ? void 0 : report.parentReportID]);
-    var reportAction = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportActionsReportID), {
+    }, [isEditing, iouType, report?.reportID, report?.parentReportID]);
+    const [reportAction] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportActionsReportID}`, {
         canEvict: false,
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        selector: function (reportActions) { return reportActions === null || reportActions === void 0 ? void 0 : reportActions["".concat((report === null || report === void 0 ? void 0 : report.parentReportActionID) || reportActionID)]; },
+        selector: (reportActions) => reportActions?.[`${report?.parentReportActionID || reportActionID}`],
         canBeMissing: true,
-    })[0];
+    });
     // eslint-disable-next-line rulesdir/no-negated-variables
-    var shouldShowNotFoundPage = false;
-    var canEditSplitBill = isSplitBill && reportAction && (session === null || session === void 0 ? void 0 : session.accountID) === reportAction.actorAccountID && (0, TransactionUtils_1.areRequiredFieldsEmpty)(transaction);
-    var canEditSplitExpense = isSplitExpense && !!transaction;
+    let shouldShowNotFoundPage = false;
+    const canEditSplitBill = isSplitBill && reportAction && session?.accountID === reportAction.actorAccountID && (0, TransactionUtils_1.areRequiredFieldsEmpty)(transaction);
+    const canEditSplitExpense = isSplitExpense && !!transaction;
     if (isEditing) {
         if (isSplitBill) {
             shouldShowNotFoundPage = !canEditSplitBill;

@@ -1,27 +1,18 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isFullScreenName = isFullScreenName;
 exports.isOnboardingFlowName = isOnboardingFlowName;
 exports.isSidebarScreenName = isSidebarScreenName;
 exports.isSplitNavigatorName = isSplitNavigatorName;
 exports.isWorkspacesTabScreenName = isWorkspacesTabScreenName;
-var RELATIONS_1 = require("@libs/Navigation/linkingConfig/RELATIONS");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var SCREENS_1 = require("@src/SCREENS");
-var FULL_SCREENS_SET = new Set(__spreadArray(__spreadArray([], Object.values(RELATIONS_1.SIDEBAR_TO_SPLIT), true), [NAVIGATORS_1.default.SEARCH_FULLSCREEN_NAVIGATOR, SCREENS_1.default.WORKSPACES_LIST], false));
-var SIDEBARS_SET = new Set(Object.values(RELATIONS_1.SPLIT_TO_SIDEBAR));
-var ONBOARDING_SCREENS_SET = new Set(Object.values(SCREENS_1.default.ONBOARDING));
-var SPLIT_NAVIGATORS_SET = new Set(Object.values(RELATIONS_1.SIDEBAR_TO_SPLIT));
-var WORKSPACES_TAB_SET = new Set(Object.values([NAVIGATORS_1.default.WORKSPACE_SPLIT_NAVIGATOR, SCREENS_1.default.WORKSPACES_LIST]));
+const RELATIONS_1 = require("@libs/Navigation/linkingConfig/RELATIONS");
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const SCREENS_1 = require("@src/SCREENS");
+const FULL_SCREENS_SET = new Set([...Object.values(RELATIONS_1.SIDEBAR_TO_SPLIT), NAVIGATORS_1.default.SEARCH_FULLSCREEN_NAVIGATOR, SCREENS_1.default.WORKSPACES_LIST]);
+const SIDEBARS_SET = new Set(Object.values(RELATIONS_1.SPLIT_TO_SIDEBAR));
+const ONBOARDING_SCREENS_SET = new Set(Object.values(SCREENS_1.default.ONBOARDING));
+const SPLIT_NAVIGATORS_SET = new Set(Object.values(RELATIONS_1.SIDEBAR_TO_SPLIT));
+const WORKSPACES_TAB_SET = new Set(Object.values([NAVIGATORS_1.default.WORKSPACE_SPLIT_NAVIGATOR, SCREENS_1.default.WORKSPACES_LIST]));
 /**
  * Functions defined below are used to check whether a screen belongs to a specific group.
  * It is mainly used to filter routes in the navigation state.

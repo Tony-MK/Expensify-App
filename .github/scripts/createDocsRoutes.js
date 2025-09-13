@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs_1 = require("fs");
-var js_yaml_1 = require("js-yaml");
-var warnMessage = function (platform) { return "Number of hubs in _routes.yml does not match number of hubs in docs/".concat(platform, "/articles. Please update _routes.yml with hub info."); };
-var disclaimer = '# This file is auto-generated. Do not edit it directly. Use npm run createDocsRoutes instead.\n';
-var docsDir = "".concat(process.cwd(), "/docs");
-var routes = js_yaml_1.default.load(fs_1.default.readFileSync("".concat(docsDir, "/_data/_routes.yml"), 'utf8'));
-var platformNames = {
+const fs_1 = require("fs");
+const js_yaml_1 = require("js-yaml");
+const warnMessage = (platform) => `Number of hubs in _routes.yml does not match number of hubs in docs/${platform}/articles. Please update _routes.yml with hub info.`;
+const disclaimer = '# This file is auto-generated. Do not edit it directly. Use npm run createDocsRoutes instead.\n';
+const docsDir = `${process.cwd()}/docs`;
+const routes = js_yaml_1.default.load(fs_1.default.readFileSync(`${docsDir}/_data/_routes.yml`, 'utf8'));
+const platformNames = {
     expensifyClassic: 'expensify-classic',
     newExpensify: 'new-expensify',
     travel: 'travel',
@@ -17,7 +17,7 @@ var platformNames = {
 function toTitleCase(str) {
     return str
         .split(' ')
-        .map(function (word, index) {
+        .map((word, index) => {
         if (index !== 0 && (word.toLowerCase() === 'a' || word.toLowerCase() === 'the' || word.toLowerCase() === 'and')) {
             return word.toLowerCase();
         }
@@ -29,11 +29,11 @@ function toTitleCase(str) {
  * @param filename - The name of the file
  */
 function getArticleObj(filename, order) {
-    var href = filename.replace('.md', '');
+    const href = filename.replace('.md', '');
     return {
-        href: href,
+        href,
         title: toTitleCase(href.replaceAll('-', ' ')),
-        order: order,
+        order,
     };
 }
 /**
@@ -45,24 +45,23 @@ function getArticleObj(filename, order) {
  * @param entry - The article / section to push
  */
 function pushOrCreateEntry(hubs, hub, key, entry) {
-    var _a;
-    var hubObj = hubs.find(function (obj) { return obj.href === hub; });
+    const hubObj = hubs.find((obj) => obj.href === hub);
     if (!hubObj) {
         return;
     }
     if (hubObj[key]) {
-        (_a = hubObj[key]) === null || _a === void 0 ? void 0 : _a.push(entry);
+        hubObj[key]?.push(entry);
     }
     else {
         hubObj[key] = [entry];
     }
 }
 function getOrderFromArticleFrontMatter(path) {
-    var frontmatter = fs_1.default.readFileSync(path, 'utf8').split('---').at(1);
+    const frontmatter = fs_1.default.readFileSync(path, 'utf8').split('---').at(1);
     if (!frontmatter) {
         return;
     }
-    var frontmatterObject = js_yaml_1.default.load(frontmatter);
+    const frontmatterObject = js_yaml_1.default.load(frontmatter);
     return frontmatterObject.order;
 }
 /**
@@ -72,47 +71,47 @@ function getOrderFromArticleFrontMatter(path) {
  * @param routeHubs - The hubs insude docs/data/_routes.yml for a platform
  */
 function createHubsWithArticles(hubs, platformName, routeHubs) {
-    hubs.forEach(function (hub) {
+    hubs.forEach((hub) => {
         // Iterate through each directory in articles
-        fs_1.default.readdirSync("".concat(docsDir, "/articles/").concat(platformName, "/").concat(hub)).forEach(function (fileOrFolder) {
+        fs_1.default.readdirSync(`${docsDir}/articles/${platformName}/${hub}`).forEach((fileOrFolder) => {
             // If the directory content is a markdown file, then it is an article
             if (fileOrFolder.endsWith('.md')) {
-                var articleObj = getArticleObj(fileOrFolder);
+                const articleObj = getArticleObj(fileOrFolder);
                 pushOrCreateEntry(routeHubs, hub, 'articles', articleObj);
                 return;
             }
             // For readability, we will use the term section to refer to subfolders
-            var section = fileOrFolder;
-            var articles = [];
+            const section = fileOrFolder;
+            const articles = [];
             // Each subfolder will be a section containing articles
-            fs_1.default.readdirSync("".concat(docsDir, "/articles/").concat(platformName, "/").concat(hub, "/").concat(section)).forEach(function (subArticle) {
-                var order = getOrderFromArticleFrontMatter("".concat(docsDir, "/articles/").concat(platformName, "/").concat(hub, "/").concat(section, "/").concat(subArticle));
+            fs_1.default.readdirSync(`${docsDir}/articles/${platformName}/${hub}/${section}`).forEach((subArticle) => {
+                const order = getOrderFromArticleFrontMatter(`${docsDir}/articles/${platformName}/${hub}/${section}/${subArticle}`);
                 articles.push(getArticleObj(subArticle, order));
             });
             pushOrCreateEntry(routeHubs, hub, 'sections', {
                 href: section,
                 title: toTitleCase(section.replaceAll('-', ' ')),
-                articles: articles,
+                articles,
             });
         });
     });
 }
 function run() {
-    var expensifyClassicArticleHubs = fs_1.default.readdirSync("".concat(docsDir, "/articles/").concat(platformNames.expensifyClassic));
-    var newExpensifyArticleHubs = fs_1.default.readdirSync("".concat(docsDir, "/articles/").concat(platformNames.newExpensify));
-    var travelArticleHubs = fs_1.default.readdirSync("".concat(docsDir, "/articles/").concat(platformNames.travel));
-    var expensifyClassicRoute = routes.platforms.find(function (platform) { return platform.href === platformNames.expensifyClassic; });
-    var newExpensifyRoute = routes.platforms.find(function (platform) { return platform.href === platformNames.newExpensify; });
-    var travelRoute = routes.platforms.find(function (platform) { return platform.href === platformNames.travel; });
-    if (expensifyClassicArticleHubs.length !== (expensifyClassicRoute === null || expensifyClassicRoute === void 0 ? void 0 : expensifyClassicRoute.hubs.length)) {
+    const expensifyClassicArticleHubs = fs_1.default.readdirSync(`${docsDir}/articles/${platformNames.expensifyClassic}`);
+    const newExpensifyArticleHubs = fs_1.default.readdirSync(`${docsDir}/articles/${platformNames.newExpensify}`);
+    const travelArticleHubs = fs_1.default.readdirSync(`${docsDir}/articles/${platformNames.travel}`);
+    const expensifyClassicRoute = routes.platforms.find((platform) => platform.href === platformNames.expensifyClassic);
+    const newExpensifyRoute = routes.platforms.find((platform) => platform.href === platformNames.newExpensify);
+    const travelRoute = routes.platforms.find((platform) => platform.href === platformNames.travel);
+    if (expensifyClassicArticleHubs.length !== expensifyClassicRoute?.hubs.length) {
         console.error(warnMessage(platformNames.expensifyClassic));
         process.exit(1);
     }
-    if (newExpensifyArticleHubs.length !== (newExpensifyRoute === null || newExpensifyRoute === void 0 ? void 0 : newExpensifyRoute.hubs.length)) {
+    if (newExpensifyArticleHubs.length !== newExpensifyRoute?.hubs.length) {
         console.error(warnMessage(platformNames.newExpensify));
         process.exit(1);
     }
-    if (travelArticleHubs.length !== (travelRoute === null || travelRoute === void 0 ? void 0 : travelRoute.hubs.length)) {
+    if (travelArticleHubs.length !== travelRoute?.hubs.length) {
         console.error(warnMessage(platformNames.travel));
         process.exit(1);
     }
@@ -120,9 +119,9 @@ function run() {
     createHubsWithArticles(newExpensifyArticleHubs, platformNames.newExpensify, newExpensifyRoute.hubs);
     createHubsWithArticles(travelArticleHubs, platformNames.travel, travelRoute.hubs);
     // Convert the object to YAML and write it to the file
-    var yamlString = js_yaml_1.default.dump(routes);
+    let yamlString = js_yaml_1.default.dump(routes);
     yamlString = disclaimer + yamlString;
-    fs_1.default.writeFileSync("".concat(docsDir, "/_data/routes.yml"), yamlString);
+    fs_1.default.writeFileSync(`${docsDir}/_data/routes.yml`, yamlString);
 }
 try {
     run();

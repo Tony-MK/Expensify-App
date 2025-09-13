@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.types = exports.pick = exports.keepLocalCopy = void 0;
-var keepLocalCopy = jest.fn();
+const keepLocalCopy = jest.fn();
 exports.keepLocalCopy = keepLocalCopy;
-var pick = jest.fn();
+const pick = jest.fn();
 exports.pick = pick;
-var types = Object.freeze({
+const types = Object.freeze({
     allFiles: 'public.item',
     audio: 'public.audio',
     csv: 'public.comma-separated-values-text',

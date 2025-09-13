@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var containerComposeStyles = function (styles) { return [styles.textInputComposeSpacing]; };
+const containerComposeStyles = (styles) => [styles.textInputComposeSpacing];
 exports.default = containerComposeStyles;

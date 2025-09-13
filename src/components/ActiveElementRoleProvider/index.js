@@ -1,33 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ActiveElementRoleContext = void 0;
-var react_1 = require("react");
-var ActiveElementRoleContext = react_1.default.createContext({
+const react_1 = require("react");
+const ActiveElementRoleContext = react_1.default.createContext({
     role: null,
 });
 exports.ActiveElementRoleContext = ActiveElementRoleContext;
-function ActiveElementRoleProvider(_a) {
-    var _b, _c;
-    var children = _a.children;
-    var _d = (0, react_1.useState)((_c = (_b = document === null || document === void 0 ? void 0 : document.activeElement) === null || _b === void 0 ? void 0 : _b.role) !== null && _c !== void 0 ? _c : null), activeRoleRef = _d[0], setRole = _d[1];
-    var handleFocusIn = function () {
-        var _a, _b;
-        setRole((_b = (_a = document === null || document === void 0 ? void 0 : document.activeElement) === null || _a === void 0 ? void 0 : _a.role) !== null && _b !== void 0 ? _b : null);
+function ActiveElementRoleProvider({ children }) {
+    const [activeRoleRef, setRole] = (0, react_1.useState)(document?.activeElement?.role ?? null);
+    const handleFocusIn = () => {
+        setRole(document?.activeElement?.role ?? null);
     };
-    var handleFocusOut = function () {
+    const handleFocusOut = () => {
         setRole(null);
     };
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         document.addEventListener('focusin', handleFocusIn);
         document.addEventListener('focusout', handleFocusOut);
-        return function () {
+        return () => {
             document.removeEventListener('focusin', handleFocusIn);
             document.removeEventListener('focusout', handleFocusOut);
         };
     }, []);
-    var value = react_1.default.useMemo(function () { return ({
+    const value = react_1.default.useMemo(() => ({
         role: activeRoleRef,
-    }); }, [activeRoleRef]);
+    }), [activeRoleRef]);
     return <ActiveElementRoleContext.Provider value={value}>{children}</ActiveElementRoleContext.Provider>;
 }
 exports.default = ActiveElementRoleProvider;

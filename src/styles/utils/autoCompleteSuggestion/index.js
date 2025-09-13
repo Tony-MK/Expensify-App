@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var shouldPreventScrollOnAutoCompleteSuggestion = function () { return true; };
+const shouldPreventScrollOnAutoCompleteSuggestion = () => true;
 exports.default = shouldPreventScrollOnAutoCompleteSuggestion;

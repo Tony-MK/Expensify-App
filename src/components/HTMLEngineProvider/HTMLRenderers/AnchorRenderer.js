@@ -1,56 +1,43 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_render_html_1 = require("react-native-render-html");
-var AnchorForAttachmentsOnly_1 = require("@components/AnchorForAttachmentsOnly");
-var AnchorForCommentsOnly_1 = require("@components/AnchorForCommentsOnly");
-var HTMLEngineUtils = require("@components/HTMLEngineProvider/htmlEngineUtils");
-var Text_1 = require("@components/Text");
-var useEnvironment_1 = require("@hooks/useEnvironment");
-var useHover_1 = require("@hooks/useHover");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Link_1 = require("@libs/actions/Link");
-var tryResolveUrlFromApiRoot_1 = require("@libs/tryResolveUrlFromApiRoot");
-var CONST_1 = require("@src/CONST");
-function AnchorRenderer(_a) {
-    var _b, _c, _d, _e, _f;
-    var tnode = _a.tnode, style = _a.style, key = _a.key;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var htmlAttribs = tnode.attributes;
-    var environmentURL = (0, useEnvironment_1.default)().environmentURL;
-    var _g = (0, useHover_1.default)(), hovered = _g.hovered, bind = _g.bind;
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_render_html_1 = require("react-native-render-html");
+const AnchorForAttachmentsOnly_1 = require("@components/AnchorForAttachmentsOnly");
+const AnchorForCommentsOnly_1 = require("@components/AnchorForCommentsOnly");
+const HTMLEngineUtils = require("@components/HTMLEngineProvider/htmlEngineUtils");
+const Text_1 = require("@components/Text");
+const useEnvironment_1 = require("@hooks/useEnvironment");
+const useHover_1 = require("@hooks/useHover");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Link_1 = require("@libs/actions/Link");
+const tryResolveUrlFromApiRoot_1 = require("@libs/tryResolveUrlFromApiRoot");
+const CONST_1 = require("@src/CONST");
+function AnchorRenderer({ tnode, style, key }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const htmlAttribs = tnode.attributes;
+    const { environmentURL } = (0, useEnvironment_1.default)();
+    const { hovered, bind } = (0, useHover_1.default)();
     // An auth token is needed to download Expensify chat attachments
-    var isAttachment = !!htmlAttribs[CONST_1.default.ATTACHMENT_SOURCE_ATTRIBUTE];
-    var tNodeChild = (_c = (_b = tnode === null || tnode === void 0 ? void 0 : tnode.domNode) === null || _b === void 0 ? void 0 : _b.children) === null || _c === void 0 ? void 0 : _c.at(0);
-    var displayName = tNodeChild && 'data' in tNodeChild && typeof tNodeChild.data === 'string' ? tNodeChild.data : '';
-    var attrHref = htmlAttribs.href || htmlAttribs[CONST_1.default.ATTACHMENT_SOURCE_ATTRIBUTE] || '';
-    var parentStyle = (_f = (_e = (_d = tnode.parent) === null || _d === void 0 ? void 0 : _d.styles) === null || _e === void 0 ? void 0 : _e.nativeTextRet) !== null && _f !== void 0 ? _f : {};
-    var internalNewExpensifyPath = (0, Link_1.getInternalNewExpensifyPath)(attrHref);
-    var internalExpensifyPath = (0, Link_1.getInternalExpensifyPath)(attrHref);
-    var isVideo = attrHref && expensify_common_1.Str.isVideo(attrHref);
-    var linkHasImage = tnode.tagName === 'a' && tnode.children.some(function (child) { return child.tagName === 'img'; });
-    var isDeleted = HTMLEngineUtils.isDeletedNode(tnode);
-    var isChildOfTaskTitle = HTMLEngineUtils.isChildOfTaskTitle(tnode);
-    var textDecorationLineStyle = isDeleted ? styles.lineThrough : {};
-    var onLinkPress = (0, react_1.useMemo)(function () {
+    const isAttachment = !!htmlAttribs[CONST_1.default.ATTACHMENT_SOURCE_ATTRIBUTE];
+    const tNodeChild = tnode?.domNode?.children?.at(0);
+    const displayName = tNodeChild && 'data' in tNodeChild && typeof tNodeChild.data === 'string' ? tNodeChild.data : '';
+    const attrHref = htmlAttribs.href || htmlAttribs[CONST_1.default.ATTACHMENT_SOURCE_ATTRIBUTE] || '';
+    const parentStyle = tnode.parent?.styles?.nativeTextRet ?? {};
+    const internalNewExpensifyPath = (0, Link_1.getInternalNewExpensifyPath)(attrHref);
+    const internalExpensifyPath = (0, Link_1.getInternalExpensifyPath)(attrHref);
+    const isVideo = attrHref && expensify_common_1.Str.isVideo(attrHref);
+    const linkHasImage = tnode.tagName === 'a' && tnode.children.some((child) => child.tagName === 'img');
+    const isDeleted = HTMLEngineUtils.isDeletedNode(tnode);
+    const isChildOfTaskTitle = HTMLEngineUtils.isChildOfTaskTitle(tnode);
+    const textDecorationLineStyle = isDeleted ? styles.lineThrough : {};
+    const onLinkPress = (0, react_1.useMemo)(() => {
         if (internalNewExpensifyPath || internalExpensifyPath) {
-            return function () { return (0, Link_1.openLink)(attrHref, environmentURL, isAttachment); };
+            return () => (0, Link_1.openLink)(attrHref, environmentURL, isAttachment);
         }
         return undefined;
     }, [internalNewExpensifyPath, internalExpensifyPath, attrHref, environmentURL, isAttachment]);
@@ -59,7 +46,7 @@ function AnchorRenderer(_a) {
         // We don't have this behaviour in other links in NewDot
         // TODO: We should use TextLink, but I'm leaving it as Text for now because TextLink breaks the alignment in Android.
         // Define link style based on context
-        var linkStyle = styles.link;
+        let linkStyle = styles.link;
         // Special handling for links in RBR to maintain consistent font size
         if (HTMLEngineUtils.isChildOfRBR(tnode)) {
             linkStyle = [
@@ -83,19 +70,19 @@ function AnchorRenderer(_a) {
         }
         if (tnode.classes.includes('no-style-link')) {
             // If the link has a class of a no-style-link, we don't apply any styles
-            linkStyle = __assign({}, style);
+            linkStyle = { ...style };
             delete linkStyle.color;
             delete linkStyle.textDecorationLine;
             delete linkStyle.textDecorationColor;
         }
-        return (<Text_1.default style={linkStyle} onPress={function () { return (0, Link_1.openLink)(attrHref, environmentURL, isAttachment); }} suppressHighlighting>
+        return (<Text_1.default style={linkStyle} onPress={() => (0, Link_1.openLink)(attrHref, environmentURL, isAttachment)} suppressHighlighting>
                 <react_native_render_html_1.TNodeChildrenRenderer tnode={tnode}/>
             </Text_1.default>);
     }
     if (isAttachment && !isVideo) {
         return (<AnchorForAttachmentsOnly_1.default source={(0, tryResolveUrlFromApiRoot_1.default)(attrHref)} displayName={displayName} isDeleted={isDeleted}/>);
     }
-    var hoverStyle = hovered ? StyleUtils.getColorStyle(theme.linkHover) : {};
+    const hoverStyle = hovered ? StyleUtils.getColorStyle(theme.linkHover) : {};
     return (<AnchorForCommentsOnly_1.default href={attrHref} 
     // Unless otherwise specified open all links in
     // a new window. On Desktop this means that we will
@@ -117,7 +104,7 @@ function AnchorRenderer(_a) {
     onPress={onLinkPress} 
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...bind} linkHasImage={linkHasImage}>
-            <react_native_render_html_1.TNodeChildrenRenderer tnode={tnode} renderChild={function (props) {
+            <react_native_render_html_1.TNodeChildrenRenderer tnode={tnode} renderChild={(props) => {
             if (props.childTnode.tagName === 'br') {
                 return <Text_1.default key={props.key}>{'\n'}</Text_1.default>;
             }

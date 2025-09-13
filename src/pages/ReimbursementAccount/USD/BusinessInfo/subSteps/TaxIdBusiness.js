@@ -1,43 +1,41 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var SingleFieldStep_1 = require("@components/SubStepForms/SingleFieldStep");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReimbursementAccountStepFormSubmit_1 = require("@hooks/useReimbursementAccountStepFormSubmit");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
-var COMPANY_TAX_ID_KEY = ReimbursementAccountForm_1.default.BUSINESS_INFO_STEP.COMPANY_TAX_ID;
-var STEP_FIELDS = [COMPANY_TAX_ID_KEY];
-function TaxIdBusiness(_a) {
-    var _b, _c, _d, _e, _f;
-    var onNext = _a.onNext, onMove = _a.onMove, isEditing = _a.isEditing;
-    var translate = (0, useLocalize_1.default)().translate;
-    var _g = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false }), reimbursementAccount = _g[0], reimbursementAccountResult = _g[1];
-    var isLoadingReimbursementAccount = (0, isLoadingOnyxValue_1.default)(reimbursementAccountResult);
+const react_1 = require("react");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const SingleFieldStep_1 = require("@components/SubStepForms/SingleFieldStep");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReimbursementAccountStepFormSubmit_1 = require("@hooks/useReimbursementAccountStepFormSubmit");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+const COMPANY_TAX_ID_KEY = ReimbursementAccountForm_1.default.BUSINESS_INFO_STEP.COMPANY_TAX_ID;
+const STEP_FIELDS = [COMPANY_TAX_ID_KEY];
+function TaxIdBusiness({ onNext, onMove, isEditing }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const [reimbursementAccount, reimbursementAccountResult] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false });
+    const isLoadingReimbursementAccount = (0, isLoadingOnyxValue_1.default)(reimbursementAccountResult);
     // This is default value for the input to be display
     /* eslint-disable-next-line rulesdir/no-default-id-values */
-    var defaultCompanyTaxID = (_c = (_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.companyTaxID) !== null && _c !== void 0 ? _c : '';
-    var bankAccountID = (_d = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _d === void 0 ? void 0 : _d.bankAccountID;
-    var bankAccountState = (_f = (_e = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _e === void 0 ? void 0 : _e.state) !== null && _f !== void 0 ? _f : '';
-    var shouldDisableCompanyTaxID = !!(bankAccountID &&
+    const defaultCompanyTaxID = reimbursementAccount?.achData?.companyTaxID ?? '';
+    const bankAccountID = reimbursementAccount?.achData?.bankAccountID;
+    const bankAccountState = reimbursementAccount?.achData?.state ?? '';
+    const shouldDisableCompanyTaxID = !!(bankAccountID &&
         defaultCompanyTaxID &&
         bankAccountState !== CONST_1.default.BANK_ACCOUNT.STATE.SETUP &&
         bankAccountState !== CONST_1.default.BANK_ACCOUNT.STATE.VERIFYING);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, STEP_FIELDS);
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, STEP_FIELDS);
         if (values.companyTaxID && !(0, ValidationUtils_1.isValidTaxID)(values.companyTaxID)) {
             errors.companyTaxID = translate('bankAccount.error.taxID');
         }
         return errors;
     }, [translate]);
-    var handleSubmit = (0, useReimbursementAccountStepFormSubmit_1.default)({
+    const handleSubmit = (0, useReimbursementAccountStepFormSubmit_1.default)({
         fieldIds: STEP_FIELDS,
-        onNext: onNext,
+        onNext,
         shouldSaveDraft: isEditing,
     });
     if (isLoadingReimbursementAccount) {

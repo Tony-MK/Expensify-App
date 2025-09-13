@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var isWindowReadyPromise = Promise.resolve();
-var resolveWindowReadyToFocus;
-react_native_1.AppState.addEventListener('focus', function () {
+const react_native_1 = require("react-native");
+let isWindowReadyPromise = Promise.resolve();
+let resolveWindowReadyToFocus;
+react_native_1.AppState.addEventListener('focus', () => {
     if (!resolveWindowReadyToFocus) {
         return;
     }
     resolveWindowReadyToFocus();
 });
-react_native_1.AppState.addEventListener('blur', function () {
-    isWindowReadyPromise = new Promise(function (resolve) {
+react_native_1.AppState.addEventListener('blur', () => {
+    isWindowReadyPromise = new Promise((resolve) => {
         resolveWindowReadyToFocus = resolve;
     });
 });
@@ -20,5 +20,5 @@ react_native_1.AppState.addEventListener('blur', function () {
  * so we can achieve this by listening to the 'focus' event of the AppState.
  * See {@link https://developer.android.com/develop/ui/views/touch-and-input/keyboard-input/visibility#ShowReliably}
  */
-var isWindowReadyToFocus = function () { return isWindowReadyPromise; };
+const isWindowReadyToFocus = () => isWindowReadyPromise;
 exports.default = isWindowReadyToFocus;

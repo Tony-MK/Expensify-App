@@ -1,39 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_dom_1 = require("react-dom");
-var react_native_1 = require("react-native");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var DistanceEReceipt_1 = require("@components/DistanceEReceipt");
-var EReceiptWithSizeCalculation_1 = require("@components/EReceiptWithSizeCalculation");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var variables_1 = require("@styles/variables");
-var Image_1 = require("@src/components/Image");
-var CONST_1 = require("@src/CONST");
-function ReceiptPreview(_a) {
-    var source = _a.source, hovered = _a.hovered, _b = _a.isEReceipt, isEReceipt = _b === void 0 ? false : _b, transactionItem = _a.transactionItem;
-    var isDistanceEReceipt = (0, TransactionUtils_1.isDistanceRequest)(transactionItem) && !(0, TransactionUtils_1.isManualDistanceRequest)(transactionItem);
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var _c = (0, react_1.useState)(0), eReceiptScaleFactor = _c[0], setEReceiptScaleFactor = _c[1];
-    var _d = (0, react_1.useState)(undefined), imageAspectRatio = _d[0], setImageAspectRatio = _d[1];
-    var _e = (0, react_1.useState)(undefined), distanceEReceiptAspectRatio = _e[0], setDistanceEReceiptAspectRatio = _e[1];
-    var _f = (0, useDebouncedState_1.default)(false, CONST_1.default.TIMING.SHOW_HOVER_PREVIEW_DELAY), shouldShow = _f[0], debounceShouldShow = _f[1], setShouldShow = _f[2];
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var hasMeasured = (0, react_1.useRef)(false);
-    var windowHeight = (0, useWindowDimensions_1.default)().windowHeight;
-    var _g = (0, react_1.useState)(true), isLoading = _g[0], setIsLoading = _g[1];
-    var handleDistanceEReceiptLayout = function (e) {
+const react_1 = require("react");
+const react_dom_1 = require("react-dom");
+const react_native_1 = require("react-native");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const DistanceEReceipt_1 = require("@components/DistanceEReceipt");
+const EReceiptWithSizeCalculation_1 = require("@components/EReceiptWithSizeCalculation");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const variables_1 = require("@styles/variables");
+const Image_1 = require("@src/components/Image");
+const CONST_1 = require("@src/CONST");
+function ReceiptPreview({ source, hovered, isEReceipt = false, transactionItem }) {
+    const isDistanceEReceipt = (0, TransactionUtils_1.isDistanceRequest)(transactionItem) && !(0, TransactionUtils_1.isManualDistanceRequest)(transactionItem);
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const [eReceiptScaleFactor, setEReceiptScaleFactor] = (0, react_1.useState)(0);
+    const [imageAspectRatio, setImageAspectRatio] = (0, react_1.useState)(undefined);
+    const [distanceEReceiptAspectRatio, setDistanceEReceiptAspectRatio] = (0, react_1.useState)(undefined);
+    const [shouldShow, debounceShouldShow, setShouldShow] = (0, useDebouncedState_1.default)(false, CONST_1.default.TIMING.SHOW_HOVER_PREVIEW_DELAY);
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const hasMeasured = (0, react_1.useRef)(false);
+    const { windowHeight } = (0, useWindowDimensions_1.default)();
+    const [isLoading, setIsLoading] = (0, react_1.useState)(true);
+    const handleDistanceEReceiptLayout = (e) => {
         if (hasMeasured.current) {
             return;
         }
         hasMeasured.current = true;
-        var _a = e.nativeEvent.layout, height = _a.height, width = _a.width;
+        const { height, width } = e.nativeEvent.layout;
         if (height === 0) {
             // on the initial layout, measured height is 0, so we want to set everything on the second one
             hasMeasured.current = false;
@@ -46,28 +45,28 @@ function ReceiptPreview(_a) {
         setDistanceEReceiptAspectRatio(variables_1.default.eReceiptBGHWidth / height);
         setEReceiptScaleFactor(width / variables_1.default.eReceiptBGHWidth);
     };
-    var updateImageAspectRatio = (0, react_1.useCallback)(function (width, height) {
+    const updateImageAspectRatio = (0, react_1.useCallback)((width, height) => {
         if (!source) {
             return;
         }
         setImageAspectRatio(height ? width / height : 'auto');
     }, [source]);
-    var handleLoad = (0, react_1.useCallback)(function (e) {
-        var _a = e.nativeEvent, width = _a.width, height = _a.height;
+    const handleLoad = (0, react_1.useCallback)((e) => {
+        const { width, height } = e.nativeEvent;
         updateImageAspectRatio(width, height);
         setIsLoading(false);
     }, [updateImageAspectRatio]);
-    var handleError = function () {
+    const handleError = () => {
         setIsLoading(false);
     };
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         setShouldShow(hovered);
     }, [hovered, setShouldShow]);
     if (shouldUseNarrowLayout || !debounceShouldShow || !shouldShow || (!source && !isEReceipt && !isDistanceEReceipt)) {
         return null;
     }
-    var shouldShowImage = source && !(isEReceipt || isDistanceEReceipt);
-    var shouldShowDistanceEReceipt = isDistanceEReceipt && !isEReceipt;
+    const shouldShowImage = source && !(isEReceipt || isDistanceEReceipt);
+    const shouldShowDistanceEReceipt = isDistanceEReceipt && !isEReceipt;
     return react_dom_1.default.createPortal(<react_native_reanimated_1.default.View entering={react_native_reanimated_1.FadeIn.duration(CONST_1.default.TIMING.SHOW_HOVER_PREVIEW_ANIMATION_DURATION)} exiting={react_native_reanimated_1.FadeOut.duration(CONST_1.default.TIMING.SHOW_HOVER_PREVIEW_ANIMATION_DURATION)} style={[styles.receiptPreview, styles.flexColumn, styles.alignItemsCenter, styles.justifyContentStart]}>
             {shouldShowImage ? (<react_native_1.View style={[styles.w100]}>
                     {isLoading && (<react_native_1.View style={[react_native_1.StyleSheet.absoluteFillObject, styles.justifyContentCenter, styles.alignItemsCenter]}>
@@ -76,9 +75,9 @@ function ReceiptPreview(_a) {
 
                     <Image_1.default source={{ uri: source }} style={[
                 styles.w100,
-                { aspectRatio: imageAspectRatio !== null && imageAspectRatio !== void 0 ? imageAspectRatio : 1 },
+                { aspectRatio: imageAspectRatio ?? 1 },
                 isLoading && { opacity: 0 }, // hide until loaded
-            ]} onLoadStart={function () {
+            ]} onLoadStart={() => {
                 if (isLoading) {
                     return;
                 }

@@ -1,10 +1,9 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var colors_1 = require("@styles/theme/colors");
-var CONST_1 = require("@src/CONST");
-var SCREENS_1 = require("@src/SCREENS");
-var lightTheme = {
+const colors_1 = require("@styles/theme/colors");
+const CONST_1 = require("@src/CONST");
+const SCREENS_1 = require("@src/SCREENS");
+const lightTheme = {
     // Figma keys
     appBG: colors_1.default.productLight100,
     splashBG: colors_1.default.green400,
@@ -19,7 +18,7 @@ var lightTheme = {
     iconSuccessFill: colors_1.default.green400,
     iconDangerFill: colors_1.default.red,
     iconReversed: colors_1.default.productLight100,
-    iconColorfulBackground: "".concat(colors_1.default.ivory, "cc"),
+    iconColorfulBackground: `${colors_1.default.ivory}cc`,
     textSupporting: colors_1.default.productLight800,
     text: colors_1.default.productLight900,
     textColorfulBackground: colors_1.default.ivory,
@@ -100,8 +99,8 @@ var lightTheme = {
     starDefaultBG: 'rgb(254, 228, 94)',
     mapAttributionText: colors_1.default.black,
     white: colors_1.default.white,
-    videoPlayerBG: "".concat(colors_1.default.productDark100, "cc"),
-    transparentWhite: "".concat(colors_1.default.white, "51"),
+    videoPlayerBG: `${colors_1.default.productDark100}cc`,
+    transparentWhite: `${colors_1.default.white}51`,
     emptyFolderBG: colors_1.default.yellow600,
     travelBG: colors_1.default.blue600,
     todoBG: colors_1.default.blue800,
@@ -110,55 +109,55 @@ var lightTheme = {
     // Note that it needs to be a screen name, not a route url.
     // The route urls from ROUTES.ts are only used for deep linking and configuring URLs on web.
     // The screen name (see SCREENS.ts) is the name of the screen as far as react-navigation is concerned, and the linkingConfig maps screen names to URLs
-    PAGE_THEMES: (_a = {},
-        _a[SCREENS_1.default.HOME] = {
+    PAGE_THEMES: {
+        [SCREENS_1.default.HOME]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.REPORT] = {
+        [SCREENS_1.default.REPORT]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.SAVE_THE_WORLD.ROOT] = {
+        [SCREENS_1.default.SAVE_THE_WORLD.ROOT]: {
             backgroundColor: colors_1.default.tangerine800,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.LIGHT_CONTENT,
         },
-        _a[SCREENS_1.default.SETTINGS.PREFERENCES.ROOT] = {
+        [SCREENS_1.default.SETTINGS.PREFERENCES.ROOT]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.WORKSPACES_LIST] = {
+        [SCREENS_1.default.WORKSPACES_LIST]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.SETTINGS.WALLET.ROOT] = {
+        [SCREENS_1.default.SETTINGS.WALLET.ROOT]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.SETTINGS.PROFILE.STATUS] = {
+        [SCREENS_1.default.SETTINGS.PROFILE.STATUS]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.SETTINGS.ROOT] = {
+        [SCREENS_1.default.SETTINGS.ROOT]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.SETTINGS.TROUBLESHOOT] = {
+        [SCREENS_1.default.SETTINGS.TROUBLESHOOT]: {
             backgroundColor: colors_1.default.productLight100,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
         },
-        _a[SCREENS_1.default.REFERRAL_DETAILS] = {
+        [SCREENS_1.default.REFERRAL_DETAILS]: {
             backgroundColor: colors_1.default.pink800,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.LIGHT_CONTENT,
         },
-        _a[SCREENS_1.default.RIGHT_MODAL.SIGN_IN] = {
+        [SCREENS_1.default.RIGHT_MODAL.SIGN_IN]: {
             backgroundColor: colors_1.default.productDark200,
             statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.LIGHT_CONTENT,
         },
-        _a),
+    },
     statusBarStyle: CONST_1.default.STATUS_BAR_STYLE.DARK_CONTENT,
     navigationBarButtonsStyle: CONST_1.default.NAVIGATION_BAR_BUTTONS_STYLE.DARK,
-    translucentNavigationBarBackgroundColor: "".concat(colors_1.default.productLight100, "CD"), // CD is 80% opacity (80% of 0xFF)
+    translucentNavigationBarBackgroundColor: `${colors_1.default.productLight100}CD`, // CD is 80% opacity (80% of 0xFF)
     colorScheme: CONST_1.default.COLOR_SCHEME.LIGHT,
 };
 exports.default = lightTheme;

@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var variables_1 = require("@styles/variables");
-var Session = require("@userActions/Session");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const variables_1 = require("@styles/variables");
+const Session = require("@userActions/Session");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function ExpiredValidateCodeModal() {
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var credentials = (0, useOnyx_1.default)(ONYXKEYS_1.default.CREDENTIALS)[0];
-    var translate = (0, useLocalize_1.default)().translate;
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [credentials] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CREDENTIALS);
+    const { translate } = (0, useLocalize_1.default)();
     return (<react_native_1.View style={styles.deeplinkWrapperContainer}>
             <react_native_1.View style={styles.deeplinkWrapperMessage}>
                 <react_native_1.View style={styles.mb2}>
@@ -27,12 +27,11 @@ function ExpiredValidateCodeModal() {
                 </react_native_1.View>
                 <Text_1.default style={[styles.textHeadline, styles.textXXLarge, styles.textAlignCenter]}>{translate('validateCodeModal.expiredCodeTitle')}</Text_1.default>
                 <react_native_1.View style={[styles.mt2, styles.mb2]}>
-                    {(credentials === null || credentials === void 0 ? void 0 : credentials.login) ? (<Text_1.default style={styles.textAlignCenter}>
+                    {credentials?.login ? (<Text_1.default style={styles.textAlignCenter}>
                             {translate('validateCodeModal.expiredCodeDescription')}
                             {translate('validateCodeModal.or')}{' '}
-                            <TextLink_1.default onPress={function () {
-                var _a;
-                Session.beginSignIn((_a = credentials === null || credentials === void 0 ? void 0 : credentials.login) !== null && _a !== void 0 ? _a : '');
+                            <TextLink_1.default onPress={() => {
+                Session.beginSignIn(credentials?.login ?? '');
                 Navigation_1.default.setNavigationActionToMicrotaskQueue(Navigation_1.default.goBack);
             }}>
                                 {translate('validateCodeModal.requestOneHere')}

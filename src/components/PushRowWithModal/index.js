@@ -1,26 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var CONST_1 = require("@src/CONST");
-var keyboard_1 = require("@src/utils/keyboard");
-var PushRowModal_1 = require("./PushRowModal");
-function PushRowWithModal(_a) {
-    var value = _a.value, optionsList = _a.optionsList, wrapperStyles = _a.wrapperStyles, description = _a.description, modalHeaderTitle = _a.modalHeaderTitle, searchInputTitle = _a.searchInputTitle, _b = _a.shouldAllowChange, shouldAllowChange = _b === void 0 ? true : _b, errorText = _a.errorText, _c = _a.onInputChange, onInputChange = _c === void 0 ? function () { } : _c, stateInputIDToReset = _a.stateInputIDToReset, _d = _a.onBlur, onBlur = _d === void 0 ? function () { } : _d;
-    var _e = (0, react_1.useState)(false), isModalVisible = _e[0], setIsModalVisible = _e[1];
-    var shouldBlurOnCloseRef = (0, react_1.useRef)(true);
-    var handleModalClose = function () {
+const react_1 = require("react");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const CONST_1 = require("@src/CONST");
+const keyboard_1 = require("@src/utils/keyboard");
+const PushRowModal_1 = require("./PushRowModal");
+function PushRowWithModal({ value, optionsList, wrapperStyles, description, modalHeaderTitle, searchInputTitle, shouldAllowChange = true, errorText, onInputChange = () => { }, stateInputIDToReset, onBlur = () => { }, }) {
+    const [isModalVisible, setIsModalVisible] = (0, react_1.useState)(false);
+    const shouldBlurOnCloseRef = (0, react_1.useRef)(true);
+    const handleModalClose = () => {
         if (shouldBlurOnCloseRef.current) {
-            onBlur === null || onBlur === void 0 ? void 0 : onBlur();
+            onBlur?.();
         }
-        keyboard_1.default.dismiss().then(function () {
+        keyboard_1.default.dismiss().then(() => {
             setIsModalVisible(false);
         });
     };
-    var handleModalOpen = function () {
+    const handleModalOpen = () => {
         setIsModalVisible(true);
     };
-    var handleOptionChange = function (optionValue) {
+    const handleOptionChange = (optionValue) => {
         onInputChange(optionValue);
         shouldBlurOnCloseRef.current = false;
         if (stateInputIDToReset) {
@@ -29,7 +28,7 @@ function PushRowWithModal(_a) {
     };
     return (<>
             <MenuItemWithTopDescription_1.default description={description} title={value ? optionsList[value] : ''} shouldShowRightIcon={shouldAllowChange} onPress={handleModalOpen} wrapperStyle={wrapperStyles} interactive={shouldAllowChange} brickRoadIndicator={errorText ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : undefined} errorText={errorText}/>
-            <PushRowModal_1.default isVisible={isModalVisible} selectedOption={value !== null && value !== void 0 ? value : ''} onOptionChange={handleOptionChange} onClose={handleModalClose} optionsList={optionsList} headerTitle={modalHeaderTitle} searchInputTitle={searchInputTitle}/>
+            <PushRowModal_1.default isVisible={isModalVisible} selectedOption={value ?? ''} onOptionChange={handleOptionChange} onClose={handleModalClose} optionsList={optionsList} headerTitle={modalHeaderTitle} searchInputTitle={searchInputTitle}/>
         </>);
 }
 PushRowWithModal.displayName = 'PushRowWithModal';

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createPersonalDetails;
-var falso_1 = require("@ngneat/falso");
+const falso_1 = require("@ngneat/falso");
 function createPersonalDetails(index) {
     return {
         accountID: index,

@@ -1,21 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SubscriptionPlanDowngradeBlocked_1 = require("@components/SubscriptionPlanDowngradeBlocked");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var Navigation_1 = require("@navigation/Navigation");
-var utils_1 = require("@pages/settings/Subscription/utils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_1 = require("react");
+const DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SubscriptionPlanDowngradeBlocked_1 = require("@components/SubscriptionPlanDowngradeBlocked");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const Navigation_1 = require("@navigation/Navigation");
+const utils_1 = require("@pages/settings/Subscription/utils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function SubscriptionPlanDowngradeBlockedPage() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var privateSubscription = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION, { canBeMissing: false })[0];
-    var formattedSubscriptionEndDate = (0, utils_1.formatSubscriptionEndDate)(privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.endDate);
-    var onClosePress = function () {
+    const { translate } = (0, useLocalize_1.default)();
+    const [privateSubscription] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION, { canBeMissing: false });
+    const formattedSubscriptionEndDate = (0, utils_1.formatSubscriptionEndDate)(privateSubscription?.endDate);
+    const onClosePress = () => {
         Navigation_1.default.goBack();
     };
     return (<ScreenWrapper_1.default testID={SubscriptionPlanDowngradeBlockedPage.displayName} includeSafeAreaPaddingBottom shouldEnableMaxHeight>

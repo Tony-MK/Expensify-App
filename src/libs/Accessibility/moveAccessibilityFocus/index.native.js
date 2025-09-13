@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var moveAccessibilityFocus = function (ref) {
+const react_native_1 = require("react-native");
+const moveAccessibilityFocus = (ref) => {
     if (!ref) {
         return;
     }

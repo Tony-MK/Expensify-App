@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var moveAccessibilityFocus = function (ref) {
-    if (!(ref === null || ref === void 0 ? void 0 : ref.current)) {
+const moveAccessibilityFocus = (ref) => {
+    if (!ref?.current) {
         return;
     }
     ref.current.focus();

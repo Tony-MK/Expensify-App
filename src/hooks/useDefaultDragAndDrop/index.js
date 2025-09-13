@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useDefaultDragAndDrop = function () {
-    (0, react_1.useEffect)(function () {
-        var dropDragListener = function (event) {
+const react_1 = require("react");
+const useDefaultDragAndDrop = () => {
+    (0, react_1.useEffect)(() => {
+        const dropDragListener = (event) => {
             event.preventDefault();
             if (event.dataTransfer) {
                 // eslint-disable-next-line no-param-reassign
@@ -14,7 +14,7 @@ var useDefaultDragAndDrop = function () {
         document.addEventListener('dragenter', dropDragListener);
         document.addEventListener('dragleave', dropDragListener);
         document.addEventListener('drop', dropDragListener);
-        return function () {
+        return () => {
             document.removeEventListener('dragover', dropDragListener);
             document.removeEventListener('dragenter', dropDragListener);
             document.removeEventListener('dragleave', dropDragListener);

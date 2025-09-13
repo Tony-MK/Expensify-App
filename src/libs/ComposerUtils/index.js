@@ -4,7 +4,7 @@ exports.insertText = insertText;
 exports.canSkipTriggerHotkeys = canSkipTriggerHotkeys;
 exports.insertWhiteSpaceAtIndex = insertWhiteSpaceAtIndex;
 exports.findCommonSuffixLength = findCommonSuffixLength;
-var DeviceCapabilities = require("@libs/DeviceCapabilities");
+const DeviceCapabilities = require("@libs/DeviceCapabilities");
 /**
  * Replace substring between selection with a text.
  */
@@ -16,7 +16,7 @@ function insertText(text, selection, textToInsert) {
  * @param text - text that needs whitespace to be appended to
  */
 function insertWhiteSpaceAtIndex(text, index) {
-    return "".concat(text.slice(0, index), " ").concat(text.slice(index));
+    return `${text.slice(0, index)} ${text.slice(index)}`;
 }
 /**
  * Check whether we can skip trigger hotkeys on some specific devices.
@@ -30,9 +30,9 @@ function canSkipTriggerHotkeys(isSmallScreenWidth, isKeyboardShown) {
  * Finds the length of common suffix between two texts
  */
 function findCommonSuffixLength(str1, str2, cursorPosition) {
-    var commonSuffixLength = 0;
-    var minLength = Math.min(str1.length - cursorPosition, str2.length);
-    for (var i = 1; i <= minLength; i++) {
+    let commonSuffixLength = 0;
+    const minLength = Math.min(str1.length - cursorPosition, str2.length);
+    for (let i = 1; i <= minLength; i++) {
         if (str1.charAt(str1.length - i) === str2.charAt(str2.length - i)) {
             commonSuffixLength++;
         }

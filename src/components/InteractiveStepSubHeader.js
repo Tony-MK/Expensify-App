@@ -1,49 +1,48 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var colors_1 = require("@styles/theme/colors");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
-var Text_1 = require("./Text");
-var MIN_AMOUNT_FOR_EXPANDING = 3;
-var MIN_AMOUNT_OF_STEPS = 2;
-function InteractiveStepSubHeader(_a, ref) {
-    var stepNames = _a.stepNames, _b = _a.startStepIndex, startStepIndex = _b === void 0 ? 0 : _b, onStepSelected = _a.onStepSelected;
-    var styles = (0, useThemeStyles_1.default)();
-    var containerWidthStyle = stepNames.length < MIN_AMOUNT_FOR_EXPANDING ? styles.mnw60 : styles.mnw100;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const colors_1 = require("@styles/theme/colors");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
+const Text_1 = require("./Text");
+const MIN_AMOUNT_FOR_EXPANDING = 3;
+const MIN_AMOUNT_OF_STEPS = 2;
+function InteractiveStepSubHeader({ stepNames, startStepIndex = 0, onStepSelected }, ref) {
+    const styles = (0, useThemeStyles_1.default)();
+    const containerWidthStyle = stepNames.length < MIN_AMOUNT_FOR_EXPANDING ? styles.mnw60 : styles.mnw100;
     if (stepNames.length < MIN_AMOUNT_OF_STEPS) {
-        throw new Error("stepNames list must have at least ".concat(MIN_AMOUNT_OF_STEPS, " elements."));
+        throw new Error(`stepNames list must have at least ${MIN_AMOUNT_OF_STEPS} elements.`);
     }
-    var _c = (0, react_1.useState)(startStepIndex), currentStep = _c[0], setCurrentStep = _c[1];
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        moveNext: function () {
-            setCurrentStep(function (actualStep) { return actualStep + 1; });
+    const [currentStep, setCurrentStep] = (0, react_1.useState)(startStepIndex);
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        moveNext: () => {
+            setCurrentStep((actualStep) => actualStep + 1);
         },
-        movePrevious: function () {
-            setCurrentStep(function (actualStep) { return actualStep - 1; });
+        movePrevious: () => {
+            setCurrentStep((actualStep) => actualStep - 1);
         },
-        moveTo: function (step) {
+        moveTo: (step) => {
             setCurrentStep(step);
         },
-    }); }, []);
-    var amountOfUnions = stepNames.length - 1;
+    }), []);
+    const amountOfUnions = stepNames.length - 1;
     return (<react_native_1.View style={[styles.interactiveStepHeaderContainer, containerWidthStyle]}>
-            {stepNames.map(function (stepName, index) {
-            var isCompletedStep = currentStep > index;
-            var isLockedStep = currentStep < index;
-            var isLockedLine = currentStep < index + 1;
-            var hasUnion = index < amountOfUnions;
-            var moveToStep = function () {
+            {stepNames.map((stepName, index) => {
+            const isCompletedStep = currentStep > index;
+            const isLockedStep = currentStep < index;
+            const isLockedLine = currentStep < index + 1;
+            const hasUnion = index < amountOfUnions;
+            const moveToStep = () => {
                 if (isLockedStep || !onStepSelected) {
                     return;
                 }
                 setCurrentStep(index);
-                var step = stepNames.at(index);
+                const step = stepNames.at(index);
                 if (step) {
                     onStepSelected(step);
                 }

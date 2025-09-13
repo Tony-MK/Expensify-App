@@ -1,22 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ChangeWorkspaceMenuSectionList_1 = require("@components/ChangeWorkspaceMenuSectionList");
-var FeatureTrainingModal_1 = require("@components/FeatureTrainingModal");
-var Illustrations = require("@components/Icon/Illustrations");
-var useBeforeRemove_1 = require("@hooks/useBeforeRemove");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Report_1 = require("@libs/actions/Report");
-var colors_1 = require("@styles/theme/colors");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const ChangeWorkspaceMenuSectionList_1 = require("@components/ChangeWorkspaceMenuSectionList");
+const FeatureTrainingModal_1 = require("@components/FeatureTrainingModal");
+const Illustrations = require("@components/Icon/Illustrations");
+const useBeforeRemove_1 = require("@hooks/useBeforeRemove");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Report_1 = require("@libs/actions/Report");
+const colors_1 = require("@styles/theme/colors");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
 function ChangePolicyEducationalModal() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var onConfirm = (0, react_1.useCallback)(function () {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const onConfirm = (0, react_1.useCallback)(() => {
         (0, Report_1.dismissChangePolicyModal)();
     }, []);
     (0, useBeforeRemove_1.default)(onConfirm);

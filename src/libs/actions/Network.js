@@ -9,18 +9,17 @@ exports.setShouldFailAllRequests = setShouldFailAllRequests;
 exports.setTimeSkew = setTimeSkew;
 exports.setNetWorkStatus = setNetWorkStatus;
 exports.setNetworkLastOffline = setNetworkLastOffline;
-var react_native_onyx_1 = require("react-native-onyx");
-var Log_1 = require("@libs/Log");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const Log_1 = require("@libs/Log");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function setNetworkLastOffline(lastOfflineAt) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { lastOfflineAt: lastOfflineAt });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { lastOfflineAt });
 }
-function setIsOffline(isNetworkOffline, reason) {
-    if (reason === void 0) { reason = ''; }
+function setIsOffline(isNetworkOffline, reason = '') {
     if (reason) {
-        var textToLog = '[Network] Client is';
+        let textToLog = '[Network] Client is';
         textToLog += isNetworkOffline ? ' entering offline mode' : ' back online';
-        textToLog += " because: ".concat(reason);
+        textToLog += ` because: ${reason}`;
         Log_1.default.info(textToLog);
     }
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { isOffline: isNetworkOffline });
@@ -32,25 +31,25 @@ function setTimeSkew(skew) {
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { timeSkew: skew });
 }
 function setShouldForceOffline(shouldForceOffline) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldForceOffline: shouldForceOffline });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldForceOffline });
 }
 /**
  * Test tool that will fail all network requests when enabled
  */
 function setShouldFailAllRequests(shouldFailAllRequests) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldFailAllRequests: shouldFailAllRequests });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldFailAllRequests });
 }
 function setPoorConnectionTimeoutID(poorConnectionTimeoutID) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { poorConnectionTimeoutID: poorConnectionTimeoutID });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { poorConnectionTimeoutID });
 }
 function setShouldSimulatePoorConnection(shouldSimulatePoorConnection, poorConnectionTimeoutID) {
     if (!shouldSimulatePoorConnection) {
         clearTimeout(poorConnectionTimeoutID);
-        react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldSimulatePoorConnection: shouldSimulatePoorConnection, poorConnectionTimeoutID: undefined });
+        react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldSimulatePoorConnection, poorConnectionTimeoutID: undefined });
         return;
     }
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldSimulatePoorConnection: shouldSimulatePoorConnection });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { shouldSimulatePoorConnection });
 }
 function setConnectionChanges(connectionChanges) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { connectionChanges: connectionChanges });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.NETWORK, { connectionChanges });
 }

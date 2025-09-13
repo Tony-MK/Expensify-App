@@ -1,37 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReimbursementAccountStepFormSubmit_1 = require("@hooks/useReimbursementAccountStepFormSubmit");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var ExampleCheck_1 = require("@pages/ReimbursementAccount/USD/BankInfo/ExampleCheck");
-var getSubStepValues_1 = require("@pages/ReimbursementAccount/utils/getSubStepValues");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
-var BANK_INFO_STEP_KEYS = ReimbursementAccountForm_1.default.BANK_INFO_STEP;
-var STEP_FIELDS = [BANK_INFO_STEP_KEYS.ROUTING_NUMBER, BANK_INFO_STEP_KEYS.ACCOUNT_NUMBER];
-function Manual(_a) {
-    var _b;
-    var onNext = _a.onNext;
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false })[0];
-    var reimbursementAccountDraft = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT, { canBeMissing: true })[0];
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var defaultValues = (0, react_1.useMemo)(function () { return (0, getSubStepValues_1.default)(BANK_INFO_STEP_KEYS, reimbursementAccountDraft, reimbursementAccount); }, [reimbursementAccount, reimbursementAccountDraft]);
-    var hasBankAccountData = !!((_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.bankAccountID);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var _a;
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, STEP_FIELDS);
-        var routingNumber = (_a = values.routingNumber) === null || _a === void 0 ? void 0 : _a.trim();
+const react_1 = require("react");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReimbursementAccountStepFormSubmit_1 = require("@hooks/useReimbursementAccountStepFormSubmit");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const ExampleCheck_1 = require("@pages/ReimbursementAccount/USD/BankInfo/ExampleCheck");
+const getSubStepValues_1 = require("@pages/ReimbursementAccount/utils/getSubStepValues");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
+const BANK_INFO_STEP_KEYS = ReimbursementAccountForm_1.default.BANK_INFO_STEP;
+const STEP_FIELDS = [BANK_INFO_STEP_KEYS.ROUTING_NUMBER, BANK_INFO_STEP_KEYS.ACCOUNT_NUMBER];
+function Manual({ onNext }) {
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false });
+    const [reimbursementAccountDraft] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT, { canBeMissing: true });
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const defaultValues = (0, react_1.useMemo)(() => (0, getSubStepValues_1.default)(BANK_INFO_STEP_KEYS, reimbursementAccountDraft, reimbursementAccount), [reimbursementAccount, reimbursementAccountDraft]);
+    const hasBankAccountData = !!reimbursementAccount?.achData?.bankAccountID;
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, STEP_FIELDS);
+        const routingNumber = values.routingNumber?.trim();
         if (values.accountNumber &&
             !CONST_1.default.BANK_ACCOUNT.REGEX.US_ACCOUNT_NUMBER.test(values.accountNumber.trim()) &&
             !CONST_1.default.BANK_ACCOUNT.REGEX.MASKED_US_ACCOUNT_NUMBER.test(values.accountNumber.trim())) {
@@ -45,9 +42,9 @@ function Manual(_a) {
         }
         return errors;
     }, [translate]);
-    var handleSubmit = (0, useReimbursementAccountStepFormSubmit_1.default)({
+    const handleSubmit = (0, useReimbursementAccountStepFormSubmit_1.default)({
         fieldIds: STEP_FIELDS,
-        onNext: onNext,
+        onNext,
         shouldSaveDraft: true,
     });
     return (<FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM} onSubmit={handleSubmit} validate={validate} submitButtonText={translate('common.next')} style={[styles.mh5, styles.flexGrow1]}>

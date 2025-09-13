@@ -1,33 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
-var SelectionList_1 = require("@components/SelectionList");
-var RadioListItem_1 = require("@components/SelectionList/RadioListItem");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var searchOptions_1 = require("@libs/searchOptions");
-var StringUtils_1 = require("@libs/StringUtils");
-var BankAccounts_1 = require("@userActions/BankAccounts");
-var Text_1 = require("@src/components/Text");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function CountrySelection(_a) {
-    var isEditing = _a.isEditing, onNext = _a.onNext, formValues = _a.formValues, resetScreenIndex = _a.resetScreenIndex, fieldsMap = _a.fieldsMap;
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = (0, useDebouncedState_1.default)(''), searchValue = _b[0], debouncedSearchValue = _b[1], setSearchValue = _b[2];
-    var _c = (0, react_1.useState)(formValues.bankCountry), currentCountry = _c[0], setCurrentCountry = _c[1];
-    var isUserValidated = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: function (account) { return account === null || account === void 0 ? void 0 : account.validated; }, canBeMissing: false })[0];
-    var onCountrySelected = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
+const SelectionList_1 = require("@components/SelectionList");
+const RadioListItem_1 = require("@components/SelectionList/RadioListItem");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const searchOptions_1 = require("@libs/searchOptions");
+const StringUtils_1 = require("@libs/StringUtils");
+const BankAccounts_1 = require("@userActions/BankAccounts");
+const Text_1 = require("@src/components/Text");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function CountrySelection({ isEditing, onNext, formValues, resetScreenIndex, fieldsMap }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [searchValue, debouncedSearchValue, setSearchValue] = (0, useDebouncedState_1.default)('');
+    const [currentCountry, setCurrentCountry] = (0, react_1.useState)(formValues.bankCountry);
+    const [isUserValidated] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: (account) => account?.validated, canBeMissing: false });
+    const onCountrySelected = (0, react_1.useCallback)(() => {
         if (currentCountry === CONST_1.default.COUNTRY.US) {
             if (isUserValidated) {
                 Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_ADD_US_BANK_ACCOUNT);
@@ -42,27 +41,25 @@ function CountrySelection(_a) {
             return;
         }
         (0, BankAccounts_1.fetchCorpayFields)(currentCountry);
-        resetScreenIndex === null || resetScreenIndex === void 0 ? void 0 : resetScreenIndex(CONST_1.default.CORPAY_FIELDS.INDEXES.MAPPING.BANK_ACCOUNT_DETAILS);
+        resetScreenIndex?.(CONST_1.default.CORPAY_FIELDS.INDEXES.MAPPING.BANK_ACCOUNT_DETAILS);
     }, [currentCountry, fieldsMap, formValues.bankCountry, resetScreenIndex, isUserValidated, onNext]);
-    var onSelectionChange = (0, react_1.useCallback)(function (country) {
+    const onSelectionChange = (0, react_1.useCallback)((country) => {
         setCurrentCountry(country.value);
     }, []);
-    var countries = (0, react_1.useMemo)(function () {
-        return Object.keys(CONST_1.default.ALL_COUNTRIES)
-            .filter(function (countryISO) { return !CONST_1.default.CORPAY_FIELDS.EXCLUDED_COUNTRIES.includes(countryISO); })
-            .map(function (countryISO) {
-            var countryName = translate("allCountries.".concat(countryISO));
-            return {
-                value: countryISO,
-                keyForList: countryISO,
-                text: countryName,
-                isSelected: currentCountry === countryISO,
-                searchValue: StringUtils_1.default.sanitizeString("".concat(countryISO).concat(countryName)),
-            };
-        });
-    }, [translate, currentCountry]);
-    var searchResults = (0, searchOptions_1.default)(debouncedSearchValue, countries);
-    var headerMessage = debouncedSearchValue.trim() && !searchResults.length ? translate('common.noResultsFound') : '';
+    const countries = (0, react_1.useMemo)(() => Object.keys(CONST_1.default.ALL_COUNTRIES)
+        .filter((countryISO) => !CONST_1.default.CORPAY_FIELDS.EXCLUDED_COUNTRIES.includes(countryISO))
+        .map((countryISO) => {
+        const countryName = translate(`allCountries.${countryISO}`);
+        return {
+            value: countryISO,
+            keyForList: countryISO,
+            text: countryName,
+            isSelected: currentCountry === countryISO,
+            searchValue: StringUtils_1.default.sanitizeString(`${countryISO}${countryName}`),
+        };
+    }), [translate, currentCountry]);
+    const searchResults = (0, searchOptions_1.default)(debouncedSearchValue, countries);
+    const headerMessage = debouncedSearchValue.trim() && !searchResults.length ? translate('common.noResultsFound') : '';
     return (<FullPageOfflineBlockingView_1.default>
             <react_native_1.View style={styles.ph5}>
                 <Text_1.default style={[styles.textHeadlineLineHeightXXL, styles.mb6]}>{translate('addPersonalBankAccount.countrySelectionStepHeader')}</Text_1.default>

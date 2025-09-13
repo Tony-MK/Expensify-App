@@ -1,11 +1,10 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TEST_NAMES = void 0;
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- if the first value is '' nullish coalescing will return '' so leaving || for safety
-var OUTPUT_DIR = process.env.WORKING_DIRECTORY || './tests/e2e/results';
+const OUTPUT_DIR = process.env.WORKING_DIRECTORY || './tests/e2e/results';
 // add your test name here …
-var TEST_NAMES = {
+const TEST_NAMES = {
     AppStartTime: 'App start time',
     OpenSearchRouter: 'Open search router TTI',
     ReportTyping: 'Report typing',
@@ -40,47 +39,47 @@ exports.default = {
     // The amount of times a test should be executed for average performance metrics
     RUNS: 60,
     DEFAULT_BASELINE_BRANCH: 'main',
-    OUTPUT_DIR: OUTPUT_DIR,
+    OUTPUT_DIR,
     // The file to write intermediate results to
-    OUTPUT_FILE_CURRENT: "".concat(OUTPUT_DIR, "/current.json"),
+    OUTPUT_FILE_CURRENT: `${OUTPUT_DIR}/current.json`,
     // The file we write logs to
-    LOG_FILE: "".concat(OUTPUT_DIR, "/debug.log"),
+    LOG_FILE: `${OUTPUT_DIR}/debug.log`,
     // The time in milliseconds after which an operation fails due to timeout
     INTERACTION_TIMEOUT: 150 * 1000,
     // Period we wait between each test runs, to let the device cool down
     BOOT_COOL_DOWN: 90 * 1000,
     // Period we wait between each test runs, to let the device cool down
     SUITE_COOL_DOWN: 10 * 1000,
-    TEST_NAMES: TEST_NAMES,
+    TEST_NAMES,
     /**
      * Add your test configurations here. At least,
      * you need to add a name for your test.
      *
      * @type {Object.<string, TestConfig>}
      */
-    TESTS_CONFIG: (_a = {},
-        _a[TEST_NAMES.AppStartTime] = {
+    TESTS_CONFIG: {
+        [TEST_NAMES.AppStartTime]: {
             name: TEST_NAMES.AppStartTime,
             // ... any additional config you might need
         },
-        _a[TEST_NAMES.OpenSearchRouter] = {
+        [TEST_NAMES.OpenSearchRouter]: {
             name: TEST_NAMES.OpenSearchRouter,
         },
-        _a[TEST_NAMES.ReportTyping] = {
+        [TEST_NAMES.ReportTyping]: {
             name: TEST_NAMES.ReportTyping,
             reportScreen: {
                 autoFocus: true,
             },
             // Crowded Policy (Do Not Delete) Report, has a input bar available:
             reportID: '8268282951170052',
-            message: "Measure_performance#".concat(Math.floor(Math.random() * 1000000)),
+            message: `Measure_performance#${Math.floor(Math.random() * 1000000)}`,
         },
-        _a[TEST_NAMES.ChatOpening] = {
+        [TEST_NAMES.ChatOpening]: {
             name: TEST_NAMES.ChatOpening,
             // #announce Chat with many messages
             reportID: '5421294415618529',
         },
-        _a[TEST_NAMES.Linking] = {
+        [TEST_NAMES.Linking]: {
             name: TEST_NAMES.Linking,
             reportScreen: {
                 autoFocus: true,
@@ -90,8 +89,8 @@ exports.default = {
             linkedReportID: '5421294415618529',
             linkedReportActionID: '2845024374735019929',
         },
-        _a[TEST_NAMES.MoneyRequest] = {
+        [TEST_NAMES.MoneyRequest]: {
             name: TEST_NAMES.MoneyRequest,
         },
-        _a),
+    },
 };

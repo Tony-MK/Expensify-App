@@ -1,76 +1,69 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var Pressable_1 = require("@components/Pressable");
-var ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useTripTransactions_1 = require("@hooks/useTripTransactions");
-var ControlSelection_1 = require("@libs/ControlSelection");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var DateUtils_1 = require("@libs/DateUtils");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var TripReservationUtils_1 = require("@libs/TripReservationUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-function ReservationView(_a) {
-    var _b, _c;
-    var reservation = _a.reservation, onPress = _a.onPress;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var reservationIcon = (0, TripReservationUtils_1.getTripReservationIcon)(reservation.type);
-    var title = reservation.type === CONST_1.default.RESERVATION_TYPE.CAR ? (_b = reservation.carInfo) === null || _b === void 0 ? void 0 : _b.name : expensify_common_1.Str.recapitalize((_c = reservation.start.longName) !== null && _c !== void 0 ? _c : '');
-    var titleComponent = (<Text_1.default numberOfLines={1} ellipsizeMode="tail">
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const Pressable_1 = require("@components/Pressable");
+const ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useTripTransactions_1 = require("@hooks/useTripTransactions");
+const ControlSelection_1 = require("@libs/ControlSelection");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const DateUtils_1 = require("@libs/DateUtils");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const TripReservationUtils_1 = require("@libs/TripReservationUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+function ReservationView({ reservation, onPress }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const reservationIcon = (0, TripReservationUtils_1.getTripReservationIcon)(reservation.type);
+    const title = reservation.type === CONST_1.default.RESERVATION_TYPE.CAR ? reservation.carInfo?.name : expensify_common_1.Str.recapitalize(reservation.start.longName ?? '');
+    let titleComponent = (<Text_1.default numberOfLines={1} ellipsizeMode="tail">
             {title}
         </Text_1.default>);
     if (reservation.type === CONST_1.default.RESERVATION_TYPE.FLIGHT || reservation.type === CONST_1.default.RESERVATION_TYPE.TRAIN) {
-        var startName = reservation.type === CONST_1.default.RESERVATION_TYPE.FLIGHT ? reservation.start.shortName : reservation.start.longName;
-        var endName = reservation.type === CONST_1.default.RESERVATION_TYPE.FLIGHT ? reservation.end.shortName : reservation.end.longName;
+        const startName = reservation.type === CONST_1.default.RESERVATION_TYPE.FLIGHT ? reservation.start.shortName : reservation.start.longName;
+        const endName = reservation.type === CONST_1.default.RESERVATION_TYPE.FLIGHT ? reservation.end.shortName : reservation.end.longName;
         titleComponent = (<Text_1.default numberOfLines={2} ellipsizeMode="tail">
                 {startName} {translate('common.to').toLowerCase()} {endName}
             </Text_1.default>);
     }
-    return (<MenuItemWithTopDescription_1.default description={translate("travel.".concat(reservation.type))} descriptionTextStyle={[styles.textLabelSupporting, styles.lh16]} titleComponent={titleComponent} titleContainerStyle={styles.gap1} secondaryIcon={reservationIcon} secondaryIconFill={theme.icon} wrapperStyle={[styles.taskDescriptionMenuItem, styles.p0]} shouldGreyOutWhenDisabled={false} numberOfLinesTitle={0} shouldRemoveBackground onPress={onPress} iconHeight={variables_1.default.iconSizeNormal} iconWidth={variables_1.default.iconSizeNormal} iconStyles={[StyleUtils.getTripReservationIconContainer(false), styles.mr3, styles.alignSelfCenter]} isSmallAvatarSubscriptMenu/>);
+    return (<MenuItemWithTopDescription_1.default description={translate(`travel.${reservation.type}`)} descriptionTextStyle={[styles.textLabelSupporting, styles.lh16]} titleComponent={titleComponent} titleContainerStyle={styles.gap1} secondaryIcon={reservationIcon} secondaryIconFill={theme.icon} wrapperStyle={[styles.taskDescriptionMenuItem, styles.p0]} shouldGreyOutWhenDisabled={false} numberOfLinesTitle={0} shouldRemoveBackground onPress={onPress} iconHeight={variables_1.default.iconSizeNormal} iconWidth={variables_1.default.iconSizeNormal} iconStyles={[StyleUtils.getTripReservationIconContainer(false), styles.mr3, styles.alignSelfCenter]} isSmallAvatarSubscriptMenu/>);
 }
-function TripRoomPreview(_a) {
-    var _b, _c, _d, _e;
-    var action = _a.action, chatReport = _a.chatReport, iouReport = _a.iouReport, containerStyles = _a.containerStyles, contextMenuAnchor = _a.contextMenuAnchor, _f = _a.isHovered, isHovered = _f === void 0 ? false : _f, _g = _a.checkIfContextMenuActive, checkIfContextMenuActive = _g === void 0 ? function () { } : _g, _h = _a.shouldDisplayContextMenu, shouldDisplayContextMenu = _h === void 0 ? true : _h;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var chatReportID = chatReport === null || chatReport === void 0 ? void 0 : chatReport.reportID;
-    var tripTransactions = (0, useTripTransactions_1.default)(chatReportID);
-    var reservationsData = (0, TripReservationUtils_1.getReservationsFromTripReport)(chatReport, tripTransactions);
-    var dateInfo = ((_b = chatReport === null || chatReport === void 0 ? void 0 : chatReport.tripData) === null || _b === void 0 ? void 0 : _b.startDate) && ((_c = chatReport === null || chatReport === void 0 ? void 0 : chatReport.tripData) === null || _c === void 0 ? void 0 : _c.endDate)
+function TripRoomPreview({ action, chatReport, iouReport, containerStyles, contextMenuAnchor, isHovered = false, checkIfContextMenuActive = () => { }, shouldDisplayContextMenu = true, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const chatReportID = chatReport?.reportID;
+    const tripTransactions = (0, useTripTransactions_1.default)(chatReportID);
+    const reservationsData = (0, TripReservationUtils_1.getReservationsFromTripReport)(chatReport, tripTransactions);
+    const dateInfo = chatReport?.tripData?.startDate && chatReport?.tripData?.endDate
         ? DateUtils_1.default.getFormattedDateRange(new Date(chatReport.tripData.startDate), new Date(chatReport.tripData.endDate))
         : '';
-    var reportCurrency = (_d = iouReport === null || iouReport === void 0 ? void 0 : iouReport.currency) !== null && _d !== void 0 ? _d : chatReport === null || chatReport === void 0 ? void 0 : chatReport.currency;
-    var _j = chatReport ? (0, TripReservationUtils_1.getTripTotal)(chatReport) : {}, _k = _j.totalDisplaySpend, totalDisplaySpend = _k === void 0 ? 0 : _k, _l = _j.currency, currency = _l === void 0 ? reportCurrency : _l;
-    var displayAmount = (0, react_1.useMemo)(function () {
+    const reportCurrency = iouReport?.currency ?? chatReport?.currency;
+    const { totalDisplaySpend = 0, currency = reportCurrency } = chatReport ? (0, TripReservationUtils_1.getTripTotal)(chatReport) : {};
+    const displayAmount = (0, react_1.useMemo)(() => {
         if (totalDisplaySpend) {
             return (0, CurrencyUtils_1.convertToDisplayString)(totalDisplaySpend, currency);
         }
-        return (0, CurrencyUtils_1.convertToDisplayString)(tripTransactions === null || tripTransactions === void 0 ? void 0 : tripTransactions.reduce(function (acc, transaction) { return acc + Math.abs(transaction.amount); }, 0), currency);
+        return (0, CurrencyUtils_1.convertToDisplayString)(tripTransactions?.reduce((acc, transaction) => acc + Math.abs(transaction.amount), 0), currency);
     }, [currency, totalDisplaySpend, tripTransactions]);
-    var navigateToTrip = function () { return Navigation_1.default.navigate(ROUTES_1.default.REPORT_WITH_ID.getRoute(chatReportID, undefined, undefined, Navigation_1.default.getActiveRoute())); };
-    var renderItem = function (_a) {
-        var item = _a.item;
-        return (<ReservationView reservation={item.reservation} onPress={navigateToTrip}/>);
-    };
-    return (<OfflineWithFeedback_1.default pendingAction={action === null || action === void 0 ? void 0 : action.pendingAction} shouldDisableOpacity={!!((_e = action.pendingAction) !== null && _e !== void 0 ? _e : action.isOptimisticAction)} needsOffscreenAlphaCompositing>
+    const navigateToTrip = () => Navigation_1.default.navigate(ROUTES_1.default.REPORT_WITH_ID.getRoute(chatReportID, undefined, undefined, Navigation_1.default.getActiveRoute()));
+    const renderItem = ({ item }) => (<ReservationView reservation={item.reservation} onPress={navigateToTrip}/>);
+    return (<OfflineWithFeedback_1.default pendingAction={action?.pendingAction} shouldDisableOpacity={!!(action.pendingAction ?? action.isOptimisticAction)} needsOffscreenAlphaCompositing>
             <react_native_1.View style={[styles.chatItemMessage, containerStyles]}>
-                <Pressable_1.PressableWithoutFeedback onPress={navigateToTrip} onPressIn={function () { return (0, DeviceCapabilities_1.canUseTouchScreen)() && ControlSelection_1.default.block(); }} onPressOut={function () { return ControlSelection_1.default.unblock(); }} onLongPress={function (event) {
+                <Pressable_1.PressableWithoutFeedback onPress={navigateToTrip} onPressIn={() => (0, DeviceCapabilities_1.canUseTouchScreen)() && ControlSelection_1.default.block()} onPressOut={() => ControlSelection_1.default.unblock()} onLongPress={(event) => {
             if (!shouldDisplayContextMenu) {
                 return;
             }
@@ -78,7 +71,7 @@ function TripRoomPreview(_a) {
         }} shouldUseHapticsOnLongPress style={[styles.flexRow, styles.justifyContentBetween, styles.reportPreviewBox]} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('iou.viewDetails')}>
                     <react_native_1.View style={[styles.moneyRequestPreviewBox, styles.p4, styles.gap4, isHovered ? styles.reportPreviewBoxHoverBorder : undefined]}>
                         <react_native_1.View>
-                            <Text_1.default style={[styles.headerText, styles.mb1]}>{chatReport === null || chatReport === void 0 ? void 0 : chatReport.reportName}</Text_1.default>
+                            <Text_1.default style={[styles.headerText, styles.mb1]}>{chatReport?.reportName}</Text_1.default>
                             <Text_1.default style={[styles.textLabelSupporting, styles.lh16]}>
                                 {dateInfo} • {reservationsData.length} {(reservationsData.length < 2 ? translate('travel.trip') : translate('travel.trips')).toLowerCase()}
                             </Text_1.default>

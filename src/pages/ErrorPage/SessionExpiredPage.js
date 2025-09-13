@@ -1,21 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Session_1 = require("@userActions/Session");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Session_1 = require("@userActions/Session");
 function SessionExpiredPage() {
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
     return (<react_native_1.View style={styles.deeplinkWrapperContainer}>
             <react_native_1.View style={styles.deeplinkWrapperMessage}>
                 <react_native_1.View style={styles.mb2}>
@@ -25,7 +25,7 @@ function SessionExpiredPage() {
                 <react_native_1.View style={styles.mt2}>
                     <Text_1.default style={styles.textAlignCenter}>
                         {translate('deeplinkWrapper.expired')}{' '}
-                        <TextLink_1.default onPress={function () {
+                        <TextLink_1.default onPress={() => {
             (0, Session_1.clearSignInData)();
             Navigation_1.default.goBack();
         }}>

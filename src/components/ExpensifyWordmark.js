@@ -1,33 +1,31 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var expensify_logo__adhoc_svg_1 = require("@assets/images/expensify-logo--adhoc.svg");
-var expensify_logo__dev_svg_1 = require("@assets/images/expensify-logo--dev.svg");
-var expensify_logo__prod_svg_1 = require("@assets/images/expensify-logo--prod.svg");
-var expensify_logo__staging_svg_1 = require("@assets/images/expensify-logo--staging.svg");
-var useEnvironment_1 = require("@hooks/useEnvironment");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ImageSVG_1 = require("./ImageSVG");
-var logoComponents = (_a = {},
-    _a[CONST_1.default.ENVIRONMENT.DEV] = expensify_logo__dev_svg_1.default,
-    _a[CONST_1.default.ENVIRONMENT.STAGING] = expensify_logo__staging_svg_1.default,
-    _a[CONST_1.default.ENVIRONMENT.PRODUCTION] = expensify_logo__prod_svg_1.default,
-    _a[CONST_1.default.ENVIRONMENT.ADHOC] = expensify_logo__adhoc_svg_1.default,
-    _a);
-function ExpensifyWordmark(_a) {
-    var style = _a.style;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var environment = (0, useEnvironment_1.default)().environment;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const expensify_logo__adhoc_svg_1 = require("@assets/images/expensify-logo--adhoc.svg");
+const expensify_logo__dev_svg_1 = require("@assets/images/expensify-logo--dev.svg");
+const expensify_logo__prod_svg_1 = require("@assets/images/expensify-logo--prod.svg");
+const expensify_logo__staging_svg_1 = require("@assets/images/expensify-logo--staging.svg");
+const useEnvironment_1 = require("@hooks/useEnvironment");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ImageSVG_1 = require("./ImageSVG");
+const logoComponents = {
+    [CONST_1.default.ENVIRONMENT.DEV]: expensify_logo__dev_svg_1.default,
+    [CONST_1.default.ENVIRONMENT.STAGING]: expensify_logo__staging_svg_1.default,
+    [CONST_1.default.ENVIRONMENT.PRODUCTION]: expensify_logo__prod_svg_1.default,
+    [CONST_1.default.ENVIRONMENT.ADHOC]: expensify_logo__adhoc_svg_1.default,
+};
+function ExpensifyWordmark({ style }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { environment } = (0, useEnvironment_1.default)();
     // PascalCase is required for React components, so capitalize the const here
-    var LogoComponent = logoComponents[environment];
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
+    const LogoComponent = logoComponents[environment];
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
     return (<react_native_1.View style={[
             StyleUtils.getSignInWordmarkWidthStyle(shouldUseNarrowLayout, environment),
             StyleUtils.getHeight(shouldUseNarrowLayout ? variables_1.default.signInLogoHeightSmallScreen : variables_1.default.signInLogoHeight),

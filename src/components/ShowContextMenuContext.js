@@ -2,19 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShowContextMenuContext = void 0;
 exports.showContextMenuForReport = showContextMenuForReport;
-var react_1 = require("react");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var ReportActionContextMenu_1 = require("@pages/home/report/ContextMenu/ReportActionContextMenu");
-var CONST_1 = require("@src/CONST");
-var ShowContextMenuContext = (0, react_1.createContext)({
+const react_1 = require("react");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const ReportActionContextMenu_1 = require("@pages/home/report/ContextMenu/ReportActionContextMenu");
+const CONST_1 = require("@src/CONST");
+const ShowContextMenuContext = (0, react_1.createContext)({
     anchor: null,
-    onShowContextMenu: function (callback) { return callback(); },
+    onShowContextMenu: (callback) => callback(),
     report: undefined,
     isReportArchived: false,
     action: undefined,
     transactionThreadReport: undefined,
-    checkIfContextMenuActive: function () { },
+    checkIfContextMenuActive: () => { },
     isDisabled: true,
     shouldDisplayContextMenu: true,
 });
@@ -30,23 +30,22 @@ ShowContextMenuContext.displayName = 'ShowContextMenuContext';
  * @param checkIfContextMenuActive Callback to update context menu active state
  * @param isArchivedRoom - Is the report an archived room
  */
-function showContextMenuForReport(event, anchor, reportID, action, checkIfContextMenuActive, isArchivedRoom) {
-    if (isArchivedRoom === void 0) { isArchivedRoom = false; }
+function showContextMenuForReport(event, anchor, reportID, action, checkIfContextMenuActive, isArchivedRoom = false) {
     if (!(0, DeviceCapabilities_1.canUseTouchScreen)()) {
         return;
     }
     (0, ReportActionContextMenu_1.showContextMenu)({
         type: CONST_1.default.CONTEXT_MENU_TYPES.REPORT_ACTION,
-        event: event,
+        event,
         selection: '',
         contextMenuAnchor: anchor,
         report: {
-            reportID: reportID,
+            reportID,
             originalReportID: reportID ? (0, ReportUtils_1.getOriginalReportID)(reportID, action) : undefined,
-            isArchivedRoom: isArchivedRoom,
+            isArchivedRoom,
         },
         reportAction: {
-            reportActionID: action === null || action === void 0 ? void 0 : action.reportActionID,
+            reportActionID: action?.reportActionID,
         },
         callbacks: {
             onShow: checkIfContextMenuActive,

@@ -1,70 +1,65 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useEnvironment_1 = require("@hooks/useEnvironment");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var SidebarUtils_1 = require("@libs/SidebarUtils");
-var TextWithEmojiFragment_1 = require("@pages/home/report/comment/TextWithEmojiFragment");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var mapOnyxCollectionItems_1 = require("@src/utils/mapOnyxCollectionItems");
-var RenderHTML_1 = require("./RenderHTML");
-var Text_1 = require("./Text");
-var UserDetailsTooltip_1 = require("./UserDetailsTooltip");
-var personalDetailsSelector = function (personalDetail) {
-    return personalDetail && {
-        accountID: personalDetail.accountID,
-        login: personalDetail.login,
-        avatar: personalDetail.avatar,
-        pronouns: personalDetail.pronouns,
-    };
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useEnvironment_1 = require("@hooks/useEnvironment");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const SidebarUtils_1 = require("@libs/SidebarUtils");
+const TextWithEmojiFragment_1 = require("@pages/home/report/comment/TextWithEmojiFragment");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const mapOnyxCollectionItems_1 = require("@src/utils/mapOnyxCollectionItems");
+const RenderHTML_1 = require("./RenderHTML");
+const Text_1 = require("./Text");
+const UserDetailsTooltip_1 = require("./UserDetailsTooltip");
+const personalDetailsSelector = (personalDetail) => personalDetail && {
+    accountID: personalDetail.accountID,
+    login: personalDetail.login,
+    avatar: personalDetail.avatar,
+    pronouns: personalDetail.pronouns,
 };
-function ReportWelcomeText(_a) {
-    var report = _a.report, policy = _a.policy;
-    var _b = (0, useLocalize_1.default)(), translate = _b.translate, localeCompare = _b.localeCompare;
-    var styles = (0, useThemeStyles_1.default)();
-    var environmentURL = (0, useEnvironment_1.default)().environmentURL;
-    var personalDetails = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { selector: function (c) { return (0, mapOnyxCollectionItems_1.default)(c, personalDetailsSelector); }, canBeMissing: false })[0];
-    var isPolicyExpenseChat = (0, ReportUtils_1.isPolicyExpenseChat)(report);
+function ReportWelcomeText({ report, policy }) {
+    const { translate, localeCompare } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { environmentURL } = (0, useEnvironment_1.default)();
+    const [personalDetails] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { selector: (c) => (0, mapOnyxCollectionItems_1.default)(c, personalDetailsSelector), canBeMissing: false });
+    const isPolicyExpenseChat = (0, ReportUtils_1.isPolicyExpenseChat)(report);
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var reportMetadata = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_METADATA).concat((report === null || report === void 0 ? void 0 : report.reportID) || undefined), { canBeMissing: true })[0];
-    var isReportArchived = (0, useReportIsArchived_1.default)(report === null || report === void 0 ? void 0 : report.reportID);
-    var isChatRoom = (0, ReportUtils_1.isChatRoom)(report);
-    var isSelfDM = (0, ReportUtils_1.isSelfDM)(report);
-    var isInvoiceRoom = (0, ReportUtils_1.isInvoiceRoom)(report);
-    var isSystemChat = (0, ReportUtils_1.isSystemChat)(report);
-    var isDefault = !(isChatRoom || isPolicyExpenseChat || isSelfDM || isSystemChat);
-    var participantAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, undefined, true, true, reportMetadata);
-    var isMultipleParticipant = participantAccountIDs.length > 1;
-    var displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDs, personalDetails), isMultipleParticipant, localeCompare);
-    var moneyRequestOptions = (0, ReportUtils_1.temporary_getMoneyRequestOptions)(report, policy, participantAccountIDs, isReportArchived);
-    var policyName = (0, ReportUtils_1.getPolicyName)({ report: report });
-    var filteredOptions = moneyRequestOptions.filter(function (item) { return item !== CONST_1.default.IOU.TYPE.INVOICE; });
-    var additionalText = filteredOptions
-        .map(function (item, index) {
-        return "".concat(index === filteredOptions.length - 1 && index > 0 ? "".concat(translate('common.or'), " ") : '').concat(translate(item === 'submit' ? "reportActionsView.create" : "reportActionsView.iouTypes.".concat(item)));
-    })
+    const [reportMetadata] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_METADATA}${report?.reportID || undefined}`, { canBeMissing: true });
+    const isReportArchived = (0, useReportIsArchived_1.default)(report?.reportID);
+    const isChatRoom = (0, ReportUtils_1.isChatRoom)(report);
+    const isSelfDM = (0, ReportUtils_1.isSelfDM)(report);
+    const isInvoiceRoom = (0, ReportUtils_1.isInvoiceRoom)(report);
+    const isSystemChat = (0, ReportUtils_1.isSystemChat)(report);
+    const isDefault = !(isChatRoom || isPolicyExpenseChat || isSelfDM || isSystemChat);
+    const participantAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, undefined, true, true, reportMetadata);
+    const isMultipleParticipant = participantAccountIDs.length > 1;
+    const displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDs, personalDetails), isMultipleParticipant, localeCompare);
+    const moneyRequestOptions = (0, ReportUtils_1.temporary_getMoneyRequestOptions)(report, policy, participantAccountIDs, isReportArchived);
+    const policyName = (0, ReportUtils_1.getPolicyName)({ report });
+    const filteredOptions = moneyRequestOptions.filter((item) => item !== CONST_1.default.IOU.TYPE.INVOICE);
+    const additionalText = filteredOptions
+        .map((item, index) => `${index === filteredOptions.length - 1 && index > 0 ? `${translate('common.or')} ` : ''}${translate(item === 'submit' ? `reportActionsView.create` : `reportActionsView.iouTypes.${item}`)}`)
         .join(', ');
-    var reportName = (0, ReportUtils_1.getReportName)(report);
-    var shouldShowUsePlusButtonText = moneyRequestOptions.includes(CONST_1.default.IOU.TYPE.PAY) ||
+    const reportName = (0, ReportUtils_1.getReportName)(report);
+    const shouldShowUsePlusButtonText = moneyRequestOptions.includes(CONST_1.default.IOU.TYPE.PAY) ||
         moneyRequestOptions.includes(CONST_1.default.IOU.TYPE.SUBMIT) ||
         moneyRequestOptions.includes(CONST_1.default.IOU.TYPE.TRACK) ||
         moneyRequestOptions.includes(CONST_1.default.IOU.TYPE.SPLIT);
-    var reportDetailsLink = (0, react_1.useMemo)(function () {
-        if (!(report === null || report === void 0 ? void 0 : report.reportID)) {
+    const reportDetailsLink = (0, react_1.useMemo)(() => {
+        if (!report?.reportID) {
             return '';
         }
-        return "".concat(environmentURL, "/").concat(ROUTES_1.default.REPORT_WITH_ID_DETAILS.getRoute(report.reportID, Navigation_1.default.getReportRHPActiveRoute()));
-    }, [environmentURL, report === null || report === void 0 ? void 0 : report.reportID]);
-    var welcomeHeroText = (0, react_1.useMemo)(function () {
+        return `${environmentURL}/${ROUTES_1.default.REPORT_WITH_ID_DETAILS.getRoute(report.reportID, Navigation_1.default.getReportRHPActiveRoute())}`;
+    }, [environmentURL, report?.reportID]);
+    const welcomeHeroText = (0, react_1.useMemo)(() => {
         if (isInvoiceRoom) {
             return translate('reportActionsView.sayHello');
         }
@@ -82,9 +77,9 @@ function ReportWelcomeText(_a) {
         }
         return translate('reportActionsView.sayHello');
     }, [isChatRoom, isInvoiceRoom, isPolicyExpenseChat, isSelfDM, isSystemChat, translate, policyName, reportName]);
-    var participantAccountIDsExcludeCurrentUser = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, undefined, undefined, true);
-    var participantPersonalDetailListExcludeCurrentUser = Object.values((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDsExcludeCurrentUser, personalDetails));
-    var welcomeMessage = SidebarUtils_1.default.getWelcomeMessage(report, policy, participantPersonalDetailListExcludeCurrentUser, localeCompare, isReportArchived, reportDetailsLink);
+    const participantAccountIDsExcludeCurrentUser = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, undefined, undefined, true);
+    const participantPersonalDetailListExcludeCurrentUser = Object.values((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDsExcludeCurrentUser, personalDetails));
+    const welcomeMessage = SidebarUtils_1.default.getWelcomeMessage(report, policy, participantPersonalDetailListExcludeCurrentUser, localeCompare, isReportArchived, reportDetailsLink);
     return (<>
             <react_native_1.View>
                 <Text_1.default style={[styles.textHero]}>{welcomeHeroText}</Text_1.default>
@@ -95,29 +90,26 @@ function ReportWelcomeText(_a) {
                     </react_native_1.View>)}
                 {isSelfDM && (<Text_1.default>
                         <Text_1.default>{welcomeMessage.messageText}</Text_1.default>
-                        {shouldShowUsePlusButtonText && <TextWithEmojiFragment_1.default message={translate('reportActionsView.usePlusButton', { additionalText: additionalText })}/>}
+                        {shouldShowUsePlusButtonText && <TextWithEmojiFragment_1.default message={translate('reportActionsView.usePlusButton', { additionalText })}/>}
                     </Text_1.default>)}
                 {isSystemChat && (<Text_1.default>
                         <Text_1.default>{welcomeMessage.messageText}</Text_1.default>
                     </Text_1.default>)}
                 {isDefault && displayNamesWithTooltips.length > 0 && (<Text_1.default>
                         <Text_1.default>{welcomeMessage.phrase1}</Text_1.default>
-                        {displayNamesWithTooltips.map(function (_a, index) {
-                var displayName = _a.displayName, accountID = _a.accountID;
-                return (
-                // eslint-disable-next-line react/no-array-index-key
-                <Text_1.default key={"".concat(displayName).concat(index)}>
+                        {displayNamesWithTooltips.map(({ displayName, accountID }, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Text_1.default key={`${displayName}${index}`}>
                                 <UserDetailsTooltip_1.default accountID={accountID}>
-                                    {(0, ReportUtils_1.isOptimisticPersonalDetail)(accountID) ? (<Text_1.default style={[styles.textStrong]}>{displayName}</Text_1.default>) : (<Text_1.default style={[styles.textStrong]} onPress={function () { return Navigation_1.default.navigate(ROUTES_1.default.PROFILE.getRoute(accountID, Navigation_1.default.getActiveRoute())); }} suppressHighlighting>
+                                    {(0, ReportUtils_1.isOptimisticPersonalDetail)(accountID) ? (<Text_1.default style={[styles.textStrong]}>{displayName}</Text_1.default>) : (<Text_1.default style={[styles.textStrong]} onPress={() => Navigation_1.default.navigate(ROUTES_1.default.PROFILE.getRoute(accountID, Navigation_1.default.getActiveRoute()))} suppressHighlighting>
                                             {displayName}
                                         </Text_1.default>)}
                                 </UserDetailsTooltip_1.default>
                                 {index === displayNamesWithTooltips.length - 1 && <Text_1.default>.</Text_1.default>}
-                                {index === displayNamesWithTooltips.length - 2 && <Text_1.default>{" ".concat(translate('common.and'), " ")}</Text_1.default>}
+                                {index === displayNamesWithTooltips.length - 2 && <Text_1.default>{` ${translate('common.and')} `}</Text_1.default>}
                                 {index < displayNamesWithTooltips.length - 2 && <Text_1.default>, </Text_1.default>}
-                            </Text_1.default>);
-            })}
-                        {shouldShowUsePlusButtonText && <TextWithEmojiFragment_1.default message={translate('reportActionsView.usePlusButton', { additionalText: additionalText })}/>}
+                            </Text_1.default>))}
+                        {shouldShowUsePlusButtonText && <TextWithEmojiFragment_1.default message={translate('reportActionsView.usePlusButton', { additionalText })}/>}
                         {(0, ReportUtils_1.isConciergeChatReport)(report) && <Text_1.default>{translate('reportActionsView.askConcierge')}</Text_1.default>}
                     </Text_1.default>)}
             </react_native_1.View>

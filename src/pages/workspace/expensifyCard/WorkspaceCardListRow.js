@@ -1,27 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Avatar_1 = require("@components/Avatar");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
-var CONST_1 = require("@src/CONST");
-function WorkspaceCardListRow(_a) {
-    var _b;
-    var limit = _a.limit, cardholder = _a.cardholder, lastFourPAN = _a.lastFourPAN, name = _a.name, currency = _a.currency, isVirtual = _a.isVirtual;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var cardholderName = (0, react_1.useMemo)(function () { return (0, PersonalDetailsUtils_1.getDisplayNameOrDefault)(cardholder); }, [cardholder]);
-    var cardType = isVirtual ? translate('workspace.expensifyCard.virtual') : translate('workspace.expensifyCard.physical');
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Avatar_1 = require("@components/Avatar");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
+const CONST_1 = require("@src/CONST");
+function WorkspaceCardListRow({ limit, cardholder, lastFourPAN, name, currency, isVirtual }) {
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const cardholderName = (0, react_1.useMemo)(() => (0, PersonalDetailsUtils_1.getDisplayNameOrDefault)(cardholder), [cardholder]);
+    const cardType = isVirtual ? translate('workspace.expensifyCard.virtual') : translate('workspace.expensifyCard.physical');
     return (<react_native_1.View style={[styles.flexRow, styles.gap3, styles.br3, styles.p4]}>
             <react_native_1.View style={[styles.flexRow, styles.flex4, styles.gap3, styles.alignItemsCenter]}>
-                <Avatar_1.default source={(_b = cardholder === null || cardholder === void 0 ? void 0 : cardholder.avatar) !== null && _b !== void 0 ? _b : Expensicons_1.FallbackAvatar} avatarID={cardholder === null || cardholder === void 0 ? void 0 : cardholder.accountID} type={CONST_1.default.ICON_TYPE_AVATAR} size={CONST_1.default.AVATAR_SIZE.DEFAULT}/>
+                <Avatar_1.default source={cardholder?.avatar ?? Expensicons_1.FallbackAvatar} avatarID={cardholder?.accountID} type={CONST_1.default.ICON_TYPE_AVATAR} size={CONST_1.default.AVATAR_SIZE.DEFAULT}/>
                 <react_native_1.View style={[styles.flex1, styles.h100]}>
                     <Text_1.default numberOfLines={1} style={[styles.optionDisplayName, styles.textStrong, styles.pre]}>
                         {cardholderName}

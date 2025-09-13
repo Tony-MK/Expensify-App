@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var wordBreak = {
+const wordBreak = {
     breakWord: {
         wordBreak: 'break-word',
     },

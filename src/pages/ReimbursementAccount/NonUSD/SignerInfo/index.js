@@ -1,75 +1,66 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var InteractiveStepWrapper_1 = require("@components/InteractiveStepWrapper");
-var YesNoStep_1 = require("@components/SubStepForms/YesNoStep");
-var useEnvironment_1 = require("@hooks/useEnvironment");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var useSubStep_1 = require("@hooks/useSubStep");
-var Navigation_1 = require("@navigation/Navigation");
-var getSignerDetailsAndSignerFilesForSignerInfo_1 = require("@pages/ReimbursementAccount/NonUSD/utils/getSignerDetailsAndSignerFilesForSignerInfo");
-var BankAccounts_1 = require("@userActions/BankAccounts");
-var FormActions_1 = require("@userActions/FormActions");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
-var EnterEmail_1 = require("./EnterEmail");
-var HangTight_1 = require("./HangTight");
-var Address_1 = require("./subSteps/Address");
-var Confirmation_1 = require("./subSteps/Confirmation");
-var DateOfBirth_1 = require("./subSteps/DateOfBirth");
-var JobTitle_1 = require("./subSteps/JobTitle");
-var Name_1 = require("./subSteps/Name");
-var UploadDocuments_1 = require("./subSteps/UploadDocuments");
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const InteractiveStepWrapper_1 = require("@components/InteractiveStepWrapper");
+const YesNoStep_1 = require("@components/SubStepForms/YesNoStep");
+const useEnvironment_1 = require("@hooks/useEnvironment");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const useSubStep_1 = require("@hooks/useSubStep");
+const Navigation_1 = require("@navigation/Navigation");
+const getSignerDetailsAndSignerFilesForSignerInfo_1 = require("@pages/ReimbursementAccount/NonUSD/utils/getSignerDetailsAndSignerFilesForSignerInfo");
+const BankAccounts_1 = require("@userActions/BankAccounts");
+const FormActions_1 = require("@userActions/FormActions");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
+const EnterEmail_1 = require("./EnterEmail");
+const HangTight_1 = require("./HangTight");
+const Address_1 = require("./subSteps/Address");
+const Confirmation_1 = require("./subSteps/Confirmation");
+const DateOfBirth_1 = require("./subSteps/DateOfBirth");
+const JobTitle_1 = require("./subSteps/JobTitle");
+const Name_1 = require("./subSteps/Name");
+const UploadDocuments_1 = require("./subSteps/UploadDocuments");
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-var SUBSTEP = CONST_1.default.NON_USD_BANK_ACCOUNT.SIGNER_INFO_STEP.SUBSTEP;
-var _a = ReimbursementAccountForm_1.default.ADDITIONAL_DATA.CORPAY, OWNS_MORE_THAN_25_PERCENT = _a.OWNS_MORE_THAN_25_PERCENT, COMPANY_NAME = _a.COMPANY_NAME;
-var fullBodyContent = [Name_1.default, JobTitle_1.default, DateOfBirth_1.default, Address_1.default, UploadDocuments_1.default, Confirmation_1.default];
-var userIsOwnerBodyContent = [JobTitle_1.default, UploadDocuments_1.default, Confirmation_1.default];
-function SignerInfo(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
-    var onBackButtonPress = _a.onBackButtonPress, onSubmit = _a.onSubmit, stepNames = _a.stepNames;
-    var translate = (0, useLocalize_1.default)().translate;
-    var isProduction = (0, useEnvironment_1.default)().isProduction;
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false })[0];
-    var reimbursementAccountDraft = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT, { canBeMissing: true })[0];
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: false })[0];
-    var policyID = (_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.policyID;
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { canBeMissing: false })[0];
-    var currency = (_c = policy === null || policy === void 0 ? void 0 : policy.outputCurrency) !== null && _c !== void 0 ? _c : '';
-    var isUserOwner = (_g = (_f = (_e = (_d = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _d === void 0 ? void 0 : _d.corpay) === null || _e === void 0 ? void 0 : _e[OWNS_MORE_THAN_25_PERCENT]) !== null && _f !== void 0 ? _f : reimbursementAccountDraft === null || reimbursementAccountDraft === void 0 ? void 0 : reimbursementAccountDraft[OWNS_MORE_THAN_25_PERCENT]) !== null && _g !== void 0 ? _g : false;
-    var companyName = (_l = (_k = (_j = (_h = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _h === void 0 ? void 0 : _h.corpay) === null || _j === void 0 ? void 0 : _j[COMPANY_NAME]) !== null && _k !== void 0 ? _k : reimbursementAccountDraft === null || reimbursementAccountDraft === void 0 ? void 0 : reimbursementAccountDraft[COMPANY_NAME]) !== null && _l !== void 0 ? _l : '';
-    var bankAccountID = (_o = (_m = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _m === void 0 ? void 0 : _m.bankAccountID) !== null && _o !== void 0 ? _o : CONST_1.default.DEFAULT_NUMBER_ID;
-    var _q = (0, react_1.useState)(SUBSTEP.IS_DIRECTOR), currentSubStep = _q[0], setCurrentSubStep = _q[1];
-    var _r = (0, react_1.useState)(false), isUserDirector = _r[0], setIsUserDirector = _r[1];
-    var primaryLogin = (_p = account === null || account === void 0 ? void 0 : account.primaryLogin) !== null && _p !== void 0 ? _p : '';
+const SUBSTEP = CONST_1.default.NON_USD_BANK_ACCOUNT.SIGNER_INFO_STEP.SUBSTEP;
+const { OWNS_MORE_THAN_25_PERCENT, COMPANY_NAME } = ReimbursementAccountForm_1.default.ADDITIONAL_DATA.CORPAY;
+const fullBodyContent = [Name_1.default, JobTitle_1.default, DateOfBirth_1.default, Address_1.default, UploadDocuments_1.default, Confirmation_1.default];
+const userIsOwnerBodyContent = [JobTitle_1.default, UploadDocuments_1.default, Confirmation_1.default];
+function SignerInfo({ onBackButtonPress, onSubmit, stepNames }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const { isProduction } = (0, useEnvironment_1.default)();
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false });
+    const [reimbursementAccountDraft] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT, { canBeMissing: true });
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: false });
+    const policyID = reimbursementAccount?.achData?.policyID;
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { canBeMissing: false });
+    const currency = policy?.outputCurrency ?? '';
+    const isUserOwner = reimbursementAccount?.achData?.corpay?.[OWNS_MORE_THAN_25_PERCENT] ?? reimbursementAccountDraft?.[OWNS_MORE_THAN_25_PERCENT] ?? false;
+    const companyName = reimbursementAccount?.achData?.corpay?.[COMPANY_NAME] ?? reimbursementAccountDraft?.[COMPANY_NAME] ?? '';
+    const bankAccountID = reimbursementAccount?.achData?.bankAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const [currentSubStep, setCurrentSubStep] = (0, react_1.useState)(SUBSTEP.IS_DIRECTOR);
+    const [isUserDirector, setIsUserDirector] = (0, react_1.useState)(false);
+    const primaryLogin = account?.primaryLogin ?? '';
     // Corpay does not accept emails with a "+" character and will not let us connect account at the end of whole flow
-    var signerEmail = !isProduction && isBetaEnabled(CONST_1.default.BETAS.GLOBAL_REIMBURSEMENTS_ON_ND) ? expensify_common_1.Str.replaceAll(primaryLogin, '+', '') : primaryLogin;
-    var submit = (0, react_1.useCallback)(function () {
-        var _a = (0, getSignerDetailsAndSignerFilesForSignerInfo_1.default)(reimbursementAccountDraft, signerEmail, isUserOwner), signerDetails = _a.signerDetails, signerFiles = _a.signerFiles;
-        (0, BankAccounts_1.saveCorpayOnboardingDirectorInformation)(__assign(__assign({ inputs: JSON.stringify(signerDetails) }, signerFiles), { bankAccountID: bankAccountID }));
+    const signerEmail = !isProduction && isBetaEnabled(CONST_1.default.BETAS.GLOBAL_REIMBURSEMENTS_ON_ND) ? expensify_common_1.Str.replaceAll(primaryLogin, '+', '') : primaryLogin;
+    const submit = (0, react_1.useCallback)(() => {
+        const { signerDetails, signerFiles } = (0, getSignerDetailsAndSignerFilesForSignerInfo_1.default)(reimbursementAccountDraft, signerEmail, isUserOwner);
+        (0, BankAccounts_1.saveCorpayOnboardingDirectorInformation)({
+            inputs: JSON.stringify(signerDetails),
+            ...signerFiles,
+            bankAccountID,
+        });
     }, [bankAccountID, isUserOwner, reimbursementAccountDraft, signerEmail]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        if ((reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.errors) || (reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSavingCorpayOnboardingDirectorInformation) || !(reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSuccess)) {
+        if (reimbursementAccount?.errors || reimbursementAccount?.isSavingCorpayOnboardingDirectorInformation || !reimbursementAccount?.isSuccess) {
             return;
         }
-        if ((reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSuccess) && currentSubStep !== SUBSTEP.HANG_TIGHT) {
+        if (reimbursementAccount?.isSuccess && currentSubStep !== SUBSTEP.HANG_TIGHT) {
             if (currency === CONST_1.default.CURRENCY.AUD) {
                 setCurrentSubStep(SUBSTEP.ENTER_EMAIL);
                 (0, BankAccounts_1.clearReimbursementAccountSaveCorpayOnboardingDirectorInformation)();
@@ -78,27 +69,27 @@ function SignerInfo(_a) {
             onSubmit();
             (0, BankAccounts_1.clearReimbursementAccountSaveCorpayOnboardingDirectorInformation)();
         }
-        return function () {
+        return () => {
             (0, BankAccounts_1.clearReimbursementAccountSaveCorpayOnboardingDirectorInformation)();
         };
     }, [reimbursementAccount, onSubmit, currency, currentSubStep]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        if ((reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.errors) || (reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isAskingForCorpaySignerInformation) || !(reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isAskingForCorpaySignerInformationSuccess)) {
+        if (reimbursementAccount?.errors || reimbursementAccount?.isAskingForCorpaySignerInformation || !reimbursementAccount?.isAskingForCorpaySignerInformationSuccess) {
             return;
         }
-        if (reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isAskingForCorpaySignerInformationSuccess) {
+        if (reimbursementAccount?.isAskingForCorpaySignerInformationSuccess) {
             setCurrentSubStep(SUBSTEP.HANG_TIGHT);
         }
     }, [reimbursementAccount]);
-    var bodyContent = (0, react_1.useMemo)(function () {
+    const bodyContent = (0, react_1.useMemo)(() => {
         if (isUserOwner) {
             return userIsOwnerBodyContent;
         }
         return fullBodyContent;
     }, [isUserOwner]);
-    var _s = (0, useSubStep_1.default)({ bodyContent: bodyContent, startFrom: 0, onFinished: submit }), SignerDetailsForm = _s.componentToRender, isEditing = _s.isEditing, screenIndex = _s.screenIndex, nextScreen = _s.nextScreen, prevScreen = _s.prevScreen, moveTo = _s.moveTo, goToTheLastStep = _s.goToTheLastStep;
-    var handleNextSubStep = (0, react_1.useCallback)(function (value) {
+    const { componentToRender: SignerDetailsForm, isEditing, screenIndex, nextScreen, prevScreen, moveTo, goToTheLastStep, } = (0, useSubStep_1.default)({ bodyContent, startFrom: 0, onFinished: submit });
+    const handleNextSubStep = (0, react_1.useCallback)((value) => {
         if (currentSubStep === SUBSTEP.IS_DIRECTOR) {
             // user is director so we gather their data
             if (value) {
@@ -113,7 +104,7 @@ function SignerInfo(_a) {
         setIsUserDirector(value);
         setCurrentSubStep(SUBSTEP.ENTER_EMAIL);
     }, [currentSubStep]);
-    var handleBackButtonPress = (0, react_1.useCallback)(function () {
+    const handleBackButtonPress = (0, react_1.useCallback)(() => {
         (0, FormActions_1.clearErrors)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM);
         if (isEditing) {
             goToTheLastStep();
@@ -138,23 +129,23 @@ function SignerInfo(_a) {
             setCurrentSubStep(SUBSTEP.SIGNER_DETAILS_FORM);
         }
         else {
-            setCurrentSubStep(function (subStep) { return subStep - 1; });
+            setCurrentSubStep((subStep) => subStep - 1);
         }
     }, [currentSubStep, goToTheLastStep, isEditing, isUserDirector, onBackButtonPress, prevScreen, screenIndex]);
-    var handleEmailSubmit = (0, react_1.useCallback)(function (values) {
+    const handleEmailSubmit = (0, react_1.useCallback)((values) => {
         (0, BankAccounts_1.askForCorpaySignerInformation)({
             signerEmail: values.signerEmail,
             secondSignerEmail: values.secondSignerEmail,
             policyID: String(policyID),
-            bankAccountID: bankAccountID,
+            bankAccountID,
         });
     }, [bankAccountID, policyID]);
     return (<InteractiveStepWrapper_1.default wrapperID={SignerInfo.displayName} handleBackButtonPress={handleBackButtonPress} headerTitle={translate('signerInfoStep.signerInfo')} stepNames={stepNames} startStepIndex={4}>
-            {currentSubStep === SUBSTEP.IS_DIRECTOR && (<YesNoStep_1.default title={translate('signerInfoStep.areYouDirector', { companyName: companyName })} description={translate('signerInfoStep.regulationRequiresUs')} defaultValue={isUserDirector} onSelectedValue={handleNextSubStep}/>)}
+            {currentSubStep === SUBSTEP.IS_DIRECTOR && (<YesNoStep_1.default title={translate('signerInfoStep.areYouDirector', { companyName })} description={translate('signerInfoStep.regulationRequiresUs')} defaultValue={isUserDirector} onSelectedValue={handleNextSubStep}/>)}
 
             {currentSubStep === SUBSTEP.SIGNER_DETAILS_FORM && (<SignerDetailsForm isEditing={isEditing} onNext={nextScreen} onMove={moveTo}/>)}
 
-            {currentSubStep === SUBSTEP.ENTER_EMAIL && (<EnterEmail_1.default onSubmit={handleEmailSubmit} isUserDirector={isUserDirector} isLoading={reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isAskingForCorpaySignerInformation}/>)}
+            {currentSubStep === SUBSTEP.ENTER_EMAIL && (<EnterEmail_1.default onSubmit={handleEmailSubmit} isUserDirector={isUserDirector} isLoading={reimbursementAccount?.isAskingForCorpaySignerInformation}/>)}
 
             {currentSubStep === SUBSTEP.HANG_TIGHT && (<HangTight_1.default policyID={policyID} bankAccountID={bankAccountID}/>)}
         </InteractiveStepWrapper_1.default>);

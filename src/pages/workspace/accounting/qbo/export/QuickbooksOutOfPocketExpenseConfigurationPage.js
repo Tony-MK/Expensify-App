@@ -1,36 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var ConnectionLayout_1 = require("@components/ConnectionLayout");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var QuickbooksOnline_1 = require("@libs/actions/connections/QuickbooksOnline");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var Navigation_1 = require("@navigation/Navigation");
-var withPolicyConnections_1 = require("@pages/workspace/withPolicyConnections");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-var account = [CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_ACCOUNT];
-var accountOrExportDestination = [CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_EXPORT_DESTINATION, CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_ACCOUNT];
-function QuickbooksOutOfPocketExpenseConfigurationPage(_a) {
-    var _b;
-    var _c, _d, _e, _f;
-    var policy = _a.policy;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var policyID = policy === null || policy === void 0 ? void 0 : policy.id;
-    var qboConfig = (_d = (_c = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _c === void 0 ? void 0 : _c.quickbooksOnline) === null || _d === void 0 ? void 0 : _d.config;
-    var isLocationEnabled = !!((qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.syncLocations) && (qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.syncLocations) !== CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE);
-    var isTaxesEnabled = !!(qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.syncTax);
-    var route = (0, native_1.useRoute)();
-    var backTo = (_e = route.params) === null || _e === void 0 ? void 0 : _e.backTo;
-    var _g = (0, react_1.useMemo)(function () {
-        var hintText;
-        var description;
-        switch (qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.reimbursableExpensesExportDestination) {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const ConnectionLayout_1 = require("@components/ConnectionLayout");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const QuickbooksOnline_1 = require("@libs/actions/connections/QuickbooksOnline");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const Navigation_1 = require("@navigation/Navigation");
+const withPolicyConnections_1 = require("@pages/workspace/withPolicyConnections");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+const account = [CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_ACCOUNT];
+const accountOrExportDestination = [CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_EXPORT_DESTINATION, CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_ACCOUNT];
+function QuickbooksOutOfPocketExpenseConfigurationPage({ policy }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const policyID = policy?.id;
+    const qboConfig = policy?.connections?.quickbooksOnline?.config;
+    const isLocationEnabled = !!(qboConfig?.syncLocations && qboConfig?.syncLocations !== CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE);
+    const isTaxesEnabled = !!qboConfig?.syncTax;
+    const route = (0, native_1.useRoute)();
+    const backTo = route.params?.backTo;
+    const [exportHintText, accountDescription] = (0, react_1.useMemo)(() => {
+        let hintText;
+        let description;
+        switch (qboConfig?.reimbursableExpensesExportDestination) {
             case CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK:
                 hintText = isLocationEnabled ? undefined : translate('workspace.qbo.exportCheckDescription');
                 description = translate('workspace.qbo.bankAccount');
@@ -47,12 +44,12 @@ function QuickbooksOutOfPocketExpenseConfigurationPage(_a) {
                 break;
         }
         return [hintText, description];
-    }, [translate, qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.reimbursableExpensesExportDestination, isLocationEnabled, isTaxesEnabled]), exportHintText = _g[0], accountDescription = _g[1];
-    var sections = [
+    }, [translate, qboConfig?.reimbursableExpensesExportDestination, isLocationEnabled, isTaxesEnabled]);
+    const sections = [
         {
-            title: (qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.reimbursableExpensesExportDestination) ? translate("workspace.qbo.accounts.".concat(qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.reimbursableExpensesExportDestination)) : undefined,
+            title: qboConfig?.reimbursableExpensesExportDestination ? translate(`workspace.qbo.accounts.${qboConfig?.reimbursableExpensesExportDestination}`) : undefined,
             description: translate('workspace.accounting.exportAs'),
-            onPress: function () {
+            onPress: () => {
                 if (!policyID) {
                     return;
                 }
@@ -60,33 +57,34 @@ function QuickbooksOutOfPocketExpenseConfigurationPage(_a) {
             },
             hintText: exportHintText,
             subscribedSettings: accountOrExportDestination,
-            pendingAction: (0, PolicyUtils_1.settingsPendingAction)(accountOrExportDestination, qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.pendingFields),
-            brickRoadIndicator: (0, PolicyUtils_1.areSettingsInErrorFields)(accountOrExportDestination, qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.errorFields) ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : undefined,
+            pendingAction: (0, PolicyUtils_1.settingsPendingAction)(accountOrExportDestination, qboConfig?.pendingFields),
+            brickRoadIndicator: (0, PolicyUtils_1.areSettingsInErrorFields)(accountOrExportDestination, qboConfig?.errorFields) ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : undefined,
         },
         {
-            title: (_f = qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.reimbursableExpensesAccount) === null || _f === void 0 ? void 0 : _f.name,
+            title: qboConfig?.reimbursableExpensesAccount?.name,
             description: accountDescription,
-            onPress: function () {
+            onPress: () => {
                 if (!policyID) {
                     return;
                 }
                 Navigation_1.default.navigate(ROUTES_1.default.POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT.getRoute(policyID, Navigation_1.default.getActiveRoute()));
             },
             subscribedSettings: account,
-            pendingAction: (0, PolicyUtils_1.settingsPendingAction)(account, qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.pendingFields),
-            brickRoadIndicator: (0, PolicyUtils_1.areSettingsInErrorFields)(account, qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.errorFields) ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : undefined,
-            errors: (0, QuickbooksOnline_1.shouldShowQBOReimbursableExportDestinationAccountError)(policy) && (qboConfig === null || qboConfig === void 0 ? void 0 : qboConfig.reimbursableExpensesExportDestination)
-                ? (_b = {},
-                    _b[CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_EXPORT_DESTINATION] = translate("workspace.qbo.exportDestinationAccountsMisconfigurationError.".concat(qboConfig.reimbursableExpensesExportDestination)),
-                    _b) : undefined,
+            pendingAction: (0, PolicyUtils_1.settingsPendingAction)(account, qboConfig?.pendingFields),
+            brickRoadIndicator: (0, PolicyUtils_1.areSettingsInErrorFields)(account, qboConfig?.errorFields) ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : undefined,
+            errors: (0, QuickbooksOnline_1.shouldShowQBOReimbursableExportDestinationAccountError)(policy) && qboConfig?.reimbursableExpensesExportDestination
+                ? {
+                    [CONST_1.default.QUICKBOOKS_CONFIG.REIMBURSABLE_EXPENSES_EXPORT_DESTINATION]: translate(`workspace.qbo.exportDestinationAccountsMisconfigurationError.${qboConfig.reimbursableExpensesExportDestination}`),
+                }
+                : undefined,
         },
     ];
-    return (<ConnectionLayout_1.default displayName={QuickbooksOutOfPocketExpenseConfigurationPage.displayName} headerTitle="workspace.accounting.exportOutOfPocket" title="workspace.qbo.exportOutOfPocketExpensesDescription" accessVariants={[CONST_1.default.POLICY.ACCESS_VARIANTS.ADMIN]} policyID={policyID} featureName={CONST_1.default.POLICY.MORE_FEATURES.ARE_CONNECTIONS_ENABLED} contentContainerStyle={styles.pb2} titleStyle={styles.ph5} connectionName={CONST_1.default.POLICY.CONNECTIONS.NAME.QBO} onBackButtonPress={function () { return Navigation_1.default.goBack(backTo !== null && backTo !== void 0 ? backTo : ROUTES_1.default.POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT.getRoute(policyID)); }}>
-            {sections.map(function (section, index) { return (<OfflineWithFeedback_1.default pendingAction={section.pendingAction} 
+    return (<ConnectionLayout_1.default displayName={QuickbooksOutOfPocketExpenseConfigurationPage.displayName} headerTitle="workspace.accounting.exportOutOfPocket" title="workspace.qbo.exportOutOfPocketExpensesDescription" accessVariants={[CONST_1.default.POLICY.ACCESS_VARIANTS.ADMIN]} policyID={policyID} featureName={CONST_1.default.POLICY.MORE_FEATURES.ARE_CONNECTIONS_ENABLED} contentContainerStyle={styles.pb2} titleStyle={styles.ph5} connectionName={CONST_1.default.POLICY.CONNECTIONS.NAME.QBO} onBackButtonPress={() => Navigation_1.default.goBack(backTo ?? ROUTES_1.default.POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT.getRoute(policyID))}>
+            {sections.map((section, index) => (<OfflineWithFeedback_1.default pendingAction={section.pendingAction} 
         // eslint-disable-next-line react/no-array-index-key
         key={index} errors={section.errors} errorRowStyles={[styles.ph5]} canDismissError={false}>
                     <MenuItemWithTopDescription_1.default title={section.title} description={section.description} onPress={section.onPress} shouldShowRightIcon brickRoadIndicator={section.brickRoadIndicator} hintText={section.hintText}/>
-                </OfflineWithFeedback_1.default>); })}
+                </OfflineWithFeedback_1.default>))}
         </ConnectionLayout_1.default>);
 }
 QuickbooksOutOfPocketExpenseConfigurationPage.displayName = 'QuickbooksExportOutOfPocketExpensesPage';

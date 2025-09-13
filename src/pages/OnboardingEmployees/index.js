@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var OnboardingWrapper_1 = require("@components/OnboardingWrapper");
-var BaseOnboardingEmployees_1 = require("./BaseOnboardingEmployees");
+const react_1 = require("react");
+const OnboardingWrapper_1 = require("@components/OnboardingWrapper");
+const BaseOnboardingEmployees_1 = require("./BaseOnboardingEmployees");
 function OnboardingEmployees(props) {
     return (<OnboardingWrapper_1.default>
             <BaseOnboardingEmployees_1.default shouldUseNativeStyles={false} 

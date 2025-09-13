@@ -1,121 +1,108 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var SafariFormWrapper_1 = require("@components/Form/SafariFormWrapper");
-var FormHelpMessage_1 = require("@components/FormHelpMessage");
-var MagicCodeInput_1 = require("@components/MagicCodeInput");
-var PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var withToggleVisibilityView_1 = require("@components/withToggleVisibilityView");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var AccountUtils_1 = require("@libs/AccountUtils");
-var canFocusInputOnScreenFocus_1 = require("@libs/canFocusInputOnScreenFocus");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var ChangeExpensifyLoginLink_1 = require("@pages/signin/ChangeExpensifyLoginLink");
-var Terms_1 = require("@pages/signin/Terms");
-var Session_1 = require("@userActions/Session");
-var User_1 = require("@userActions/User");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function BaseValidateCodeForm(_a) {
-    var _b;
-    var autoComplete = _a.autoComplete, isUsingRecoveryCode = _a.isUsingRecoveryCode, setIsUsingRecoveryCode = _a.setIsUsingRecoveryCode, isVisible = _a.isVisible, ref = _a.ref;
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var credentials = (0, useOnyx_1.default)(ONYXKEYS_1.default.CREDENTIALS, { canBeMissing: true })[0];
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false })[0];
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isFocused = (0, native_1.useIsFocused)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var _c = (0, react_1.useState)({}), formError = _c[0], setFormError = _c[1];
-    var _d = (0, react_1.useState)((_b = credentials === null || credentials === void 0 ? void 0 : credentials.validateCode) !== null && _b !== void 0 ? _b : ''), validateCode = _d[0], setValidateCode = _d[1];
-    var _e = (0, react_1.useState)(''), twoFactorAuthCode = _e[0], setTwoFactorAuthCode = _e[1];
-    var _f = (0, react_1.useState)(CONST_1.default.REQUEST_CODE_DELAY), timeRemaining = _f[0], setTimeRemaining = _f[1];
-    var _g = (0, react_1.useState)(''), recoveryCode = _g[0], setRecoveryCode = _g[1];
-    var _h = (0, react_1.useState)(!!(account === null || account === void 0 ? void 0 : account.errors)), needToClearError = _h[0], setNeedToClearError = _h[1];
-    var prevRequiresTwoFactorAuth = (0, usePrevious_1.default)(account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth);
-    var prevValidateCode = (0, usePrevious_1.default)(credentials === null || credentials === void 0 ? void 0 : credentials.validateCode);
-    var inputValidateCodeRef = (0, react_1.useRef)(undefined);
-    var input2FARef = (0, react_1.useRef)(undefined);
-    var timerRef = (0, react_1.useRef)(undefined);
-    var hasError = !!account && !(0, EmptyObject_1.isEmptyObject)(account === null || account === void 0 ? void 0 : account.errors) && !needToClearError;
-    var isLoadingResendValidationForm = (account === null || account === void 0 ? void 0 : account.loadingForm) === CONST_1.default.FORMS.RESEND_VALIDATE_CODE_FORM;
-    var shouldDisableResendValidateCode = isOffline !== null && isOffline !== void 0 ? isOffline : account === null || account === void 0 ? void 0 : account.isLoading;
-    var isValidateCodeFormSubmitting = AccountUtils_1.default.isValidateCodeFormSubmitting(account);
-    (0, react_1.useEffect)(function () {
-        if (!(inputValidateCodeRef.current && hasError && ((session === null || session === void 0 ? void 0 : session.autoAuthState) === CONST_1.default.AUTO_AUTH_STATE.FAILED || (account === null || account === void 0 ? void 0 : account.isLoading)))) {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const SafariFormWrapper_1 = require("@components/Form/SafariFormWrapper");
+const FormHelpMessage_1 = require("@components/FormHelpMessage");
+const MagicCodeInput_1 = require("@components/MagicCodeInput");
+const PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const withToggleVisibilityView_1 = require("@components/withToggleVisibilityView");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const AccountUtils_1 = require("@libs/AccountUtils");
+const canFocusInputOnScreenFocus_1 = require("@libs/canFocusInputOnScreenFocus");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const ChangeExpensifyLoginLink_1 = require("@pages/signin/ChangeExpensifyLoginLink");
+const Terms_1 = require("@pages/signin/Terms");
+const Session_1 = require("@userActions/Session");
+const User_1 = require("@userActions/User");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function BaseValidateCodeForm({ autoComplete, isUsingRecoveryCode, setIsUsingRecoveryCode, isVisible, ref }) {
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [credentials] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CREDENTIALS, { canBeMissing: true });
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false });
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const isFocused = (0, native_1.useIsFocused)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [formError, setFormError] = (0, react_1.useState)({});
+    const [validateCode, setValidateCode] = (0, react_1.useState)(credentials?.validateCode ?? '');
+    const [twoFactorAuthCode, setTwoFactorAuthCode] = (0, react_1.useState)('');
+    const [timeRemaining, setTimeRemaining] = (0, react_1.useState)(CONST_1.default.REQUEST_CODE_DELAY);
+    const [recoveryCode, setRecoveryCode] = (0, react_1.useState)('');
+    const [needToClearError, setNeedToClearError] = (0, react_1.useState)(!!account?.errors);
+    const prevRequiresTwoFactorAuth = (0, usePrevious_1.default)(account?.requiresTwoFactorAuth);
+    const prevValidateCode = (0, usePrevious_1.default)(credentials?.validateCode);
+    const inputValidateCodeRef = (0, react_1.useRef)(undefined);
+    const input2FARef = (0, react_1.useRef)(undefined);
+    const timerRef = (0, react_1.useRef)(undefined);
+    const hasError = !!account && !(0, EmptyObject_1.isEmptyObject)(account?.errors) && !needToClearError;
+    const isLoadingResendValidationForm = account?.loadingForm === CONST_1.default.FORMS.RESEND_VALIDATE_CODE_FORM;
+    const shouldDisableResendValidateCode = isOffline ?? account?.isLoading;
+    const isValidateCodeFormSubmitting = AccountUtils_1.default.isValidateCodeFormSubmitting(account);
+    (0, react_1.useEffect)(() => {
+        if (!(inputValidateCodeRef.current && hasError && (session?.autoAuthState === CONST_1.default.AUTO_AUTH_STATE.FAILED || account?.isLoading))) {
             return;
         }
         inputValidateCodeRef.current.blur();
-    }, [account === null || account === void 0 ? void 0 : account.isLoading, session === null || session === void 0 ? void 0 : session.autoAuthState, hasError]);
-    (0, react_1.useEffect)(function () {
+    }, [account?.isLoading, session?.autoAuthState, hasError]);
+    (0, react_1.useEffect)(() => {
         if (!inputValidateCodeRef.current || !(0, canFocusInputOnScreenFocus_1.default)() || !isVisible || !isFocused) {
             return;
         }
         setTimeRemaining(CONST_1.default.REQUEST_CODE_DELAY);
         inputValidateCodeRef.current.focus();
     }, [isVisible, isFocused]);
-    (0, react_1.useEffect)(function () {
-        if (!!prevValidateCode || !(credentials === null || credentials === void 0 ? void 0 : credentials.validateCode)) {
+    (0, react_1.useEffect)(() => {
+        if (!!prevValidateCode || !credentials?.validateCode) {
             return;
         }
         setValidateCode(credentials.validateCode);
-    }, [credentials === null || credentials === void 0 ? void 0 : credentials.validateCode, prevValidateCode]);
-    (0, react_1.useEffect)(function () {
-        if (!input2FARef.current || !!prevRequiresTwoFactorAuth || !(account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth)) {
+    }, [credentials?.validateCode, prevValidateCode]);
+    (0, react_1.useEffect)(() => {
+        if (!input2FARef.current || !!prevRequiresTwoFactorAuth || !account?.requiresTwoFactorAuth) {
             return;
         }
         input2FARef.current.focus();
-    }, [account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth, prevRequiresTwoFactorAuth]);
-    (0, react_1.useEffect)(function () {
+    }, [account?.requiresTwoFactorAuth, prevRequiresTwoFactorAuth]);
+    (0, react_1.useEffect)(() => {
         if (!inputValidateCodeRef.current || validateCode.length > 0) {
             return;
         }
         inputValidateCodeRef.current.clear();
     }, [validateCode]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!input2FARef.current || twoFactorAuthCode.length > 0) {
             return;
         }
         input2FARef.current.clear();
     }, [twoFactorAuthCode]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (timeRemaining > 0) {
-            timerRef.current = setTimeout(function () {
+            timerRef.current = setTimeout(() => {
                 setTimeRemaining(timeRemaining - 1);
             }, 1000);
         }
-        return function () {
+        return () => {
             clearTimeout(timerRef.current);
         };
     }, [timeRemaining]);
     /**
      * Handle text input and clear formError upon text change
      */
-    var onTextInput = function (text, key) {
+    const onTextInput = (text, key) => {
         if (key === 'validateCode') {
             setValidateCode(text);
         }
@@ -125,28 +112,24 @@ function BaseValidateCodeForm(_a) {
         if (key === 'recoveryCode') {
             setRecoveryCode(text.trim());
         }
-        setFormError(function (prevError) {
-            var _a;
-            return (__assign(__assign({}, prevError), (_a = {}, _a[key] = undefined, _a)));
-        });
-        if (account === null || account === void 0 ? void 0 : account.errors) {
+        setFormError((prevError) => ({ ...prevError, [key]: undefined }));
+        if (account?.errors) {
             (0, Session_1.clearAccountMessages)();
         }
     };
     /**
      * Trigger the reset validate code flow and ensure the 2FA input field is reset to avoid it being permanently hidden
      */
-    var resendValidateCode = function () {
-        var _a, _b;
-        (0, User_1.resendValidateCode)((_a = credentials === null || credentials === void 0 ? void 0 : credentials.login) !== null && _a !== void 0 ? _a : '');
-        (_b = inputValidateCodeRef.current) === null || _b === void 0 ? void 0 : _b.clear();
+    const resendValidateCode = () => {
+        (0, User_1.resendValidateCode)(credentials?.login ?? '');
+        inputValidateCodeRef.current?.clear();
         // Give feedback to the user to let them know the email was sent so that they don't spam the button.
         setTimeRemaining(CONST_1.default.REQUEST_CODE_DELAY);
     };
     /**
      * Clear local sign in states
      */
-    var clearLocalSignInData = (0, react_1.useCallback)(function () {
+    const clearLocalSignInData = (0, react_1.useCallback)(() => {
         setTwoFactorAuthCode('');
         setFormError({});
         setValidateCode('');
@@ -156,36 +139,36 @@ function BaseValidateCodeForm(_a) {
     /**
      * Clears local and Onyx sign in states
      */
-    var clearSignInData = (0, react_1.useCallback)(function () {
+    const clearSignInData = (0, react_1.useCallback)(() => {
         clearLocalSignInData();
         (0, Session_1.clearSignInData)();
     }, [clearLocalSignInData]);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        clearSignInData: clearSignInData,
-    }); });
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        clearSignInData,
+    }));
+    (0, react_1.useEffect)(() => {
         if (!needToClearError) {
             return;
         }
-        if (account === null || account === void 0 ? void 0 : account.errors) {
+        if (account?.errors) {
             (0, Session_1.clearAccountMessages)();
             return;
         }
         setNeedToClearError(false);
-    }, [account === null || account === void 0 ? void 0 : account.errors, needToClearError]);
+    }, [account?.errors, needToClearError]);
     /**
      * Switches between 2fa and recovery code, clears inputs and errors
      */
-    var switchBetween2faAndRecoveryCode = function () {
+    const switchBetween2faAndRecoveryCode = () => {
         setIsUsingRecoveryCode(!isUsingRecoveryCode);
         setRecoveryCode('');
         setTwoFactorAuthCode('');
-        setFormError(function (prevError) { return (__assign(__assign({}, prevError), { recoveryCode: undefined, twoFactorAuthCode: undefined })); });
-        if (account === null || account === void 0 ? void 0 : account.errors) {
+        setFormError((prevError) => ({ ...prevError, recoveryCode: undefined, twoFactorAuthCode: undefined }));
+        if (account?.errors) {
             (0, Session_1.clearAccountMessages)();
         }
     };
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isLoadingResendValidationForm) {
             return;
         }
@@ -194,7 +177,7 @@ function BaseValidateCodeForm(_a) {
         // over complicates things requiring clearLocalSignInData function to use useCallback
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, [isLoadingResendValidationForm]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!hasError) {
             return;
         }
@@ -203,15 +186,15 @@ function BaseValidateCodeForm(_a) {
     /**
      * Check that all the form fields are valid, then trigger the submit callback
      */
-    var validateAndSubmitForm = (0, react_1.useCallback)(function () {
-        if (account === null || account === void 0 ? void 0 : account.isLoading) {
+    const validateAndSubmitForm = (0, react_1.useCallback)(() => {
+        if (account?.isLoading) {
             return;
         }
-        if (account === null || account === void 0 ? void 0 : account.errors) {
+        if (account?.errors) {
             (0, Session_1.clearAccountMessages)();
         }
-        var requiresTwoFactorAuth = account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth;
-        if (requiresTwoFactorAuth && !!(credentials === null || credentials === void 0 ? void 0 : credentials.validateCode)) {
+        const requiresTwoFactorAuth = account?.requiresTwoFactorAuth;
+        if (requiresTwoFactorAuth && !!credentials?.validateCode) {
             if (input2FARef.current) {
                 input2FARef.current.blur();
             }
@@ -253,8 +236,8 @@ function BaseValidateCodeForm(_a) {
             }
         }
         setFormError({});
-        var recoveryCodeOr2faCode = isUsingRecoveryCode ? recoveryCode : twoFactorAuthCode;
-        var accountID = credentials === null || credentials === void 0 ? void 0 : credentials.accountID;
+        const recoveryCodeOr2faCode = isUsingRecoveryCode ? recoveryCode : twoFactorAuthCode;
+        const accountID = credentials?.accountID;
         if (accountID) {
             (0, Session_1.signInWithValidateCode)(accountID, validateCode, recoveryCodeOr2faCode);
         }
@@ -262,11 +245,11 @@ function BaseValidateCodeForm(_a) {
             (0, Session_1.signIn)(validateCode, recoveryCodeOr2faCode);
         }
     }, [
-        account === null || account === void 0 ? void 0 : account.isLoading,
-        account === null || account === void 0 ? void 0 : account.errors,
-        account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth,
-        credentials === null || credentials === void 0 ? void 0 : credentials.validateCode,
-        credentials === null || credentials === void 0 ? void 0 : credentials.accountID,
+        account?.isLoading,
+        account?.errors,
+        account?.requiresTwoFactorAuth,
+        credentials?.validateCode,
+        credentials?.accountID,
         isUsingRecoveryCode,
         recoveryCode,
         twoFactorAuthCode,
@@ -274,24 +257,24 @@ function BaseValidateCodeForm(_a) {
     ]);
     return (<SafariFormWrapper_1.default>
             {/* At this point, show 2FA only after the user has submitted a magic code and account requires 2FA */}
-            {(account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth) && !!(credentials === null || credentials === void 0 ? void 0 : credentials.validateCode) ? (<react_native_1.View style={[styles.mv3]}>
-                    {isUsingRecoveryCode ? (<TextInput_1.default accessibilityLabel={translate('recoveryCodeForm.recoveryCode')} value={recoveryCode} onChangeText={function (text) { return onTextInput(text, 'recoveryCode'); }} maxLength={CONST_1.default.FORM_CHARACTER_LIMIT} label={translate('recoveryCodeForm.recoveryCode')} errorText={(formError === null || formError === void 0 ? void 0 : formError.recoveryCode) ? translate(formError === null || formError === void 0 ? void 0 : formError.recoveryCode) : ''} hasError={hasError} onSubmitEditing={validateAndSubmitForm} autoFocus/>) : (<MagicCodeInput_1.default autoComplete={autoComplete} ref={function (magicCodeInput) {
+            {account?.requiresTwoFactorAuth && !!credentials?.validateCode ? (<react_native_1.View style={[styles.mv3]}>
+                    {isUsingRecoveryCode ? (<TextInput_1.default accessibilityLabel={translate('recoveryCodeForm.recoveryCode')} value={recoveryCode} onChangeText={(text) => onTextInput(text, 'recoveryCode')} maxLength={CONST_1.default.FORM_CHARACTER_LIMIT} label={translate('recoveryCodeForm.recoveryCode')} errorText={formError?.recoveryCode ? translate(formError?.recoveryCode) : ''} hasError={hasError} onSubmitEditing={validateAndSubmitForm} autoFocus/>) : (<MagicCodeInput_1.default autoComplete={autoComplete} ref={(magicCodeInput) => {
                     if (!magicCodeInput) {
                         return;
                     }
                     input2FARef.current = magicCodeInput;
-                }} name="twoFactorAuthCode" value={twoFactorAuthCode} onChangeText={function (text) { return onTextInput(text, 'twoFactorAuthCode'); }} onFulfill={validateAndSubmitForm} maxLength={CONST_1.default.TFA_CODE_LENGTH} errorText={(formError === null || formError === void 0 ? void 0 : formError.twoFactorAuthCode) ? translate(formError === null || formError === void 0 ? void 0 : formError.twoFactorAuthCode) : ''} hasError={hasError} autoFocus key="twoFactorAuthCode"/>)}
+                }} name="twoFactorAuthCode" value={twoFactorAuthCode} onChangeText={(text) => onTextInput(text, 'twoFactorAuthCode')} onFulfill={validateAndSubmitForm} maxLength={CONST_1.default.TFA_CODE_LENGTH} errorText={formError?.twoFactorAuthCode ? translate(formError?.twoFactorAuthCode) : ''} hasError={hasError} autoFocus key="twoFactorAuthCode"/>)}
                     {hasError && <FormHelpMessage_1.default message={(0, ErrorUtils_1.getLatestErrorMessage)(account)}/>}
                     <PressableWithFeedback_1.default key={isUsingRecoveryCode.toString()} style={[styles.mt2]} onPress={switchBetween2faAndRecoveryCode} hoverDimmingValue={1} disabled={isValidateCodeFormSubmitting} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={isUsingRecoveryCode ? translate('recoveryCodeForm.use2fa') : translate('recoveryCodeForm.useRecoveryCode')}>
                         <Text_1.default style={[styles.link]}>{isUsingRecoveryCode ? translate('recoveryCodeForm.use2fa') : translate('recoveryCodeForm.useRecoveryCode')}</Text_1.default>
                     </PressableWithFeedback_1.default>
                 </react_native_1.View>) : (<react_native_1.View style={[styles.mv3]}>
-                    <MagicCodeInput_1.default autoComplete={autoComplete} ref={function (magicCodeInput) {
+                    <MagicCodeInput_1.default autoComplete={autoComplete} ref={(magicCodeInput) => {
                 if (!magicCodeInput) {
                     return;
                 }
                 inputValidateCodeRef.current = magicCodeInput;
-            }} name="validateCode" value={validateCode} onChangeText={function (text) { return onTextInput(text, 'validateCode'); }} onFulfill={validateAndSubmitForm} errorText={(formError === null || formError === void 0 ? void 0 : formError.validateCode) ? translate(formError === null || formError === void 0 ? void 0 : formError.validateCode) : ''} hasError={hasError} autoFocus key="validateCode" testID="validateCode"/>
+            }} name="validateCode" value={validateCode} onChangeText={(text) => onTextInput(text, 'validateCode')} onFulfill={validateAndSubmitForm} errorText={formError?.validateCode ? translate(formError?.validateCode) : ''} hasError={hasError} autoFocus key="validateCode" testID="validateCode"/>
                     {hasError && <FormHelpMessage_1.default message={(0, ErrorUtils_1.getLatestErrorMessage)(account)}/>}
                     <react_native_1.View style={[styles.alignItemsStart]}>
                         {timeRemaining > 0 && !isOffline ? (<Text_1.default style={[styles.mt2]}>

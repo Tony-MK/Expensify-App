@@ -1,44 +1,24 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_native_onyx_1 = require("react-native-onyx");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var DraftCommentUtils_1 = require("./DraftCommentUtils");
-var Localize_1 = require("./Localize");
-var OptionsListUtils_1 = require("./OptionsListUtils");
-var Parser_1 = require("./Parser");
-var Performance_1 = require("./Performance");
-var PolicyUtils_1 = require("./PolicyUtils");
-var ReportActionsUtils_1 = require("./ReportActionsUtils");
-var ReportUtils_1 = require("./ReportUtils");
-var TaskUtils_1 = require("./TaskUtils");
-var TransactionUtils_1 = require("./TransactionUtils");
-var allReports;
+const expensify_common_1 = require("expensify-common");
+const react_native_onyx_1 = require("react-native-onyx");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const DraftCommentUtils_1 = require("./DraftCommentUtils");
+const Localize_1 = require("./Localize");
+const OptionsListUtils_1 = require("./OptionsListUtils");
+const Parser_1 = require("./Parser");
+const Performance_1 = require("./Performance");
+const PolicyUtils_1 = require("./PolicyUtils");
+const ReportActionsUtils_1 = require("./ReportActionsUtils");
+const ReportUtils_1 = require("./ReportUtils");
+const TaskUtils_1 = require("./TaskUtils");
+const TransactionUtils_1 = require("./TransactionUtils");
+let allReports;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.COLLECTION.REPORT,
     waitForCollectionCallback: true,
-    callback: function (value) {
+    callback: (value) => {
         allReports = value;
     },
 });
@@ -55,22 +35,21 @@ function ensureSingleSpacing(text) {
     return text.replace(CONST_1.default.REGEX.WHITESPACE, ' ').trim();
 }
 function shouldDisplayReportInLHN(report, reports, currentReportId, isInFocusMode, betas, transactionViolations, isReportArchived, reportAttributes) {
-    var _a, _b, _c;
     if (!report) {
         return { shouldDisplay: false };
     }
-    if (Object.values(CONST_1.default.REPORT.UNSUPPORTED_TYPE).includes((_a = report === null || report === void 0 ? void 0 : report.type) !== null && _a !== void 0 ? _a : '')) {
+    if (Object.values(CONST_1.default.REPORT.UNSUPPORTED_TYPE).includes(report?.type ?? '')) {
         return { shouldDisplay: false };
     }
     // Get report metadata and status
-    var parentReportAction = (0, ReportActionsUtils_1.getReportAction)(report === null || report === void 0 ? void 0 : report.parentReportID, report === null || report === void 0 ? void 0 : report.parentReportActionID);
-    var doesReportHaveViolations = (0, ReportUtils_1.shouldDisplayViolationsRBRInLHN)(report, transactionViolations);
-    var isHidden = (0, ReportUtils_1.isHiddenForCurrentUser)(report);
-    var isFocused = report.reportID === currentReportId;
-    var chatReport = reports === null || reports === void 0 ? void 0 : reports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(report === null || report === void 0 ? void 0 : report.chatReportID)];
-    var parentReport = reports === null || reports === void 0 ? void 0 : reports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(report.parentReportID)];
-    var hasErrorsOtherThanFailedReceipt = (0, ReportUtils_1.hasReportErrorsOtherThanFailedReceipt)(report, chatReport, doesReportHaveViolations, transactionViolations, reportAttributes);
-    var isReportInAccessible = (_b = report === null || report === void 0 ? void 0 : report.errorFields) === null || _b === void 0 ? void 0 : _b.notFound;
+    const parentReportAction = (0, ReportActionsUtils_1.getReportAction)(report?.parentReportID, report?.parentReportActionID);
+    const doesReportHaveViolations = (0, ReportUtils_1.shouldDisplayViolationsRBRInLHN)(report, transactionViolations);
+    const isHidden = (0, ReportUtils_1.isHiddenForCurrentUser)(report);
+    const isFocused = report.reportID === currentReportId;
+    const chatReport = reports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${report?.chatReportID}`];
+    const parentReport = reports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${report.parentReportID}`];
+    const hasErrorsOtherThanFailedReceipt = (0, ReportUtils_1.hasReportErrorsOtherThanFailedReceipt)(report, chatReport, doesReportHaveViolations, transactionViolations, reportAttributes);
+    const isReportInAccessible = report?.errorFields?.notFound;
     if ((0, ReportUtils_1.isOneTransactionThread)(report, parentReport, parentReportAction)) {
         return { shouldDisplay: false };
     }
@@ -79,51 +58,50 @@ function shouldDisplayReportInLHN(report, reports, currentReportId, isInFocusMod
         return { shouldDisplay: true, hasErrorsOtherThanFailedReceipt: true };
     }
     // Check if report should override hidden status
-    var isSystemChat = (0, ReportUtils_1.isSystemChat)(report);
-    var shouldOverrideHidden = (0, DraftCommentUtils_1.hasValidDraftComment)(report.reportID) || hasErrorsOtherThanFailedReceipt || isFocused || isSystemChat || !!report.isPinned || ((_c = reportAttributes === null || reportAttributes === void 0 ? void 0 : reportAttributes[report === null || report === void 0 ? void 0 : report.reportID]) === null || _c === void 0 ? void 0 : _c.requiresAttention);
+    const isSystemChat = (0, ReportUtils_1.isSystemChat)(report);
+    const shouldOverrideHidden = (0, DraftCommentUtils_1.hasValidDraftComment)(report.reportID) || hasErrorsOtherThanFailedReceipt || isFocused || isSystemChat || !!report.isPinned || reportAttributes?.[report?.reportID]?.requiresAttention;
     if (isHidden && !shouldOverrideHidden) {
         return { shouldDisplay: false };
     }
     // Final check for display eligibility
-    var shouldDisplay = (0, ReportUtils_1.shouldReportBeInOptionList)({
-        report: report,
-        chatReport: chatReport,
-        currentReportId: currentReportId,
-        isInFocusMode: isInFocusMode,
-        betas: betas,
+    const shouldDisplay = (0, ReportUtils_1.shouldReportBeInOptionList)({
+        report,
+        chatReport,
+        currentReportId,
+        isInFocusMode,
+        betas,
         excludeEmptyChats: true,
-        doesReportHaveViolations: doesReportHaveViolations,
+        doesReportHaveViolations,
         includeSelfDM: true,
-        isReportArchived: isReportArchived,
+        isReportArchived,
     });
-    return { shouldDisplay: shouldDisplay };
+    return { shouldDisplay };
 }
 function getReportsToDisplayInLHN(currentReportId, reports, betas, policies, priorityMode, transactionViolations, reportNameValuePairs, reportAttributes) {
-    var isInFocusMode = priorityMode === CONST_1.default.PRIORITY_MODE.GSD;
-    var allReportsDictValues = reports !== null && reports !== void 0 ? reports : {};
-    var reportsToDisplay = {};
-    Object.entries(allReportsDictValues).forEach(function (_a) {
-        var reportID = _a[0], report = _a[1];
+    const isInFocusMode = priorityMode === CONST_1.default.PRIORITY_MODE.GSD;
+    const allReportsDictValues = reports ?? {};
+    const reportsToDisplay = {};
+    Object.entries(allReportsDictValues).forEach(([reportID, report]) => {
         if (!report) {
             return;
         }
-        var _b = shouldDisplayReportInLHN(report, reports, currentReportId, isInFocusMode, betas, transactionViolations, (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs === null || reportNameValuePairs === void 0 ? void 0 : reportNameValuePairs["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(report.reportID)]), reportAttributes), shouldDisplay = _b.shouldDisplay, hasErrorsOtherThanFailedReceipt = _b.hasErrorsOtherThanFailedReceipt;
+        const { shouldDisplay, hasErrorsOtherThanFailedReceipt } = shouldDisplayReportInLHN(report, reports, currentReportId, isInFocusMode, betas, transactionViolations, (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report.reportID}`]), reportAttributes);
         if (shouldDisplay) {
-            reportsToDisplay[reportID] = hasErrorsOtherThanFailedReceipt ? __assign(__assign({}, report), { hasErrorsOtherThanFailedReceipt: true }) : report;
+            reportsToDisplay[reportID] = hasErrorsOtherThanFailedReceipt ? { ...report, hasErrorsOtherThanFailedReceipt: true } : report;
         }
     });
     return reportsToDisplay;
 }
 function updateReportsToDisplayInLHN(displayedReports, reports, updatedReportsKeys, currentReportId, isInFocusMode, betas, policies, transactionViolations, reportNameValuePairs, reportAttributes) {
-    var displayedReportsCopy = __assign({}, displayedReports);
-    updatedReportsKeys.forEach(function (reportID) {
-        var report = reports === null || reports === void 0 ? void 0 : reports[reportID];
+    const displayedReportsCopy = { ...displayedReports };
+    updatedReportsKeys.forEach((reportID) => {
+        const report = reports?.[reportID];
         if (!report) {
             return;
         }
-        var _a = shouldDisplayReportInLHN(report, reports, currentReportId, isInFocusMode, betas, transactionViolations, (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs === null || reportNameValuePairs === void 0 ? void 0 : reportNameValuePairs["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(report.reportID)]), reportAttributes), shouldDisplay = _a.shouldDisplay, hasErrorsOtherThanFailedReceipt = _a.hasErrorsOtherThanFailedReceipt;
+        const { shouldDisplay, hasErrorsOtherThanFailedReceipt } = shouldDisplayReportInLHN(report, reports, currentReportId, isInFocusMode, betas, transactionViolations, (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report.reportID}`]), reportAttributes);
         if (shouldDisplay) {
-            displayedReportsCopy[reportID] = hasErrorsOtherThanFailedReceipt ? __assign(__assign({}, report), { hasErrorsOtherThanFailedReceipt: true }) : report;
+            displayedReportsCopy[reportID] = hasErrorsOtherThanFailedReceipt ? { ...report, hasErrorsOtherThanFailedReceipt: true } : report;
         }
         else {
             delete displayedReportsCopy[reportID];
@@ -135,48 +113,45 @@ function updateReportsToDisplayInLHN(displayedReports, reports, updatedReportsKe
  * Categorizes reports into their respective LHN groups
  */
 function categorizeReportsForLHN(reportsToDisplay, reportNameValuePairs, reportAttributes) {
-    var _a;
-    var pinnedAndGBRReports = [];
-    var errorReports = [];
-    var draftReports = [];
-    var nonArchivedReports = [];
-    var archivedReports = [];
+    const pinnedAndGBRReports = [];
+    const errorReports = [];
+    const draftReports = [];
+    const nonArchivedReports = [];
+    const archivedReports = [];
     // Pre-calculate report names and other properties to avoid repeated calculations
-    var reportValues = Object.values(reportsToDisplay);
-    var precomputedReports = [];
+    const reportValues = Object.values(reportsToDisplay);
+    const precomputedReports = [];
     // Single pass to precompute all required data
-    for (var _i = 0, reportValues_1 = reportValues; _i < reportValues_1.length; _i++) {
-        var report = reportValues_1[_i];
+    for (const report of reportValues) {
         if (!report) {
             continue;
         }
-        var reportID = report.reportID;
-        var displayName = (0, ReportUtils_1.getReportName)(report);
-        var miniReport = {
-            reportID: reportID,
-            displayName: displayName,
+        const reportID = report.reportID;
+        const displayName = (0, ReportUtils_1.getReportName)(report);
+        const miniReport = {
+            reportID,
+            displayName,
             lastVisibleActionCreated: report.lastVisibleActionCreated,
         };
-        var isPinned = !!report.isPinned;
-        var requiresAttention = !!((_a = reportAttributes === null || reportAttributes === void 0 ? void 0 : reportAttributes[reportID]) === null || _a === void 0 ? void 0 : _a.requiresAttention);
-        var hasDraft = reportID ? (0, DraftCommentUtils_1.hasValidDraftComment)(reportID) : false;
-        var reportNameValuePairsKey = "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(reportID);
-        var rNVPs = reportNameValuePairs === null || reportNameValuePairs === void 0 ? void 0 : reportNameValuePairs[reportNameValuePairsKey];
-        var isArchived = (0, ReportUtils_1.isArchivedNonExpenseReport)(report, !!(rNVPs === null || rNVPs === void 0 ? void 0 : rNVPs.private_isArchived));
-        var hasErrors = !!report.hasErrorsOtherThanFailedReceipt && !isArchived;
+        const isPinned = !!report.isPinned;
+        const requiresAttention = !!reportAttributes?.[reportID]?.requiresAttention;
+        const hasDraft = reportID ? (0, DraftCommentUtils_1.hasValidDraftComment)(reportID) : false;
+        const reportNameValuePairsKey = `${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${reportID}`;
+        const rNVPs = reportNameValuePairs?.[reportNameValuePairsKey];
+        const isArchived = (0, ReportUtils_1.isArchivedNonExpenseReport)(report, !!rNVPs?.private_isArchived);
+        const hasErrors = !!report.hasErrorsOtherThanFailedReceipt && !isArchived;
         precomputedReports.push({
-            miniReport: miniReport,
-            isPinned: isPinned,
-            hasErrors: hasErrors,
-            hasDraft: hasDraft,
-            isArchived: isArchived,
-            requiresAttention: requiresAttention,
+            miniReport,
+            isPinned,
+            hasErrors,
+            hasDraft,
+            isArchived,
+            requiresAttention,
         });
     }
     // Single pass to categorize reports
-    for (var _b = 0, precomputedReports_1 = precomputedReports; _b < precomputedReports_1.length; _b++) {
-        var data = precomputedReports_1[_b];
-        var miniReport = data.miniReport, isPinned = data.isPinned, requiresAttention = data.requiresAttention, hasErrors = data.hasErrors, hasDraft = data.hasDraft, isArchived = data.isArchived;
+    for (const data of precomputedReports) {
+        const { miniReport, isPinned, requiresAttention, hasErrors, hasDraft, isArchived } = data;
         if (isPinned || requiresAttention) {
             pinnedAndGBRReports.push(miniReport);
         }
@@ -194,11 +169,11 @@ function categorizeReportsForLHN(reportsToDisplay, reportNameValuePairs, reportA
         }
     }
     return {
-        pinnedAndGBRReports: pinnedAndGBRReports,
-        errorReports: errorReports,
-        draftReports: draftReports,
-        nonArchivedReports: nonArchivedReports,
-        archivedReports: archivedReports,
+        pinnedAndGBRReports,
+        errorReports,
+        draftReports,
+        nonArchivedReports,
+        archivedReports,
     };
 }
 /**
@@ -206,22 +181,20 @@ function categorizeReportsForLHN(reportsToDisplay, reportNameValuePairs, reportA
  * This function does not mutate the input and returns new arrays for better testability.
  */
 function sortCategorizedReports(categories, isInDefaultMode, localeCompare) {
-    var pinnedAndGBRReports = categories.pinnedAndGBRReports, errorReports = categories.errorReports, draftReports = categories.draftReports, nonArchivedReports = categories.nonArchivedReports, archivedReports = categories.archivedReports;
+    const { pinnedAndGBRReports, errorReports, draftReports, nonArchivedReports, archivedReports } = categories;
     // Create comparison functions once to avoid recreating them in sort
-    var compareDisplayNames = function (a, b) { return ((a === null || a === void 0 ? void 0 : a.displayName) && (b === null || b === void 0 ? void 0 : b.displayName) ? localeCompare(a.displayName, b.displayName) : 0); };
-    var compareDatesDesc = function (a, b) {
-        return (a === null || a === void 0 ? void 0 : a.lastVisibleActionCreated) && (b === null || b === void 0 ? void 0 : b.lastVisibleActionCreated) ? compareStringDates(b.lastVisibleActionCreated, a.lastVisibleActionCreated) : 0;
-    };
-    var compareNonArchivedDefault = function (a, b) {
-        var compareDates = compareDatesDesc(a, b);
+    const compareDisplayNames = (a, b) => (a?.displayName && b?.displayName ? localeCompare(a.displayName, b.displayName) : 0);
+    const compareDatesDesc = (a, b) => a?.lastVisibleActionCreated && b?.lastVisibleActionCreated ? compareStringDates(b.lastVisibleActionCreated, a.lastVisibleActionCreated) : 0;
+    const compareNonArchivedDefault = (a, b) => {
+        const compareDates = compareDatesDesc(a, b);
         return compareDates !== 0 ? compareDates : compareDisplayNames(a, b);
     };
     // Sort each group of reports accordingly
-    var sortedPinnedAndGBRReports = pinnedAndGBRReports.sort(compareDisplayNames);
-    var sortedErrorReports = errorReports.sort(compareDisplayNames);
-    var sortedDraftReports = draftReports.sort(compareDisplayNames);
-    var sortedNonArchivedReports;
-    var sortedArchivedReports;
+    const sortedPinnedAndGBRReports = pinnedAndGBRReports.sort(compareDisplayNames);
+    const sortedErrorReports = errorReports.sort(compareDisplayNames);
+    const sortedDraftReports = draftReports.sort(compareDisplayNames);
+    let sortedNonArchivedReports;
+    let sortedArchivedReports;
     if (isInDefaultMode) {
         sortedNonArchivedReports = nonArchivedReports.sort(compareNonArchivedDefault);
         // For archived reports ensure that most recent reports are at the top by reversing the order
@@ -245,15 +218,15 @@ function sortCategorizedReports(categories, isInDefaultMode, localeCompare) {
 function combineReportCategories(pinnedAndGBRReports, errorReports, draftReports, nonArchivedReports, archivedReports) {
     // Now that we have all the reports grouped and sorted, they must be flattened into an array and only return the reportID.
     // The order the arrays are concatenated in matters and will determine the order that the groups are displayed in the sidebar.
-    return __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], pinnedAndGBRReports, true), errorReports, true), draftReports, true), nonArchivedReports, true), archivedReports, true).map(function (report) { return report === null || report === void 0 ? void 0 : report.reportID; }).filter(Boolean);
+    return [...pinnedAndGBRReports, ...errorReports, ...draftReports, ...nonArchivedReports, ...archivedReports].map((report) => report?.reportID).filter(Boolean);
 }
 /**
  * @returns An array of reportIDs sorted in the proper order
  */
 function sortReportsToDisplayInLHN(reportsToDisplay, priorityMode, localeCompare, reportNameValuePairs, reportAttributes) {
     Performance_1.default.markStart(CONST_1.default.TIMING.GET_ORDERED_REPORT_IDS);
-    var isInFocusMode = priorityMode === CONST_1.default.PRIORITY_MODE.GSD;
-    var isInDefaultMode = !isInFocusMode;
+    const isInFocusMode = priorityMode === CONST_1.default.PRIORITY_MODE.GSD;
+    const isInDefaultMode = !isInFocusMode;
     // The LHN is split into five distinct groups, and each group is sorted a little differently. The groups will ALWAYS be in this order:
     // 1. Pinned/GBR - Always sorted by reportDisplayName
     // 2. Error reports - Always sorted by reportDisplayName
@@ -265,19 +238,18 @@ function sortReportsToDisplayInLHN(reportsToDisplay, priorityMode, localeCompare
     //      - Sorted by lastVisibleActionCreated in default (most recent) view mode
     //      - Sorted by reportDisplayName in GSD (focus) view mode
     // Step 1: Categorize reports
-    var categories = categorizeReportsForLHN(reportsToDisplay, reportNameValuePairs, reportAttributes);
+    const categories = categorizeReportsForLHN(reportsToDisplay, reportNameValuePairs, reportAttributes);
     // Step 2: Sort each category
-    var sortedCategories = sortCategorizedReports(categories, isInDefaultMode, localeCompare);
+    const sortedCategories = sortCategorizedReports(categories, isInDefaultMode, localeCompare);
     // Step 3: Combine and extract IDs
-    var result = combineReportCategories(sortedCategories.pinnedAndGBRReports, sortedCategories.errorReports, sortedCategories.draftReports, sortedCategories.nonArchivedReports, sortedCategories.archivedReports);
+    const result = combineReportCategories(sortedCategories.pinnedAndGBRReports, sortedCategories.errorReports, sortedCategories.draftReports, sortedCategories.nonArchivedReports, sortedCategories.archivedReports);
     Performance_1.default.markEnd(CONST_1.default.TIMING.GET_ORDERED_REPORT_IDS);
     return result;
 }
-function getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportActions, hasViolations, reportErrors, transactions, transactionViolations, isReportArchived) {
-    if (isReportArchived === void 0) { isReportArchived = false; }
-    var reportAction = (0, ReportUtils_1.getAllReportActionsErrorsAndReportActionThatRequiresAttention)(report, reportActions, isReportArchived).reportAction;
-    var errors = reportErrors;
-    var hasErrors = Object.keys(errors).length !== 0;
+function getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportActions, hasViolations, reportErrors, transactions, transactionViolations, isReportArchived = false) {
+    const { reportAction } = (0, ReportUtils_1.getAllReportActionsErrorsAndReportActionThatRequiresAttention)(report, reportActions, isReportArchived);
+    const errors = reportErrors;
+    const hasErrors = Object.keys(errors).length !== 0;
     if (isReportArchived) {
         return null;
     }
@@ -289,7 +261,7 @@ function getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportA
     if (hasErrors) {
         return {
             reason: CONST_1.default.RBR_REASONS.HAS_ERRORS,
-            reportAction: reportAction,
+            reportAction,
         };
     }
     if (hasViolations) {
@@ -297,19 +269,19 @@ function getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportA
             reason: CONST_1.default.RBR_REASONS.HAS_VIOLATIONS,
         };
     }
-    var parentReportAction = (0, ReportActionsUtils_1.getReportAction)(report === null || report === void 0 ? void 0 : report.parentReportID, report === null || report === void 0 ? void 0 : report.parentReportActionID);
-    var transactionThreadReportID = (0, ReportActionsUtils_1.getOneTransactionThreadReportID)(report, chatReport, reportActions !== null && reportActions !== void 0 ? reportActions : []);
+    const parentReportAction = (0, ReportActionsUtils_1.getReportAction)(report?.parentReportID, report?.parentReportActionID);
+    const transactionThreadReportID = (0, ReportActionsUtils_1.getOneTransactionThreadReportID)(report, chatReport, reportActions ?? []);
     if (transactionThreadReportID) {
-        var transactionID_1 = (0, TransactionUtils_1.getTransactionID)(transactionThreadReportID);
-        var transaction_1 = transactions === null || transactions === void 0 ? void 0 : transactions["".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(transactionID_1)];
-        if ((0, ReportUtils_1.hasReceiptError)(transaction_1)) {
+        const transactionID = (0, TransactionUtils_1.getTransactionID)(transactionThreadReportID);
+        const transaction = transactions?.[`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${transactionID}`];
+        if ((0, ReportUtils_1.hasReceiptError)(transaction)) {
             return {
                 reason: CONST_1.default.RBR_REASONS.HAS_ERRORS,
             };
         }
     }
-    var transactionID = (0, TransactionUtils_1.getTransactionID)(report.reportID);
-    var transaction = transactions === null || transactions === void 0 ? void 0 : transactions["".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(transactionID)];
+    const transactionID = (0, TransactionUtils_1.getTransactionID)(report.reportID);
+    const transaction = transactions?.[`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${transactionID}`];
     if ((0, ReportActionsUtils_1.isTransactionThread)(parentReportAction) && (0, ReportUtils_1.hasReceiptError)(transaction)) {
         return {
             reason: CONST_1.default.RBR_REASONS.HAS_ERRORS,
@@ -317,26 +289,23 @@ function getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportA
     }
     return null;
 }
-function shouldShowRedBrickRoad(report, chatReport, reportActions, hasViolations, reportErrors, transactions, transactionViolations, isReportArchived) {
-    if (isReportArchived === void 0) { isReportArchived = false; }
+function shouldShowRedBrickRoad(report, chatReport, reportActions, hasViolations, reportErrors, transactions, transactionViolations, isReportArchived = false) {
     return !!getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportActions, hasViolations, reportErrors, transactions, transactionViolations, isReportArchived);
 }
 /**
  * Gets all the data necessary for rendering an OptionRowLHN component
  */
-function getOptionData(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
-    var report = _a.report, reportAttributes = _a.reportAttributes, oneTransactionThreadReport = _a.oneTransactionThreadReport, reportNameValuePairs = _a.reportNameValuePairs, personalDetails = _a.personalDetails, policy = _a.policy, parentReportAction = _a.parentReportAction, lastMessageTextFromReportProp = _a.lastMessageTextFromReport, invoiceReceiverPolicy = _a.invoiceReceiverPolicy, card = _a.card, lastAction = _a.lastAction, localeCompare = _a.localeCompare, _3 = _a.isReportArchived, isReportArchived = _3 === void 0 ? false : _3, movedFromReport = _a.movedFromReport, movedToReport = _a.movedToReport;
+function getOptionData({ report, reportAttributes, oneTransactionThreadReport, reportNameValuePairs, personalDetails, policy, parentReportAction, lastMessageTextFromReport: lastMessageTextFromReportProp, invoiceReceiverPolicy, card, lastAction, localeCompare, isReportArchived = false, movedFromReport, movedToReport, }) {
     // When a user signs out, Onyx is cleared. Due to the lazy rendering with a virtual list, it's possible for
     // this method to be called after the Onyx data has been cleared out. In that case, it's fine to do
     // a null check here and return early.
     if (!report || !personalDetails) {
         return;
     }
-    var result = {
+    const result = {
         text: '',
         alternateText: undefined,
-        allReportErrors: reportAttributes === null || reportAttributes === void 0 ? void 0 : reportAttributes.reportErrors,
+        allReportErrors: reportAttributes?.reportErrors,
         brickRoadIndicator: null,
         tooltipText: null,
         subtitle: undefined,
@@ -365,24 +334,24 @@ function getOptionData(_a) {
         isDeletedParentAction: false,
         isConciergeChat: false,
     };
-    var participantAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report);
-    var participantAccountIDsExcludeCurrentUser = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, undefined, undefined, true);
-    var participantPersonalDetailListExcludeCurrentUser = Object.values((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDsExcludeCurrentUser, personalDetails));
-    var visibleParticipantAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, true);
-    var participantPersonalDetailList = Object.values((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDs, personalDetails));
-    var personalDetail = (_b = participantPersonalDetailList.at(0)) !== null && _b !== void 0 ? _b : {};
+    const participantAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report);
+    const participantAccountIDsExcludeCurrentUser = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, undefined, undefined, true);
+    const participantPersonalDetailListExcludeCurrentUser = Object.values((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDsExcludeCurrentUser, personalDetails));
+    const visibleParticipantAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, true);
+    const participantPersonalDetailList = Object.values((0, OptionsListUtils_1.getPersonalDetailsForAccountIDs)(participantAccountIDs, personalDetails));
+    const personalDetail = participantPersonalDetailList.at(0) ?? {};
     result.isThread = (0, ReportUtils_1.isChatThread)(report);
     result.isChatRoom = (0, ReportUtils_1.isChatRoom)(report);
     result.isTaskReport = (0, ReportUtils_1.isTaskReport)(report);
     result.isInvoiceReport = (0, ReportUtils_1.isInvoiceReport)(report);
     result.parentReportAction = parentReportAction;
-    result.private_isArchived = reportNameValuePairs === null || reportNameValuePairs === void 0 ? void 0 : reportNameValuePairs.private_isArchived;
+    result.private_isArchived = reportNameValuePairs?.private_isArchived;
     result.isPolicyExpenseChat = (0, ReportUtils_1.isPolicyExpenseChat)(report);
     result.isExpenseRequest = (0, ReportUtils_1.isExpenseRequest)(report);
     result.isMoneyRequestReport = (0, ReportUtils_1.isMoneyRequestReport)(report);
     result.shouldShowSubscript = (0, ReportUtils_1.shouldReportShowSubscript)(report, isReportArchived);
-    result.pendingAction = (_d = (_c = report.pendingFields) === null || _c === void 0 ? void 0 : _c.addWorkspaceRoom) !== null && _d !== void 0 ? _d : (_e = report.pendingFields) === null || _e === void 0 ? void 0 : _e.createChat;
-    result.brickRoadIndicator = reportAttributes === null || reportAttributes === void 0 ? void 0 : reportAttributes.brickRoadStatus;
+    result.pendingAction = report.pendingFields?.addWorkspaceRoom ?? report.pendingFields?.createChat;
+    result.brickRoadIndicator = reportAttributes?.brickRoadStatus;
     result.ownerAccountID = report.ownerAccountID;
     result.managerID = report.managerID;
     result.reportID = report.reportID;
@@ -409,60 +378,60 @@ function getOptionData(_a) {
     result.hasParentAccess = report.hasParentAccess;
     result.isConciergeChat = (0, ReportUtils_1.isConciergeChatReport)(report);
     result.participants = report.participants;
-    var isExpense = (0, ReportUtils_1.isExpenseReport)(report);
-    var hasMultipleParticipants = participantPersonalDetailList.length > 1 || result.isChatRoom || result.isPolicyExpenseChat || isExpense;
-    var subtitle = (0, ReportUtils_1.getChatRoomSubtitle)(report, false, isReportArchived);
-    var status = (_f = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.status) !== null && _f !== void 0 ? _f : '';
+    const isExpense = (0, ReportUtils_1.isExpenseReport)(report);
+    const hasMultipleParticipants = participantPersonalDetailList.length > 1 || result.isChatRoom || result.isPolicyExpenseChat || isExpense;
+    const subtitle = (0, ReportUtils_1.getChatRoomSubtitle)(report, false, isReportArchived);
+    const status = personalDetail?.status ?? '';
     // We only create tooltips for the first 10 users or so since some reports have hundreds of users, causing performance to degrade.
-    var displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)((participantPersonalDetailList || []).slice(0, 10), hasMultipleParticipants, localeCompare, undefined, (0, ReportUtils_1.isSelfDM)(report));
+    const displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)((participantPersonalDetailList || []).slice(0, 10), hasMultipleParticipants, localeCompare, undefined, (0, ReportUtils_1.isSelfDM)(report));
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var lastActorAccountID = (lastAction === null || lastAction === void 0 ? void 0 : lastAction.actorAccountID) || report.lastActorAccountID;
+    const lastActorAccountID = lastAction?.actorAccountID || report.lastActorAccountID;
     // If the last actor's details are not currently saved in Onyx Collection,
     // then try to get that from the last report action if that action is valid
     // to get data from.
-    var lastActorDetails = lastActorAccountID ? ((_g = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[lastActorAccountID]) !== null && _g !== void 0 ? _g : null) : null;
+    let lastActorDetails = lastActorAccountID ? (personalDetails?.[lastActorAccountID] ?? null) : null;
     if (!lastActorDetails && lastAction) {
-        var lastActorDisplayName_1 = (_j = (_h = lastAction === null || lastAction === void 0 ? void 0 : lastAction.person) === null || _h === void 0 ? void 0 : _h[0]) === null || _j === void 0 ? void 0 : _j.text;
-        lastActorDetails = lastActorDisplayName_1
+        const lastActorDisplayName = lastAction?.person?.[0]?.text;
+        lastActorDetails = lastActorDisplayName
             ? {
-                displayName: lastActorDisplayName_1,
+                displayName: lastActorDisplayName,
                 accountID: report.lastActorAccountID,
             }
             : null;
     }
     // Assign the actor account ID from the last action when it’s a REPORT_PREVIEW action.
     // to ensures that lastActorDetails.accountID is correctly set in case it's empty string
-    if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW && lastActorDetails) {
+    if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW && lastActorDetails) {
         lastActorDetails.accountID = lastAction.actorAccountID;
     }
-    var lastActorDisplayName = (0, OptionsListUtils_1.getLastActorDisplayName)(lastActorDetails);
-    var lastMessageTextFromReport = lastMessageTextFromReportProp;
+    const lastActorDisplayName = (0, OptionsListUtils_1.getLastActorDisplayName)(lastActorDetails);
+    let lastMessageTextFromReport = lastMessageTextFromReportProp;
     if (!lastMessageTextFromReport) {
-        lastMessageTextFromReport = (0, OptionsListUtils_1.getLastMessageTextForReport)({ report: report, lastActorDetails: lastActorDetails, movedFromReport: movedFromReport, movedToReport: movedToReport, policy: policy, isReportArchived: isReportArchived });
+        lastMessageTextFromReport = (0, OptionsListUtils_1.getLastMessageTextForReport)({ report, lastActorDetails, movedFromReport, movedToReport, policy, isReportArchived });
     }
     // We need to remove sms domain in case the last message text has a phone number mention with sms domain.
-    var lastMessageText = expensify_common_1.Str.removeSMSDomain(lastMessageTextFromReport);
-    var isGroupChat = (0, ReportUtils_1.isGroupChat)(report) || (0, ReportUtils_1.isDeprecatedGroupDM)(report, isReportArchived);
-    var isThreadMessage = (0, ReportUtils_1.isThread)(report) && (lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.ADD_COMMENT && (lastAction === null || lastAction === void 0 ? void 0 : lastAction.pendingAction) !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
+    let lastMessageText = expensify_common_1.Str.removeSMSDomain(lastMessageTextFromReport);
+    const isGroupChat = (0, ReportUtils_1.isGroupChat)(report) || (0, ReportUtils_1.isDeprecatedGroupDM)(report, isReportArchived);
+    const isThreadMessage = (0, ReportUtils_1.isThread)(report) && lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.ADD_COMMENT && lastAction?.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
     if ((result.isChatRoom || result.isPolicyExpenseChat || result.isThread || result.isTaskReport || isThreadMessage || isGroupChat) && !isReportArchived) {
-        var lastActionName = (_k = lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) !== null && _k !== void 0 ? _k : report.lastActionType;
-        var prefix = (0, ReportUtils_1.getReportSubtitlePrefix)(report);
+        const lastActionName = lastAction?.actionName ?? report.lastActionType;
+        const prefix = (0, ReportUtils_1.getReportSubtitlePrefix)(report);
         if ((0, ReportActionsUtils_1.isRenamedAction)(lastAction)) {
             result.alternateText = (0, ReportActionsUtils_1.getRenamedAction)(lastAction, isExpense, lastActorDisplayName);
         }
         else if ((0, ReportActionsUtils_1.isTaskAction)(lastAction)) {
             result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)((0, TaskUtils_1.getTaskReportActionMessage)(lastAction).text);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.LEAVE_ROOM) {
-            var actionMessage = (0, ReportActionsUtils_1.getReportActionMessageText)(lastAction);
-            result.alternateText = actionMessage ? "".concat(lastActorDisplayName, ": ").concat(actionMessage) : '';
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.LEAVE_ROOM) {
+            const actionMessage = (0, ReportActionsUtils_1.getReportActionMessageText)(lastAction);
+            result.alternateText = actionMessage ? `${lastActorDisplayName}: ${actionMessage}` : '';
         }
         else if ((0, ReportActionsUtils_1.isInviteOrRemovedAction)(lastAction)) {
-            var actorDetails = void 0;
+            let actorDetails;
             if (lastAction.actorAccountID) {
-                actorDetails = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[lastAction === null || lastAction === void 0 ? void 0 : lastAction.actorAccountID];
+                actorDetails = personalDetails?.[lastAction?.actorAccountID];
             }
-            var actorDisplayName = (_m = (_l = lastAction === null || lastAction === void 0 ? void 0 : lastAction.person) === null || _l === void 0 ? void 0 : _l[0]) === null || _m === void 0 ? void 0 : _m.text;
+            let actorDisplayName = lastAction?.person?.[0]?.text;
             if (!actorDetails && actorDisplayName && lastAction.actorAccountID) {
                 actorDetails = {
                     displayName: actorDisplayName,
@@ -470,20 +439,20 @@ function getOptionData(_a) {
                 };
             }
             actorDisplayName = actorDetails ? (0, OptionsListUtils_1.getLastActorDisplayName)(actorDetails) : undefined;
-            var lastActionOriginalMessage = (lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) ? (0, ReportActionsUtils_1.getOriginalMessage)(lastAction) : null;
-            var targetAccountIDs = (_o = lastActionOriginalMessage === null || lastActionOriginalMessage === void 0 ? void 0 : lastActionOriginalMessage.targetAccountIDs) !== null && _o !== void 0 ? _o : [];
-            var targetAccountIDsLength = targetAccountIDs.length !== 0 ? targetAccountIDs.length : ((_r = (_q = (_p = report.lastMessageHtml) === null || _p === void 0 ? void 0 : _p.match(/<mention-user[^>]*><\/mention-user>/g)) === null || _q === void 0 ? void 0 : _q.length) !== null && _r !== void 0 ? _r : 0);
-            var verb = lastActionName === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM || lastActionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM
+            const lastActionOriginalMessage = lastAction?.actionName ? (0, ReportActionsUtils_1.getOriginalMessage)(lastAction) : null;
+            const targetAccountIDs = lastActionOriginalMessage?.targetAccountIDs ?? [];
+            const targetAccountIDsLength = targetAccountIDs.length !== 0 ? targetAccountIDs.length : (report.lastMessageHtml?.match(/<mention-user[^>]*><\/mention-user>/g)?.length ?? 0);
+            const verb = lastActionName === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM || lastActionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM
                 ? (0, Localize_1.translateLocal)('workspace.invite.invited')
                 : (0, Localize_1.translateLocal)('workspace.invite.removed');
-            var users = (_s = (0, Localize_1.translateLocal)(targetAccountIDsLength > 1 ? 'common.members' : 'common.member')) === null || _s === void 0 ? void 0 : _s.toLocaleLowerCase();
-            result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)("".concat(actorDisplayName !== null && actorDisplayName !== void 0 ? actorDisplayName : lastActorDisplayName, ": ").concat(verb, " ").concat(targetAccountIDsLength, " ").concat(users));
-            var roomName = (0, ReportUtils_1.getReportName)(allReports === null || allReports === void 0 ? void 0 : allReports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(lastActionOriginalMessage === null || lastActionOriginalMessage === void 0 ? void 0 : lastActionOriginalMessage.reportID)]) || (lastActionOriginalMessage === null || lastActionOriginalMessage === void 0 ? void 0 : lastActionOriginalMessage.roomName);
+            const users = (0, Localize_1.translateLocal)(targetAccountIDsLength > 1 ? 'common.members' : 'common.member')?.toLocaleLowerCase();
+            result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)(`${actorDisplayName ?? lastActorDisplayName}: ${verb} ${targetAccountIDsLength} ${users}`);
+            const roomName = (0, ReportUtils_1.getReportName)(allReports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${lastActionOriginalMessage?.reportID}`]) || lastActionOriginalMessage?.roomName;
             if (roomName) {
-                var preposition = lastAction.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM || lastAction.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM
-                    ? " ".concat((0, Localize_1.translateLocal)('workspace.invite.to'))
-                    : " ".concat((0, Localize_1.translateLocal)('workspace.invite.from'));
-                result.alternateText += "".concat(preposition, " ").concat(roomName);
+                const preposition = lastAction.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM || lastAction.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM
+                    ? ` ${(0, Localize_1.translateLocal)('workspace.invite.to')}`
+                    : ` ${(0, Localize_1.translateLocal)('workspace.invite.from')}`;
+                result.alternateText += `${preposition} ${roomName}`;
             }
         }
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_NAME)) {
@@ -505,7 +474,7 @@ function getOptionData(_a) {
             result.alternateText = (0, Localize_1.translateLocal)('workspaceActions.downgradedWorkspace');
         }
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.INTEGRATION_SYNC_FAILED)) {
-            result.alternateText = (0, ReportActionsUtils_1.getIntegrationSyncFailedMessage)(lastAction, report === null || report === void 0 ? void 0 : report.policyID);
+            result.alternateText = (0, ReportActionsUtils_1.getIntegrationSyncFailedMessage)(lastAction, report?.policyID);
         }
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_CATEGORY) ||
             (0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CATEGORY) ||
@@ -514,10 +483,10 @@ function getOptionData(_a) {
             result.alternateText = (0, ReportActionsUtils_1.getWorkspaceCategoryUpdateMessage)(lastAction);
         }
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG_LIST_NAME)) {
-            result.alternateText = (0, PolicyUtils_1.getCleanedTagName)((_t = (0, ReportActionsUtils_1.getTagListNameUpdatedMessage)(lastAction)) !== null && _t !== void 0 ? _t : '');
+            result.alternateText = (0, PolicyUtils_1.getCleanedTagName)((0, ReportActionsUtils_1.getTagListNameUpdatedMessage)(lastAction) ?? '');
         }
-        else if ((0, ReportActionsUtils_1.isTagModificationAction)((_u = lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) !== null && _u !== void 0 ? _u : '')) {
-            result.alternateText = (0, PolicyUtils_1.getCleanedTagName)((_v = (0, ReportActionsUtils_1.getWorkspaceTagUpdateMessage)(lastAction)) !== null && _v !== void 0 ? _v : '');
+        else if ((0, ReportActionsUtils_1.isTagModificationAction)(lastAction?.actionName ?? '')) {
+            result.alternateText = (0, PolicyUtils_1.getCleanedTagName)((0, ReportActionsUtils_1.getWorkspaceTagUpdateMessage)(lastAction) ?? '');
         }
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CUSTOM_UNIT)) {
             result.alternateText = (0, ReportActionsUtils_1.getWorkspaceCustomUnitUpdatedMessage)(lastAction);
@@ -540,79 +509,79 @@ function getOptionData(_a) {
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_REPORT_FIELD)) {
             result.alternateText = (0, ReportActionsUtils_1.getWorkspaceReportFieldDeleteMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_FIELD) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_FIELD) {
             result.alternateText = (0, ReportActionsUtils_1.getWorkspaceUpdateFieldMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_MAX_EXPENSE_AMOUNT_NO_RECEIPT) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_MAX_EXPENSE_AMOUNT_NO_RECEIPT) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogMaxExpenseAmountNoReceiptMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_MAX_EXPENSE_AMOUNT) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_MAX_EXPENSE_AMOUNT) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogMaxExpenseAmountMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DEFAULT_BILLABLE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DEFAULT_BILLABLE) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogDefaultBillableMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DEFAULT_REIMBURSABLE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DEFAULT_REIMBURSABLE) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogDefaultReimbursableMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DEFAULT_TITLE_ENFORCED) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DEFAULT_TITLE_ENFORCED) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogDefaultTitleEnforcedMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.LEAVE_POLICY) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.LEAVE_POLICY) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogEmployeeLeftMessage)(lastAction, true);
         }
         else if ((0, ReportActionsUtils_1.isCardIssuedAction)(lastAction)) {
             result.alternateText = (0, ReportActionsUtils_1.getCardIssuedMessage)({ reportAction: lastAction, expensifyCard: card });
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) !== CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW && lastActorDisplayName && lastMessageTextFromReport) {
-            result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)(Parser_1.default.htmlToText("".concat(lastActorDisplayName, ": ").concat(lastMessageText)));
+        else if (lastAction?.actionName !== CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW && lastActorDisplayName && lastMessageTextFromReport) {
+            result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)(Parser_1.default.htmlToText(`${lastActorDisplayName}: ${lastMessageText}`));
         }
         else if (lastAction && (0, ReportActionsUtils_1.isOldDotReportAction)(lastAction)) {
             result.alternateText = (0, ReportActionsUtils_1.getMessageOfOldDotReportAction)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.UPDATE_ROOM_DESCRIPTION) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.UPDATE_ROOM_DESCRIPTION) {
             result.alternateText = (0, ReportActionsUtils_1.getUpdateRoomDescriptionMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_EMPLOYEE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_EMPLOYEE) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogAddEmployeeMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_EMPLOYEE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_EMPLOYEE) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogUpdateEmployee)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_EMPLOYEE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_EMPLOYEE) {
             result.alternateText = (0, ReportActionsUtils_1.getPolicyChangeLogDeleteMemberMessage)(lastAction);
         }
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.UNREPORTED_TRANSACTION)) {
             result.alternateText = (0, ReportUtils_1.getUnreportedTransactionMessage)();
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CUSTOM_UNIT_RATE) {
-            result.alternateText = (_w = (0, ReportActionsUtils_1.getReportActionMessageText)(lastAction)) !== null && _w !== void 0 ? _w : '';
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CUSTOM_UNIT_RATE) {
+            result.alternateText = (0, ReportActionsUtils_1.getReportActionMessageText)(lastAction) ?? '';
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_INTEGRATION) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_INTEGRATION) {
             result.alternateText = (0, ReportActionsUtils_1.getAddedConnectionMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_INTEGRATION) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_INTEGRATION) {
             result.alternateText = (0, ReportActionsUtils_1.getRemovedConnectionMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_AUDIT_RATE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_AUDIT_RATE) {
             result.alternateText = (0, ReportActionsUtils_1.getUpdatedAuditRateMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_APPROVER_RULE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_APPROVER_RULE) {
             result.alternateText = (0, ReportActionsUtils_1.getAddedApprovalRuleMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_APPROVER_RULE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_APPROVER_RULE) {
             result.alternateText = (0, ReportActionsUtils_1.getDeletedApprovalRuleMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_APPROVER_RULE) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_APPROVER_RULE) {
             result.alternateText = (0, ReportActionsUtils_1.getUpdatedApprovalRuleMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_MANUAL_APPROVAL_THRESHOLD) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_MANUAL_APPROVAL_THRESHOLD) {
             result.alternateText = (0, ReportActionsUtils_1.getUpdatedManualApprovalThresholdMessage)(lastAction);
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.RETRACTED) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.RETRACTED) {
             result.alternateText = (0, ReportActionsUtils_1.getRetractedMessage)();
         }
-        else if ((lastAction === null || lastAction === void 0 ? void 0 : lastAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.REOPENED) {
+        else if (lastAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REOPENED) {
             result.alternateText = (0, ReportActionsUtils_1.getReopenedMessage)();
         }
         else if ((0, ReportActionsUtils_1.isActionOfType)(lastAction, CONST_1.default.REPORT.ACTIONS.TYPE.TRAVEL_UPDATE)) {
@@ -625,9 +594,9 @@ function getOptionData(_a) {
             result.alternateText =
                 lastMessageTextFromReport.length > 0
                     ? (0, ReportUtils_1.formatReportLastMessageText)(Parser_1.default.htmlToText(lastMessageText))
-                    : (_x = (0, ReportActionsUtils_1.getLastVisibleMessage)(report.reportID, result.isAllowedToComment, {}, lastAction)) === null || _x === void 0 ? void 0 : _x.lastMessageText;
+                    : (0, ReportActionsUtils_1.getLastVisibleMessage)(report.reportID, result.isAllowedToComment, {}, lastAction)?.lastMessageText;
             if (!result.alternateText) {
-                result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)((_y = getWelcomeMessage(report, policy, participantPersonalDetailListExcludeCurrentUser, localeCompare, isReportArchived).messageText) !== null && _y !== void 0 ? _y : (0, Localize_1.translateLocal)('report.noActivityYet'));
+                result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)(getWelcomeMessage(report, policy, participantPersonalDetailListExcludeCurrentUser, localeCompare, isReportArchived).messageText ?? (0, Localize_1.translateLocal)('report.noActivityYet'));
             }
         }
         result.alternateText = prefix + result.alternateText;
@@ -639,7 +608,7 @@ function getOptionData(_a) {
             getWelcomeMessage(report, policy, participantPersonalDetailListExcludeCurrentUser, localeCompare, isReportArchived).messageText || (0, Localize_1.translateLocal)('report.noActivityYet'));
         }
         if ((0, OptionsListUtils_1.shouldShowLastActorDisplayName)(report, lastActorDetails, lastAction) && !isReportArchived) {
-            result.alternateText = "".concat(lastActorDisplayName, ": ").concat((0, ReportUtils_1.formatReportLastMessageText)(Parser_1.default.htmlToText(lastMessageText)));
+            result.alternateText = `${lastActorDisplayName}: ${(0, ReportUtils_1.formatReportLastMessageText)(Parser_1.default.htmlToText(lastMessageText))}`;
         }
         else {
             result.alternateText = (0, ReportUtils_1.formatReportLastMessageText)(Parser_1.default.htmlToText(lastMessageText));
@@ -650,15 +619,15 @@ function getOptionData(_a) {
         result.isUnread = true;
     }
     if (!hasMultipleParticipants) {
-        result.accountID = (_z = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.accountID) !== null && _z !== void 0 ? _z : CONST_1.default.DEFAULT_NUMBER_ID;
-        result.login = (_0 = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.login) !== null && _0 !== void 0 ? _0 : '';
-        result.phoneNumber = (_1 = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.phoneNumber) !== null && _1 !== void 0 ? _1 : '';
+        result.accountID = personalDetail?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+        result.login = personalDetail?.login ?? '';
+        result.phoneNumber = personalDetail?.phoneNumber ?? '';
     }
-    var reportName = (0, ReportUtils_1.getReportName)(report, policy, undefined, undefined, invoiceReceiverPolicy);
+    const reportName = (0, ReportUtils_1.getReportName)(report, policy, undefined, undefined, invoiceReceiverPolicy);
     result.text = reportName;
     result.subtitle = subtitle;
     result.participantsList = participantPersonalDetailList;
-    result.icons = (0, ReportUtils_1.getIcons)(report, personalDetails, personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.avatar, personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.login, (_2 = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.accountID) !== null && _2 !== void 0 ? _2 : CONST_1.default.DEFAULT_NUMBER_ID, policy, invoiceReceiverPolicy, isReportArchived);
+    result.icons = (0, ReportUtils_1.getIcons)(report, personalDetails, personalDetail?.avatar, personalDetail?.login, personalDetail?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID, policy, invoiceReceiverPolicy, isReportArchived);
     result.displayNamesWithTooltips = displayNamesWithTooltips;
     if (status) {
         result.status = status;
@@ -666,10 +635,8 @@ function getOptionData(_a) {
     result.type = report.type;
     return result;
 }
-function getWelcomeMessage(report, policy, participantPersonalDetailList, localeCompare, isReportArchived, reportDetailsLink) {
-    if (isReportArchived === void 0) { isReportArchived = false; }
-    if (reportDetailsLink === void 0) { reportDetailsLink = ''; }
-    var welcomeMessage = {};
+function getWelcomeMessage(report, policy, participantPersonalDetailList, localeCompare, isReportArchived = false, reportDetailsLink = '') {
+    const welcomeMessage = {};
     if ((0, ReportUtils_1.isChatThread)(report) || (0, ReportUtils_1.isTaskReport)(report)) {
         return welcomeMessage;
     }
@@ -677,14 +644,14 @@ function getWelcomeMessage(report, policy, participantPersonalDetailList, locale
         return getRoomWelcomeMessage(report, isReportArchived, reportDetailsLink);
     }
     if ((0, ReportUtils_1.isPolicyExpenseChat)(report)) {
-        if (policy === null || policy === void 0 ? void 0 : policy.description) {
+        if (policy?.description) {
             welcomeMessage.messageHtml = policy.description;
             welcomeMessage.messageText = Parser_1.default.htmlToText(welcomeMessage.messageHtml);
         }
         else {
             welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryPolicyExpenseChat', {
-                submitterDisplayName: (0, ReportUtils_1.getDisplayNameForParticipant)({ accountID: report === null || report === void 0 ? void 0 : report.ownerAccountID }),
-                workspaceName: (0, ReportUtils_1.getPolicyName)({ report: report }),
+                submitterDisplayName: (0, ReportUtils_1.getDisplayNameForParticipant)({ accountID: report?.ownerAccountID }),
+                workspaceName: (0, ReportUtils_1.getPolicyName)({ report }),
             });
             welcomeMessage.messageText = Parser_1.default.htmlToText(welcomeMessage.messageHtml);
         }
@@ -699,81 +666,77 @@ function getWelcomeMessage(report, policy, participantPersonalDetailList, locale
         return welcomeMessage;
     }
     welcomeMessage.phrase1 = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistory');
-    var isMultipleParticipant = participantPersonalDetailList.length > 1;
-    var displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)(participantPersonalDetailList, isMultipleParticipant, localeCompare);
-    var displayNamesWithTooltipsText = displayNamesWithTooltips
-        .map(function (_a, index) {
-        var displayName = _a.displayName;
+    const isMultipleParticipant = participantPersonalDetailList.length > 1;
+    const displayNamesWithTooltips = (0, ReportUtils_1.getDisplayNamesWithTooltips)(participantPersonalDetailList, isMultipleParticipant, localeCompare);
+    const displayNamesWithTooltipsText = displayNamesWithTooltips
+        .map(({ displayName }, index) => {
         if (index === displayNamesWithTooltips.length - 1) {
-            return "".concat(displayName, ".");
+            return `${displayName}.`;
         }
         if (index === displayNamesWithTooltips.length - 2) {
-            return "".concat(displayName, " ").concat((0, Localize_1.translateLocal)('common.and'));
+            return `${displayName} ${(0, Localize_1.translateLocal)('common.and')}`;
         }
         if (index < displayNamesWithTooltips.length - 2) {
-            return "".concat(displayName, ",");
+            return `${displayName},`;
         }
         return '';
     })
         .join(' ');
-    welcomeMessage.messageText = displayNamesWithTooltips.length ? ensureSingleSpacing("".concat(welcomeMessage.phrase1, " ").concat(displayNamesWithTooltipsText)) : '';
+    welcomeMessage.messageText = displayNamesWithTooltips.length ? ensureSingleSpacing(`${welcomeMessage.phrase1} ${displayNamesWithTooltipsText}`) : '';
     return welcomeMessage;
 }
 /**
  * Get welcome message based on room type
  */
-function getRoomWelcomeMessage(report, isReportArchived, reportDetailsLink) {
-    var _a, _b, _c, _d, _e;
-    if (isReportArchived === void 0) { isReportArchived = false; }
-    if (reportDetailsLink === void 0) { reportDetailsLink = ''; }
-    var welcomeMessage = {};
-    var workspaceName = (0, ReportUtils_1.getPolicyName)({ report: report });
-    var reportName = (0, ReportUtils_1.getReportName)(report);
-    if (report === null || report === void 0 ? void 0 : report.description) {
+function getRoomWelcomeMessage(report, isReportArchived = false, reportDetailsLink = '') {
+    const welcomeMessage = {};
+    const workspaceName = (0, ReportUtils_1.getPolicyName)({ report });
+    const reportName = (0, ReportUtils_1.getReportName)(report);
+    if (report?.description) {
         welcomeMessage.messageHtml = (0, ReportUtils_1.getReportDescription)(report);
         welcomeMessage.messageText = Parser_1.default.htmlToText(welcomeMessage.messageHtml);
         return welcomeMessage;
     }
     if (isReportArchived) {
-        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfArchivedRoom', { reportName: reportName, reportDetailsLink: reportDetailsLink });
+        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfArchivedRoom', { reportName, reportDetailsLink });
     }
     else if ((0, ReportUtils_1.isDomainRoom)(report)) {
-        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryDomainRoom', { domainRoom: (_a = report === null || report === void 0 ? void 0 : report.reportName) !== null && _a !== void 0 ? _a : '' });
+        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryDomainRoom', { domainRoom: report?.reportName ?? '' });
     }
     else if ((0, ReportUtils_1.isAdminRoom)(report)) {
-        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryAdminRoom', { workspaceName: workspaceName });
+        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryAdminRoom', { workspaceName });
     }
     else if ((0, ReportUtils_1.isAnnounceRoom)(report)) {
-        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryAnnounceRoom', { workspaceName: workspaceName });
+        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryAnnounceRoom', { workspaceName });
     }
     else if ((0, ReportUtils_1.isInvoiceRoom)(report)) {
-        var payer = ((_b = report === null || report === void 0 ? void 0 : report.invoiceReceiver) === null || _b === void 0 ? void 0 : _b.type) === CONST_1.default.REPORT.INVOICE_RECEIVER_TYPE.INDIVIDUAL
-            ? (0, ReportUtils_1.getDisplayNameForParticipant)({ accountID: (_c = report === null || report === void 0 ? void 0 : report.invoiceReceiver) === null || _c === void 0 ? void 0 : _c.accountID })
+        const payer = report?.invoiceReceiver?.type === CONST_1.default.REPORT.INVOICE_RECEIVER_TYPE.INDIVIDUAL
+            ? (0, ReportUtils_1.getDisplayNameForParticipant)({ accountID: report?.invoiceReceiver?.accountID })
             : // This will be fixed as part of https://github.com/Expensify/Expensify/issues/507850
                 // eslint-disable-next-line deprecation/deprecation
-                (_e = (0, PolicyUtils_1.getPolicy)((_d = report === null || report === void 0 ? void 0 : report.invoiceReceiver) === null || _d === void 0 ? void 0 : _d.policyID)) === null || _e === void 0 ? void 0 : _e.name;
-        var receiver = (0, ReportUtils_1.getPolicyName)({ report: report });
+                (0, PolicyUtils_1.getPolicy)(report?.invoiceReceiver?.policyID)?.name;
+        const receiver = (0, ReportUtils_1.getPolicyName)({ report });
         welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryInvoiceRoom', {
-            invoicePayer: payer !== null && payer !== void 0 ? payer : '',
+            invoicePayer: payer ?? '',
             invoiceReceiver: receiver,
         });
     }
     else {
         // Message for user created rooms or other room types.
-        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryUserRoom', { reportName: reportName, reportDetailsLink: reportDetailsLink });
+        welcomeMessage.messageHtml = (0, Localize_1.translateLocal)('reportActionsView.beginningOfChatHistoryUserRoom', { reportName, reportDetailsLink });
     }
     welcomeMessage.messageText = Parser_1.default.htmlToText(welcomeMessage.messageHtml);
     return welcomeMessage;
 }
 exports.default = {
-    getOptionData: getOptionData,
-    sortReportsToDisplayInLHN: sortReportsToDisplayInLHN,
-    categorizeReportsForLHN: categorizeReportsForLHN,
-    sortCategorizedReports: sortCategorizedReports,
-    combineReportCategories: combineReportCategories,
-    getWelcomeMessage: getWelcomeMessage,
-    getReasonAndReportActionThatHasRedBrickRoad: getReasonAndReportActionThatHasRedBrickRoad,
-    shouldShowRedBrickRoad: shouldShowRedBrickRoad,
-    getReportsToDisplayInLHN: getReportsToDisplayInLHN,
-    updateReportsToDisplayInLHN: updateReportsToDisplayInLHN,
+    getOptionData,
+    sortReportsToDisplayInLHN,
+    categorizeReportsForLHN,
+    sortCategorizedReports,
+    combineReportCategories,
+    getWelcomeMessage,
+    getReasonAndReportActionThatHasRedBrickRoad,
+    shouldShowRedBrickRoad,
+    getReportsToDisplayInLHN,
+    updateReportsToDisplayInLHN,
 };

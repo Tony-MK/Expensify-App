@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
-var getNavigationBarType = function (insets) {
-    var _a;
-    var bottomInset = (_a = insets === null || insets === void 0 ? void 0 : insets.bottom) !== null && _a !== void 0 ? _a : 0;
+const CONST_1 = require("@src/CONST");
+const getNavigationBarType = (insets) => {
+    const bottomInset = insets?.bottom ?? 0;
     // If there is no bottom safe area inset, the device uses a physical navigation button.
     if (bottomInset === 0) {
         return CONST_1.default.NAVIGATION_BAR_TYPE.NONE;

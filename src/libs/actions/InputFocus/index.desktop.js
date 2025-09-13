@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.callback = void 0;
 exports.composerFocusKeepFocusOn = composerFocusKeepFocusOn;
 exports.inputFocusChange = inputFocusChange;
-var react_native_1 = require("react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var ReportActionComposeFocusManager_1 = require("@libs/ReportActionComposeFocusManager");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_1 = require("react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const ReportActionComposeFocusManager_1 = require("@libs/ReportActionComposeFocusManager");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function inputFocusChange(focus) {
     react_native_onyx_1.default.set(ONYXKEYS_1.default.INPUT_FOCUSED, focus);
 }
-var refSave;
+let refSave;
 function composerFocusKeepFocusOn(ref, isFocused, modal, onyxFocused) {
     if (isFocused && !onyxFocused) {
         inputFocusChange(true);
@@ -21,8 +21,8 @@ function composerFocusKeepFocusOn(ref, isFocused, modal, onyxFocused) {
     }
     if (!isFocused && !onyxFocused && !modal.willAlertModalBecomeVisible && !modal.isVisible && refSave) {
         if (!ReportActionComposeFocusManager_1.default.isFocused()) {
-            react_native_1.InteractionManager.runAfterInteractions(function () {
-                refSave === null || refSave === void 0 ? void 0 : refSave.focus();
+            react_native_1.InteractionManager.runAfterInteractions(() => {
+                refSave?.focus();
             });
         }
         else {
@@ -30,5 +30,5 @@ function composerFocusKeepFocusOn(ref, isFocused, modal, onyxFocused) {
         }
     }
 }
-var callback = function (method) { return method(); };
+const callback = (method) => method();
 exports.callback = callback;

@@ -1,24 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FlatList_1 = require("@components/FlatList");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var DuplicateTransactionItem_1 = require("./DuplicateTransactionItem");
-var keyExtractor = function (item, index) { return "".concat(item === null || item === void 0 ? void 0 : item.transactionID, "+").concat(index); };
-var maintainVisibleContentPosition = {
+const react_1 = require("react");
+const FlatList_1 = require("@components/FlatList");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const DuplicateTransactionItem_1 = require("./DuplicateTransactionItem");
+const keyExtractor = (item, index) => `${item?.transactionID}+${index}`;
+const maintainVisibleContentPosition = {
     minIndexForVisible: 1,
 };
-function DuplicateTransactionsList(_a) {
-    var transactions = _a.transactions;
-    var styles = (0, useThemeStyles_1.default)();
-    var allReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false })[0];
-    var policies = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: false })[0];
-    var renderItem = (0, react_1.useCallback)(function (_a) {
-        var item = _a.item, index = _a.index;
-        return (<DuplicateTransactionItem_1.default transaction={item} index={index} allReports={allReports} policies={policies}/>);
-    }, [allReports, policies]);
+function DuplicateTransactionsList({ transactions }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const [allReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false });
+    const [policies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: false });
+    const renderItem = (0, react_1.useCallback)(({ item, index }) => (<DuplicateTransactionItem_1.default transaction={item} index={index} allReports={allReports} policies={policies}/>), [allReports, policies]);
     return (<FlatList_1.default data={transactions} renderItem={renderItem} keyExtractor={keyExtractor} maintainVisibleContentPosition={maintainVisibleContentPosition} contentContainerStyle={styles.pt5}/>);
 }
 DuplicateTransactionsList.displayName = 'DuplicateTransactionsList';

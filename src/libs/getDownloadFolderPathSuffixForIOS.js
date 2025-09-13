@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 function getDownloadFolderPathSuffixForIOS(environment) {
-    var folderSuffix = '';
+    let folderSuffix = '';
     switch (environment) {
         case CONST_1.default.ENVIRONMENT.PRODUCTION:
             folderSuffix = '';

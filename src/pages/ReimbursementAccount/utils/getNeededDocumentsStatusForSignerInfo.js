@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 function getNeededDocumentsStatusForSignerInfo(workspaceCurrency, accountCountry) {
     return {
         isProofOfDirectorsNeeded: accountCountry === CONST_1.default.COUNTRY.CA || accountCountry === CONST_1.default.COUNTRY.AU,

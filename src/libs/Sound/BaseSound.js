@@ -2,28 +2,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getIsMuted = exports.SOUNDS = void 0;
 exports.withMinimalExecutionTime = withMinimalExecutionTime;
-var react_native_onyx_1 = require("react-native-onyx");
-var getPlatform_1 = require("@libs/getPlatform");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var isMuted = false;
+const react_native_onyx_1 = require("react-native-onyx");
+const getPlatform_1 = require("@libs/getPlatform");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+let isMuted = false;
 // We use `connectWithoutView` here because this is purely for sound utility logic and not connected
 // to any UI component. This connection tracks the platform-specific mute state in a module-level
 // variable that sound functions check when called, avoiding unnecessary re-renders since.
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.NVP_MUTED_PLATFORMS,
-    callback: function (val) {
-        var platform = (0, getPlatform_1.default)(true);
-        isMuted = !!(val === null || val === void 0 ? void 0 : val[platform]);
+    callback: (val) => {
+        const platform = (0, getPlatform_1.default)(true);
+        isMuted = !!val?.[platform];
     },
 });
-var SOUNDS = {
+const SOUNDS = {
     DONE: 'done',
     SUCCESS: 'success',
     ATTENTION: 'attention',
     RECEIVE: 'receive',
 };
 exports.SOUNDS = SOUNDS;
-var getIsMuted = function () { return isMuted; };
+const getIsMuted = () => isMuted;
 exports.getIsMuted = getIsMuted;
 /**
  * Creates a version of the given function that, when called, queues the execution and ensures that
@@ -32,15 +32,15 @@ exports.getIsMuted = getIsMuted;
  * Each call returns a promise that resolves when the function call is executed, allowing for asynchronous handling.
  */
 function withMinimalExecutionTime(func, minExecutionTime) {
-    var queue = [];
-    var timerId = null;
+    const queue = [];
+    let timerId = null;
     function processQueue() {
         if (queue.length > 0) {
-            var next = queue.shift();
+            const next = queue.shift();
             if (!next) {
                 return;
             }
-            var nextFunc = next[0], resolve = next[1];
+            const [nextFunc, resolve] = next;
             nextFunc();
             resolve();
             timerId = setTimeout(processQueue, minExecutionTime);
@@ -49,13 +49,9 @@ function withMinimalExecutionTime(func, minExecutionTime) {
             timerId = null;
         }
     }
-    return function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return new Promise(function (resolve) {
-            queue.push([function () { return func.apply(void 0, args); }, resolve]);
+    return function (...args) {
+        return new Promise((resolve) => {
+            queue.push([() => func(...args), resolve]);
             if (!timerId) {
                 // If the timer isn't running, start processing the queue
                 processQueue();

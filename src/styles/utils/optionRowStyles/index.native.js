@@ -7,5 +7,5 @@ exports.compactContentContainerStyles = void 0;
  *  keeping compactContentContainerStyles as it is.
  *  https://github.com/Expensify/App/issues/14148
  */
-var compactContentContainerStyles = function (styles) { return styles.alignItemsCenter; };
+const compactContentContainerStyles = (styles) => styles.alignItemsCenter;
 exports.compactContentContainerStyles = compactContentContainerStyles;

@@ -1,88 +1,86 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkIsFileImage = checkIsFileImage;
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AttachmentCarouselPagerContext_1 = require("@components/Attachments/AttachmentCarousel/Pager/AttachmentCarouselPagerContext");
-var Button_1 = require("@components/Button");
-var DistanceEReceipt_1 = require("@components/DistanceEReceipt");
-var EReceipt_1 = require("@components/EReceipt");
-var Icon_1 = require("@components/Icon");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var PerDiemEReceipt_1 = require("@components/PerDiemEReceipt");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var PlaybackContext_1 = require("@components/VideoPlayerContexts/PlaybackContext");
-var useFirstRenderRoute_1 = require("@hooks/useFirstRenderRoute");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CachedPDFPaths_1 = require("@libs/actions/CachedPDFPaths");
-var addEncryptedAuthTokenToURL_1 = require("@libs/addEncryptedAuthTokenToURL");
-var FileUtils_1 = require("@libs/fileDownload/FileUtils");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var AttachmentViewImage_1 = require("./AttachmentViewImage");
-var AttachmentViewPdf_1 = require("./AttachmentViewPdf");
-var AttachmentViewVideo_1 = require("./AttachmentViewVideo");
-var DefaultAttachmentView_1 = require("./DefaultAttachmentView");
-var HighResolutionInfo_1 = require("./HighResolutionInfo");
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AttachmentCarouselPagerContext_1 = require("@components/Attachments/AttachmentCarousel/Pager/AttachmentCarouselPagerContext");
+const Button_1 = require("@components/Button");
+const DistanceEReceipt_1 = require("@components/DistanceEReceipt");
+const EReceipt_1 = require("@components/EReceipt");
+const Icon_1 = require("@components/Icon");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const PerDiemEReceipt_1 = require("@components/PerDiemEReceipt");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const PlaybackContext_1 = require("@components/VideoPlayerContexts/PlaybackContext");
+const useFirstRenderRoute_1 = require("@hooks/useFirstRenderRoute");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CachedPDFPaths_1 = require("@libs/actions/CachedPDFPaths");
+const addEncryptedAuthTokenToURL_1 = require("@libs/addEncryptedAuthTokenToURL");
+const FileUtils_1 = require("@libs/fileDownload/FileUtils");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const AttachmentViewImage_1 = require("./AttachmentViewImage");
+const AttachmentViewPdf_1 = require("./AttachmentViewPdf");
+const AttachmentViewVideo_1 = require("./AttachmentViewVideo");
+const DefaultAttachmentView_1 = require("./DefaultAttachmentView");
+const HighResolutionInfo_1 = require("./HighResolutionInfo");
 function checkIsFileImage(source, fileName) {
-    var isSourceImage = typeof source === 'number' || (typeof source === 'string' && expensify_common_1.Str.isImage(source));
-    var isFileNameImage = fileName && expensify_common_1.Str.isImage(fileName);
+    const isSourceImage = typeof source === 'number' || (typeof source === 'string' && expensify_common_1.Str.isImage(source));
+    const isFileNameImage = fileName && expensify_common_1.Str.isImage(fileName);
     return isSourceImage || isFileNameImage;
 }
-function AttachmentView(_a) {
-    var _b, _c, _d;
-    var source = _a.source, previewSource = _a.previewSource, file = _a.file, isAuthTokenRequired = _a.isAuthTokenRequired, onPress = _a.onPress, shouldShowLoadingSpinnerIcon = _a.shouldShowLoadingSpinnerIcon, shouldShowDownloadIcon = _a.shouldShowDownloadIcon, containerStyles = _a.containerStyles, onToggleKeyboard = _a.onToggleKeyboard, _e = _a.onPDFLoadError, onPDFLoadErrorProp = _e === void 0 ? function () { } : _e, isFocused = _a.isFocused, isUsedInAttachmentModal = _a.isUsedInAttachmentModal, isWorkspaceAvatar = _a.isWorkspaceAvatar, maybeIcon = _a.maybeIcon, fallbackSource = _a.fallbackSource, _f = _a.transactionID, transactionID = _f === void 0 ? '-1' : _f, reportActionID = _a.reportActionID, isHovered = _a.isHovered, duration = _a.duration, isUsedAsChatAttachment = _a.isUsedAsChatAttachment, _g = _a.isUploaded, isUploaded = _g === void 0 ? true : _g, isDeleted = _a.isDeleted, _h = _a.isUploading, isUploading = _h === void 0 ? false : _h, reportID = _a.reportID;
-    var transaction = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), { canBeMissing: true })[0];
-    var translate = (0, useLocalize_1.default)().translate;
-    var updateCurrentURLAndReportID = (0, PlaybackContext_1.usePlaybackContext)().updateCurrentURLAndReportID;
-    var attachmentCarouselPagerContext = (0, react_1.useContext)(AttachmentCarouselPagerContext_1.default);
-    var _j = attachmentCarouselPagerContext !== null && attachmentCarouselPagerContext !== void 0 ? attachmentCarouselPagerContext : {}, onAttachmentError = _j.onAttachmentError, onAttachmentLoaded = _j.onAttachmentLoaded;
-    var theme = (0, useTheme_1.default)();
-    var safeAreaPaddingBottomStyle = (0, useSafeAreaPaddings_1.default)().safeAreaPaddingBottomStyle;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var _k = (0, react_1.useState)(false), loadComplete = _k[0], setLoadComplete = _k[1];
-    var _l = (0, react_1.useState)(false), isHighResolution = _l[0], setIsHighResolution = _l[1];
-    var _m = (0, react_1.useState)(false), hasPDFFailedToLoad = _m[0], setHasPDFFailedToLoad = _m[1];
-    var isVideo = (typeof source === 'string' && expensify_common_1.Str.isVideo(source)) || ((file === null || file === void 0 ? void 0 : file.name) && expensify_common_1.Str.isVideo(file.name));
-    var firstRenderRoute = (0, useFirstRenderRoute_1.default)();
-    var isInFocusedModal = firstRenderRoute.isFocused && isFocused === undefined;
-    (0, react_1.useEffect)(function () {
+function AttachmentView({ source, previewSource, file, isAuthTokenRequired, onPress, shouldShowLoadingSpinnerIcon, shouldShowDownloadIcon, containerStyles, onToggleKeyboard, onPDFLoadError: onPDFLoadErrorProp = () => { }, isFocused, isUsedInAttachmentModal, isWorkspaceAvatar, maybeIcon, fallbackSource, transactionID = '-1', reportActionID, isHovered, duration, isUsedAsChatAttachment, isUploaded = true, isDeleted, isUploading = false, reportID, }) {
+    const [transaction] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, { canBeMissing: true });
+    const { translate } = (0, useLocalize_1.default)();
+    const { updateCurrentURLAndReportID } = (0, PlaybackContext_1.usePlaybackContext)();
+    const attachmentCarouselPagerContext = (0, react_1.useContext)(AttachmentCarouselPagerContext_1.default);
+    const { onAttachmentError, onAttachmentLoaded } = attachmentCarouselPagerContext ?? {};
+    const theme = (0, useTheme_1.default)();
+    const { safeAreaPaddingBottomStyle } = (0, useSafeAreaPaddings_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const [loadComplete, setLoadComplete] = (0, react_1.useState)(false);
+    const [isHighResolution, setIsHighResolution] = (0, react_1.useState)(false);
+    const [hasPDFFailedToLoad, setHasPDFFailedToLoad] = (0, react_1.useState)(false);
+    const isVideo = (typeof source === 'string' && expensify_common_1.Str.isVideo(source)) || (file?.name && expensify_common_1.Str.isVideo(file.name));
+    const firstRenderRoute = (0, useFirstRenderRoute_1.default)();
+    const isInFocusedModal = firstRenderRoute.isFocused && isFocused === undefined;
+    (0, react_1.useEffect)(() => {
         if (!isFocused && !isInFocusedModal && !(file && isUsedInAttachmentModal)) {
             return;
         }
         updateCurrentURLAndReportID(isVideo && typeof source === 'string' ? source : undefined, reportID);
     }, [file, isFocused, isInFocusedModal, isUsedInAttachmentModal, isVideo, reportID, source, updateCurrentURLAndReportID]);
-    var _o = (0, react_1.useState)(false), imageError = _o[0], setImageError = _o[1];
-    var isOffline = (0, useNetwork_1.default)({ onReconnect: function () { return setImageError(false); } }).isOffline;
-    (0, react_1.useEffect)(function () {
-        (0, FileUtils_1.getFileResolution)(file).then(function (resolution) {
+    const [imageError, setImageError] = (0, react_1.useState)(false);
+    const { isOffline } = (0, useNetwork_1.default)({ onReconnect: () => setImageError(false) });
+    (0, react_1.useEffect)(() => {
+        (0, FileUtils_1.getFileResolution)(file).then((resolution) => {
             setIsHighResolution((0, FileUtils_1.isHighResolutionImage)(resolution));
         });
     }, [file]);
-    (0, react_1.useEffect)(function () {
-        var isImageSource = typeof source !== 'function' && !!checkIsFileImage(source, file === null || file === void 0 ? void 0 : file.name);
-        var isErrorInImage = imageError && (typeof fallbackSource === 'number' || typeof fallbackSource === 'function');
-        onAttachmentError === null || onAttachmentError === void 0 ? void 0 : onAttachmentError(source, isErrorInImage && isImageSource);
-    }, [fallbackSource, file === null || file === void 0 ? void 0 : file.name, imageError, onAttachmentError, source]);
+    (0, react_1.useEffect)(() => {
+        const isImageSource = typeof source !== 'function' && !!checkIsFileImage(source, file?.name);
+        const isErrorInImage = imageError && (typeof fallbackSource === 'number' || typeof fallbackSource === 'function');
+        onAttachmentError?.(source, isErrorInImage && isImageSource);
+    }, [fallbackSource, file?.name, imageError, onAttachmentError, source]);
     // Handles case where source is a component (ex: SVG) or a number
     // Number may represent a SVG or an image
     if (typeof source === 'function' || (maybeIcon && typeof source === 'number')) {
-        var iconFillColor = '';
-        var additionalStyles = [];
+        let iconFillColor = '';
+        let additionalStyles = [];
         if (isWorkspaceAvatar && file) {
-            var defaultWorkspaceAvatarColor = StyleUtils.getDefaultWorkspaceAvatarColor((_b = file.name) !== null && _b !== void 0 ? _b : '');
+            const defaultWorkspaceAvatarColor = StyleUtils.getDefaultWorkspaceAvatarColor(file.name ?? '');
             iconFillColor = defaultWorkspaceAvatarColor.fill;
             additionalStyles = [defaultWorkspaceAvatarColor];
         }
@@ -100,13 +98,12 @@ function AttachmentView(_a) {
     }
     // Check both source and file.name since PDFs dragged into the text field
     // will appear with a source that is a blob
-    var isSourcePDF = typeof source === 'string' && expensify_common_1.Str.isPDF(source);
-    var isFilePDF = file && expensify_common_1.Str.isPDF((_c = file.name) !== null && _c !== void 0 ? _c : translate('attachmentView.unknownFilename'));
+    const isSourcePDF = typeof source === 'string' && expensify_common_1.Str.isPDF(source);
+    const isFilePDF = file && expensify_common_1.Str.isPDF(file.name ?? translate('attachmentView.unknownFilename'));
     if (!hasPDFFailedToLoad && !isUploading && (isSourcePDF || isFilePDF)) {
-        var encryptedSourceUrl = isAuthTokenRequired ? (0, addEncryptedAuthTokenToURL_1.default)(source) : source;
-        var onPDFLoadComplete = function (path) {
-            var _a;
-            var id = (_a = (transaction && transaction.transactionID)) !== null && _a !== void 0 ? _a : reportActionID;
+        const encryptedSourceUrl = isAuthTokenRequired ? (0, addEncryptedAuthTokenToURL_1.default)(source) : source;
+        const onPDFLoadComplete = (path) => {
+            const id = (transaction && transaction.transactionID) ?? reportActionID;
             if (path && id) {
                 (0, CachedPDFPaths_1.add)(id, path);
             }
@@ -114,7 +111,7 @@ function AttachmentView(_a) {
                 setLoadComplete(true);
             }
         };
-        var onPDFLoadError = function () {
+        const onPDFLoadError = () => {
             setHasPDFFailedToLoad(true);
             onPDFLoadErrorProp();
         };
@@ -132,9 +129,9 @@ function AttachmentView(_a) {
     // both PDFs and images will appear as images when pasted into the text field.
     // We also check for numeric source since this is how static images (used for preview) are represented in RN.
     // isLocalSource checks if the source is blob as that's the type of the temp image coming from mobile web
-    var isFileImage = checkIsFileImage(source, file === null || file === void 0 ? void 0 : file.name);
-    var isLocalSourceImage = typeof source === 'string' && source.startsWith('blob:');
-    var isImage = isFileImage !== null && isFileImage !== void 0 ? isFileImage : isLocalSourceImage;
+    const isFileImage = checkIsFileImage(source, file?.name);
+    const isLocalSourceImage = typeof source === 'string' && source.startsWith('blob:');
+    const isImage = isFileImage ?? isLocalSourceImage;
     if (isImage) {
         if (imageError && (typeof fallbackSource === 'number' || typeof fallbackSource === 'function')) {
             return (<react_native_1.View style={[styles.flexColumn, styles.alignItemsCenter, styles.justifyContentCenter]}>
@@ -142,7 +139,7 @@ function AttachmentView(_a) {
                     <react_native_1.View>
                         <Text_1.default style={[styles.notFoundTextHeader]}>{translate('attachmentView.attachmentNotFound')}</Text_1.default>
                     </react_native_1.View>
-                    <Button_1.default text={translate('attachmentView.retry')} icon={Expensicons_1.ArrowCircleClockwise} onPress={function () {
+                    <Button_1.default text={translate('attachmentView.retry')} icon={Expensicons_1.ArrowCircleClockwise} onPress={() => {
                     if (isOffline) {
                         return;
                     }
@@ -150,21 +147,21 @@ function AttachmentView(_a) {
                 }}/>
                 </react_native_1.View>);
         }
-        var imageSource = imageError && fallbackSource ? fallbackSource : source;
+        let imageSource = imageError && fallbackSource ? fallbackSource : source;
         if (isHighResolution) {
             if (!isUploaded) {
                 return (<>
                         <react_native_1.View style={styles.imageModalImageCenterContainer}>
-                            <DefaultAttachmentView_1.default icon={Expensicons_1.Gallery} fileName={file === null || file === void 0 ? void 0 : file.name} shouldShowDownloadIcon={shouldShowDownloadIcon} shouldShowLoadingSpinnerIcon={shouldShowLoadingSpinnerIcon} containerStyles={containerStyles}/>
+                            <DefaultAttachmentView_1.default icon={Expensicons_1.Gallery} fileName={file?.name} shouldShowDownloadIcon={shouldShowDownloadIcon} shouldShowLoadingSpinnerIcon={shouldShowLoadingSpinnerIcon} containerStyles={containerStyles}/>
                         </react_native_1.View>
                         <HighResolutionInfo_1.default isUploaded={isUploaded}/>
                     </>);
             }
-            imageSource = (_d = previewSource === null || previewSource === void 0 ? void 0 : previewSource.toString()) !== null && _d !== void 0 ? _d : imageSource;
+            imageSource = previewSource?.toString() ?? imageSource;
         }
         return (<>
                 <react_native_1.View style={styles.imageModalImageCenterContainer}>
-                    <AttachmentViewImage_1.default url={imageSource} file={file} isAuthTokenRequired={isAuthTokenRequired} loadComplete={loadComplete} isImage={isImage} onPress={onPress} onLoad={function () { return onAttachmentLoaded === null || onAttachmentLoaded === void 0 ? void 0 : onAttachmentLoaded(source, true); }} onError={function () {
+                    <AttachmentViewImage_1.default url={imageSource} file={file} isAuthTokenRequired={isAuthTokenRequired} loadComplete={loadComplete} isImage={isImage} onPress={onPress} onLoad={() => onAttachmentLoaded?.(source, true)} onError={() => {
                 if (isOffline) {
                     return;
                 }
@@ -176,10 +173,10 @@ function AttachmentView(_a) {
                     </react_native_1.View>)}
             </>);
     }
-    if ((isVideo !== null && isVideo !== void 0 ? isVideo : ((file === null || file === void 0 ? void 0 : file.name) && expensify_common_1.Str.isVideo(file.name))) && typeof source === 'string') {
-        return (<AttachmentViewVideo_1.default source={source} shouldUseSharedVideoElement={!CONST_1.default.ATTACHMENT_LOCAL_URL_PREFIX.some(function (prefix) { return source.startsWith(prefix); })} isHovered={isHovered} duration={duration} reportID={reportID}/>);
+    if ((isVideo ?? (file?.name && expensify_common_1.Str.isVideo(file.name))) && typeof source === 'string') {
+        return (<AttachmentViewVideo_1.default source={source} shouldUseSharedVideoElement={!CONST_1.default.ATTACHMENT_LOCAL_URL_PREFIX.some((prefix) => source.startsWith(prefix))} isHovered={isHovered} duration={duration} reportID={reportID}/>);
     }
-    return (<DefaultAttachmentView_1.default fileName={file === null || file === void 0 ? void 0 : file.name} shouldShowDownloadIcon={shouldShowDownloadIcon} 
+    return (<DefaultAttachmentView_1.default fileName={file?.name} shouldShowDownloadIcon={shouldShowDownloadIcon} 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     shouldShowLoadingSpinnerIcon={shouldShowLoadingSpinnerIcon || isUploading} containerStyles={containerStyles} isDeleted={isDeleted} isUploading={isUploading}/>);
 }

@@ -1,27 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var Illustrations_1 = require("@components/Icon/Illustrations");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Policy_1 = require("@libs/actions/Policy/Policy");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var BillingBanner_1 = require("@pages/settings/Subscription/CardSection/BillingBanner/BillingBanner");
-function WorkspaceCompanyCardExpensifyCardPromotionBanner(_a) {
-    var policy = _a.policy;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var policyID = policy === null || policy === void 0 ? void 0 : policy.id;
-    var areExpensifyCardsEnabled = policy === null || policy === void 0 ? void 0 : policy.areExpensifyCardsEnabled;
-    var handleLearnMore = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const Illustrations_1 = require("@components/Icon/Illustrations");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Policy_1 = require("@libs/actions/Policy/Policy");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const BillingBanner_1 = require("@pages/settings/Subscription/CardSection/BillingBanner/BillingBanner");
+function WorkspaceCompanyCardExpensifyCardPromotionBanner({ policy }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const policyID = policy?.id;
+    const areExpensifyCardsEnabled = policy?.areExpensifyCardsEnabled;
+    const handleLearnMore = (0, react_1.useCallback)(() => {
         if (!policyID) {
             return;
         }
@@ -31,8 +30,8 @@ function WorkspaceCompanyCardExpensifyCardPromotionBanner(_a) {
         }
         (0, Policy_1.enableExpensifyCard)(policyID, true, true);
     }, [policyID, areExpensifyCardsEnabled]);
-    var rightComponent = (0, react_1.useMemo)(function () {
-        var smallScreenStyle = shouldUseNarrowLayout ? [styles.flex0, styles.flexBasis100, styles.justifyContentCenter] : [];
+    const rightComponent = (0, react_1.useMemo)(() => {
+        const smallScreenStyle = shouldUseNarrowLayout ? [styles.flex0, styles.flexBasis100, styles.justifyContentCenter] : [];
         return (<react_native_1.View style={[styles.flexRow, styles.gap2, smallScreenStyle]}>
                 <Button_1.default success onPress={handleLearnMore} style={shouldUseNarrowLayout && styles.flex1} text={translate('workspace.moreFeatures.companyCards.expensifyCardBannerLearnMoreButton')}/>
             </react_native_1.View>);

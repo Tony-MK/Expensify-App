@@ -1,27 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var Text_1 = require("./Text");
-function AttachmentOfflineIndicator(_a) {
-    var _b = _a.isPreview, isPreview = _b === void 0 ? false : _b;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var translate = (0, useLocalize_1.default)().translate;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const Text_1 = require("./Text");
+function AttachmentOfflineIndicator({ isPreview = false }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     // We don't want to show the offline indicator when the attachment is a cached one, so
     // we delay the display by 200 ms to ensure it is not a cached one.
-    var _c = (0, react_1.useState)(true), onCacheDelay = _c[0], setOnCacheDelay = _c[1];
-    (0, react_1.useEffect)(function () {
-        var timeout = setTimeout(function () { return setOnCacheDelay(false); }, 200);
-        return function () { return clearTimeout(timeout); };
+    const [onCacheDelay, setOnCacheDelay] = (0, react_1.useState)(true);
+    (0, react_1.useEffect)(() => {
+        const timeout = setTimeout(() => setOnCacheDelay(false), 200);
+        return () => clearTimeout(timeout);
     }, []);
     if (!isOffline || onCacheDelay) {
         return null;

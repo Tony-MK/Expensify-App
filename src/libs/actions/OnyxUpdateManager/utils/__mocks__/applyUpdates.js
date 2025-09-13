@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mockValues = exports.applyUpdates = void 0;
-var OnyxUpdates = require("@userActions/OnyxUpdates");
-var createProxyForObject_1 = require("@src/utils/createProxyForObject");
+const OnyxUpdates = require("@userActions/OnyxUpdates");
+const createProxyForObject_1 = require("@src/utils/createProxyForObject");
 jest.mock('@userActions/OnyxUpdates');
-var mockValues = {
+const mockValues = {
     beforeApplyUpdates: undefined,
 };
-var mockValuesProxy = (0, createProxyForObject_1.default)(mockValues);
+const mockValuesProxy = (0, createProxyForObject_1.default)(mockValues);
 exports.mockValues = mockValuesProxy;
-var applyUpdates = jest.fn(function (updates) {
-    var createChain = function () {
-        var chain = Promise.resolve();
-        Object.values(updates).forEach(function (update) {
-            chain = chain.then(function () {
-                return OnyxUpdates.apply(update).then(function () { return undefined; });
+const applyUpdates = jest.fn((updates) => {
+    const createChain = () => {
+        let chain = Promise.resolve();
+        Object.values(updates).forEach((update) => {
+            chain = chain.then(() => {
+                return OnyxUpdates.apply(update).then(() => undefined);
             });
         });
         return chain;
@@ -22,6 +22,6 @@ var applyUpdates = jest.fn(function (updates) {
     if (mockValuesProxy.beforeApplyUpdates === undefined) {
         return createChain();
     }
-    return mockValuesProxy.beforeApplyUpdates(updates).then(function () { return createChain(); });
+    return mockValuesProxy.beforeApplyUpdates(updates).then(() => createChain());
 });
 exports.applyUpdates = applyUpdates;

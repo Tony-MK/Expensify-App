@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Web-only style.
  */
-var overflowAuto = {
+const overflowAuto = {
     overflow: 'auto',
 };
 exports.default = overflowAuto;

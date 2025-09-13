@@ -1,117 +1,93 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var fast_equals_1 = require("fast-equals");
-var pick_1 = require("lodash/pick");
-var reject_1 = require("lodash/reject");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_permissions_1 = require("react-native-permissions");
-var Button_1 = require("@components/Button");
-var ContactPermissionModal_1 = require("@components/ContactPermissionModal");
-var EmptySelectionListContent_1 = require("@components/EmptySelectionListContent");
-var FormHelpMessage_1 = require("@components/FormHelpMessage");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var MenuItem_1 = require("@components/MenuItem");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var OptionListContextProvider_1 = require("@components/OptionListContextProvider");
-var ReferralProgramCTA_1 = require("@components/ReferralProgramCTA");
-var SelectionList_1 = require("@components/SelectionList");
-var InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
-var useContactImport_1 = require("@hooks/useContactImport");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useDismissedReferralBanners_1 = require("@hooks/useDismissedReferralBanners");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePolicy_1 = require("@hooks/usePolicy");
-var useScreenWrapperTransitionStatus_1 = require("@hooks/useScreenWrapperTransitionStatus");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var getPlatform_1 = require("@libs/getPlatform");
-var goToSettings_1 = require("@libs/goToSettings");
-var IOUUtils_1 = require("@libs/IOUUtils");
-var memoize_1 = require("@libs/memoize");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
-var Policy_1 = require("@userActions/Policy/Policy");
-var Report_1 = require("@userActions/Report");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var ImportContactButton_1 = require("./ImportContactButton");
-var memoizedGetValidOptions = (0, memoize_1.default)(OptionsListUtils_1.getValidOptions, { maxSize: 5, monitoringName: 'MoneyRequestParticipantsSelector.getValidOptions' });
-function MoneyRequestParticipantsSelector(_a, ref) {
-    var _b;
-    var _c = _a.participants, participants = _c === void 0 ? CONST_1.default.EMPTY_ARRAY : _c, 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _d = _a.onFinish, 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onFinish = _d === void 0 ? function (_value) { } : _d, onParticipantsAdded = _a.onParticipantsAdded, iouType = _a.iouType, action = _a.action, _e = _a.isPerDiemRequest, isPerDiemRequest = _e === void 0 ? false : _e;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var betas = (0, useOnyx_1.default)(ONYXKEYS_1.default.BETAS, { canBeMissing: true })[0];
-    var _f = (0, useContactImport_1.default)(), contactPermissionState = _f.contactPermissionState, contacts = _f.contacts, setContactPermissionState = _f.setContactPermissionState, importAndSaveContacts = _f.importAndSaveContacts;
-    var platform = (0, getPlatform_1.default)();
-    var isNative = platform === CONST_1.default.PLATFORM.ANDROID || platform === CONST_1.default.PLATFORM.IOS;
-    var showImportContacts = isNative && !(contactPermissionState === react_native_permissions_1.RESULTS.GRANTED || contactPermissionState === react_native_permissions_1.RESULTS.LIMITED);
-    var _g = (0, useDebouncedState_1.default)(''), searchTerm = _g[0], debouncedSearchTerm = _g[1], setSearchTerm = _g[2];
-    var referralContentType = CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var isDismissed = (0, useDismissedReferralBanners_1.default)({ referralContentType: referralContentType }).isDismissed;
-    var didScreenTransitionEnd = (0, useScreenWrapperTransitionStatus_1.default)().didScreenTransitionEnd;
-    var countryCode = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false })[0];
-    var activePolicyID = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ACTIVE_POLICY_ID, { canBeMissing: true })[0];
-    var policy = (0, usePolicy_1.default)(activePolicyID);
-    var isSearchingForReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { canBeMissing: true, initWithStoredValues: false })[0];
-    var currentUserLogin = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true, selector: function (session) { return session === null || session === void 0 ? void 0 : session.email; } })[0];
-    var _h = (0, OptionListContextProvider_1.useOptionsList)({
+const fast_equals_1 = require("fast-equals");
+const pick_1 = require("lodash/pick");
+const reject_1 = require("lodash/reject");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_permissions_1 = require("react-native-permissions");
+const Button_1 = require("@components/Button");
+const ContactPermissionModal_1 = require("@components/ContactPermissionModal");
+const EmptySelectionListContent_1 = require("@components/EmptySelectionListContent");
+const FormHelpMessage_1 = require("@components/FormHelpMessage");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const MenuItem_1 = require("@components/MenuItem");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const OptionListContextProvider_1 = require("@components/OptionListContextProvider");
+const ReferralProgramCTA_1 = require("@components/ReferralProgramCTA");
+const SelectionList_1 = require("@components/SelectionList");
+const InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
+const useContactImport_1 = require("@hooks/useContactImport");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useDismissedReferralBanners_1 = require("@hooks/useDismissedReferralBanners");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePolicy_1 = require("@hooks/usePolicy");
+const useScreenWrapperTransitionStatus_1 = require("@hooks/useScreenWrapperTransitionStatus");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const getPlatform_1 = require("@libs/getPlatform");
+const goToSettings_1 = require("@libs/goToSettings");
+const IOUUtils_1 = require("@libs/IOUUtils");
+const memoize_1 = require("@libs/memoize");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
+const Policy_1 = require("@userActions/Policy/Policy");
+const Report_1 = require("@userActions/Report");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const ImportContactButton_1 = require("./ImportContactButton");
+const memoizedGetValidOptions = (0, memoize_1.default)(OptionsListUtils_1.getValidOptions, { maxSize: 5, monitoringName: 'MoneyRequestParticipantsSelector.getValidOptions' });
+function MoneyRequestParticipantsSelector({ participants = CONST_1.default.EMPTY_ARRAY, 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+onFinish = (_value) => { }, onParticipantsAdded, iouType, action, isPerDiemRequest = false, }, ref) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [betas] = (0, useOnyx_1.default)(ONYXKEYS_1.default.BETAS, { canBeMissing: true });
+    const { contactPermissionState, contacts, setContactPermissionState, importAndSaveContacts } = (0, useContactImport_1.default)();
+    const platform = (0, getPlatform_1.default)();
+    const isNative = platform === CONST_1.default.PLATFORM.ANDROID || platform === CONST_1.default.PLATFORM.IOS;
+    const showImportContacts = isNative && !(contactPermissionState === react_native_permissions_1.RESULTS.GRANTED || contactPermissionState === react_native_permissions_1.RESULTS.LIMITED);
+    const [searchTerm, debouncedSearchTerm, setSearchTerm] = (0, useDebouncedState_1.default)('');
+    const referralContentType = CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE;
+    const { isOffline } = (0, useNetwork_1.default)();
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const { isDismissed } = (0, useDismissedReferralBanners_1.default)({ referralContentType });
+    const { didScreenTransitionEnd } = (0, useScreenWrapperTransitionStatus_1.default)();
+    const [countryCode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false });
+    const [activePolicyID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ACTIVE_POLICY_ID, { canBeMissing: true });
+    const policy = (0, usePolicy_1.default)(activePolicyID);
+    const [isSearchingForReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { canBeMissing: true, initWithStoredValues: false });
+    const [currentUserLogin] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true, selector: (session) => session?.email });
+    const { options, areOptionsInitialized, initializeOptions } = (0, OptionListContextProvider_1.useOptionsList)({
         shouldInitialize: didScreenTransitionEnd,
-    }), options = _h.options, areOptionsInitialized = _h.areOptionsInitialized, initializeOptions = _h.initializeOptions;
-    var reportAttributesDerived = (0, useOnyx_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_ATTRIBUTES, { canBeMissing: true, selector: function (val) { return val === null || val === void 0 ? void 0 : val.reports; } })[0];
-    var _j = (0, react_1.useState)(!isNative), textInputAutoFocus = _j[0], setTextInputAutoFocus = _j[1];
-    var selectionListRef = (0, react_1.useRef)(null);
-    var cleanSearchTerm = (0, react_1.useMemo)(function () { return debouncedSearchTerm.trim().toLowerCase(); }, [debouncedSearchTerm]);
-    var offlineMessage = isOffline ? "".concat(translate('common.youAppearToBeOffline'), " ").concat(translate('search.resultsAreLimited')) : '';
-    var isPaidGroupPolicy = (0, react_1.useMemo)(function () { return (0, PolicyUtils_1.isPaidGroupPolicy)(policy); }, [policy]);
-    var isIOUSplit = iouType === CONST_1.default.IOU.TYPE.SPLIT;
-    var isCategorizeOrShareAction = [CONST_1.default.IOU.ACTION.CATEGORIZE, CONST_1.default.IOU.ACTION.SHARE].some(function (option) { return option === action; });
-    var tryNewDot = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_TRY_NEW_DOT, { canBeMissing: true })[0];
-    var hasBeenAddedToNudgeMigration = !!((_b = tryNewDot === null || tryNewDot === void 0 ? void 0 : tryNewDot.nudgeMigration) === null || _b === void 0 ? void 0 : _b.timestamp);
-    var canShowManagerMcTest = (0, react_1.useMemo)(function () { return !hasBeenAddedToNudgeMigration && action !== CONST_1.default.IOU.ACTION.SUBMIT; }, [hasBeenAddedToNudgeMigration, action]);
-    (0, react_1.useEffect)(function () {
+    });
+    const [reportAttributesDerived] = (0, useOnyx_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_ATTRIBUTES, { canBeMissing: true, selector: (val) => val?.reports });
+    const [textInputAutoFocus, setTextInputAutoFocus] = (0, react_1.useState)(!isNative);
+    const selectionListRef = (0, react_1.useRef)(null);
+    const cleanSearchTerm = (0, react_1.useMemo)(() => debouncedSearchTerm.trim().toLowerCase(), [debouncedSearchTerm]);
+    const offlineMessage = isOffline ? `${translate('common.youAppearToBeOffline')} ${translate('search.resultsAreLimited')}` : '';
+    const isPaidGroupPolicy = (0, react_1.useMemo)(() => (0, PolicyUtils_1.isPaidGroupPolicy)(policy), [policy]);
+    const isIOUSplit = iouType === CONST_1.default.IOU.TYPE.SPLIT;
+    const isCategorizeOrShareAction = [CONST_1.default.IOU.ACTION.CATEGORIZE, CONST_1.default.IOU.ACTION.SHARE].some((option) => option === action);
+    const [tryNewDot] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_TRY_NEW_DOT, { canBeMissing: true });
+    const hasBeenAddedToNudgeMigration = !!tryNewDot?.nudgeMigration?.timestamp;
+    const canShowManagerMcTest = (0, react_1.useMemo)(() => !hasBeenAddedToNudgeMigration && action !== CONST_1.default.IOU.ACTION.SUBMIT, [hasBeenAddedToNudgeMigration, action]);
+    (0, react_1.useEffect)(() => {
         (0, Report_1.searchInServer)(debouncedSearchTerm.trim());
     }, [debouncedSearchTerm]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // This is necessary to ensure the options list is always up to date
         // e.g. if the approver was changed in the policy, we need to update the options list
         initializeOptions();
     }, [initializeOptions]);
-    var defaultOptions = (0, react_1.useMemo)(function () {
+    const defaultOptions = (0, react_1.useMemo)(() => {
         if (!areOptionsInitialized || !didScreenTransitionEnd) {
             return {
                 userToInvite: null,
@@ -121,11 +97,11 @@ function MoneyRequestParticipantsSelector(_a, ref) {
                 headerMessage: '',
             };
         }
-        var optionList = memoizedGetValidOptions({
+        const optionList = memoizedGetValidOptions({
             reports: options.reports,
             personalDetails: options.personalDetails.concat(contacts),
         }, {
-            betas: betas,
+            betas,
             selectedOptions: participants,
             excludeLogins: CONST_1.default.EXPENSIFY_EMAILS_OBJECT,
             // If we are using this component in the "Submit expense" or the combined submit/track flow then we pass the includeOwnedWorkspaceChats argument so that the current user
@@ -136,16 +112,19 @@ function MoneyRequestParticipantsSelector(_a, ref) {
             // Per diem expenses should only be submitted to workspaces, not individual users
             includeP2P: !isCategorizeOrShareAction && !isPerDiemRequest,
             includeInvoiceRooms: iouType === CONST_1.default.IOU.TYPE.INVOICE,
-            action: action,
+            action,
             shouldSeparateSelfDMChat: iouType !== CONST_1.default.IOU.TYPE.INVOICE,
             shouldSeparateWorkspaceChat: true,
             includeSelfDM: !(0, IOUUtils_1.isMovingTransactionFromTrackExpense)(action) && iouType !== CONST_1.default.IOU.TYPE.INVOICE,
-            canShowManagerMcTest: canShowManagerMcTest,
-            isPerDiemRequest: isPerDiemRequest,
+            canShowManagerMcTest,
+            isPerDiemRequest,
             showRBR: false,
         });
-        var orderedOptions = (0, OptionsListUtils_1.orderOptions)(optionList);
-        return __assign(__assign({}, optionList), orderedOptions);
+        const orderedOptions = (0, OptionsListUtils_1.orderOptions)(optionList);
+        return {
+            ...optionList,
+            ...orderedOptions,
+        };
     }, [
         action,
         contacts,
@@ -160,7 +139,7 @@ function MoneyRequestParticipantsSelector(_a, ref) {
         isPerDiemRequest,
         canShowManagerMcTest,
     ]);
-    var chatOptions = (0, react_1.useMemo)(function () {
+    const chatOptions = (0, react_1.useMemo)(() => {
         if (!areOptionsInitialized) {
             return {
                 userToInvite: null,
@@ -172,7 +151,7 @@ function MoneyRequestParticipantsSelector(_a, ref) {
                 selfDMChat: null,
             };
         }
-        var newOptions = (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchTerm, countryCode, {
+        const newOptions = (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchTerm, countryCode, {
             canInviteUser: !isCategorizeOrShareAction && !isPerDiemRequest,
             selectedOptions: participants,
             excludeLogins: CONST_1.default.EXPENSIFY_EMAILS_OBJECT,
@@ -182,15 +161,12 @@ function MoneyRequestParticipantsSelector(_a, ref) {
         });
         return newOptions;
     }, [areOptionsInitialized, defaultOptions, debouncedSearchTerm, participants, isPaidGroupPolicy, isCategorizeOrShareAction, action, isPerDiemRequest, countryCode]);
-    var inputHelperText = (0, react_1.useMemo)(function () {
-        var _a, _b, _c;
-        return (0, OptionsListUtils_1.getHeaderMessage)(((_a = chatOptions.personalDetails) !== null && _a !== void 0 ? _a : []).length + ((_b = chatOptions.recentReports) !== null && _b !== void 0 ? _b : []).length + ((_c = chatOptions.workspaceChats) !== null && _c !== void 0 ? _c : []).length !== 0 ||
-            !(0, EmptyObject_1.isEmptyObject)(chatOptions.selfDMChat), !!(chatOptions === null || chatOptions === void 0 ? void 0 : chatOptions.userToInvite), debouncedSearchTerm.trim(), participants.some(function (participant) { return (0, OptionsListUtils_1.getPersonalDetailSearchTerms)(participant).join(' ').toLowerCase().includes(cleanSearchTerm); }));
-    }, [
+    const inputHelperText = (0, react_1.useMemo)(() => (0, OptionsListUtils_1.getHeaderMessage)((chatOptions.personalDetails ?? []).length + (chatOptions.recentReports ?? []).length + (chatOptions.workspaceChats ?? []).length !== 0 ||
+        !(0, EmptyObject_1.isEmptyObject)(chatOptions.selfDMChat), !!chatOptions?.userToInvite, debouncedSearchTerm.trim(), participants.some((participant) => (0, OptionsListUtils_1.getPersonalDetailSearchTerms)(participant).join(' ').toLowerCase().includes(cleanSearchTerm))), [
         chatOptions.personalDetails,
         chatOptions.recentReports,
         chatOptions.selfDMChat,
-        chatOptions === null || chatOptions === void 0 ? void 0 : chatOptions.userToInvite,
+        chatOptions?.userToInvite,
         chatOptions.workspaceChats,
         cleanSearchTerm,
         debouncedSearchTerm,
@@ -200,18 +176,17 @@ function MoneyRequestParticipantsSelector(_a, ref) {
      * Returns the sections needed for the OptionsSelector
      * @returns {Array}
      */
-    var _k = (0, react_1.useMemo)(function () {
-        var _a, _b, _c, _d, _e, _f;
-        var newSections = [];
+    const [sections, header] = (0, react_1.useMemo)(() => {
+        const newSections = [];
         if (!areOptionsInitialized || !didScreenTransitionEnd) {
             return [newSections, ''];
         }
-        var formatResults = (0, OptionsListUtils_1.formatSectionsFromSearchTerm)(debouncedSearchTerm, participants.map(function (participant) { return (__assign(__assign({}, participant), { reportID: participant.reportID })); }), chatOptions.recentReports, chatOptions.personalDetails, personalDetails, true, undefined, reportAttributesDerived);
+        const formatResults = (0, OptionsListUtils_1.formatSectionsFromSearchTerm)(debouncedSearchTerm, participants.map((participant) => ({ ...participant, reportID: participant.reportID })), chatOptions.recentReports, chatOptions.personalDetails, personalDetails, true, undefined, reportAttributesDerived);
         newSections.push(formatResults.section);
         newSections.push({
             title: translate('workspace.common.workspace'),
-            data: (_a = chatOptions.workspaceChats) !== null && _a !== void 0 ? _a : [],
-            shouldShow: ((_b = chatOptions.workspaceChats) !== null && _b !== void 0 ? _b : []).length > 0,
+            data: chatOptions.workspaceChats ?? [],
+            shouldShow: (chatOptions.workspaceChats ?? []).length > 0,
         });
         newSections.push({
             title: translate('workspace.invoices.paymentMethods.personal'),
@@ -220,8 +195,8 @@ function MoneyRequestParticipantsSelector(_a, ref) {
         });
         newSections.push({
             title: translate('common.recents'),
-            data: isPerDiemRequest ? chatOptions.recentReports.filter(function (report) { return report.isPolicyExpenseChat; }) : chatOptions.recentReports,
-            shouldShow: (isPerDiemRequest ? chatOptions.recentReports.filter(function (report) { return report.isPolicyExpenseChat; }) : chatOptions.recentReports).length > 0,
+            data: isPerDiemRequest ? chatOptions.recentReports.filter((report) => report.isPolicyExpenseChat) : chatOptions.recentReports,
+            shouldShow: (isPerDiemRequest ? chatOptions.recentReports.filter((report) => report.isPolicyExpenseChat) : chatOptions.recentReports).length > 0,
         });
         newSections.push({
             title: translate('common.contacts'),
@@ -229,19 +204,22 @@ function MoneyRequestParticipantsSelector(_a, ref) {
             shouldShow: chatOptions.personalDetails.length > 0 && !isPerDiemRequest,
         });
         if (chatOptions.userToInvite &&
-            !(0, OptionsListUtils_1.isCurrentUser)(__assign(__assign({}, chatOptions.userToInvite), { accountID: (_d = (_c = chatOptions.userToInvite) === null || _c === void 0 ? void 0 : _c.accountID) !== null && _d !== void 0 ? _d : CONST_1.default.DEFAULT_NUMBER_ID, status: (_f = (_e = chatOptions.userToInvite) === null || _e === void 0 ? void 0 : _e.status) !== null && _f !== void 0 ? _f : undefined })) &&
+            !(0, OptionsListUtils_1.isCurrentUser)({
+                ...chatOptions.userToInvite,
+                accountID: chatOptions.userToInvite?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID,
+                status: chatOptions.userToInvite?.status ?? undefined,
+            }) &&
             !isPerDiemRequest) {
             newSections.push({
                 title: undefined,
-                data: [chatOptions.userToInvite].map(function (participant) {
-                    var _a;
-                    var isPolicyExpenseChat = (_a = participant === null || participant === void 0 ? void 0 : participant.isPolicyExpenseChat) !== null && _a !== void 0 ? _a : false;
+                data: [chatOptions.userToInvite].map((participant) => {
+                    const isPolicyExpenseChat = participant?.isPolicyExpenseChat ?? false;
                     return isPolicyExpenseChat ? (0, OptionsListUtils_1.getPolicyExpenseReportOption)(participant, reportAttributesDerived) : (0, OptionsListUtils_1.getParticipantsOption)(participant, personalDetails);
                 }),
                 shouldShow: true,
             });
         }
-        var headerMessage = '';
+        let headerMessage = '';
         if (!showImportContacts) {
             headerMessage = inputHelperText;
         }
@@ -262,24 +240,27 @@ function MoneyRequestParticipantsSelector(_a, ref) {
         showImportContacts,
         reportAttributesDerived,
         inputHelperText,
-    ]), sections = _k[0], header = _k[1];
+    ]);
     /**
      * Adds a single participant to the expense
      *
      * @param {Object} option
      */
-    var addSingleParticipant = (0, react_1.useCallback)(function (option) {
-        var _a;
-        var newParticipants = [
-            __assign(__assign({}, (0, pick_1.default)(option, 'accountID', 'login', 'isPolicyExpenseChat', 'reportID', 'searchText', 'policyID', 'isSelfDM', 'text', 'phoneNumber', 'displayName')), { selected: true, iouType: iouType }),
+    const addSingleParticipant = (0, react_1.useCallback)((option) => {
+        const newParticipants = [
+            {
+                ...(0, pick_1.default)(option, 'accountID', 'login', 'isPolicyExpenseChat', 'reportID', 'searchText', 'policyID', 'isSelfDM', 'text', 'phoneNumber', 'displayName'),
+                selected: true,
+                iouType,
+            },
         ];
         if (iouType === CONST_1.default.IOU.TYPE.INVOICE) {
-            var policyID = option.item && (0, ReportUtils_1.isInvoiceRoom)(option.item) ? option.policyID : (_a = (0, Policy_1.getInvoicePrimaryWorkspace)(currentUserLogin)) === null || _a === void 0 ? void 0 : _a.id;
+            const policyID = option.item && (0, ReportUtils_1.isInvoiceRoom)(option.item) ? option.policyID : (0, Policy_1.getInvoicePrimaryWorkspace)(currentUserLogin)?.id;
             newParticipants.push({
-                policyID: policyID,
+                policyID,
                 isSender: true,
                 selected: false,
-                iouType: iouType,
+                iouType,
             });
         }
         onParticipantsAdded(newParticipants);
@@ -293,23 +274,24 @@ function MoneyRequestParticipantsSelector(_a, ref) {
      * Removes a selected option from list if already selected. If not already selected add this option to the list.
      * @param {Object} option
      */
-    var addParticipantToSelection = (0, react_1.useCallback)(function (option) {
-        var isOptionSelected = function (selectedOption) {
-            if (selectedOption.accountID && selectedOption.accountID === (option === null || option === void 0 ? void 0 : option.accountID)) {
+    const addParticipantToSelection = (0, react_1.useCallback)((option) => {
+        const isOptionSelected = (selectedOption) => {
+            if (selectedOption.accountID && selectedOption.accountID === option?.accountID) {
                 return true;
             }
-            if (selectedOption.reportID && selectedOption.reportID === (option === null || option === void 0 ? void 0 : option.reportID)) {
+            if (selectedOption.reportID && selectedOption.reportID === option?.reportID) {
                 return true;
             }
             return false;
         };
-        var isOptionInList = participants.some(isOptionSelected);
-        var newSelectedOptions;
+        const isOptionInList = participants.some(isOptionSelected);
+        let newSelectedOptions;
         if (isOptionInList) {
             newSelectedOptions = (0, reject_1.default)(participants, isOptionSelected);
         }
         else {
-            newSelectedOptions = __spreadArray(__spreadArray([], participants, true), [
+            newSelectedOptions = [
+                ...participants,
                 {
                     accountID: option.accountID,
                     login: option.login,
@@ -317,9 +299,9 @@ function MoneyRequestParticipantsSelector(_a, ref) {
                     reportID: option.reportID,
                     selected: true,
                     searchText: option.searchText,
-                    iouType: iouType,
+                    iouType,
                 },
-            ], false);
+            ];
         }
         onParticipantsAdded(newSelectedOptions);
     }, 
@@ -328,12 +310,12 @@ function MoneyRequestParticipantsSelector(_a, ref) {
     // Right now you can't split a request with a workspace and other additional participants
     // This is getting properly fixed in https://github.com/Expensify/App/issues/27508, but as a stop-gap to prevent
     // the app from crashing on native when you try to do this, we'll going to hide the button if you have a workspace and other participants
-    var hasPolicyExpenseChatParticipant = participants.some(function (participant) { return participant.isPolicyExpenseChat; });
-    var shouldShowSplitBillErrorMessage = participants.length > 1 && hasPolicyExpenseChatParticipant;
-    var isAllowedToSplit = ![CONST_1.default.IOU.TYPE.PAY, CONST_1.default.IOU.TYPE.TRACK, CONST_1.default.IOU.TYPE.INVOICE].some(function (option) { return option === iouType; }) &&
-        ![CONST_1.default.IOU.ACTION.SHARE, CONST_1.default.IOU.ACTION.SUBMIT, CONST_1.default.IOU.ACTION.CATEGORIZE].some(function (option) { return option === action; });
-    var handleConfirmSelection = (0, react_1.useCallback)(function (keyEvent, option) {
-        var shouldAddSingleParticipant = option && !participants.length;
+    const hasPolicyExpenseChatParticipant = participants.some((participant) => participant.isPolicyExpenseChat);
+    const shouldShowSplitBillErrorMessage = participants.length > 1 && hasPolicyExpenseChatParticipant;
+    const isAllowedToSplit = ![CONST_1.default.IOU.TYPE.PAY, CONST_1.default.IOU.TYPE.TRACK, CONST_1.default.IOU.TYPE.INVOICE].some((option) => option === iouType) &&
+        ![CONST_1.default.IOU.ACTION.SHARE, CONST_1.default.IOU.ACTION.SUBMIT, CONST_1.default.IOU.ACTION.CATEGORIZE].some((option) => option === action);
+    const handleConfirmSelection = (0, react_1.useCallback)((keyEvent, option) => {
+        const shouldAddSingleParticipant = option && !participants.length;
         if (shouldShowSplitBillErrorMessage || (!participants.length && !option)) {
             return;
         }
@@ -343,24 +325,24 @@ function MoneyRequestParticipantsSelector(_a, ref) {
         }
         onFinish(CONST_1.default.IOU.TYPE.SPLIT);
     }, [shouldShowSplitBillErrorMessage, onFinish, addSingleParticipant, participants]);
-    var showLoadingPlaceholder = (0, react_1.useMemo)(function () { return !areOptionsInitialized || !didScreenTransitionEnd; }, [areOptionsInitialized, didScreenTransitionEnd]);
-    var optionLength = (0, react_1.useMemo)(function () {
+    const showLoadingPlaceholder = (0, react_1.useMemo)(() => !areOptionsInitialized || !didScreenTransitionEnd, [areOptionsInitialized, didScreenTransitionEnd]);
+    const optionLength = (0, react_1.useMemo)(() => {
         if (!areOptionsInitialized) {
             return 0;
         }
-        var length = 0;
-        sections.forEach(function (section) {
+        let length = 0;
+        sections.forEach((section) => {
             length += section.data.length;
         });
         return length;
     }, [areOptionsInitialized, sections]);
-    var shouldShowListEmptyContent = (0, react_1.useMemo)(function () { return optionLength === 0 && !showLoadingPlaceholder; }, [optionLength, showLoadingPlaceholder]);
-    var shouldShowReferralBanner = !isDismissed && iouType !== CONST_1.default.IOU.TYPE.INVOICE && !shouldShowListEmptyContent;
-    var initiateContactImportAndSetState = (0, react_1.useCallback)(function () {
+    const shouldShowListEmptyContent = (0, react_1.useMemo)(() => optionLength === 0 && !showLoadingPlaceholder, [optionLength, showLoadingPlaceholder]);
+    const shouldShowReferralBanner = !isDismissed && iouType !== CONST_1.default.IOU.TYPE.INVOICE && !shouldShowListEmptyContent;
+    const initiateContactImportAndSetState = (0, react_1.useCallback)(() => {
         setContactPermissionState(react_native_permissions_1.RESULTS.GRANTED);
         react_native_1.InteractionManager.runAfterInteractions(importAndSaveContacts);
     }, [importAndSaveContacts, setContactPermissionState]);
-    var footerContent = (0, react_1.useMemo)(function () {
+    const footerContent = (0, react_1.useMemo)(() => {
         if (isDismissed && !shouldShowSplitBillErrorMessage && !participants.length) {
             return;
         }
@@ -370,7 +352,7 @@ function MoneyRequestParticipantsSelector(_a, ref) {
                 {shouldShowSplitBillErrorMessage && (<FormHelpMessage_1.default style={[styles.ph1, styles.mb2]} isError message={translate('iou.error.splitExpenseMultipleParticipantsErrorMessage')}/>)}
 
                 {!!participants.length && !isCategorizeOrShareAction && (<Button_1.default success text={translate('common.next')} onPress={handleConfirmSelection} pressOnEnter large isDisabled={shouldShowSplitBillErrorMessage}/>)}
-                {isCategorizeOrShareAction && (<Button_1.default success text={translate('workspace.new.newWorkspace')} onPress={function () { return onFinish(); }} pressOnEnter large/>)}
+                {isCategorizeOrShareAction && (<Button_1.default success text={translate('workspace.new.newWorkspace')} onPress={() => onFinish()} pressOnEnter large/>)}
             </>);
     }, [
         handleConfirmSelection,
@@ -384,7 +366,7 @@ function MoneyRequestParticipantsSelector(_a, ref) {
         isCategorizeOrShareAction,
         onFinish,
     ]);
-    var onSelectRow = (0, react_1.useCallback)(function (option) {
+    const onSelectRow = (0, react_1.useCallback)((option) => {
         if (option.isPolicyExpenseChat && option.policyID && (0, SubscriptionUtils_1.shouldRestrictUserBillableActions)(option.policyID)) {
             Navigation_1.default.navigate(ROUTES_1.default.RESTRICTED_ACTION.getRoute(option.policyID));
             return;
@@ -395,41 +377,39 @@ function MoneyRequestParticipantsSelector(_a, ref) {
         }
         addSingleParticipant(option);
     }, [isIOUSplit, addParticipantToSelection, addSingleParticipant]);
-    var footerContentAbovePaginationComponent = (0, react_1.useMemo)(function () {
+    const footerContentAbovePaginationComponent = (0, react_1.useMemo)(() => {
         if (!showImportContacts) {
             return null;
         }
         return (<MenuItem_1.default title={translate('contact.importContacts')} icon={Expensicons_1.UserPlus} onPress={goToSettings_1.default} shouldShowRightIcon style={styles.mb3}/>);
     }, [showImportContacts, styles.mb3, translate]);
-    var ClickableImportContactTextComponent = (0, react_1.useMemo)(function () {
+    const ClickableImportContactTextComponent = (0, react_1.useMemo)(() => {
         if (debouncedSearchTerm.length || isSearchingForReports) {
             return;
         }
         return (<ImportContactButton_1.default showImportContacts={showImportContacts} inputHelperText={translate('contact.importContactsTitle')} isInSearch={false}/>);
     }, [debouncedSearchTerm, isSearchingForReports, showImportContacts, translate]);
-    var EmptySelectionListContentWithPermission = (0, react_1.useMemo)(function () {
+    const EmptySelectionListContentWithPermission = (0, react_1.useMemo)(() => {
         return (<>
                 {ClickableImportContactTextComponent}
                 <EmptySelectionListContent_1.default contentType={iouType}/>
             </>);
     }, [iouType, ClickableImportContactTextComponent]);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        focus: function () {
-            var _a, _b;
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        focus: () => {
             if (!textInputAutoFocus) {
                 return;
             }
-            (_b = (_a = selectionListRef.current) === null || _a === void 0 ? void 0 : _a.focusTextInput) === null || _b === void 0 ? void 0 : _b.call(_a);
+            selectionListRef.current?.focusTextInput?.();
         },
-    }); });
+    }));
     return (<>
-            <ContactPermissionModal_1.default onGrant={initiateContactImportAndSetState} onDeny={setContactPermissionState} onFocusTextInput={function () {
-            var _a, _b;
+            <ContactPermissionModal_1.default onGrant={initiateContactImportAndSetState} onDeny={setContactPermissionState} onFocusTextInput={() => {
             setTextInputAutoFocus(true);
-            (_b = (_a = selectionListRef.current) === null || _a === void 0 ? void 0 : _a.focusTextInput) === null || _b === void 0 ? void 0 : _b.call(_a);
+            selectionListRef.current?.focusTextInput?.();
         }}/>
             <SelectionList_1.default onConfirm={handleConfirmSelection} sections={areOptionsInitialized ? sections : CONST_1.default.EMPTY_ARRAY} ListItem={InviteMemberListItem_1.default} textInputValue={searchTerm} textInputLabel={translate('selectionList.nameEmailOrPhoneNumber')} textInputHint={offlineMessage} onChangeText={setSearchTerm} shouldPreventDefaultFocusOnSelectRow={!(0, DeviceCapabilities_1.canUseTouchScreen)()} onSelectRow={onSelectRow} shouldSingleExecuteRowSelect canShowProductTrainingTooltip={canShowManagerMcTest} headerContent={<ImportContactButton_1.default showImportContacts={showImportContacts} inputHelperText={inputHelperText} isInSearch/>} footerContent={footerContent} listEmptyContent={EmptySelectionListContentWithPermission} footerContentAbovePagination={footerContentAbovePaginationComponent} headerMessage={header} showLoadingPlaceholder={showLoadingPlaceholder} canSelectMultiple={isIOUSplit && isAllowedToSplit} isLoadingNewOptions={!!isSearchingForReports} shouldShowListEmptyContent={shouldShowListEmptyContent} textInputAutoFocus={!isNative} ref={selectionListRef}/>
         </>);
 }
 MoneyRequestParticipantsSelector.displayName = 'MoneyTemporaryForRefactorRequestParticipantsSelector';
-exports.default = (0, react_1.memo)((0, react_1.forwardRef)(MoneyRequestParticipantsSelector), function (prevProps, nextProps) { return (0, fast_equals_1.deepEqual)(prevProps.participants, nextProps.participants) && prevProps.iouType === nextProps.iouType; });
+exports.default = (0, react_1.memo)((0, react_1.forwardRef)(MoneyRequestParticipantsSelector), (prevProps, nextProps) => (0, fast_equals_1.deepEqual)(prevProps.participants, nextProps.participants) && prevProps.iouType === nextProps.iouType);

@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var isEmpty_1 = require("lodash/isEmpty");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Parser_1 = require("@libs/Parser");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var RenderHTML_1 = require("./RenderHTML");
-var Text_1 = require("./Text");
-function FormHelpMessage(_a) {
-    var _b = _a.message, message = _b === void 0 ? '' : _b, children = _a.children, _c = _a.isError, isError = _c === void 0 ? true : _c, style = _a.style, _d = _a.shouldShowRedDotIndicator, shouldShowRedDotIndicator = _d === void 0 ? true : _d, _e = _a.shouldRenderMessageAsHTML, shouldRenderMessageAsHTML = _e === void 0 ? false : _e, _f = _a.isInfo, isInfo = _f === void 0 ? false : _f;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var HTMLMessage = (0, react_1.useMemo)(function () {
+const isEmpty_1 = require("lodash/isEmpty");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Parser_1 = require("@libs/Parser");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const RenderHTML_1 = require("./RenderHTML");
+const Text_1 = require("./Text");
+function FormHelpMessage({ message = '', children, isError = true, style, shouldShowRedDotIndicator = true, shouldRenderMessageAsHTML = false, isInfo = false }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const HTMLMessage = (0, react_1.useMemo)(() => {
         if (typeof message !== 'string' || !shouldRenderMessageAsHTML) {
             return '';
         }
-        var replacedText = Parser_1.default.replace(message, { shouldEscapeText: false });
+        const replacedText = Parser_1.default.replace(message, { shouldEscapeText: false });
         if (isError) {
-            return "<alert-text>".concat(replacedText, "</alert-text>");
+            return `<alert-text>${replacedText}</alert-text>`;
         }
-        return "<muted-text-label>".concat(replacedText, "</muted-text-label>");
+        return `<muted-text-label>${replacedText}</muted-text-label>`;
     }, [isError, message, shouldRenderMessageAsHTML]);
     if ((0, isEmpty_1.default)(message) && (0, isEmpty_1.default)(children)) {
         return null;
@@ -31,7 +30,7 @@ function FormHelpMessage(_a) {
             {isError && shouldShowRedDotIndicator && (<Icon_1.default src={Expensicons.DotIndicator} fill={theme.danger}/>)}
             {isInfo && (<Icon_1.default src={Expensicons.Exclamation} fill={theme.icon} small additionalStyles={[styles.mr1]}/>)}
             <react_native_1.View style={[styles.flex1, isError && shouldShowRedDotIndicator ? styles.ml2 : {}]}>
-                {children !== null && children !== void 0 ? children : (shouldRenderMessageAsHTML ? <RenderHTML_1.default html={HTMLMessage}/> : <Text_1.default style={[isError ? styles.formError : styles.formHelp, styles.mb0]}>{message}</Text_1.default>)}
+                {children ?? (shouldRenderMessageAsHTML ? <RenderHTML_1.default html={HTMLMessage}/> : <Text_1.default style={[isError ? styles.formError : styles.formHelp, styles.mb0]}>{message}</Text_1.default>)}
             </react_native_1.View>
         </react_native_1.View>);
 }

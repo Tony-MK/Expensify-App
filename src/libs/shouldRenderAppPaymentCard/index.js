@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var shouldRenderAddPaymentCard = function () { return true; };
+const shouldRenderAddPaymentCard = () => true;
 exports.default = shouldRenderAddPaymentCard;

@@ -1,51 +1,48 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var PaymentCardForm_1 = require("@components/AddPaymentCard/PaymentCardForm");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var RenderHTML_1 = require("@components/RenderHTML");
-var Section_1 = require("@components/Section");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CardUtils_1 = require("@libs/CardUtils");
-var PaymentMethods_1 = require("@userActions/PaymentMethods");
-var Policy_1 = require("@userActions/Policy/Policy");
-var CONST_1 = require("@src/CONST");
-function WorkspaceOwnerPaymentCardForm(_a) {
-    var _b;
-    var policy = _a.policy;
-    var translate = (0, useLocalize_1.default)().translate;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var _c = (0, react_1.useState)(false), shouldShowPaymentCardForm = _c[0], setShouldShowPaymentCardForm = _c[1];
-    var policyID = policy === null || policy === void 0 ? void 0 : policy.id;
-    var checkIfCanBeRendered = (0, react_1.useCallback)(function () {
-        var _a, _b;
-        var changeOwnerErrors = Object.keys((_b = (_a = policy === null || policy === void 0 ? void 0 : policy.errorFields) === null || _a === void 0 ? void 0 : _a.changeOwner) !== null && _b !== void 0 ? _b : {});
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const PaymentCardForm_1 = require("@components/AddPaymentCard/PaymentCardForm");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const RenderHTML_1 = require("@components/RenderHTML");
+const Section_1 = require("@components/Section");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CardUtils_1 = require("@libs/CardUtils");
+const PaymentMethods_1 = require("@userActions/PaymentMethods");
+const Policy_1 = require("@userActions/Policy/Policy");
+const CONST_1 = require("@src/CONST");
+function WorkspaceOwnerPaymentCardForm({ policy }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [shouldShowPaymentCardForm, setShouldShowPaymentCardForm] = (0, react_1.useState)(false);
+    const policyID = policy?.id;
+    const checkIfCanBeRendered = (0, react_1.useCallback)(() => {
+        const changeOwnerErrors = Object.keys(policy?.errorFields?.changeOwner ?? {});
         if (changeOwnerErrors.at(0) !== CONST_1.default.POLICY.OWNERSHIP_ERRORS.NO_BILLING_CARD) {
             setShouldShowPaymentCardForm(false);
         }
         setShouldShowPaymentCardForm(true);
-    }, [(_b = policy === null || policy === void 0 ? void 0 : policy.errorFields) === null || _b === void 0 ? void 0 : _b.changeOwner]);
-    (0, react_1.useEffect)(function () {
+    }, [policy?.errorFields?.changeOwner]);
+    (0, react_1.useEffect)(() => {
         (0, PaymentMethods_1.clearPaymentCardFormErrorAndSubmit)();
         checkIfCanBeRendered();
-        return function () {
+        return () => {
             (0, PaymentMethods_1.clearPaymentCardFormErrorAndSubmit)();
         };
     }, 
     // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     []);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         checkIfCanBeRendered();
     }, [checkIfCanBeRendered]);
-    var addPaymentCard = (0, react_1.useCallback)(function (values) {
-        var cardData = {
+    const addPaymentCard = (0, react_1.useCallback)((values) => {
+        const cardData = {
             cardNumber: (0, CardUtils_1.getMCardNumberString)(values.cardNumber),
             cardMonth: (0, CardUtils_1.getMonthFromExpirationDateString)(values.expirationDate),
             cardYear: (0, CardUtils_1.getYearFromExpirationDateString)(values.expirationDate),

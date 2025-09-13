@@ -1,51 +1,49 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var usePolicy_1 = require("@hooks/usePolicy");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var TaxRate_1 = require("@libs/actions/TaxRate");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var WorkspaceTaxCodeForm_1 = require("@src/types/form/WorkspaceTaxCodeForm");
-function WorkspaceTaxCodePage(_a) {
-    var route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var policyID = route.params.policyID;
-    var currentTaxCode = route.params.taxID;
-    var policy = (0, usePolicy_1.default)(policyID);
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var distanceRateCustomUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
-    var setTaxCode = (0, react_1.useCallback)(function (values) {
-        var _a, _b, _c, _d;
-        var newTaxCode = values.taxCode.trim();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const usePolicy_1 = require("@hooks/usePolicy");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const TaxRate_1 = require("@libs/actions/TaxRate");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const WorkspaceTaxCodeForm_1 = require("@src/types/form/WorkspaceTaxCodeForm");
+function WorkspaceTaxCodePage({ route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const policyID = route.params.policyID;
+    const currentTaxCode = route.params.taxID;
+    const policy = (0, usePolicy_1.default)(policyID);
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const distanceRateCustomUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
+    const setTaxCode = (0, react_1.useCallback)((values) => {
+        const newTaxCode = values.taxCode.trim();
         if (currentTaxCode === newTaxCode) {
             Navigation_1.default.goBack(ROUTES_1.default.WORKSPACE_TAX_EDIT.getRoute(policyID, currentTaxCode));
             return;
         }
-        if (!((_a = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _a === void 0 ? void 0 : _a.taxes[currentTaxCode])) {
+        if (!policy?.taxRates?.taxes[currentTaxCode]) {
             return;
         }
-        (0, TaxRate_1.setPolicyTaxCode)(policyID, currentTaxCode, newTaxCode, (_b = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _b === void 0 ? void 0 : _b.taxes[currentTaxCode], (_c = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _c === void 0 ? void 0 : _c.foreignTaxDefault, (_d = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _d === void 0 ? void 0 : _d.defaultExternalID, distanceRateCustomUnit);
+        (0, TaxRate_1.setPolicyTaxCode)(policyID, currentTaxCode, newTaxCode, policy?.taxRates?.taxes[currentTaxCode], policy?.taxRates?.foreignTaxDefault, policy?.taxRates?.defaultExternalID, distanceRateCustomUnit);
         Navigation_1.default.goBack(ROUTES_1.default.WORKSPACE_TAX_EDIT.getRoute(policyID, currentTaxCode));
-    }, [currentTaxCode, policyID, policy === null || policy === void 0 ? void 0 : policy.taxRates, distanceRateCustomUnit]);
-    var validate = (0, react_1.useCallback)(function (values) {
+    }, [currentTaxCode, policyID, policy?.taxRates, distanceRateCustomUnit]);
+    const validate = (0, react_1.useCallback)((values) => {
         if (!policy) {
             return {};
         }
-        var newTaxCode = values.taxCode.trim();
+        const newTaxCode = values.taxCode.trim();
         if (newTaxCode === currentTaxCode) {
             return {};
         }
@@ -53,7 +51,7 @@ function WorkspaceTaxCodePage(_a) {
     }, [currentTaxCode, policy]);
     return (<AccessOrNotFoundWrapper_1.default accessVariants={[CONST_1.default.POLICY.ACCESS_VARIANTS.ADMIN, CONST_1.default.POLICY.ACCESS_VARIANTS.CONTROL]} policyID={policyID} featureName={CONST_1.default.POLICY.MORE_FEATURES.ARE_TAXES_ENABLED}>
             <ScreenWrapper_1.default enableEdgeToEdgeBottomSafeAreaPadding shouldEnableMaxHeight testID={WorkspaceTaxCodePage.displayName}>
-                <HeaderWithBackButton_1.default title={translate('workspace.taxes.taxCode')} onBackButtonPress={function () { return Navigation_1.default.goBack(ROUTES_1.default.WORKSPACE_TAX_EDIT.getRoute(policyID, currentTaxCode)); }}/>
+                <HeaderWithBackButton_1.default title={translate('workspace.taxes.taxCode')} onBackButtonPress={() => Navigation_1.default.goBack(ROUTES_1.default.WORKSPACE_TAX_EDIT.getRoute(policyID, currentTaxCode))}/>
 
                 <FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.WORKSPACE_TAX_CODE_FORM} submitButtonText={translate('workspace.editor.save')} style={[styles.flexGrow1, styles.ph5]} onSubmit={setTaxCode} enabledWhenOffline validate={validate} shouldHideFixErrorsAlert addBottomSafeAreaPadding>
                     <react_native_1.View style={styles.mb4}>

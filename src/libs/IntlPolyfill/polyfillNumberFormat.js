@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
-var CONST_1 = require("@src/CONST");
-var numberFormat = new Intl.NumberFormat(CONST_1.default.LOCALES.DEFAULT, {
+const CONST_1 = require("@src/CONST");
+const numberFormat = new Intl.NumberFormat(CONST_1.default.LOCALES.DEFAULT, {
     style: CONST_1.default.POLYFILL_TEST.STYLE,
     currency: CONST_1.default.POLYFILL_TEST.CURRENCY,
     currencyDisplay: CONST_1.default.POLYFILL_TEST.FORMAT,

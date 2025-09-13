@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Badge_1 = require("@components/Badge");
-var Button_1 = require("@components/Button");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var variables_1 = require("@styles/variables");
-var ROUTES_1 = require("@src/ROUTES");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Badge_1 = require("@components/Badge");
+const Button_1 = require("@components/Button");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const variables_1 = require("@styles/variables");
+const ROUTES_1 = require("@src/ROUTES");
 function WorkspaceOwnerRestrictedAction() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var addPaymentCard = function () {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const addPaymentCard = () => {
         Navigation_1.default.closeRHPFlow();
         Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_SUBSCRIPTION_ADD_PAYMENT_CARD);
     };

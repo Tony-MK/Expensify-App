@@ -1,32 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
-var ExpensifyWordmark_1 = require("@components/ExpensifyWordmark");
-var Icon_1 = require("@components/Icon");
-var Illustrations_1 = require("@components/Icon/Illustrations");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Session_1 = require("@libs/actions/Session");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var variables_1 = require("@styles/variables");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function ValidateCodeModal(_a) {
-    var code = _a.code, accountID = _a.accountID;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION)[0];
-    var signInHere = (0, react_1.useCallback)(function () { return (0, Session_1.signInWithValidateCode)(accountID, code); }, [accountID, code]);
-    var translate = (0, useLocalize_1.default)().translate;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    return (<FullPageNotFoundView_1.default testID="validate-code-not-found" shouldShow={!(0, ValidationUtils_1.isValidValidateCode)(code)} shouldShowBackButton={shouldUseNarrowLayout} onLinkPress={function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
+const ExpensifyWordmark_1 = require("@components/ExpensifyWordmark");
+const Icon_1 = require("@components/Icon");
+const Illustrations_1 = require("@components/Icon/Illustrations");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Session_1 = require("@libs/actions/Session");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const variables_1 = require("@styles/variables");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function ValidateCodeModal({ code, accountID }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION);
+    const signInHere = (0, react_1.useCallback)(() => (0, Session_1.signInWithValidateCode)(accountID, code), [accountID, code]);
+    const { translate } = (0, useLocalize_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    return (<FullPageNotFoundView_1.default testID="validate-code-not-found" shouldShow={!(0, ValidationUtils_1.isValidValidateCode)(code)} shouldShowBackButton={shouldUseNarrowLayout} onLinkPress={() => {
             Navigation_1.default.goBack();
         }}>
             <react_native_1.View style={styles.deeplinkWrapperContainer} testID="validate-code">
@@ -38,7 +37,7 @@ function ValidateCodeModal(_a) {
                     <react_native_1.View style={[styles.mt2, styles.mb2]}>
                         <Text_1.default style={styles.textAlignCenter}>
                             {translate('validateCodeModal.description')}
-                            {!(session === null || session === void 0 ? void 0 : session.authToken) && (<>
+                            {!session?.authToken && (<>
                                     {translate('validateCodeModal.or')} <TextLink_1.default onPress={signInHere}>{translate('validateCodeModal.signInHere')}</TextLink_1.default>
                                 </>)}
                             .

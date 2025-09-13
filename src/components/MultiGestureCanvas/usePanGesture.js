@@ -1,74 +1,73 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable no-param-reassign */
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_gesture_handler_1 = require("react-native-gesture-handler");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var Browser = require("@libs/Browser");
-var constants_1 = require("./constants");
-var MultiGestureCanvasUtils = require("./utils");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_gesture_handler_1 = require("react-native-gesture-handler");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const Browser = require("@libs/Browser");
+const constants_1 = require("./constants");
+const MultiGestureCanvasUtils = require("./utils");
 // This value determines how fast the pan animation should phase out
 // We're using a "withDecay" animation to smoothly phase out the pan animation
 // https://docs.swmansion.com/react-native-reanimated/docs/animations/withDecay/
-var PAN_DECAY_DECLARATION = 0.9915;
-var SCREEN_HEIGHT = react_native_1.Dimensions.get('screen').height;
-var SNAP_POINT = SCREEN_HEIGHT / 4;
-var SNAP_POINT_HIDDEN = SCREEN_HEIGHT / 1.2;
-var usePanGesture = function (_a) {
-    var canvasSize = _a.canvasSize, contentSize = _a.contentSize, zoomScale = _a.zoomScale, totalScale = _a.totalScale, offsetX = _a.offsetX, offsetY = _a.offsetY, panTranslateX = _a.panTranslateX, panTranslateY = _a.panTranslateY, shouldDisableTransformationGestures = _a.shouldDisableTransformationGestures, stopAnimation = _a.stopAnimation, isSwipingDownToClose = _a.isSwipingDownToClose, onSwipeDown = _a.onSwipeDown;
+const PAN_DECAY_DECLARATION = 0.9915;
+const SCREEN_HEIGHT = react_native_1.Dimensions.get('screen').height;
+const SNAP_POINT = SCREEN_HEIGHT / 4;
+const SNAP_POINT_HIDDEN = SCREEN_HEIGHT / 1.2;
+const usePanGesture = ({ canvasSize, contentSize, zoomScale, totalScale, offsetX, offsetY, panTranslateX, panTranslateY, shouldDisableTransformationGestures, stopAnimation, isSwipingDownToClose, onSwipeDown, }) => {
     // The content size after fitting it to the canvas and zooming
-    var zoomedContentWidth = (0, react_native_reanimated_1.useDerivedValue)(function () { return contentSize.width * totalScale.get(); }, [contentSize.width]);
-    var zoomedContentHeight = (0, react_native_reanimated_1.useDerivedValue)(function () { return contentSize.height * totalScale.get(); }, [contentSize.height]);
+    const zoomedContentWidth = (0, react_native_reanimated_1.useDerivedValue)(() => contentSize.width * totalScale.get(), [contentSize.width]);
+    const zoomedContentHeight = (0, react_native_reanimated_1.useDerivedValue)(() => contentSize.height * totalScale.get(), [contentSize.height]);
     // Used to track previous touch position for the "swipe down to close" gesture
-    var previousTouch = (0, react_native_reanimated_1.useSharedValue)(null);
+    const previousTouch = (0, react_native_reanimated_1.useSharedValue)(null);
     // Velocity of the pan gesture
     // We need to keep track of the velocity to properly phase out/decay the pan animation
-    var panVelocityX = (0, react_native_reanimated_1.useSharedValue)(0);
-    var panVelocityY = (0, react_native_reanimated_1.useSharedValue)(0);
-    var isMobileBrowser = Browser.isMobile();
+    const panVelocityX = (0, react_native_reanimated_1.useSharedValue)(0);
+    const panVelocityY = (0, react_native_reanimated_1.useSharedValue)(0);
+    const isMobileBrowser = Browser.isMobile();
     // Disable "swipe down to close" gesture when content is bigger than the canvas
-    var enableSwipeDownToClose = (0, react_native_reanimated_1.useDerivedValue)(function () { return canvasSize.height < zoomedContentHeight.get(); }, [canvasSize.height]);
+    const enableSwipeDownToClose = (0, react_native_reanimated_1.useDerivedValue)(() => canvasSize.height < zoomedContentHeight.get(), [canvasSize.height]);
     // Calculates bounds of the scaled content
     // Can we pan left/right/up/down
     // Can be used to limit gesture or implementing tension effect
-    var getBounds = (0, react_1.useCallback)(function () {
+    const getBounds = (0, react_1.useCallback)(() => {
         'worklet';
-        var horizontalBoundary = 0;
-        var verticalBoundary = 0;
+        let horizontalBoundary = 0;
+        let verticalBoundary = 0;
         if (canvasSize.width < zoomedContentWidth.get()) {
             horizontalBoundary = Math.abs(canvasSize.width - zoomedContentWidth.get()) / 2;
         }
         if (canvasSize.height < zoomedContentHeight.get()) {
             verticalBoundary = Math.abs(zoomedContentHeight.get() - canvasSize.height) / 2;
         }
-        var horizontalBoundaries = { min: -horizontalBoundary, max: horizontalBoundary };
-        var verticalBoundaries = { min: -verticalBoundary, max: verticalBoundary };
-        var clampedOffset = {
+        const horizontalBoundaries = { min: -horizontalBoundary, max: horizontalBoundary };
+        const verticalBoundaries = { min: -verticalBoundary, max: verticalBoundary };
+        const clampedOffset = {
             x: MultiGestureCanvasUtils.clamp(offsetX.get(), horizontalBoundaries.min, horizontalBoundaries.max),
             y: MultiGestureCanvasUtils.clamp(offsetY.get(), verticalBoundaries.min, verticalBoundaries.max),
         };
         // If the horizontal/vertical offset is the same after clamping to the min/max boundaries, the content is within the boundaries
-        var isInHorizontalBoundary = clampedOffset.x === offsetX.get();
-        var isInVerticalBoundary = clampedOffset.y === offsetY.get();
+        const isInHorizontalBoundary = clampedOffset.x === offsetX.get();
+        const isInVerticalBoundary = clampedOffset.y === offsetY.get();
         return {
-            horizontalBoundaries: horizontalBoundaries,
-            verticalBoundaries: verticalBoundaries,
-            clampedOffset: clampedOffset,
-            isInHorizontalBoundary: isInHorizontalBoundary,
-            isInVerticalBoundary: isInVerticalBoundary,
+            horizontalBoundaries,
+            verticalBoundaries,
+            clampedOffset,
+            isInHorizontalBoundary,
+            isInVerticalBoundary,
         };
     }, [canvasSize.width, canvasSize.height, zoomedContentWidth, zoomedContentHeight, offsetX, offsetY]);
     // We want to smoothly decay/end the gesture by phasing out the pan animation
     // In case the content is outside of the boundaries of the canvas,
     // we need to move the content back into the boundaries
-    var finishPanGesture = (0, react_1.useCallback)(function () {
+    const finishPanGesture = (0, react_1.useCallback)(() => {
         'worklet';
         // If the content is centered within the canvas, we don't need to run any animations
         if (offsetX.get() === 0 && offsetY.get() === 0 && panTranslateX.get() === 0 && panTranslateY.get() === 0) {
             return;
         }
-        var _a = getBounds(), clampedOffset = _a.clampedOffset, isInHorizontalBoundary = _a.isInHorizontalBoundary, isInVerticalBoundary = _a.isInVerticalBoundary, horizontalBoundaries = _a.horizontalBoundaries, verticalBoundaries = _a.verticalBoundaries;
+        const { clampedOffset, isInHorizontalBoundary, isInVerticalBoundary, horizontalBoundaries, verticalBoundaries } = getBounds();
         // If the content is within the horizontal/vertical boundaries of the canvas, we can smoothly phase out the animation
         // If not, we need to snap back to the boundaries
         if (isInHorizontalBoundary) {
@@ -100,9 +99,9 @@ var usePanGesture = function (_a) {
             }
         }
         else {
-            var finalTranslateY = offsetY.get() + panVelocityY.get() * 0.2;
+            const finalTranslateY = offsetY.get() + panVelocityY.get() * 0.2;
             if (finalTranslateY > SNAP_POINT && zoomScale.get() <= 1) {
-                offsetY.set((0, react_native_reanimated_1.withSpring)(SNAP_POINT_HIDDEN, constants_1.SPRING_CONFIG, function () {
+                offsetY.set((0, react_native_reanimated_1.withSpring)(SNAP_POINT_HIDDEN, constants_1.SPRING_CONFIG, () => {
                     isSwipingDownToClose.set(false);
                     if (onSwipeDown) {
                         (0, react_native_reanimated_1.runOnJS)(onSwipeDown)();
@@ -111,7 +110,7 @@ var usePanGesture = function (_a) {
             }
             else {
                 // Animated back to the boundary
-                offsetY.set((0, react_native_reanimated_1.withSpring)(clampedOffset.y, constants_1.SPRING_CONFIG, function () {
+                offsetY.set((0, react_native_reanimated_1.withSpring)(clampedOffset.y, constants_1.SPRING_CONFIG, () => {
                     isSwipingDownToClose.set(false);
                 }));
             }
@@ -120,23 +119,22 @@ var usePanGesture = function (_a) {
         panVelocityX.set(0);
         panVelocityY.set(0);
     }, [getBounds, isSwipingDownToClose, offsetX, offsetY, onSwipeDown, panTranslateX, panTranslateY, panVelocityX, panVelocityY, zoomScale]);
-    var panGesture = react_native_gesture_handler_1.Gesture.Pan()
+    const panGesture = react_native_gesture_handler_1.Gesture.Pan()
         .manualActivation(true)
         .averageTouches(true)
-        .onTouchesUp(function () {
+        .onTouchesUp(() => {
         previousTouch.set(null);
     })
-        .onTouchesMove(function (evt, state) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+        .onTouchesMove((evt, state) => {
         // We only allow panning when the content is zoomed in
         if (zoomScale.get() > 1 && !shouldDisableTransformationGestures.get()) {
             state.activate();
         }
         // TODO: this needs tuning to work properly
-        var previousTouchValue = previousTouch.get();
+        const previousTouchValue = previousTouch.get();
         if (!shouldDisableTransformationGestures.get() && zoomScale.get() === 1 && previousTouchValue !== null) {
-            var velocityX = Math.abs(((_b = (_a = evt.allTouches.at(0)) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0) - previousTouchValue.x);
-            var velocityY = ((_d = (_c = evt.allTouches.at(0)) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 0) - previousTouchValue.y;
+            const velocityX = Math.abs((evt.allTouches.at(0)?.x ?? 0) - previousTouchValue.x);
+            const velocityY = (evt.allTouches.at(0)?.y ?? 0) - previousTouchValue.y;
             if (Math.abs(velocityY) > velocityX && velocityY > 20) {
                 state.activate();
                 isSwipingDownToClose.set(true);
@@ -146,15 +144,15 @@ var usePanGesture = function (_a) {
         }
         if (previousTouch.get() === null) {
             previousTouch.set({
-                x: (_f = (_e = evt.allTouches.at(0)) === null || _e === void 0 ? void 0 : _e.x) !== null && _f !== void 0 ? _f : 0,
-                y: (_h = (_g = evt.allTouches.at(0)) === null || _g === void 0 ? void 0 : _g.y) !== null && _h !== void 0 ? _h : 0,
+                x: evt.allTouches.at(0)?.x ?? 0,
+                y: evt.allTouches.at(0)?.y ?? 0,
             });
         }
     })
-        .onStart(function () {
+        .onStart(() => {
         stopAnimation();
     })
-        .onChange(function (evt) {
+        .onChange((evt) => {
         // Since we're running both pinch and pan gesture handlers simultaneously,
         // we need to make sure that we don't pan when we pinch since we track it as pinch focal gesture.
         if (evt.numberOfPointers > 1) {
@@ -164,17 +162,17 @@ var usePanGesture = function (_a) {
         panVelocityY.set(evt.velocityY);
         if (!isSwipingDownToClose.get()) {
             if (!isMobileBrowser || (isMobileBrowser && zoomScale.get() !== 1)) {
-                panTranslateX.set(function (value) { return value + evt.changeX; });
+                panTranslateX.set((value) => value + evt.changeX);
             }
         }
         if (enableSwipeDownToClose.get() || isSwipingDownToClose.get()) {
-            panTranslateY.set(function (value) { return value + evt.changeY; });
+            panTranslateY.set((value) => value + evt.changeY);
         }
     })
-        .onEnd(function () {
+        .onEnd(() => {
         // Add pan translation to total offset and reset gesture variables
-        offsetX.set(function (value) { return value + panTranslateX.get(); });
-        offsetY.set(function (value) { return value + panTranslateY.get(); });
+        offsetX.set((value) => value + panTranslateX.get());
+        offsetY.set((value) => value + panTranslateY.get());
         // Reset pan gesture variables
         panTranslateX.set(0);
         panTranslateY.set(0);

@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var shouldUseEmojiPickerSelection = function () { return true; };
+const shouldUseEmojiPickerSelection = () => true;
 exports.default = shouldUseEmojiPickerSelection;

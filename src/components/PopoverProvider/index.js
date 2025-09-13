@@ -1,38 +1,28 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PopoverContext = void 0;
-var react_1 = require("react");
-var PopoverContext = (0, react_1.createContext)({
-    onOpen: function () { },
+const react_1 = require("react");
+const PopoverContext = (0, react_1.createContext)({
+    onOpen: () => { },
     popover: null,
     popoverAnchor: null,
-    close: function () { },
+    close: () => { },
     isOpen: false,
-    setActivePopoverExtraAnchorRef: function () { },
+    setActivePopoverExtraAnchorRef: () => { },
 });
 exports.PopoverContext = PopoverContext;
 function elementContains(ref, target) {
-    var _a;
-    if ((ref === null || ref === void 0 ? void 0 : ref.current) && 'contains' in ref.current && ((_a = ref === null || ref === void 0 ? void 0 : ref.current) === null || _a === void 0 ? void 0 : _a.contains(target))) {
+    if (ref?.current && 'contains' in ref.current && ref?.current?.contains(target)) {
         return true;
     }
     return false;
 }
 function PopoverContextProvider(props) {
-    var _a = (0, react_1.useState)(false), isOpen = _a[0], setIsOpen = _a[1];
-    var activePopoverRef = (0, react_1.useRef)(null);
-    var _b = (0, react_1.useState)(null), activePopoverAnchor = _b[0], setActivePopoverAnchor = _b[1];
-    var _c = (0, react_1.useState)([]), activePopoverExtraAnchorRefs = _c[0], setActivePopoverExtraAnchorRefs = _c[1];
-    var closePopover = (0, react_1.useCallback)(function (anchorRef) {
+    const [isOpen, setIsOpen] = (0, react_1.useState)(false);
+    const activePopoverRef = (0, react_1.useRef)(null);
+    const [activePopoverAnchor, setActivePopoverAnchor] = (0, react_1.useState)(null);
+    const [activePopoverExtraAnchorRefs, setActivePopoverExtraAnchorRefs] = (0, react_1.useState)([]);
+    const closePopover = (0, react_1.useCallback)((anchorRef) => {
         if (!activePopoverRef.current || (anchorRef && anchorRef !== activePopoverRef.current.anchorRef)) {
             return false;
         }
@@ -42,40 +32,38 @@ function PopoverContextProvider(props) {
         setActivePopoverAnchor(null);
         return true;
     }, []);
-    (0, react_1.useEffect)(function () {
-        var listener = function (e) {
-            var _a, _b, _c;
-            if (elementContains((_a = activePopoverRef.current) === null || _a === void 0 ? void 0 : _a.ref, e.target) || elementContains((_b = activePopoverRef.current) === null || _b === void 0 ? void 0 : _b.anchorRef, e.target)) {
+    (0, react_1.useEffect)(() => {
+        const listener = (e) => {
+            if (elementContains(activePopoverRef.current?.ref, e.target) || elementContains(activePopoverRef.current?.anchorRef, e.target)) {
                 return;
             }
             // Incase there are any extra anchor refs where the popover should not close on click
             // for example, the case when the QAB tooltip is clicked it closes the popover this will prevent that
-            if (activePopoverExtraAnchorRefs === null || activePopoverExtraAnchorRefs === void 0 ? void 0 : activePopoverExtraAnchorRefs.some(function (ref) { return elementContains(ref, e.target); })) {
+            if (activePopoverExtraAnchorRefs?.some((ref) => elementContains(ref, e.target))) {
                 return;
             }
-            var ref = (_c = activePopoverRef.current) === null || _c === void 0 ? void 0 : _c.anchorRef;
+            const ref = activePopoverRef.current?.anchorRef;
             closePopover(ref);
         };
         document.addEventListener('click', listener, true);
-        return function () {
+        return () => {
             document.removeEventListener('click', listener, true);
         };
     }, [closePopover, activePopoverExtraAnchorRefs]);
-    (0, react_1.useEffect)(function () {
-        var listener = function (e) {
-            var _a;
-            if (elementContains((_a = activePopoverRef.current) === null || _a === void 0 ? void 0 : _a.ref, e.target)) {
+    (0, react_1.useEffect)(() => {
+        const listener = (e) => {
+            if (elementContains(activePopoverRef.current?.ref, e.target)) {
                 return;
             }
             closePopover();
         };
         document.addEventListener('contextmenu', listener);
-        return function () {
+        return () => {
             document.removeEventListener('contextmenu', listener);
         };
     }, [closePopover]);
-    (0, react_1.useEffect)(function () {
-        var listener = function (e) {
+    (0, react_1.useEffect)(() => {
+        const listener = (e) => {
             if (e.key !== 'Escape') {
                 return;
             }
@@ -84,37 +72,36 @@ function PopoverContextProvider(props) {
             }
         };
         document.addEventListener('keyup', listener, true);
-        return function () {
+        return () => {
             document.removeEventListener('keyup', listener, true);
         };
     }, [closePopover]);
-    (0, react_1.useEffect)(function () {
-        var listener = function () {
+    (0, react_1.useEffect)(() => {
+        const listener = () => {
             if (document.hasFocus()) {
                 return;
             }
             closePopover();
         };
         document.addEventListener('visibilitychange', listener);
-        return function () {
+        return () => {
             document.removeEventListener('visibilitychange', listener);
         };
     }, [closePopover]);
-    (0, react_1.useEffect)(function () {
-        var listener = function (e) {
-            var _a;
-            if (elementContains((_a = activePopoverRef.current) === null || _a === void 0 ? void 0 : _a.ref, e.target)) {
+    (0, react_1.useEffect)(() => {
+        const listener = (e) => {
+            if (elementContains(activePopoverRef.current?.ref, e.target)) {
                 return;
             }
             closePopover();
         };
         document.addEventListener('wheel', listener, true);
-        return function () {
+        return () => {
             document.removeEventListener('wheel', listener, true);
         };
     }, [closePopover]);
-    var onOpen = (0, react_1.useCallback)(function (popoverParams) {
-        if (activePopoverRef.current && activePopoverRef.current.ref !== (popoverParams === null || popoverParams === void 0 ? void 0 : popoverParams.ref)) {
+    const onOpen = (0, react_1.useCallback)((popoverParams) => {
+        if (activePopoverRef.current && activePopoverRef.current.ref !== popoverParams?.ref) {
             closePopover(activePopoverRef.current.anchorRef);
         }
         activePopoverRef.current = popoverParams;
@@ -122,29 +109,29 @@ function PopoverContextProvider(props) {
         setIsOpen(true);
     }, [closePopover]);
     // To set the extra anchor refs for the popover when prop-drilling is not possible
-    var setActivePopoverExtraAnchorRef = (0, react_1.useCallback)(function (extraAnchorRef) {
+    const setActivePopoverExtraAnchorRef = (0, react_1.useCallback)((extraAnchorRef) => {
         if (!extraAnchorRef) {
             return;
         }
-        setActivePopoverExtraAnchorRefs(function (prev) {
+        setActivePopoverExtraAnchorRefs((prev) => {
             if (!prev) {
                 return [extraAnchorRef];
             }
-            if (prev === null || prev === void 0 ? void 0 : prev.includes(extraAnchorRef)) {
+            if (prev?.includes(extraAnchorRef)) {
                 return prev;
             }
-            return __spreadArray(__spreadArray([], prev, true), [extraAnchorRef], false);
+            return [...prev, extraAnchorRef];
         });
     }, []);
-    var contextValue = (0, react_1.useMemo)(function () { return ({
-        onOpen: onOpen,
-        setActivePopoverExtraAnchorRef: setActivePopoverExtraAnchorRef,
+    const contextValue = (0, react_1.useMemo)(() => ({
+        onOpen,
+        setActivePopoverExtraAnchorRef,
         close: closePopover,
         // eslint-disable-next-line react-compiler/react-compiler
         popover: activePopoverRef.current,
         popoverAnchor: activePopoverAnchor,
-        isOpen: isOpen,
-    }); }, [onOpen, closePopover, isOpen, activePopoverAnchor, setActivePopoverExtraAnchorRef]);
+        isOpen,
+    }), [onOpen, closePopover, isOpen, activePopoverAnchor, setActivePopoverExtraAnchorRef]);
     return <PopoverContext.Provider value={contextValue}>{props.children}</PopoverContext.Provider>;
 }
 PopoverContextProvider.displayName = 'PopoverContextProvider';

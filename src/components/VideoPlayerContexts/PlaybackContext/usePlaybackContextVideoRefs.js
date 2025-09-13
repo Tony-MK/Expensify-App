@@ -1,60 +1,53 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Visibility_1 = require("@libs/Visibility");
+const react_1 = require("react");
+const Visibility_1 = require("@libs/Visibility");
 function usePlaybackContextVideoRefs(resetCallback) {
-    var currentVideoPlayerRef = (0, react_1.useRef)(null);
-    var videoResumeTryNumberRef = (0, react_1.useRef)(0);
-    var playVideoPromiseRef = (0, react_1.useRef)(undefined);
-    var isPlayPendingRef = (0, react_1.useRef)(false);
-    var pauseVideo = (0, react_1.useCallback)(function () {
-        var _a, _b;
-        (_b = (_a = currentVideoPlayerRef.current) === null || _a === void 0 ? void 0 : _a.setStatusAsync) === null || _b === void 0 ? void 0 : _b.call(_a, { shouldPlay: false });
+    const currentVideoPlayerRef = (0, react_1.useRef)(null);
+    const videoResumeTryNumberRef = (0, react_1.useRef)(0);
+    const playVideoPromiseRef = (0, react_1.useRef)(undefined);
+    const isPlayPendingRef = (0, react_1.useRef)(false);
+    const pauseVideo = (0, react_1.useCallback)(() => {
+        currentVideoPlayerRef.current?.setStatusAsync?.({ shouldPlay: false });
     }, [currentVideoPlayerRef]);
-    var stopVideo = (0, react_1.useCallback)(function () {
-        var _a, _b;
-        (_b = (_a = currentVideoPlayerRef.current) === null || _a === void 0 ? void 0 : _a.setStatusAsync) === null || _b === void 0 ? void 0 : _b.call(_a, { shouldPlay: false, positionMillis: 0 });
+    const stopVideo = (0, react_1.useCallback)(() => {
+        currentVideoPlayerRef.current?.setStatusAsync?.({ shouldPlay: false, positionMillis: 0 });
     }, [currentVideoPlayerRef]);
-    var playVideo = (0, react_1.useCallback)(function () {
-        var _a, _b;
+    const playVideo = (0, react_1.useCallback)(() => {
         if (!Visibility_1.default.isVisible()) {
             isPlayPendingRef.current = true;
             return;
         }
-        (_b = (_a = currentVideoPlayerRef.current) === null || _a === void 0 ? void 0 : _a.getStatusAsync) === null || _b === void 0 ? void 0 : _b.call(_a).then(function (status) {
-            var _a;
-            var newStatus = { shouldPlay: true };
+        currentVideoPlayerRef.current?.getStatusAsync?.().then((status) => {
+            const newStatus = { shouldPlay: true };
             if ('durationMillis' in status && status.durationMillis === status.positionMillis) {
                 newStatus.positionMillis = 0;
             }
-            playVideoPromiseRef.current = (_a = currentVideoPlayerRef.current) === null || _a === void 0 ? void 0 : _a.setStatusAsync(newStatus).catch(function (error) {
+            playVideoPromiseRef.current = currentVideoPlayerRef.current?.setStatusAsync(newStatus).catch((error) => {
                 return error;
             });
         });
     }, [currentVideoPlayerRef]);
-    var unloadVideo = (0, react_1.useCallback)(function () {
-        var _a, _b;
-        (_b = (_a = currentVideoPlayerRef.current) === null || _a === void 0 ? void 0 : _a.unloadAsync) === null || _b === void 0 ? void 0 : _b.call(_a);
+    const unloadVideo = (0, react_1.useCallback)(() => {
+        currentVideoPlayerRef.current?.unloadAsync?.();
     }, [currentVideoPlayerRef]);
-    var checkIfVideoIsPlaying = (0, react_1.useCallback)(function (statusCallback) {
-        var _a, _b;
-        (_b = (_a = currentVideoPlayerRef.current) === null || _a === void 0 ? void 0 : _a.getStatusAsync) === null || _b === void 0 ? void 0 : _b.call(_a).then(function (status) {
+    const checkIfVideoIsPlaying = (0, react_1.useCallback)((statusCallback) => {
+        currentVideoPlayerRef.current?.getStatusAsync?.().then((status) => {
             statusCallback('isPlaying' in status && status.isPlaying);
         });
     }, [currentVideoPlayerRef]);
-    var resetVideoPlayerData = (0, react_1.useCallback)(function () {
-        var _a;
+    const resetVideoPlayerData = (0, react_1.useCallback)(() => {
         // Play video is an async operation and if we call stop video before the promise is completed,
         // it will throw a console error. So, we'll wait until the promise is resolved before stopping the video.
-        ((_a = playVideoPromiseRef.current) !== null && _a !== void 0 ? _a : Promise.resolve()).then(stopVideo).finally(function () {
+        (playVideoPromiseRef.current ?? Promise.resolve()).then(stopVideo).finally(() => {
             videoResumeTryNumberRef.current = 0;
             resetCallback();
             unloadVideo();
             currentVideoPlayerRef.current = null;
         });
     }, [resetCallback, stopVideo, unloadVideo]);
-    (0, react_1.useEffect)(function () {
-        return Visibility_1.default.onVisibilityChange(function () {
+    (0, react_1.useEffect)(() => {
+        return Visibility_1.default.onVisibilityChange(() => {
             if (!Visibility_1.default.isVisible() || !isPlayPendingRef.current) {
                 return;
             }
@@ -62,10 +55,10 @@ function usePlaybackContextVideoRefs(resetCallback) {
             isPlayPendingRef.current = false;
         });
     }, [playVideo]);
-    var updateCurrentVideoPlayerRef = function (ref) {
+    const updateCurrentVideoPlayerRef = (ref) => {
         currentVideoPlayerRef.current = ref;
     };
-    return (0, react_1.useMemo)(function () { return ({
+    return (0, react_1.useMemo)(() => ({
         resetPlayerData: resetVideoPlayerData,
         isPlaying: checkIfVideoIsPlaying,
         pause: pauseVideo,
@@ -73,6 +66,6 @@ function usePlaybackContextVideoRefs(resetCallback) {
         ref: currentVideoPlayerRef,
         resumeTryNumberRef: videoResumeTryNumberRef,
         updateRef: updateCurrentVideoPlayerRef,
-    }); }, [checkIfVideoIsPlaying, pauseVideo, playVideo, resetVideoPlayerData]);
+    }), [checkIfVideoIsPlaying, pauseVideo, playVideo, resetVideoPlayerData]);
 }
 exports.default = usePlaybackContextVideoRefs;

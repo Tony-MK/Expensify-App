@@ -1,88 +1,95 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 // We use Animated for all functionality related to wide RHP to make it easier
 // to interact with react-navigation components (e.g., CardContainer, interpolator), which also use Animated.
 // eslint-disable-next-line no-restricted-imports
-var react_native_1 = require("react-native");
-var WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
-var presentation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/presentation");
-var variables_1 = require("@styles/variables");
-var hideKeyboardOnSwipe_1 = require("./hideKeyboardOnSwipe");
-var useModalCardStyleInterpolator_1 = require("./useModalCardStyleInterpolator");
-var commonScreenOptions = {
+const react_native_1 = require("react-native");
+const WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
+const presentation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/presentation");
+const variables_1 = require("@styles/variables");
+const hideKeyboardOnSwipe_1 = require("./hideKeyboardOnSwipe");
+const useModalCardStyleInterpolator_1 = require("./useModalCardStyleInterpolator");
+const commonScreenOptions = {
     web: {
         cardOverlayEnabled: true,
     },
 };
-var useRootNavigatorScreenOptions = function () {
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var modalCardStyleInterpolator = (0, useModalCardStyleInterpolator_1.default)();
+const useRootNavigatorScreenOptions = () => {
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const modalCardStyleInterpolator = (0, useModalCardStyleInterpolator_1.default)();
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var _a = (0, useResponsiveLayout_1.default)(), isSmallScreenWidth = _a.isSmallScreenWidth, shouldUseNarrowLayout = _a.shouldUseNarrowLayout;
-    var themeStyles = (0, useThemeStyles_1.default)();
+    const { isSmallScreenWidth, shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const themeStyles = (0, useThemeStyles_1.default)();
     return {
-        rightModalNavigator: __assign(__assign(__assign({}, commonScreenOptions), hideKeyboardOnSwipe_1.default), { animation: animation_1.default.SLIDE_FROM_RIGHT, 
+        rightModalNavigator: {
+            ...commonScreenOptions,
+            ...hideKeyboardOnSwipe_1.default,
+            animation: animation_1.default.SLIDE_FROM_RIGHT,
             // We want pop in RHP since there are some flows that would work weird otherwise
-            animationTypeForReplace: 'pop', web: {
+            animationTypeForReplace: 'pop',
+            web: {
                 presentation: presentation_1.default.TRANSPARENT_MODAL,
-                cardStyleInterpolator: function (props) {
-                    // Add 1 to change range from [0, 1] to [1, 2]
-                    // Don't use outputMultiplier for the narrow layout
-                    return modalCardStyleInterpolator({
-                        props: props,
-                        shouldAnimateSidePanel: true,
-                        // Adjust output range to match the wide RHP size
-                        outputRangeMultiplier: isSmallScreenWidth
-                            ? undefined
-                            : react_native_1.Animated.add(react_native_1.Animated.multiply(WideRHPContextProvider_1.expandedRHPProgress, variables_1.default.receiptPaneRHPMaxWidth / variables_1.default.sideBarWidth), 1),
-                    });
-                },
-            } }),
+                cardStyleInterpolator: (props) => 
+                // Add 1 to change range from [0, 1] to [1, 2]
+                // Don't use outputMultiplier for the narrow layout
+                modalCardStyleInterpolator({
+                    props,
+                    shouldAnimateSidePanel: true,
+                    // Adjust output range to match the wide RHP size
+                    outputRangeMultiplier: isSmallScreenWidth
+                        ? undefined
+                        : react_native_1.Animated.add(react_native_1.Animated.multiply(WideRHPContextProvider_1.expandedRHPProgress, variables_1.default.receiptPaneRHPMaxWidth / variables_1.default.sideBarWidth), 1),
+                }),
+            },
+        },
         basicModalNavigator: {
             presentation: presentation_1.default.TRANSPARENT_MODAL,
             web: {
                 cardOverlayEnabled: false,
-                cardStyle: __assign(__assign({}, StyleUtils.getNavigationModalCardStyle()), { backgroundColor: 'transparent', width: '100%', top: 0, left: 0, position: 'fixed' }),
-                cardStyleInterpolator: function (props) { return modalCardStyleInterpolator({ props: props, isOnboardingModal: true }); },
+                cardStyle: {
+                    ...StyleUtils.getNavigationModalCardStyle(),
+                    backgroundColor: 'transparent',
+                    width: '100%',
+                    top: 0,
+                    left: 0,
+                    position: 'fixed',
+                },
+                cardStyleInterpolator: (props) => modalCardStyleInterpolator({ props, isOnboardingModal: true }),
             },
         },
-        splitNavigator: __assign(__assign({}, commonScreenOptions), { 
+        splitNavigator: {
+            ...commonScreenOptions,
             // We need to turn off animation for the full screen to avoid delay when closing screens.
-            animation: animation_1.default.NONE, web: {
-                cardStyleInterpolator: function (props) { return modalCardStyleInterpolator({ props: props, isFullScreenModal: true }); },
+            animation: animation_1.default.NONE,
+            web: {
+                cardStyleInterpolator: (props) => modalCardStyleInterpolator({ props, isFullScreenModal: true }),
                 cardStyle: StyleUtils.getNavigationModalCardStyle(),
-            } }),
-        fullScreen: __assign(__assign({}, commonScreenOptions), { 
+            },
+        },
+        fullScreen: {
+            ...commonScreenOptions,
             // We need to turn off animation for the full screen to avoid delay when closing screens.
-            animation: animation_1.default.NONE, web: {
+            animation: animation_1.default.NONE,
+            web: {
                 cardStyle: {
                     height: '100%',
                 },
-                cardStyleInterpolator: function (props) { return modalCardStyleInterpolator({ props: props, isFullScreenModal: true }); },
-            } }),
-        workspacesListPage: __assign(__assign({}, commonScreenOptions), { 
+                cardStyleInterpolator: (props) => modalCardStyleInterpolator({ props, isFullScreenModal: true }),
+            },
+        },
+        workspacesListPage: {
+            ...commonScreenOptions,
             // We need to turn off animation for the full screen to avoid delay when closing screens.
-            animation: animation_1.default.NONE, web: {
-                cardStyleInterpolator: function (props) {
-                    return modalCardStyleInterpolator({ props: props, isFullScreenModal: true, animationEnabled: false, shouldAnimateSidePanel: true });
-                },
-                cardStyle: shouldUseNarrowLayout ? __assign(__assign({}, StyleUtils.getNavigationModalCardStyle()), { paddingLeft: 0 }) : __assign(__assign({}, themeStyles.h100), { paddingLeft: variables_1.default.navigationTabBarSize }),
-            } }),
+            animation: animation_1.default.NONE,
+            web: {
+                cardStyleInterpolator: (props) => modalCardStyleInterpolator({ props, isFullScreenModal: true, animationEnabled: false, shouldAnimateSidePanel: true }),
+                cardStyle: shouldUseNarrowLayout ? { ...StyleUtils.getNavigationModalCardStyle(), paddingLeft: 0 } : { ...themeStyles.h100, paddingLeft: variables_1.default.navigationTabBarSize },
+            },
+        },
     };
 };
 exports.default = useRootNavigatorScreenOptions;

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
-var businessInfoStepKeys = ReimbursementAccountForm_1.default.BUSINESS_INFO_STEP;
+const expensify_common_1 = require("expensify-common");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
+const businessInfoStepKeys = ReimbursementAccountForm_1.default.BUSINESS_INFO_STEP;
 /**
  * Returns the initial subStep for the Business Info step based on already existing data
  */

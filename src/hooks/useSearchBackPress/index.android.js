@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useOnyx_1 = require("@hooks/useOnyx");
-var MobileSelectionMode_1 = require("@libs/actions/MobileSelectionMode");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var useSearchBackPress = function (_a) {
-    var onClearSelection = _a.onClearSelection, onNavigationCallBack = _a.onNavigationCallBack;
-    var selectionMode = (0, useOnyx_1.default)(ONYXKEYS_1.default.MOBILE_SELECTION_MODE, { canBeMissing: true })[0];
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
-        var onBackPress = function () {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useOnyx_1 = require("@hooks/useOnyx");
+const MobileSelectionMode_1 = require("@libs/actions/MobileSelectionMode");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const useSearchBackPress = ({ onClearSelection, onNavigationCallBack }) => {
+    const [selectionMode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.MOBILE_SELECTION_MODE, { canBeMissing: true });
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
+        const onBackPress = () => {
             if (selectionMode) {
                 onClearSelection();
                 (0, MobileSelectionMode_1.turnOffMobileSelectionMode)();
@@ -19,8 +18,8 @@ var useSearchBackPress = function (_a) {
             onNavigationCallBack();
             return true;
         };
-        var backHandler = react_native_1.BackHandler.addEventListener('hardwareBackPress', onBackPress);
-        return function () { return backHandler.remove(); };
+        const backHandler = react_native_1.BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => backHandler.remove();
     }, [selectionMode, onClearSelection, onNavigationCallBack]));
 };
 exports.default = useSearchBackPress;

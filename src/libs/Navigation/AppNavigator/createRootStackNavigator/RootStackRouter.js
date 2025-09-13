@@ -1,25 +1,14 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var Localize = require("@libs/Localize");
-var isNavigatorName_1 = require("@libs/Navigation/helpers/isNavigatorName");
-var isSideModalNavigator_1 = require("@libs/Navigation/helpers/isSideModalNavigator");
-var Welcome = require("@userActions/Welcome");
-var CONST_1 = require("@src/CONST");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var GetStateForActionHandlers_1 = require("./GetStateForActionHandlers");
-var syncBrowserHistory_1 = require("./syncBrowserHistory");
+const native_1 = require("@react-navigation/native");
+const Localize = require("@libs/Localize");
+const isNavigatorName_1 = require("@libs/Navigation/helpers/isNavigatorName");
+const isSideModalNavigator_1 = require("@libs/Navigation/helpers/isSideModalNavigator");
+const Welcome = require("@userActions/Welcome");
+const CONST_1 = require("@src/CONST");
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const GetStateForActionHandlers_1 = require("./GetStateForActionHandlers");
+const syncBrowserHistory_1 = require("./syncBrowserHistory");
 function isOpenWorkspaceSplitAction(action) {
     return action.type === CONST_1.default.NAVIGATION.ACTION_TYPE.OPEN_WORKSPACE_SPLIT;
 }
@@ -39,13 +28,13 @@ function isPreloadAction(action) {
     return action.type === CONST_1.default.NAVIGATION.ACTION_TYPE.PRELOAD;
 }
 function shouldPreventReset(state, action) {
-    if (action.type !== CONST_1.default.NAVIGATION_ACTIONS.RESET || !(action === null || action === void 0 ? void 0 : action.payload)) {
+    if (action.type !== CONST_1.default.NAVIGATION_ACTIONS.RESET || !action?.payload) {
         return false;
     }
-    var currentFocusedRoute = (0, native_1.findFocusedRoute)(state);
-    var targetFocusedRoute = (0, native_1.findFocusedRoute)(action === null || action === void 0 ? void 0 : action.payload);
+    const currentFocusedRoute = (0, native_1.findFocusedRoute)(state);
+    const targetFocusedRoute = (0, native_1.findFocusedRoute)(action?.payload);
     // We want to prevent the user from navigating back to a non-onboarding screen if they are currently on an onboarding screen
-    if ((0, isNavigatorName_1.isOnboardingFlowName)(currentFocusedRoute === null || currentFocusedRoute === void 0 ? void 0 : currentFocusedRoute.name) && !(0, isNavigatorName_1.isOnboardingFlowName)(targetFocusedRoute === null || targetFocusedRoute === void 0 ? void 0 : targetFocusedRoute.name)) {
+    if ((0, isNavigatorName_1.isOnboardingFlowName)(currentFocusedRoute?.name) && !(0, isNavigatorName_1.isOnboardingFlowName)(targetFocusedRoute?.name)) {
         Welcome.setOnboardingErrorMessage(Localize.translateLocal('onboarding.purpose.errorBackButton'));
         return true;
     }
@@ -55,16 +44,17 @@ function isNavigatingToModalFromModal(state, action) {
     if (action.type !== CONST_1.default.NAVIGATION.ACTION_TYPE.PUSH) {
         return false;
     }
-    var lastRoute = state.routes.at(-1);
+    const lastRoute = state.routes.at(-1);
     // If the last route is a side modal navigator and the generated minimal action want's to push a new side modal navigator that means they are different ones.
     // We want to dismiss the one that is currently on the top.
-    return (0, isSideModalNavigator_1.default)(lastRoute === null || lastRoute === void 0 ? void 0 : lastRoute.name) && (0, isSideModalNavigator_1.default)(action.payload.name);
+    return (0, isSideModalNavigator_1.default)(lastRoute?.name) && (0, isSideModalNavigator_1.default)(action.payload.name);
 }
 function RootStackRouter(options) {
-    var stackRouter = (0, native_1.StackRouter)(options);
-    return __assign(__assign({}, stackRouter), { getStateForAction: function (state, action, configOptions) {
-            var _a;
-            if (isPreloadAction(action) && action.payload.name === ((_a = state.routes.at(-1)) === null || _a === void 0 ? void 0 : _a.name)) {
+    const stackRouter = (0, native_1.StackRouter)(options);
+    return {
+        ...stackRouter,
+        getStateForAction(state, action, configOptions) {
+            if (isPreloadAction(action) && action.payload.name === state.routes.at(-1)?.name) {
                 return state;
             }
             if (isToggleSidePanelWithHistoryAction(action)) {
@@ -94,6 +84,7 @@ function RootStackRouter(options) {
                 return (0, GetStateForActionHandlers_1.handleNavigatingToModalFromModal)(state, action, configOptions, stackRouter);
             }
             return stackRouter.getStateForAction(state, action, configOptions);
-        } });
+        },
+    };
 }
 exports.default = RootStackRouter;

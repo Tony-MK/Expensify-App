@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
+const react_1 = require("react");
 /**
  * This is a wrapper component that allows us to defer rendering children and do it in the background with the use of startTransition.
  * Caution: To achieve performance benefits from this component you have to wrap it in a Suspense component.
  */
-function Deferred(_a) {
-    var children = _a.children;
-    var _b = (0, react_1.useState)(function () { return Promise.withResolvers(); })[0], promise = _b.promise, resolve = _b.resolve;
-    var _c = (0, react_1.useState)(false), isMounted = _c[0], setIsMounted = _c[1];
-    (0, react_1.useLayoutEffect)(function () {
+function Deferred({ children }) {
+    const [{ promise, resolve }] = (0, react_1.useState)(() => Promise.withResolvers());
+    const [isMounted, setIsMounted] = (0, react_1.useState)(false);
+    (0, react_1.useLayoutEffect)(() => {
         setIsMounted(true);
-        (0, react_1.startTransition)(function () {
+        (0, react_1.startTransition)(() => {
             resolve();
         });
     }, [resolve]);

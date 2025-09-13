@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Check platform supports the selector or not
  */
-var isSelectorSupported = function (selector) {
+const isSelectorSupported = (selector) => {
     try {
         document.querySelector(selector);
         return true;

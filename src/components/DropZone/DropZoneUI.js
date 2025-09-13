@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Text_1 = require("@components/Text");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function DropZoneUI(_a) {
-    var icon = _a.icon, dropTitle = _a.dropTitle, dropStyles = _a.dropStyles, dropTextStyles = _a.dropTextStyles, dropWrapperStyles = _a.dropWrapperStyles, dashedBorderStyles = _a.dashedBorderStyles;
-    var styles = (0, useThemeStyles_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Text_1 = require("@components/Text");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function DropZoneUI({ icon, dropTitle, dropStyles, dropTextStyles, dropWrapperStyles, dashedBorderStyles }) {
+    const styles = (0, useThemeStyles_1.default)();
     return (<react_native_1.View style={[styles.flex1, styles.dropWrapper, styles.p2, dropWrapperStyles]}>
             <react_native_1.View style={[styles.borderRadiusComponentLarge, styles.p2, styles.flex1, dropStyles]}>
                 <react_native_1.View style={[styles.flex1, styles.justifyContentCenter, styles.alignItemsCenter, styles.pRelative]}>

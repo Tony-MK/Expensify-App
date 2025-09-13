@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetRerenderCount = exports.getRerenderCount = void 0;
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var client_1 = require("@libs/E2E/client");
-var ComposerWithSuggestions_1 = require("./ComposerWithSuggestions");
-var rerenderCount = 0;
-var getRerenderCount = function () { return rerenderCount; };
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const client_1 = require("@libs/E2E/client");
+const ComposerWithSuggestions_1 = require("./ComposerWithSuggestions");
+let rerenderCount = 0;
+const getRerenderCount = () => rerenderCount;
 exports.getRerenderCount = getRerenderCount;
-var resetRerenderCount = function () {
+const resetRerenderCount = () => {
     rerenderCount = 0;
 };
 exports.resetRerenderCount = resetRerenderCount;
@@ -21,33 +21,31 @@ function ComposerWithSuggestionsE2e(props, ref) {
     // we rely on waterfall rendering in react, so we intentionally disable compiler
     // for this component. This file is only used for e2e tests, so it's okay to
     // disable compiler for this file.
-    var textInputRef = (0, react_1.useRef)(null);
-    var hasFocusBeenRequested = (0, react_1.useRef)(false);
-    var onLayout = (0, react_1.useCallback)(function (event) {
-        var testConfig = client_1.default.getCurrentActiveTestConfig();
-        if ((testConfig === null || testConfig === void 0 ? void 0 : testConfig.reportScreen) && typeof testConfig.reportScreen !== 'string' && !(testConfig === null || testConfig === void 0 ? void 0 : testConfig.reportScreen.autoFocus)) {
+    const textInputRef = (0, react_1.useRef)(null);
+    const hasFocusBeenRequested = (0, react_1.useRef)(false);
+    const onLayout = (0, react_1.useCallback)((event) => {
+        const testConfig = client_1.default.getCurrentActiveTestConfig();
+        if (testConfig?.reportScreen && typeof testConfig.reportScreen !== 'string' && !testConfig?.reportScreen.autoFocus) {
             return;
         }
-        var canRequestFocus = event.nativeEvent.layout.width > 0 && !hasFocusBeenRequested.current;
+        const canRequestFocus = event.nativeEvent.layout.width > 0 && !hasFocusBeenRequested.current;
         if (!canRequestFocus) {
             return;
         }
         hasFocusBeenRequested.current = true;
-        var setFocus = function () {
-            var _a;
+        const setFocus = () => {
             console.debug('[E2E] Requesting focus for ComposerWithSuggestions');
             if (!(textInputRef && 'current' in textInputRef)) {
                 console.error('[E2E] textInputRef is not available, failed to focus');
                 return;
             }
-            (_a = textInputRef.current) === null || _a === void 0 ? void 0 : _a.focus(true);
-            setTimeout(function () {
-                var _a;
+            textInputRef.current?.focus(true);
+            setTimeout(() => {
                 // and actually let's verify that the keyboard is visible
                 if (react_native_1.Keyboard.isVisible()) {
                     return;
                 }
-                (_a = textInputRef.current) === null || _a === void 0 ? void 0 : _a.blur();
+                textInputRef.current?.blur();
                 setFocus();
                 // 1000ms is enough time for any keyboard to open
             }, 1000);
@@ -57,7 +55,7 @@ function ComposerWithSuggestionsE2e(props, ref) {
     }, []);
     return (<ComposerWithSuggestions_1.default 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props} ref={function (composerRef) {
+    {...props} ref={(composerRef) => {
             textInputRef.current = composerRef;
             if (typeof ref === 'function') {
                 ref(composerRef);

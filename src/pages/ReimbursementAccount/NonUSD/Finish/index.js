@@ -1,35 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Expensicons = require("@components/Icon/Expensicons");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var MenuItem_1 = require("@components/MenuItem");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Section_1 = require("@components/Section");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@navigation/Navigation");
-var Report_1 = require("@userActions/Report");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Expensicons = require("@components/Icon/Expensicons");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const MenuItem_1 = require("@components/MenuItem");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Section_1 = require("@components/Section");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@navigation/Navigation");
+const Report_1 = require("@userActions/Report");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
 function Finish() {
-    var _a;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: true })[0];
-    var policyID = (_a = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _a === void 0 ? void 0 : _a.policyID;
-    var handleBackButtonPress = function () {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: true });
+    const policyID = reimbursementAccount?.achData?.policyID;
+    const handleBackButtonPress = () => {
         Navigation_1.default.goBack();
     };
-    var handleNavigateToConciergeChat = function () { return (0, Report_1.navigateToConciergeChat)(true); };
+    const handleNavigateToConciergeChat = () => (0, Report_1.navigateToConciergeChat)(true);
     return (<ScreenWrapper_1.default testID={Finish.displayName} includeSafeAreaPaddingBottom={false} shouldEnablePickerAvoiding={false} shouldEnableMaxHeight>
             <HeaderWithBackButton_1.default title={translate('bankAccount.addBankAccount')} onBackButtonPress={handleBackButtonPress}/>
             <ScrollView_1.default style={[styles.flex1]}>
@@ -40,7 +39,7 @@ function Finish() {
                 <Section_1.default title={translate('finishStep.enable2FA')} icon={Illustrations.ShieldYellow} titleStyles={[styles.mb4, styles.textHeadline]} containerStyles={[styles.mh5]} menuItems={[
             {
                 title: translate('finishStep.secure'),
-                onPress: function () {
+                onPress: () => {
                     Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_2FA_ROOT.getRoute(ROUTES_1.default.BANK_ACCOUNT_WITH_STEP_TO_OPEN.getRoute(policyID)));
                 },
                 icon: Expensicons.Shield,

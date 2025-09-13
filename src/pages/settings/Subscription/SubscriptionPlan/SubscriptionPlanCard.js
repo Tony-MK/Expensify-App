@@ -1,41 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var SelectCircle_1 = require("@components/SelectCircle");
-var Text_1 = require("@components/Text");
-var usePreferredCurrency_1 = require("@hooks/usePreferredCurrency");
-var usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSubscriptionPlan_1 = require("@hooks/useSubscriptionPlan");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
-var variables_1 = require("@styles/variables");
-var SubscriptionPlanCardActionButton_1 = require("./SubscriptionPlanCardActionButton");
-function SubscriptionPlanCard(_a) {
-    var subscriptionPlan = _a.subscriptionPlan, _b = _a.isFromComparisonModal, isFromComparisonModal = _b === void 0 ? false : _b, closeComparisonModal = _a.closeComparisonModal;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var currentSubscriptionPlan = (0, useSubscriptionPlan_1.default)();
-    var privateSubscription = (0, usePrivateSubscription_1.default)();
-    var preferredCurrency = (0, usePreferredCurrency_1.default)();
-    var _c = (0, SubscriptionUtils_1.getSubscriptionPlanInfo)(subscriptionPlan, privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.type, preferredCurrency, isFromComparisonModal), title = _c.title, src = _c.src, description = _c.description, benefits = _c.benefits, note = _c.note, subtitle = _c.subtitle;
-    var isSelected = isFromComparisonModal && subscriptionPlan === currentSubscriptionPlan;
-    var benefitsColumns = shouldUseNarrowLayout || isFromComparisonModal ? 1 : 2;
-    var renderBenefits = function () {
-        var amountOfRows = Math.ceil(benefits.length / benefitsColumns);
-        return Array.from({ length: amountOfRows }).map(function (_, rowIndex) { return (<react_native_1.View 
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const SelectCircle_1 = require("@components/SelectCircle");
+const Text_1 = require("@components/Text");
+const usePreferredCurrency_1 = require("@hooks/usePreferredCurrency");
+const usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSubscriptionPlan_1 = require("@hooks/useSubscriptionPlan");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
+const variables_1 = require("@styles/variables");
+const SubscriptionPlanCardActionButton_1 = require("./SubscriptionPlanCardActionButton");
+function SubscriptionPlanCard({ subscriptionPlan, isFromComparisonModal = false, closeComparisonModal }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const currentSubscriptionPlan = (0, useSubscriptionPlan_1.default)();
+    const privateSubscription = (0, usePrivateSubscription_1.default)();
+    const preferredCurrency = (0, usePreferredCurrency_1.default)();
+    const { title, src, description, benefits, note, subtitle } = (0, SubscriptionUtils_1.getSubscriptionPlanInfo)(subscriptionPlan, privateSubscription?.type, preferredCurrency, isFromComparisonModal);
+    const isSelected = isFromComparisonModal && subscriptionPlan === currentSubscriptionPlan;
+    const benefitsColumns = shouldUseNarrowLayout || isFromComparisonModal ? 1 : 2;
+    const renderBenefits = () => {
+        const amountOfRows = Math.ceil(benefits.length / benefitsColumns);
+        return Array.from({ length: amountOfRows }).map((_, rowIndex) => (<react_native_1.View 
         // eslint-disable-next-line react/no-array-index-key
-        key={"row-".concat(rowIndex)} style={styles.flexRow}>
-                {benefits.slice(rowIndex * benefitsColumns, (rowIndex + 1) * benefitsColumns).map(function (item) { return (<react_native_1.View key={item} style={[styles.flex1, styles.flexRow, styles.alignItemsCenter, shouldUseNarrowLayout ? styles.mt3 : styles.mt4]}>
+        key={`row-${rowIndex}`} style={styles.flexRow}>
+                {benefits.slice(rowIndex * benefitsColumns, (rowIndex + 1) * benefitsColumns).map((item) => (<react_native_1.View key={item} style={[styles.flex1, styles.flexRow, styles.alignItemsCenter, shouldUseNarrowLayout ? styles.mt3 : styles.mt4]}>
                         <Icon_1.default src={Expensicons.Checkmark} fill={theme.iconSuccessFill} width={variables_1.default.iconSizeSmall} height={variables_1.default.iconSizeSmall}/>
                         <Text_1.default style={[styles.textLabelSupporting, styles.ml2]}>{item}</Text_1.default>
-                    </react_native_1.View>); })}
-            </react_native_1.View>); });
+                    </react_native_1.View>))}
+            </react_native_1.View>));
     };
     return (<react_native_1.View style={[styles.borderedContentCard, styles.borderRadiusComponentLarge, styles.mt5, styles.flex1, isSelected && styles.borderColorFocus, styles.justifyContentBetween]}>
             <react_native_1.View style={shouldUseNarrowLayout ? styles.p5 : [styles.p8, styles.pb6]}>

@@ -1,57 +1,57 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_dom_1 = require("react-dom");
-var Modal_1 = require("@components/Modal");
-var PopoverProvider_1 = require("@components/PopoverProvider");
-var PopoverWithoutOverlay_1 = require("@components/PopoverWithoutOverlay");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSidePanel_1 = require("@hooks/useSidePanel");
-var TooltipRefManager_1 = require("@libs/TooltipRefManager");
-var CONST_1 = require("@src/CONST");
-var DISABLED_ANIMATION_DURATION = 1;
+const react_1 = require("react");
+const react_dom_1 = require("react-dom");
+const Modal_1 = require("@components/Modal");
+const PopoverProvider_1 = require("@components/PopoverProvider");
+const PopoverWithoutOverlay_1 = require("@components/PopoverWithoutOverlay");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSidePanel_1 = require("@hooks/useSidePanel");
+const TooltipRefManager_1 = require("@libs/TooltipRefManager");
+const CONST_1 = require("@src/CONST");
+const DISABLED_ANIMATION_DURATION = 1;
 /*
  * This is a convenience wrapper around the Modal component for a responsive Popover.
  * On small screen widths, it uses BottomDocked modal type, and a Popover type on wide screen widths.
  */
 function Popover(props) {
-    var isVisible = props.isVisible, onClose = props.onClose, fullscreen = props.fullscreen, onLayout = props.onLayout, animationOutTiming = props.animationOutTiming, _a = props.animationInTiming, animationInTiming = _a === void 0 ? CONST_1.default.ANIMATED_TRANSITION : _a, _b = props.disableAnimation, disableAnimation = _b === void 0 ? true : _b, _c = props.withoutOverlay, withoutOverlay = _c === void 0 ? false : _c, _d = props.anchorPosition, anchorPosition = _d === void 0 ? {} : _d, _e = props.anchorRef, anchorRef = _e === void 0 ? function () { } : _e, _f = props.animationIn, animationIn = _f === void 0 ? 'fadeIn' : _f, _g = props.animationOut, animationOut = _g === void 0 ? 'fadeOut' : _g, _h = props.shouldCloseWhenBrowserNavigationChanged, shouldCloseWhenBrowserNavigationChanged = _h === void 0 ? true : _h;
+    const { isVisible, onClose, fullscreen, onLayout, animationOutTiming, animationInTiming = CONST_1.default.ANIMATED_TRANSITION, disableAnimation = true, withoutOverlay = false, anchorPosition = {}, anchorRef = () => { }, animationIn = 'fadeIn', animationOut = 'fadeOut', shouldCloseWhenBrowserNavigationChanged = true, } = props;
     // We need to use isSmallScreenWidth to apply the correct modal type and popoverAnchorPosition
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var _j = (0, useResponsiveLayout_1.default)(), shouldUseNarrowLayout = _j.shouldUseNarrowLayout, isSmallScreenWidth = _j.isSmallScreenWidth;
-    var withoutOverlayRef = (0, react_1.useRef)(null);
-    var _k = react_1.default.useContext(PopoverProvider_1.PopoverContext), close = _k.close, popover = _k.popover;
-    var isSidePanelTransitionEnded = (0, useSidePanel_1.default)().isSidePanelTransitionEnded;
+    const { shouldUseNarrowLayout, isSmallScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const withoutOverlayRef = (0, react_1.useRef)(null);
+    const { close, popover } = react_1.default.useContext(PopoverProvider_1.PopoverContext);
+    const { isSidePanelTransitionEnded } = (0, useSidePanel_1.default)();
     // This useEffect handles hiding popovers when SidePanel is animating.
-    react_1.default.useEffect(function () {
+    react_1.default.useEffect(() => {
         if (isSidePanelTransitionEnded || isSmallScreenWidth || !isVisible) {
             return;
         }
-        onClose === null || onClose === void 0 ? void 0 : onClose();
+        onClose?.();
     }, [onClose, isSidePanelTransitionEnded, isSmallScreenWidth, isVisible]);
     // Not adding this inside the PopoverProvider
     // because this is an issue on smaller screens as well.
-    react_1.default.useEffect(function () {
+    react_1.default.useEffect(() => {
         if (!shouldCloseWhenBrowserNavigationChanged) {
             return;
         }
-        var listener = function () {
+        const listener = () => {
             if (!isVisible) {
                 return;
             }
-            onClose === null || onClose === void 0 ? void 0 : onClose();
+            onClose?.();
         };
         window.addEventListener('popstate', listener);
-        return function () {
+        return () => {
             window.removeEventListener('popstate', listener);
         };
     }, [onClose, isVisible, shouldCloseWhenBrowserNavigationChanged]);
-    var onCloseWithPopoverContext = function () {
+    const onCloseWithPopoverContext = () => {
         if (popover && 'current' in anchorRef) {
             close(anchorRef);
         }
         TooltipRefManager_1.default.hideTooltip();
-        onClose === null || onClose === void 0 ? void 0 : onClose();
+        onClose?.();
     };
     if (!fullscreen && !shouldUseNarrowLayout) {
         return (0, react_dom_1.createPortal)(<Modal_1.default 

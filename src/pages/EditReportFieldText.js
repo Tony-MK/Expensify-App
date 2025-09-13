@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function EditReportFieldTextPage(_a) {
-    var fieldName = _a.fieldName, onSubmit = _a.onSubmit, fieldValue = _a.fieldValue, isRequired = _a.isRequired, fieldKey = _a.fieldKey;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = {};
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function EditReportFieldTextPage({ fieldName, onSubmit, fieldValue, isRequired, fieldKey }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = {};
         if (isRequired && values[fieldKey].trim() === '') {
             errors[fieldKey] = translate('common.error.fieldRequired');
         }

@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_permissions_1 = require("react-native-permissions");
-var useAppState_1 = require("@hooks/useAppState");
-var index_1 = require("./index");
-function useContactPermissions(_a) {
-    var importAndSaveContacts = _a.importAndSaveContacts, setContacts = _a.setContacts, contactPermissionState = _a.contactPermissionState, setContactPermissionState = _a.setContactPermissionState;
-    var checkPermissionAndUpdateContacts = (0, react_1.useCallback)(function () {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_permissions_1 = require("react-native-permissions");
+const useAppState_1 = require("@hooks/useAppState");
+const index_1 = require("./index");
+function useContactPermissions({ importAndSaveContacts, setContacts, contactPermissionState, setContactPermissionState }) {
+    const checkPermissionAndUpdateContacts = (0, react_1.useCallback)(() => {
         return (0, index_1.getContactPermission)()
-            .then(function (newStatus) {
-            var isNewStatusGranted = newStatus === react_native_permissions_1.RESULTS.GRANTED || newStatus === react_native_permissions_1.RESULTS.LIMITED; // Permission is enabled, or just became enabled
+            .then((newStatus) => {
+            const isNewStatusGranted = newStatus === react_native_permissions_1.RESULTS.GRANTED || newStatus === react_native_permissions_1.RESULTS.LIMITED; // Permission is enabled, or just became enabled
             if (isNewStatusGranted) {
                 importAndSaveContacts();
             }
@@ -21,19 +20,19 @@ function useContactPermissions(_a) {
                 setContacts([]);
             }
         })
-            .catch(function (error) {
+            .catch((error) => {
             // eslint-disable-next-line no-console
             console.error('Failed to check contact permission:', error);
         });
     }, [contactPermissionState, importAndSaveContacts, setContacts, setContactPermissionState]);
-    var handleAppStateChange = (0, react_1.useCallback)(function (nextAppState) {
+    const handleAppStateChange = (0, react_1.useCallback)((nextAppState) => {
         if (nextAppState !== 'active') {
             return;
         }
         checkPermissionAndUpdateContacts();
     }, [checkPermissionAndUpdateContacts]);
     (0, useAppState_1.default)({ onAppStateChange: handleAppStateChange });
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
         checkPermissionAndUpdateContacts();
     }, [checkPermissionAndUpdateContacts]));
 }

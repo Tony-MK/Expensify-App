@@ -1,28 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Browser_1 = require("@libs/Browser");
-var SearchUIUtils_1 = require("@libs/SearchUIUtils");
-function BaseSelectionListItemRenderer(_a) {
-    var _b;
-    var ListItem = _a.ListItem, item = _a.item, index = _a.index, isFocused = _a.isFocused, isDisabled = _a.isDisabled, showTooltip = _a.showTooltip, canSelectMultiple = _a.canSelectMultiple, onLongPressRow = _a.onLongPressRow, shouldSingleExecuteRowSelect = _a.shouldSingleExecuteRowSelect, selectRow = _a.selectRow, onCheckboxPress = _a.onCheckboxPress, onDismissError = _a.onDismissError, shouldPreventDefaultFocusOnSelectRow = _a.shouldPreventDefaultFocusOnSelectRow, rightHandSideComponent = _a.rightHandSideComponent, isMultilineSupported = _a.isMultilineSupported, isAlternateTextMultilineSupported = _a.isAlternateTextMultilineSupported, alternateTextNumberOfLines = _a.alternateTextNumberOfLines, shouldIgnoreFocus = _a.shouldIgnoreFocus, setFocusedIndex = _a.setFocusedIndex, normalizedIndex = _a.normalizedIndex, shouldSyncFocus = _a.shouldSyncFocus, wrapperStyle = _a.wrapperStyle, titleStyles = _a.titleStyles, singleExecution = _a.singleExecution, titleContainerStyles = _a.titleContainerStyles, shouldUseDefaultRightHandSideCheckmark = _a.shouldUseDefaultRightHandSideCheckmark, _c = _a.canShowProductTrainingTooltip, canShowProductTrainingTooltip = _c === void 0 ? true : _c, userWalletTierName = _a.userWalletTierName, isUserValidated = _a.isUserValidated, personalDetails = _a.personalDetails, userBillingFundID = _a.userBillingFundID;
-    var handleOnCheckboxPress = function () {
+const react_1 = require("react");
+const Browser_1 = require("@libs/Browser");
+const SearchUIUtils_1 = require("@libs/SearchUIUtils");
+function BaseSelectionListItemRenderer({ ListItem, item, index, isFocused, isDisabled, showTooltip, canSelectMultiple, onLongPressRow, shouldSingleExecuteRowSelect, selectRow, onCheckboxPress, onDismissError, shouldPreventDefaultFocusOnSelectRow, rightHandSideComponent, isMultilineSupported, isAlternateTextMultilineSupported, alternateTextNumberOfLines, shouldIgnoreFocus, setFocusedIndex, normalizedIndex, shouldSyncFocus, wrapperStyle, titleStyles, singleExecution, titleContainerStyles, shouldUseDefaultRightHandSideCheckmark, canShowProductTrainingTooltip = true, userWalletTierName, isUserValidated, personalDetails, userBillingFundID, }) {
+    const handleOnCheckboxPress = () => {
         if ((0, SearchUIUtils_1.isTransactionGroupListItemType)(item)) {
             return onCheckboxPress;
         }
-        return onCheckboxPress ? function () { return onCheckboxPress(item); } : undefined;
+        return onCheckboxPress ? () => onCheckboxPress(item) : undefined;
     };
     return (<>
-            <ListItem item={item} isFocused={isFocused} isDisabled={isDisabled} showTooltip={showTooltip} canSelectMultiple={canSelectMultiple} onLongPressRow={onLongPressRow} onSelectRow={function () {
+            <ListItem item={item} isFocused={isFocused} isDisabled={isDisabled} showTooltip={showTooltip} canSelectMultiple={canSelectMultiple} onLongPressRow={onLongPressRow} onSelectRow={() => {
             if (shouldSingleExecuteRowSelect) {
-                singleExecution(function () { return selectRow(item, index); })();
+                singleExecution(() => selectRow(item, index))();
             }
             else {
                 selectRow(item, index);
             }
-        }} onCheckboxPress={handleOnCheckboxPress()} onDismissError={function () { return onDismissError === null || onDismissError === void 0 ? void 0 : onDismissError(item); }} shouldPreventDefaultFocusOnSelectRow={shouldPreventDefaultFocusOnSelectRow} 
+        }} onCheckboxPress={handleOnCheckboxPress()} onDismissError={() => onDismissError?.(item)} shouldPreventDefaultFocusOnSelectRow={shouldPreventDefaultFocusOnSelectRow} 
     // We're already handling the Enter key press in the useKeyboardShortcut hook, so we don't want the list item to submit the form
-    shouldPreventEnterKeySubmit rightHandSideComponent={rightHandSideComponent} keyForList={(_b = item.keyForList) !== null && _b !== void 0 ? _b : ''} isMultilineSupported={isMultilineSupported} isAlternateTextMultilineSupported={isAlternateTextMultilineSupported} alternateTextNumberOfLines={alternateTextNumberOfLines} onFocus={function (event) {
+    shouldPreventEnterKeySubmit rightHandSideComponent={rightHandSideComponent} keyForList={item.keyForList ?? ''} isMultilineSupported={isMultilineSupported} isAlternateTextMultilineSupported={isAlternateTextMultilineSupported} alternateTextNumberOfLines={alternateTextNumberOfLines} onFocus={(event) => {
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             if (shouldIgnoreFocus || isDisabled) {
                 return;

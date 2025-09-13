@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTargetTransactionFromMergeTransaction = exports.getSourceTransactionFromMergeTransaction = void 0;
 exports.shouldNavigateToReceiptReview = shouldNavigateToReceiptReview;
@@ -25,18 +14,18 @@ exports.getReceiptFileName = getReceiptFileName;
 exports.getDisplayValue = getDisplayValue;
 exports.buildMergeFieldsData = buildMergeFieldsData;
 exports.getReportIDForExpense = getReportIDForExpense;
-var CONST_1 = require("@src/CONST");
-var CurrencyUtils_1 = require("./CurrencyUtils");
-var Parser_1 = require("./Parser");
-var PolicyUtils_1 = require("./PolicyUtils");
-var ReportActionsUtils_1 = require("./ReportActionsUtils");
-var ReportUtils_1 = require("./ReportUtils");
-var StringUtils_1 = require("./StringUtils");
-var TransactionUtils_1 = require("./TransactionUtils");
-var RECEIPT_SOURCE_URL = 'https://www.expensify.com/receipts/';
+const CONST_1 = require("@src/CONST");
+const CurrencyUtils_1 = require("./CurrencyUtils");
+const Parser_1 = require("./Parser");
+const PolicyUtils_1 = require("./PolicyUtils");
+const ReportActionsUtils_1 = require("./ReportActionsUtils");
+const ReportUtils_1 = require("./ReportUtils");
+const StringUtils_1 = require("./StringUtils");
+const TransactionUtils_1 = require("./TransactionUtils");
+const RECEIPT_SOURCE_URL = 'https://www.expensify.com/receipts/';
 // Define the specific merge fields we want to handle
-var MERGE_FIELDS = ['amount', 'currency', 'merchant', 'created', 'category', 'tag', 'description', 'reimbursable', 'billable', 'reportID'];
-var MERGE_FIELD_TRANSLATION_KEYS = {
+const MERGE_FIELDS = ['amount', 'currency', 'merchant', 'created', 'category', 'tag', 'description', 'reimbursable', 'billable', 'reportID'];
+const MERGE_FIELD_TRANSLATION_KEYS = {
     amount: 'iou.amount',
     currency: 'iou.currency',
     merchant: 'common.merchant',
@@ -50,8 +39,7 @@ var MERGE_FIELD_TRANSLATION_KEYS = {
 };
 // Get the filename from the receipt
 function getReceiptFileName(receipt) {
-    var _a, _b;
-    return (_b = (_a = receipt === null || receipt === void 0 ? void 0 : receipt.source) === null || _a === void 0 ? void 0 : _a.split('/')) === null || _b === void 0 ? void 0 : _b.pop();
+    return receipt?.source?.split('/')?.pop();
 }
 /**
  * Fills the receipt.source for a transaction if it's missing
@@ -60,18 +48,23 @@ function getReceiptFileName(receipt) {
  * @returns The updated transaction with receipt.source filled if it was missing
  */
 function fillMissingReceiptSource(transaction) {
-    var _a;
     // If receipt.source already exists, no need to modify
-    if (!transaction.receipt || !!((_a = transaction.receipt) === null || _a === void 0 ? void 0 : _a.source) || !transaction.filename) {
+    if (!transaction.receipt || !!transaction.receipt?.source || !transaction.filename) {
         return transaction;
     }
-    return __assign(__assign({}, transaction), { receipt: __assign(__assign({}, transaction.receipt), { source: "".concat(RECEIPT_SOURCE_URL).concat(transaction.filename) }) });
+    return {
+        ...transaction,
+        receipt: {
+            ...transaction.receipt,
+            source: `${RECEIPT_SOURCE_URL}${transaction.filename}`,
+        },
+    };
 }
-var getTransactionFromMergeTransaction = function (mergeTransaction, transactionID) {
-    if (!(mergeTransaction === null || mergeTransaction === void 0 ? void 0 : mergeTransaction.eligibleTransactions)) {
+const getTransactionFromMergeTransaction = (mergeTransaction, transactionID) => {
+    if (!mergeTransaction?.eligibleTransactions) {
         return undefined;
     }
-    var transaction = mergeTransaction.eligibleTransactions.find(function (eligibleTransaction) { return eligibleTransaction.transactionID === transactionID; });
+    const transaction = mergeTransaction.eligibleTransactions.find((eligibleTransaction) => eligibleTransaction.transactionID === transactionID);
     return transaction ? fillMissingReceiptSource(transaction) : transaction;
 };
 /**
@@ -79,8 +72,8 @@ var getTransactionFromMergeTransaction = function (mergeTransaction, transaction
  * @param mergeTransaction - The merge transaction to get the source transaction from
  * @returns The source transaction or null if it doesn't exist
  */
-var getSourceTransactionFromMergeTransaction = function (mergeTransaction) {
-    if (!(mergeTransaction === null || mergeTransaction === void 0 ? void 0 : mergeTransaction.sourceTransactionID)) {
+const getSourceTransactionFromMergeTransaction = (mergeTransaction) => {
+    if (!mergeTransaction?.sourceTransactionID) {
         return undefined;
     }
     return getTransactionFromMergeTransaction(mergeTransaction, mergeTransaction.sourceTransactionID);
@@ -91,8 +84,8 @@ exports.getSourceTransactionFromMergeTransaction = getSourceTransactionFromMerge
  * @param mergeTransaction - The merge transaction to get the target transaction from
  * @returns The target transaction or null if it doesn't exist
  */
-var getTargetTransactionFromMergeTransaction = function (mergeTransaction) {
-    if (!(mergeTransaction === null || mergeTransaction === void 0 ? void 0 : mergeTransaction.targetTransactionID)) {
+const getTargetTransactionFromMergeTransaction = (mergeTransaction) => {
+    if (!mergeTransaction?.targetTransactionID) {
         return undefined;
     }
     return getTransactionFromMergeTransaction(mergeTransaction, mergeTransaction.targetTransactionID);
@@ -104,7 +97,7 @@ exports.getTargetTransactionFromMergeTransaction = getTargetTransactionFromMerge
  * @returns True if both transactions have a receipt
  */
 function shouldNavigateToReceiptReview(transactions) {
-    return transactions.every(function (transaction) { var _a; return (_a = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _a === void 0 ? void 0 : _a.receiptID; });
+    return transactions.every((transaction) => transaction?.receipt?.receiptID);
 }
 // Check if whether merge value is truly "empty" (null, undefined, or empty string)
 // For boolean fields, false is a valid value, not an empty value
@@ -119,7 +112,6 @@ function isEmptyMergeValue(value) {
  * @returns The value of the specified field from the transaction
  */
 function getMergeFieldValue(transactionDetails, transaction, field) {
-    var _a;
     if (!transactionDetails || !transaction) {
         return '';
     }
@@ -135,7 +127,7 @@ function getMergeFieldValue(transactionDetails, transaction, field) {
     if (field === 'merchant' && (0, TransactionUtils_1.isMerchantMissing)(transaction)) {
         return '';
     }
-    return (_a = transactionDetails[field]) !== null && _a !== void 0 ? _a : '';
+    return transactionDetails[field] ?? '';
 }
 /**
  * Get the translation key for a specific merge field
@@ -152,19 +144,19 @@ function getMergeFieldTranslationKey(field) {
  * @returns mergeableData and conflictFields
  */
 function getMergeableDataAndConflictFields(targetTransaction, sourceTransaction) {
-    var conflictFields = [];
-    var mergeableData = {};
-    var targetTransactionDetails = (0, ReportUtils_1.getTransactionDetails)(targetTransaction);
-    var sourceTransactionDetails = (0, ReportUtils_1.getTransactionDetails)(sourceTransaction);
-    MERGE_FIELDS.forEach(function (field) {
+    const conflictFields = [];
+    const mergeableData = {};
+    const targetTransactionDetails = (0, ReportUtils_1.getTransactionDetails)(targetTransaction);
+    const sourceTransactionDetails = (0, ReportUtils_1.getTransactionDetails)(sourceTransaction);
+    MERGE_FIELDS.forEach((field) => {
         // Currency field is handled by the amount field
         if (field === 'currency') {
             return;
         }
-        var targetValue = getMergeFieldValue(targetTransactionDetails, targetTransaction, field);
-        var sourceValue = getMergeFieldValue(sourceTransactionDetails, sourceTransaction, field);
-        var isTargetValueEmpty = isEmptyMergeValue(targetValue);
-        var isSourceValueEmpty = isEmptyMergeValue(sourceValue);
+        const targetValue = getMergeFieldValue(targetTransactionDetails, targetTransaction, field);
+        const sourceValue = getMergeFieldValue(sourceTransactionDetails, sourceTransaction, field);
+        const isTargetValueEmpty = isEmptyMergeValue(targetValue);
+        const isSourceValueEmpty = isEmptyMergeValue(sourceValue);
         if (field === 'amount') {
             // If target transaction is a card transaction, always preserve the target transaction's amount and currency
             // See https://github.com/Expensify/App/issues/68189#issuecomment-3167156907
@@ -214,7 +206,7 @@ function getMergeableDataAndConflictFields(targetTransaction, sourceTransaction)
             conflictFields.push(field);
         }
     });
-    return { mergeableData: mergeableData, conflictFields: conflictFields };
+    return { mergeableData, conflictFields };
 }
 /**
  * Get the report ID for an expense, if it's unreported, we'll return the self DM report ID
@@ -223,7 +215,7 @@ function getReportIDForExpense(transaction) {
     if (!transaction) {
         return undefined;
     }
-    var isUnreportedExpense = !transaction.reportID || transaction.reportID === CONST_1.default.REPORT.UNREPORTED_REPORT_ID;
+    const isUnreportedExpense = !transaction.reportID || transaction.reportID === CONST_1.default.REPORT.UNREPORTED_REPORT_ID;
     if (isUnreportedExpense) {
         return (0, ReportUtils_1.findSelfDMReportID)();
     }
@@ -235,8 +227,8 @@ function getReportIDForExpense(transaction) {
  * @returns The report ID for the transaction thread
  */
 function getTransactionThreadReportID(transaction) {
-    var iouActionOfTargetTransaction = (0, ReportActionsUtils_1.getIOUActionForReportID)(getReportIDForExpense(transaction), transaction === null || transaction === void 0 ? void 0 : transaction.transactionID);
-    return iouActionOfTargetTransaction === null || iouActionOfTargetTransaction === void 0 ? void 0 : iouActionOfTargetTransaction.childReportID;
+    const iouActionOfTargetTransaction = (0, ReportActionsUtils_1.getIOUActionForReportID)(getReportIDForExpense(transaction), transaction?.transactionID);
+    return iouActionOfTargetTransaction?.childReportID;
 }
 /**
  * Build the merged transaction data for display by combining target transaction with merge transaction updates
@@ -248,7 +240,27 @@ function buildMergedTransactionData(targetTransaction, mergeTransaction) {
     if (!targetTransaction || !mergeTransaction) {
         return null;
     }
-    return __assign(__assign({}, targetTransaction), { amount: mergeTransaction.amount, modifiedAmount: mergeTransaction.amount, modifiedCurrency: mergeTransaction.currency, merchant: mergeTransaction.merchant, modifiedMerchant: mergeTransaction.merchant, category: mergeTransaction.category, tag: mergeTransaction.tag, comment: __assign(__assign({}, targetTransaction.comment), { comment: mergeTransaction.description }), reimbursable: mergeTransaction.reimbursable, billable: mergeTransaction.billable, filename: getReceiptFileName(mergeTransaction.receipt), receipt: mergeTransaction.receipt, created: mergeTransaction.created, modifiedCreated: mergeTransaction.created, reportID: mergeTransaction.reportID });
+    return {
+        ...targetTransaction,
+        amount: mergeTransaction.amount,
+        modifiedAmount: mergeTransaction.amount,
+        modifiedCurrency: mergeTransaction.currency,
+        merchant: mergeTransaction.merchant,
+        modifiedMerchant: mergeTransaction.merchant,
+        category: mergeTransaction.category,
+        tag: mergeTransaction.tag,
+        comment: {
+            ...targetTransaction.comment,
+            comment: mergeTransaction.description,
+        },
+        reimbursable: mergeTransaction.reimbursable,
+        billable: mergeTransaction.billable,
+        filename: getReceiptFileName(mergeTransaction.receipt),
+        receipt: mergeTransaction.receipt,
+        created: mergeTransaction.created,
+        modifiedCreated: mergeTransaction.created,
+        reportID: mergeTransaction.reportID,
+    };
 }
 /**
  * Determines the correct target and source transaction IDs for merging based on transaction types.
@@ -277,7 +289,7 @@ function selectTargetAndSourceTransactionsForMerge(originalTargetTransaction, or
  * @returns The formatted display string for the field value
  */
 function getDisplayValue(field, transaction, translate) {
-    var fieldValue = getMergeFieldValue((0, ReportUtils_1.getTransactionDetails)(transaction), transaction, field);
+    const fieldValue = getMergeFieldValue((0, ReportUtils_1.getTransactionDetails)(transaction), transaction, field);
     if (isEmptyMergeValue(fieldValue)) {
         return '';
     }
@@ -311,12 +323,11 @@ function buildMergeFieldsData(conflictFields, targetTransaction, sourceTransacti
     if (!targetTransaction || !sourceTransaction) {
         return [];
     }
-    return conflictFields.map(function (field) {
-        var _a;
-        var label = translate(getMergeFieldTranslationKey(field));
-        var selectedTransactionId = (_a = mergeTransaction === null || mergeTransaction === void 0 ? void 0 : mergeTransaction.selectedTransactionByField) === null || _a === void 0 ? void 0 : _a[field];
+    return conflictFields.map((field) => {
+        const label = translate(getMergeFieldTranslationKey(field));
+        const selectedTransactionId = mergeTransaction?.selectedTransactionByField?.[field];
         // Create options for this field
-        var options = [
+        const options = [
             {
                 transaction: targetTransaction,
                 displayValue: getDisplayValue(field, targetTransaction, translate),
@@ -329,9 +340,9 @@ function buildMergeFieldsData(conflictFields, targetTransaction, sourceTransacti
             },
         ];
         return {
-            field: field,
-            label: label,
-            options: options,
+            field,
+            label,
+            options,
         };
     });
 }

@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FloatingActionButtonAndPopover_1 = require("@pages/home/sidebar/FloatingActionButtonAndPopover");
-function NavigationTabBarFloatingActionButton(_a) {
-    var isTooltipAllowed = _a.isTooltipAllowed;
-    var popoverModal = (0, react_1.useRef)(null);
+const react_1 = require("react");
+const FloatingActionButtonAndPopover_1 = require("@pages/home/sidebar/FloatingActionButtonAndPopover");
+function NavigationTabBarFloatingActionButton({ isTooltipAllowed }) {
+    const popoverModal = (0, react_1.useRef)(null);
     /**
      * Method to hide popover when dragover.
      */
-    var hidePopoverOnDragOver = (0, react_1.useCallback)(function () {
+    const hidePopoverOnDragOver = (0, react_1.useCallback)(() => {
         if (!popoverModal.current) {
             return;
         }
@@ -17,13 +16,13 @@ function NavigationTabBarFloatingActionButton(_a) {
     /**
      * Method create event listener
      */
-    var createDragoverListener = function () {
+    const createDragoverListener = () => {
         document.addEventListener('dragover', hidePopoverOnDragOver);
     };
     /**
      * Method remove event listener.
      */
-    var removeDragoverListener = function () {
+    const removeDragoverListener = () => {
         document.removeEventListener('dragover', hidePopoverOnDragOver);
     };
     return (<FloatingActionButtonAndPopover_1.default ref={popoverModal} isTooltipAllowed={isTooltipAllowed} onShowCreateMenu={createDragoverListener} onHideCreateMenu={removeDragoverListener}/>);

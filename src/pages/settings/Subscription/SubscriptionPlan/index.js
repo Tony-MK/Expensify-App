@@ -1,28 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var Icon_1 = require("@components/Icon");
-var Illustrations = require("@components/Icon/Illustrations");
-var Section_1 = require("@components/Section");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useSubscriptionPlan_1 = require("@hooks/useSubscriptionPlan");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var ComparePlansModal_1 = require("./ComparePlansModal");
-var SaveWithExpensifyButton_1 = require("./SaveWithExpensifyButton");
-var SubscriptionPlanCard_1 = require("./SubscriptionPlanCard");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const Icon_1 = require("@components/Icon");
+const Illustrations = require("@components/Icon/Illustrations");
+const Section_1 = require("@components/Section");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useSubscriptionPlan_1 = require("@hooks/useSubscriptionPlan");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const ComparePlansModal_1 = require("./ComparePlansModal");
+const SaveWithExpensifyButton_1 = require("./SaveWithExpensifyButton");
+const SubscriptionPlanCard_1 = require("./SubscriptionPlanCard");
 function SubscriptionPlan() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var subscriptionPlan = (0, useSubscriptionPlan_1.default)();
-    var _a = (0, react_1.useState)(false), isModalVisible = _a[0], setIsModalVisible = _a[1];
-    var renderTitle = function () {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const subscriptionPlan = (0, useSubscriptionPlan_1.default)();
+    const [isModalVisible, setIsModalVisible] = (0, react_1.useState)(false);
+    const renderTitle = () => {
         return (<react_native_1.View style={[styles.flexRow, styles.justifyContentBetween, styles.alignItemsCenter]}>
                 <Text_1.default style={[styles.textHeadline, styles.cardSectionTitle, styles.textStrong]}>{translate('subscription.yourPlan.title')}</Text_1.default>
-                <Button_1.default small text={translate('subscription.yourPlan.exploreAllPlans')} onPress={function () { return setIsModalVisible(true); }}/>
+                <Button_1.default small text={translate('subscription.yourPlan.exploreAllPlans')} onPress={() => setIsModalVisible(true)}/>
             </react_native_1.View>);
     };
     return (<Section_1.default renderTitle={renderTitle} isCentralPane>

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUpdatedSubstitutionsMap = getUpdatedSubstitutionsMap;
-var autocompleteParser_1 = require("@libs/SearchParser/autocompleteParser");
-var getSubstitutionsKey = function (filterKey, value) { return "".concat(filterKey, ":").concat(value); };
+const autocompleteParser_1 = require("@libs/SearchParser/autocompleteParser");
+const getSubstitutionsKey = (filterKey, value) => `${filterKey}:${value}`;
 /**
  * Given a plaintext query and a SubstitutionMap object,
  * this function will remove any substitution keys that do not appear in the query and return an updated object
@@ -15,14 +15,14 @@ var getSubstitutionsKey = function (filterKey, value) { return "".concat(filterK
  * return: {}
  */
 function getUpdatedSubstitutionsMap(query, substitutions) {
-    var parsedQuery = (0, autocompleteParser_1.parse)(query);
-    var searchAutocompleteQueryRanges = parsedQuery.ranges;
+    const parsedQuery = (0, autocompleteParser_1.parse)(query);
+    const searchAutocompleteQueryRanges = parsedQuery.ranges;
     if (searchAutocompleteQueryRanges.length === 0) {
         return {};
     }
-    var autocompleteQueryKeys = searchAutocompleteQueryRanges.map(function (range) { return getSubstitutionsKey(range.key, range.value); });
+    const autocompleteQueryKeys = searchAutocompleteQueryRanges.map((range) => getSubstitutionsKey(range.key, range.value));
     // Build a new substitutions map consisting of only the keys from old map, that appear in query
-    var updatedSubstitutionMap = autocompleteQueryKeys.reduce(function (map, key) {
+    const updatedSubstitutionMap = autocompleteQueryKeys.reduce((map, key) => {
         if (substitutions[key]) {
             // eslint-disable-next-line no-param-reassign
             map[key] = substitutions[key];

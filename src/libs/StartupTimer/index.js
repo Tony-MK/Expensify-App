@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var startupTimer = {
-    stop: function () { },
+const startupTimer = {
+    stop: () => { },
 };
 exports.default = startupTimer;

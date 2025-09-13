@@ -1,25 +1,13 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
-var Text_1 = require("@components/Text");
+const react_1 = require("react");
+const PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
+const Text_1 = require("@components/Text");
 /** This is a special Pressable that calls onSecondaryInteraction when LongPressed. */
-function PressableWithSecondaryInteraction(_a) {
-    var children = _a.children, onSecondaryInteraction = _a.onSecondaryInteraction, _b = _a.inline, inline = _b === void 0 ? false : _b, _c = _a.needsOffscreenAlphaCompositing, needsOffscreenAlphaCompositing = _c === void 0 ? false : _c, _d = _a.suppressHighlighting, suppressHighlighting = _d === void 0 ? false : _d, _e = _a.activeOpacity, activeOpacity = _e === void 0 ? 1 : _e, preventDefaultContextMenu = _a.preventDefaultContextMenu, withoutFocusOnSecondaryInteraction = _a.withoutFocusOnSecondaryInteraction, enableLongPressWithHover = _a.enableLongPressWithHover, ref = _a.ref, rest = __rest(_a, ["children", "onSecondaryInteraction", "inline", "needsOffscreenAlphaCompositing", "suppressHighlighting", "activeOpacity", "preventDefaultContextMenu", "withoutFocusOnSecondaryInteraction", "enableLongPressWithHover", "ref"]);
-    var executeSecondaryInteraction = function (event) {
+function PressableWithSecondaryInteraction({ children, onSecondaryInteraction, inline = false, needsOffscreenAlphaCompositing = false, suppressHighlighting = false, activeOpacity = 1, preventDefaultContextMenu, withoutFocusOnSecondaryInteraction, enableLongPressWithHover, ref, ...rest }) {
+    const executeSecondaryInteraction = (event) => {
         event.preventDefault();
-        onSecondaryInteraction === null || onSecondaryInteraction === void 0 ? void 0 : onSecondaryInteraction(event);
+        onSecondaryInteraction?.(event);
     };
     // Use Text node for inline mode to prevent content overflow.
     if (inline) {

@@ -1,36 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var HapticFeedback_1 = require("@libs/HapticFeedback");
+const react_1 = require("react");
+const HapticFeedback_1 = require("@libs/HapticFeedback");
 function usePaymentAnimations() {
-    var _a = (0, react_1.useState)(false), isPaidAnimationRunning = _a[0], setIsPaidAnimationRunning = _a[1];
-    var _b = (0, react_1.useState)(false), isApprovedAnimationRunning = _b[0], setIsApprovedAnimationRunning = _b[1];
-    var _c = (0, react_1.useState)(false), isSubmittingAnimationRunning = _c[0], setIsSubmittingAnimationRunning = _c[1];
-    var stopAnimation = (0, react_1.useCallback)(function () {
+    const [isPaidAnimationRunning, setIsPaidAnimationRunning] = (0, react_1.useState)(false);
+    const [isApprovedAnimationRunning, setIsApprovedAnimationRunning] = (0, react_1.useState)(false);
+    const [isSubmittingAnimationRunning, setIsSubmittingAnimationRunning] = (0, react_1.useState)(false);
+    const stopAnimation = (0, react_1.useCallback)(() => {
         setIsPaidAnimationRunning(false);
         setIsApprovedAnimationRunning(false);
         setIsSubmittingAnimationRunning(false);
     }, []);
-    var startAnimation = (0, react_1.useCallback)(function () {
+    const startAnimation = (0, react_1.useCallback)(() => {
         setIsPaidAnimationRunning(true);
         HapticFeedback_1.default.longPress();
     }, []);
-    var startApprovedAnimation = (0, react_1.useCallback)(function () {
+    const startApprovedAnimation = (0, react_1.useCallback)(() => {
         setIsApprovedAnimationRunning(true);
         HapticFeedback_1.default.longPress();
     }, []);
-    var startSubmittingAnimation = (0, react_1.useCallback)(function () {
+    const startSubmittingAnimation = (0, react_1.useCallback)(() => {
         setIsSubmittingAnimationRunning(true);
         HapticFeedback_1.default.longPress();
     }, []);
     return {
-        isPaidAnimationRunning: isPaidAnimationRunning,
-        isApprovedAnimationRunning: isApprovedAnimationRunning,
-        isSubmittingAnimationRunning: isSubmittingAnimationRunning,
-        stopAnimation: stopAnimation,
-        startAnimation: startAnimation,
-        startApprovedAnimation: startApprovedAnimation,
-        startSubmittingAnimation: startSubmittingAnimation,
+        isPaidAnimationRunning,
+        isApprovedAnimationRunning,
+        isSubmittingAnimationRunning,
+        stopAnimation,
+        startAnimation,
+        startApprovedAnimation,
+        startSubmittingAnimation,
     };
 }
 exports.default = usePaymentAnimations;

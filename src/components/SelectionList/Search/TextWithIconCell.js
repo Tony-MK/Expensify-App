@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = TextWithIconCell;
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var TextWithTooltip_1 = require("@components/TextWithTooltip");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function TextWithIconCell(_a) {
-    var icon = _a.icon, text = _a.text, showTooltip = _a.showTooltip, textStyle = _a.textStyle;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const TextWithTooltip_1 = require("@components/TextWithTooltip");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function TextWithIconCell({ icon, text, showTooltip, textStyle }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
     if (!text) {
         return null;
     }

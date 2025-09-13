@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullScreenBlockingViewContextProvider_1 = require("@components/FullScreenBlockingViewContextProvider");
-var NavigationTabBar_1 = require("@components/Navigation/NavigationTabBar");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var getIsNavigationTabBarVisibleDirectly_1 = require("./getIsNavigationTabBarVisibleDirectly");
-var getIsScreenWithNavigationTabBarFocused_1 = require("./getIsScreenWithNavigationTabBarFocused");
-var getSelectedTab_1 = require("./getSelectedTab");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullScreenBlockingViewContextProvider_1 = require("@components/FullScreenBlockingViewContextProvider");
+const NavigationTabBar_1 = require("@components/Navigation/NavigationTabBar");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const getIsNavigationTabBarVisibleDirectly_1 = require("./getIsNavigationTabBarVisibleDirectly");
+const getIsScreenWithNavigationTabBarFocused_1 = require("./getIsScreenWithNavigationTabBarFocused");
+const getSelectedTab_1 = require("./getSelectedTab");
 /**
  * TopLevelNavigationTabBar is displayed when the user can interact with the bottom tab bar.
  * We hide it when:
@@ -19,23 +19,22 @@ var getSelectedTab_1 = require("./getSelectedTab");
  * 3. The bottom tab bar is under the overlay.
  * For cases 2 and 3, local bottom tab bar mounted on the screen will be displayed.
  */
-function TopLevelNavigationTabBar(_a) {
-    var state = _a.state;
-    var styles = (0, useThemeStyles_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var paddingBottom = (0, useSafeAreaPaddings_1.default)().paddingBottom;
-    var _b = (0, react_1.useState)(false), isAfterClosingTransition = _b[0], setIsAfterClosingTransition = _b[1];
-    var cancelAfterInteractions = (0, react_1.useRef)(undefined);
-    var isBlockingViewVisible = (0, react_1.useContext)(FullScreenBlockingViewContextProvider_1.FullScreenBlockingViewContext).isBlockingViewVisible;
-    var StyleUtils = (0, useStyleUtils_1.default)();
+function TopLevelNavigationTabBar({ state }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const { paddingBottom } = (0, useSafeAreaPaddings_1.default)();
+    const [isAfterClosingTransition, setIsAfterClosingTransition] = (0, react_1.useState)(false);
+    const cancelAfterInteractions = (0, react_1.useRef)(undefined);
+    const { isBlockingViewVisible } = (0, react_1.useContext)(FullScreenBlockingViewContextProvider_1.FullScreenBlockingViewContext);
+    const StyleUtils = (0, useStyleUtils_1.default)();
     // That means it's visible and it's not covered by the overlay.
-    var isNavigationTabVisibleDirectly = (0, getIsNavigationTabBarVisibleDirectly_1.default)(state);
-    var isScreenWithNavigationTabFocused = (0, getIsScreenWithNavigationTabBarFocused_1.default)(state);
-    var selectedTab = (0, getSelectedTab_1.default)(state);
-    var shouldDisplayBottomBar = shouldUseNarrowLayout ? isScreenWithNavigationTabFocused : isNavigationTabVisibleDirectly;
-    var isReadyToDisplayBottomBar = isAfterClosingTransition && shouldDisplayBottomBar && !isBlockingViewVisible;
-    var shouldDisplayLHB = !shouldUseNarrowLayout;
-    (0, react_1.useEffect)(function () {
+    const isNavigationTabVisibleDirectly = (0, getIsNavigationTabBarVisibleDirectly_1.default)(state);
+    const isScreenWithNavigationTabFocused = (0, getIsScreenWithNavigationTabBarFocused_1.default)(state);
+    const selectedTab = (0, getSelectedTab_1.default)(state);
+    const shouldDisplayBottomBar = shouldUseNarrowLayout ? isScreenWithNavigationTabFocused : isNavigationTabVisibleDirectly;
+    const isReadyToDisplayBottomBar = isAfterClosingTransition && shouldDisplayBottomBar && !isBlockingViewVisible;
+    const shouldDisplayLHB = !shouldUseNarrowLayout;
+    (0, react_1.useEffect)(() => {
         if (!shouldDisplayBottomBar) {
             // If the bottom tab is not visible, that means there is a screen covering it.
             // In that case we need to set the flag to true because there will be a transition for which we need to wait.
@@ -43,10 +42,10 @@ function TopLevelNavigationTabBar(_a) {
         }
         else {
             // If the bottom tab should be visible, we want to wait for transition to finish.
-            cancelAfterInteractions.current = react_native_1.InteractionManager.runAfterInteractions(function () {
+            cancelAfterInteractions.current = react_native_1.InteractionManager.runAfterInteractions(() => {
                 setIsAfterClosingTransition(true);
             });
-            return function () { var _a; return (_a = cancelAfterInteractions.current) === null || _a === void 0 ? void 0 : _a.cancel(); };
+            return () => cancelAfterInteractions.current?.cancel();
         }
     }, [shouldDisplayBottomBar]);
     return (<react_native_1.View style={[

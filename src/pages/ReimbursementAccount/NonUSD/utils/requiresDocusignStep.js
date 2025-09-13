@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 /**
  * Checks whether passed currency requires an additional step where we ask for signed form
  * @param currency

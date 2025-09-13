@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useDebounce;
-var debounce_1 = require("lodash/debounce");
-var react_1 = require("react");
+const debounce_1 = require("lodash/debounce");
+const react_1 = require("react");
 /**
  * Create and return a debounced function.
  *
@@ -18,23 +18,19 @@ var react_1 = require("react");
  * @returns Returns a function to call the debounced function.
  */
 function useDebounce(func, wait, options) {
-    var debouncedFnRef = (0, react_1.useRef)(undefined);
-    var _a = options !== null && options !== void 0 ? options : {}, leading = _a.leading, maxWait = _a.maxWait, _b = _a.trailing, trailing = _b === void 0 ? true : _b;
-    (0, react_1.useEffect)(function () {
-        var debouncedFn = (0, debounce_1.default)(func, wait, { leading: leading, maxWait: maxWait, trailing: trailing });
+    const debouncedFnRef = (0, react_1.useRef)(undefined);
+    const { leading, maxWait, trailing = true } = options ?? {};
+    (0, react_1.useEffect)(() => {
+        const debouncedFn = (0, debounce_1.default)(func, wait, { leading, maxWait, trailing });
         debouncedFnRef.current = debouncedFn;
-        return function () {
+        return () => {
             debouncedFn.cancel();
         };
     }, [func, wait, leading, maxWait, trailing]);
-    var debounceCallback = (0, react_1.useCallback)(function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        var debouncedFn = debouncedFnRef.current;
+    const debounceCallback = (0, react_1.useCallback)((...args) => {
+        const debouncedFn = debouncedFnRef.current;
         if (debouncedFn) {
-            debouncedFn.apply(void 0, args);
+            debouncedFn(...args);
         }
     }, []);
     // eslint-disable-next-line react-compiler/react-compiler

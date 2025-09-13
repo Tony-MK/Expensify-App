@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var FocusAwareCellRendererComponent = undefined;
+const FocusAwareCellRendererComponent = undefined;
 exports.default = FocusAwareCellRendererComponent;

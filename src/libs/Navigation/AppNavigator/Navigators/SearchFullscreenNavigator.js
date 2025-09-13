@@ -1,20 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var usePreloadFullScreenNavigators_1 = require("@libs/Navigation/AppNavigator/usePreloadFullScreenNavigators");
-var useSplitNavigatorScreenOptions_1 = require("@libs/Navigation/AppNavigator/useSplitNavigatorScreenOptions");
-var animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
-var SearchQueryUtils = require("@libs/SearchQueryUtils");
-var createSearchFullscreenNavigator_1 = require("@navigation/AppNavigator/createSearchFullscreenNavigator");
-var FreezeWrapper_1 = require("@navigation/AppNavigator/FreezeWrapper");
-var SCREENS_1 = require("@src/SCREENS");
-var loadSearchPage = function () { return require('@pages/Search/SearchPage').default; };
-var loadSearchMoneyReportPage = function () { return require('@pages/Search/SearchMoneyRequestReportPage').default; };
-var Stack = (0, createSearchFullscreenNavigator_1.default)();
-function SearchFullscreenNavigator(_a) {
-    var route = _a.route;
+const react_1 = require("react");
+const usePreloadFullScreenNavigators_1 = require("@libs/Navigation/AppNavigator/usePreloadFullScreenNavigators");
+const useSplitNavigatorScreenOptions_1 = require("@libs/Navigation/AppNavigator/useSplitNavigatorScreenOptions");
+const animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
+const SearchQueryUtils = require("@libs/SearchQueryUtils");
+const createSearchFullscreenNavigator_1 = require("@navigation/AppNavigator/createSearchFullscreenNavigator");
+const FreezeWrapper_1 = require("@navigation/AppNavigator/FreezeWrapper");
+const SCREENS_1 = require("@src/SCREENS");
+const loadSearchPage = () => require('@pages/Search/SearchPage').default;
+const loadSearchMoneyReportPage = () => require('@pages/Search/SearchMoneyRequestReportPage').default;
+const Stack = (0, createSearchFullscreenNavigator_1.default)();
+function SearchFullscreenNavigator({ route }) {
     // These options can be used here because the full screen navigator has the same structure as the split navigator in terms of the central screens, but it does not have a sidebar.
-    var centralScreenOptions = (0, useSplitNavigatorScreenOptions_1.default)().centralScreen;
+    const { centralScreen: centralScreenOptions } = (0, useSplitNavigatorScreenOptions_1.default)();
     // This hook preloads the screens of adjacent tabs to make changing tabs faster.
     (0, usePreloadFullScreenNavigators_1.default)();
     return (<FreezeWrapper_1.default>

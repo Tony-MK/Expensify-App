@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setWorkspaceCompanyCardFeedName = setWorkspaceCompanyCardFeedName;
 exports.deleteWorkspaceCompanyCardFeed = deleteWorkspaceCompanyCardFeed;
@@ -32,30 +21,28 @@ exports.openPolicyAddCardFeedPage = openPolicyAddCardFeedPage;
 exports.setTransactionStartDate = setTransactionStartDate;
 exports.setFeedStatementPeriodEndDay = setFeedStatementPeriodEndDay;
 exports.clearErrorField = clearErrorField;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var CardUtils = require("@libs/CardUtils");
-var ErrorUtils = require("@libs/ErrorUtils");
-var NetworkStore = require("@libs/Network/NetworkStore");
-var PersonalDetailsUtils = require("@libs/PersonalDetailsUtils");
-var PolicyUtils = require("@libs/PolicyUtils");
-var ReportUtils = require("@libs/ReportUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function setAssignCardStepAndData(_a) {
-    var data = _a.data, isEditing = _a.isEditing, currentStep = _a.currentStep;
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.ASSIGN_CARD, { data: data, isEditing: isEditing, currentStep: currentStep });
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const CardUtils = require("@libs/CardUtils");
+const ErrorUtils = require("@libs/ErrorUtils");
+const NetworkStore = require("@libs/Network/NetworkStore");
+const PersonalDetailsUtils = require("@libs/PersonalDetailsUtils");
+const PolicyUtils = require("@libs/PolicyUtils");
+const ReportUtils = require("@libs/ReportUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function setAssignCardStepAndData({ data, isEditing, currentStep }) {
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.ASSIGN_CARD, { data, isEditing, currentStep });
 }
 function setTransactionStartDate(startDate) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.ASSIGN_CARD, { startDate: startDate });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.ASSIGN_CARD, { startDate });
 }
 function clearAssignCardStepAndData() {
     react_native_onyx_1.default.set(ONYXKEYS_1.default.ASSIGN_CARD, {});
 }
-function setAddNewCompanyCardStepAndData(_a) {
-    var data = _a.data, isEditing = _a.isEditing, step = _a.step;
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { data: data, isEditing: isEditing, currentStep: step });
+function setAddNewCompanyCardStepAndData({ data, isEditing, step }) {
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { data, isEditing, currentStep: step });
 }
 function clearAddNewCardFlow() {
     react_native_onyx_1.default.set(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, {
@@ -64,151 +51,143 @@ function clearAddNewCardFlow() {
     });
 }
 function addNewCompanyCardsFeed(policyID, cardFeed, feedDetails, cardFeeds, statementPeriodEnd, statementPeriodEndDay, lastSelectedFeed) {
-    var _a, _b;
-    var _c;
-    var authToken = NetworkStore.getAuthToken();
-    var workspaceAccountID = PolicyUtils.getWorkspaceAccountID(policyID);
+    const authToken = NetworkStore.getAuthToken();
+    const workspaceAccountID = PolicyUtils.getWorkspaceAccountID(policyID);
     if (!authToken || !policyID) {
         return;
     }
-    var feedType = CardUtils.getFeedType(cardFeed, cardFeeds);
-    var optimisticData = [
+    const feedType = CardUtils.getFeedType(cardFeed, cardFeeds);
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED}${policyID}`,
             value: feedType,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${workspaceAccountID}`,
             value: {
                 isLoading: true,
                 settings: {
-                    companyCards: (_a = {},
-                        _a[feedType] = {
-                            statementPeriodEndDay: (_c = statementPeriodEndDay !== null && statementPeriodEndDay !== void 0 ? statementPeriodEndDay : statementPeriodEnd) !== null && _c !== void 0 ? _c : null,
+                    companyCards: {
+                        [feedType]: {
+                            statementPeriodEndDay: statementPeriodEndDay ?? statementPeriodEnd ?? null,
                             errors: null,
                         },
-                        _a),
+                    },
                 },
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED).concat(policyID),
-            value: lastSelectedFeed !== null && lastSelectedFeed !== void 0 ? lastSelectedFeed : null,
+            key: `${ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED}${policyID}`,
+            value: lastSelectedFeed ?? null,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${workspaceAccountID}`,
             value: {
                 isLoading: true,
                 settings: {
-                    companyCards: (_b = {},
-                        _b[feedType] = null,
-                        _b),
+                    companyCards: {
+                        [feedType]: null,
+                    },
                 },
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED}${policyID}`,
             value: feedType,
         },
     ];
-    var finallyData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${workspaceAccountID}`,
             value: {
                 isLoading: false,
             },
         },
     ];
-    var parameters = {
-        policyID: policyID,
-        authToken: authToken,
-        feedType: feedType,
+    const parameters = {
+        policyID,
+        authToken,
+        feedType,
         feedDetails: Object.entries(feedDetails)
-            .map(function (_a) {
-            var key = _a[0], value = _a[1];
-            return "".concat(key, ": ").concat(value);
-        })
+            .map(([key, value]) => `${key}: ${value}`)
             .join(', '),
-        statementPeriodEnd: statementPeriodEnd,
-        statementPeriodEndDay: statementPeriodEndDay,
+        statementPeriodEnd,
+        statementPeriodEndDay,
     };
-    API.write(types_1.WRITE_COMMANDS.REQUEST_FEED_SETUP, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData, finallyData: finallyData });
+    API.write(types_1.WRITE_COMMANDS.REQUEST_FEED_SETUP, parameters, { optimisticData, failureData, successData, finallyData });
 }
 function setWorkspaceCompanyCardFeedName(policyID, domainOrWorkspaceAccountID, bankName, userDefinedName) {
-    var _a;
-    var authToken = NetworkStore.getAuthToken();
-    var onyxData = {
+    const authToken = NetworkStore.getAuthToken();
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+                key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
                 value: {
                     settings: {
-                        companyCardNicknames: (_a = {},
-                            _a[bankName] = userDefinedName,
-                            _a),
+                        companyCardNicknames: {
+                            [bankName]: userDefinedName,
+                        },
                     },
                 },
             },
         ],
     };
-    var parameters = {
-        authToken: authToken,
-        policyID: policyID,
+    const parameters = {
+        authToken,
+        policyID,
         domainAccountID: domainOrWorkspaceAccountID,
-        bankName: bankName,
-        userDefinedName: userDefinedName,
+        bankName,
+        userDefinedName,
     };
     API.write(types_1.WRITE_COMMANDS.SET_COMPANY_CARD_FEED_NAME, parameters, onyxData);
 }
 function setWorkspaceCompanyCardTransactionLiability(domainOrWorkspaceAccountID, policyID, bankName, liabilityType) {
-    var _a;
-    var authToken = NetworkStore.getAuthToken();
-    var feedUpdates = (_a = {},
-        _a[bankName] = { liabilityType: liabilityType },
-        _a);
-    var onyxData = {
+    const authToken = NetworkStore.getAuthToken();
+    const feedUpdates = {
+        [bankName]: { liabilityType },
+    };
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+                key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
                 value: {
                     settings: { companyCards: feedUpdates },
                 },
             },
         ],
     };
-    var parameters = {
-        authToken: authToken,
-        policyID: policyID,
-        bankName: bankName,
-        liabilityType: liabilityType,
+    const parameters = {
+        authToken,
+        policyID,
+        bankName,
+        liabilityType,
     };
     API.write(types_1.WRITE_COMMANDS.SET_COMPANY_CARD_TRANSACTION_LIABILITY, parameters, onyxData);
 }
 function deleteWorkspaceCompanyCardFeed(policyID, domainOrWorkspaceAccountID, bankName, cardIDs, feedToOpen) {
-    var _a, _b, _c, _d;
-    var authToken = NetworkStore.getAuthToken();
-    var isCustomFeed = CardUtils.isCustomFeed(bankName);
-    var optimisticFeedUpdates = (_a = {}, _a[bankName] = { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE }, _a);
-    var successFeedUpdates = (_b = {}, _b[bankName] = null, _b);
-    var failureFeedUpdates = (_c = {}, _c[bankName] = { pendingAction: null, errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage') }, _c);
-    var optimisticCardUpdates = Object.fromEntries(cardIDs.map(function (cardID) { return [cardID, { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE }]; }));
-    var successAndFailureCardUpdates = Object.fromEntries(cardIDs.map(function (cardID) { return [cardID, { pendingAction: null }]; }));
-    var optimisticData = [
+    const authToken = NetworkStore.getAuthToken();
+    const isCustomFeed = CardUtils.isCustomFeed(bankName);
+    const optimisticFeedUpdates = { [bankName]: { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE } };
+    const successFeedUpdates = { [bankName]: null };
+    const failureFeedUpdates = { [bankName]: { pendingAction: null, errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage') } };
+    const optimisticCardUpdates = Object.fromEntries(cardIDs.map((cardID) => [cardID, { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE }]));
+    const successAndFailureCardUpdates = Object.fromEntries(cardIDs.map((cardID) => [cardID, { pendingAction: null }]));
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 settings: {
                     companyCards: optimisticFeedUpdates,
@@ -217,7 +196,7 @@ function deleteWorkspaceCompanyCardFeed(policyID, domainOrWorkspaceAccountID, ba
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
             value: optimisticCardUpdates,
         },
         {
@@ -226,19 +205,22 @@ function deleteWorkspaceCompanyCardFeed(policyID, domainOrWorkspaceAccountID, ba
             value: optimisticCardUpdates,
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
-                settings: __assign(__assign({}, (isCustomFeed ? { companyCards: successFeedUpdates } : { oAuthAccountDetails: successFeedUpdates, companyCards: successFeedUpdates })), { companyCardNicknames: (_d = {},
-                        _d[bankName] = null,
-                        _d) }),
+                settings: {
+                    ...(isCustomFeed ? { companyCards: successFeedUpdates } : { oAuthAccountDetails: successFeedUpdates, companyCards: successFeedUpdates }),
+                    companyCardNicknames: {
+                        [bankName]: null,
+                    },
+                },
             },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
             value: successAndFailureCardUpdates,
         },
         {
@@ -247,10 +229,10 @@ function deleteWorkspaceCompanyCardFeed(policyID, domainOrWorkspaceAccountID, ba
             value: successAndFailureCardUpdates,
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 settings: {
                     companyCards: failureFeedUpdates,
@@ -259,7 +241,7 @@ function deleteWorkspaceCompanyCardFeed(policyID, domainOrWorkspaceAccountID, ba
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
             value: successAndFailureCardUpdates,
         },
         {
@@ -270,47 +252,45 @@ function deleteWorkspaceCompanyCardFeed(policyID, domainOrWorkspaceAccountID, ba
     ];
     optimisticData.push({
         onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-        key: "".concat(ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED).concat(policyID),
-        value: feedToOpen !== null && feedToOpen !== void 0 ? feedToOpen : null,
+        key: `${ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED}${policyID}`,
+        value: feedToOpen ?? null,
     });
-    var parameters = {
-        authToken: authToken,
+    const parameters = {
+        authToken,
         domainAccountID: domainOrWorkspaceAccountID,
-        policyID: policyID,
-        bankName: bankName,
+        policyID,
+        bankName,
     };
-    API.write(types_1.WRITE_COMMANDS.DELETE_COMPANY_CARD_FEED, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.DELETE_COMPANY_CARD_FEED, parameters, { optimisticData, successData, failureData });
 }
 function assignWorkspaceCompanyCard(policyID, data) {
-    var _a, _b, _c;
-    var _d, _e;
     if (!data) {
         return;
     }
-    var _f = data.bankName, bankName = _f === void 0 ? '' : _f, _g = data.email, email = _g === void 0 ? '' : _g, _h = data.encryptedCardNumber, encryptedCardNumber = _h === void 0 ? '' : _h, _j = data.startDate, startDate = _j === void 0 ? '' : _j, _k = data.cardName, cardName = _k === void 0 ? '' : _k;
-    var assigneeDetails = PersonalDetailsUtils.getPersonalDetailByEmail(email);
-    var optimisticCardAssignedReportAction = ReportUtils.buildOptimisticCardAssignedReportAction((_d = assigneeDetails === null || assigneeDetails === void 0 ? void 0 : assigneeDetails.accountID) !== null && _d !== void 0 ? _d : CONST_1.default.DEFAULT_NUMBER_ID);
-    var parameters = {
-        policyID: policyID,
-        bankName: bankName,
-        encryptedCardNumber: encryptedCardNumber,
-        cardName: cardName,
-        email: email,
-        startDate: startDate,
+    const { bankName = '', email = '', encryptedCardNumber = '', startDate = '', cardName = '' } = data;
+    const assigneeDetails = PersonalDetailsUtils.getPersonalDetailByEmail(email);
+    const optimisticCardAssignedReportAction = ReportUtils.buildOptimisticCardAssignedReportAction(assigneeDetails?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID);
+    const parameters = {
+        policyID,
+        bankName,
+        encryptedCardNumber,
+        cardName,
+        email,
+        startDate,
         reportActionID: optimisticCardAssignedReportAction.reportActionID,
     };
     // This will be fixed as part of https://github.com/Expensify/Expensify/issues/507850
     // eslint-disable-next-line deprecation/deprecation
-    var policy = PolicyUtils.getPolicy(policyID);
-    var policyExpenseChat = ReportUtils.getPolicyExpenseChat((_e = policy === null || policy === void 0 ? void 0 : policy.ownerAccountID) !== null && _e !== void 0 ? _e : CONST_1.default.DEFAULT_NUMBER_ID, policyID);
-    var onyxData = {
+    const policy = PolicyUtils.getPolicy(policyID);
+    const policyExpenseChat = ReportUtils.getPolicyExpenseChat(policy?.ownerAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID, policyID);
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(policyExpenseChat === null || policyExpenseChat === void 0 ? void 0 : policyExpenseChat.reportID),
-                value: (_a = {},
-                    _a[optimisticCardAssignedReportAction.reportActionID] = optimisticCardAssignedReportAction,
-                    _a),
+                key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${policyExpenseChat?.reportID}`,
+                value: {
+                    [optimisticCardAssignedReportAction.reportActionID]: optimisticCardAssignedReportAction,
+                },
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -321,8 +301,8 @@ function assignWorkspaceCompanyCard(policyID, data) {
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(policyExpenseChat === null || policyExpenseChat === void 0 ? void 0 : policyExpenseChat.reportID),
-                value: (_b = {}, _b[optimisticCardAssignedReportAction.reportActionID] = { pendingAction: null }, _b),
+                key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${policyExpenseChat?.reportID}`,
+                value: { [optimisticCardAssignedReportAction.reportActionID]: { pendingAction: null } },
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -333,13 +313,13 @@ function assignWorkspaceCompanyCard(policyID, data) {
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(policyExpenseChat === null || policyExpenseChat === void 0 ? void 0 : policyExpenseChat.reportID),
-                value: (_c = {},
-                    _c[optimisticCardAssignedReportAction.reportActionID] = {
+                key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${policyExpenseChat?.reportID}`,
+                value: {
+                    [optimisticCardAssignedReportAction.reportActionID]: {
                         pendingAction: null,
                         errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                     },
-                    _c),
+                },
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -351,84 +331,82 @@ function assignWorkspaceCompanyCard(policyID, data) {
     API.write(types_1.WRITE_COMMANDS.ASSIGN_COMPANY_CARD, parameters, onyxData);
 }
 function unassignWorkspaceCompanyCard(domainOrWorkspaceAccountID, bankName, card) {
-    var _a, _b, _c, _d, _e, _f;
-    var authToken = NetworkStore.getAuthToken();
-    var cardID = card.cardID;
-    var onyxData = {
+    const authToken = NetworkStore.getAuthToken();
+    const cardID = card.cardID;
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-                value: (_a = {},
-                    _a[cardID] = {
+                key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+                value: {
+                    [cardID]: {
                         pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE,
                     },
-                    _a),
+                },
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.CARD_LIST,
-                value: (_b = {},
-                    _b[cardID] = {
+                value: {
+                    [cardID]: {
                         pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE,
                     },
-                    _b),
+                },
             },
         ],
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-                value: (_c = {},
-                    _c[cardID] = null,
-                    _c),
+                key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+                value: {
+                    [cardID]: null,
+                },
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.CARD_LIST,
-                value: (_d = {},
-                    _d[cardID] = null,
-                    _d),
+                value: {
+                    [cardID]: null,
+                },
             },
         ],
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-                value: (_e = {},
-                    _e[cardID] = {
+                key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+                value: {
+                    [cardID]: {
                         pendingAction: null,
                         errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                     },
-                    _e),
+                },
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.CARD_LIST,
-                value: (_f = {},
-                    _f[cardID] = {
+                value: {
+                    [cardID]: {
                         pendingAction: null,
                         errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                     },
-                    _f),
+                },
             },
         ],
     };
-    var parameters = {
-        authToken: authToken,
+    const parameters = {
+        authToken,
         cardID: Number(cardID),
     };
     API.write(types_1.WRITE_COMMANDS.UNASSIGN_COMPANY_CARD, parameters, onyxData);
 }
 function updateWorkspaceCompanyCard(domainOrWorkspaceAccountID, cardID, bankName, lastScrapeResult) {
-    var _a, _b, _c, _d, _e, _f;
-    var authToken = NetworkStore.getAuthToken();
-    var optimisticData = [
+    const authToken = NetworkStore.getAuthToken();
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-            value: (_a = {},
-                _a[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+            value: {
+                [cardID]: {
                     isLoadingLastUpdated: true,
                     lastScrapeResult: CONST_1.default.JSON_CODE.SUCCESS,
                     pendingFields: {
@@ -438,13 +416,13 @@ function updateWorkspaceCompanyCard(domainOrWorkspaceAccountID, cardID, bankName
                         lastScrape: null,
                     },
                 },
-                _a),
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_b = {},
-                _b[cardID] = {
+            value: {
+                [cardID]: {
                     lastScrapeResult: CONST_1.default.JSON_CODE.SUCCESS,
                     isLoadingLastUpdated: true,
                     pendingFields: {
@@ -454,44 +432,44 @@ function updateWorkspaceCompanyCard(domainOrWorkspaceAccountID, cardID, bankName
                         lastScrape: null,
                     },
                 },
-                _b),
+            },
         },
     ];
-    var finallyData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-            value: (_c = {},
-                _c[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+            value: {
+                [cardID]: {
                     lastScrapeResult: CONST_1.default.JSON_CODE.SUCCESS,
                     isLoadingLastUpdated: false,
                     pendingFields: {
                         lastScrape: null,
                     },
                 },
-                _c),
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_d = {},
-                _d[cardID] = {
+            value: {
+                [cardID]: {
                     lastScrapeResult: CONST_1.default.JSON_CODE.SUCCESS,
                     isLoadingLastUpdated: false,
                     pendingFields: {
                         lastScrape: null,
                     },
                 },
-                _d),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-            value: (_e = {},
-                _e[cardID] = {
-                    lastScrapeResult: lastScrapeResult,
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+            value: {
+                [cardID]: {
+                    lastScrapeResult,
                     isLoadingLastUpdated: false,
                     pendingFields: {
                         lastScrape: null,
@@ -500,14 +478,14 @@ function updateWorkspaceCompanyCard(domainOrWorkspaceAccountID, cardID, bankName
                         lastScrape: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                     },
                 },
-                _e),
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_f = {},
-                _f[cardID] = {
-                    lastScrapeResult: lastScrapeResult,
+            value: {
+                [cardID]: {
+                    lastScrapeResult,
                     isLoadingLastUpdated: false,
                     pendingFields: {
                         lastScrape: null,
@@ -516,24 +494,23 @@ function updateWorkspaceCompanyCard(domainOrWorkspaceAccountID, cardID, bankName
                         lastScrape: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                     },
                 },
-                _f),
+            },
         },
     ];
-    var parameters = {
-        authToken: authToken,
+    const parameters = {
+        authToken,
         cardID: Number(cardID),
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_COMPANY_CARD, parameters, { optimisticData: optimisticData, finallyData: finallyData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_COMPANY_CARD, parameters, { optimisticData, finallyData, failureData });
 }
 function updateCompanyCardName(domainOrWorkspaceAccountID, cardID, newCardTitle, bankName, oldCardTitle) {
-    var _a, _b, _c, _d, _e;
-    var authToken = NetworkStore.getAuthToken();
-    var optimisticData = [
+    const authToken = NetworkStore.getAuthToken();
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-            value: (_a = {},
-                _a[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         cardTitle: newCardTitle,
                         pendingFields: {
@@ -544,35 +521,35 @@ function updateCompanyCardName(domainOrWorkspaceAccountID, cardID, newCardTitle,
                         },
                     },
                 },
-                _a),
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_EXPENSIFY_COMPANY_CARDS_CUSTOM_NAMES,
-            value: (_b = {}, _b[cardID] = newCardTitle, _b),
+            value: { [cardID]: newCardTitle },
         },
     ];
-    var finallyData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-            value: (_c = {},
-                _c[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         pendingFields: {
                             cardTitle: null,
                         },
                     },
                 },
-                _c),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName),
-            value: (_d = {},
-                _d[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         pendingFields: {
                             cardTitle: null,
@@ -582,210 +559,205 @@ function updateCompanyCardName(domainOrWorkspaceAccountID, cardID, newCardTitle,
                         },
                     },
                 },
-                _d),
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_EXPENSIFY_COMPANY_CARDS_CUSTOM_NAMES,
-            value: (_e = {}, _e[cardID] = oldCardTitle, _e),
+            value: { [cardID]: oldCardTitle },
         },
     ];
-    var parameters = {
-        authToken: authToken,
+    const parameters = {
+        authToken,
         cardID: Number(cardID),
         cardName: newCardTitle,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_COMPANY_CARD_NAME, parameters, { optimisticData: optimisticData, finallyData: finallyData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_COMPANY_CARD_NAME, parameters, { optimisticData, finallyData, failureData });
 }
 function setCompanyCardExportAccount(policyID, domainOrWorkspaceAccountID, cardID, accountKey, newAccount, bank) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    var authToken = NetworkStore.getAuthToken();
-    var optimisticData = [
+    const authToken = NetworkStore.getAuthToken();
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bank),
-            value: (_a = {},
-                _a[cardID] = {
-                    nameValuePairs: (_b = {
-                            pendingFields: (_c = {},
-                                _c[accountKey] = CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
-                                _c),
-                            errorFields: (_d = {},
-                                _d[accountKey] = null,
-                                _d)
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bank}`,
+            value: {
+                [cardID]: {
+                    nameValuePairs: {
+                        pendingFields: {
+                            [accountKey]: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                         },
-                        _b[accountKey] = newAccount,
-                        _b),
-                },
-                _a),
-        },
-    ];
-    var finallyData = [
-        {
-            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bank),
-            value: (_e = {},
-                _e[cardID] = {
-                    nameValuePairs: {
-                        pendingFields: (_f = {},
-                            _f[accountKey] = null,
-                            _f),
+                        errorFields: {
+                            [accountKey]: null,
+                        },
+                        [accountKey]: newAccount,
                     },
                 },
-                _e),
+            },
         },
     ];
-    var failureData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bank),
-            value: (_g = {},
-                _g[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bank}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
-                        pendingFields: (_h = {},
-                            _h[accountKey] = newAccount,
-                            _h),
-                        errorFields: (_j = {},
-                            _j[accountKey] = ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
-                            _j),
+                        pendingFields: {
+                            [accountKey]: null,
+                        },
                     },
                 },
-                _g),
+            },
         },
     ];
-    var parameters = {
-        authToken: authToken,
+    const failureData = [
+        {
+            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bank}`,
+            value: {
+                [cardID]: {
+                    nameValuePairs: {
+                        pendingFields: {
+                            [accountKey]: newAccount,
+                        },
+                        errorFields: {
+                            [accountKey]: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                        },
+                    },
+                },
+            },
+        },
+    ];
+    const parameters = {
+        authToken,
         cardID: Number(cardID),
-        exportAccountDetails: JSON.stringify((_k = {}, _k[accountKey] = newAccount, _k["".concat(accountKey, "_policy_id")] = policyID, _k)),
+        exportAccountDetails: JSON.stringify({ [accountKey]: newAccount, [`${accountKey}_policy_id`]: policyID }),
     };
-    API.write(types_1.WRITE_COMMANDS.SET_CARD_EXPORT_ACCOUNT, parameters, { optimisticData: optimisticData, finallyData: finallyData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.SET_CARD_EXPORT_ACCOUNT, parameters, { optimisticData, finallyData, failureData });
 }
 function clearCompanyCardErrorField(domainOrWorkspaceAccountID, cardID, bankName, fieldName, isRootLevel) {
-    var _a, _b, _c, _d, _e, _f;
     if (isRootLevel) {
-        react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName), (_a = {},
-            _a[cardID] = {
-                errorFields: (_b = {}, _b[fieldName] = null, _b),
+        react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`, {
+            [cardID]: {
+                errorFields: { [fieldName]: null },
             },
-            _a));
+        });
         return;
     }
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(bankName), (_c = {},
-        _c[cardID] = {
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${bankName}`, {
+        [cardID]: {
             nameValuePairs: {
-                errorFields: (_d = {}, _d[fieldName] = null, _d),
+                errorFields: { [fieldName]: null },
             },
         },
-        _c));
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.CARD_LIST, (_e = {},
-        _e[cardID] = {
+    });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.CARD_LIST, {
+        [cardID]: {
             nameValuePairs: {
-                errorFields: (_f = {},
-                    _f[fieldName] = null,
-                    _f),
+                errorFields: {
+                    [fieldName]: null,
+                },
             },
         },
-        _e));
+    });
 }
 function openPolicyCompanyCardsPage(policyID, domainOrWorkspaceAccountID) {
-    var authToken = NetworkStore.getAuthToken();
-    var optimisticData = [
+    const authToken = NetworkStore.getAuthToken();
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 isLoading: true,
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 isLoading: false,
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 isLoading: false,
             },
         },
     ];
-    var params = {
-        policyID: policyID,
-        authToken: authToken,
+    const params = {
+        policyID,
+        authToken,
     };
-    API.read(types_1.READ_COMMANDS.OPEN_POLICY_COMPANY_CARDS_PAGE, params, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.read(types_1.READ_COMMANDS.OPEN_POLICY_COMPANY_CARDS_PAGE, params, { optimisticData, successData, failureData });
 }
 function openPolicyCompanyCardsFeed(domainAccountID, policyID, feed) {
-    var parameters = {
-        domainAccountID: domainAccountID,
-        policyID: policyID,
-        feed: feed,
+    const parameters = {
+        domainAccountID,
+        policyID,
+        feed,
     };
     API.read(types_1.READ_COMMANDS.OPEN_POLICY_COMPANY_CARDS_FEED, parameters);
 }
 function openAssignFeedCardPage(policyID, feed, domainOrWorkspaceAccountID) {
-    var parameters = {
-        policyID: policyID,
-        feed: feed,
+    const parameters = {
+        policyID,
+        feed,
     };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 isLoading: true,
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 isLoading: false,
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainOrWorkspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainOrWorkspaceAccountID}`,
             value: {
                 isLoading: false,
             },
         },
     ];
-    API.read(types_1.READ_COMMANDS.OPEN_ASSIGN_FEED_CARD_PAGE, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.read(types_1.READ_COMMANDS.OPEN_ASSIGN_FEED_CARD_PAGE, parameters, { optimisticData, successData, failureData });
 }
 function openPolicyAddCardFeedPage(policyID) {
     if (!policyID) {
         return;
     }
-    var parameters = {
-        policyID: policyID,
+    const parameters = {
+        policyID,
     };
     API.write(types_1.WRITE_COMMANDS.OPEN_POLICY_ADD_CARD_FEED_PAGE, parameters);
 }
 function setFeedStatementPeriodEndDay(policyID, bankName, domainAccountID, newStatementPeriodEnd, newStatementPeriodEndDay, oldStatementPeriodEndDay) {
-    var _a, _b, _c;
-    var _d;
-    var authToken = NetworkStore.getAuthToken();
-    var optimisticData = [
+    const authToken = NetworkStore.getAuthToken();
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainAccountID}`,
             value: {
                 settings: {
-                    companyCards: (_a = {},
-                        _a[bankName] = {
-                            statementPeriodEndDay: (_d = newStatementPeriodEndDay !== null && newStatementPeriodEndDay !== void 0 ? newStatementPeriodEndDay : newStatementPeriodEnd) !== null && _d !== void 0 ? _d : null,
+                    companyCards: {
+                        [bankName]: {
+                            statementPeriodEndDay: newStatementPeriodEndDay ?? newStatementPeriodEnd ?? null,
                             pendingFields: {
                                 statementPeriodEndDay: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                             },
@@ -793,37 +765,37 @@ function setFeedStatementPeriodEndDay(policyID, bankName, domainAccountID, newSt
                                 statementPeriodEndDay: null,
                             },
                         },
-                        _a),
+                    },
                 },
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainAccountID}`,
             value: {
                 settings: {
-                    companyCards: (_b = {},
-                        _b[bankName] = {
+                    companyCards: {
+                        [bankName]: {
                             pendingFields: {
                                 statementPeriodEndDay: null,
                             },
                         },
-                        _b),
+                    },
                 },
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainAccountID}`,
             value: {
                 settings: {
-                    companyCards: (_c = {},
-                        _c[bankName] = {
-                            statementPeriodEndDay: oldStatementPeriodEndDay !== null && oldStatementPeriodEndDay !== void 0 ? oldStatementPeriodEndDay : null,
+                    companyCards: {
+                        [bankName]: {
+                            statementPeriodEndDay: oldStatementPeriodEndDay ?? null,
                             pendingFields: {
                                 statementPeriodEndDay: null,
                             },
@@ -831,32 +803,31 @@ function setFeedStatementPeriodEndDay(policyID, bankName, domainAccountID, newSt
                                 statementPeriodEndDay: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                             },
                         },
-                        _c),
+                    },
                 },
             },
         },
     ];
-    var parameters = {
-        authToken: authToken,
-        policyID: policyID,
-        bankName: bankName,
-        domainAccountID: domainAccountID,
+    const parameters = {
+        authToken,
+        policyID,
+        bankName,
+        domainAccountID,
         statementPeriodEnd: newStatementPeriodEnd,
         statementPeriodEndDay: newStatementPeriodEndDay,
     };
-    API.write(types_1.WRITE_COMMANDS.SET_FEED_STATEMENT_PERIOD_END_DAY, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.SET_FEED_STATEMENT_PERIOD_END_DAY, parameters, { optimisticData, successData, failureData });
 }
 function clearErrorField(bankName, domainAccountID, fieldName) {
-    var _a, _b;
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER).concat(domainAccountID), {
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER}${domainAccountID}`, {
         settings: {
-            companyCards: (_a = {},
-                _a[bankName] = {
-                    errorFields: (_b = {},
-                        _b[fieldName] = null,
-                        _b),
+            companyCards: {
+                [bankName]: {
+                    errorFields: {
+                        [fieldName]: null,
+                    },
                 },
-                _a),
+            },
         },
     });
 }

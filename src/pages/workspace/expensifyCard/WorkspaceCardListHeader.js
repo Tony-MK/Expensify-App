@@ -1,22 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormHelpMessage_1 = require("@components/FormHelpMessage");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-function WorkspaceCardListHeader(_a) {
-    var _b;
-    var cardSettings = _a.cardSettings;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormHelpMessage_1 = require("@components/FormHelpMessage");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+function WorkspaceCardListHeader({ cardSettings }) {
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var _c = (0, useResponsiveLayout_1.default)(), shouldUseNarrowLayout = _c.shouldUseNarrowLayout, isMediumScreenWidth = _c.isMediumScreenWidth, isSmallScreenWidth = _c.isSmallScreenWidth;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isLessThanMediumScreen = isMediumScreenWidth || isSmallScreenWidth;
-    var errorMessage = (_b = (0, ErrorUtils_1.getLatestErrorMessage)(cardSettings)) !== null && _b !== void 0 ? _b : '';
+    const { shouldUseNarrowLayout, isMediumScreenWidth, isSmallScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const isLessThanMediumScreen = isMediumScreenWidth || isSmallScreenWidth;
+    const errorMessage = (0, ErrorUtils_1.getLatestErrorMessage)(cardSettings) ?? '';
     return (<react_native_1.View style={styles.appBG}>
             {!!errorMessage && (<react_native_1.View style={[styles.mh5, styles.pr4, styles.mt2]}>
                     <FormHelpMessage_1.default isError message={errorMessage}/>

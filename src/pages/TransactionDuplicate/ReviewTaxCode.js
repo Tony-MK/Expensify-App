@@ -1,61 +1,53 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReviewDuplicatesNavigation_1 = require("@hooks/useReviewDuplicatesNavigation");
-var Transaction_1 = require("@libs/actions/Transaction");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ReviewDescription_1 = require("./ReviewDescription");
-var ReviewFields_1 = require("./ReviewFields");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReviewDuplicatesNavigation_1 = require("@hooks/useReviewDuplicatesNavigation");
+const Transaction_1 = require("@libs/actions/Transaction");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ReviewDescription_1 = require("./ReviewDescription");
+const ReviewFields_1 = require("./ReviewFields");
 function ReviewTaxRate() {
-    var _a, _b, _c;
-    var route = (0, native_1.useRoute)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var reviewDuplicates = (0, useOnyx_1.default)(ONYXKEYS_1.default.REVIEW_DUPLICATES, { canBeMissing: true })[0];
-    var report = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat((_a = reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.reportID) !== null && _a !== void 0 ? _a : route.params.threadReportID), { canBeMissing: true })[0];
+    const route = (0, native_1.useRoute)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [reviewDuplicates] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REVIEW_DUPLICATES, { canBeMissing: true });
+    const [report] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT}${reviewDuplicates?.reportID ?? route.params.threadReportID}`, { canBeMissing: true });
     // This will be fixed as part of https://github.com/Expensify/Expensify/issues/507850
     // eslint-disable-next-line deprecation/deprecation
-    var policy = (0, PolicyUtils_1.getPolicy)(report === null || report === void 0 ? void 0 : report.policyID);
-    var transactionID = (0, TransactionUtils_1.getTransactionID)(route.params.threadReportID);
-    var transaction = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), { canBeMissing: true })[0];
-    var transactionViolations = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat(transactionID), {
+    const policy = (0, PolicyUtils_1.getPolicy)(report?.policyID);
+    const transactionID = (0, TransactionUtils_1.getTransactionID)(route.params.threadReportID);
+    const [transaction] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, { canBeMissing: true });
+    const [transactionViolations] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`, {
         canBeMissing: false,
-    })[0];
-    var allDuplicateIDs = (0, react_1.useMemo)(function () { var _a, _b, _c; return (_c = (_b = (_a = transactionViolations === null || transactionViolations === void 0 ? void 0 : transactionViolations.find(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION; })) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.duplicates) !== null && _c !== void 0 ? _c : []; }, [transactionViolations]);
-    var allDuplicates = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
-        selector: function (allTransactions) { return allDuplicateIDs.map(function (id) { return allTransactions === null || allTransactions === void 0 ? void 0 : allTransactions["".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(id)]; }); },
+    });
+    const allDuplicateIDs = (0, react_1.useMemo)(() => transactionViolations?.find((violation) => violation.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION)?.data?.duplicates ?? [], [transactionViolations]);
+    const [allDuplicates] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
+        selector: (allTransactions) => allDuplicateIDs.map((id) => allTransactions?.[`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${id}`]),
         canBeMissing: true,
-    }, [allDuplicateIDs])[0];
-    var compareResult = (0, TransactionUtils_1.compareDuplicateTransactionFields)(transaction, allDuplicates, reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.reportID);
-    var stepNames = Object.keys((_b = compareResult.change) !== null && _b !== void 0 ? _b : {}).map(function (key, index) { return (index + 1).toString(); });
-    var _d = (0, useReviewDuplicatesNavigation_1.default)(Object.keys((_c = compareResult.change) !== null && _c !== void 0 ? _c : {}), 'taxCode', route.params.threadReportID, route.params.backTo), currentScreenIndex = _d.currentScreenIndex, goBack = _d.goBack, navigateToNextScreen = _d.navigateToNextScreen;
-    var options = (0, react_1.useMemo)(function () {
-        var _a;
-        return (_a = compareResult.change.taxCode) === null || _a === void 0 ? void 0 : _a.map(function (taxID) {
-            var _a, _b, _c;
-            return !taxID
-                ? { text: translate('violations.none'), value: (_a = (0, TransactionUtils_1.getDefaultTaxCode)(policy, transaction)) !== null && _a !== void 0 ? _a : '' }
-                : {
-                    text: (_c = (_b = (0, PolicyUtils_1.getTaxByID)(policy, taxID)) === null || _b === void 0 ? void 0 : _b.name) !== null && _c !== void 0 ? _c : '',
-                    value: taxID,
-                };
-        });
-    }, [compareResult.change.taxCode, policy, transaction, translate]);
-    var getTaxAmount = (0, react_1.useCallback)(function (taxID) {
-        var _a;
-        var taxPercentage = (0, TransactionUtils_1.getTaxValue)(policy, transaction, taxID);
-        return (0, CurrencyUtils_1.convertToBackendAmount)((0, TransactionUtils_1.calculateTaxAmount)(taxPercentage !== null && taxPercentage !== void 0 ? taxPercentage : '', (0, TransactionUtils_1.getAmount)(transaction), (_a = transaction === null || transaction === void 0 ? void 0 : transaction.currency) !== null && _a !== void 0 ? _a : ''));
+    }, [allDuplicateIDs]);
+    const compareResult = (0, TransactionUtils_1.compareDuplicateTransactionFields)(transaction, allDuplicates, reviewDuplicates?.reportID);
+    const stepNames = Object.keys(compareResult.change ?? {}).map((key, index) => (index + 1).toString());
+    const { currentScreenIndex, goBack, navigateToNextScreen } = (0, useReviewDuplicatesNavigation_1.default)(Object.keys(compareResult.change ?? {}), 'taxCode', route.params.threadReportID, route.params.backTo);
+    const options = (0, react_1.useMemo)(() => compareResult.change.taxCode?.map((taxID) => !taxID
+        ? { text: translate('violations.none'), value: (0, TransactionUtils_1.getDefaultTaxCode)(policy, transaction) ?? '' }
+        : {
+            text: (0, PolicyUtils_1.getTaxByID)(policy, taxID)?.name ?? '',
+            value: taxID,
+        }), [compareResult.change.taxCode, policy, transaction, translate]);
+    const getTaxAmount = (0, react_1.useCallback)((taxID) => {
+        const taxPercentage = (0, TransactionUtils_1.getTaxValue)(policy, transaction, taxID);
+        return (0, CurrencyUtils_1.convertToBackendAmount)((0, TransactionUtils_1.calculateTaxAmount)(taxPercentage ?? '', (0, TransactionUtils_1.getAmount)(transaction), transaction?.currency ?? ''));
     }, [policy, transaction]);
-    var setTaxCode = (0, react_1.useCallback)(function (data) {
+    const setTaxCode = (0, react_1.useCallback)((data) => {
         if (data.value !== undefined) {
             (0, Transaction_1.setReviewDuplicatesKey)({ taxCode: data.value, taxAmount: getTaxAmount(data.value) });
         }

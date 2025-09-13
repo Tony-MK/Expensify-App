@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var linkingConfig_1 = require("@libs/Navigation/linkingConfig");
+const native_1 = require("@react-navigation/native");
+const linkingConfig_1 = require("@libs/Navigation/linkingConfig");
 function syncBrowserHistory(state) {
     // We reset the URL as the browser sets it in a way that doesn't match the navigation state
     // eslint-disable-next-line no-restricted-globals

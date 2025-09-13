@@ -1,23 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ModalStackNavigators = require("@libs/Navigation/AppNavigator/ModalStackNavigators");
-var useRHPScreenOptions_1 = require("@libs/Navigation/AppNavigator/useRHPScreenOptions");
-var createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var SCREENS_1 = require("@src/SCREENS");
-var NarrowPaneContext_1 = require("./NarrowPaneContext");
-var Overlay_1 = require("./Overlay");
-var Stack = (0, createPlatformStackNavigator_1.default)();
-function PublicRightModalNavigatorComponent(_a) {
-    var navigation = _a.navigation;
-    var styles = (0, useThemeStyles_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var screenOptions = (0, useRHPScreenOptions_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ModalStackNavigators = require("@libs/Navigation/AppNavigator/ModalStackNavigators");
+const useRHPScreenOptions_1 = require("@libs/Navigation/AppNavigator/useRHPScreenOptions");
+const createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const SCREENS_1 = require("@src/SCREENS");
+const NarrowPaneContext_1 = require("./NarrowPaneContext");
+const Overlay_1 = require("./Overlay");
+const Stack = (0, createPlatformStackNavigator_1.default)();
+function PublicRightModalNavigatorComponent({ navigation }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const screenOptions = (0, useRHPScreenOptions_1.default)();
     return (<NarrowPaneContext_1.NarrowPaneContextProvider>
             <NoDropZone_1.default>
                 {!shouldUseNarrowLayout && <Overlay_1.default onPress={navigation.goBack}/>}

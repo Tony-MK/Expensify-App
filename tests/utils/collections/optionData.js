@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createRandomOptionData;
-var falso_1 = require("@ngneat/falso");
-var CONST_1 = require("@src/CONST");
+const falso_1 = require("@ngneat/falso");
+const CONST_1 = require("@src/CONST");
 function createRandomOptionData(index) {
     return {
         login: (0, falso_1.randEmail)(),
         searchText: (0, falso_1.randWord)(),
-        reportID: "report_".concat(index),
+        reportID: `report_${index}`,
         text: (0, falso_1.randWord)(),
         alternateText: (0, falso_1.randWord)(),
         tooltipText: (0, falso_1.randWord)(),
-        keyForList: "option_".concat(index),
+        keyForList: `option_${index}`,
         descriptiveText: (0, falso_1.randWord)(),
         isUnread: (0, falso_1.randBoolean)(),
         isPinned: (0, falso_1.randBoolean)(),
         isSelected: (0, falso_1.randBoolean)(),
         phoneNumber: (0, falso_1.randPhoneNumber)(),
         policyName: (0, falso_1.randWord)(),
-        policyID: "policy_".concat(index),
+        policyID: `policy_${index}`,
         accountID: (0, falso_1.randNumber)(),
         private_isArchived: new Date().toISOString(),
         isPolicyExpenseChat: (0, falso_1.randBoolean)(),
@@ -36,13 +36,13 @@ function createRandomOptionData(index) {
         description: (0, falso_1.randWord)(),
         isDeletedParentAction: (0, falso_1.randBoolean)(),
         reportName: (0, falso_1.randWord)(),
-        chatReportID: "chatReport_".concat(index),
+        chatReportID: `chatReport_${index}`,
         stateNum: (0, falso_1.rand)(Object.values(CONST_1.default.REPORT.STATE_NUM)),
         statusNum: (0, falso_1.rand)(Object.values(CONST_1.default.REPORT.STATUS_NUM)),
         type: (0, falso_1.rand)(Object.values(CONST_1.default.REPORT.TYPE)),
         visibility: (0, falso_1.rand)(Object.values(CONST_1.default.REPORT.VISIBILITY)),
         isCancelledIOU: (0, falso_1.randBoolean)(),
-        iouReportID: "iou_".concat(index),
+        iouReportID: `iou_${index}`,
         currency: (0, falso_1.randWord)(),
         isWaitingOnBankAccount: (0, falso_1.randBoolean)(),
         lastVisibleActionLastModified: new Date().toISOString(),

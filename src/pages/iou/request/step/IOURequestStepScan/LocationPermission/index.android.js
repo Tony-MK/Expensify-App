@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requestLocationPermission = requestLocationPermission;
 exports.getLocationPermission = getLocationPermission;
-var react_native_permissions_1 = require("react-native-permissions");
+const react_native_permissions_1 = require("react-native-permissions");
 function requestLocationPermission() {
     return (0, react_native_permissions_1.request)(react_native_permissions_1.PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
 }

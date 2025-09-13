@@ -1,26 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var FormActions_1 = require("@userActions/FormActions");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var Agreements_1 = require("./Agreements");
-var BankInfo_1 = require("./BankInfo/BankInfo");
-var BeneficialOwnerInfo_1 = require("./BeneficialOwnerInfo/BeneficialOwnerInfo");
-var BusinessInfo_1 = require("./BusinessInfo/BusinessInfo");
-var Country_1 = require("./Country");
-var Docusign_1 = require("./Docusign");
-var Finish_1 = require("./Finish");
-var SignerInfo_1 = require("./SignerInfo");
-var requiresDocusignStep_1 = require("./utils/requiresDocusignStep");
-function NonUSDVerifiedBankAccountFlow(_a) {
-    var nonUSDBankAccountStep = _a.nonUSDBankAccountStep, setNonUSDBankAccountStep = _a.setNonUSDBankAccountStep, setShouldShowContinueSetupButton = _a.setShouldShowContinueSetupButton, policyID = _a.policyID, shouldShowContinueSetupButtonValue = _a.shouldShowContinueSetupButtonValue, policyCurrency = _a.policyCurrency, isComingFromExpensifyCard = _a.isComingFromExpensifyCard;
-    var styles = (0, useThemeStyles_1.default)();
-    var isDocusignStepRequired = (0, requiresDocusignStep_1.default)(policyCurrency);
-    var stepNames = isDocusignStepRequired ? CONST_1.default.NON_USD_BANK_ACCOUNT.DOCUSIGN_REQUIRED_STEP_NAMES : CONST_1.default.NON_USD_BANK_ACCOUNT.STEP_NAMES;
-    var handleNextNonUSDBankAccountStep = function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const FormActions_1 = require("@userActions/FormActions");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const Agreements_1 = require("./Agreements");
+const BankInfo_1 = require("./BankInfo/BankInfo");
+const BeneficialOwnerInfo_1 = require("./BeneficialOwnerInfo/BeneficialOwnerInfo");
+const BusinessInfo_1 = require("./BusinessInfo/BusinessInfo");
+const Country_1 = require("./Country");
+const Docusign_1 = require("./Docusign");
+const Finish_1 = require("./Finish");
+const SignerInfo_1 = require("./SignerInfo");
+const requiresDocusignStep_1 = require("./utils/requiresDocusignStep");
+function NonUSDVerifiedBankAccountFlow({ nonUSDBankAccountStep, setNonUSDBankAccountStep, setShouldShowContinueSetupButton, policyID, shouldShowContinueSetupButtonValue, policyCurrency, isComingFromExpensifyCard, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const isDocusignStepRequired = (0, requiresDocusignStep_1.default)(policyCurrency);
+    const stepNames = isDocusignStepRequired ? CONST_1.default.NON_USD_BANK_ACCOUNT.DOCUSIGN_REQUIRED_STEP_NAMES : CONST_1.default.NON_USD_BANK_ACCOUNT.STEP_NAMES;
+    const handleNextNonUSDBankAccountStep = () => {
         switch (nonUSDBankAccountStep) {
             case CONST_1.default.NON_USD_BANK_ACCOUNT.STEP.COUNTRY:
                 setNonUSDBankAccountStep(CONST_1.default.NON_USD_BANK_ACCOUNT.STEP.BANK_INFO);
@@ -47,7 +46,7 @@ function NonUSDVerifiedBankAccountFlow(_a) {
                 return null;
         }
     };
-    var nonUSDBankAccountsGoBack = function () {
+    const nonUSDBankAccountsGoBack = () => {
         (0, FormActions_1.clearErrors)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM);
         switch (nonUSDBankAccountStep) {
             case CONST_1.default.NON_USD_BANK_ACCOUNT.STEP.COUNTRY:
@@ -80,7 +79,7 @@ function NonUSDVerifiedBankAccountFlow(_a) {
                 return null;
         }
     };
-    var CurrentStep;
+    let CurrentStep;
     switch (nonUSDBankAccountStep) {
         case CONST_1.default.NON_USD_BANK_ACCOUNT.STEP.COUNTRY:
             CurrentStep = (<Country_1.default onBackButtonPress={nonUSDBankAccountsGoBack} onSubmit={handleNextNonUSDBankAccountStep} policyID={policyID} isComingFromExpensifyCard={isComingFromExpensifyCard} stepNames={stepNames}/>);

@@ -1,44 +1,24 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var OptionListContextProvider_1 = require("@components/OptionListContextProvider");
-var SelectionList_1 = require("@components/SelectionList");
-var InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useScreenWrapperTransitionStatus_1 = require("@hooks/useScreenWrapperTransitionStatus");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Report_1 = require("@libs/actions/Report");
-var Share_1 = require("@libs/actions/Share");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var StringUtils_1 = require("@libs/StringUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var defaultListOptions = {
+const react_1 = require("react");
+const OptionListContextProvider_1 = require("@components/OptionListContextProvider");
+const SelectionList_1 = require("@components/SelectionList");
+const InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useScreenWrapperTransitionStatus_1 = require("@hooks/useScreenWrapperTransitionStatus");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Report_1 = require("@libs/actions/Report");
+const Share_1 = require("@libs/actions/Share");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const StringUtils_1 = require("@libs/StringUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const defaultListOptions = {
     userToInvite: null,
     recentReports: [],
     personalDetails: [],
@@ -46,62 +26,63 @@ var defaultListOptions = {
     categoryOptions: [],
 };
 function ShareTab(_, ref) {
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var _a = (0, useDebouncedState_1.default)(''), textInputValue = _a[0], debouncedTextInputValue = _a[1], setTextInputValue = _a[2];
-    var betas = (0, useOnyx_1.default)(ONYXKEYS_1.default.BETAS, { canBeMissing: true })[0];
-    var selectionListRef = (0, react_1.useRef)(null);
-    (0, react_1.useImperativeHandle)(ref, function () {
-        var _a;
-        return ({
-            focus: (_a = selectionListRef.current) === null || _a === void 0 ? void 0 : _a.focusTextInput,
-        });
-    });
-    var _b = (0, OptionListContextProvider_1.useOptionsList)(), options = _b.options, areOptionsInitialized = _b.areOptionsInitialized;
-    var didScreenTransitionEnd = (0, useScreenWrapperTransitionStatus_1.default)().didScreenTransitionEnd;
-    var isSearchingForReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true })[0];
-    var offlineMessage = isOffline ? "".concat(translate('common.youAppearToBeOffline'), " ").concat(translate('search.resultsAreLimited')) : '';
-    var showLoadingPlaceholder = (0, react_1.useMemo)(function () { return !areOptionsInitialized || !didScreenTransitionEnd; }, [areOptionsInitialized, didScreenTransitionEnd]);
-    var searchOptions = (0, react_1.useMemo)(function () {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [textInputValue, debouncedTextInputValue, setTextInputValue] = (0, useDebouncedState_1.default)('');
+    const [betas] = (0, useOnyx_1.default)(ONYXKEYS_1.default.BETAS, { canBeMissing: true });
+    const selectionListRef = (0, react_1.useRef)(null);
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        focus: selectionListRef.current?.focusTextInput,
+    }));
+    const { options, areOptionsInitialized } = (0, OptionListContextProvider_1.useOptionsList)();
+    const { didScreenTransitionEnd } = (0, useScreenWrapperTransitionStatus_1.default)();
+    const [isSearchingForReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true });
+    const offlineMessage = isOffline ? `${translate('common.youAppearToBeOffline')} ${translate('search.resultsAreLimited')}` : '';
+    const showLoadingPlaceholder = (0, react_1.useMemo)(() => !areOptionsInitialized || !didScreenTransitionEnd, [areOptionsInitialized, didScreenTransitionEnd]);
+    const searchOptions = (0, react_1.useMemo)(() => {
         if (!areOptionsInitialized) {
             return defaultListOptions;
         }
-        return (0, OptionsListUtils_1.getSearchOptions)(options, betas !== null && betas !== void 0 ? betas : [], false, false, textInputValue, 20, true);
+        return (0, OptionsListUtils_1.getSearchOptions)(options, betas ?? [], false, false, textInputValue, 20, true);
     }, [areOptionsInitialized, betas, options, textInputValue]);
-    var recentReportsOptions = (0, react_1.useMemo)(function () {
+    const recentReportsOptions = (0, react_1.useMemo)(() => {
         if (textInputValue.trim() === '') {
             return (0, OptionsListUtils_1.optionsOrderBy)(searchOptions.recentReports, OptionsListUtils_1.recentReportComparator, 20);
         }
-        var orderedOptions = (0, OptionsListUtils_1.combineOrderingOfReportsAndPersonalDetails)(searchOptions, textInputValue, {
+        const orderedOptions = (0, OptionsListUtils_1.combineOrderingOfReportsAndPersonalDetails)(searchOptions, textInputValue, {
             sortByReportTypeInSearch: true,
             preferChatRoomsOverThreads: true,
         });
-        var reportOptions = __spreadArray(__spreadArray([], orderedOptions.recentReports, true), orderedOptions.personalDetails, true);
+        const reportOptions = [...orderedOptions.recentReports, ...orderedOptions.personalDetails];
         if (searchOptions.userToInvite) {
             reportOptions.push(searchOptions.userToInvite);
         }
         return reportOptions.slice(0, 20);
     }, [searchOptions, textInputValue]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         (0, Report_1.searchInServer)(debouncedTextInputValue.trim());
     }, [debouncedTextInputValue]);
-    var styledRecentReports = recentReportsOptions.map(function (item) { return (__assign(__assign({}, item), { pressableStyle: styles.br2, text: StringUtils_1.default.lineBreaksToSpaces(item.text), wrapperStyle: [styles.pr3, styles.pl3] })); });
-    var _c = (0, react_1.useMemo)(function () {
-        var newSections = [];
+    const styledRecentReports = recentReportsOptions.map((item) => ({
+        ...item,
+        pressableStyle: styles.br2,
+        text: StringUtils_1.default.lineBreaksToSpaces(item.text),
+        wrapperStyle: [styles.pr3, styles.pl3],
+    }));
+    const [sections, header] = (0, react_1.useMemo)(() => {
+        const newSections = [];
         newSections.push({ title: textInputValue.trim() === '' ? translate('search.recentChats') : undefined, data: styledRecentReports });
-        var headerMessage = (0, OptionsListUtils_1.getHeaderMessage)(styledRecentReports.length !== 0, false, textInputValue.trim(), false);
+        const headerMessage = (0, OptionsListUtils_1.getHeaderMessage)(styledRecentReports.length !== 0, false, textInputValue.trim(), false);
         return [newSections, headerMessage];
-    }, [textInputValue, styledRecentReports, translate]), sections = _c[0], header = _c[1];
-    var onSelectRow = function (item) {
-        var _a;
-        var reportID = (_a = item === null || item === void 0 ? void 0 : item.reportID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID;
-        var accountID = item === null || item === void 0 ? void 0 : item.accountID;
+    }, [textInputValue, styledRecentReports, translate]);
+    const onSelectRow = (item) => {
+        let reportID = item?.reportID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+        const accountID = item?.accountID;
         if (accountID && !reportID) {
             (0, Share_1.saveUnknownUserDetails)(item);
-            var optimisticReport = (0, Report_1.getOptimisticChatReport)(accountID);
+            const optimisticReport = (0, Report_1.getOptimisticChatReport)(accountID);
             reportID = optimisticReport.reportID;
-            (0, Report_1.saveReportDraft)(reportID, optimisticReport).then(function () {
+            (0, Report_1.saveReportDraft)(reportID, optimisticReport).then(() => {
                 Navigation_1.default.navigate(ROUTES_1.default.SHARE_DETAILS.getRoute(reportID.toString()));
             });
         }

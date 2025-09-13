@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.goToWithdrawalAccountSetupStep = goToWithdrawalAccountSetupStep;
 exports.navigateToBankAccountRoute = navigateToBankAccountRoute;
-var react_native_onyx_1 = require("react-native-onyx");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
+const react_native_onyx_1 = require("react-native-onyx");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
 /**
  * Navigate to a specific step in the VBA flow
  */

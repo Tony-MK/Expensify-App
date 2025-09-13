@@ -1,15 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var BaseOnfidoWeb_1 = require("./BaseOnfidoWeb");
-function Onfido(_a) {
-    var sdkToken = _a.sdkToken, onSuccess = _a.onSuccess, onError = _a.onError, onUserExit = _a.onUserExit;
-    var baseOnfidoRef = (0, react_1.useRef)(null);
-    (0, react_1.useEffect)(function () {
-        var _a;
-        var onfidoOut = (_a = baseOnfidoRef.current) === null || _a === void 0 ? void 0 : _a.onfidoOut;
-        var observer = new MutationObserver(function () {
-            var fidoRef = baseOnfidoRef.current;
+const react_1 = require("react");
+const BaseOnfidoWeb_1 = require("./BaseOnfidoWeb");
+function Onfido({ sdkToken, onSuccess, onError, onUserExit }) {
+    const baseOnfidoRef = (0, react_1.useRef)(null);
+    (0, react_1.useEffect)(() => {
+        const onfidoOut = baseOnfidoRef.current?.onfidoOut;
+        const observer = new MutationObserver(() => {
+            const fidoRef = baseOnfidoRef.current;
             /** This condition is needed because we are using external embedded content and they are
              * causing two scrollbars to be displayed which make it difficult to accept the consent for
              * the processing of biometric data and sensitive data we are resizing the first iframe so
@@ -17,11 +15,11 @@ function Onfido(_a) {
              */
             if (fidoRef) {
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                var onfidoSdk = fidoRef.querySelector('#onfido-sdk > iframe');
+                const onfidoSdk = fidoRef.querySelector('#onfido-sdk > iframe');
                 if (onfidoSdk) {
-                    var viewportHeight = window.innerHeight; // Get the viewport height
-                    var desiredHeight = viewportHeight * 0.8;
-                    onfidoSdk.style.height = "".concat(desiredHeight, "px");
+                    const viewportHeight = window.innerHeight; // Get the viewport height
+                    const desiredHeight = viewportHeight * 0.8;
+                    onfidoSdk.style.height = `${desiredHeight}px`;
                 }
             }
         });
@@ -33,11 +31,11 @@ function Onfido(_a) {
         }
         onfidoOut.tearDown();
         // Clean up function to remove the observer when component unmounts
-        return function () {
+        return () => {
             observer.disconnect();
         };
     }, []);
-    (0, react_1.useEffect)(function () { }, []);
+    (0, react_1.useEffect)(() => { }, []);
     return (<BaseOnfidoWeb_1.default ref={baseOnfidoRef} sdkToken={sdkToken} onSuccess={onSuccess} onError={onError} onUserExit={onUserExit}/>);
 }
 Onfido.displayName = 'Onfido';

@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getExpenseHeaders = void 0;
-var react_1 = require("react");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var SortableTableHeader_1 = require("./SortableTableHeader");
-var getExpenseHeaders = function (groupBy) { return [
+const react_1 = require("react");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const SortableTableHeader_1 = require("./SortableTableHeader");
+const getExpenseHeaders = (groupBy) => [
     {
         columnName: CONST_1.default.SEARCH.TABLE_COLUMNS.RECEIPT,
         translationKey: 'common.receipt',
@@ -74,9 +74,9 @@ var getExpenseHeaders = function (groupBy) { return [
         translationKey: 'common.action',
         isColumnSortable: false,
     },
-]; };
+];
 exports.getExpenseHeaders = getExpenseHeaders;
-var taskHeaders = [
+const taskHeaders = [
     {
         columnName: CONST_1.default.SEARCH.TABLE_COLUMNS.DATE,
         translationKey: 'common.date',
@@ -130,25 +130,24 @@ function getSearchColumns(type, groupBy) {
             return null;
     }
 }
-function SearchTableHeader(_a) {
-    var columns = _a.columns, type = _a.type, sortBy = _a.sortBy, sortOrder = _a.sortOrder, onSortPress = _a.onSortPress, shouldShowYear = _a.shouldShowYear, shouldShowSorting = _a.shouldShowSorting, canSelectMultiple = _a.canSelectMultiple, isAmountColumnWide = _a.isAmountColumnWide, isTaxAmountColumnWide = _a.isTaxAmountColumnWide, areAllOptionalColumnsHidden = _a.areAllOptionalColumnsHidden, groupBy = _a.groupBy;
-    var styles = (0, useThemeStyles_1.default)();
+function SearchTableHeader({ columns, type, sortBy, sortOrder, onSortPress, shouldShowYear, shouldShowSorting, canSelectMultiple, isAmountColumnWide, isTaxAmountColumnWide, areAllOptionalColumnsHidden, groupBy, }) {
+    const styles = (0, useThemeStyles_1.default)();
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var _b = (0, useResponsiveLayout_1.default)(), isSmallScreenWidth = _b.isSmallScreenWidth, isMediumScreenWidth = _b.isMediumScreenWidth;
-    var displayNarrowVersion = isMediumScreenWidth || isSmallScreenWidth;
-    var shouldShowColumn = (0, react_1.useCallback)(function (columnName) {
+    const { isSmallScreenWidth, isMediumScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const displayNarrowVersion = isMediumScreenWidth || isSmallScreenWidth;
+    const shouldShowColumn = (0, react_1.useCallback)((columnName) => {
         return columns.includes(columnName);
     }, [columns]);
     if (displayNarrowVersion) {
         return;
     }
-    var columnConfig = getSearchColumns(type, groupBy);
+    const columnConfig = getSearchColumns(type, groupBy);
     if (!columnConfig) {
         return;
     }
     return (<SortableTableHeader_1.default columns={columnConfig} areAllOptionalColumnsHidden={areAllOptionalColumnsHidden} shouldShowColumn={shouldShowColumn} dateColumnSize={shouldShowYear ? CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.WIDE : CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} amountColumnSize={isAmountColumnWide ? CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.WIDE : CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} taxAmountColumnSize={isTaxAmountColumnWide ? CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.WIDE : CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} shouldShowSorting={shouldShowSorting} sortBy={sortBy} sortOrder={sortOrder} 
     // Don't butt up against the 'select all' checkbox if present
-    containerStyles={canSelectMultiple && [styles.pl4]} onSortPress={function (columnName, order) {
+    containerStyles={canSelectMultiple && [styles.pl4]} onSortPress={(columnName, order) => {
             if (columnName === CONST_1.default.REPORT.TRANSACTION_LIST.COLUMNS.COMMENTS) {
                 return;
             }

@@ -1,37 +1,36 @@
 "use strict";
-var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AddressSearch_1 = require("@components/AddressSearch");
-var CheckboxWithLabel_1 = require("@components/CheckboxWithLabel");
-var CurrencySelector_1 = require("@components/CurrencySelector");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var StateSelector_1 = require("@components/StateSelector");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var SCREENS_1 = require("@src/SCREENS");
-var AddPaymentCardForm_1 = require("@src/types/form/AddPaymentCardForm");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AddressSearch_1 = require("@components/AddressSearch");
+const CheckboxWithLabel_1 = require("@components/CheckboxWithLabel");
+const CurrencySelector_1 = require("@components/CurrencySelector");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const StateSelector_1 = require("@components/StateSelector");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const SCREENS_1 = require("@src/SCREENS");
+const AddPaymentCardForm_1 = require("@src/types/form/AddPaymentCardForm");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
 function IAcceptTheLabel() {
-    var translate = (0, useLocalize_1.default)().translate;
+    const { translate } = (0, useLocalize_1.default)();
     return (<Text_1.default>
-            {"".concat(translate('common.iAcceptThe'))}
-            <TextLink_1.default href={CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}>{"".concat(translate('common.addCardTermsOfService'))}</TextLink_1.default> {"".concat(translate('common.and'))}
-            <TextLink_1.default href={CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}> {" ".concat(translate('common.privacyPolicy'), " ")}</TextLink_1.default>
+            {`${translate('common.iAcceptThe')}`}
+            <TextLink_1.default href={CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}>{`${translate('common.addCardTermsOfService')}`}</TextLink_1.default> {`${translate('common.and')}`}
+            <TextLink_1.default href={CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}> {` ${translate('common.privacyPolicy')} `}</TextLink_1.default>
         </Text_1.default>);
 }
-var REQUIRED_FIELDS = [
+const REQUIRED_FIELDS = [
     AddPaymentCardForm_1.default.NAME_ON_CARD,
     AddPaymentCardForm_1.default.CARD_NUMBER,
     AddPaymentCardForm_1.default.EXPIRATION_DATE,
@@ -41,17 +40,17 @@ var REQUIRED_FIELDS = [
     AddPaymentCardForm_1.default.ADDRESS_STATE,
     AddPaymentCardForm_1.default.CURRENCY,
 ];
-var CARD_TYPES = {
+const CARD_TYPES = {
     DEBIT_CARD: 'debit',
     PAYMENT_CARD: 'payment',
 };
-var CARD_TYPE_SECTIONS = {
+const CARD_TYPE_SECTIONS = {
     DEFAULTS: 'defaults',
     ERROR: 'error',
 };
-var CARD_LABELS = (_a = {},
-    _a[CARD_TYPES.DEBIT_CARD] = (_b = {},
-        _b[CARD_TYPE_SECTIONS.DEFAULTS] = {
+const CARD_LABELS = {
+    [CARD_TYPES.DEBIT_CARD]: {
+        [CARD_TYPE_SECTIONS.DEFAULTS]: {
             cardNumber: 'addDebitCardPage.debitCardNumber',
             nameOnCard: 'addDebitCardPage.nameOnCard',
             expirationDate: 'addDebitCardPage.expirationDate',
@@ -59,7 +58,7 @@ var CARD_LABELS = (_a = {},
             securityCode: 'addDebitCardPage.cvv',
             billingAddress: 'addDebitCardPage.billingAddress',
         },
-        _b[CARD_TYPE_SECTIONS.ERROR] = {
+        [CARD_TYPE_SECTIONS.ERROR]: {
             nameOnCard: 'addDebitCardPage.error.invalidName',
             cardNumber: 'addDebitCardPage.error.debitCardNumber',
             expirationDate: 'addDebitCardPage.error.expirationDate',
@@ -67,8 +66,8 @@ var CARD_LABELS = (_a = {},
             addressStreet: 'addDebitCardPage.error.addressStreet',
             addressZipCode: 'addDebitCardPage.error.addressZipCode',
         },
-        _b),
-    _a[CARD_TYPES.PAYMENT_CARD] = {
+    },
+    [CARD_TYPES.PAYMENT_CARD]: {
         defaults: {
             cardNumber: 'addPaymentCardPage.paymentCardNumber',
             nameOnCard: 'addPaymentCardPage.nameOnCard',
@@ -86,56 +85,52 @@ var CARD_LABELS = (_a = {},
             addressZipCode: 'addPaymentCardPage.error.addressZipCode',
         },
     },
-    _a);
-function PaymentCardForm(_a) {
-    var _b;
-    var shouldShowPaymentCardForm = _a.shouldShowPaymentCardForm, addPaymentCard = _a.addPaymentCard, showAcceptTerms = _a.showAcceptTerms, showAddressField = _a.showAddressField, showCurrencyField = _a.showCurrencyField, isDebitCard = _a.isDebitCard, submitButtonText = _a.submitButtonText, showStateSelector = _a.showStateSelector, footerContent = _a.footerContent, headerContent = _a.headerContent, currencySelectorRoute = _a.currencySelectorRoute;
-    var styles = (0, useThemeStyles_1.default)();
-    var _c = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM, { canBeMissing: true }), data = _c[0], metadata = _c[1];
-    var translate = (0, useLocalize_1.default)().translate;
-    var route = (0, native_1.useRoute)();
-    var label = CARD_LABELS[isDebitCard ? CARD_TYPES.DEBIT_CARD : CARD_TYPES.PAYMENT_CARD];
-    var cardNumberRef = (0, react_1.useRef)(null);
-    var _d = (0, react_1.useState)(data === null || data === void 0 ? void 0 : data.expirationDate), expirationDate = _d[0], setExpirationDate = _d[1];
-    var previousValueRef = (0, react_1.useRef)('');
+};
+function PaymentCardForm({ shouldShowPaymentCardForm, addPaymentCard, showAcceptTerms, showAddressField, showCurrencyField, isDebitCard, submitButtonText, showStateSelector, footerContent, headerContent, currencySelectorRoute, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const [data, metadata] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM, { canBeMissing: true });
+    const { translate } = (0, useLocalize_1.default)();
+    const route = (0, native_1.useRoute)();
+    const label = CARD_LABELS[isDebitCard ? CARD_TYPES.DEBIT_CARD : CARD_TYPES.PAYMENT_CARD];
+    const cardNumberRef = (0, react_1.useRef)(null);
+    const [expirationDate, setExpirationDate] = (0, react_1.useState)(data?.expirationDate);
+    const previousValueRef = (0, react_1.useRef)('');
     // Formats user input into a valid expiration date (MM/YY) and automatically adds slash after the month.
     // Ensures the month is always between 01 and 12 by correcting invalid value to match the proper format.
-    var onChangeExpirationDate = (0, react_1.useCallback)(function (newValue) {
-        var _a, _b;
+    const onChangeExpirationDate = (0, react_1.useCallback)((newValue) => {
         if (typeof newValue !== 'string') {
             return;
         }
-        var value = newValue.replace(CONST_1.default.REGEX.NON_NUMERIC, '');
+        let value = newValue.replace(CONST_1.default.REGEX.NON_NUMERIC, '');
         if (value.length === 1) {
-            var firstDigit = value.charAt(0);
+            const firstDigit = value.charAt(0);
             if (parseInt(firstDigit, 10) > 1) {
-                value = "0".concat(firstDigit);
+                value = `0${firstDigit}`;
             }
         }
         if (value.length >= 2) {
-            var month = parseInt(value.slice(0, 2), 10);
+            const month = parseInt(value.slice(0, 2), 10);
             if (value.startsWith('00')) {
                 value = '0';
             }
             if (month > 12) {
-                value = "0".concat(value.charAt(0)).concat(value.charAt(1)).concat(value.charAt(2));
+                value = `0${value.charAt(0)}${value.charAt(1)}${value.charAt(2)}`;
             }
         }
-        var prevValue = (_b = (_a = previousValueRef.current) === null || _a === void 0 ? void 0 : _a.replace(CONST_1.default.REGEX.NON_NUMERIC, '')) !== null && _b !== void 0 ? _b : '';
-        var formattedValue = value;
+        const prevValue = previousValueRef.current?.replace(CONST_1.default.REGEX.NON_NUMERIC, '') ?? '';
+        let formattedValue = value;
         if (value.length === 2 && prevValue.length < 2) {
-            formattedValue = "".concat(value, "/");
+            formattedValue = `${value}/`;
         }
         else if (value.length > 2) {
-            formattedValue = "".concat(value.slice(0, 2), "/").concat(value.slice(2, 4));
+            formattedValue = `${value.slice(0, 2)}/${value.slice(2, 4)}`;
         }
         previousValueRef.current = formattedValue;
         setExpirationDate(formattedValue);
     }, []);
-    var _e = (0, react_1.useState)(''), cardNumber = _e[0], setCardNumber = _e[1];
-    var validate = function (values) {
-        var _a;
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, REQUIRED_FIELDS);
+    const [cardNumber, setCardNumber] = (0, react_1.useState)('');
+    const validate = (values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, REQUIRED_FIELDS);
         if (values.nameOnCard && !(0, ValidationUtils_1.isValidLegalName)(values.nameOnCard)) {
             errors.nameOnCard = translate(label.error.nameOnCard);
         }
@@ -143,7 +138,7 @@ function PaymentCardForm(_a) {
             errors.cardNumber = translate(label.error.cardNumber);
         }
         // When user pastes 5 digit value without slash, trim it to the first 4 digits before validation.
-        var normalizedExpirationDate = ((_a = values.expirationDate) === null || _a === void 0 ? void 0 : _a.length) === 5 && !values.expirationDate.includes('/') ? values.expirationDate.slice(0, 4) : values.expirationDate;
+        const normalizedExpirationDate = values.expirationDate?.length === 5 && !values.expirationDate.includes('/') ? values.expirationDate.slice(0, 4) : values.expirationDate;
         if (normalizedExpirationDate && !(0, ValidationUtils_1.isValidExpirationDate)(normalizedExpirationDate)) {
             errors.expirationDate = translate(label.error.expirationDate);
         }
@@ -170,24 +165,23 @@ function PaymentCardForm(_a) {
         }
         return errors;
     };
-    var onChangeCardNumber = (0, react_1.useCallback)(function (newValue) {
-        var _a, _b, _c, _d;
+    const onChangeCardNumber = (0, react_1.useCallback)((newValue) => {
         // Replace all characters that are not spaces or digits
-        var validCardNumber = newValue.replace(/[^\d ]/g, '');
+        let validCardNumber = newValue.replace(/[^\d ]/g, '');
         // Gets only the first 16 digits if the inputted number have more digits than that
-        validCardNumber = (_b = (_a = validCardNumber.match(/(?:\d *){1,16}/)) === null || _a === void 0 ? void 0 : _a[0]) !== null && _b !== void 0 ? _b : '';
+        validCardNumber = validCardNumber.match(/(?:\d *){1,16}/)?.[0] ?? '';
         // Remove all spaces to simplify formatting
-        var cleanedNumber = validCardNumber.replace(/ /g, '');
+        const cleanedNumber = validCardNumber.replace(/ /g, '');
         // Check if the number is a potential Amex card (starts with 34 or 37 and has up to 15 digits)
-        var isAmex = /^3[47]\d{0,13}$/.test(cleanedNumber);
+        const isAmex = /^3[47]\d{0,13}$/.test(cleanedNumber);
         // Format based on Amex or standard 4-4-4-4 pattern
         if (isAmex) {
             // Format as 4-6-5 for Amex
-            validCardNumber = cleanedNumber.replace(/(\d{1,4})(\d{1,6})?(\d{1,5})?/, function (match, p1, p2, p3) { return [p1, p2, p3].filter(Boolean).join(' '); });
+            validCardNumber = cleanedNumber.replace(/(\d{1,4})(\d{1,6})?(\d{1,5})?/, (match, p1, p2, p3) => [p1, p2, p3].filter(Boolean).join(' '));
         }
         else {
             // Format as 4-4-4-4 for non-Amex
-            validCardNumber = (_d = (_c = cleanedNumber.match(/.{1,4}/g)) === null || _c === void 0 ? void 0 : _c.join(' ')) !== null && _d !== void 0 ? _d : '';
+            validCardNumber = cleanedNumber.match(/.{1,4}/g)?.join(' ') ?? '';
         }
         setCardNumber(validCardNumber);
     }, []);
@@ -197,30 +191,30 @@ function PaymentCardForm(_a) {
     return (<>
             {headerContent}
             <FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM} validate={validate} onSubmit={addPaymentCard} submitButtonText={submitButtonText} scrollContextEnabled style={[styles.mh5, styles.flexGrow1]} forwardedFSClass={CONST_1.default.FULLSTORY.CLASS.MASK}>
-                <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.CARD_NUMBER} defaultValue={data === null || data === void 0 ? void 0 : data.cardNumber} label={translate(label.defaults.cardNumber)} aria-label={translate(label.defaults.cardNumber)} role={CONST_1.default.ROLE.PRESENTATION} ref={cardNumberRef} inputMode={CONST_1.default.INPUT_MODE.NUMERIC} onChangeText={onChangeCardNumber} value={cardNumber}/>
-                <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.NAME_ON_CARD} defaultValue={data === null || data === void 0 ? void 0 : data.nameOnCard} label={translate(label.defaults.nameOnCard)} aria-label={translate(label.defaults.nameOnCard)} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mt5]} spellCheck={false}/>
+                <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.CARD_NUMBER} defaultValue={data?.cardNumber} label={translate(label.defaults.cardNumber)} aria-label={translate(label.defaults.cardNumber)} role={CONST_1.default.ROLE.PRESENTATION} ref={cardNumberRef} inputMode={CONST_1.default.INPUT_MODE.NUMERIC} onChangeText={onChangeCardNumber} value={cardNumber}/>
+                <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.NAME_ON_CARD} defaultValue={data?.nameOnCard} label={translate(label.defaults.nameOnCard)} aria-label={translate(label.defaults.nameOnCard)} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mt5]} spellCheck={false}/>
                 <react_native_1.View style={[styles.flexRow, styles.mt5]}>
                     <react_native_1.View style={[styles.mr2, styles.flex1]}>
-                        <InputWrapper_1.default defaultValue={data === null || data === void 0 ? void 0 : data.expirationDate} value={expirationDate} onChangeText={onChangeExpirationDate} InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.EXPIRATION_DATE} label={translate(label.defaults.expiration)} testID={label.defaults.expiration} aria-label={translate(label.defaults.expiration)} role={CONST_1.default.ROLE.PRESENTATION} placeholder={translate(label.defaults.expirationDate)} inputMode={CONST_1.default.INPUT_MODE.NUMERIC} maxLength={5}/>
+                        <InputWrapper_1.default defaultValue={data?.expirationDate} value={expirationDate} onChangeText={onChangeExpirationDate} InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.EXPIRATION_DATE} label={translate(label.defaults.expiration)} testID={label.defaults.expiration} aria-label={translate(label.defaults.expiration)} role={CONST_1.default.ROLE.PRESENTATION} placeholder={translate(label.defaults.expirationDate)} inputMode={CONST_1.default.INPUT_MODE.NUMERIC} maxLength={5}/>
                     </react_native_1.View>
                     <react_native_1.View style={styles.flex1}>
-                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.SECURITY_CODE} defaultValue={data === null || data === void 0 ? void 0 : data.securityCode} label={translate(label.defaults.securityCode)} aria-label={translate(label.defaults.securityCode)} role={CONST_1.default.ROLE.PRESENTATION} maxLength={4} inputMode={CONST_1.default.INPUT_MODE.NUMERIC}/>
+                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddPaymentCardForm_1.default.SECURITY_CODE} defaultValue={data?.securityCode} label={translate(label.defaults.securityCode)} aria-label={translate(label.defaults.securityCode)} role={CONST_1.default.ROLE.PRESENTATION} maxLength={4} inputMode={CONST_1.default.INPUT_MODE.NUMERIC}/>
                     </react_native_1.View>
                 </react_native_1.View>
                 {!!showAddressField && (<react_native_1.View>
-                        <InputWrapper_1.default defaultValue={data === null || data === void 0 ? void 0 : data.addressStreet} InputComponent={AddressSearch_1.default} inputID={AddPaymentCardForm_1.default.ADDRESS_STREET} label={translate(label.defaults.billingAddress)} containerStyles={[styles.mt5]} maxInputLength={CONST_1.default.FORM_CHARACTER_LIMIT} 
+                        <InputWrapper_1.default defaultValue={data?.addressStreet} InputComponent={AddressSearch_1.default} inputID={AddPaymentCardForm_1.default.ADDRESS_STREET} label={translate(label.defaults.billingAddress)} containerStyles={[styles.mt5]} maxInputLength={CONST_1.default.FORM_CHARACTER_LIMIT} 
         // Limit the address search only to the USA until we fully can support international debit cards
         limitSearchesToCountry={CONST_1.default.COUNTRY.US}/>
                     </react_native_1.View>)}
-                <InputWrapper_1.default InputComponent={TextInput_1.default} defaultValue={data === null || data === void 0 ? void 0 : data.addressZipCode} inputID={AddPaymentCardForm_1.default.ADDRESS_ZIP_CODE} label={translate('common.zipPostCode')} aria-label={translate('common.zipPostCode')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mt5]}/>
+                <InputWrapper_1.default InputComponent={TextInput_1.default} defaultValue={data?.addressZipCode} inputID={AddPaymentCardForm_1.default.ADDRESS_ZIP_CODE} label={translate('common.zipPostCode')} aria-label={translate('common.zipPostCode')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mt5]}/>
                 {!!showStateSelector && (<react_native_1.View style={[styles.mt4, styles.mhn5]}>
                         <InputWrapper_1.default stateSelectorRoute={route.name === SCREENS_1.default.IOU_SEND.ADD_DEBIT_CARD ? ROUTES_1.default.MONEY_REQUEST_STATE_SELECTOR : undefined} InputComponent={StateSelector_1.default} inputID={AddPaymentCardForm_1.default.ADDRESS_STATE}/>
                     </react_native_1.View>)}
                 {!!showCurrencyField && (<react_native_1.View style={[styles.mt4, styles.mhn5]}>
-                        <InputWrapper_1.default currencySelectorRoute={currencySelectorRoute} value={(_b = data === null || data === void 0 ? void 0 : data.currency) !== null && _b !== void 0 ? _b : CONST_1.default.PAYMENT_CARD_CURRENCY.USD} InputComponent={CurrencySelector_1.default} inputID={AddPaymentCardForm_1.default.CURRENCY}/>
+                        <InputWrapper_1.default currencySelectorRoute={currencySelectorRoute} value={data?.currency ?? CONST_1.default.PAYMENT_CARD_CURRENCY.USD} InputComponent={CurrencySelector_1.default} inputID={AddPaymentCardForm_1.default.CURRENCY}/>
                     </react_native_1.View>)}
                 {!!showAcceptTerms && (<react_native_1.View style={[styles.mt4, styles.ml1]}>
-                        <InputWrapper_1.default InputComponent={CheckboxWithLabel_1.default} accessibilityLabel={"".concat(translate('common.iAcceptThe'), " ").concat(translate('common.addCardTermsOfService'), " ").concat(translate('common.and'), " ").concat(translate('common.privacyPolicy'))} inputID={AddPaymentCardForm_1.default.ACCEPT_TERMS} defaultValue={!!(data === null || data === void 0 ? void 0 : data.acceptTerms)} LabelComponent={IAcceptTheLabel}/>
+                        <InputWrapper_1.default InputComponent={CheckboxWithLabel_1.default} accessibilityLabel={`${translate('common.iAcceptThe')} ${translate('common.addCardTermsOfService')} ${translate('common.and')} ${translate('common.privacyPolicy')}`} inputID={AddPaymentCardForm_1.default.ACCEPT_TERMS} defaultValue={!!data?.acceptTerms} LabelComponent={IAcceptTheLabel}/>
                     </react_native_1.View>)}
                 {footerContent}
             </FormProvider_1.default>

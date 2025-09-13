@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var cameraRollMock = {
+const cameraRollMock = {
     CameraRoll: {
         save: jest.fn(),
     },

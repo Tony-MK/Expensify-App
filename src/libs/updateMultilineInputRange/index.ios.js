@@ -9,8 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * scroll behaviour works on all platforms except iOS native.
  * See https://github.com/Expensify/App/issues/20836 for more details.
  */
-var updateMultilineInputRange = function (input, shouldAutoFocus) {
-    if (shouldAutoFocus === void 0) { shouldAutoFocus = true; }
+const updateMultilineInputRange = (input, shouldAutoFocus = true) => {
     if (!input) {
         return;
     }

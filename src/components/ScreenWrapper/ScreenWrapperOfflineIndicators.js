@@ -1,23 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var ImportedStateIndicator_1 = require("@components/ImportedStateIndicator");
-var OfflineIndicator_1 = require("@components/OfflineIndicator");
-var useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-function ScreenWrapperOfflineIndicators(_a) {
-    var offlineIndicatorStyle = _a.offlineIndicatorStyle, _b = _a.shouldShowOfflineIndicator, shouldShowSmallScreenOfflineIndicator = _b === void 0 ? true : _b, _c = _a.shouldShowOfflineIndicatorInWideScreen, shouldShowWideScreenOfflineIndicator = _c === void 0 ? false : _c, _d = _a.shouldMobileOfflineIndicatorStickToBottom, shouldSmallScreenOfflineIndicatorStickToBottom = _d === void 0 ? true : _d, _e = _a.isOfflineIndicatorTranslucent, isOfflineIndicatorTranslucent = _e === void 0 ? false : _e, extraContent = _a.extraContent, _f = _a.addBottomSafeAreaPadding, addBottomSafeAreaPadding = _f === void 0 ? true : _f, _g = _a.addWideScreenBottomSafeAreaPadding, addWideScreenBottomSafeAreaPadding = _g === void 0 ? !!extraContent : _g;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var insets = (0, useSafeAreaPaddings_1.default)(true).insets;
-    var navigationBarType = (0, react_1.useMemo)(function () { return StyleUtils.getNavigationBarType(insets); }, [StyleUtils, insets]);
-    var isSoftKeyNavigation = navigationBarType === CONST_1.default.NAVIGATION_BAR_TYPE.SOFT_KEYS;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const ImportedStateIndicator_1 = require("@components/ImportedStateIndicator");
+const OfflineIndicator_1 = require("@components/OfflineIndicator");
+const useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+function ScreenWrapperOfflineIndicators({ offlineIndicatorStyle, shouldShowOfflineIndicator: shouldShowSmallScreenOfflineIndicator = true, shouldShowOfflineIndicatorInWideScreen: shouldShowWideScreenOfflineIndicator = false, shouldMobileOfflineIndicatorStickToBottom: shouldSmallScreenOfflineIndicatorStickToBottom = true, isOfflineIndicatorTranslucent = false, extraContent, addBottomSafeAreaPadding = true, addWideScreenBottomSafeAreaPadding = !!extraContent, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const { insets } = (0, useSafeAreaPaddings_1.default)(true);
+    const navigationBarType = (0, react_1.useMemo)(() => StyleUtils.getNavigationBarType(insets), [StyleUtils, insets]);
+    const isSoftKeyNavigation = navigationBarType === CONST_1.default.NAVIGATION_BAR_TYPE.SOFT_KEYS;
     /**
      * This style applies the background color of the small screen offline indicator.
      * When there is not bottom content, and the device either has soft keys or is offline,
@@ -25,8 +24,8 @@ function ScreenWrapperOfflineIndicators(_a) {
      * By default, the background color of the small screen offline indicator is translucent.
      * If `isOfflineIndicatorTranslucent` is set to true, an opaque background color is applied.
      */
-    var smallScreenOfflineIndicatorBackgroundStyle = (0, react_1.useMemo)(function () {
-        var showOfflineIndicatorBackground = !extraContent && (isSoftKeyNavigation || isOffline);
+    const smallScreenOfflineIndicatorBackgroundStyle = (0, react_1.useMemo)(() => {
+        const showOfflineIndicatorBackground = !extraContent && (isSoftKeyNavigation || isOffline);
         if (!showOfflineIndicatorBackground) {
             return undefined;
         }
@@ -40,8 +39,8 @@ function ScreenWrapperOfflineIndicators(_a) {
      * two overlapping layers of translucent background.
      * If the device does not have soft keys, the bottom safe area padding is applied as `paddingBottom`.
      */
-    var smallScreenOfflineIndicatorBottomSafeAreaStyle = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({
-        addBottomSafeAreaPadding: addBottomSafeAreaPadding,
+    const smallScreenOfflineIndicatorBottomSafeAreaStyle = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({
+        addBottomSafeAreaPadding,
         addOfflineIndicatorBottomSafeAreaPadding: false,
         styleProperty: isSoftKeyNavigation ? 'bottom' : 'paddingBottom',
     });
@@ -50,11 +49,11 @@ function ScreenWrapperOfflineIndicators(_a) {
      * It always applies the bottom safe area padding as well as the background style, if the device has soft keys.
      * In this case, we want the whole container (including the bottom safe area padding) to have translucent/opaque background.
      */
-    var smallScreenOfflineIndicatorContainerStyle = (0, react_1.useMemo)(function () { return [
+    const smallScreenOfflineIndicatorContainerStyle = (0, react_1.useMemo)(() => [
         smallScreenOfflineIndicatorBottomSafeAreaStyle,
         shouldSmallScreenOfflineIndicatorStickToBottom && styles.stickToBottom,
         !isSoftKeyNavigation && smallScreenOfflineIndicatorBackgroundStyle,
-    ]; }, [
+    ], [
         smallScreenOfflineIndicatorBottomSafeAreaStyle,
         shouldSmallScreenOfflineIndicatorStickToBottom,
         styles.stickToBottom,
@@ -66,7 +65,7 @@ function ScreenWrapperOfflineIndicators(_a) {
      * If the device has soft keys, we only want to apply the background style to the small screen offline indicator component,
      * rather than the whole container, because otherwise the navigation bar would be extra opaque, since it already has a translucent background.
      */
-    var smallScreenOfflineIndicatorStyle = (0, react_1.useMemo)(function () { return [styles.pl5, isSoftKeyNavigation && smallScreenOfflineIndicatorBackgroundStyle, offlineIndicatorStyle]; }, [isSoftKeyNavigation, smallScreenOfflineIndicatorBackgroundStyle, offlineIndicatorStyle, styles.pl5]);
+    const smallScreenOfflineIndicatorStyle = (0, react_1.useMemo)(() => [styles.pl5, isSoftKeyNavigation && smallScreenOfflineIndicatorBackgroundStyle, offlineIndicatorStyle], [isSoftKeyNavigation, smallScreenOfflineIndicatorBackgroundStyle, offlineIndicatorStyle, styles.pl5]);
     return (<>
             {shouldShowSmallScreenOfflineIndicator && (<>
                     {isOffline && (<react_native_1.View style={[smallScreenOfflineIndicatorContainerStyle]}>

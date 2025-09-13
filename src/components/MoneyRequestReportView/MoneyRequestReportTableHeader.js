@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var SearchTableHeader_1 = require("@components/SelectionList/SearchTableHeader");
-var SortableTableHeader_1 = require("@components/SelectionList/SortableTableHeader");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var columnConfig = [
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const SearchTableHeader_1 = require("@components/SelectionList/SearchTableHeader");
+const SortableTableHeader_1 = require("@components/SelectionList/SortableTableHeader");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const columnConfig = [
     {
         columnName: CONST_1.default.SEARCH.TABLE_COLUMNS.RECEIPT,
         translationKey: 'common.receipt',
@@ -52,16 +52,15 @@ var columnConfig = [
         translationKey: 'iou.amount',
     },
 ];
-var expenseHeaders = (0, SearchTableHeader_1.getExpenseHeaders)();
-function MoneyRequestReportTableHeader(_a) {
-    var sortBy = _a.sortBy, sortOrder = _a.sortOrder, onSortPress = _a.onSortPress, dateColumnSize = _a.dateColumnSize, shouldShowSorting = _a.shouldShowSorting, columns = _a.columns, amountColumnSize = _a.amountColumnSize, taxAmountColumnSize = _a.taxAmountColumnSize;
-    var styles = (0, useThemeStyles_1.default)();
-    var shouldShowColumn = (0, react_1.useCallback)(function (columnName) {
+const expenseHeaders = (0, SearchTableHeader_1.getExpenseHeaders)();
+function MoneyRequestReportTableHeader({ sortBy, sortOrder, onSortPress, dateColumnSize, shouldShowSorting, columns, amountColumnSize, taxAmountColumnSize }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const shouldShowColumn = (0, react_1.useCallback)((columnName) => {
         return columns.includes(columnName);
     }, [columns]);
-    var areAllOptionalColumnsHidden = (0, react_1.useMemo)(function () {
-        var canBeMissingColumns = expenseHeaders.filter(function (header) { return header.canBeMissing; }).map(function (header) { return header.columnName; });
-        return canBeMissingColumns.every(function (column) { return !columns.includes(column); });
+    const areAllOptionalColumnsHidden = (0, react_1.useMemo)(() => {
+        const canBeMissingColumns = expenseHeaders.filter((header) => header.canBeMissing).map((header) => header.columnName);
+        return canBeMissingColumns.every((column) => !columns.includes(column));
     }, [columns]);
     return (<react_native_1.View style={[styles.dFlex, styles.flex5]}>
             <SortableTableHeader_1.default columns={columnConfig} shouldShowColumn={shouldShowColumn} areAllOptionalColumnsHidden={areAllOptionalColumnsHidden} dateColumnSize={dateColumnSize} amountColumnSize={amountColumnSize} taxAmountColumnSize={taxAmountColumnSize} shouldShowSorting={shouldShowSorting} sortBy={sortBy} sortOrder={sortOrder} onSortPress={onSortPress}/>

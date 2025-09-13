@@ -1,38 +1,14 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Browser_1 = require("@libs/Browser");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Browser_1 = require("@libs/Browser");
 // Changing the scroll position during a momentum scroll does not work on mobile Safari.
 // We do a best effort to avoid content jumping by using some hacks on mobile Safari only.
-var IS_MOBILE_SAFARI = (0, Browser_1.isMobileSafari)();
-function mergeRefs() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
+const IS_MOBILE_SAFARI = (0, Browser_1.isMobileSafari)();
+function mergeRefs(...args) {
     return function forwardRef(node) {
-        args.forEach(function (ref) {
+        args.forEach((ref) => {
             if (ref == null) {
                 return;
             }
@@ -45,71 +21,67 @@ function mergeRefs() {
                 ref.current = node;
                 return;
             }
-            console.error("mergeRefs cannot handle Refs of type boolean, number or string, received ref ".concat(String(ref)));
+            console.error(`mergeRefs cannot handle Refs of type boolean, number or string, received ref ${String(ref)}`);
         });
     };
 }
-function useMergeRefs() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return (0, react_1.useMemo)(function () { return mergeRefs.apply(void 0, args); }, __spreadArray([], args, true));
+function useMergeRefs(...args) {
+    return (0, react_1.useMemo)(() => mergeRefs(...args), 
+    // eslint-disable-next-line
+    [...args]);
 }
 function getScrollableNode(flatList) {
-    return flatList === null || flatList === void 0 ? void 0 : flatList.getScrollableNode();
+    return flatList?.getScrollableNode();
 }
-function MVCPFlatList(_a, ref) {
-    var maintainVisibleContentPosition = _a.maintainVisibleContentPosition, _b = _a.horizontal, horizontal = _b === void 0 ? false : _b, onScroll = _a.onScroll, props = __rest(_a, ["maintainVisibleContentPosition", "horizontal", "onScroll"]);
-    var _c = maintainVisibleContentPosition !== null && maintainVisibleContentPosition !== void 0 ? maintainVisibleContentPosition : {}, mvcpMinIndexForVisible = _c.minIndexForVisible, mvcpAutoscrollToTopThreshold = _c.autoscrollToTopThreshold;
-    var scrollRef = (0, react_1.useRef)(null);
-    var prevFirstVisibleOffsetRef = (0, react_1.useRef)(0);
-    var firstVisibleViewRef = (0, react_1.useRef)(null);
-    var mutationObserverRef = (0, react_1.useRef)(null);
-    var lastScrollOffsetRef = (0, react_1.useRef)(0);
-    var isListRenderedRef = (0, react_1.useRef)(false);
-    var mvcpAutoscrollToTopThresholdRef = (0, react_1.useRef)(mvcpAutoscrollToTopThreshold);
+function MVCPFlatList({ maintainVisibleContentPosition, horizontal = false, onScroll, ...props }, ref) {
+    const { minIndexForVisible: mvcpMinIndexForVisible, autoscrollToTopThreshold: mvcpAutoscrollToTopThreshold } = maintainVisibleContentPosition ?? {};
+    const scrollRef = (0, react_1.useRef)(null);
+    const prevFirstVisibleOffsetRef = (0, react_1.useRef)(0);
+    const firstVisibleViewRef = (0, react_1.useRef)(null);
+    const mutationObserverRef = (0, react_1.useRef)(null);
+    const lastScrollOffsetRef = (0, react_1.useRef)(0);
+    const isListRenderedRef = (0, react_1.useRef)(false);
+    const mvcpAutoscrollToTopThresholdRef = (0, react_1.useRef)(mvcpAutoscrollToTopThreshold);
     // eslint-disable-next-line react-compiler/react-compiler
     mvcpAutoscrollToTopThresholdRef.current = mvcpAutoscrollToTopThreshold;
-    var getScrollOffset = (0, react_1.useCallback)(function () {
-        var _a, _b, _c, _d;
+    const getScrollOffset = (0, react_1.useCallback)(() => {
         if (!scrollRef.current) {
             return 0;
         }
-        return horizontal ? ((_b = (_a = getScrollableNode(scrollRef.current)) === null || _a === void 0 ? void 0 : _a.scrollLeft) !== null && _b !== void 0 ? _b : 0) : ((_d = (_c = getScrollableNode(scrollRef.current)) === null || _c === void 0 ? void 0 : _c.scrollTop) !== null && _d !== void 0 ? _d : 0);
+        return horizontal ? (getScrollableNode(scrollRef.current)?.scrollLeft ?? 0) : (getScrollableNode(scrollRef.current)?.scrollTop ?? 0);
     }, [horizontal]);
-    var getContentView = (0, react_1.useCallback)(function () { var _a; return (_a = getScrollableNode(scrollRef.current)) === null || _a === void 0 ? void 0 : _a.childNodes[0]; }, []);
-    var scrollToOffset = (0, react_1.useCallback)(function (offset, animated, interrupt) {
-        var behavior = animated ? 'smooth' : 'instant';
-        var node = getScrollableNode(scrollRef.current);
+    const getContentView = (0, react_1.useCallback)(() => getScrollableNode(scrollRef.current)?.childNodes[0], []);
+    const scrollToOffset = (0, react_1.useCallback)((offset, animated, interrupt) => {
+        const behavior = animated ? 'smooth' : 'instant';
+        const node = getScrollableNode(scrollRef.current);
         if (node == null) {
             return;
         }
-        var overflowProp = horizontal ? 'overflowX' : 'overflowY';
+        const overflowProp = horizontal ? 'overflowX' : 'overflowY';
         // Stop momentum scrolling on mobile Safari otherwise the scroll position update
         // will not work.
         if (IS_MOBILE_SAFARI && interrupt) {
             node.style[overflowProp] = 'hidden';
         }
-        node.scroll(horizontal ? { left: offset, behavior: behavior } : { top: offset, behavior: behavior });
+        node.scroll(horizontal ? { left: offset, behavior } : { top: offset, behavior });
         if (IS_MOBILE_SAFARI && interrupt) {
             node.style[overflowProp] = 'scroll';
         }
     }, [horizontal]);
-    var prepareForMaintainVisibleContentPosition = (0, react_1.useCallback)(function () {
+    const prepareForMaintainVisibleContentPosition = (0, react_1.useCallback)(() => {
         if (mvcpMinIndexForVisible == null) {
             return;
         }
-        var contentView = getContentView();
+        const contentView = getContentView();
         if (contentView == null) {
             return;
         }
-        var scrollOffset = getScrollOffset();
+        const scrollOffset = getScrollOffset();
         lastScrollOffsetRef.current = scrollOffset;
-        var contentViewLength = contentView.childNodes.length;
-        for (var i = mvcpMinIndexForVisible; i < contentViewLength; i++) {
-            var subview = contentView.childNodes[i];
-            var subviewOffset = horizontal ? subview.offsetLeft : subview.offsetTop;
+        const contentViewLength = contentView.childNodes.length;
+        for (let i = mvcpMinIndexForVisible; i < contentViewLength; i++) {
+            const subview = contentView.childNodes[i];
+            const subviewOffset = horizontal ? subview.offsetLeft : subview.offsetTop;
             if (subviewOffset > scrollOffset) {
                 prevFirstVisibleOffsetRef.current = subviewOffset;
                 firstVisibleViewRef.current = subview;
@@ -117,20 +89,19 @@ function MVCPFlatList(_a, ref) {
             }
         }
     }, [getContentView, getScrollOffset, mvcpMinIndexForVisible, horizontal]);
-    var adjustForMaintainVisibleContentPosition = (0, react_1.useCallback)(function (animated) {
-        if (animated === void 0) { animated = true; }
+    const adjustForMaintainVisibleContentPosition = (0, react_1.useCallback)((animated = true) => {
         if (mvcpMinIndexForVisible == null) {
             return;
         }
-        var firstVisibleView = firstVisibleViewRef.current;
-        var prevFirstVisibleOffset = prevFirstVisibleOffsetRef.current;
+        const firstVisibleView = firstVisibleViewRef.current;
+        const prevFirstVisibleOffset = prevFirstVisibleOffsetRef.current;
         if (firstVisibleView == null || !firstVisibleView.isConnected || prevFirstVisibleOffset == null) {
             return;
         }
-        var firstVisibleViewOffset = horizontal ? firstVisibleView.offsetLeft : firstVisibleView.offsetTop;
-        var delta = firstVisibleViewOffset - prevFirstVisibleOffset;
+        const firstVisibleViewOffset = horizontal ? firstVisibleView.offsetLeft : firstVisibleView.offsetTop;
+        const delta = firstVisibleViewOffset - prevFirstVisibleOffset;
         if (Math.abs(delta) > (IS_MOBILE_SAFARI ? 100 : 0.5)) {
-            var scrollOffset = lastScrollOffsetRef.current;
+            const scrollOffset = lastScrollOffsetRef.current;
             prevFirstVisibleOffsetRef.current = firstVisibleViewOffset;
             scrollToOffset(scrollOffset + delta, false, true);
             if (mvcpAutoscrollToTopThresholdRef.current != null && scrollOffset <= mvcpAutoscrollToTopThresholdRef.current) {
@@ -138,26 +109,24 @@ function MVCPFlatList(_a, ref) {
             }
         }
     }, [scrollToOffset, mvcpMinIndexForVisible, horizontal]);
-    var setupMutationObserver = (0, react_1.useCallback)(function () {
-        var _a;
-        var contentView = getContentView();
+    const setupMutationObserver = (0, react_1.useCallback)(() => {
+        const contentView = getContentView();
         if (contentView == null) {
             return;
         }
-        (_a = mutationObserverRef.current) === null || _a === void 0 ? void 0 : _a.disconnect();
-        var mutationObserver = new MutationObserver(function (mutations) {
-            var _a;
-            var isEditComposerAdded = false;
+        mutationObserverRef.current?.disconnect();
+        const mutationObserver = new MutationObserver((mutations) => {
+            let isEditComposerAdded = false;
             // Check if the first visible view is removed and re-calculate it
             // if needed.
-            mutations.forEach(function (mutation) {
-                mutation.removedNodes.forEach(function (node) {
+            mutations.forEach((mutation) => {
+                mutation.removedNodes.forEach((node) => {
                     if (node !== firstVisibleViewRef.current) {
                         return;
                     }
                     firstVisibleViewRef.current = null;
                 });
-                mutation.addedNodes.forEach(function (node) {
+                mutation.addedNodes.forEach((node) => {
                     if (node.nodeType !== Node.ELEMENT_NODE || !node.querySelector('#composer')) {
                         return;
                     }
@@ -169,7 +138,7 @@ function MVCPFlatList(_a, ref) {
             }
             // When the list is hidden, the size will be 0.
             // Ignore the callback if the list is hidden because scrollOffset will always be 0.
-            if (!((_a = getScrollableNode(scrollRef.current)) === null || _a === void 0 ? void 0 : _a.clientHeight)) {
+            if (!getScrollableNode(scrollRef.current)?.clientHeight) {
                 return;
             }
             adjustForMaintainVisibleContentPosition(!isEditComposerAdded);
@@ -182,20 +151,20 @@ function MVCPFlatList(_a, ref) {
         });
         mutationObserverRef.current = mutationObserver;
     }, [adjustForMaintainVisibleContentPosition, prepareForMaintainVisibleContentPosition, getContentView]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isListRenderedRef.current) {
             return;
         }
-        var animationFrame = requestAnimationFrame(function () {
+        const animationFrame = requestAnimationFrame(() => {
             prepareForMaintainVisibleContentPosition();
             setupMutationObserver();
         });
-        return function () {
+        return () => {
             cancelAnimationFrame(animationFrame);
         };
     }, [prepareForMaintainVisibleContentPosition, setupMutationObserver]);
-    var setMergedRef = useMergeRefs(scrollRef, ref);
-    var onRef = (0, react_1.useCallback)(function (newRef) {
+    const setMergedRef = useMergeRefs(scrollRef, ref);
+    const onRef = (0, react_1.useCallback)((newRef) => {
         // Make sure to only call refs and re-attach listeners if the node changed.
         if (newRef == null || newRef === scrollRef.current) {
             return;
@@ -204,27 +173,26 @@ function MVCPFlatList(_a, ref) {
         prepareForMaintainVisibleContentPosition();
         setupMutationObserver();
     }, [prepareForMaintainVisibleContentPosition, setMergedRef, setupMutationObserver]);
-    (0, react_1.useEffect)(function () {
-        var mutationObserver = mutationObserverRef.current;
-        return function () {
-            mutationObserver === null || mutationObserver === void 0 ? void 0 : mutationObserver.disconnect();
+    (0, react_1.useEffect)(() => {
+        const mutationObserver = mutationObserverRef.current;
+        return () => {
+            mutationObserver?.disconnect();
             mutationObserverRef.current = null;
         };
     }, []);
-    var onScrollInternal = (0, react_1.useCallback)(function (event) {
+    const onScrollInternal = (0, react_1.useCallback)((event) => {
         prepareForMaintainVisibleContentPosition();
-        onScroll === null || onScroll === void 0 ? void 0 : onScroll(event);
+        onScroll?.(event);
     }, [prepareForMaintainVisibleContentPosition, onScroll]);
     return (<react_native_1.FlatList 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props} maintainVisibleContentPosition={maintainVisibleContentPosition} horizontal={horizontal} onScroll={onScrollInternal} scrollEventThrottle={1} ref={onRef} onLayout={function (e) {
-            var _a;
+    {...props} maintainVisibleContentPosition={maintainVisibleContentPosition} horizontal={horizontal} onScroll={onScrollInternal} scrollEventThrottle={1} ref={onRef} onLayout={(e) => {
             isListRenderedRef.current = true;
             if (!mutationObserverRef.current) {
                 prepareForMaintainVisibleContentPosition();
                 setupMutationObserver();
             }
-            (_a = props.onLayout) === null || _a === void 0 ? void 0 : _a.call(props, e);
+            props.onLayout?.(e);
         }}/>);
 }
 MVCPFlatList.displayName = 'MVCPFlatList';

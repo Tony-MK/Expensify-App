@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
-var MigratedUserWelcomeModal_1 = require("@components/MigratedUserWelcomeModal");
-var createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
-var SCREENS_1 = require("@src/SCREENS");
-var Stack = (0, createPlatformStackNavigator_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
+const MigratedUserWelcomeModal_1 = require("@components/MigratedUserWelcomeModal");
+const createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
+const SCREENS_1 = require("@src/SCREENS");
+const Stack = (0, createPlatformStackNavigator_1.default)();
 function MigratedUserWelcomeModalNavigator() {
     return (<NoDropZone_1.default>
             <react_native_1.View>

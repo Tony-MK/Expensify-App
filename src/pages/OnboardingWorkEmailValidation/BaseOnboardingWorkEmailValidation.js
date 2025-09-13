@@ -1,48 +1,47 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var OnboardingMergingAccountBlockedView_1 = require("@components/OnboardingMergingAccountBlockedView");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var ValidateCodeForm_1 = require("@components/ValidateCodeActionModal/ValidateCodeForm");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var AccountUtils_1 = require("@libs/AccountUtils");
-var Link_1 = require("@libs/actions/Link");
-var Welcome_1 = require("@libs/actions/Welcome");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Session_1 = require("@userActions/Session");
-var User_1 = require("@userActions/User");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-function BaseOnboardingWorkEmailValidation(_a) {
-    var shouldUseNativeStyles = _a.shouldUseNativeStyles;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true })[0];
-    var credentials = (0, useOnyx_1.default)(ONYXKEYS_1.default.CREDENTIALS, { canBeMissing: true })[0];
-    var onboardingEmail = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORK_EMAIL_FORM, { canBeMissing: true })[0];
-    var workEmail = onboardingEmail === null || onboardingEmail === void 0 ? void 0 : onboardingEmail.onboardingWorkEmail;
-    var onboardingIsMediumOrLargerScreenWidth = (0, useResponsiveLayout_1.default)().onboardingIsMediumOrLargerScreenWidth;
-    var onboardingValues = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true })[0];
-    var isVsb = onboardingValues && 'signupQualifier' in onboardingValues && onboardingValues.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
-    var isSmb = (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.signupQualifier) === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
-    var onboardingErrorMessage = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ERROR_MESSAGE, { canBeMissing: true })[0];
-    var isValidateCodeFormSubmitting = AccountUtils_1.default.isValidateCodeFormSubmitting(account);
-    var isFocused = (0, native_1.useIsFocused)();
-    (0, react_1.useEffect)(function () {
-        if ((onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergeAccountStepCompleted) === undefined) {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const OnboardingMergingAccountBlockedView_1 = require("@components/OnboardingMergingAccountBlockedView");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const ValidateCodeForm_1 = require("@components/ValidateCodeActionModal/ValidateCodeForm");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const AccountUtils_1 = require("@libs/AccountUtils");
+const Link_1 = require("@libs/actions/Link");
+const Welcome_1 = require("@libs/actions/Welcome");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Session_1 = require("@userActions/Session");
+const User_1 = require("@userActions/User");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+function BaseOnboardingWorkEmailValidation({ shouldUseNativeStyles }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true });
+    const [credentials] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CREDENTIALS, { canBeMissing: true });
+    const [onboardingEmail] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORK_EMAIL_FORM, { canBeMissing: true });
+    const workEmail = onboardingEmail?.onboardingWorkEmail;
+    const { onboardingIsMediumOrLargerScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const [onboardingValues] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true });
+    const isVsb = onboardingValues && 'signupQualifier' in onboardingValues && onboardingValues.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
+    const isSmb = onboardingValues?.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
+    const [onboardingErrorMessage] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ERROR_MESSAGE, { canBeMissing: true });
+    const isValidateCodeFormSubmitting = AccountUtils_1.default.isValidateCodeFormSubmitting(account);
+    const isFocused = (0, native_1.useIsFocused)();
+    (0, react_1.useEffect)(() => {
+        if (onboardingValues?.isMergeAccountStepCompleted === undefined) {
             return;
         }
         (0, Welcome_1.setOnboardingErrorMessage)('');
-        if (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.shouldRedirectToClassicAfterMerge) {
+        if (onboardingValues?.shouldRedirectToClassicAfterMerge) {
             (0, Link_1.openOldDotLink)(CONST_1.default.OLDDOT_URLS.INBOX, true);
             return;
         }
@@ -56,32 +55,32 @@ function BaseOnboardingWorkEmailValidation(_a) {
             Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_EMPLOYEES.getRoute(), { forceReplace: true });
             return;
         }
-        if (!(onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergeAccountStepSkipped)) {
+        if (!onboardingValues?.isMergeAccountStepSkipped) {
             Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_WORKSPACES.getRoute(), { forceReplace: true });
             return;
         }
         Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_PURPOSE.getRoute(), { forceReplace: true });
     }, [onboardingValues, isVsb, isSmb, isFocused]);
-    var sendValidateCode = (0, react_1.useCallback)(function () {
-        if (!(credentials === null || credentials === void 0 ? void 0 : credentials.login)) {
+    const sendValidateCode = (0, react_1.useCallback)(() => {
+        if (!credentials?.login) {
             return;
         }
         (0, User_1.resendValidateCode)(credentials.login);
-    }, [credentials === null || credentials === void 0 ? void 0 : credentials.login]);
-    var validateAccountAndMerge = (0, react_1.useCallback)(function (validateCode) {
+    }, [credentials?.login]);
+    const validateAccountAndMerge = (0, react_1.useCallback)((validateCode) => {
         (0, Welcome_1.setOnboardingErrorMessage)('');
-        (0, Session_1.MergeIntoAccountAndLogin)(workEmail, validateCode, session === null || session === void 0 ? void 0 : session.accountID);
-    }, [workEmail, session === null || session === void 0 ? void 0 : session.accountID]);
+        (0, Session_1.MergeIntoAccountAndLogin)(workEmail, validateCode, session?.accountID);
+    }, [workEmail, session?.accountID]);
     return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom testID="BaseOnboardingWorkEmailValidation" style={[styles.defaultModalContainer, shouldUseNativeStyles && styles.pt8]}>
-            <HeaderWithBackButton_1.default shouldShowBackButton={!(onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergingAccountBlocked)} progressBarPercentage={15} onBackButtonPress={function () {
+            <HeaderWithBackButton_1.default shouldShowBackButton={!onboardingValues?.isMergingAccountBlocked} progressBarPercentage={15} onBackButtonPress={() => {
             (0, Welcome_1.updateOnboardingValuesAndNavigation)(onboardingValues);
         }}/>
-            {(onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.isMergingAccountBlocked) ? (<react_native_1.View style={[styles.flex1, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5]}>
+            {onboardingValues?.isMergingAccountBlocked ? (<react_native_1.View style={[styles.flex1, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5]}>
                     <OnboardingMergingAccountBlockedView_1.default workEmail={workEmail} isVsb={isVsb}/>
                 </react_native_1.View>) : (<react_native_1.View style={[styles.flex1, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5]}>
                     <Text_1.default style={styles.textHeadlineH1}>{translate('onboarding.workEmailValidation.title')}</Text_1.default>
-                    <Text_1.default style={[styles.textNormal, styles.colorMuted, styles.textAlignLeft, styles.mt5]}>{translate('onboarding.workEmailValidation.magicCodeSent', { workEmail: workEmail })}</Text_1.default>
-                    <ValidateCodeForm_1.default handleSubmitForm={validateAccountAndMerge} sendValidateCode={sendValidateCode} validateCodeActionErrorField="mergeIntoAccountAndLogIn" clearError={function () { return (0, Welcome_1.setOnboardingErrorMessage)(''); }} buttonStyles={[styles.flex2, styles.justifyContentEnd, styles.mb5]} shouldShowSkipButton handleSkipButtonPress={function () {
+                    <Text_1.default style={[styles.textNormal, styles.colorMuted, styles.textAlignLeft, styles.mt5]}>{translate('onboarding.workEmailValidation.magicCodeSent', { workEmail })}</Text_1.default>
+                    <ValidateCodeForm_1.default handleSubmitForm={validateAccountAndMerge} sendValidateCode={sendValidateCode} validateCodeActionErrorField="mergeIntoAccountAndLogIn" clearError={() => (0, Welcome_1.setOnboardingErrorMessage)('')} buttonStyles={[styles.flex2, styles.justifyContentEnd, styles.mb5]} shouldShowSkipButton handleSkipButtonPress={() => {
                 (0, Welcome_1.setOnboardingErrorMessage)('');
                 (0, Welcome_1.setOnboardingMergeAccountStepValue)(true, true);
             }} isLoading={isValidateCodeFormSubmitting} validateError={onboardingErrorMessage ? { invalidCodeError: onboardingErrorMessage } : undefined}/>

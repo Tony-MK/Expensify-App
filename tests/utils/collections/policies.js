@@ -2,18 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createRandomPolicy;
 exports.createCategoryTaxExpenseRules = createCategoryTaxExpenseRules;
-var falso_1 = require("@ngneat/falso");
-var CONST_1 = require("@src/CONST");
+const falso_1 = require("@ngneat/falso");
+const CONST_1 = require("@src/CONST");
 function createRandomPolicy(index, type, name) {
     return {
         id: index.toString(),
-        name: name !== null && name !== void 0 ? name : (0, falso_1.randWord)(),
-        type: type !== null && type !== void 0 ? type : (0, falso_1.rand)(Object.values(CONST_1.default.POLICY.TYPE)),
+        name: name ?? (0, falso_1.randWord)(),
+        type: type ?? (0, falso_1.rand)(Object.values(CONST_1.default.POLICY.TYPE)),
         autoReporting: (0, falso_1.randBoolean)(),
         isPolicyExpenseChatEnabled: (0, falso_1.randBoolean)(),
-        autoReportingFrequency: (0, falso_1.rand)(Object.values(CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES).filter(function (frequency) {
-            return frequency !== CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.MANUAL;
-        })),
+        autoReportingFrequency: (0, falso_1.rand)(Object.values(CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES).filter((frequency) => frequency !== CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.MANUAL)),
         harvesting: {
             enabled: (0, falso_1.randBoolean)(),
         },

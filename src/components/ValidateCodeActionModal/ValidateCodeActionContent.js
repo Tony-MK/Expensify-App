@@ -1,23 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ValidateCodeForm_1 = require("./ValidateCodeForm");
-function ValidateCodeActionContent(_a) {
-    var title = _a.title, descriptionPrimary = _a.descriptionPrimary, descriptionSecondary = _a.descriptionSecondary, onClose = _a.onClose, validateError = _a.validateError, validatePendingAction = _a.validatePendingAction, validateCodeActionErrorField = _a.validateCodeActionErrorField, handleSubmitForm = _a.handleSubmitForm, clearError = _a.clearError, sendValidateCode = _a.sendValidateCode, isLoading = _a.isLoading, _b = _a.threeDotsMenuItems, threeDotsMenuItems = _b === void 0 ? [] : _b, _c = _a.onThreeDotsButtonPress, onThreeDotsButtonPress = _c === void 0 ? function () { } : _c;
-    var themeStyles = (0, useThemeStyles_1.default)();
-    var validateCodeFormRef = (0, react_1.useRef)(null);
-    var validateCodeAction = (0, useOnyx_1.default)(ONYXKEYS_1.default.VALIDATE_ACTION_CODE, { canBeMissing: true })[0];
-    var firstRenderRef = (0, react_1.useRef)(true);
-    (0, react_1.useEffect)(function () {
-        if (!firstRenderRef.current || (validateCodeAction === null || validateCodeAction === void 0 ? void 0 : validateCodeAction.validateCodeSent)) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ValidateCodeForm_1 = require("./ValidateCodeForm");
+function ValidateCodeActionContent({ title, descriptionPrimary, descriptionSecondary, onClose, validateError, validatePendingAction, validateCodeActionErrorField, handleSubmitForm, clearError, sendValidateCode, isLoading, threeDotsMenuItems = [], onThreeDotsButtonPress = () => { }, }) {
+    const themeStyles = (0, useThemeStyles_1.default)();
+    const validateCodeFormRef = (0, react_1.useRef)(null);
+    const [validateCodeAction] = (0, useOnyx_1.default)(ONYXKEYS_1.default.VALIDATE_ACTION_CODE, { canBeMissing: true });
+    const firstRenderRef = (0, react_1.useRef)(true);
+    (0, react_1.useEffect)(() => {
+        if (!firstRenderRef.current || validateCodeAction?.validateCodeSent) {
             return;
         }
         firstRenderRef.current = false;
@@ -26,9 +25,9 @@ function ValidateCodeActionContent(_a) {
         // eslint-disable-next-line react-compiler/react-compiler
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sendValidateCode]);
-    var hide = (0, react_1.useCallback)(function () {
+    const hide = (0, react_1.useCallback)(() => {
         clearError();
-        onClose === null || onClose === void 0 ? void 0 : onClose();
+        onClose?.();
     }, [onClose, clearError]);
     return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom includePaddingTop shouldEnableMaxHeight testID={ValidateCodeActionContent.displayName} offlineIndicatorStyle={themeStyles.mtAuto}>
             <HeaderWithBackButton_1.default title={title} onBackButtonPress={hide} threeDotsMenuItems={threeDotsMenuItems} shouldShowThreeDotsButton={threeDotsMenuItems.length > 0} shouldOverlayDots onThreeDotsButtonPress={onThreeDotsButtonPress}/>

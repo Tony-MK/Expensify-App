@@ -7,8 +7,8 @@ exports.isActive = isActive;
 exports.clearActive = clearActive;
 exports.isEmojiPickerVisible = isEmojiPickerVisible;
 exports.resetEmojiPopoverAnchor = resetEmojiPopoverAnchor;
-var react_1 = require("react");
-var emojiPickerRef = react_1.default.createRef();
+const react_1 = require("react");
+const emojiPickerRef = react_1.default.createRef();
 exports.emojiPickerRef = emojiPickerRef;
 /**
  * Show the EmojiPicker modal popover.
@@ -20,8 +20,7 @@ exports.emojiPickerRef = emojiPickerRef;
  * @param onWillShow - Run a callback when Popover will show
  * @param id - Unique id for EmojiPicker
  */
-function showEmojiPicker(onModalHide, onEmojiSelected, emojiPopoverAnchor, anchorOrigin, onWillShow, id, activeEmoji, withoutOverlay) {
-    if (onWillShow === void 0) { onWillShow = function () { }; }
+function showEmojiPicker(onModalHide, onEmojiSelected, emojiPopoverAnchor, anchorOrigin, onWillShow = () => { }, id, activeEmoji, withoutOverlay) {
     if (!emojiPickerRef.current) {
         return;
     }

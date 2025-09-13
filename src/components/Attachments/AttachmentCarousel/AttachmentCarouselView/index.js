@@ -1,160 +1,146 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_gesture_handler_1 = require("react-native-gesture-handler");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var CarouselActions_1 = require("@components/Attachments/AttachmentCarousel/CarouselActions");
-var CarouselButtons_1 = require("@components/Attachments/AttachmentCarousel/CarouselButtons");
-var CarouselItem_1 = require("@components/Attachments/AttachmentCarousel/CarouselItem");
-var AttachmentCarouselPagerContext_1 = require("@components/Attachments/AttachmentCarousel/Pager/AttachmentCarouselPagerContext");
-var useCarouselContextEvents_1 = require("@components/Attachments/AttachmentCarousel/useCarouselContextEvents");
-var BlockingView_1 = require("@components/BlockingViews/BlockingView");
-var Illustrations = require("@components/Icon/Illustrations");
-var FullScreenContext_1 = require("@components/VideoPlayerContexts/FullScreenContext");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var viewabilityConfig = {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_gesture_handler_1 = require("react-native-gesture-handler");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const CarouselActions_1 = require("@components/Attachments/AttachmentCarousel/CarouselActions");
+const CarouselButtons_1 = require("@components/Attachments/AttachmentCarousel/CarouselButtons");
+const CarouselItem_1 = require("@components/Attachments/AttachmentCarousel/CarouselItem");
+const AttachmentCarouselPagerContext_1 = require("@components/Attachments/AttachmentCarousel/Pager/AttachmentCarouselPagerContext");
+const useCarouselContextEvents_1 = require("@components/Attachments/AttachmentCarousel/useCarouselContextEvents");
+const BlockingView_1 = require("@components/BlockingViews/BlockingView");
+const Illustrations = require("@components/Icon/Illustrations");
+const FullScreenContext_1 = require("@components/VideoPlayerContexts/FullScreenContext");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const viewabilityConfig = {
     // To facilitate paging through the attachments, we want to consider an item "viewable" when it is
     // more than 95% visible. When that happens we update the page index in the state.
     itemVisiblePercentThreshold: 95,
 };
-var MIN_FLING_VELOCITY = 500;
-function DeviceAwareGestureDetector(_a) {
-    var canUseTouchScreen = _a.canUseTouchScreen, gesture = _a.gesture, children = _a.children;
+const MIN_FLING_VELOCITY = 500;
+function DeviceAwareGestureDetector({ canUseTouchScreen, gesture, children }) {
     // Don't render GestureDetector on non-touchable devices to prevent unexpected pointer event capture.
     // This issue is left out on touchable devices since finger touch works fine.
     // See: https://github.com/Expensify/App/issues/51246
     return canUseTouchScreen ? <react_native_gesture_handler_1.GestureDetector gesture={gesture}>{children}</react_native_gesture_handler_1.GestureDetector> : children;
 }
-function AttachmentCarouselView(_a) {
-    var page = _a.page, attachments = _a.attachments, shouldShowArrows = _a.shouldShowArrows, source = _a.source, report = _a.report, autoHideArrows = _a.autoHideArrows, cancelAutoHideArrow = _a.cancelAutoHideArrow, setShouldShowArrows = _a.setShouldShowArrows, onAttachmentError = _a.onAttachmentError, onAttachmentLoaded = _a.onAttachmentLoaded, onNavigate = _a.onNavigate, onClose = _a.onClose, setPage = _a.setPage, attachmentID = _a.attachmentID;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var canUseTouchScreen = (0, DeviceCapabilities_1.canUseTouchScreen)();
-    var isFullScreenRef = (0, FullScreenContext_1.useFullScreenContext)().isFullScreenRef;
-    var isPagerScrolling = (0, react_native_reanimated_1.useSharedValue)(false);
-    var _b = (0, useCarouselContextEvents_1.default)(setShouldShowArrows), handleTap = _b.handleTap, handleScaleChange = _b.handleScaleChange, isScrollEnabled = _b.isScrollEnabled;
-    var _c = (0, react_1.useState)(attachmentID !== null && attachmentID !== void 0 ? attachmentID : source), activeAttachmentID = _c[0], setActiveAttachmentID = _c[1];
-    var pagerRef = (0, react_1.useRef)(null);
-    var scrollRef = (0, react_native_reanimated_1.useAnimatedRef)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var modalStyles = styles.centeredModalStyles(shouldUseNarrowLayout, true);
-    var windowWidth = (0, useWindowDimensions_1.default)().windowWidth;
-    var cellWidth = (0, react_1.useMemo)(function () { return react_native_1.PixelRatio.roundToNearestPixel(windowWidth - (modalStyles.marginHorizontal + modalStyles.borderWidth) * 2); }, [modalStyles.borderWidth, modalStyles.marginHorizontal, windowWidth]);
+function AttachmentCarouselView({ page, attachments, shouldShowArrows, source, report, autoHideArrows, cancelAutoHideArrow, setShouldShowArrows, onAttachmentError, onAttachmentLoaded, onNavigate, onClose, setPage, attachmentID, }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const canUseTouchScreen = (0, DeviceCapabilities_1.canUseTouchScreen)();
+    const { isFullScreenRef } = (0, FullScreenContext_1.useFullScreenContext)();
+    const isPagerScrolling = (0, react_native_reanimated_1.useSharedValue)(false);
+    const { handleTap, handleScaleChange, isScrollEnabled } = (0, useCarouselContextEvents_1.default)(setShouldShowArrows);
+    const [activeAttachmentID, setActiveAttachmentID] = (0, react_1.useState)(attachmentID ?? source);
+    const pagerRef = (0, react_1.useRef)(null);
+    const scrollRef = (0, react_native_reanimated_1.useAnimatedRef)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const modalStyles = styles.centeredModalStyles(shouldUseNarrowLayout, true);
+    const { windowWidth } = (0, useWindowDimensions_1.default)();
+    const cellWidth = (0, react_1.useMemo)(() => react_native_1.PixelRatio.roundToNearestPixel(windowWidth - (modalStyles.marginHorizontal + modalStyles.borderWidth) * 2), [modalStyles.borderWidth, modalStyles.marginHorizontal, windowWidth]);
     /** Updates the page state when the user navigates between attachments */
-    var updatePage = (0, react_1.useCallback)(function (_a) {
-        var _b;
-        var viewableItems = _a.viewableItems;
+    const updatePage = (0, react_1.useCallback)(({ viewableItems }) => {
         if (isFullScreenRef.current) {
             return;
         }
         react_native_1.Keyboard.dismiss();
         // Since we can have only one item in view at a time, we can use the first item in the array
         // to get the index of the current page
-        var entry = viewableItems.at(0);
+        const entry = viewableItems.at(0);
         if (!entry) {
             setActiveAttachmentID(null);
             return;
         }
-        var item = entry.item;
+        const item = entry.item;
         if (entry.index !== null) {
             setPage(entry.index);
-            setActiveAttachmentID((_b = item.attachmentID) !== null && _b !== void 0 ? _b : item.source);
+            setActiveAttachmentID(item.attachmentID ?? item.source);
         }
         if (onNavigate) {
             onNavigate(item);
         }
     }, [isFullScreenRef, onNavigate, setPage, setActiveAttachmentID]);
     /** Increments or decrements the index to get another selected item */
-    var cycleThroughAttachments = (0, react_1.useCallback)(function (deltaSlide) {
+    const cycleThroughAttachments = (0, react_1.useCallback)((deltaSlide) => {
         if (isFullScreenRef.current) {
             return;
         }
-        var nextIndex = page + deltaSlide;
-        var nextItem = attachments.at(nextIndex);
+        const nextIndex = page + deltaSlide;
+        const nextItem = attachments.at(nextIndex);
         if (!nextItem || nextIndex < 0 || !scrollRef.current) {
             return;
         }
         scrollRef.current.scrollToIndex({ index: nextIndex, animated: canUseTouchScreen });
     }, [attachments, canUseTouchScreen, isFullScreenRef, page, scrollRef]);
-    var extractItemKey = (0, react_1.useCallback)(function (item) {
-        return !!item.attachmentID || (typeof item.source !== 'string' && typeof item.source !== 'number')
-            ? "attachmentID-".concat(item.attachmentID)
-            : "source-".concat(item.source, "|").concat(item.attachmentLink);
-    }, []);
+    const extractItemKey = (0, react_1.useCallback)((item) => !!item.attachmentID || (typeof item.source !== 'string' && typeof item.source !== 'number')
+        ? `attachmentID-${item.attachmentID}`
+        : `source-${item.source}|${item.attachmentLink}`, []);
     /** Calculate items layout information to optimize scrolling performance */
-    var getItemLayout = (0, react_1.useCallback)(function (data, index) { return ({
+    const getItemLayout = (0, react_1.useCallback)((data, index) => ({
         length: cellWidth,
         offset: cellWidth * index,
-        index: index,
-    }); }, [cellWidth]);
-    var context = (0, react_1.useMemo)(function () { return ({
-        pagerItems: [{ source: source, index: 0, isActive: true }],
+        index,
+    }), [cellWidth]);
+    const context = (0, react_1.useMemo)(() => ({
+        pagerItems: [{ source, index: 0, isActive: true }],
         activePage: 0,
-        pagerRef: pagerRef,
-        isPagerScrolling: isPagerScrolling,
-        isScrollEnabled: isScrollEnabled,
+        pagerRef,
+        isPagerScrolling,
+        isScrollEnabled,
         onTap: handleTap,
         onScaleChanged: handleScaleChange,
         onSwipeDown: onClose,
-        onAttachmentError: onAttachmentError,
-        onAttachmentLoaded: onAttachmentLoaded,
-    }); }, [onAttachmentError, onAttachmentLoaded, source, isPagerScrolling, isScrollEnabled, handleTap, handleScaleChange, onClose]);
+        onAttachmentError,
+        onAttachmentLoaded,
+    }), [onAttachmentError, onAttachmentLoaded, source, isPagerScrolling, isScrollEnabled, handleTap, handleScaleChange, onClose]);
     /** Defines how a single attachment should be rendered */
-    var renderItem = (0, react_1.useCallback)(function (_a) {
-        var _b;
-        var item = _a.item;
-        return (<react_native_1.View style={[styles.h100, { width: cellWidth }]}>
-                <CarouselItem_1.default item={item} isFocused={activeAttachmentID === ((_b = item.attachmentID) !== null && _b !== void 0 ? _b : item.source)} onPress={canUseTouchScreen ? handleTap : undefined} isModalHovered={shouldShowArrows} reportID={report === null || report === void 0 ? void 0 : report.reportID}/>
-            </react_native_1.View>);
-    }, [activeAttachmentID, canUseTouchScreen, cellWidth, handleTap, report === null || report === void 0 ? void 0 : report.reportID, shouldShowArrows, styles.h100]);
+    const renderItem = (0, react_1.useCallback)(({ item }) => (<react_native_1.View style={[styles.h100, { width: cellWidth }]}>
+                <CarouselItem_1.default item={item} isFocused={activeAttachmentID === (item.attachmentID ?? item.source)} onPress={canUseTouchScreen ? handleTap : undefined} isModalHovered={shouldShowArrows} reportID={report?.reportID}/>
+            </react_native_1.View>), [activeAttachmentID, canUseTouchScreen, cellWidth, handleTap, report?.reportID, shouldShowArrows, styles.h100]);
     /** Pan gesture handing swiping through attachments on touch screen devices */
-    var pan = (0, react_1.useMemo)(function () {
-        return react_native_gesture_handler_1.Gesture.Pan()
-            .enabled(canUseTouchScreen)
-            .onUpdate(function (_a) {
-            var translationX = _a.translationX;
-            if (!isScrollEnabled.get()) {
-                return;
-            }
-            if (translationX !== 0) {
-                isPagerScrolling.set(true);
-            }
-            (0, react_native_reanimated_1.scrollTo)(scrollRef, page * cellWidth - translationX, 0, false);
-        })
-            .onEnd(function (_a) {
-            var translationX = _a.translationX, velocityX = _a.velocityX;
-            if (!isScrollEnabled.get()) {
-                return;
-            }
-            var newIndex;
-            if (velocityX > MIN_FLING_VELOCITY) {
-                // User flung to the right
-                newIndex = Math.max(0, page - 1);
-            }
-            else if (velocityX < -MIN_FLING_VELOCITY) {
-                // User flung to the left
-                newIndex = Math.min(attachments.length - 1, page + 1);
-            }
-            else {
-                // snap scroll position to the nearest cell (making sure it's within the bounds of the list)
-                var delta = Math.round(-translationX / cellWidth);
-                newIndex = Math.min(attachments.length - 1, Math.max(0, page + delta));
-            }
-            isPagerScrolling.set(false);
-            (0, react_native_reanimated_1.scrollTo)(scrollRef, newIndex * cellWidth, 0, true);
-        })
-            // eslint-disable-next-line react-compiler/react-compiler
-            .withRef(pagerRef);
-    }, [attachments.length, canUseTouchScreen, cellWidth, page, isScrollEnabled, scrollRef, isPagerScrolling]);
+    const pan = (0, react_1.useMemo)(() => react_native_gesture_handler_1.Gesture.Pan()
+        .enabled(canUseTouchScreen)
+        .onUpdate(({ translationX }) => {
+        if (!isScrollEnabled.get()) {
+            return;
+        }
+        if (translationX !== 0) {
+            isPagerScrolling.set(true);
+        }
+        (0, react_native_reanimated_1.scrollTo)(scrollRef, page * cellWidth - translationX, 0, false);
+    })
+        .onEnd(({ translationX, velocityX }) => {
+        if (!isScrollEnabled.get()) {
+            return;
+        }
+        let newIndex;
+        if (velocityX > MIN_FLING_VELOCITY) {
+            // User flung to the right
+            newIndex = Math.max(0, page - 1);
+        }
+        else if (velocityX < -MIN_FLING_VELOCITY) {
+            // User flung to the left
+            newIndex = Math.min(attachments.length - 1, page + 1);
+        }
+        else {
+            // snap scroll position to the nearest cell (making sure it's within the bounds of the list)
+            const delta = Math.round(-translationX / cellWidth);
+            newIndex = Math.min(attachments.length - 1, Math.max(0, page + delta));
+        }
+        isPagerScrolling.set(false);
+        (0, react_native_reanimated_1.scrollTo)(scrollRef, newIndex * cellWidth, 0, true);
+    })
+        // eslint-disable-next-line react-compiler/react-compiler
+        .withRef(pagerRef), [attachments.length, canUseTouchScreen, cellWidth, page, isScrollEnabled, scrollRef, isPagerScrolling]);
     // Scroll position is affected when window width is resized, so we readjust it on width changes
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (attachments.length === 0 || scrollRef.current == null) {
             return;
         }
@@ -162,9 +148,9 @@ function AttachmentCarouselView(_a) {
         // The hook is not supposed to run on page change, so we keep the page out of the dependencies
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, [cellWidth]);
-    return (<react_native_1.View style={[styles.flex1, styles.attachmentCarouselContainer]} onMouseEnter={function () { return !canUseTouchScreen && setShouldShowArrows(true); }} onMouseLeave={function () { return !canUseTouchScreen && setShouldShowArrows(false); }}>
+    return (<react_native_1.View style={[styles.flex1, styles.attachmentCarouselContainer]} onMouseEnter={() => !canUseTouchScreen && setShouldShowArrows(true)} onMouseLeave={() => !canUseTouchScreen && setShouldShowArrows(false)}>
             {page === -1 ? (<BlockingView_1.default icon={Illustrations.ToddBehindCloud} iconWidth={variables_1.default.modalTopIconWidth} iconHeight={variables_1.default.modalTopIconHeight} title={translate('notFound.notHere')}/>) : (<>
-                    <CarouselButtons_1.default page={page} attachments={attachments} shouldShowArrows={shouldShowArrows} onBack={function () { return cycleThroughAttachments(-1); }} onForward={function () { return cycleThroughAttachments(1); }} autoHideArrow={autoHideArrows} cancelAutoHideArrow={cancelAutoHideArrow}/>
+                    <CarouselButtons_1.default page={page} attachments={attachments} shouldShowArrows={shouldShowArrows} onBack={() => cycleThroughAttachments(-1)} onForward={() => cycleThroughAttachments(1)} autoHideArrow={autoHideArrows} cancelAutoHideArrow={cancelAutoHideArrow}/>
                     <AttachmentCarouselPagerContext_1.default.Provider value={context}>
                         <DeviceAwareGestureDetector canUseTouchScreen={canUseTouchScreen} gesture={pan}>
                             <react_native_reanimated_1.default.FlatList keyboardShouldPersistTaps="handled" horizontal showsHorizontalScrollIndicator={false} 

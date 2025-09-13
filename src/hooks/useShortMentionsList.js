@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useShortMentionsList;
-var react_1 = require("react");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var LoginUtils_1 = require("@libs/LoginUtils");
-var useCurrentUserPersonalDetails_1 = require("./useCurrentUserPersonalDetails");
+const react_1 = require("react");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const LoginUtils_1 = require("@libs/LoginUtils");
+const useCurrentUserPersonalDetails_1 = require("./useCurrentUserPersonalDetails");
 /**
  * This hook returns data to be used with short mentions in LiveMarkdown/Composer.
  * Short mentions have the format `@username`, where username is the first part of user's login (email).
@@ -12,34 +12,33 @@ var useCurrentUserPersonalDetails_1 = require("./useCurrentUserPersonalDetails")
  * In addition, currently logged-in user is returned separately since it requires special styling.
  */
 function useShortMentionsList() {
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var availableLoginsList = (0, react_1.useMemo)(function () {
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const availableLoginsList = (0, react_1.useMemo)(() => {
         if (!personalDetails) {
             return [];
         }
         return Object.values(personalDetails)
-            .map(function (personalDetail) {
-            var _a;
-            if (!(personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.login)) {
+            .map((personalDetail) => {
+            if (!personalDetail?.login) {
                 return;
             }
             // If the emails are not in the same private domain, we don't want to highlight them
-            if (!(0, LoginUtils_1.areEmailsFromSamePrivateDomain)(personalDetail.login, (_a = currentUserPersonalDetails.login) !== null && _a !== void 0 ? _a : '')) {
+            if (!(0, LoginUtils_1.areEmailsFromSamePrivateDomain)(personalDetail.login, currentUserPersonalDetails.login ?? '')) {
                 return;
             }
-            var username = personalDetail.login.split('@')[0];
+            const [username] = personalDetail.login.split('@');
             return username;
         })
-            .filter(function (login) { return !!login; });
+            .filter((login) => !!login);
     }, [currentUserPersonalDetails.login, personalDetails]);
     // We want to highlight both short and long version of current user login
-    var currentUserMentions = (0, react_1.useMemo)(function () {
+    const currentUserMentions = (0, react_1.useMemo)(() => {
         if (!currentUserPersonalDetails.login) {
             return [];
         }
-        var baseName = currentUserPersonalDetails.login.split('@')[0];
+        const [baseName] = currentUserPersonalDetails.login.split('@');
         return [baseName, currentUserPersonalDetails.login];
     }, [currentUserPersonalDetails.login]);
-    return { availableLoginsList: availableLoginsList, currentUserMentions: currentUserMentions };
+    return { availableLoginsList, currentUserMentions };
 }

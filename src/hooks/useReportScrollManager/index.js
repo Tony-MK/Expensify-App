@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ReportScreenContext_1 = require("@pages/home/ReportScreenContext");
+const react_1 = require("react");
+const ReportScreenContext_1 = require("@pages/home/ReportScreenContext");
 function useReportScrollManager() {
-    var flatListRef = (0, react_1.useContext)(ReportScreenContext_1.ActionListContext).flatListRef;
+    const { flatListRef } = (0, react_1.useContext)(ReportScreenContext_1.ActionListContext);
     /**
      * Scroll to the provided index. On non-native implementations we do not want to scroll when we are scrolling because
      */
-    var scrollToIndex = (0, react_1.useCallback)(function (index, isEditing) {
-        if (!(flatListRef === null || flatListRef === void 0 ? void 0 : flatListRef.current) || isEditing) {
+    const scrollToIndex = (0, react_1.useCallback)((index, isEditing) => {
+        if (!flatListRef?.current || isEditing) {
             return;
         }
-        flatListRef.current.scrollToIndex({ index: index, animated: true });
+        flatListRef.current.scrollToIndex({ index, animated: true });
     }, [flatListRef]);
     /**
      * Scroll to the bottom of the inverted FlatList.
      * When FlatList is inverted it's "bottom" is really it's top
      */
-    var scrollToBottom = (0, react_1.useCallback)(function () {
-        if (!(flatListRef === null || flatListRef === void 0 ? void 0 : flatListRef.current)) {
+    const scrollToBottom = (0, react_1.useCallback)(() => {
+        if (!flatListRef?.current) {
             return;
         }
         flatListRef.current.scrollToOffset({ animated: false, offset: 0 });
@@ -26,18 +26,18 @@ function useReportScrollManager() {
     /**
      * Scroll to the end of the FlatList.
      */
-    var scrollToEnd = (0, react_1.useCallback)(function () {
-        if (!(flatListRef === null || flatListRef === void 0 ? void 0 : flatListRef.current)) {
+    const scrollToEnd = (0, react_1.useCallback)(() => {
+        if (!flatListRef?.current) {
             return;
         }
         flatListRef.current.scrollToEnd({ animated: false });
     }, [flatListRef]);
-    var scrollToOffset = (0, react_1.useCallback)(function (offset) {
-        if (!(flatListRef === null || flatListRef === void 0 ? void 0 : flatListRef.current)) {
+    const scrollToOffset = (0, react_1.useCallback)((offset) => {
+        if (!flatListRef?.current) {
             return;
         }
-        flatListRef.current.scrollToOffset({ animated: true, offset: offset });
+        flatListRef.current.scrollToOffset({ animated: true, offset });
     }, [flatListRef]);
-    return { ref: flatListRef, scrollToIndex: scrollToIndex, scrollToBottom: scrollToBottom, scrollToEnd: scrollToEnd, scrollToOffset: scrollToOffset };
+    return { ref: flatListRef, scrollToIndex, scrollToBottom, scrollToEnd, scrollToOffset };
 }
 exports.default = useReportScrollManager;

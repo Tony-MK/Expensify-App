@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateAmount = calculateAmount;
 exports.insertTagIntoTransactionTagsString = insertTagIntoTransactionTagsString;
@@ -22,14 +11,14 @@ exports.updateIOUOwnerAndTotal = updateIOUOwnerAndTotal;
 exports.formatCurrentUserToAttendee = formatCurrentUserToAttendee;
 exports.navigateToParticipantPage = navigateToParticipantPage;
 exports.shouldShowReceiptEmptyState = shouldShowReceiptEmptyState;
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-var CurrencyUtils_1 = require("./CurrencyUtils");
-var Navigation_1 = require("./Navigation/Navigation");
-var Performance_1 = require("./Performance");
-var PolicyUtils_1 = require("./PolicyUtils");
-var ReportUtils_1 = require("./ReportUtils");
-var TransactionUtils_1 = require("./TransactionUtils");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+const CurrencyUtils_1 = require("./CurrencyUtils");
+const Navigation_1 = require("./Navigation/Navigation");
+const Performance_1 = require("./Performance");
+const PolicyUtils_1 = require("./PolicyUtils");
+const ReportUtils_1 = require("./ReportUtils");
+const TransactionUtils_1 = require("./TransactionUtils");
 function navigateToStartMoneyRequestStep(requestType, iouType, transactionID, reportID, iouAction) {
     if (iouAction === CONST_1.default.IOU.ACTION.CATEGORIZE || iouAction === CONST_1.default.IOU.ACTION.SUBMIT || iouAction === CONST_1.default.IOU.ACTION.SHARE) {
         Navigation_1.default.goBack();
@@ -75,18 +64,17 @@ function navigateToParticipantPage(iouType, transactionID, reportID) {
  * @param currency - This is used to know how many decimal places are valid to use when splitting the total
  * @param isDefaultUser - Whether we are calculating the amount for the current user
  */
-function calculateAmount(numberOfParticipants, total, currency, isDefaultUser) {
-    if (isDefaultUser === void 0) { isDefaultUser = false; }
+function calculateAmount(numberOfParticipants, total, currency, isDefaultUser = false) {
     // Since the backend can maximum store 2 decimal places, any currency with more than 2 decimals
     // has to be capped to 2 decimal places
-    var currencyUnit = Math.min(100, (0, CurrencyUtils_1.getCurrencyUnit)(currency));
-    var totalInCurrencySubunit = (total / 100) * currencyUnit;
-    var totalParticipants = numberOfParticipants + 1;
-    var amountPerPerson = Math.round(totalInCurrencySubunit / totalParticipants);
-    var finalAmount = amountPerPerson;
+    const currencyUnit = Math.min(100, (0, CurrencyUtils_1.getCurrencyUnit)(currency));
+    const totalInCurrencySubunit = (total / 100) * currencyUnit;
+    const totalParticipants = numberOfParticipants + 1;
+    const amountPerPerson = Math.round(totalInCurrencySubunit / totalParticipants);
+    let finalAmount = amountPerPerson;
     if (isDefaultUser) {
-        var sumAmount = amountPerPerson * totalParticipants;
-        var difference = totalInCurrencySubunit - sumAmount;
+        const sumAmount = amountPerPerson * totalParticipants;
+        const difference = totalInCurrencySubunit - sumAmount;
         finalAmount = totalInCurrencySubunit !== sumAmount ? amountPerPerson + difference : amountPerPerson;
     }
     return Math.round((finalAmount * 100) / currencyUnit);
@@ -100,20 +88,16 @@ function calculateAmount(numberOfParticipants, total, currency, isDefaultUser) {
  * @param isDeleting - whether the user is deleting the expense
  * @param isUpdating - whether the user is updating the expense
  */
-function updateIOUOwnerAndTotal(iouReport, actorAccountID, amount, currency, isDeleting, isUpdating, isOnHold) {
-    var _a, _b;
-    if (isDeleting === void 0) { isDeleting = false; }
-    if (isUpdating === void 0) { isUpdating = false; }
-    if (isOnHold === void 0) { isOnHold = false; }
+function updateIOUOwnerAndTotal(iouReport, actorAccountID, amount, currency, isDeleting = false, isUpdating = false, isOnHold = false) {
     // For the update case, we have calculated the diff amount in the calculateDiffAmount function so there is no need to compare currencies here
-    if ((currency !== (iouReport === null || iouReport === void 0 ? void 0 : iouReport.currency) && !isUpdating) || !iouReport) {
+    if ((currency !== iouReport?.currency && !isUpdating) || !iouReport) {
         return iouReport;
     }
     // Make a copy so we don't mutate the original object
-    var iouReportUpdate = __assign({}, iouReport);
+    const iouReportUpdate = { ...iouReport };
     // Let us ensure a valid value before updating the total amount.
-    iouReportUpdate.total = (_a = iouReportUpdate.total) !== null && _a !== void 0 ? _a : 0;
-    iouReportUpdate.unheldTotal = (_b = iouReportUpdate.unheldTotal) !== null && _b !== void 0 ? _b : 0;
+    iouReportUpdate.total = iouReportUpdate.total ?? 0;
+    iouReportUpdate.unheldTotal = iouReportUpdate.unheldTotal ?? 0;
     if (actorAccountID === iouReport.ownerAccountID) {
         iouReportUpdate.total += isDeleting ? -amount : amount;
         if (!isOnHold) {
@@ -140,15 +124,15 @@ function updateIOUOwnerAndTotal(iouReport, actorAccountID, amount, currency, isD
  * that are either created or cancelled offline, and thus haven't been converted to the report's currency yet
  */
 function isIOUReportPendingCurrencyConversion(iouReport) {
-    var reportTransactions = (0, ReportUtils_1.getReportTransactions)(iouReport.reportID);
-    var pendingRequestsInDifferentCurrency = reportTransactions.filter(function (transaction) { return transaction.pendingAction && (0, TransactionUtils_1.getCurrency)(transaction) !== iouReport.currency; });
+    const reportTransactions = (0, ReportUtils_1.getReportTransactions)(iouReport.reportID);
+    const pendingRequestsInDifferentCurrency = reportTransactions.filter((transaction) => transaction.pendingAction && (0, TransactionUtils_1.getCurrency)(transaction) !== iouReport.currency);
     return pendingRequestsInDifferentCurrency.length > 0;
 }
 /**
  * Checks if the iou type is one of request, send, invoice or split.
  */
 function isValidMoneyRequestType(iouType) {
-    var moneyRequestType = [
+    const moneyRequestType = [
         CONST_1.default.IOU.TYPE.REQUEST,
         CONST_1.default.IOU.TYPE.SUBMIT,
         CONST_1.default.IOU.TYPE.SPLIT,
@@ -174,12 +158,12 @@ function insertTagIntoTransactionTagsString(transactionTags, tag, tagIndex, hasM
     if (!hasMultipleTagLists) {
         return tag;
     }
-    var tagArray = (0, TransactionUtils_1.getTagArrayFromName)(transactionTags);
+    const tagArray = (0, TransactionUtils_1.getTagArrayFromName)(transactionTags);
     tagArray[tagIndex] = tag;
     while (tagArray.length > 0 && !tagArray.at(-1)) {
         tagArray.pop();
     }
-    return tagArray.map(function (tagItem) { return tagItem.trim(); }).join(CONST_1.default.COLON);
+    return tagArray.map((tagItem) => tagItem.trim()).join(CONST_1.default.COLON);
 }
 function isMovingTransactionFromTrackExpense(action) {
     if (action === CONST_1.default.IOU.ACTION.SUBMIT || action === CONST_1.default.IOU.ACTION.SHARE || action === CONST_1.default.IOU.ACTION.CATEGORIZE) {
@@ -202,19 +186,18 @@ function shouldUseTransactionDraft(action, type) {
     return action === CONST_1.default.IOU.ACTION.CREATE || type === CONST_1.default.IOU.TYPE.SPLIT_EXPENSE || isMovingTransactionFromTrackExpense(action);
 }
 function formatCurrentUserToAttendee(currentUser, reportID) {
-    var _a, _b, _c, _d, _e;
     if (!currentUser) {
         return;
     }
-    var initialAttendee = {
-        email: (_a = currentUser === null || currentUser === void 0 ? void 0 : currentUser.login) !== null && _a !== void 0 ? _a : '',
-        login: (_b = currentUser === null || currentUser === void 0 ? void 0 : currentUser.login) !== null && _b !== void 0 ? _b : '',
-        displayName: (_c = currentUser.displayName) !== null && _c !== void 0 ? _c : '',
-        avatarUrl: (_e = (_d = currentUser.avatar) === null || _d === void 0 ? void 0 : _d.toString()) !== null && _e !== void 0 ? _e : '',
+    const initialAttendee = {
+        email: currentUser?.login ?? '',
+        login: currentUser?.login ?? '',
+        displayName: currentUser.displayName ?? '',
+        avatarUrl: currentUser.avatar?.toString() ?? '',
         accountID: currentUser.accountID,
         text: currentUser.login,
         selected: true,
-        reportID: reportID,
+        reportID,
     };
     return [initialAttendee];
 }

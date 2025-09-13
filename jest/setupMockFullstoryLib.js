@@ -2,19 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = mockFSLibrary;
 function mockFSLibrary() {
-    jest.mock('@fullstory/react-native', function () {
+    jest.mock('@fullstory/react-native', () => {
         return {
             FSPage: jest.fn(),
             default: jest.fn(),
         };
     });
-    jest.mock('@libs/Fullstory', function () {
-        var FSPage = /** @class */ (function () {
-            function FSPage() {
-            }
-            FSPage.prototype.start = function () { };
-            return FSPage;
-        }());
+    jest.mock('@libs/Fullstory', () => {
+        class FSPage {
+            start() { }
+        }
         return {
             Page: FSPage,
             getChatFSClass: jest.fn(),

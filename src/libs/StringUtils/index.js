@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var deburr_1 = require("lodash/deburr");
-var Browser_1 = require("@libs/Browser");
-var CONST_1 = require("@src/CONST");
-var decodeUnicode_1 = require("./decodeUnicode");
-var dedent_1 = require("./dedent");
-var hash_1 = require("./hash");
+const deburr_1 = require("lodash/deburr");
+const Browser_1 = require("@libs/Browser");
+const CONST_1 = require("@src/CONST");
+const decodeUnicode_1 = require("./decodeUnicode");
+const dedent_1 = require("./dedent");
+const hash_1 = require("./hash");
 /**
  * Removes diacritical marks and non-alphabetic and non-latin characters from a string.
  * @param str - The input string to be sanitized.
@@ -21,8 +21,8 @@ function isEmptyString(value) {
     // We implemented a custom emoji on this Unicode Private Use Area (PUA) code point
     // so we should not remove it.
     // Temporarily replace \uE100 with a placeholder
-    var PLACEHOLDER = '<<KEEP_E100>>';
-    var transformed = value.replace(/\uE100/g, PLACEHOLDER);
+    const PLACEHOLDER = '<<KEEP_E100>>';
+    let transformed = value.replace(/\uE100/g, PLACEHOLDER);
     // \p{C} matches all 'Other' characters
     // \p{Z} matches all separators (spaces etc.)
     // Source: http://www.unicode.org/reports/tr18/#General_Category_Property
@@ -37,26 +37,25 @@ function isEmptyString(value) {
  *  Remove invisible characters from a string except for spaces and format characters for emoji, and trim it.
  */
 function removeInvisibleCharacters(value) {
-    var result = value;
+    let result = value;
     // We implemented a custom emoji on this Unicode Private Use Area (PUA) code point
     // so we should not remove it.
     // Temporarily replace \uE100 with a placeholder
-    var PLACEHOLDER = '<<KEEP_E100>>';
+    const PLACEHOLDER = '<<KEEP_E100>>';
     result = result.replace(/\uE100/g, PLACEHOLDER);
     // Remove spaces:
     // - \u200B: zero-width space
     // - \u2060: word joiner
     result = result.replace(/[\u200B\u2060]/g, '');
-    var invisibleCharacterRegex = (0, Browser_1.isSafari)() ? /([\uD800-\uDBFF][\uDC00-\uDFFF])|[\p{Cc}\p{Co}\p{Cn}]/gu : /[\p{Cc}\p{Cs}\p{Co}\p{Cn}]/gu;
+    const invisibleCharacterRegex = (0, Browser_1.isSafari)() ? /([\uD800-\uDBFF][\uDC00-\uDFFF])|[\p{Cc}\p{Co}\p{Cn}]/gu : /[\p{Cc}\p{Cs}\p{Co}\p{Cn}]/gu;
     // The control unicode (Cc) regex removes all newlines,
     // so we first split the string by newline and rejoin it afterward to retain the original line breaks.
     result = result
         .split('\n')
-        .map(function (part) {
-        // Remove all characters from the 'Other' (C) category except for format characters (Cf)
-        // because some of them are used for emojis
-        return part.replace(invisibleCharacterRegex, '');
-    })
+        .map((part) => 
+    // Remove all characters from the 'Other' (C) category except for format characters (Cf)
+    // because some of them are used for emojis
+    part.replace(invisibleCharacterRegex, ''))
         .join('\n');
     // Remove characters from the (Cf) category that are not used for emojis
     result = result.replace(/[\u200E-\u200F]/g, '');
@@ -99,30 +98,26 @@ function normalize(text) {
  *  @returns The string with all CRLF replaced with LF
  */
 function normalizeCRLF(value) {
-    return value === null || value === void 0 ? void 0 : value.replace(/\r\n/g, '\n');
+    return value?.replace(/\r\n/g, '\n');
 }
 /**
  * Replace all line breaks with white spaces
  */
-function lineBreaksToSpaces(text, useNonBreakingSpace) {
-    if (text === void 0) { text = ''; }
-    if (useNonBreakingSpace === void 0) { useNonBreakingSpace = false; }
+function lineBreaksToSpaces(text = '', useNonBreakingSpace = false) {
     return text.replace(CONST_1.default.REGEX.LINE_BREAK, useNonBreakingSpace ? '\u00A0' : ' ');
 }
 /**
  * Get the first line of the string
  */
-function getFirstLine(text) {
-    if (text === void 0) { text = ''; }
+function getFirstLine(text = '') {
     // Split the input string by newline characters and return the first element of the resulting array
-    var lines = text.split('\n');
+    const lines = text.split('\n');
     return lines.at(0);
 }
 /**
  * Remove double quotes from the string
  */
-function removeDoubleQuotes(text) {
-    if (text === void 0) { text = ''; }
+function removeDoubleQuotes(text = '') {
     return text.replace(/"/g, '');
 }
 /**
@@ -130,29 +125,27 @@ function removeDoubleQuotes(text) {
  * The longest strings will be at the end of the array.
  */
 function sortStringArrayByLength(arr) {
-    return arr.sort(function (a, b) { return a.length - b.length; });
+    return arr.sort((a, b) => a.length - b.length);
 }
 /**
  * Remove pre tag from the html
  */
-function removePreCodeBlock(text) {
-    if (text === void 0) { text = ''; }
+function removePreCodeBlock(text = '') {
     return text.replace(/<pre[^>]*>|<\/pre>/g, '');
 }
 /**
  * Returns the number of bytes required to encode a string in UTF-8.
  */
 function getUTF8ByteLength(str) {
-    var encoder = new TextEncoder();
-    var bytes = encoder.encode(str);
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(str);
     return bytes.length;
 }
 /**
  * Remove white spaces length from the string
  */
 function countWhiteSpaces(str) {
-    var _a;
-    return ((_a = str.match(/\s/g)) !== null && _a !== void 0 ? _a : []).length;
+    return (str.match(/\s/g) ?? []).length;
 }
 /**
  * Check if the string starts with a vowel
@@ -163,21 +156,21 @@ function startsWithVowel(str) {
     return /^[aeiouAEIOU]/.test(str);
 }
 exports.default = {
-    sanitizeString: sanitizeString,
-    isEmptyString: isEmptyString,
-    removeInvisibleCharacters: removeInvisibleCharacters,
-    normalize: normalize,
-    normalizeAccents: normalizeAccents,
-    normalizeCRLF: normalizeCRLF,
-    lineBreaksToSpaces: lineBreaksToSpaces,
-    getFirstLine: getFirstLine,
-    removeDoubleQuotes: removeDoubleQuotes,
-    removePreCodeBlock: removePreCodeBlock,
-    sortStringArrayByLength: sortStringArrayByLength,
+    sanitizeString,
+    isEmptyString,
+    removeInvisibleCharacters,
+    normalize,
+    normalizeAccents,
+    normalizeCRLF,
+    lineBreaksToSpaces,
+    getFirstLine,
+    removeDoubleQuotes,
+    removePreCodeBlock,
+    sortStringArrayByLength,
     dedent: dedent_1.default,
     hash: hash_1.default,
-    getUTF8ByteLength: getUTF8ByteLength,
+    getUTF8ByteLength,
     decodeUnicode: decodeUnicode_1.default,
-    countWhiteSpaces: countWhiteSpaces,
-    startsWithVowel: startsWithVowel,
+    countWhiteSpaces,
+    startsWithVowel,
 };

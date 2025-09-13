@@ -1,46 +1,44 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components//Icon");
-var Button_1 = require("@components/Button");
-var FixedFooter_1 = require("@components/FixedFooter");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Illustrations_1 = require("@components/Icon/Illustrations");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@navigation/Navigation");
-var variables_1 = require("@styles/variables");
-var ExitSurvey_1 = require("@userActions/ExitSurvey");
-var Link_1 = require("@userActions/Link");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var ExitSurveyReasonForm_1 = require("@src/types/form/ExitSurveyReasonForm");
-var ExitSurveyResponseForm_1 = require("@src/types/form/ExitSurveyResponseForm");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var ExitSurveyOffline_1 = require("./ExitSurveyOffline");
-function ExitSurveyConfirmPage(_a) {
-    var _b, _c;
-    var route = _a.route, navigation = _a.navigation;
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var styles = (0, useThemeStyles_1.default)();
-    var tryNewDot = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_TRY_NEW_DOT, { canBeMissing: true })[0];
-    var exitReason = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM, {
-        selector: function (value) { var _a; return (_a = value === null || value === void 0 ? void 0 : value[ExitSurveyReasonForm_1.default.REASON]) !== null && _a !== void 0 ? _a : null; },
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components//Icon");
+const Button_1 = require("@components/Button");
+const FixedFooter_1 = require("@components/FixedFooter");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Illustrations_1 = require("@components/Icon/Illustrations");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@navigation/Navigation");
+const variables_1 = require("@styles/variables");
+const ExitSurvey_1 = require("@userActions/ExitSurvey");
+const Link_1 = require("@userActions/Link");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const ExitSurveyReasonForm_1 = require("@src/types/form/ExitSurveyReasonForm");
+const ExitSurveyResponseForm_1 = require("@src/types/form/ExitSurveyResponseForm");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const ExitSurveyOffline_1 = require("./ExitSurveyOffline");
+function ExitSurveyConfirmPage({ route, navigation }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [tryNewDot] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_TRY_NEW_DOT, { canBeMissing: true });
+    const [exitReason] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM, {
+        selector: (value) => value?.[ExitSurveyReasonForm_1.default.REASON] ?? null,
         canBeMissing: true,
-    })[0];
-    var exitSurveyResponse = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM, {
-        selector: function (value) { return value === null || value === void 0 ? void 0 : value[ExitSurveyResponseForm_1.default.RESPONSE]; },
+    });
+    const [exitSurveyResponse] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM, {
+        selector: (value) => value?.[ExitSurveyResponseForm_1.default.RESPONSE],
         canBeMissing: true,
-    })[0];
-    var shouldShowQuickTips = (0, EmptyObject_1.isEmptyObject)(tryNewDot) || ((_b = tryNewDot === null || tryNewDot === void 0 ? void 0 : tryNewDot.classicRedirect) === null || _b === void 0 ? void 0 : _b.dismissed) === true || (!(0, EmptyObject_1.isEmptyObject)(tryNewDot) && ((_c = tryNewDot === null || tryNewDot === void 0 ? void 0 : tryNewDot.classicRedirect) === null || _c === void 0 ? void 0 : _c.dismissed) === undefined);
-    var getBackToParam = (0, react_1.useCallback)(function () {
+    });
+    const shouldShowQuickTips = (0, EmptyObject_1.isEmptyObject)(tryNewDot) || tryNewDot?.classicRedirect?.dismissed === true || (!(0, EmptyObject_1.isEmptyObject)(tryNewDot) && tryNewDot?.classicRedirect?.dismissed === undefined);
+    const getBackToParam = (0, react_1.useCallback)(() => {
         if (isOffline) {
             return ROUTES_1.default.SETTINGS;
         }
@@ -49,9 +47,9 @@ function ExitSurveyConfirmPage(_a) {
         }
         return ROUTES_1.default.SETTINGS;
     }, [exitReason, isOffline]);
-    var backTo = (route.params || {}).backTo;
-    (0, react_1.useEffect)(function () {
-        var newBackTo = getBackToParam();
+    const { backTo } = route.params || {};
+    (0, react_1.useEffect)(() => {
+        const newBackTo = getBackToParam();
         if (backTo === newBackTo) {
             return;
         }
@@ -60,7 +58,7 @@ function ExitSurveyConfirmPage(_a) {
         });
     }, [backTo, getBackToParam, navigation]);
     return (<ScreenWrapper_1.default testID={ExitSurveyConfirmPage.displayName}>
-            <HeaderWithBackButton_1.default title={translate(shouldShowQuickTips ? 'exitSurvey.goToExpensifyClassic' : 'exitSurvey.header')} onBackButtonPress={function () { return Navigation_1.default.goBack(backTo); }}/>
+            <HeaderWithBackButton_1.default title={translate(shouldShowQuickTips ? 'exitSurvey.goToExpensifyClassic' : 'exitSurvey.header')} onBackButtonPress={() => Navigation_1.default.goBack(backTo)}/>
             <react_native_1.View style={[styles.flex1, styles.justifyContentCenter, styles.alignItemsCenter, styles.mh5]}>
                 {isOffline && <ExitSurveyOffline_1.default />}
                 {!isOffline && (<>
@@ -72,7 +70,7 @@ function ExitSurveyConfirmPage(_a) {
                     </>)}
             </react_native_1.View>
             <FixedFooter_1.default>
-                <Button_1.default success large text={translate(shouldShowQuickTips ? 'exitSurvey.takeMeToExpensifyClassic' : 'exitSurvey.goToExpensifyClassic')} pressOnEnter onPress={function () {
+                <Button_1.default success large text={translate(shouldShowQuickTips ? 'exitSurvey.takeMeToExpensifyClassic' : 'exitSurvey.goToExpensifyClassic')} pressOnEnter onPress={() => {
             (0, ExitSurvey_1.switchToOldDot)(exitReason, exitSurveyResponse);
             Navigation_1.default.dismissModal();
             (0, Link_1.openOldDotLink)(CONST_1.default.OLDDOT_URLS.INBOX, true);

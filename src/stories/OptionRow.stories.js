@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Default = void 0;
-var react_1 = require("react");
-var Expensicons = require("@components/Icon/Expensicons");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var OptionRow_1 = require("@components/OptionRow");
+const react_1 = require("react");
+const Expensicons = require("@components/Icon/Expensicons");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const OptionRow_1 = require("@components/OptionRow");
 /* eslint-disable react/jsx-props-no-spreading */
 /**
  * We use the Component Story Format for writing stories. Follow the docs here:
@@ -49,5 +49,5 @@ function Template(props) {
 }
 // Arguments can be passed to the component by binding
 // See: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-var Default = Template.bind({});
+const Default = Template.bind({});
 exports.Default = Default;

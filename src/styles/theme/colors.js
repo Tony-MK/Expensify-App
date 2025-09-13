@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * For functional components, you can use the `useTheme` and `useThemeStyles` hooks
  * For class components, you can use the `withTheme` and `withThemeStyles` HOCs
  */
-var colors = {
+const colors = {
     // Brand Colors
     black: '#000000',
     white: '#FFFFFF',

@@ -1,47 +1,44 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
-var useStepFormSubmit_1 = require("@hooks/useStepFormSubmit");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var SubscriptionSizeForm_1 = require("@src/types/form/SubscriptionSizeForm");
-function Size(_a) {
-    var _b;
-    var _c;
-    var onNext = _a.onNext;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var privateSubscription = (0, usePrivateSubscription_1.default)();
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var updateValuesAndNavigateToNextStep = (0, useStepFormSubmit_1.default)({
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
+const useStepFormSubmit_1 = require("@hooks/useStepFormSubmit");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const SubscriptionSizeForm_1 = require("@src/types/form/SubscriptionSizeForm");
+function Size({ onNext }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const privateSubscription = (0, usePrivateSubscription_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const updateValuesAndNavigateToNextStep = (0, useStepFormSubmit_1.default)({
         formId: ONYXKEYS_1.default.FORMS.SUBSCRIPTION_SIZE_FORM,
         fieldIds: [SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE],
-        onNext: onNext,
+        onNext,
         shouldSaveDraft: true,
     });
-    var defaultValues = (_b = {},
-        _b[SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE] = "".concat((_c = privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.userCount) !== null && _c !== void 0 ? _c : ''),
-        _b);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE]);
+    const defaultValues = {
+        [SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE]: `${privateSubscription?.userCount ?? ''}`,
+    };
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE]);
         if (values[SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE] && !(0, ValidationUtils_1.isValidSubscriptionSize)(values[SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE])) {
             errors.subscriptionSize = translate('subscription.subscriptionSize.error.size');
         }
-        if (Number(values[SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE]) === (privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.userCount)) {
+        if (Number(values[SubscriptionSizeForm_1.default.SUBSCRIPTION_SIZE]) === privateSubscription?.userCount) {
             errors.subscriptionSize = translate('subscription.subscriptionSize.error.sameSize');
         }
         return errors;
-    }, [privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.userCount, translate]);
+    }, [privateSubscription?.userCount, translate]);
     return (<FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.SUBSCRIPTION_SIZE_FORM} submitButtonText={translate('common.next')} onSubmit={updateValuesAndNavigateToNextStep} validate={validate} style={[styles.mh5, styles.flexGrow1]} enabledWhenOffline shouldHideFixErrorsAlert>
             <react_native_1.View>
                 <Text_1.default style={[styles.textNormalThemeText, styles.mb5]}>{translate('subscription.subscriptionSize.yourSize')}</Text_1.default>

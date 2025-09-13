@@ -2,115 +2,42 @@
 /**
  * @jest-environment node
  */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention */
-var core = require("@actions/core");
-var request_error_1 = require("@octokit/request-error");
-var CONST_1 = require("@github/libs/CONST");
-var GithubUtils_1 = require("@github/libs/GithubUtils");
-var mockGetInput = jest.fn();
-var mockListIssues = jest.fn();
-var asMutable = function (value) { return value; };
-beforeAll(function () {
+const core = require("@actions/core");
+const request_error_1 = require("@octokit/request-error");
+const CONST_1 = require("@github/libs/CONST");
+const GithubUtils_1 = require("@github/libs/GithubUtils");
+const mockGetInput = jest.fn();
+const mockListIssues = jest.fn();
+const asMutable = (value) => value;
+beforeAll(() => {
     // Mock core module
     asMutable(core).getInput = mockGetInput;
     // Mock octokit module
-    var mockOctokit = {
+    const mockOctokit = {
         rest: {
             issues: {
-                create: jest.fn().mockImplementation(function (arg) {
-                    return Promise.resolve({
-                        data: __assign(__assign({}, arg), { html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/issues/29") }),
-                    });
-                }),
+                create: jest.fn().mockImplementation((arg) => Promise.resolve({
+                    data: {
+                        ...arg,
+                        html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/29`,
+                    },
+                })),
                 listForRepo: mockListIssues,
             },
         },
-        paginate: jest.fn().mockImplementation(function (objectMethod) { return objectMethod().then(function (_a) {
-            var data = _a.data;
-            return data;
-        }); }),
+        paginate: jest.fn().mockImplementation((objectMethod) => objectMethod().then(({ data }) => data)),
     };
     GithubUtils_1.default.internalOctokit = mockOctokit;
 });
-afterEach(function () {
+afterEach(() => {
     mockGetInput.mockClear();
     mockListIssues.mockClear();
 });
-describe('GithubUtils', function () {
-    describe('getStagingDeployCash', function () {
-        var baseIssue = {
+describe('GithubUtils', () => {
+    describe('getStagingDeployCash', () => {
+        const baseIssue = {
             url: 'https://api.github.com/repos/Andrew-Test-Org/Public-Test-Repo/issues/29',
             title: 'Andrew Test Issue',
             labels: [
@@ -126,25 +53,25 @@ describe('GithubUtils', function () {
                 },
             ],
             // eslint-disable-next-line max-len
-            body: "**Release Version:** `1.0.1-47`\r\n**Compare Changes:** https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n- [ ] https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/pull/21\r\n- [x] https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/pull/22\r\n- [ ] https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/pull/23\r\n\r\n"),
+            body: `**Release Version:** \`1.0.1-47\`\r\n**Compare Changes:** https://github.com/${process.env.GITHUB_REPOSITORY}/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n- [ ] https://github.com/${process.env.GITHUB_REPOSITORY}/pull/21\r\n- [x] https://github.com/${process.env.GITHUB_REPOSITORY}/pull/22\r\n- [ ] https://github.com/${process.env.GITHUB_REPOSITORY}/pull/23\r\n\r\n`,
         };
-        var issueWithDeployBlockers = __assign({}, baseIssue);
+        const issueWithDeployBlockers = { ...baseIssue };
         // eslint-disable-next-line max-len
-        issueWithDeployBlockers.body += "\r\n**Deploy Blockers:**\r\n- [ ] https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/issues/1\r\n- [x] https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/issues/2\r\n- [ ] https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/pull/1234\r\n");
-        var baseExpectedResponse = {
+        issueWithDeployBlockers.body += `\r\n**Deploy Blockers:**\r\n- [ ] https://github.com/${process.env.GITHUB_REPOSITORY}/issues/1\r\n- [x] https://github.com/${process.env.GITHUB_REPOSITORY}/issues/2\r\n- [ ] https://github.com/${process.env.GITHUB_REPOSITORY}/pull/1234\r\n`;
+        const baseExpectedResponse = {
             PRList: [
                 {
-                    url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/21"),
+                    url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/21`,
                     number: 21,
                     isVerified: false,
                 },
                 {
-                    url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/22"),
+                    url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/22`,
                     number: 22,
                     isVerified: true,
                 },
                 {
-                    url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/23"),
+                    url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/23`,
                     number: 23,
                     isVerified: false,
                 },
@@ -172,188 +99,194 @@ describe('GithubUtils', function () {
             isFirebaseChecked: false,
             isGHStatusChecked: false,
         };
-        var expectedResponseWithDeployBlockers = __assign({}, baseExpectedResponse);
+        const expectedResponseWithDeployBlockers = { ...baseExpectedResponse };
         expectedResponseWithDeployBlockers.deployBlockers = [
             {
-                url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/issues/1"),
+                url: `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/1`,
                 number: 1,
                 isResolved: false,
             },
             {
-                url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/issues/2"),
+                url: `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/2`,
                 number: 2,
                 isResolved: true,
             },
             {
-                url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/1234"),
+                url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/1234`,
                 number: 1234,
                 isResolved: false,
             },
         ];
-        test('Test finding an open issue with no PRs successfully', function () {
-            var bareIssue = __assign(__assign({}, baseIssue), { 
+        test('Test finding an open issue with no PRs successfully', () => {
+            const bareIssue = {
+                ...baseIssue,
                 // eslint-disable-next-line max-len
-                body: "**Release Version:** `1.0.1-47`\r\n**Compare Changes:** https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/compare/production...staging\r\n\r\ncc @Expensify/applauseleads\n") });
-            var bareExpectedResponse = __assign(__assign({}, baseExpectedResponse), { PRList: [], PRListMobileExpensify: [] });
+                body: `**Release Version:** \`1.0.1-47\`\r\n**Compare Changes:** https://github.com/${process.env.GITHUB_REPOSITORY}/compare/production...staging\r\n\r\ncc @Expensify/applauseleads\n`,
+            };
+            const bareExpectedResponse = {
+                ...baseExpectedResponse,
+                PRList: [],
+                PRListMobileExpensify: [],
+            };
             GithubUtils_1.default.octokit.issues.listForRepo = jest.fn().mockResolvedValue({ data: [bareIssue] });
-            return GithubUtils_1.default.getStagingDeployCash().then(function (data) { return expect(data).toStrictEqual(bareExpectedResponse); });
+            return GithubUtils_1.default.getStagingDeployCash().then((data) => expect(data).toStrictEqual(bareExpectedResponse));
         });
-        test('Test finding an open issue successfully', function () {
+        test('Test finding an open issue successfully', () => {
             GithubUtils_1.default.octokit.issues.listForRepo = jest.fn().mockResolvedValue({ data: [baseIssue] });
-            return GithubUtils_1.default.getStagingDeployCash().then(function (data) { return expect(data).toStrictEqual(baseExpectedResponse); });
+            return GithubUtils_1.default.getStagingDeployCash().then((data) => expect(data).toStrictEqual(baseExpectedResponse));
         });
-        test('Test finding an open issue successfully and parsing with deploy blockers', function () {
+        test('Test finding an open issue successfully and parsing with deploy blockers', () => {
             GithubUtils_1.default.octokit.issues.listForRepo = jest.fn().mockResolvedValue({ data: [issueWithDeployBlockers] });
-            return GithubUtils_1.default.getStagingDeployCash().then(function (data) { return expect(data).toStrictEqual(expectedResponseWithDeployBlockers); });
+            return GithubUtils_1.default.getStagingDeployCash().then((data) => expect(data).toStrictEqual(expectedResponseWithDeployBlockers));
         });
-        test('Test finding an open issue successfully and parsing with blockers w/o carriage returns', function () {
-            var modifiedIssueWithDeployBlockers = __assign({}, issueWithDeployBlockers);
+        test('Test finding an open issue successfully and parsing with blockers w/o carriage returns', () => {
+            const modifiedIssueWithDeployBlockers = { ...issueWithDeployBlockers };
             modifiedIssueWithDeployBlockers.body = modifiedIssueWithDeployBlockers.body.replace(/\r/g, '');
             GithubUtils_1.default.octokit.issues.listForRepo = jest.fn().mockResolvedValue({
                 data: [modifiedIssueWithDeployBlockers],
             });
-            return GithubUtils_1.default.getStagingDeployCash().then(function (data) { return expect(data).toStrictEqual(expectedResponseWithDeployBlockers); });
+            return GithubUtils_1.default.getStagingDeployCash().then((data) => expect(data).toStrictEqual(expectedResponseWithDeployBlockers));
         });
-        test('Test finding an open issue without a body', function () {
-            var noBodyIssue = baseIssue;
+        test('Test finding an open issue without a body', () => {
+            const noBodyIssue = baseIssue;
             noBodyIssue.body = '';
             GithubUtils_1.default.octokit.issues.listForRepo = jest.fn().mockResolvedValue({ data: [noBodyIssue] });
-            return GithubUtils_1.default.getStagingDeployCash().catch(function (e) { return expect(e).toEqual(new Error('Unable to find StagingDeployCash issue with correct data.')); });
+            return GithubUtils_1.default.getStagingDeployCash().catch((e) => expect(e).toEqual(new Error('Unable to find StagingDeployCash issue with correct data.')));
         });
-        test('Test finding more than one issue', function () {
+        test('Test finding more than one issue', () => {
             GithubUtils_1.default.octokit.issues.listForRepo = jest.fn().mockResolvedValue({ data: [{ a: 1 }, { b: 2 }] });
-            return GithubUtils_1.default.getStagingDeployCash().catch(function (e) { return expect(e).toEqual(new Error('Found more than one StagingDeployCash issue.')); });
+            return GithubUtils_1.default.getStagingDeployCash().catch((e) => expect(e).toEqual(new Error('Found more than one StagingDeployCash issue.')));
         });
-        test('Test finding no issues', function () {
+        test('Test finding no issues', () => {
             GithubUtils_1.default.octokit.issues.listForRepo = jest.fn().mockResolvedValue({ data: [] });
-            return GithubUtils_1.default.getStagingDeployCash().catch(function (e) { return expect(e).toEqual(new Error('Unable to find StagingDeployCash issue.')); });
+            return GithubUtils_1.default.getStagingDeployCash().catch((e) => expect(e).toEqual(new Error('Unable to find StagingDeployCash issue.')));
         });
     });
-    describe('getPullRequestNumberFromURL', function () {
-        describe('valid pull requests', function () {
+    describe('getPullRequestNumberFromURL', () => {
+        describe('valid pull requests', () => {
             test.each([
                 ['https://github.com/Expensify/Expensify/pull/156369', 156369],
-                ["https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/1644"), 1644],
+                [`https://github.com/${process.env.GITHUB_REPOSITORY}/pull/1644`, 1644],
                 ['https://github.com/Expensify/expensify-common/pull/346', 346],
                 ['https://api.github.com/repos/Expensify/Expensify/pull/156369', 156369],
-                ["https://api.github.com/repos/".concat(process.env.GITHUB_REPOSITORY, "/pull/1644"), 1644],
+                [`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/pull/1644`, 1644],
                 ['https://api.github.com/repos/Expensify/expensify-common/pull/346', 346],
-            ])('getPullRequestNumberFromURL("%s")', function (input, expected) {
+            ])('getPullRequestNumberFromURL("%s")', (input, expected) => {
                 expect(GithubUtils_1.default.getPullRequestNumberFromURL(input)).toBe(expected);
             });
         });
-        describe('invalid pull requests', function () {
+        describe('invalid pull requests', () => {
             test.each([
                 ['https://www.google.com/'],
                 ['https://github.com/Expensify/Expensify/issues/156481'],
                 ['https://docs.google.com/document/d/1mMFh-m1seOES48r3zNqcvfuTvr3qOAsY6n5rP4ejdXE/edit?ts=602420d2#'],
-            ])('getPullRequestNumberFromURL("%s")', function (input) {
-                expect(function () {
+            ])('getPullRequestNumberFromURL("%s")', (input) => {
+                expect(() => {
                     GithubUtils_1.default.getPullRequestNumberFromURL(input);
-                }).toThrow(new Error("Provided URL ".concat(input, " is not a Github Pull Request!")));
+                }).toThrow(new Error(`Provided URL ${input} is not a Github Pull Request!`));
             });
         });
     });
-    describe('getIssueNumberFromURL', function () {
-        describe('valid issues', function () {
+    describe('getIssueNumberFromURL', () => {
+        describe('valid issues', () => {
             test.each([
                 ['https://github.com/Expensify/Expensify/issues/156369', 156369],
-                ["https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/issues/1644"), 1644],
+                [`https://github.com/${process.env.GITHUB_REPOSITORY}/issues/1644`, 1644],
                 ['https://github.com/Expensify/expensify-common/issues/346', 346],
                 ['https://api.github.com/repos/Expensify/Expensify/issues/156369', 156369],
-                ["https://api.github.com/repos/".concat(process.env.GITHUB_REPOSITORY, "/issues/1644"), 1644],
+                [`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/issues/1644`, 1644],
                 ['https://api.github.com/repos/Expensify/expensify-common/issues/346', 346],
-            ])('getIssueNumberFromURL("%s")', function (input, expected) {
+            ])('getIssueNumberFromURL("%s")', (input, expected) => {
                 expect(GithubUtils_1.default.getIssueNumberFromURL(input)).toBe(expected);
             });
         });
-        describe('invalid issues', function () {
+        describe('invalid issues', () => {
             test.each([
                 ['https://www.google.com/'],
                 ['https://github.com/Expensify/Expensify/pull/156481'],
                 ['https://docs.google.com/document/d/1mMFh-m1seOES48r3zNqcvfuTvr3qOAsY6n5rP4ejdXE/edit?ts=602420d2#'],
-            ])('getIssueNumberFromURL("%s")', function (input) {
-                expect(function () {
+            ])('getIssueNumberFromURL("%s")', (input) => {
+                expect(() => {
                     GithubUtils_1.default.getIssueNumberFromURL(input);
-                }).toThrow(new Error("Provided URL ".concat(input, " is not a Github Issue!")));
+                }).toThrow(new Error(`Provided URL ${input} is not a Github Issue!`));
             });
         });
     });
-    describe('getIssueOrPullRequestNumberFromURL', function () {
-        describe('valid issues and pull requests', function () {
+    describe('getIssueOrPullRequestNumberFromURL', () => {
+        describe('valid issues and pull requests', () => {
             test.each([
                 ['https://github.com/Expensify/Expensify/issues/156369', 156369],
-                ["https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/issues/1644"), 1644],
+                [`https://github.com/${process.env.GITHUB_REPOSITORY}/issues/1644`, 1644],
                 ['https://github.com/Expensify/expensify-common/issues/346', 346],
                 ['https://github.com/Expensify/Expensify/pull/156369', 156369],
-                ["https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/1644"), 1644],
+                [`https://github.com/${process.env.GITHUB_REPOSITORY}/pull/1644`, 1644],
                 ['https://github.com/Expensify/expensify-common/pull/346', 346],
                 ['https://api.github.com/repos/Expensify/Expensify/issues/156369', 156369],
-                ["https://api.github.com/repos/".concat(process.env.GITHUB_REPOSITORY, "/issues/1644"), 1644],
+                [`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/issues/1644`, 1644],
                 ['https://api.github.com/repos/Expensify/expensify-common/issues/346', 346],
                 ['https://api.github.com/repos/Expensify/Expensify/pull/156369', 156369],
-                ["https://api.github.com/repos/".concat(process.env.GITHUB_REPOSITORY, "/pull/1644"), 1644],
+                [`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/pull/1644`, 1644],
                 ['https://api.github.com/repos/Expensify/expensify-common/pull/346', 346],
-            ])('getIssueOrPullRequestNumberFromURL("%s")', function (input, expected) {
+            ])('getIssueOrPullRequestNumberFromURL("%s")', (input, expected) => {
                 expect(GithubUtils_1.default.getIssueOrPullRequestNumberFromURL(input)).toBe(expected);
             });
         });
-        describe('invalid issues/pull requests', function () {
-            test.each([['https://www.google.com/'], ['https://docs.google.com/document/d/1mMFh-m1seOES48r3zNqcvfuTvr3qOAsY6n5rP4ejdXE/edit?ts=602420d2#']])('getIssueOrPullRequestNumberFromURL("%s")', function (input) {
-                expect(function () {
+        describe('invalid issues/pull requests', () => {
+            test.each([['https://www.google.com/'], ['https://docs.google.com/document/d/1mMFh-m1seOES48r3zNqcvfuTvr3qOAsY6n5rP4ejdXE/edit?ts=602420d2#']])('getIssueOrPullRequestNumberFromURL("%s")', (input) => {
+                expect(() => {
                     GithubUtils_1.default.getIssueOrPullRequestNumberFromURL(input);
-                }).toThrow(new Error("Provided URL ".concat(input, " is not a valid Github Issue or Pull Request!")));
+                }).toThrow(new Error(`Provided URL ${input} is not a valid Github Issue or Pull Request!`));
             });
         });
     });
-    describe('generateStagingDeployCashBody', function () {
-        var mockTags = [{ name: '1.0.2-0' }, { name: '1.0.2-12' }];
-        var mockPRs = [
+    describe('generateStagingDeployCashBody', () => {
+        const mockTags = [{ name: '1.0.2-0' }, { name: '1.0.2-12' }];
+        const mockPRs = [
             {
                 number: 1,
                 title: 'Test PR 1',
-                html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/1"),
+                html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/1`,
                 user: { login: 'username' },
                 labels: [],
             },
             {
                 number: 2,
                 title: 'Test PR 2',
-                html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/2"),
+                html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/2`,
                 user: { login: 'username' },
                 labels: [],
             },
             {
                 number: 3,
                 title: 'Test PR 3',
-                html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/3"),
+                html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/3`,
                 user: { login: 'username' },
                 labels: [],
             },
             {
                 number: 4,
                 title: '[NO QA] Test No QA PR uppercase',
-                html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/4"),
+                html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/4`,
                 user: { login: 'username' },
                 labels: [],
             },
             {
                 number: 5,
                 title: '[NoQa] Test No QA PR Title Case',
-                html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/5"),
+                html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/5`,
                 user: { login: 'username' },
                 labels: [],
             },
             {
                 number: 6,
                 title: '[Internal QA] Another Test Internal QA PR',
-                html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/6"),
+                html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/6`,
                 user: { login: 'username' },
                 labels: [
                     {
                         id: 1234,
                         node_id: 'MDU6TGFiZWwyMDgwNDU5NDY=',
-                        url: "https://api.github.com/".concat(process.env.GITHUB_REPOSITORY, "/labels/InternalQA"),
+                        url: `https://api.github.com/${process.env.GITHUB_REPOSITORY}/labels/InternalQA`,
                         name: 'InternalQA',
                         description: 'An Expensifier needs to test this.',
                         color: 'f29513',
@@ -364,13 +297,13 @@ describe('GithubUtils', function () {
             {
                 number: 7,
                 title: '[Internal QA] Another Test Internal QA PR',
-                html_url: "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/7"),
+                html_url: `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/7`,
                 user: { login: 'username' },
                 labels: [
                     {
                         id: 1234,
                         node_id: 'MDU6TGFiZWwyMDgwNDU5NDY=',
-                        url: "https://api.github.com/".concat(process.env.GITHUB_REPOSITORY, "/labels/InternalQA"),
+                        url: `https://api.github.com/${process.env.GITHUB_REPOSITORY}/labels/InternalQA`,
                         name: 'InternalQA',
                         description: 'An Expensifier needs to test this.',
                         color: 'f29513',
@@ -379,11 +312,11 @@ describe('GithubUtils', function () {
                 assignees: [],
             },
         ];
-        var mockInternalQaPR = {
+        const mockInternalQaPR = {
             merged_by: { login: 'octocat' },
         };
-        var mockGithub = jest.fn(function () { return ({
-            getOctokit: function () { return ({
+        const mockGithub = jest.fn(() => ({
+            getOctokit: () => ({
                 rest: {
                     repos: {
                         listTags: jest.fn().mockResolvedValue({ data: mockTags }),
@@ -393,91 +326,83 @@ describe('GithubUtils', function () {
                         get: jest.fn().mockResolvedValue({ data: mockInternalQaPR }),
                     },
                 },
-                paginate: jest.fn().mockImplementation(function (objectMethod) { return objectMethod().then(function (_a) {
-                    var data = _a.data;
-                    return data;
-                }); }),
-            }); },
-        }); });
-        var octokit = mockGithub().getOctokit();
-        var githubUtils = /** @class */ (function (_super) {
-            __extends(githubUtils, _super);
-            function githubUtils() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            return githubUtils;
-        }(GithubUtils_1.default));
+                paginate: jest.fn().mockImplementation((objectMethod) => objectMethod().then(({ data }) => data)),
+            }),
+        }));
+        const octokit = mockGithub().getOctokit();
+        const githubUtils = class extends GithubUtils_1.default {
+        };
         githubUtils.internalOctokit = octokit;
-        var tag = '1.0.2-12';
-        var basePRList = [
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/2"),
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/3"),
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/1"),
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/3"), // This is an intentional duplicate for testing duplicates
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/4"), // No QA
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/5"),
+        const tag = '1.0.2-12';
+        const basePRList = [
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/2`,
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/3`,
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/1`,
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/3`, // This is an intentional duplicate for testing duplicates
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/4`, // No QA
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/5`, // No QA
         ];
-        var PRListMobileExpensify = [
-            "https://github.com/Expensify/Mobile-Expensify/pull/1",
-            "https://github.com/Expensify/Mobile-Expensify/pull/2",
-            "https://github.com/Expensify/Mobile-Expensify/pull/3",
+        const PRListMobileExpensify = [
+            `https://github.com/Expensify/Mobile-Expensify/pull/1`,
+            `https://github.com/Expensify/Mobile-Expensify/pull/2`,
+            `https://github.com/Expensify/Mobile-Expensify/pull/3`,
         ];
-        var internalQAPRList = [
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/6"), // Internal QA
-            "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/7"),
+        const internalQAPRList = [
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/6`, // Internal QA
+            `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/7`, // Internal QA
         ];
-        var baseDeployBlockerList = ["https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/3"), "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/issues/4")];
+        const baseDeployBlockerList = [`https://github.com/${process.env.GITHUB_REPOSITORY}/pull/3`, `https://github.com/${process.env.GITHUB_REPOSITORY}/issues/4`];
         // eslint-disable-next-line max-len
-        var baseExpectedOutput = "**Release Version:** `".concat(tag, "`\r\n**Compare Changes:** https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n");
-        var openCheckbox = '- [ ] ';
-        var closedCheckbox = '- [x] ';
-        var ccApplauseLeads = 'cc @Expensify/applauseleads\r\n';
-        var deployBlockerHeader = '\r\n**Deploy Blockers:**';
-        var internalQAHeader = '\r\n\r\n**Internal QA:**';
-        var lineBreak = '\r\n';
-        var lineBreakDouble = '\r\n\r\n';
-        var assignOctocat = ' - @octocat';
-        var deployerVerificationsHeader = '\r\n**Deployer verifications:**';
+        const baseExpectedOutput = `**Release Version:** \`${tag}\`\r\n**Compare Changes:** https://github.com/${process.env.GITHUB_REPOSITORY}/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n`;
+        const openCheckbox = '- [ ] ';
+        const closedCheckbox = '- [x] ';
+        const ccApplauseLeads = 'cc @Expensify/applauseleads\r\n';
+        const deployBlockerHeader = '\r\n**Deploy Blockers:**';
+        const internalQAHeader = '\r\n\r\n**Internal QA:**';
+        const lineBreak = '\r\n';
+        const lineBreakDouble = '\r\n\r\n';
+        const assignOctocat = ' - @octocat';
+        const deployerVerificationsHeader = '\r\n**Deployer verifications:**';
         // eslint-disable-next-line max-len
-        var firebaseVerificationCurrentRelease = 'I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/ios:com.expensify.expensifylite/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **this release version** and verified that this release does not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).';
+        const firebaseVerificationCurrentRelease = 'I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/ios:com.expensify.expensifylite/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **this release version** and verified that this release does not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).';
         // eslint-disable-next-line max-len
-        var firebaseVerificationPreviousRelease = 'I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/android:org.me.mobiexpensifyg/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **the previous release version** and verified that the release did not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).';
+        const firebaseVerificationPreviousRelease = 'I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/android:org.me.mobiexpensifyg/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **the previous release version** and verified that the release did not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).';
         // eslint-disable-next-line max-len
-        var ghVerification = 'I checked [GitHub Status](https://www.githubstatus.com/) and verified there is no reported incident with Actions.';
+        const ghVerification = 'I checked [GitHub Status](https://www.githubstatus.com/) and verified there is no reported incident with Actions.';
         // Valid output which will be reused in the deploy blocker tests
-        var allVerifiedExpectedOutput = "".concat(baseExpectedOutput) +
-            "".concat(closedCheckbox).concat(basePRList.at(2)) +
-            "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(0)) +
-            "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(1)) +
-            "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(4)) +
-            "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(5)) +
-            "".concat(lineBreak);
-        test('Test no verified PRs', function () {
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, PRListMobileExpensify).then(function (issue) {
+        const allVerifiedExpectedOutput = `${baseExpectedOutput}` +
+            `${closedCheckbox}${basePRList.at(2)}` +
+            `${lineBreak}${closedCheckbox}${basePRList.at(0)}` +
+            `${lineBreak}${closedCheckbox}${basePRList.at(1)}` +
+            `${lineBreak}${closedCheckbox}${basePRList.at(4)}` +
+            `${lineBreak}${closedCheckbox}${basePRList.at(5)}` +
+            `${lineBreak}`;
+        test('Test no verified PRs', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, PRListMobileExpensify).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                var expectedOutputWithMobileExpensify = "**Release Version:** `".concat(tag, "`\r\n**Compare Changes:** https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/compare/production...staging\r\n**Mobile-Expensify Changes:** https://github.com/Expensify/Mobile-Expensify/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n");
-                expect(issue.issueBody).toBe("".concat(expectedOutputWithMobileExpensify) +
-                    "".concat(openCheckbox).concat(basePRList.at(2)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(basePRList.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(basePRList.at(1)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(4)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(5)) +
-                    "".concat(lineBreak).concat(lineBreakDouble, "**Mobile-Expensify PRs:**") +
-                    "".concat(lineBreak).concat(openCheckbox).concat(PRListMobileExpensify.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(PRListMobileExpensify.at(1)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(PRListMobileExpensify.at(2)) +
-                    "".concat(lineBreakDouble).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification) +
-                    "".concat(lineBreakDouble).concat(ccApplauseLeads));
+                const expectedOutputWithMobileExpensify = `**Release Version:** \`${tag}\`\r\n**Compare Changes:** https://github.com/${process.env.GITHUB_REPOSITORY}/compare/production...staging\r\n**Mobile-Expensify Changes:** https://github.com/Expensify/Mobile-Expensify/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n`;
+                expect(issue.issueBody).toBe(`${expectedOutputWithMobileExpensify}` +
+                    `${openCheckbox}${basePRList.at(2)}` +
+                    `${lineBreak}${openCheckbox}${basePRList.at(0)}` +
+                    `${lineBreak}${openCheckbox}${basePRList.at(1)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(4)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(5)}` +
+                    `${lineBreak}${lineBreakDouble}**Mobile-Expensify PRs:**` +
+                    `${lineBreak}${openCheckbox}${PRListMobileExpensify.at(0)}` +
+                    `${lineBreak}${openCheckbox}${PRListMobileExpensify.at(1)}` +
+                    `${lineBreak}${openCheckbox}${PRListMobileExpensify.at(2)}` +
+                    `${lineBreakDouble}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}` +
+                    `${lineBreakDouble}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual([]);
             });
         });
-        test('Test Mobile-Expensify compare link with Mobile-Expensify PRs', function () {
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, PRListMobileExpensify).then(function (issue) {
+        test('Test Mobile-Expensify compare link with Mobile-Expensify PRs', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, PRListMobileExpensify).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
@@ -486,8 +411,8 @@ describe('GithubUtils', function () {
                 expect(issue.issueBody).toContain('**Mobile-Expensify PRs:**');
             });
         });
-        test('Test no Mobile-Expensify compare link without Mobile-Expensify PRs', function () {
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, []).then(function (issue) {
+        test('Test no Mobile-Expensify compare link without Mobile-Expensify PRs', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, []).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
@@ -496,149 +421,146 @@ describe('GithubUtils', function () {
                 expect(issue.issueBody).not.toContain('**Mobile-Expensify PRs:**'); // And should not have PRs section either
             });
         });
-        test('Test some verified PRs', function () {
-            var _a;
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], [(_a = basePRList.at(0)) !== null && _a !== void 0 ? _a : '']).then(function (issue) {
+        test('Test some verified PRs', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], [basePRList.at(0) ?? '']).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                expect(issue.issueBody).toBe("".concat(baseExpectedOutput) +
-                    "".concat(openCheckbox).concat(basePRList.at(2)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(basePRList.at(1)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(4)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(5)) +
-                    "".concat(lineBreakDouble).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification) +
-                    "".concat(lineBreakDouble).concat(ccApplauseLeads));
+                expect(issue.issueBody).toBe(`${baseExpectedOutput}` +
+                    `${openCheckbox}${basePRList.at(2)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(0)}` +
+                    `${lineBreak}${openCheckbox}${basePRList.at(1)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(4)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(5)}` +
+                    `${lineBreakDouble}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}` +
+                    `${lineBreakDouble}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual([]);
             });
         });
-        test('Test all verified PRs', function () {
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList).then(function (issue) {
+        test('Test all verified PRs', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                expect(issue.issueBody).toBe("".concat(allVerifiedExpectedOutput) +
-                    "".concat(lineBreak).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification) +
-                    "".concat(lineBreakDouble).concat(ccApplauseLeads));
+                expect(issue.issueBody).toBe(`${allVerifiedExpectedOutput}` +
+                    `${lineBreak}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}` +
+                    `${lineBreakDouble}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual([]);
             });
         });
-        test('Test no resolved deploy blockers', function () {
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList, [], baseDeployBlockerList).then(function (issue) {
+        test('Test no resolved deploy blockers', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList, [], baseDeployBlockerList).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                expect(issue.issueBody).toBe("".concat(allVerifiedExpectedOutput) +
-                    "".concat(lineBreak).concat(deployBlockerHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(baseDeployBlockerList.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(baseDeployBlockerList.at(1)) +
-                    "".concat(lineBreakDouble).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification).concat(lineBreak) +
-                    "".concat(lineBreak).concat(ccApplauseLeads));
+                expect(issue.issueBody).toBe(`${allVerifiedExpectedOutput}` +
+                    `${lineBreak}${deployBlockerHeader}` +
+                    `${lineBreak}${openCheckbox}${baseDeployBlockerList.at(0)}` +
+                    `${lineBreak}${openCheckbox}${baseDeployBlockerList.at(1)}` +
+                    `${lineBreakDouble}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}${lineBreak}` +
+                    `${lineBreak}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual([]);
             });
         });
-        test('Test some resolved deploy blockers', function () {
-            var _a;
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList, [], baseDeployBlockerList, [(_a = baseDeployBlockerList.at(0)) !== null && _a !== void 0 ? _a : '']).then(function (issue) {
+        test('Test some resolved deploy blockers', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList, [], baseDeployBlockerList, [baseDeployBlockerList.at(0) ?? '']).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                expect(issue.issueBody).toBe("".concat(allVerifiedExpectedOutput) +
-                    "".concat(lineBreak).concat(deployBlockerHeader) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(baseDeployBlockerList.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(baseDeployBlockerList.at(1)) +
-                    "".concat(lineBreakDouble).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification) +
-                    "".concat(lineBreakDouble).concat(ccApplauseLeads));
+                expect(issue.issueBody).toBe(`${allVerifiedExpectedOutput}` +
+                    `${lineBreak}${deployBlockerHeader}` +
+                    `${lineBreak}${closedCheckbox}${baseDeployBlockerList.at(0)}` +
+                    `${lineBreak}${openCheckbox}${baseDeployBlockerList.at(1)}` +
+                    `${lineBreakDouble}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}` +
+                    `${lineBreakDouble}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual([]);
             });
         });
-        test('Test all resolved deploy blockers', function () {
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList, [], baseDeployBlockerList, baseDeployBlockerList).then(function (issue) {
+        test('Test all resolved deploy blockers', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, basePRList, [], basePRList, [], baseDeployBlockerList, baseDeployBlockerList).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                expect(issue.issueBody).toBe("".concat(baseExpectedOutput) +
-                    "".concat(closedCheckbox).concat(basePRList.at(2)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(0)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(1)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(4)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(5)) +
-                    "".concat(lineBreakDouble).concat(deployBlockerHeader) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(baseDeployBlockerList.at(0)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(baseDeployBlockerList.at(1)) +
-                    "".concat(lineBreakDouble).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification) +
-                    "".concat(lineBreakDouble).concat(ccApplauseLeads));
+                expect(issue.issueBody).toBe(`${baseExpectedOutput}` +
+                    `${closedCheckbox}${basePRList.at(2)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(0)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(1)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(4)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(5)}` +
+                    `${lineBreakDouble}${deployBlockerHeader}` +
+                    `${lineBreak}${closedCheckbox}${baseDeployBlockerList.at(0)}` +
+                    `${lineBreak}${closedCheckbox}${baseDeployBlockerList.at(1)}` +
+                    `${lineBreakDouble}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}` +
+                    `${lineBreakDouble}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual([]);
             });
         });
-        test('Test internalQA PRs', function () {
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, __spreadArray(__spreadArray([], basePRList, true), internalQAPRList, true), PRListMobileExpensify).then(function (issue) {
+        test('Test internalQA PRs', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, [...basePRList, ...internalQAPRList], PRListMobileExpensify).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                var expectedOutputWithMobileExpensify = "**Release Version:** `".concat(tag, "`\r\n**Compare Changes:** https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/compare/production...staging\r\n**Mobile-Expensify Changes:** https://github.com/Expensify/Mobile-Expensify/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n");
-                expect(issue.issueBody).toBe("".concat(expectedOutputWithMobileExpensify) +
-                    "".concat(openCheckbox).concat(basePRList.at(2)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(basePRList.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(basePRList.at(1)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(4)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(5)) +
-                    "".concat(lineBreak).concat(lineBreakDouble, "**Mobile-Expensify PRs:**") +
-                    "".concat(lineBreak).concat(openCheckbox).concat(PRListMobileExpensify.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(PRListMobileExpensify.at(1)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(PRListMobileExpensify.at(2)) +
-                    "".concat(lineBreak).concat(internalQAHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(internalQAPRList.at(0)).concat(assignOctocat) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(internalQAPRList.at(1)).concat(assignOctocat) +
-                    "".concat(lineBreakDouble).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification) +
-                    "".concat(lineBreakDouble).concat(ccApplauseLeads));
+                const expectedOutputWithMobileExpensify = `**Release Version:** \`${tag}\`\r\n**Compare Changes:** https://github.com/${process.env.GITHUB_REPOSITORY}/compare/production...staging\r\n**Mobile-Expensify Changes:** https://github.com/Expensify/Mobile-Expensify/compare/production...staging\r\n\r\n**This release contains changes from the following pull requests:**\r\n`;
+                expect(issue.issueBody).toBe(`${expectedOutputWithMobileExpensify}` +
+                    `${openCheckbox}${basePRList.at(2)}` +
+                    `${lineBreak}${openCheckbox}${basePRList.at(0)}` +
+                    `${lineBreak}${openCheckbox}${basePRList.at(1)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(4)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(5)}` +
+                    `${lineBreak}${lineBreakDouble}**Mobile-Expensify PRs:**` +
+                    `${lineBreak}${openCheckbox}${PRListMobileExpensify.at(0)}` +
+                    `${lineBreak}${openCheckbox}${PRListMobileExpensify.at(1)}` +
+                    `${lineBreak}${openCheckbox}${PRListMobileExpensify.at(2)}` +
+                    `${lineBreak}${internalQAHeader}` +
+                    `${lineBreak}${openCheckbox}${internalQAPRList.at(0)}${assignOctocat}` +
+                    `${lineBreak}${openCheckbox}${internalQAPRList.at(1)}${assignOctocat}` +
+                    `${lineBreakDouble}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}` +
+                    `${lineBreakDouble}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual(['octocat']);
             });
         });
-        test('Test some verified internalQA PRs', function () {
-            var _a;
-            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, __spreadArray(__spreadArray([], basePRList, true), internalQAPRList, true), [], [], [], [], [], [(_a = internalQAPRList.at(0)) !== null && _a !== void 0 ? _a : '']).then(function (issue) {
+        test('Test some verified internalQA PRs', () => {
+            githubUtils.generateStagingDeployCashBodyAndAssignees(tag, [...basePRList, ...internalQAPRList], [], [], [], [], [], [internalQAPRList.at(0) ?? '']).then((issue) => {
                 if (typeof issue !== 'object') {
                     return;
                 }
-                expect(issue.issueBody).toBe("".concat(baseExpectedOutput) +
-                    "".concat(openCheckbox).concat(basePRList.at(2)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(basePRList.at(0)) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(basePRList.at(1)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(4)) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(basePRList.at(5)) +
-                    "".concat(lineBreak).concat(internalQAHeader) +
-                    "".concat(lineBreak).concat(closedCheckbox).concat(internalQAPRList.at(0)).concat(assignOctocat) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(internalQAPRList.at(1)).concat(assignOctocat) +
-                    "".concat(lineBreakDouble).concat(deployerVerificationsHeader) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationCurrentRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(firebaseVerificationPreviousRelease) +
-                    "".concat(lineBreak).concat(openCheckbox).concat(ghVerification) +
-                    "".concat(lineBreakDouble).concat(ccApplauseLeads));
+                expect(issue.issueBody).toBe(`${baseExpectedOutput}` +
+                    `${openCheckbox}${basePRList.at(2)}` +
+                    `${lineBreak}${openCheckbox}${basePRList.at(0)}` +
+                    `${lineBreak}${openCheckbox}${basePRList.at(1)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(4)}` +
+                    `${lineBreak}${closedCheckbox}${basePRList.at(5)}` +
+                    `${lineBreak}${internalQAHeader}` +
+                    `${lineBreak}${closedCheckbox}${internalQAPRList.at(0)}${assignOctocat}` +
+                    `${lineBreak}${openCheckbox}${internalQAPRList.at(1)}${assignOctocat}` +
+                    `${lineBreakDouble}${deployerVerificationsHeader}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationCurrentRelease}` +
+                    `${lineBreak}${openCheckbox}${firebaseVerificationPreviousRelease}` +
+                    `${lineBreak}${openCheckbox}${ghVerification}` +
+                    `${lineBreakDouble}${ccApplauseLeads}`);
                 expect(issue.issueAssignees).toEqual(['octocat']);
             });
         });
     });
-    var commitHistoryData = {
+    const commitHistoryData = {
         emptyResponse: {
             data: {
                 commits: [],
@@ -690,10 +612,10 @@ describe('GithubUtils', function () {
             },
         },
     };
-    describe('getCommitHistoryBetweenTags', function () {
-        var mockCompareCommits;
-        beforeEach(function () {
-            jest.spyOn(core, 'getInput').mockImplementation(function (name) {
+    describe('getCommitHistoryBetweenTags', () => {
+        let mockCompareCommits;
+        beforeEach(() => {
+            jest.spyOn(core, 'getInput').mockImplementation((name) => {
                 if (name === 'GITHUB_TOKEN') {
                     return 'mock-token';
                 }
@@ -701,7 +623,7 @@ describe('GithubUtils', function () {
             });
             // Prepare the mocked GitHub API
             mockCompareCommits = jest.fn();
-            var mockOctokitInstance = {
+            const mockOctokitInstance = {
                 rest: {
                     repos: {
                         compareCommits: mockCompareCommits,
@@ -710,127 +632,75 @@ describe('GithubUtils', function () {
                 paginate: jest.fn(),
             };
             // Replace the real initOctokit with our mocked one
-            jest.spyOn(GithubUtils_1.default, 'initOctokit').mockImplementation(function () { });
+            jest.spyOn(GithubUtils_1.default, 'initOctokit').mockImplementation(() => { });
             GithubUtils_1.default.internalOctokit = mockOctokitInstance;
         });
-        afterEach(function () {
+        afterEach(() => {
             jest.restoreAllMocks();
         });
-        test('should call GitHub API with correct parameters', function () { return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        mockCompareCommits.mockResolvedValue(commitHistoryData.emptyResponse);
-                        return [4 /*yield*/, GithubUtils_1.default.getCommitHistoryBetweenTags('v1.0.0', 'v1.0.1', CONST_1.default.APP_REPO)];
-                    case 1:
-                        _a.sent();
-                        expect(mockCompareCommits).toHaveBeenCalledWith({
-                            owner: CONST_1.default.GITHUB_OWNER,
-                            repo: CONST_1.default.APP_REPO,
-                            base: 'v1.0.0',
-                            head: 'v1.0.1',
-                            page: 1,
-                            per_page: 250,
-                        });
-                        return [2 /*return*/];
-                }
+        test('should call GitHub API with correct parameters', async () => {
+            mockCompareCommits.mockResolvedValue(commitHistoryData.emptyResponse);
+            await GithubUtils_1.default.getCommitHistoryBetweenTags('v1.0.0', 'v1.0.1', CONST_1.default.APP_REPO);
+            expect(mockCompareCommits).toHaveBeenCalledWith({
+                owner: CONST_1.default.GITHUB_OWNER,
+                repo: CONST_1.default.APP_REPO,
+                base: 'v1.0.0',
+                head: 'v1.0.1',
+                page: 1,
+                per_page: 250,
             });
-        }); });
-        test('should return empty array when no commits found', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        mockCompareCommits.mockResolvedValue(commitHistoryData.emptyResponse);
-                        return [4 /*yield*/, GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO)];
-                    case 1:
-                        result = _a.sent();
-                        expect(result).toEqual([]);
-                        return [2 /*return*/];
-                }
+        });
+        test('should return empty array when no commits found', async () => {
+            mockCompareCommits.mockResolvedValue(commitHistoryData.emptyResponse);
+            const result = await GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO);
+            expect(result).toEqual([]);
+        });
+        test('should return formatted commit history when commits exist', async () => {
+            mockCompareCommits.mockResolvedValue(commitHistoryData.singleCommit);
+            const result = await GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO);
+            expect(result).toEqual(commitHistoryData.expectedFormattedCommit);
+        });
+        test('should handle multiple commits correctly', async () => {
+            mockCompareCommits.mockResolvedValue(commitHistoryData.multipleCommitsResponse);
+            const result = await GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO);
+            expect(result).toHaveLength(2);
+            expect(result.at(0)).toEqual({
+                commit: 'abc123',
+                subject: 'First commit',
+                authorName: 'Author One',
             });
-        }); });
-        test('should return formatted commit history when commits exist', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        mockCompareCommits.mockResolvedValue(commitHistoryData.singleCommit);
-                        return [4 /*yield*/, GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO)];
-                    case 1:
-                        result = _a.sent();
-                        expect(result).toEqual(commitHistoryData.expectedFormattedCommit);
-                        return [2 /*return*/];
-                }
+            expect(result.at(1)).toEqual({
+                commit: 'def456',
+                subject: 'Second commit',
+                authorName: 'Author Two',
             });
-        }); });
-        test('should handle multiple commits correctly', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        mockCompareCommits.mockResolvedValue(commitHistoryData.multipleCommitsResponse);
-                        return [4 /*yield*/, GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO)];
-                    case 1:
-                        result = _a.sent();
-                        expect(result).toHaveLength(2);
-                        expect(result.at(0)).toEqual({
-                            commit: 'abc123',
-                            subject: 'First commit',
-                            authorName: 'Author One',
-                        });
-                        expect(result.at(1)).toEqual({
-                            commit: 'def456',
-                            subject: 'Second commit',
-                            authorName: 'Author Two',
-                        });
-                        return [2 /*return*/];
-                }
+        });
+        test('should handle 404 RequestError with specific error message', async () => {
+            const coreErrorSpy = jest.spyOn(core, 'error').mockImplementation();
+            const requestError = new request_error_1.RequestError('Not Found', 404, {
+                request: {
+                    method: 'GET',
+                    url: '/repos/compare',
+                    headers: {},
+                },
             });
-        }); });
-        test('should handle 404 RequestError with specific error message', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var coreErrorSpy, requestError;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        coreErrorSpy = jest.spyOn(core, 'error').mockImplementation();
-                        requestError = new request_error_1.RequestError('Not Found', 404, {
-                            request: {
-                                method: 'GET',
-                                url: '/repos/compare',
-                                headers: {},
-                            },
-                        });
-                        mockCompareCommits.mockRejectedValue(requestError);
-                        return [4 /*yield*/, expect(GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO)).rejects.toThrow(requestError)];
-                    case 1:
-                        _a.sent();
-                        expect(coreErrorSpy).toHaveBeenCalledWith(expect.stringContaining("❓❓ Failed to get commits with the GitHub API. The base tag ('1.0.0') or head tag ('1.0.1') likely doesn't exist on the remote repository. If this is the case, create or push them."));
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        test('should handle generic API errors gracefully', function () { return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        mockCompareCommits.mockRejectedValue(new Error('API Error'));
-                        return [4 /*yield*/, expect(GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO)).rejects.toThrow('API Error')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
+            mockCompareCommits.mockRejectedValue(requestError);
+            await expect(GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO)).rejects.toThrow(requestError);
+            expect(coreErrorSpy).toHaveBeenCalledWith(expect.stringContaining("❓❓ Failed to get commits with the GitHub API. The base tag ('1.0.0') or head tag ('1.0.1') likely doesn't exist on the remote repository. If this is the case, create or push them."));
+        });
+        test('should handle generic API errors gracefully', async () => {
+            mockCompareCommits.mockRejectedValue(new Error('API Error'));
+            await expect(GithubUtils_1.default.getCommitHistoryBetweenTags('1.0.0', '1.0.1', CONST_1.default.APP_REPO)).rejects.toThrow('API Error');
+        });
     });
-    describe('getPullRequestURLFromNumber', function () {
+    describe('getPullRequestURLFromNumber', () => {
         test.each([
-            [1234, "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/1234")],
-            [54321, "https://github.com/".concat(process.env.GITHUB_REPOSITORY, "/pull/54321")],
-        ])('getPullRequestNumberFromURL("%s")', function (input, expectedOutput) { return expect(GithubUtils_1.default.getPullRequestURLFromNumber(input, CONST_1.default.APP_REPO_URL)).toBe(expectedOutput); });
+            [1234, `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/1234`],
+            [54321, `https://github.com/${process.env.GITHUB_REPOSITORY}/pull/54321`],
+        ])('getPullRequestNumberFromURL("%s")', (input, expectedOutput) => expect(GithubUtils_1.default.getPullRequestURLFromNumber(input, CONST_1.default.APP_REPO_URL)).toBe(expectedOutput));
         test.each([
-            [1234, "https://github.com/Expensify/Mobile-Expensify/pull/1234"],
-            [54321, "https://github.com/Expensify/Mobile-Expensify/pull/54321"],
-        ])('getPullRequestNumberFromURL("%s")', function (input, expectedOutput) { return expect(GithubUtils_1.default.getPullRequestURLFromNumber(input, CONST_1.default.MOBILE_EXPENSIFY_URL)).toBe(expectedOutput); });
+            [1234, `https://github.com/Expensify/Mobile-Expensify/pull/1234`],
+            [54321, `https://github.com/Expensify/Mobile-Expensify/pull/54321`],
+        ])('getPullRequestNumberFromURL("%s")', (input, expectedOutput) => expect(GithubUtils_1.default.getPullRequestURLFromNumber(input, CONST_1.default.MOBILE_EXPENSIFY_URL)).toBe(expectedOutput));
     });
 });

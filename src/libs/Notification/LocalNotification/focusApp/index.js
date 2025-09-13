@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // On web this is up to the browser that shows the notifications
-var focusApp = function () { };
+const focusApp = () => { };
 exports.default = focusApp;

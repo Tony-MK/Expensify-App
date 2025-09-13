@@ -1,19 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var FixedFooter_1 = require("@components/FixedFooter");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var RenderHTML_1 = require("@components/RenderHTML");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-function DomainPermissionInfoPage(_a) {
-    var route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const FixedFooter_1 = require("@components/FixedFooter");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const RenderHTML_1 = require("@components/RenderHTML");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+function DomainPermissionInfoPage({ route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     return (<ScreenWrapper_1.default shouldEnableMaxHeight testID={DomainPermissionInfoPage.displayName}>
             <HeaderWithBackButton_1.default title={translate('travel.domainPermissionInfo.title')}/>
             <react_native_1.View style={[styles.flex1]}>
@@ -25,7 +24,7 @@ function DomainPermissionInfoPage(_a) {
                 </react_native_1.View>
             </react_native_1.View>
             <FixedFooter_1.default>
-                <Button_1.default success large style={[styles.w100]} onPress={function () { return Navigation_1.default.closeRHPFlow(); }} text={translate('common.buttonConfirm')}/>
+                <Button_1.default success large style={[styles.w100]} onPress={() => Navigation_1.default.closeRHPFlow()} text={translate('common.buttonConfirm')}/>
             </FixedFooter_1.default>
         </ScreenWrapper_1.default>);
 }

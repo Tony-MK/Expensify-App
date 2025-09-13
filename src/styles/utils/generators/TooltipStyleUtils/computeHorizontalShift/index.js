@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GUTTER_WIDTH = void 0;
-var roundToNearestMultipleOfFour_1 = require("@libs/roundToNearestMultipleOfFour");
-var variables_1 = require("@styles/variables");
+const roundToNearestMultipleOfFour_1 = require("@libs/roundToNearestMultipleOfFour");
+const variables_1 = require("@styles/variables");
 /** This defines the proximity with the edge of the window in which tooltips should not be displayed.
  * If a tooltip is too close to the edge of the screen, we'll shift it towards the center. */
-var GUTTER_WIDTH = variables_1.default.gutterWidth;
+const GUTTER_WIDTH = variables_1.default.gutterWidth;
 exports.GUTTER_WIDTH = GUTTER_WIDTH;
 /**
  * Compute the amount the tooltip needs to be horizontally shifted in order to keep it from displaying in the gutters.
@@ -15,9 +15,9 @@ exports.GUTTER_WIDTH = GUTTER_WIDTH;
  *                           and the left edge of the wrapped component.
  * @param tooltipWidth - The width of the tooltip itself.
  */
-var computeHorizontalShift = function (windowWidth, tooltipLeftEdge, tooltipWidth, tooltipWrapperLeft, tooltipWrapperWidth) {
-    var tooltipRightEdge = tooltipLeftEdge + tooltipWidth;
-    var tooltipWrapperRight = tooltipWrapperLeft + tooltipWrapperWidth;
+const computeHorizontalShift = (windowWidth, tooltipLeftEdge, tooltipWidth, tooltipWrapperLeft, tooltipWrapperWidth) => {
+    const tooltipRightEdge = tooltipLeftEdge + tooltipWidth;
+    const tooltipWrapperRight = tooltipWrapperLeft + tooltipWrapperWidth;
     if (tooltipWrapperLeft < 0 || tooltipWrapperRight > windowWidth) {
         return 0;
     }

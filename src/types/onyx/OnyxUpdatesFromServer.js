@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isValidOnyxUpdateFromServer = isValidOnyxUpdateFromServer;
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 /**
  * Helper function to determine if onyx update received from server is valid
  *

@@ -1,59 +1,37 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var connections_1 = require("@libs/actions/connections");
-var QuickbooksOnline_1 = require("@libs/actions/connections/QuickbooksOnline");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var useOnyx_1 = require("./useOnyx");
-var useTheme_1 = require("./useTheme");
+const react_1 = require("react");
+const connections_1 = require("@libs/actions/connections");
+const QuickbooksOnline_1 = require("@libs/actions/connections/QuickbooksOnline");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const useOnyx_1 = require("./useOnyx");
+const useTheme_1 = require("./useTheme");
 function useWorkspacesTabIndicatorStatus() {
-    var _a;
-    var _b, _c;
-    var theme = (0, useTheme_1.default)();
-    var allConnectionSyncProgresses = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS, { canBeMissing: true })[0];
-    var policies = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true })[0];
+    const theme = (0, useTheme_1.default)();
+    const [allConnectionSyncProgresses] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS, { canBeMissing: true });
+    const [policies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true });
     // If a policy was just deleted from Onyx, then Onyx will pass a null value to the props, and
     // those should be cleaned out before doing any error checking
-    var cleanPolicies = (0, react_1.useMemo)(function () { return Object.fromEntries(Object.entries(policies !== null && policies !== void 0 ? policies : {}).filter(function (_a) {
-        var policy = _a[1];
-        return policy === null || policy === void 0 ? void 0 : policy.id;
-    })); }, [policies]);
-    var policyErrors = (_a = {},
-        _a[CONST_1.default.INDICATOR_STATUS.HAS_POLICY_ERRORS] = Object.values(cleanPolicies).find(PolicyUtils_1.shouldShowPolicyError),
-        _a[CONST_1.default.INDICATOR_STATUS.HAS_CUSTOM_UNITS_ERROR] = Object.values(cleanPolicies).find(PolicyUtils_1.shouldShowCustomUnitsError),
-        _a[CONST_1.default.INDICATOR_STATUS.HAS_EMPLOYEE_LIST_ERROR] = Object.values(cleanPolicies).find(PolicyUtils_1.shouldShowEmployeeListError),
-        _a[CONST_1.default.INDICATOR_STATUS.HAS_SYNC_ERRORS] = Object.values(cleanPolicies).find(function (cleanPolicy) {
-            return (0, PolicyUtils_1.shouldShowSyncError)(cleanPolicy, (0, connections_1.isConnectionInProgress)(allConnectionSyncProgresses === null || allConnectionSyncProgresses === void 0 ? void 0 : allConnectionSyncProgresses["".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS).concat(cleanPolicy === null || cleanPolicy === void 0 ? void 0 : cleanPolicy.id)], cleanPolicy));
-        }),
-        _a[CONST_1.default.INDICATOR_STATUS.HAS_QBO_EXPORT_ERROR] = Object.values(cleanPolicies).find(QuickbooksOnline_1.shouldShowQBOReimbursableExportDestinationAccountError),
-        _a);
+    const cleanPolicies = (0, react_1.useMemo)(() => Object.fromEntries(Object.entries(policies ?? {}).filter(([, policy]) => policy?.id)), [policies]);
+    const policyErrors = {
+        [CONST_1.default.INDICATOR_STATUS.HAS_POLICY_ERRORS]: Object.values(cleanPolicies).find(PolicyUtils_1.shouldShowPolicyError),
+        [CONST_1.default.INDICATOR_STATUS.HAS_CUSTOM_UNITS_ERROR]: Object.values(cleanPolicies).find(PolicyUtils_1.shouldShowCustomUnitsError),
+        [CONST_1.default.INDICATOR_STATUS.HAS_EMPLOYEE_LIST_ERROR]: Object.values(cleanPolicies).find(PolicyUtils_1.shouldShowEmployeeListError),
+        [CONST_1.default.INDICATOR_STATUS.HAS_SYNC_ERRORS]: Object.values(cleanPolicies).find((cleanPolicy) => (0, PolicyUtils_1.shouldShowSyncError)(cleanPolicy, (0, connections_1.isConnectionInProgress)(allConnectionSyncProgresses?.[`${ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS}${cleanPolicy?.id}`], cleanPolicy))),
+        [CONST_1.default.INDICATOR_STATUS.HAS_QBO_EXPORT_ERROR]: Object.values(cleanPolicies).find(QuickbooksOnline_1.shouldShowQBOReimbursableExportDestinationAccountError),
+    };
     // All of the error & info-checking methods are put into an array. This is so that using _.some() will return
     // early as soon as the first error / info condition is returned. This makes the checks very efficient since
     // we only care if a single error / info condition exists anywhere.
-    var errorChecking = __assign({}, Object.fromEntries(Object.entries(policyErrors).map(function (_a) {
-        var error = _a[0], policy = _a[1];
-        return [error, !!policy];
-    })));
-    var error = ((_b = Object.entries(errorChecking).find(function (_a) {
-        var value = _a[1];
-        return value;
-    })) !== null && _b !== void 0 ? _b : [])[0];
-    var status = error;
-    var policyIDWithErrors = (_c = Object.values(policyErrors).find(Boolean)) === null || _c === void 0 ? void 0 : _c.id;
-    var indicatorColor = error ? theme.danger : theme.success;
-    return { indicatorColor: indicatorColor, status: status, policyIDWithErrors: policyIDWithErrors };
+    const errorChecking = {
+        ...Object.fromEntries(Object.entries(policyErrors).map(([error, policy]) => [error, !!policy])),
+    };
+    const [error] = Object.entries(errorChecking).find(([, value]) => value) ?? [];
+    const status = error;
+    const policyIDWithErrors = Object.values(policyErrors).find(Boolean)?.id;
+    const indicatorColor = error ? theme.danger : theme.success;
+    return { indicatorColor, status, policyIDWithErrors };
 }
 exports.default = useWorkspacesTabIndicatorStatus;

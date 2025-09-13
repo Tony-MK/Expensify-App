@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = MemberRightIcon;
-var react_1 = require("react");
-var Badge_1 = require("@components/Badge");
-var useLocalize_1 = require("@hooks/useLocalize");
-var CONST_1 = require("@src/CONST");
-function MemberRightIcon(_a) {
-    var role = _a.role, owner = _a.owner, login = _a.login;
-    var translate = (0, useLocalize_1.default)().translate;
-    var badgeText;
+const react_1 = require("react");
+const Badge_1 = require("@components/Badge");
+const useLocalize_1 = require("@hooks/useLocalize");
+const CONST_1 = require("@src/CONST");
+function MemberRightIcon({ role, owner, login }) {
+    const { translate } = (0, useLocalize_1.default)();
+    let badgeText;
     if (owner && owner === login) {
         badgeText = 'common.owner';
     }

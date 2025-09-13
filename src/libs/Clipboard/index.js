@@ -1,55 +1,35 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var clipboard_1 = require("@react-native-clipboard/clipboard");
-var Browser = require("@libs/Browser");
-var CONST_1 = require("@src/CONST");
-var canSetHtml = function () {
-    return function () {
-        var _a;
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return (_a = navigator === null || navigator === void 0 ? void 0 : navigator.clipboard) === null || _a === void 0 ? void 0 : _a.write(__spreadArray([], args, true));
-    };
-};
+const clipboard_1 = require("@react-native-clipboard/clipboard");
+const Browser = require("@libs/Browser");
+const CONST_1 = require("@src/CONST");
+const canSetHtml = () => (...args) => navigator?.clipboard?.write([...args]);
 /**
  * Deprecated method to write the content as HTML to clipboard.
  */
 function setHTMLSync(html, text) {
-    var _a;
-    var node = document.createElement('span');
+    const node = document.createElement('span');
     node.textContent = html;
     node.style.all = 'unset';
     node.style.opacity = '0';
     node.style.position = 'absolute';
     node.style.whiteSpace = 'pre-wrap';
     node.style.userSelect = 'text';
-    node.addEventListener('copy', function (e) {
-        var _a, _b, _c;
+    node.addEventListener('copy', (e) => {
         e.stopPropagation();
         e.preventDefault();
-        (_a = e.clipboardData) === null || _a === void 0 ? void 0 : _a.clearData();
-        (_b = e.clipboardData) === null || _b === void 0 ? void 0 : _b.setData('text/html', html);
-        (_c = e.clipboardData) === null || _c === void 0 ? void 0 : _c.setData('text/plain', text);
+        e.clipboardData?.clearData();
+        e.clipboardData?.setData('text/html', html);
+        e.clipboardData?.setData('text/plain', text);
     });
     document.body.appendChild(node);
-    var selection = window === null || window === void 0 ? void 0 : window.getSelection();
+    const selection = window?.getSelection();
     if (selection === null) {
         return;
     }
-    var firstAnchorChild = (_a = selection.anchorNode) === null || _a === void 0 ? void 0 : _a.firstChild;
-    var isComposer = firstAnchorChild instanceof HTMLTextAreaElement;
-    var originalSelection = null;
+    const firstAnchorChild = selection.anchorNode?.firstChild;
+    const isComposer = firstAnchorChild instanceof HTMLTextAreaElement;
+    let originalSelection = null;
     if (isComposer) {
         originalSelection = {
             start: firstAnchorChild.selectionStart,
@@ -66,7 +46,7 @@ function setHTMLSync(html, text) {
         };
     }
     selection.removeAllRanges();
-    var range = document.createRange();
+    const range = document.createRange();
     range.selectNodeContents(node);
     selection.addRange(range);
     try {
@@ -77,7 +57,7 @@ function setHTMLSync(html, text) {
         // See https://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#the-copy-command for more details.
     }
     selection.removeAllRanges();
-    var anchorSelection = originalSelection;
+    const anchorSelection = originalSelection;
     if (isComposer && 'start' in originalSelection) {
         firstAnchorChild.setSelectionRange(originalSelection.start, originalSelection.end, originalSelection.direction);
     }
@@ -91,7 +71,7 @@ function setHTMLSync(html, text) {
 /**
  * Writes the content as HTML if the web client supports it.
  */
-var setHtml = function (html, text) {
+const setHtml = (html, text) => {
     if (!html || !text) {
         return;
     }
@@ -106,7 +86,7 @@ var setHtml = function (html, text) {
         setHTMLSync(html, text);
     }
     else {
-        var htmlNonClosingTags = html
+        const htmlNonClosingTags = html
             .replace(/<mention-report reportID="(\d+)" *\/>/gi, '<mention-report reportID="$1"></mention-report>')
             .replace(/<mention-user accountID="(\d+)" *\/>/gi, '<mention-user accountID="$1"></mention-user>');
         navigator.clipboard.write([
@@ -121,11 +101,11 @@ var setHtml = function (html, text) {
 /**
  * Sets a string on the Clipboard object via react-native-web
  */
-var setString = function (text) {
+const setString = (text) => {
     clipboard_1.default.setString(text);
 };
 exports.default = {
-    setString: setString,
-    canSetHtml: canSetHtml,
-    setHtml: setHtml,
+    setString,
+    canSetHtml,
+    setHtml,
 };

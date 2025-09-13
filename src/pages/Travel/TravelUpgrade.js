@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Modal_1 = require("@components/Modal");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var WorkspaceConfirmationForm_1 = require("@components/WorkspaceConfirmationForm");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var UpgradeConfirmation_1 = require("@pages/workspace/upgrade/UpgradeConfirmation");
-var UpgradeIntro_1 = require("@pages/workspace/upgrade/UpgradeIntro");
-var CONST_1 = require("@src/CONST");
-var Policy_1 = require("@src/libs/actions/Policy/Policy");
-function TravelUpgrade(_a) {
-    var route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var feature = CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.travel;
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var _b = (0, react_1.useState)(false), isUpgraded = _b[0], setIsUpgraded = _b[1];
-    var _c = (0, react_1.useState)(false), shouldShowConfirmation = _c[0], setShouldShowConfirmation = _c[1];
-    var onSubmit = function (params) {
+const react_1 = require("react");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Modal_1 = require("@components/Modal");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const WorkspaceConfirmationForm_1 = require("@components/WorkspaceConfirmationForm");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const UpgradeConfirmation_1 = require("@pages/workspace/upgrade/UpgradeConfirmation");
+const UpgradeIntro_1 = require("@pages/workspace/upgrade/UpgradeIntro");
+const CONST_1 = require("@src/CONST");
+const Policy_1 = require("@src/libs/actions/Policy/Policy");
+function TravelUpgrade({ route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const feature = CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.travel;
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [isUpgraded, setIsUpgraded] = (0, react_1.useState)(false);
+    const [shouldShowConfirmation, setShouldShowConfirmation] = (0, react_1.useState)(false);
+    const onSubmit = (params) => {
         (0, Policy_1.createDraftWorkspace)('', false, params.name, params.policyID, params.currency, params.avatarFile);
         setShouldShowConfirmation(false);
         setIsUpgraded(true);
@@ -36,12 +35,12 @@ function TravelUpgrade(_a) {
             file: params.avatarFile,
         });
     };
-    var onClose = function () {
+    const onClose = () => {
         setShouldShowConfirmation(false);
     };
     return (<ScreenWrapper_1.default shouldShowOfflineIndicator testID={TravelUpgrade.displayName} offlineIndicatorStyle={styles.mtAuto}>
-            <HeaderWithBackButton_1.default title={translate('common.upgrade')} onBackButtonPress={function () { return Navigation_1.default.goBack(route.params.backTo); }}/>
-            <Modal_1.default type={CONST_1.default.MODAL.MODAL_TYPE.RIGHT_DOCKED} isVisible={shouldShowConfirmation} onClose={onClose} onModalHide={onClose} onBackdropPress={function () {
+            <HeaderWithBackButton_1.default title={translate('common.upgrade')} onBackButtonPress={() => Navigation_1.default.goBack(route.params.backTo)}/>
+            <Modal_1.default type={CONST_1.default.MODAL.MODAL_TYPE.RIGHT_DOCKED} isVisible={shouldShowConfirmation} onClose={onClose} onModalHide={onClose} onBackdropPress={() => {
             onClose();
             Navigation_1.default.dismissModal();
         }} enableEdgeToEdgeBottomSafeAreaPadding>
@@ -50,7 +49,7 @@ function TravelUpgrade(_a) {
                 </ScreenWrapper_1.default>
             </Modal_1.default>
             <ScrollView_1.default contentContainerStyle={styles.flexGrow1}>
-                {isUpgraded ? (<UpgradeConfirmation_1.default onConfirmUpgrade={function () { return Navigation_1.default.goBack(); }} policyName="" isTravelUpgrade/>) : (<UpgradeIntro_1.default feature={feature} onUpgrade={function () { return setShouldShowConfirmation(true); }} buttonDisabled={isOffline} loading={false} isCategorizing/>)}
+                {isUpgraded ? (<UpgradeConfirmation_1.default onConfirmUpgrade={() => Navigation_1.default.goBack()} policyName="" isTravelUpgrade/>) : (<UpgradeIntro_1.default feature={feature} onUpgrade={() => setShouldShowConfirmation(true)} buttonDisabled={isOffline} loading={false} isCategorizing/>)}
             </ScrollView_1.default>
         </ScreenWrapper_1.default>);
 }

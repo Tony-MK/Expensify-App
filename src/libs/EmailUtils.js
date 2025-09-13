@@ -25,4 +25,4 @@ function prefixMailSeparatorsWithBreakOpportunities(email) {
     // below: zero-width space (U+200B) character
     '​$1');
 }
-exports.default = { trimMailTo: trimMailTo, prefixMailSeparatorsWithBreakOpportunities: prefixMailSeparatorsWithBreakOpportunities };
+exports.default = { trimMailTo, prefixMailSeparatorsWithBreakOpportunities };

@@ -1,41 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable no-unused-vars */
-var crashlytics_1 = require("@react-native-firebase/crashlytics");
-var perf_1 = require("@react-native-firebase/perf");
-var Environment = require("@libs/Environment/Environment");
-var utils_1 = require("./utils");
-var crashlytics = (0, crashlytics_1.getCrashlytics)();
-var perf = (0, perf_1.getPerformance)();
-var traceMap = {};
-var startTrace = function (customEventName) {
-    var start = global.performance.now();
+const crashlytics_1 = require("@react-native-firebase/crashlytics");
+const perf_1 = require("@react-native-firebase/perf");
+const Environment = require("@libs/Environment/Environment");
+const utils_1 = require("./utils");
+const crashlytics = (0, crashlytics_1.getCrashlytics)();
+const perf = (0, perf_1.getPerformance)();
+const traceMap = {};
+const startTrace = (customEventName) => {
+    const start = global.performance.now();
     if (Environment.isDevelopment()) {
         return;
     }
     if (traceMap[customEventName]) {
         return;
     }
-    var attributes = utils_1.default.getAttributes(['accountId', 'personalDetailsLength', 'reportActionsLength', 'reportsLength', 'policiesLength']);
-    perf.startTrace(customEventName).then(function (trace) {
-        Object.entries(attributes).forEach(function (_a) {
-            var name = _a[0], value = _a[1];
+    const attributes = utils_1.default.getAttributes(['accountId', 'personalDetailsLength', 'reportActionsLength', 'reportsLength', 'policiesLength']);
+    perf.startTrace(customEventName).then((trace) => {
+        Object.entries(attributes).forEach(([name, value]) => {
             trace.putAttribute(name, value);
         });
         traceMap[customEventName] = {
-            trace: trace,
-            start: start,
+            trace,
+            start,
         };
     });
 };
-var stopTrace = function (customEventName) {
-    var _a;
+const stopTrace = (customEventName) => {
     // Uncomment to inspect logs on release builds
     // const stop = global.performance.now();
     if (Environment.isDevelopment()) {
         return;
     }
-    var trace = (_a = traceMap[customEventName]) === null || _a === void 0 ? void 0 : _a.trace;
+    const trace = traceMap[customEventName]?.trace;
     if (!trace) {
         return;
     }
@@ -45,11 +43,11 @@ var stopTrace = function (customEventName) {
     // Log.info(`sidebar_loaded: ${stop - start} ms`, true);
     delete traceMap[customEventName];
 };
-var log = function (action) {
+const log = (action) => {
     (0, crashlytics_1.log)(crashlytics, action);
 };
 exports.default = {
-    startTrace: startTrace,
-    stopTrace: stopTrace,
-    log: log,
+    startTrace,
+    stopTrace,
+    log,
 };

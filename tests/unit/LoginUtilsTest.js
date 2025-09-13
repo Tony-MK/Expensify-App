@@ -1,96 +1,95 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_onyx_1 = require("react-native-onyx");
-var LoginUtils = require("@libs/LoginUtils");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
-describe('LoginUtils', function () {
-    beforeAll(function () {
-        var _a;
+const react_native_onyx_1 = require("react-native-onyx");
+const LoginUtils = require("@libs/LoginUtils");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
+describe('LoginUtils', () => {
+    beforeAll(() => {
         react_native_onyx_1.default.init({
             keys: ONYXKEYS_1.default,
-            initialKeyStates: (_a = {},
-                _a[ONYXKEYS_1.default.COUNTRY_CODE] = 1,
-                _a),
+            initialKeyStates: {
+                [ONYXKEYS_1.default.COUNTRY_CODE]: 1,
+            },
         });
         return (0, waitForBatchedUpdates_1.default)();
     });
-    afterEach(function () {
+    afterEach(() => {
         jest.useRealTimers();
         react_native_onyx_1.default.clear();
     });
-    describe('getPhoneNumberWithoutSpecialChars', function () {
-        it('Should return valid phone number', function () {
-            var givenPhone = '+12345678901';
-            var parsedPhone = LoginUtils.getPhoneNumberWithoutSpecialChars(givenPhone);
+    describe('getPhoneNumberWithoutSpecialChars', () => {
+        it('Should return valid phone number', () => {
+            const givenPhone = '+12345678901';
+            const parsedPhone = LoginUtils.getPhoneNumberWithoutSpecialChars(givenPhone);
             expect(parsedPhone).toBe('+12345678901');
         });
-        it('Should return valid phone number even if received special chars', function () {
-            var givenPhone = '+1(234) 56-7\t8-9 01';
-            var parsedPhone = LoginUtils.getPhoneNumberWithoutSpecialChars(givenPhone);
-            expect(parsedPhone).toBe('+12345678901');
-        });
-    });
-    describe('appendCountryCode', function () {
-        it('Should return valid phone number with country code when received a phone with country code', function () {
-            var givenPhone = '+12345678901';
-            var parsedPhone = LoginUtils.appendCountryCode(givenPhone);
-            expect(parsedPhone).toBe('+12345678901');
-        });
-        it('Should return valid phone number with country code when received a phone without country code', function () {
-            var givenPhone = '2345678901';
-            var parsedPhone = LoginUtils.appendCountryCode(givenPhone);
+        it('Should return valid phone number even if received special chars', () => {
+            const givenPhone = '+1(234) 56-7\t8-9 01';
+            const parsedPhone = LoginUtils.getPhoneNumberWithoutSpecialChars(givenPhone);
             expect(parsedPhone).toBe('+12345678901');
         });
     });
-    describe('isEmailPublicDomain', function () {
-        it('Should return true if email is from public domain', function () {
-            var givenEmail = 'test@gmail.com';
-            var parsedEmail = LoginUtils.isEmailPublicDomain(givenEmail);
+    describe('appendCountryCode', () => {
+        it('Should return valid phone number with country code when received a phone with country code', () => {
+            const givenPhone = '+12345678901';
+            const parsedPhone = LoginUtils.appendCountryCode(givenPhone);
+            expect(parsedPhone).toBe('+12345678901');
+        });
+        it('Should return valid phone number with country code when received a phone without country code', () => {
+            const givenPhone = '2345678901';
+            const parsedPhone = LoginUtils.appendCountryCode(givenPhone);
+            expect(parsedPhone).toBe('+12345678901');
+        });
+    });
+    describe('isEmailPublicDomain', () => {
+        it('Should return true if email is from public domain', () => {
+            const givenEmail = 'test@gmail.com';
+            const parsedEmail = LoginUtils.isEmailPublicDomain(givenEmail);
             expect(parsedEmail).toBe(true);
         });
-        it('Should return false if email is not from public domain', function () {
-            var givenEmail = 'test@test.com';
-            var parsedEmail = LoginUtils.isEmailPublicDomain(givenEmail);
+        it('Should return false if email is not from public domain', () => {
+            const givenEmail = 'test@test.com';
+            const parsedEmail = LoginUtils.isEmailPublicDomain(givenEmail);
             expect(parsedEmail).toBe(false);
         });
-        it("Should return false if provided string isn't email", function () {
-            var givenEmail = 'test';
-            var parsedEmail = LoginUtils.isEmailPublicDomain(givenEmail);
+        it("Should return false if provided string isn't email", () => {
+            const givenEmail = 'test';
+            const parsedEmail = LoginUtils.isEmailPublicDomain(givenEmail);
             expect(parsedEmail).toBe(false);
         });
     });
-    describe('validateNumber', function () {
-        it("Should return valid phone number with '@expensify.sms' suffix if provided phone number is valid", function () {
-            var givenPhone = '+12345678901';
-            var parsedPhone = LoginUtils.validateNumber(givenPhone);
+    describe('validateNumber', () => {
+        it("Should return valid phone number with '@expensify.sms' suffix if provided phone number is valid", () => {
+            const givenPhone = '+12345678901';
+            const parsedPhone = LoginUtils.validateNumber(givenPhone);
             expect(parsedPhone).toBe('+12345678901@expensify.sms');
         });
-        it('Should return empty string if provided phone number is not valid', function () {
-            var givenPhone = '786';
-            var parsedPhone = LoginUtils.validateNumber(givenPhone);
+        it('Should return empty string if provided phone number is not valid', () => {
+            const givenPhone = '786';
+            const parsedPhone = LoginUtils.validateNumber(givenPhone);
             expect(parsedPhone).toBe('');
         });
-        it('Should return empty string if provided phone number is empty', function () {
-            var givenPhone = '';
-            var parsedPhone = LoginUtils.validateNumber(givenPhone);
+        it('Should return empty string if provided phone number is empty', () => {
+            const givenPhone = '';
+            const parsedPhone = LoginUtils.validateNumber(givenPhone);
             expect(parsedPhone).toBe('');
         });
     });
-    describe('getPhoneLogin', function () {
-        it('Should return valid phone number with country code if provided phone number is valid and with country code', function () {
-            var givenPhone = '+12345678901';
-            var parsedPhone = LoginUtils.getPhoneLogin(givenPhone);
+    describe('getPhoneLogin', () => {
+        it('Should return valid phone number with country code if provided phone number is valid and with country code', () => {
+            const givenPhone = '+12345678901';
+            const parsedPhone = LoginUtils.getPhoneLogin(givenPhone);
             expect(parsedPhone).toBe('+12345678901');
         });
-        it('Should return valid phone number with country code if provided phone number is valid and without country code', function () {
-            var givenPhone = '2345678901';
-            var parsedPhone = LoginUtils.getPhoneLogin(givenPhone);
+        it('Should return valid phone number with country code if provided phone number is valid and without country code', () => {
+            const givenPhone = '2345678901';
+            const parsedPhone = LoginUtils.getPhoneLogin(givenPhone);
             expect(parsedPhone).toBe('+12345678901');
         });
-        it('Should return empty string if provided phone number is empty', function () {
-            var givenPhone = '';
-            var parsedPhone = LoginUtils.getPhoneLogin(givenPhone);
+        it('Should return empty string if provided phone number is empty', () => {
+            const givenPhone = '';
+            const parsedPhone = LoginUtils.getPhoneLogin(givenPhone);
             expect(parsedPhone).toBe('');
         });
     });

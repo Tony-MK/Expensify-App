@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_native_device_info_1 = require("react-native-device-info");
-var deviceID = react_native_device_info_1.default.getDeviceId();
-var uniqueID = expensify_common_1.Str.guid(deviceID);
+const expensify_common_1 = require("expensify-common");
+const react_native_device_info_1 = require("react-native-device-info");
+const deviceID = react_native_device_info_1.default.getDeviceId();
+const uniqueID = expensify_common_1.Str.guid(deviceID);
 /**
  * Get the "unique ID of the device". Note that the hardware ID provided by react-native-device-info for Android is considered private information,
  * so using it without appropriate permissions could cause our app to be unlisted from the Google Play Store:
@@ -23,5 +23,5 @@ var uniqueID = expensify_common_1.Str.guid(deviceID);
  * Furthermore, the deviceID prefix is not unique to a specific device, but is likely to change from one type of device to another.
  * Including this prefix will tell us with a reasonable degree of confidence if the user just uninstalled and reinstalled the app, or if they got a new device.
  */
-var generateDeviceID = function () { return Promise.resolve(uniqueID); };
+const generateDeviceID = () => Promise.resolve(uniqueID);
 exports.default = generateDeviceID;

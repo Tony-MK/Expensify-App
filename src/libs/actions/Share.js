@@ -5,17 +5,16 @@ exports.saveUnknownUserDetails = saveUnknownUserDetails;
 exports.clearShareData = clearShareData;
 exports.addValidatedShareFile = addValidatedShareFile;
 exports.clearUnknownUserDetails = clearUnknownUserDetails;
-var react_native_onyx_1 = require("react-native-onyx");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
 Function for clearing old saved data before at the start of share-extension flow
  */
 function clearShareData() {
-    var _a;
-    react_native_onyx_1.default.multiSet((_a = {},
-        _a[ONYXKEYS_1.default.SHARE_TEMP_FILE] = null,
-        _a[ONYXKEYS_1.default.SHARE_UNKNOWN_USER_DETAILS] = null,
-        _a));
+    react_native_onyx_1.default.multiSet({
+        [ONYXKEYS_1.default.SHARE_TEMP_FILE]: null,
+        [ONYXKEYS_1.default.SHARE_UNKNOWN_USER_DETAILS]: null,
+    });
 }
 /**
 Function storing natively shared file's properties for processing across share-extension screens

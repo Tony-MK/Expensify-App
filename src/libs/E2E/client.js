@@ -1,45 +1,36 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var config_1 = require("../../../tests/e2e/config");
-var routes_1 = require("../../../tests/e2e/server/routes");
-var NetworkInterceptor_1 = require("./utils/NetworkInterceptor");
-var SERVER_ADDRESS = "http://localhost:".concat(config_1.default.SERVER_PORT);
-var defaultHeaders = {
+const config_1 = require("../../../tests/e2e/config");
+const routes_1 = require("../../../tests/e2e/server/routes");
+const NetworkInterceptor_1 = require("./utils/NetworkInterceptor");
+const SERVER_ADDRESS = `http://localhost:${config_1.default.SERVER_PORT}`;
+const defaultHeaders = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     'X-E2E-Server-Request': 'true',
 };
-var defaultRequestInit = {
+const defaultRequestInit = {
     headers: defaultHeaders,
 };
-var sendRequest = function (url, data) {
+const sendRequest = (url, data) => {
     return fetch(url, {
         method: 'POST',
-        headers: __assign({ 
+        headers: {
             // eslint-disable-next-line @typescript-eslint/naming-convention
-            'Content-Type': 'application/json' }, defaultHeaders),
+            'Content-Type': 'application/json',
+            ...defaultHeaders,
+        },
         body: JSON.stringify(data),
-    }).then(function (res) {
+    }).then((res) => {
         if (res.status === 200) {
             return res;
         }
-        var errorMsg = "[E2E] Client failed to send request to \"".concat(url, "\". Returned status: ").concat(res.status);
+        const errorMsg = `[E2E] Client failed to send request to "${url}". Returned status: ${res.status}`;
         return res
             .json()
-            .then(function (responseText) {
-            throw new Error("".concat(errorMsg, ": ").concat(responseText));
+            .then((responseText) => {
+            throw new Error(`${errorMsg}: ${responseText}`);
         })
-            .catch(function () {
+            .catch(() => {
             throw new Error(errorMsg);
         });
     });
@@ -48,52 +39,48 @@ var sendRequest = function (url, data) {
  * Submits a test result to the server.
  * Note: a test can have multiple test results.
  */
-var submitTestResults = function (testResult) {
-    console.debug("[E2E] Submitting test result '".concat(testResult.name, "'\u2026"));
-    return sendRequest("".concat(SERVER_ADDRESS).concat(routes_1.default.testResults), testResult).then(function () {
-        console.debug("[E2E] Test result '".concat(testResult.name, "' submitted successfully"));
+const submitTestResults = (testResult) => {
+    console.debug(`[E2E] Submitting test result '${testResult.name}'…`);
+    return sendRequest(`${SERVER_ADDRESS}${routes_1.default.testResults}`, testResult).then(() => {
+        console.debug(`[E2E] Test result '${testResult.name}' submitted successfully`);
     });
 };
-var submitTestDone = function () { return (0, NetworkInterceptor_1.waitForActiveRequestsToBeEmpty)().then(function () { return fetch("".concat(SERVER_ADDRESS).concat(routes_1.default.testDone), defaultRequestInit); }); };
-var currentActiveTestConfig = null;
-var getTestConfig = function () {
-    return fetch("".concat(SERVER_ADDRESS).concat(routes_1.default.testConfig), defaultRequestInit)
-        .then(function (res) { return res.json(); })
-        .then(function (config) {
-        currentActiveTestConfig = config;
-        return config;
+const submitTestDone = () => (0, NetworkInterceptor_1.waitForActiveRequestsToBeEmpty)().then(() => fetch(`${SERVER_ADDRESS}${routes_1.default.testDone}`, defaultRequestInit));
+let currentActiveTestConfig = null;
+const getTestConfig = () => fetch(`${SERVER_ADDRESS}${routes_1.default.testConfig}`, defaultRequestInit)
+    .then((res) => res.json())
+    .then((config) => {
+    currentActiveTestConfig = config;
+    return config;
+});
+const getCurrentActiveTestConfig = () => currentActiveTestConfig;
+const sendNativeCommand = (payload) => {
+    console.debug(`[E2E] Sending native command '${payload.actionName}'…`);
+    return sendRequest(`${SERVER_ADDRESS}${routes_1.default.testNativeCommand}`, payload).then(() => {
+        console.debug(`[E2E] Native command '${payload.actionName}' sent successfully`);
     });
 };
-var getCurrentActiveTestConfig = function () { return currentActiveTestConfig; };
-var sendNativeCommand = function (payload) {
-    console.debug("[E2E] Sending native command '".concat(payload.actionName, "'\u2026"));
-    return sendRequest("".concat(SERVER_ADDRESS).concat(routes_1.default.testNativeCommand), payload).then(function () {
-        console.debug("[E2E] Native command '".concat(payload.actionName, "' sent successfully"));
-    });
-};
-var updateNetworkCache = function (appInstanceId, networkCache) {
+const updateNetworkCache = (appInstanceId, networkCache) => {
     console.debug('[E2E] Updating network cache…');
-    return sendRequest("".concat(SERVER_ADDRESS).concat(routes_1.default.testUpdateNetworkCache), {
-        appInstanceId: appInstanceId,
+    return sendRequest(`${SERVER_ADDRESS}${routes_1.default.testUpdateNetworkCache}`, {
+        appInstanceId,
         cache: networkCache,
-    }).then(function () {
+    }).then(() => {
         console.debug('[E2E] Network cache updated successfully');
     });
 };
-var getNetworkCache = function (appInstanceId) {
-    return sendRequest("".concat(SERVER_ADDRESS).concat(routes_1.default.testGetNetworkCache), { appInstanceId: appInstanceId })
-        .then(function (res) { return res.json(); })
-        .then(function (networkCache) {
-        console.debug('[E2E] Network cache fetched successfully');
-        return networkCache;
-    });
-};
+const getNetworkCache = (appInstanceId) => sendRequest(`${SERVER_ADDRESS}${routes_1.default.testGetNetworkCache}`, { appInstanceId })
+    .then((res) => res.json())
+    .then((networkCache) => {
+    console.debug('[E2E] Network cache fetched successfully');
+    return networkCache;
+});
 exports.default = {
-    submitTestResults: submitTestResults,
-    submitTestDone: submitTestDone,
-    getTestConfig: getTestConfig,
-    getCurrentActiveTestConfig: getCurrentActiveTestConfig,
-    sendNativeCommand: sendNativeCommand,
-    updateNetworkCache: updateNetworkCache,
-    getNetworkCache: getNetworkCache,
+    submitTestResults,
+    submitTestDone,
+    getTestConfig,
+    getCurrentActiveTestConfig,
+    sendNativeCommand,
+    updateNetworkCache,
+    getNetworkCache,
 };

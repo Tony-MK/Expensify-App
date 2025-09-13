@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Timing_1 = require("@libs/actions/Timing");
-var Performance_1 = require("@libs/Performance");
-var CONST_1 = require("@src/CONST");
+const Timing_1 = require("@libs/actions/Timing");
+const Performance_1 = require("@libs/Performance");
+const CONST_1 = require("@src/CONST");
 /**
  * Mark all 'open_report*' performance events as finished using both Performance (local) and Timing (remote) tracking.
  */

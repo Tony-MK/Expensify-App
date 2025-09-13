@@ -2,40 +2,43 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Default = Default;
 // eslint-disable-next-line no-restricted-imports
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Composer_1 = require("@components/Composer");
-var RenderHTML_1 = require("@components/RenderHTML");
-var Text_1 = require("@components/Text");
-var withNavigationFallback_1 = require("@components/withNavigationFallback");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Composer_1 = require("@components/Composer");
+const RenderHTML_1 = require("@components/RenderHTML");
+const Text_1 = require("@components/Text");
+const withNavigationFallback_1 = require("@components/withNavigationFallback");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
 // eslint-disable-next-line no-restricted-imports
-var theme_1 = require("@styles/theme");
-var styles_1 = require("@src/styles");
-var ComposerWithNavigation = (0, withNavigationFallback_1.default)(Composer_1.default);
+const theme_1 = require("@styles/theme");
+const styles_1 = require("@src/styles");
+const ComposerWithNavigation = (0, withNavigationFallback_1.default)(Composer_1.default);
 /**
  * We use the Component Story Format for writing stories. Follow the docs here:
  *
  * https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
  */
-var story = {
+const story = {
     title: 'Components/Composer',
     component: ComposerWithNavigation,
 };
-var parser = new expensify_common_1.ExpensiMark();
-var DEFAULT_VALUE = "Composer can do the following:\n\n     * It can contain MD e.g. *bold* _italic_\n     * Supports Pasted Images via Ctrl+V";
+const parser = new expensify_common_1.ExpensiMark();
+const DEFAULT_VALUE = `Composer can do the following:
+
+     * It can contain MD e.g. *bold* _italic_
+     * Supports Pasted Images via Ctrl+V`;
 function Default(props) {
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var _a = (0, react_1.useState)(null), pastedFile = _a[0], setPastedFile = _a[1];
-    var _b = (0, react_1.useState)(DEFAULT_VALUE), comment = _b[0], setComment = _b[1];
-    var renderedHTML = parser.replace(comment !== null && comment !== void 0 ? comment : '');
-    var _c = (0, react_1.useState)(function () { return ({ start: DEFAULT_VALUE.length, end: DEFAULT_VALUE.length, positionX: 0, positionY: 0 }); }), selection = _c[0], setSelection = _c[1];
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const [pastedFile, setPastedFile] = (0, react_1.useState)(null);
+    const [comment, setComment] = (0, react_1.useState)(DEFAULT_VALUE);
+    const renderedHTML = parser.replace(comment ?? '');
+    const [selection, setSelection] = (0, react_1.useState)(() => ({ start: DEFAULT_VALUE.length, end: DEFAULT_VALUE.length, positionX: 0, positionY: 0 }));
     return (<react_native_1.View>
             <react_native_1.View style={[styles_1.defaultStyles.border, styles_1.defaultStyles.p4]}>
                 <ComposerWithNavigation 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props} multiline value={comment} onChangeText={setComment} onPasteFile={setPastedFile} selection={selection} onSelectionChange={function (e) {
+    {...props} multiline value={comment} onChangeText={setComment} onPasteFile={setPastedFile} selection={selection} onSelectionChange={(e) => {
             setSelection(e.nativeEvent.selection);
         }} style={[styles_1.defaultStyles.textInputCompose, styles_1.defaultStyles.w100, styles_1.defaultStyles.verticalAlignTop]}/>
             </react_native_1.View>

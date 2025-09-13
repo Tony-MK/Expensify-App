@@ -1,49 +1,48 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention */
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
-var en_1 = require("@src/languages/en");
-var es_1 = require("@src/languages/es");
-var flattenObject_1 = require("@src/languages/flattenObject");
-var Localize_1 = require("@src/libs/Localize");
-var asMutable_1 = require("@src/types/utils/asMutable");
-var arrayDifference_1 = require("@src/utils/arrayDifference");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
+const en_1 = require("@src/languages/en");
+const es_1 = require("@src/languages/es");
+const flattenObject_1 = require("@src/languages/flattenObject");
+const Localize_1 = require("@src/libs/Localize");
+const asMutable_1 = require("@src/types/utils/asMutable");
+const arrayDifference_1 = require("@src/utils/arrayDifference");
 jest.mock('@src/languages/IntlStore');
-var originalTranslations = (_a = {},
-    _a[CONST_1.default.LOCALES.EN] = (0, flattenObject_1.default)(en_1.default),
-    _a[CONST_1.default.LOCALES.ES] = (0, flattenObject_1.default)(es_1.default),
-    _a);
-describe('translate', function () {
-    test('Test when key is not found in default', function () {
-        expect(function () { return (0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'testKey4'); }).toThrow(Error);
+const originalTranslations = {
+    [CONST_1.default.LOCALES.EN]: (0, flattenObject_1.default)(en_1.default),
+    [CONST_1.default.LOCALES.ES]: (0, flattenObject_1.default)(es_1.default),
+};
+describe('translate', () => {
+    test('Test when key is not found in default', () => {
+        expect(() => (0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'testKey4')).toThrow(Error);
     });
-    test('Test when key is not found in default (Production Mode)', function () {
-        var ORIGINAL_IS_IN_PRODUCTION = CONFIG_1.default.IS_IN_PRODUCTION;
+    test('Test when key is not found in default (Production Mode)', () => {
+        const ORIGINAL_IS_IN_PRODUCTION = CONFIG_1.default.IS_IN_PRODUCTION;
         (0, asMutable_1.default)(CONFIG_1.default).IS_IN_PRODUCTION = true;
         expect((0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'testKey4')).toBe('testKey4');
         (0, asMutable_1.default)(CONFIG_1.default).IS_IN_PRODUCTION = ORIGINAL_IS_IN_PRODUCTION;
     });
-    it('Test when translation value is a function', function () {
-        var expectedValue = 'With variable Test Variable';
-        var testVariable = 'Test Variable';
+    it('Test when translation value is a function', () => {
+        const expectedValue = 'With variable Test Variable';
+        const testVariable = 'Test Variable';
         // @ts-expect-error - TranslationPaths doesn't include testKeyGroup.testFunction as a valid key
-        expect((0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'testKeyGroup.testFunction', { testVariable: testVariable })).toBe(expectedValue);
+        expect((0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'testKeyGroup.testFunction', { testVariable })).toBe(expectedValue);
     });
-    it('Test when count value passed to function but output is string', function () {
-        var expectedValue = 'Count value is 10';
-        var count = 10;
+    it('Test when count value passed to function but output is string', () => {
+        const expectedValue = 'Count value is 10';
+        const count = 10;
         // @ts-expect-error - TranslationPaths doesn't include pluralizationGroup.countWithoutPluralRules as a valid key
-        expect((0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'pluralizationGroup.countWithoutPluralRules', { count: count })).toBe(expectedValue);
+        expect((0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'pluralizationGroup.countWithoutPluralRules', { count })).toBe(expectedValue);
     });
-    it('Test when count value 2 passed to function but there is no rule for the key two', function () {
-        var expectedValue = 'Other 2 files are being downloaded.';
-        var count = 2;
+    it('Test when count value 2 passed to function but there is no rule for the key two', () => {
+        const expectedValue = 'Other 2 files are being downloaded.';
+        const count = 2;
         // @ts-expect-error - TranslationPaths doesn't include pluralizationGroup.countWithNoCorrespondingRule as a valid key
-        expect((0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'pluralizationGroup.countWithNoCorrespondingRule', { count: count })).toBe(expectedValue);
+        expect((0, Localize_1.translate)(CONST_1.default.LOCALES.EN, 'pluralizationGroup.countWithNoCorrespondingRule', { count })).toBe(expectedValue);
     });
-    it('Test when count value 0, 1, 100 passed to function', function () {
+    it('Test when count value 0, 1, 100 passed to function', () => {
         // @ts-expect-error - TranslationPaths doesn't include pluralizationGroup.couthWithCorrespondingRule as a valid key
         expect((0, Localize_1.translate)(CONST_1.default.LOCALES.ES, 'pluralizationGroup.couthWithCorrespondingRule', { count: 0 })).toBe('0 artículos');
         // @ts-expect-error - TranslationPaths doesn't include pluralizationGroup.couthWithCorrespondingRule as a valid key
@@ -52,41 +51,38 @@ describe('translate', function () {
         expect((0, Localize_1.translate)(CONST_1.default.LOCALES.ES, 'pluralizationGroup.couthWithCorrespondingRule', { count: 100 })).toBe('100 artículos');
     });
 });
-describe('Translation Keys', function () {
+describe('Translation Keys', () => {
     function traverseKeyPath(source) {
         return Object.keys(source);
     }
-    var excludeLanguages = [CONST_1.default.LOCALES.EN];
-    var languages = Object.keys(originalTranslations).filter(function (ln) { return !excludeLanguages.some(function (excludeLanguage) { return excludeLanguage === ln; }); });
-    var mainLanguage = originalTranslations.en;
-    var mainLanguageKeys = traverseKeyPath(mainLanguage);
-    languages.forEach(function (ln) {
-        var languageKeys = traverseKeyPath(originalTranslations[ln]);
-        it("Does ".concat(ln, " locale have all the keys"), function () {
-            var hasAllKeys = (0, arrayDifference_1.default)(mainLanguageKeys, languageKeys);
+    const excludeLanguages = [CONST_1.default.LOCALES.EN];
+    const languages = Object.keys(originalTranslations).filter((ln) => !excludeLanguages.some((excludeLanguage) => excludeLanguage === ln));
+    const mainLanguage = originalTranslations.en;
+    const mainLanguageKeys = traverseKeyPath(mainLanguage);
+    languages.forEach((ln) => {
+        const languageKeys = traverseKeyPath(originalTranslations[ln]);
+        it(`Does ${ln} locale have all the keys`, () => {
+            const hasAllKeys = (0, arrayDifference_1.default)(mainLanguageKeys, languageKeys);
             if (hasAllKeys.length) {
-                console.debug("\uD83C\uDFF9 [ ".concat(hasAllKeys.join(', '), " ] are missing from ").concat(ln, ".js"));
-                Error("\uD83C\uDFF9 [ ".concat(hasAllKeys.join(', '), " ] are missing from ").concat(ln, ".js"));
+                console.debug(`🏹 [ ${hasAllKeys.join(', ')} ] are missing from ${ln}.js`);
+                Error(`🏹 [ ${hasAllKeys.join(', ')} ] are missing from ${ln}.js`);
             }
             expect(hasAllKeys).toEqual([]);
         });
-        it("Does ".concat(ln, " locale have unused keys"), function () {
-            var hasAllKeys = (0, arrayDifference_1.default)(languageKeys, mainLanguageKeys);
+        it(`Does ${ln} locale have unused keys`, () => {
+            const hasAllKeys = (0, arrayDifference_1.default)(languageKeys, mainLanguageKeys);
             if (hasAllKeys.length) {
-                console.debug("\uD83C\uDFF9 [ ".concat(hasAllKeys.join(', '), " ] are unused keys in ").concat(ln, ".js"));
-                Error("\uD83C\uDFF9 [ ".concat(hasAllKeys.join(', '), " ] are unused keys in ").concat(ln, ".js"));
+                console.debug(`🏹 [ ${hasAllKeys.join(', ')} ] are unused keys in ${ln}.js`);
+                Error(`🏹 [ ${hasAllKeys.join(', ')} ] are unused keys in ${ln}.js`);
             }
             expect(hasAllKeys).toEqual([]);
         });
     });
 });
-describe('flattenObject', function () {
-    it('It should work correctly', function () {
-        var func = function (_a) {
-            var content = _a.content;
-            return "This is the content: ".concat(content);
-        };
-        var simpleObject = {
+describe('flattenObject', () => {
+    it('It should work correctly', () => {
+        const func = ({ content }) => `This is the content: ${content}`;
+        const simpleObject = {
             common: {
                 yes: 'Yes',
                 no: 'No',
@@ -108,7 +104,7 @@ describe('flattenObject', function () {
                 },
             },
         };
-        var result = (0, flattenObject_1.default)(simpleObject);
+        const result = (0, flattenObject_1.default)(simpleObject);
         expect(result).toStrictEqual({
             'common.yes': 'Yes',
             'common.no': 'No',

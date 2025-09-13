@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FP = exports.AndroidCapability = exports.FPAttributeFormat = exports.Capability = void 0;
-var react_native_1 = require("react-native");
-var LINKING_ERROR = "The package 'group-ib-fp' doesn't seem to be linked. Make sure: \n\n" +
+const react_native_1 = require("react-native");
+const LINKING_ERROR = `The package 'group-ib-fp' doesn't seem to be linked. Make sure: \n\n` +
     react_native_1.Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
     '- You rebuilt the app after installing the package\n' +
     '- You are not using Expo Go\n';
@@ -49,119 +49,118 @@ var AndroidCapability;
     AndroidCapability[AndroidCapability["MotionCollection"] = 7] = "MotionCollection";
     AndroidCapability[AndroidCapability["PackageCollection"] = 8] = "PackageCollection";
 })(AndroidCapability || (exports.AndroidCapability = AndroidCapability = {}));
-var ModuleFhpIos = react_native_1.NativeModules.ModuleFhpIos
+const ModuleFhpIos = react_native_1.NativeModules.ModuleFhpIos
     ? react_native_1.NativeModules.ModuleFhpIos
     : new Proxy({}, {
-        get: function () {
+        get() {
             throw new Error(LINKING_ERROR);
         },
     });
-var FP = /** @class */ (function () {
-    function FP() {
+class FP {
+    constructor() {
         if (!react_native_1.NativeModules.ModuleFhpIos) {
             console.warn(LINKING_ERROR);
         }
     }
-    FP.getInstance = function () {
+    static getInstance() {
         if (!FP.instance) {
             FP.instance = new FP();
         }
         return FP.instance;
-    };
-    FP.prototype.enableCapability = function (capability, responseHandler) {
+    }
+    enableCapability(capability, responseHandler) {
         if (react_native_1.Platform.OS === 'ios') {
             return ModuleFhpIos.enableCapability(capability, responseHandler);
         }
-    };
-    FP.prototype.enableAndroidCapability = function (capability, responseHandler) {
+    }
+    enableAndroidCapability(capability, responseHandler) {
         if (react_native_1.Platform.OS === 'android') {
             return ModuleFhpIos.enableAndroidCapability(capability, responseHandler);
         }
-    };
-    FP.prototype.disableCapability = function (capability, responseHandler) {
+    }
+    disableCapability(capability, responseHandler) {
         if (react_native_1.Platform.OS === 'ios') {
             return ModuleFhpIos.disableCapability(capability, responseHandler);
         }
-    };
-    FP.prototype.disableAndroidCapability = function (capability, responseHandler) {
+    }
+    disableAndroidCapability(capability, responseHandler) {
         if (react_native_1.Platform.OS === 'android') {
             return ModuleFhpIos.disableAndroidCapability(capability, responseHandler);
         }
-    };
-    FP.prototype.setLogURL = function (url, errorCallback) {
+    }
+    setLogURL(url, errorCallback) {
         return ModuleFhpIos.setLogURL(url, errorCallback);
-    };
-    FP.prototype.setTargetURL = function (url, errorCallback) {
+    }
+    setTargetURL(url, errorCallback) {
         return ModuleFhpIos.setTargetURL(url, errorCallback);
-    };
-    FP.prototype.setCustomerId = function (iOSCustomerId, androidCustomerId, errorCallback) {
+    }
+    setCustomerId(iOSCustomerId, androidCustomerId, errorCallback) {
         if (react_native_1.Platform.OS === 'ios') {
             return ModuleFhpIos.setCustomerId(iOSCustomerId, errorCallback);
         }
         else if (react_native_1.Platform.OS === 'android') {
             return ModuleFhpIos.setCustomerId(androidCustomerId, errorCallback);
         }
-    };
-    FP.prototype.run = function (errorCallback) {
+    }
+    run(errorCallback) {
         return ModuleFhpIos.run(errorCallback);
-    };
-    FP.prototype.stop = function (errorCallback) {
+    }
+    stop(errorCallback) {
         return ModuleFhpIos.stop(errorCallback);
-    };
-    FP.prototype.enableDebugLogs = function () {
+    }
+    enableDebugLogs() {
         if (react_native_1.Platform.OS === 'ios') {
             return ModuleFhpIos.enableDebugLogs();
         }
-    };
-    FP.prototype.setPublicKeyForPinning = function (publicKey, errorCallback) {
+    }
+    setPublicKeyForPinning(publicKey, errorCallback) {
         return ModuleFhpIos.setPublicKeyForPinning(publicKey, errorCallback);
-    };
-    FP.prototype.setPublicKeysForPinning = function (publicKeys, errorCallback) {
+    }
+    setPublicKeysForPinning(publicKeys, errorCallback) {
         return ModuleFhpIos.setPublicKeysForPinning(publicKeys, errorCallback);
-    };
-    FP.prototype.setUserAgent = function (userAgent, errorCallback) {
+    }
+    setUserAgent(userAgent, errorCallback) {
         return ModuleFhpIos.setUserAgent(userAgent, errorCallback);
-    };
-    FP.prototype.setSharedKeychainIdentifier = function (identifier) {
+    }
+    setSharedKeychainIdentifier(identifier) {
         if (react_native_1.Platform.OS === 'ios') {
             return ModuleFhpIos.setSharedKeychainIdentifier(identifier);
         }
-    };
-    FP.prototype.setKeepAliveTimeout = function (sec, errorCallback) {
+    }
+    setKeepAliveTimeout(sec, errorCallback) {
         return ModuleFhpIos.setKeepAliveTimeout(sec, errorCallback);
-    };
-    FP.prototype.setHeaderValue = function (value, key, errorCallback) {
+    }
+    setHeaderValue(value, key, errorCallback) {
         return ModuleFhpIos.setHeaderValue(value, key, errorCallback);
-    };
-    FP.prototype.setLogin = function (login, errorCallback) {
+    }
+    setLogin(login, errorCallback) {
         return ModuleFhpIos.setLogin(login, errorCallback);
-    };
-    FP.prototype.setSessionId = function (sessionId, errorCallback) {
+    }
+    setSessionId(sessionId, errorCallback) {
         return ModuleFhpIos.setSessionId(sessionId, errorCallback);
-    };
-    FP.prototype.setCustomEvent = function (event, errorCallback) {
+    }
+    setCustomEvent(event, errorCallback) {
         return ModuleFhpIos.setCustomEvent(event, errorCallback);
-    };
-    FP.prototype.setAttributeTitle = function (title, value, format, errorCallback) {
+    }
+    setAttributeTitle(title, value, format, errorCallback) {
         return ModuleFhpIos.setAttributeTitle(title, value, format, errorCallback);
-    };
-    FP.prototype.setGlobalIdURL = function (url, errorCallback) {
+    }
+    setGlobalIdURL(url, errorCallback) {
         if (react_native_1.Platform.OS === 'android') {
             return ModuleFhpIos.setGlobalIdURL(url, errorCallback);
         }
-    };
-    FP.prototype.getCookies = function (cookiesCallback) {
+    }
+    getCookies(cookiesCallback) {
         return ModuleFhpIos.getCookies(cookiesCallback);
-    };
-    FP.prototype.changeBehaviorExtendedData = function (isExtendedData) {
+    }
+    changeBehaviorExtendedData(isExtendedData) {
         if (react_native_1.Platform.OS === 'ios') {
             return ModuleFhpIos.changeBehaviorExtendedData(isExtendedData);
         }
-    };
-    FP.prototype.setPubKey = function (pubKey, errorCallback) {
+    }
+    setPubKey(pubKey, errorCallback) {
         return ModuleFhpIos.setPubKey(pubKey, errorCallback);
-    };
-    FP.instance = null;
-    return FP;
-}());
+    }
+}
 exports.FP = FP;
+FP.instance = null;

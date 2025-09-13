@@ -1,33 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
-var ReportActionAvatars_1 = require("@components/ReportActionAvatars");
-var TextWithTooltip_1 = require("@components/TextWithTooltip");
-var useAnimatedHighlightStyle_1 = require("@hooks/useAnimatedHighlightStyle");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var BaseListItem_1 = require("./BaseListItem");
-function TableListItem(_a) {
-    var _b;
-    var item = _a.item, isFocused = _a.isFocused, showTooltip = _a.showTooltip, isDisabled = _a.isDisabled, canSelectMultiple = _a.canSelectMultiple, onSelectRow = _a.onSelectRow, onCheckboxPress = _a.onCheckboxPress, onDismissError = _a.onDismissError, rightHandSideComponent = _a.rightHandSideComponent, onFocus = _a.onFocus, onLongPressRow = _a.onLongPressRow, shouldSyncFocus = _a.shouldSyncFocus, titleContainerStyles = _a.titleContainerStyles, shouldUseDefaultRightHandSideCheckmark = _a.shouldUseDefaultRightHandSideCheckmark;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var animatedHighlightStyle = (0, useAnimatedHighlightStyle_1.default)({
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
+const ReportActionAvatars_1 = require("@components/ReportActionAvatars");
+const TextWithTooltip_1 = require("@components/TextWithTooltip");
+const useAnimatedHighlightStyle_1 = require("@hooks/useAnimatedHighlightStyle");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const BaseListItem_1 = require("./BaseListItem");
+function TableListItem({ item, isFocused, showTooltip, isDisabled, canSelectMultiple, onSelectRow, onCheckboxPress, onDismissError, rightHandSideComponent, onFocus, onLongPressRow, shouldSyncFocus, titleContainerStyles, shouldUseDefaultRightHandSideCheckmark, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const animatedHighlightStyle = (0, useAnimatedHighlightStyle_1.default)({
         borderRadius: styles.selectionListPressableItemWrapper.borderRadius,
         shouldHighlight: !!item.shouldAnimateInHighlight,
         highlightColor: theme.messageHighlightBG,
         backgroundColor: theme.highlightBG,
     });
-    var focusedBackgroundColor = styles.sidebarLinkActive.backgroundColor;
-    var hoveredBackgroundColor = ((_b = styles.sidebarLinkHover) === null || _b === void 0 ? void 0 : _b.backgroundColor) ? styles.sidebarLinkHover.backgroundColor : theme.sidebar;
-    var handleCheckboxPress = (0, react_1.useCallback)(function () {
+    const focusedBackgroundColor = styles.sidebarLinkActive.backgroundColor;
+    const hoveredBackgroundColor = styles.sidebarLinkHover?.backgroundColor ? styles.sidebarLinkHover.backgroundColor : theme.sidebar;
+    const handleCheckboxPress = (0, react_1.useCallback)(() => {
         if (onCheckboxPress) {
             onCheckboxPress(item);
         }
@@ -45,35 +43,32 @@ function TableListItem(_a) {
                 item.cursorStyle,
             ],
         ]} pressableWrapperStyle={[styles.mh5, animatedHighlightStyle]} wrapperStyle={[styles.flexRow, styles.flex1, styles.justifyContentBetween, styles.userSelectNone, styles.alignItemsCenter]} containerStyle={styles.mb2} isFocused={isFocused} isDisabled={isDisabled} showTooltip={showTooltip} canSelectMultiple={canSelectMultiple} onLongPressRow={onLongPressRow} onSelectRow={onSelectRow} onDismissError={onDismissError} rightHandSideComponent={rightHandSideComponent} errors={item.errors} pendingAction={item.pendingAction} keyForList={item.keyForList} onFocus={onFocus} shouldSyncFocus={shouldSyncFocus} hoverStyle={item.isSelected && styles.activeComponentBG} shouldUseDefaultRightHandSideCheckmark={shouldUseDefaultRightHandSideCheckmark}>
-            {function (hovered) {
-            var _a, _b, _c, _d;
-            return (<>
-                    {!!canSelectMultiple && (<PressableWithFeedback_1.default accessibilityLabel={(_a = item.text) !== null && _a !== void 0 ? _a : ''} role={CONST_1.default.ROLE.BUTTON} 
-                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-                disabled={isDisabled || item.isDisabledCheckbox} onPress={handleCheckboxPress} testID={"TableListItemCheckbox-".concat(item.text)} style={[styles.cursorUnset, StyleUtils.getCheckboxPressableStyle(), item.isDisabledCheckbox && styles.cursorDisabled, styles.mr3, item.cursorStyle]}>
+            {(hovered) => (<>
+                    {!!canSelectMultiple && (<PressableWithFeedback_1.default accessibilityLabel={item.text ?? ''} role={CONST_1.default.ROLE.BUTTON} 
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            disabled={isDisabled || item.isDisabledCheckbox} onPress={handleCheckboxPress} testID={`TableListItemCheckbox-${item.text}`} style={[styles.cursorUnset, StyleUtils.getCheckboxPressableStyle(), item.isDisabledCheckbox && styles.cursorDisabled, styles.mr3, item.cursorStyle]}>
                             <react_native_1.View style={[StyleUtils.getCheckboxContainerStyle(20), StyleUtils.getMultiselectListStyles(!!item.isSelected, !!item.isDisabled), item.cursorStyle]}>
                                 {!!item.isSelected && (<Icon_1.default src={Expensicons.Checkmark} fill={theme.textLight} height={14} width={14}/>)}
                             </react_native_1.View>
                         </PressableWithFeedback_1.default>)}
-                    {!!item.accountID && (<ReportActionAvatars_1.default accountIDs={[item.accountID]} fallbackDisplayName={(_c = (_b = item.text) !== null && _b !== void 0 ? _b : item.alternateText) !== null && _c !== void 0 ? _c : undefined} shouldShowTooltip={showTooltip} secondaryAvatarContainerStyle={[
-                        StyleUtils.getBackgroundAndBorderStyle(theme.sidebar),
-                        isFocused ? StyleUtils.getBackgroundAndBorderStyle(focusedBackgroundColor) : undefined,
-                        hovered && !isFocused ? StyleUtils.getBackgroundAndBorderStyle(hoveredBackgroundColor) : undefined,
-                    ]}/>)}
+                    {!!item.accountID && (<ReportActionAvatars_1.default accountIDs={[item.accountID]} fallbackDisplayName={item.text ?? item.alternateText ?? undefined} shouldShowTooltip={showTooltip} secondaryAvatarContainerStyle={[
+                    StyleUtils.getBackgroundAndBorderStyle(theme.sidebar),
+                    isFocused ? StyleUtils.getBackgroundAndBorderStyle(focusedBackgroundColor) : undefined,
+                    hovered && !isFocused ? StyleUtils.getBackgroundAndBorderStyle(hoveredBackgroundColor) : undefined,
+                ]}/>)}
                     <react_native_1.View style={[styles.flex1, styles.flexColumn, styles.justifyContentCenter, styles.alignItemsStretch, titleContainerStyles]}>
-                        <TextWithTooltip_1.default shouldShowTooltip={showTooltip} text={(_d = item.text) !== null && _d !== void 0 ? _d : ''} style={[
-                    styles.optionDisplayName,
-                    isFocused ? styles.sidebarLinkActiveText : styles.sidebarLinkText,
-                    styles.sidebarLinkTextBold,
-                    styles.pre,
-                    item.alternateText ? styles.mb1 : null,
-                    styles.justifyContentCenter,
-                ]}/>
+                        <TextWithTooltip_1.default shouldShowTooltip={showTooltip} text={item.text ?? ''} style={[
+                styles.optionDisplayName,
+                isFocused ? styles.sidebarLinkActiveText : styles.sidebarLinkText,
+                styles.sidebarLinkTextBold,
+                styles.pre,
+                item.alternateText ? styles.mb1 : null,
+                styles.justifyContentCenter,
+            ]}/>
                         {!!item.alternateText && (<TextWithTooltip_1.default shouldShowTooltip={showTooltip} text={item.alternateText} style={[styles.textLabelSupporting, styles.lh16, styles.pre]}/>)}
                     </react_native_1.View>
                     {!!item.rightElement && item.rightElement}
-                </>);
-        }}
+                </>)}
         </BaseListItem_1.default>);
 }
 TableListItem.displayName = 'TableListItem';

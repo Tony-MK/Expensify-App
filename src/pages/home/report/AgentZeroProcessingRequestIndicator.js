@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Text_1 = require("@components/Text");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function AgentZeroProcessingRequestIndicator(_a) {
-    var reportID = _a.reportID;
-    var styles = (0, useThemeStyles_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var reportNameValuePairs = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(reportID), { canBeMissing: true })[0];
-    var userTypingStatuses = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_USER_IS_TYPING).concat(reportID), { canBeMissing: true })[0];
+const react_1 = require("react");
+const Text_1 = require("@components/Text");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function AgentZeroProcessingRequestIndicator({ reportID }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [reportNameValuePairs] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${reportID}`, { canBeMissing: true });
+    const [userTypingStatuses] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_USER_IS_TYPING}${reportID}`, { canBeMissing: true });
     // Check if anyone is currently typing
-    var usersTyping = (0, react_1.useMemo)(function () { return Object.keys(userTypingStatuses !== null && userTypingStatuses !== void 0 ? userTypingStatuses : {}).filter(function (loginOrAccountID) { return userTypingStatuses === null || userTypingStatuses === void 0 ? void 0 : userTypingStatuses[loginOrAccountID]; }); }, [userTypingStatuses]);
-    var isAnyoneTyping = usersTyping.length > 0;
+    const usersTyping = (0, react_1.useMemo)(() => Object.keys(userTypingStatuses ?? {}).filter((loginOrAccountID) => userTypingStatuses?.[loginOrAccountID]), [userTypingStatuses]);
+    const isAnyoneTyping = usersTyping.length > 0;
     // Don't show if offline, if anyone is typing (typing indicator takes precedence), or if the indicator doesn't exist
-    if (isOffline || isAnyoneTyping || !(reportNameValuePairs === null || reportNameValuePairs === void 0 ? void 0 : reportNameValuePairs.agentZeroProcessingRequestIndicator)) {
+    if (isOffline || isAnyoneTyping || !reportNameValuePairs?.agentZeroProcessingRequestIndicator) {
         return null;
     }
     return (<Text_1.default style={[styles.chatItemComposeSecondaryRowSubText, styles.chatItemComposeSecondaryRowOffset]} numberOfLines={1}>

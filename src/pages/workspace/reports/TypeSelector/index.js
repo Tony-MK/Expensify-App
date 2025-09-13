@@ -1,26 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var useLocalize_1 = require("@hooks/useLocalize");
-var WorkspaceReportFieldUtils_1 = require("@libs/WorkspaceReportFieldUtils");
-var CONST_1 = require("@src/CONST");
-var TypeSelectorModal_1 = require("./TypeSelectorModal");
-function TypeSelector(_a, forwardedRef) {
-    var value = _a.value, _b = _a.label, label = _b === void 0 ? '' : _b, rightLabel = _a.rightLabel, _c = _a.subtitle, subtitle = _c === void 0 ? '' : _c, _d = _a.errorText, errorText = _d === void 0 ? '' : _d, onInputChange = _a.onInputChange, onTypeSelected = _a.onTypeSelected;
-    var translate = (0, useLocalize_1.default)().translate;
-    var _e = (0, react_1.useState)(false), isPickerVisible = _e[0], setIsPickerVisible = _e[1];
-    var showPickerModal = function () {
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const useLocalize_1 = require("@hooks/useLocalize");
+const WorkspaceReportFieldUtils_1 = require("@libs/WorkspaceReportFieldUtils");
+const CONST_1 = require("@src/CONST");
+const TypeSelectorModal_1 = require("./TypeSelectorModal");
+function TypeSelector({ value, label = '', rightLabel, subtitle = '', errorText = '', onInputChange, onTypeSelected }, forwardedRef) {
+    const { translate } = (0, useLocalize_1.default)();
+    const [isPickerVisible, setIsPickerVisible] = (0, react_1.useState)(false);
+    const showPickerModal = () => {
         setIsPickerVisible(true);
     };
-    var hidePickerModal = function () {
+    const hidePickerModal = () => {
         setIsPickerVisible(false);
     };
-    var updateTypeInput = function (reportField) {
-        onInputChange === null || onInputChange === void 0 ? void 0 : onInputChange(reportField.value);
-        onTypeSelected === null || onTypeSelected === void 0 ? void 0 : onTypeSelected(reportField.value);
+    const updateTypeInput = (reportField) => {
+        onInputChange?.(reportField.value);
+        onTypeSelected?.(reportField.value);
         hidePickerModal();
     };
     return (<react_native_1.View>

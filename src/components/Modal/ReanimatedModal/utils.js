@@ -4,9 +4,9 @@ exports.easing = void 0;
 exports.getModalInAnimation = getModalInAnimation;
 exports.getModalOutAnimation = getModalOutAnimation;
 exports.getModalInAnimationStyle = getModalInAnimationStyle;
-var react_native_reanimated_1 = require("react-native-reanimated");
-var variables_1 = require("@styles/variables");
-var easing = react_native_reanimated_1.Easing.bezier(0.76, 0.0, 0.24, 1.0).factory();
+const react_native_reanimated_1 = require("react-native-reanimated");
+const variables_1 = require("@styles/variables");
+const easing = react_native_reanimated_1.Easing.bezier(0.76, 0.0, 0.24, 1.0).factory();
 exports.easing = easing;
 function getModalInAnimation(animationType) {
     switch (animationType) {
@@ -15,7 +15,7 @@ function getModalInAnimation(animationType) {
                 from: { transform: [{ translateX: '100%' }] },
                 to: {
                     transform: [{ translateX: '0%' }],
-                    easing: easing,
+                    easing,
                 },
             };
         case 'slideInUp':
@@ -23,7 +23,7 @@ function getModalInAnimation(animationType) {
                 from: { transform: [{ translateY: '100%' }] },
                 to: {
                     transform: [{ translateY: '0%' }],
-                    easing: easing,
+                    easing,
                 },
             };
         case 'fadeIn':
@@ -31,7 +31,7 @@ function getModalInAnimation(animationType) {
                 from: { opacity: 0 },
                 to: {
                     opacity: variables_1.default.overlayOpacity,
-                    easing: easing,
+                    easing,
                 },
             };
         default:
@@ -44,11 +44,11 @@ function getModalInAnimation(animationType) {
 function getModalInAnimationStyle(animationType) {
     switch (animationType) {
         case 'slideInRight':
-            return function (progress) { return ({ transform: [{ translateX: "".concat(100 * (1 - progress), "%") }] }); };
+            return (progress) => ({ transform: [{ translateX: `${100 * (1 - progress)}%` }] });
         case 'slideInUp':
-            return function (progress) { return ({ transform: [{ translateY: "".concat(100 * (1 - progress), "%") }] }); };
+            return (progress) => ({ transform: [{ translateY: `${100 * (1 - progress)}%` }] });
         case 'fadeIn':
-            return function (progress) { return ({ opacity: progress }); };
+            return (progress) => ({ opacity: progress });
         default:
             throw new Error('Unknown animation type');
     }
@@ -60,7 +60,7 @@ function getModalOutAnimation(animationType) {
                 from: { transform: [{ translateX: '0%' }] },
                 to: {
                     transform: [{ translateX: '100%' }],
-                    easing: easing,
+                    easing,
                 },
             };
         case 'slideOutDown':
@@ -68,7 +68,7 @@ function getModalOutAnimation(animationType) {
                 from: { transform: [{ translateY: '0%' }] },
                 to: {
                     transform: [{ translateY: '100%' }],
-                    easing: easing,
+                    easing,
                 },
             };
         case 'fadeOut':
@@ -76,7 +76,7 @@ function getModalOutAnimation(animationType) {
                 from: { opacity: variables_1.default.overlayOpacity },
                 to: {
                     opacity: 0,
-                    easing: easing,
+                    easing,
                 },
             };
         default:

@@ -1,27 +1,25 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var NextStepUtils = require("@libs/NextStepUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var RenderHTML_1 = require("./RenderHTML");
-var iconMap = (_a = {},
-    _a[CONST_1.default.NEXT_STEP.ICONS.HOURGLASS] = Expensicons.Hourglass,
-    _a[CONST_1.default.NEXT_STEP.ICONS.CHECKMARK] = Expensicons.Checkmark,
-    _a[CONST_1.default.NEXT_STEP.ICONS.STOPWATCH] = Expensicons.Stopwatch,
-    _a);
-function MoneyReportHeaderStatusBar(_a) {
-    var nextStep = _a.nextStep;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var messageContent = (0, react_1.useMemo)(function () {
-        var messageArray = nextStep.message;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const NextStepUtils = require("@libs/NextStepUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const RenderHTML_1 = require("./RenderHTML");
+const iconMap = {
+    [CONST_1.default.NEXT_STEP.ICONS.HOURGLASS]: Expensicons.Hourglass,
+    [CONST_1.default.NEXT_STEP.ICONS.CHECKMARK]: Expensicons.Checkmark,
+    [CONST_1.default.NEXT_STEP.ICONS.STOPWATCH]: Expensicons.Stopwatch,
+};
+function MoneyReportHeaderStatusBar({ nextStep }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const messageContent = (0, react_1.useMemo)(() => {
+        const messageArray = nextStep.message;
         return NextStepUtils.parseMessage(messageArray);
     }, [nextStep.message]);
     return (<react_native_1.View style={[styles.dFlex, styles.flexRow, styles.alignItemsCenter, styles.overflowHidden, styles.w100, styles.headerStatusBarContainer]}>

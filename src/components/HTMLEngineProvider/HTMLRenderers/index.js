@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var AnchorRenderer_1 = require("./AnchorRenderer");
-var CodeRenderer_1 = require("./CodeRenderer");
-var ConciergeLinkRenderer_1 = require("./ConciergeLinkRenderer");
-var DeletedActionRenderer_1 = require("./DeletedActionRenderer");
-var EditedRenderer_1 = require("./EditedRenderer");
-var EmojiRenderer_1 = require("./EmojiRenderer");
-var ImageRenderer_1 = require("./ImageRenderer");
-var MentionHereRenderer_1 = require("./MentionHereRenderer");
-var MentionReportRenderer_1 = require("./MentionReportRenderer");
-var MentionUserRenderer_1 = require("./MentionUserRenderer");
-var NextStepEmailRenderer_1 = require("./NextStepEmailRenderer");
-var PreRenderer_1 = require("./PreRenderer");
-var RBRRenderer_1 = require("./RBRRenderer");
-var ShortMentionRenderer_1 = require("./ShortMentionRenderer");
-var TaskTitleRenderer_1 = require("./TaskTitleRenderer");
-var VideoRenderer_1 = require("./VideoRenderer");
+const AnchorRenderer_1 = require("./AnchorRenderer");
+const CodeRenderer_1 = require("./CodeRenderer");
+const ConciergeLinkRenderer_1 = require("./ConciergeLinkRenderer");
+const DeletedActionRenderer_1 = require("./DeletedActionRenderer");
+const EditedRenderer_1 = require("./EditedRenderer");
+const EmojiRenderer_1 = require("./EmojiRenderer");
+const ImageRenderer_1 = require("./ImageRenderer");
+const MentionHereRenderer_1 = require("./MentionHereRenderer");
+const MentionReportRenderer_1 = require("./MentionReportRenderer");
+const MentionUserRenderer_1 = require("./MentionUserRenderer");
+const NextStepEmailRenderer_1 = require("./NextStepEmailRenderer");
+const PreRenderer_1 = require("./PreRenderer");
+const RBRRenderer_1 = require("./RBRRenderer");
+const ShortMentionRenderer_1 = require("./ShortMentionRenderer");
+const TaskTitleRenderer_1 = require("./TaskTitleRenderer");
+const VideoRenderer_1 = require("./VideoRenderer");
 /**
  * This collection defines our custom renderers. It is a mapping from HTML tag type to the corresponding component.
  */
-var HTMLEngineProviderComponentList = {
+const HTMLEngineProviderComponentList = {
     // Standard HTML tag renderers
     a: AnchorRenderer_1.default,
     code: CodeRenderer_1.default,

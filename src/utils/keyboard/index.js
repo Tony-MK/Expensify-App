@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var isVisible = false;
-react_native_1.Keyboard.addListener('keyboardDidHide', function () {
+const react_native_1 = require("react-native");
+let isVisible = false;
+react_native_1.Keyboard.addListener('keyboardDidHide', () => {
     isVisible = false;
 });
-react_native_1.Keyboard.addListener('keyboardDidShow', function () {
+react_native_1.Keyboard.addListener('keyboardDidShow', () => {
     isVisible = true;
 });
-var dismiss = function () {
-    return new Promise(function (resolve) {
+const dismiss = () => {
+    return new Promise((resolve) => {
         if (!isVisible) {
             resolve();
             return;
         }
-        var subscription = react_native_1.Keyboard.addListener('keyboardDidHide', function () {
+        const subscription = react_native_1.Keyboard.addListener('keyboardDidHide', () => {
             resolve(undefined);
             subscription.remove();
         });
         react_native_1.Keyboard.dismiss();
     });
 };
-var utils = { dismiss: dismiss };
+const utils = { dismiss };
 exports.default = utils;

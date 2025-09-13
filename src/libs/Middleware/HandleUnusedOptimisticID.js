@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var clone_1 = require("lodash/clone");
-var deepReplaceKeysAndValues_1 = require("@libs/deepReplaceKeysAndValues");
-var PersistedRequests = require("@userActions/PersistedRequests");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const clone_1 = require("lodash/clone");
+const deepReplaceKeysAndValues_1 = require("@libs/deepReplaceKeysAndValues");
+const PersistedRequests = require("@userActions/PersistedRequests");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
  * This middleware checks for the presence of a field called preexistingReportID in the response.
  * If present, that means that the client passed an optimistic reportID with the request that the server did not use.
@@ -14,41 +14,37 @@ var ONYXKEYS_1 = require("@src/ONYXKEYS");
  * If it finds any, it replaces the unused optimistic ID with the "real ID" from the server.
  * That way these serialized requests function as expected rather than returning a 404.
  */
-var handleUnusedOptimisticID = function (requestResponse, request, isFromSequentialQueue) {
-    return requestResponse.then(function (response) {
-        var _a;
-        var responseOnyxData = (_a = response === null || response === void 0 ? void 0 : response.onyxData) !== null && _a !== void 0 ? _a : [];
-        responseOnyxData.forEach(function (onyxData) {
-            var _a, _b, _c, _d, _e, _f, _g;
-            var key = onyxData.key;
-            if (!(key === null || key === void 0 ? void 0 : key.startsWith(ONYXKEYS_1.default.COLLECTION.REPORT))) {
-                return;
+const handleUnusedOptimisticID = (requestResponse, request, isFromSequentialQueue) => requestResponse.then((response) => {
+    const responseOnyxData = response?.onyxData ?? [];
+    responseOnyxData.forEach((onyxData) => {
+        const key = onyxData.key;
+        if (!key?.startsWith(ONYXKEYS_1.default.COLLECTION.REPORT)) {
+            return;
+        }
+        if (!onyxData.value) {
+            return;
+        }
+        const report = onyxData.value;
+        const preexistingReportID = report.preexistingReportID;
+        if (!preexistingReportID) {
+            return;
+        }
+        const oldReportID = key.split(ONYXKEYS_1.default.COLLECTION.REPORT).at(-1) ?? request.data?.reportID ?? request.data?.optimisticReportID;
+        if (isFromSequentialQueue) {
+            const ongoingRequest = PersistedRequests.getOngoingRequest();
+            const ongoingRequestReportIDParam = ongoingRequest?.data?.reportID ?? ongoingRequest?.data?.optimisticReportID;
+            if (ongoingRequest && ongoingRequestReportIDParam === oldReportID) {
+                const ongoingRequestClone = (0, clone_1.default)(ongoingRequest);
+                ongoingRequestClone.data = (0, deepReplaceKeysAndValues_1.default)(ongoingRequest.data, oldReportID, preexistingReportID);
+                PersistedRequests.updateOngoingRequest(ongoingRequestClone);
             }
-            if (!onyxData.value) {
-                return;
-            }
-            var report = onyxData.value;
-            var preexistingReportID = report.preexistingReportID;
-            if (!preexistingReportID) {
-                return;
-            }
-            var oldReportID = (_c = (_a = key.split(ONYXKEYS_1.default.COLLECTION.REPORT).at(-1)) !== null && _a !== void 0 ? _a : (_b = request.data) === null || _b === void 0 ? void 0 : _b.reportID) !== null && _c !== void 0 ? _c : (_d = request.data) === null || _d === void 0 ? void 0 : _d.optimisticReportID;
-            if (isFromSequentialQueue) {
-                var ongoingRequest = PersistedRequests.getOngoingRequest();
-                var ongoingRequestReportIDParam = (_f = (_e = ongoingRequest === null || ongoingRequest === void 0 ? void 0 : ongoingRequest.data) === null || _e === void 0 ? void 0 : _e.reportID) !== null && _f !== void 0 ? _f : (_g = ongoingRequest === null || ongoingRequest === void 0 ? void 0 : ongoingRequest.data) === null || _g === void 0 ? void 0 : _g.optimisticReportID;
-                if (ongoingRequest && ongoingRequestReportIDParam === oldReportID) {
-                    var ongoingRequestClone = (0, clone_1.default)(ongoingRequest);
-                    ongoingRequestClone.data = (0, deepReplaceKeysAndValues_1.default)(ongoingRequest.data, oldReportID, preexistingReportID);
-                    PersistedRequests.updateOngoingRequest(ongoingRequestClone);
-                }
-            }
-            PersistedRequests.getAll().forEach(function (persistedRequest, index) {
-                var persistedRequestClone = (0, clone_1.default)(persistedRequest);
-                persistedRequestClone.data = (0, deepReplaceKeysAndValues_1.default)(persistedRequest.data, oldReportID, preexistingReportID);
-                PersistedRequests.update(index, persistedRequestClone);
-            });
+        }
+        PersistedRequests.getAll().forEach((persistedRequest, index) => {
+            const persistedRequestClone = (0, clone_1.default)(persistedRequest);
+            persistedRequestClone.data = (0, deepReplaceKeysAndValues_1.default)(persistedRequest.data, oldReportID, preexistingReportID);
+            PersistedRequests.update(index, persistedRequestClone);
         });
-        return response;
     });
-};
+    return response;
+});
 exports.default = handleUnusedOptimisticID;

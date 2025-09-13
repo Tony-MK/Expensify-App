@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DarkTheme = exports.LightTheme = void 0;
-var react_1 = require("react");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ThemeProvider_1 = require("@components/ThemeProvider");
-var ThemeStylesProvider_1 = require("@components/ThemeStylesProvider");
-var TransactionItemRow_1 = require("@components/TransactionItemRow");
-var CONST_1 = require("@src/CONST");
-var Transaction_1 = require("./objects/Transaction");
-var allAvailableColumns = [
+const react_1 = require("react");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ThemeProvider_1 = require("@components/ThemeProvider");
+const ThemeStylesProvider_1 = require("@components/ThemeStylesProvider");
+const TransactionItemRow_1 = require("@components/TransactionItemRow");
+const CONST_1 = require("@src/CONST");
+const Transaction_1 = require("./objects/Transaction");
+const allAvailableColumns = [
     CONST_1.default.REPORT.TRANSACTION_LIST.COLUMNS.RECEIPT,
     CONST_1.default.REPORT.TRANSACTION_LIST.COLUMNS.TYPE,
     CONST_1.default.REPORT.TRANSACTION_LIST.COLUMNS.DATE,
@@ -21,7 +21,7 @@ var allAvailableColumns = [
     CONST_1.default.REPORT.TRANSACTION_LIST.COLUMNS.TOTAL_AMOUNT,
     CONST_1.default.REPORT.TRANSACTION_LIST.COLUMNS.ACTION,
 ];
-var story = {
+const story = {
     title: 'Components/TransactionItemRow',
     component: TransactionItemRow_1.default,
     args: {
@@ -59,21 +59,19 @@ var story = {
         useLightTheme: true,
     },
 };
-function Template(_a, _b) {
-    var transactionItem = _a.transactionItem, shouldUseNarrowLayout = _a.shouldUseNarrowLayout, isSelected = _a.isSelected, shouldShowTooltip = _a.shouldShowTooltip, shouldShowCheckbox = _a.shouldShowCheckbox, columns = _a.columns;
-    var parameters = _b.parameters;
-    var theme = parameters.useLightTheme ? CONST_1.default.THEME.LIGHT : CONST_1.default.THEME.DARK;
+function Template({ transactionItem, shouldUseNarrowLayout, isSelected, shouldShowTooltip, shouldShowCheckbox, columns }, { parameters }) {
+    const theme = parameters.useLightTheme ? CONST_1.default.THEME.LIGHT : CONST_1.default.THEME.DARK;
     return (<ThemeProvider_1.default theme={theme}>
             <ScreenWrapper_1.default testID="testID">
                 <ThemeStylesProvider_1.default>
-                    <TransactionItemRow_1.default transactionItem={transactionItem} shouldUseNarrowLayout={shouldUseNarrowLayout} isSelected={isSelected} shouldShowTooltip={shouldShowTooltip} dateColumnSize={CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} amountColumnSize={CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} taxAmountColumnSize={CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} onCheckboxPress={function () { }} shouldShowCheckbox={shouldShowCheckbox} columns={columns} onButtonPress={function () { }}/>
+                    <TransactionItemRow_1.default transactionItem={transactionItem} shouldUseNarrowLayout={shouldUseNarrowLayout} isSelected={isSelected} shouldShowTooltip={shouldShowTooltip} dateColumnSize={CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} amountColumnSize={CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} taxAmountColumnSize={CONST_1.default.SEARCH.TABLE_COLUMN_SIZES.NORMAL} onCheckboxPress={() => { }} shouldShowCheckbox={shouldShowCheckbox} columns={columns} onButtonPress={() => { }}/>
                 </ThemeStylesProvider_1.default>
             </ScreenWrapper_1.default>
         </ThemeProvider_1.default>);
 }
-var LightTheme = Template.bind({});
+const LightTheme = Template.bind({});
 exports.LightTheme = LightTheme;
-var DarkTheme = Template.bind({});
+const DarkTheme = Template.bind({});
 exports.DarkTheme = DarkTheme;
 LightTheme.parameters = {
     useLightTheme: true,

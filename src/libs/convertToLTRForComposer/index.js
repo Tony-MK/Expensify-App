@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 function hasRTLCharacters(text) {
     // Regular expressions to match RTL character ranges.
-    var rtlPattern = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
+    const rtlPattern = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
     return rtlPattern.test(text);
 }
 // Converts a given text to ensure it starts with the LTR (Left-to-Right) marker.
-var convertToLTRForComposer = function (text) {
+const convertToLTRForComposer = (text) => {
     // Ensure that the text starts with RTL characters if not we return the same text to avoid concatenation with special
     // character at the start which leads to unexpected behaviour for Emoji/Mention suggestions.
     if (!hasRTLCharacters(text)) {
@@ -24,6 +24,6 @@ var convertToLTRForComposer = function (text) {
         return text;
     }
     // Add the LTR marker to the beginning of the text.
-    return "".concat(CONST_1.default.UNICODE.LTR).concat(text);
+    return `${CONST_1.default.UNICODE.LTR}${text}`;
 };
 exports.default = convertToLTRForComposer;

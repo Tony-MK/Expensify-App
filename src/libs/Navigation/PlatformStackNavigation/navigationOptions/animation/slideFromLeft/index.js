@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var gestureDirection_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/gestureDirection");
-var __1 = require("..");
-var slideFromLeft = {
+const gestureDirection_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/gestureDirection");
+const __1 = require("..");
+const slideFromLeft = {
     animation: __1.InternalPlatformAnimations.SLIDE_FROM_LEFT,
     gestureDirection: gestureDirection_1.default.HORIZONTAL_INVERTED,
 };

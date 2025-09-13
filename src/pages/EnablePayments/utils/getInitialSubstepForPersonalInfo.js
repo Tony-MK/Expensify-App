@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var WalletAdditionalDetailsForm_1 = require("@src/types/form/WalletAdditionalDetailsForm");
-var personalInfoKeys = WalletAdditionalDetailsForm_1.default.PERSONAL_INFO_STEP;
+const WalletAdditionalDetailsForm_1 = require("@src/types/form/WalletAdditionalDetailsForm");
+const personalInfoKeys = WalletAdditionalDetailsForm_1.default.PERSONAL_INFO_STEP;
 /**
  * Returns the initial substep for the Personal Info step based on already existing data
  */

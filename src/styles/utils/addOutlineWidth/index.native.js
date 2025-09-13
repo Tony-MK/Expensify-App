@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var addOutlineWidth = function (_theme, obj) { return obj; };
+const addOutlineWidth = (_theme, obj) => obj;
 exports.default = addOutlineWidth;

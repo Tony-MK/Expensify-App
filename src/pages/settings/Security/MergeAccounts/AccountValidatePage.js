@@ -1,36 +1,25 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var ValidateCodeActionForm_1 = require("@components/ValidateCodeActionForm");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var MergeAccounts_1 = require("@userActions/MergeAccounts");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var getMergeErrorPage = function (err) {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const ValidateCodeActionForm_1 = require("@components/ValidateCodeActionForm");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const MergeAccounts_1 = require("@userActions/MergeAccounts");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const getMergeErrorPage = (err) => {
     if (err.includes('403')) {
         return CONST_1.default.MERGE_ACCOUNT_RESULTS.TOO_MANY_ATTEMPTS;
     }
@@ -54,7 +43,7 @@ var getMergeErrorPage = function (err) {
     }
     return null;
 };
-var getAuthenticationErrorKey = function (err) {
+const getAuthenticationErrorKey = (err) => {
     if (!err) {
         return null;
     }
@@ -64,64 +53,62 @@ var getAuthenticationErrorKey = function (err) {
     return 'mergeAccountsPage.accountValidate.errors.fallback';
 };
 function AccountValidatePage() {
-    var _a;
-    var validateCodeFormRef = (0, react_1.useRef)(null);
-    var navigation = (0, native_1.useNavigation)();
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, {
-        selector: function (data) { return ({
-            mergeWithValidateCode: data === null || data === void 0 ? void 0 : data.mergeWithValidateCode,
-            getValidateCodeForAccountMerge: data === null || data === void 0 ? void 0 : data.getValidateCodeForAccountMerge,
-        }); },
+    const validateCodeFormRef = (0, react_1.useRef)(null);
+    const navigation = (0, native_1.useNavigation)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, {
+        selector: (data) => ({
+            mergeWithValidateCode: data?.mergeWithValidateCode,
+            getValidateCodeForAccountMerge: data?.getValidateCodeForAccountMerge,
+        }),
         canBeMissing: true,
-    })[0];
-    var privateSubscription = (0, usePrivateSubscription_1.default)();
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var params = (0, native_1.useRoute)().params;
-    var email = (_a = params.login) !== null && _a !== void 0 ? _a : '';
-    var mergeWithValidateCode = account === null || account === void 0 ? void 0 : account.mergeWithValidateCode;
-    var getValidateCodeForAccountMerge = account === null || account === void 0 ? void 0 : account.getValidateCodeForAccountMerge;
-    var isAccountMerged = mergeWithValidateCode === null || mergeWithValidateCode === void 0 ? void 0 : mergeWithValidateCode.isAccountMerged;
-    var latestError = (0, ErrorUtils_1.getLatestErrorMessage)(mergeWithValidateCode);
-    var errorPage = getMergeErrorPage(latestError);
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
+    });
+    const privateSubscription = (0, usePrivateSubscription_1.default)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const { params } = (0, native_1.useRoute)();
+    const email = params.login ?? '';
+    const mergeWithValidateCode = account?.mergeWithValidateCode;
+    const getValidateCodeForAccountMerge = account?.getValidateCodeForAccountMerge;
+    const isAccountMerged = mergeWithValidateCode?.isAccountMerged;
+    const latestError = (0, ErrorUtils_1.getLatestErrorMessage)(mergeWithValidateCode);
+    const errorPage = getMergeErrorPage(latestError);
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
         if (!isAccountMerged || !email) {
             return;
         }
         return Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS_RESULT.getRoute(email, 'success'), { forceReplace: true });
     }, [isAccountMerged, email]));
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
         if (!errorPage || !email) {
             return;
         }
         return Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS_RESULT.getRoute(email, errorPage), { forceReplace: true });
     }, [errorPage, email]));
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
-        var task = react_native_1.InteractionManager.runAfterInteractions(function () {
-            var _a;
-            if ((privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.type) !== CONST_1.default.SUBSCRIPTION.TYPE.INVOICING) {
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
+        const task = react_native_1.InteractionManager.runAfterInteractions(() => {
+            if (privateSubscription?.type !== CONST_1.default.SUBSCRIPTION.TYPE.INVOICING) {
                 return;
             }
-            Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS_RESULT.getRoute((_a = currentUserPersonalDetails.login) !== null && _a !== void 0 ? _a : '', CONST_1.default.MERGE_ACCOUNT_RESULTS.ERR_INVOICING, ROUTES_1.default.SETTINGS_SECURITY));
+            Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS_RESULT.getRoute(currentUserPersonalDetails.login ?? '', CONST_1.default.MERGE_ACCOUNT_RESULTS.ERR_INVOICING, ROUTES_1.default.SETTINGS_SECURITY));
         });
-        return function () { return task.cancel(); };
-    }, [privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.type, currentUserPersonalDetails.login]));
-    (0, react_1.useEffect)(function () {
-        var unsubscribe = navigation.addListener('blur', function () {
+        return () => task.cancel();
+    }, [privateSubscription?.type, currentUserPersonalDetails.login]));
+    (0, react_1.useEffect)(() => {
+        const unsubscribe = navigation.addListener('blur', () => {
             (0, MergeAccounts_1.clearGetValidateCodeForAccountMerge)();
             (0, MergeAccounts_1.clearMergeWithValidateCode)();
         });
         return unsubscribe;
     }, [navigation]);
-    var authenticationErrorKey = getAuthenticationErrorKey(latestError);
-    var validateCodeError = !errorPage && authenticationErrorKey ? { authError: translate(authenticationErrorKey) } : undefined;
+    const authenticationErrorKey = getAuthenticationErrorKey(latestError);
+    const validateCodeError = !errorPage && authenticationErrorKey ? { authError: translate(authenticationErrorKey) } : undefined;
     return (<ScreenWrapper_1.default shouldEnableMaxHeight includeSafeAreaPaddingBottom testID={AccountValidatePage.displayName}>
-            <HeaderWithBackButton_1.default title={translate('mergeAccountsPage.mergeAccount')} onBackButtonPress={function () {
+            <HeaderWithBackButton_1.default title={translate('mergeAccountsPage.mergeAccount')} onBackButtonPress={() => {
             Navigation_1.default.goBack(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS.getRoute());
         }} shouldDisplayHelpButton={false}/>
             <ScrollView_1.default style={[styles.w100, styles.h100, styles.flex1]} contentContainerStyle={[styles.flexGrow1]}>
-                <ValidateCodeActionForm_1.default descriptionPrimary={translate('mergeAccountsPage.accountValidate.confirmMerge')} descriptionPrimaryStyles={__assign(__assign({}, styles.mb8), styles.textStrong)} descriptionSecondary={<react_native_1.View style={[styles.w100]}>
+                <ValidateCodeActionForm_1.default descriptionPrimary={translate('mergeAccountsPage.accountValidate.confirmMerge')} descriptionPrimaryStyles={{ ...styles.mb8, ...styles.textStrong }} descriptionSecondary={<react_native_1.View style={[styles.w100]}>
                             <Text_1.default style={[styles.mb8]}>
                                 {translate('mergeAccountsPage.accountValidate.lossOfUnsubmittedData')}
                                 <Text_1.default style={styles.textStrong}>{email}</Text_1.default>.
@@ -130,11 +117,11 @@ function AccountValidatePage() {
                                 {translate('mergeAccountsPage.accountValidate.enterMagicCode')}
                                 <Text_1.default style={styles.textStrong}>{email}</Text_1.default>.
                             </Text_1.default>
-                        </react_native_1.View>} descriptionSecondaryStyles={styles.mb8} handleSubmitForm={function (code) {
+                        </react_native_1.View>} descriptionSecondaryStyles={styles.mb8} handleSubmitForm={(code) => {
             (0, MergeAccounts_1.mergeWithValidateCode)(email, code);
-        }} sendValidateCode={function () {
+        }} sendValidateCode={() => {
             (0, MergeAccounts_1.requestValidationCodeForAccountMerge)(email, true);
-        }} shouldSkipInitialValidation clearError={function () { return (0, MergeAccounts_1.clearMergeWithValidateCode)(); }} validateError={validateCodeError} hasMagicCodeBeenSent={getValidateCodeForAccountMerge === null || getValidateCodeForAccountMerge === void 0 ? void 0 : getValidateCodeForAccountMerge.validateCodeResent} submitButtonText={translate('mergeAccountsPage.mergeAccount')} forwardedRef={validateCodeFormRef} isLoading={mergeWithValidateCode === null || mergeWithValidateCode === void 0 ? void 0 : mergeWithValidateCode.isLoading}/>
+        }} shouldSkipInitialValidation clearError={() => (0, MergeAccounts_1.clearMergeWithValidateCode)()} validateError={validateCodeError} hasMagicCodeBeenSent={getValidateCodeForAccountMerge?.validateCodeResent} submitButtonText={translate('mergeAccountsPage.mergeAccount')} forwardedRef={validateCodeFormRef} isLoading={mergeWithValidateCode?.isLoading}/>
             </ScrollView_1.default>
         </ScreenWrapper_1.default>);
 }

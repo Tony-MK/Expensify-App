@@ -1,40 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextInput_1 = require("@components/TextInput");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var PersonalDetails_1 = require("@userActions/PersonalDetails");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var LegalNameForm_1 = require("@src/types/form/LegalNameForm");
-var updateLegalName = function (values, formatPhoneNumber, currentUserPersonalDetail) {
-    var _a, _b, _c, _d;
-    (0, PersonalDetails_1.updateLegalName)((_b = (_a = values.legalFirstName) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : '', (_d = (_c = values.legalLastName) === null || _c === void 0 ? void 0 : _c.trim()) !== null && _d !== void 0 ? _d : '', formatPhoneNumber, currentUserPersonalDetail);
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextInput_1 = require("@components/TextInput");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const PersonalDetails_1 = require("@userActions/PersonalDetails");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const LegalNameForm_1 = require("@src/types/form/LegalNameForm");
+const updateLegalName = (values, formatPhoneNumber, currentUserPersonalDetail) => {
+    (0, PersonalDetails_1.updateLegalName)(values.legalFirstName?.trim() ?? '', values.legalLastName?.trim() ?? '', formatPhoneNumber, currentUserPersonalDetail);
 };
 function LegalNamePage() {
-    var _a, _b;
-    var privatePersonalDetails = (0, useOnyx_1.default)(ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS, { canBeMissing: true })[0];
-    var _c = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true })[0], isLoadingApp = _c === void 0 ? true : _c;
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var _d = (0, useLocalize_1.default)(), translate = _d.translate, formatPhoneNumber = _d.formatPhoneNumber;
-    var legalFirstName = (_a = privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.legalFirstName) !== null && _a !== void 0 ? _a : '';
-    var legalLastName = (_b = privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.legalLastName) !== null && _b !== void 0 ? _b : '';
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = {};
+    const [privatePersonalDetails] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS, { canBeMissing: true });
+    const [isLoadingApp = true] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true });
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate, formatPhoneNumber } = (0, useLocalize_1.default)();
+    const legalFirstName = privatePersonalDetails?.legalFirstName ?? '';
+    const legalLastName = privatePersonalDetails?.legalLastName ?? '';
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = {};
         if (typeof values.legalFirstName === 'string') {
             if (!values.legalFirstName) {
                 errors.legalFirstName = translate('common.error.fieldRequired');
@@ -67,8 +65,8 @@ function LegalNamePage() {
     }, [translate]);
     return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom shouldEnableMaxHeight testID={LegalNamePage.displayName}>
             <DelegateNoAccessWrapper_1.default accessDeniedVariants={[CONST_1.default.DELEGATE.DENIED_ACCESS_VARIANTS.DELEGATE]}>
-                <HeaderWithBackButton_1.default title={translate('privatePersonalDetails.legalName')} onBackButtonPress={function () { return Navigation_1.default.goBack(); }}/>
-                {isLoadingApp ? (<FullscreenLoadingIndicator_1.default style={[styles.flex1, styles.pRelative]}/>) : (<FormProvider_1.default style={[styles.flexGrow1, styles.ph5]} formID={ONYXKEYS_1.default.FORMS.LEGAL_NAME_FORM} validate={validate} onSubmit={function (values) { return updateLegalName(values, formatPhoneNumber, { firstName: currentUserPersonalDetails.firstName, lastName: currentUserPersonalDetails.lastName }); }} submitButtonText={translate('common.save')} enabledWhenOffline>
+                <HeaderWithBackButton_1.default title={translate('privatePersonalDetails.legalName')} onBackButtonPress={() => Navigation_1.default.goBack()}/>
+                {isLoadingApp ? (<FullscreenLoadingIndicator_1.default style={[styles.flex1, styles.pRelative]}/>) : (<FormProvider_1.default style={[styles.flexGrow1, styles.ph5]} formID={ONYXKEYS_1.default.FORMS.LEGAL_NAME_FORM} validate={validate} onSubmit={(values) => updateLegalName(values, formatPhoneNumber, { firstName: currentUserPersonalDetails.firstName, lastName: currentUserPersonalDetails.lastName })} submitButtonText={translate('common.save')} enabledWhenOffline>
                         <react_native_1.View style={[styles.mb4]}>
                             <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={LegalNameForm_1.default.LEGAL_FIRST_NAME} name="legalFirstName" label={translate('privatePersonalDetails.legalFirstName')} aria-label={translate('privatePersonalDetails.legalFirstName')} role={CONST_1.default.ROLE.PRESENTATION} defaultValue={legalFirstName} spellCheck={false} autoCapitalize="words"/>
                         </react_native_1.View>

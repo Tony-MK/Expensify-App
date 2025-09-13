@@ -2,71 +2,71 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention */
 // we need "dirty" object key names in these tests
-var getQueryWithSubstitutions_1 = require("@src/components/Search/SearchRouter/getQueryWithSubstitutions");
-describe('getQueryWithSubstitutions should compute and return correct new query', function () {
-    test('when both queries contain no substitutions', function () {
+const getQueryWithSubstitutions_1 = require("@src/components/Search/SearchRouter/getQueryWithSubstitutions");
+describe('getQueryWithSubstitutions should compute and return correct new query', () => {
+    test('when both queries contain no substitutions', () => {
         // given this previous query: "foo"
-        var userTypedQuery = 'foo bar';
-        var substitutionsMock = {};
-        var result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
+        const userTypedQuery = 'foo bar';
+        const substitutionsMock = {};
+        const result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
         expect(result).toBe('foo bar');
     });
-    test('when query has a substitution and plain text was added after it', function () {
+    test('when query has a substitution and plain text was added after it', () => {
         // given this previous query: "foo from:@mateusz"
-        var userTypedQuery = 'foo from:Mat test';
-        var substitutionsMock = {
+        const userTypedQuery = 'foo from:Mat test';
+        const substitutionsMock = {
             'from:Mat': '@mateusz',
         };
-        var result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
+        const result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
         expect(result).toBe('foo from:@mateusz test');
     });
-    test('when query has a substitution and plain text was added after before it', function () {
+    test('when query has a substitution and plain text was added after before it', () => {
         // given this previous query: "foo from:@mateusz1"
-        var userTypedQuery = 'foo bar from:Mat1';
-        var substitutionsMock = {
+        const userTypedQuery = 'foo bar from:Mat1';
+        const substitutionsMock = {
             'from:Mat1': '@mateusz1',
         };
-        var result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
+        const result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
         expect(result).toBe('foo bar from:@mateusz1');
     });
-    test('when query has a substitution and then it was removed', function () {
+    test('when query has a substitution and then it was removed', () => {
         // given this previous query: "foo from:@mateusz"
-        var userTypedQuery = 'foo from:Ma';
-        var substitutionsMock = {
+        const userTypedQuery = 'foo from:Ma';
+        const substitutionsMock = {
             'from:Mat': '@mateusz',
         };
-        var result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
+        const result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
         expect(result).toBe('foo from:Ma');
     });
-    test('when query has a substitution and then it was changed', function () {
+    test('when query has a substitution and then it was changed', () => {
         // given this previous query: "foo from:@mateusz1"
-        var userTypedQuery = 'foo from:Maat1';
-        var substitutionsMock = {
+        const userTypedQuery = 'foo from:Maat1';
+        const substitutionsMock = {
             'from:Mat1': '@mateusz1',
         };
-        var result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
+        const result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
         expect(result).toBe('foo from:Maat1');
     });
-    test('when query has multiple substitutions and one was changed on the last position', function () {
+    test('when query has multiple substitutions and one was changed on the last position', () => {
         // given this previous query: "foo in:123,456 from:@jakub"
         // oldHumanReadableQ = 'foo in:admin,admins from:Jakub'
-        var userTypedQuery = 'foo in:admin,admins from:Jakub2';
-        var substitutionsMock = {
+        const userTypedQuery = 'foo in:admin,admins from:Jakub2';
+        const substitutionsMock = {
             'in:admin': '123',
             'in:admins': '456',
             'from:Jakub': '@jakub',
         };
-        var result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
+        const result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substitutionsMock);
         expect(result).toBe('foo in:123,456 from:Jakub2');
     });
-    test('when query has multiple substitutions and one was changed in the middle', function () {
+    test('when query has multiple substitutions and one was changed in the middle', () => {
         // given this previous query: "foo in:aabbccdd123,zxcv123 from:@jakub"
-        var userTypedQuery = 'foo in:wave2,waveControl from:zzzz';
-        var substM = {
+        const userTypedQuery = 'foo in:wave2,waveControl from:zzzz';
+        const substM = {
             'in:wave': 'aabbccdd123',
             'in:waveControl': 'zxcv123',
         };
-        var result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substM);
+        const result = (0, getQueryWithSubstitutions_1.getQueryWithSubstitutions)(userTypedQuery, substM);
         expect(result).toBe('foo in:wave2,zxcv123 from:zzzz');
     });
 });

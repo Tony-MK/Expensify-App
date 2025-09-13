@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var NotificationType = {
+const NotificationType = {
     REPORT_ACTION: 'reportAction',
     REPORT_COMMENT: 'reportComment',
     TRANSACTION: 'transaction',

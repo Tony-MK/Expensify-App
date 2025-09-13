@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
 // FlatList wrapped with the freeze component will lose its scroll state when frozen (only for Android).
 // CustomFlatList saves the offset and use it for scrollToOffset() when unfrozen.
 function CustomFlatList(props, ref) {
-    var lastScrollOffsetRef = (0, react_1.useRef)(0);
-    var onScreenFocus = (0, react_1.useCallback)(function () {
+    const lastScrollOffsetRef = (0, react_1.useRef)(0);
+    const onScreenFocus = (0, react_1.useCallback)(() => {
         if (typeof ref === 'function') {
             return;
         }
-        if (!(ref === null || ref === void 0 ? void 0 : ref.current) || !lastScrollOffsetRef.current) {
+        if (!ref?.current || !lastScrollOffsetRef.current) {
             return;
         }
         if (ref.current && lastScrollOffsetRef.current) {
@@ -19,10 +19,10 @@ function CustomFlatList(props, ref) {
         }
     }, [ref]);
     // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
-    var onMomentumScrollEnd = (0, react_1.useCallback)(function (event) {
+    const onMomentumScrollEnd = (0, react_1.useCallback)((event) => {
         lastScrollOffsetRef.current = event.nativeEvent.contentOffset.y;
     }, []);
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
         onScreenFocus();
     }, [onScreenFocus]));
     return (<react_native_1.FlatList 

@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AvatarWithDisplayName_1 = require("@components/AvatarWithDisplayName");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function ReportSearchHeader(_a) {
-    var report = _a.report, style = _a.style, transactions = _a.transactions, avatarBorderColor = _a.avatarBorderColor;
-    var styles = (0, useThemeStyles_1.default)();
-    var middleContent = (0, react_1.useMemo)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AvatarWithDisplayName_1 = require("@components/AvatarWithDisplayName");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function ReportSearchHeader({ report, style, transactions, avatarBorderColor }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const middleContent = (0, react_1.useMemo)(() => {
         return (<AvatarWithDisplayName_1.default shouldDisplayStatus report={report} transactions={transactions} shouldUseCustomSearchTitleName shouldEnableDetailPageNavigation={false} shouldEnableAvatarNavigation={false} avatarBorderColor={avatarBorderColor}/>);
     }, [report, transactions, avatarBorderColor]);
     return (<react_native_1.View dataSet={{ dragArea: false }} style={[style, styles.reportSearchHeaderBar]}>

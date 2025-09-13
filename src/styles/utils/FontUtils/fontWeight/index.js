@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fontWeight = {
+const fontWeight = {
     normal: '400',
     medium: '500',
     bold: '700',

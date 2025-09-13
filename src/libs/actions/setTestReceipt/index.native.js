@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var react_native_blob_util_1 = require("react-native-blob-util");
-var Log_1 = require("@libs/Log");
-var CONST_1 = require("@src/CONST");
-var getFile_1 = require("./getFile");
-var setTestReceipt = function (asset, assetExtension, onFileRead, onFileError) {
-    var filename = "".concat(CONST_1.default.TEST_RECEIPT.FILENAME, "_").concat(Date.now(), ".").concat(assetExtension);
-    var path = "".concat(react_native_blob_util_1.default.fs.dirs.CacheDir, "/").concat(filename);
-    var source = react_native_1.Image.resolveAssetSource(asset).uri;
+const react_native_1 = require("react-native");
+const react_native_blob_util_1 = require("react-native-blob-util");
+const Log_1 = require("@libs/Log");
+const CONST_1 = require("@src/CONST");
+const getFile_1 = require("./getFile");
+const setTestReceipt = (asset, assetExtension, onFileRead, onFileError) => {
+    const filename = `${CONST_1.default.TEST_RECEIPT.FILENAME}_${Date.now()}.${assetExtension}`;
+    const path = `${react_native_blob_util_1.default.fs.dirs.CacheDir}/${filename}`;
+    const source = react_native_1.Image.resolveAssetSource(asset).uri;
     (0, getFile_1.default)(source, path, assetExtension)
-        .then(function () {
-        var file = {
-            uri: "file://".concat(path),
+        .then(() => {
+        const file = {
+            uri: `file://${path}`,
             name: filename,
             type: CONST_1.default.TEST_RECEIPT.FILE_TYPE,
             size: 0,
@@ -23,9 +23,9 @@ var setTestReceipt = function (asset, assetExtension, onFileRead, onFileError) {
         }
         onFileRead(file.uri, file, filename);
     })
-        .catch(function (error) {
+        .catch((error) => {
         Log_1.default.warn('Error reading test receipt:', { message: error });
-        onFileError === null || onFileError === void 0 ? void 0 : onFileError(error);
+        onFileError?.(error);
     });
 };
 exports.default = setTestReceipt;

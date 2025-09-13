@@ -1,117 +1,109 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var PlaidLink_1 = require("@components/PlaidLink");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CompanyCards_1 = require("@libs/actions/CompanyCards");
-var KeyboardShortcut_1 = require("@libs/KeyboardShortcut");
-var Log_1 = require("@libs/Log");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var Navigation_1 = require("@navigation/Navigation");
-var App_1 = require("@userActions/App");
-var BankAccounts_1 = require("@userActions/BankAccounts");
-var Plaid_1 = require("@userActions/Plaid");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function PlaidConnectionStep(_a) {
-    var _b, _c;
-    var feed = _a.feed, policyID = _a.policyID;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var addNewCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true })[0];
-    var isUSCountry = ((_b = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _b === void 0 ? void 0 : _b.selectedCountry) === CONST_1.default.COUNTRY.US;
-    var isPlaidDisabled = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_PLAID_DISABLED, { canBeMissing: true })[0];
-    var plaidLinkToken = (0, useOnyx_1.default)(ONYXKEYS_1.default.PLAID_LINK_TOKEN, { canBeMissing: true })[0];
-    var plaidData = (0, useOnyx_1.default)(ONYXKEYS_1.default.PLAID_DATA, { canBeMissing: true })[0];
-    var plaidErrors = plaidData === null || plaidData === void 0 ? void 0 : plaidData.errors;
-    var subscribedKeyboardShortcuts = (0, react_1.useRef)([]);
-    var previousNetworkState = (0, react_1.useRef)(undefined);
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const PlaidLink_1 = require("@components/PlaidLink");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CompanyCards_1 = require("@libs/actions/CompanyCards");
+const KeyboardShortcut_1 = require("@libs/KeyboardShortcut");
+const Log_1 = require("@libs/Log");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const Navigation_1 = require("@navigation/Navigation");
+const App_1 = require("@userActions/App");
+const BankAccounts_1 = require("@userActions/BankAccounts");
+const Plaid_1 = require("@userActions/Plaid");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function PlaidConnectionStep({ feed, policyID }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const [addNewCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true });
+    const isUSCountry = addNewCard?.data?.selectedCountry === CONST_1.default.COUNTRY.US;
+    const [isPlaidDisabled] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_PLAID_DISABLED, { canBeMissing: true });
+    const [plaidLinkToken] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PLAID_LINK_TOKEN, { canBeMissing: true });
+    const [plaidData] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PLAID_DATA, { canBeMissing: true });
+    const plaidErrors = plaidData?.errors;
+    const subscribedKeyboardShortcuts = (0, react_1.useRef)([]);
+    const previousNetworkState = (0, react_1.useRef)(undefined);
     // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-    var plaidDataErrorMessage = !(0, EmptyObject_1.isEmptyObject)(plaidErrors) ? Object.values(plaidErrors).at(0) : '';
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var domain = (0, PolicyUtils_1.getDomainNameForPolicy)(policyID);
-    var isAuthenticatedWithPlaid = (0, react_1.useCallback)(function () { var _a; return !!((_a = plaidData === null || plaidData === void 0 ? void 0 : plaidData.bankAccounts) === null || _a === void 0 ? void 0 : _a.length) || !(0, EmptyObject_1.isEmptyObject)(plaidData === null || plaidData === void 0 ? void 0 : plaidData.errors); }, [plaidData]);
+    const plaidDataErrorMessage = !(0, EmptyObject_1.isEmptyObject)(plaidErrors) ? Object.values(plaidErrors).at(0) : '';
+    const { isOffline } = (0, useNetwork_1.default)();
+    const domain = (0, PolicyUtils_1.getDomainNameForPolicy)(policyID);
+    const isAuthenticatedWithPlaid = (0, react_1.useCallback)(() => !!plaidData?.bankAccounts?.length || !(0, EmptyObject_1.isEmptyObject)(plaidData?.errors), [plaidData]);
     /**
      * Blocks the keyboard shortcuts that can navigate
      */
-    var subscribeToNavigationShortcuts = function () {
+    const subscribeToNavigationShortcuts = () => {
         // find and block the shortcuts
-        var shortcutsToBlock = Object.values(CONST_1.default.KEYBOARD_SHORTCUTS).filter(function (shortcut) { return 'type' in shortcut && shortcut.type === CONST_1.default.KEYBOARD_SHORTCUTS_TYPES.NAVIGATION_SHORTCUT; });
-        subscribedKeyboardShortcuts.current = shortcutsToBlock.map(function (shortcut) {
-            return KeyboardShortcut_1.default.subscribe(shortcut.shortcutKey, function () { }, // do nothing
-            shortcut.descriptionKey, shortcut.modifiers, false, function () { var _a; return ((_a = plaidData === null || plaidData === void 0 ? void 0 : plaidData.bankAccounts) !== null && _a !== void 0 ? _a : []).length > 0; });
-        });
+        const shortcutsToBlock = Object.values(CONST_1.default.KEYBOARD_SHORTCUTS).filter((shortcut) => 'type' in shortcut && shortcut.type === CONST_1.default.KEYBOARD_SHORTCUTS_TYPES.NAVIGATION_SHORTCUT);
+        subscribedKeyboardShortcuts.current = shortcutsToBlock.map((shortcut) => KeyboardShortcut_1.default.subscribe(shortcut.shortcutKey, () => { }, // do nothing
+        shortcut.descriptionKey, shortcut.modifiers, false, () => (plaidData?.bankAccounts ?? []).length > 0));
     };
     /**
      * Unblocks the keyboard shortcuts that can navigate
      */
-    var unsubscribeToNavigationShortcuts = function () {
-        subscribedKeyboardShortcuts.current.forEach(function (unsubscribe) { return unsubscribe(); });
+    const unsubscribeToNavigationShortcuts = () => {
+        subscribedKeyboardShortcuts.current.forEach((unsubscribe) => unsubscribe());
         subscribedKeyboardShortcuts.current = [];
     };
-    (0, react_1.useEffect)(function () {
-        var _a;
+    (0, react_1.useEffect)(() => {
         subscribeToNavigationShortcuts();
         // If we're coming from Plaid OAuth flow then we need to reuse the existing plaidLinkToken
         if (isAuthenticatedWithPlaid()) {
             return unsubscribeToNavigationShortcuts;
         }
-        if ((_a = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _a === void 0 ? void 0 : _a.selectedCountry) {
+        if (addNewCard?.data?.selectedCountry) {
             (0, Plaid_1.openPlaidCompanyCardLogin)(addNewCard.data.selectedCountry, domain, feed);
             return unsubscribeToNavigationShortcuts;
         }
         // disabling this rule, as we want this to run only on the first render
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, []);
-    (0, react_1.useEffect)(function () {
-        var _a;
+    (0, react_1.useEffect)(() => {
         // If we are coming back from offline and we haven't authenticated with Plaid yet, we need to re-run our call to kick off Plaid
         // previousNetworkState.current also makes sure that this doesn't run on the first render.
-        if (previousNetworkState.current && !isOffline && !isAuthenticatedWithPlaid() && ((_a = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _a === void 0 ? void 0 : _a.selectedCountry)) {
+        if (previousNetworkState.current && !isOffline && !isAuthenticatedWithPlaid() && addNewCard?.data?.selectedCountry) {
             (0, Plaid_1.openPlaidCompanyCardLogin)(addNewCard.data.selectedCountry, domain, feed);
         }
         previousNetworkState.current = isOffline;
-    }, [(_c = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _c === void 0 ? void 0 : _c.selectedCountry, domain, feed, isAuthenticatedWithPlaid, isOffline]);
-    var handleBackButtonPress = function () {
+    }, [addNewCard?.data?.selectedCountry, domain, feed, isAuthenticatedWithPlaid, isOffline]);
+    const handleBackButtonPress = () => {
         if (feed) {
             Navigation_1.default.goBack();
             return;
         }
         (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({ step: isUSCountry ? CONST_1.default.COMPANY_CARDS.STEP.SELECT_BANK : CONST_1.default.COMPANY_CARDS.STEP.SELECT_FEED_TYPE });
     };
-    var handlePlaidLinkError = (0, react_1.useCallback)(function (error) {
-        Log_1.default.hmmm('[PlaidLink] Error: ', error === null || error === void 0 ? void 0 : error.message);
+    const handlePlaidLinkError = (0, react_1.useCallback)((error) => {
+        Log_1.default.hmmm('[PlaidLink] Error: ', error?.message);
     }, []);
-    var renderPlaidLink = function () {
+    const renderPlaidLink = () => {
         if (plaidLinkToken) {
-            return (<PlaidLink_1.default token={plaidLinkToken} onSuccess={function (_a) {
-                    var _b, _c, _d, _e, _f, _g, _h;
-                    var publicToken = _a.publicToken, metadata = _a.metadata;
+            return (<PlaidLink_1.default token={plaidLinkToken} onSuccess={({ publicToken, metadata }) => {
                     // on success we need to move to bank connection screen with token, bank name = plaid
                     Log_1.default.info('[PlaidLink] Success!');
-                    var plaidConnectedFeed = (_c = (_b = metadata === null || metadata === void 0 ? void 0 : metadata.institution) === null || _b === void 0 ? void 0 : _b.institution_id) !== null && _c !== void 0 ? _c : (_d = metadata === null || metadata === void 0 ? void 0 : metadata.institution) === null || _d === void 0 ? void 0 : _d.id;
-                    var plaidConnectedFeedName = (_f = (_e = metadata === null || metadata === void 0 ? void 0 : metadata.institution) === null || _e === void 0 ? void 0 : _e.name) !== null && _f !== void 0 ? _f : (_g = metadata === null || metadata === void 0 ? void 0 : metadata.institution) === null || _g === void 0 ? void 0 : _g.name;
+                    const plaidConnectedFeed = metadata?.institution?.institution_id ?? metadata?.institution?.id;
+                    const plaidConnectedFeedName = metadata?.institution?.name ?? metadata?.institution?.name;
                     if (feed) {
-                        if (plaidConnectedFeed && ((_h = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _h === void 0 ? void 0 : _h.selectedCountry) && plaidConnectedFeedName) {
-                            (0, Plaid_1.importPlaidAccounts)(publicToken, plaidConnectedFeed, plaidConnectedFeedName, addNewCard.data.selectedCountry, (0, PolicyUtils_1.getDomainNameForPolicy)(policyID), JSON.stringify(metadata === null || metadata === void 0 ? void 0 : metadata.accounts), addNewCard.data.statementPeriodEnd, addNewCard.data.statementPeriodEndDay);
-                            react_native_1.InteractionManager.runAfterInteractions(function () {
+                        if (plaidConnectedFeed && addNewCard?.data?.selectedCountry && plaidConnectedFeedName) {
+                            (0, Plaid_1.importPlaidAccounts)(publicToken, plaidConnectedFeed, plaidConnectedFeedName, addNewCard.data.selectedCountry, (0, PolicyUtils_1.getDomainNameForPolicy)(policyID), JSON.stringify(metadata?.accounts), addNewCard.data.statementPeriodEnd, addNewCard.data.statementPeriodEndDay);
+                            react_native_1.InteractionManager.runAfterInteractions(() => {
                                 (0, CompanyCards_1.setAssignCardStepAndData)({
                                     data: {
                                         plaidAccessToken: publicToken,
                                         institutionId: plaidConnectedFeed,
-                                        plaidConnectedFeedName: plaidConnectedFeedName,
-                                        plaidAccounts: metadata === null || metadata === void 0 ? void 0 : metadata.accounts,
+                                        plaidConnectedFeedName,
+                                        plaidAccounts: metadata?.accounts,
                                     },
                                     currentStep: CONST_1.default.COMPANY_CARD.STEP.BANK_CONNECTION,
                                 });
@@ -122,8 +114,8 @@ function PlaidConnectionStep(_a) {
                             data: {
                                 plaidAccessToken: publicToken,
                                 institutionId: plaidConnectedFeed,
-                                plaidConnectedFeedName: plaidConnectedFeedName,
-                                plaidAccounts: metadata === null || metadata === void 0 ? void 0 : metadata.accounts,
+                                plaidConnectedFeedName,
+                                plaidAccounts: metadata?.accounts,
                             },
                             currentStep: CONST_1.default.COMPANY_CARD.STEP.BANK_CONNECTION,
                         });
@@ -132,13 +124,13 @@ function PlaidConnectionStep(_a) {
                     (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({
                         step: CONST_1.default.COMPANY_CARDS.STEP.SELECT_STATEMENT_CLOSE_DATE,
                         data: {
-                            publicToken: publicToken,
-                            plaidConnectedFeed: plaidConnectedFeed,
-                            plaidConnectedFeedName: plaidConnectedFeedName,
-                            plaidAccounts: metadata === null || metadata === void 0 ? void 0 : metadata.accounts,
+                            publicToken,
+                            plaidConnectedFeed,
+                            plaidConnectedFeedName,
+                            plaidAccounts: metadata?.accounts,
                         },
                     });
-                }} onError={handlePlaidLinkError} onEvent={function (event) {
+                }} onError={handlePlaidLinkError} onEvent={(event) => {
                     (0, BankAccounts_1.setPlaidEvent)(event);
                     // Limit the number of times a user can submit Plaid credentials
                     if (event === 'SUBMIT_CREDENTIALS') {
@@ -152,7 +144,7 @@ function PlaidConnectionStep(_a) {
         if (plaidDataErrorMessage) {
             return <Text_1.default style={[styles.formError, styles.mh5]}>{plaidDataErrorMessage}</Text_1.default>;
         }
-        if (plaidData === null || plaidData === void 0 ? void 0 : plaidData.isLoading) {
+        if (plaidData?.isLoading) {
             return (<react_native_1.View style={[styles.flex1, styles.alignItemsCenter, styles.justifyContentCenter]}>
                     <react_native_1.ActivityIndicator color={theme.spinner} size="large"/>
                 </react_native_1.View>);

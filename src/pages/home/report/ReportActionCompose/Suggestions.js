@@ -1,32 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Provider_1 = require("@components/DragAndDrop/Provider");
-var usePrevious_1 = require("@hooks/usePrevious");
-var SuggestionEmoji_1 = require("./SuggestionEmoji");
-var SuggestionMention_1 = require("./SuggestionMention");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Provider_1 = require("@components/DragAndDrop/Provider");
+const usePrevious_1 = require("@hooks/usePrevious");
+const SuggestionEmoji_1 = require("./SuggestionEmoji");
+const SuggestionMention_1 = require("./SuggestionMention");
 /**
  * This component contains the individual suggestion components.
  * If you want to add a new suggestion type, add it here.
  *
  */
-function Suggestions(_a, ref) {
-    var value = _a.value, selection = _a.selection, setSelection = _a.setSelection, updateComment = _a.updateComment, resetKeyboardInput = _a.resetKeyboardInput, measureParentContainerAndReportCursor = _a.measureParentContainerAndReportCursor, _b = _a.isAutoSuggestionPickerLarge, isAutoSuggestionPickerLarge = _b === void 0 ? true : _b, isComposerFocused = _a.isComposerFocused, isGroupPolicyReport = _a.isGroupPolicyReport, policyID = _a.policyID;
-    var suggestionEmojiRef = (0, react_1.useRef)(null);
-    var suggestionMentionRef = (0, react_1.useRef)(null);
-    var isDraggingOver = (0, react_1.useContext)(Provider_1.DragAndDropContext).isDraggingOver;
-    var prevIsDraggingOver = (0, usePrevious_1.default)(isDraggingOver);
-    var getSuggestions = (0, react_1.useCallback)(function () {
-        var _a, _b;
-        if ((_a = suggestionEmojiRef.current) === null || _a === void 0 ? void 0 : _a.getSuggestions) {
-            var emojiSuggestions = suggestionEmojiRef.current.getSuggestions();
+function Suggestions({ value, selection, setSelection, updateComment, resetKeyboardInput, measureParentContainerAndReportCursor, isAutoSuggestionPickerLarge = true, isComposerFocused, isGroupPolicyReport, policyID, }, ref) {
+    const suggestionEmojiRef = (0, react_1.useRef)(null);
+    const suggestionMentionRef = (0, react_1.useRef)(null);
+    const { isDraggingOver } = (0, react_1.useContext)(Provider_1.DragAndDropContext);
+    const prevIsDraggingOver = (0, usePrevious_1.default)(isDraggingOver);
+    const getSuggestions = (0, react_1.useCallback)(() => {
+        if (suggestionEmojiRef.current?.getSuggestions) {
+            const emojiSuggestions = suggestionEmojiRef.current.getSuggestions();
             if (emojiSuggestions.length > 0) {
                 return emojiSuggestions;
             }
         }
-        if ((_b = suggestionMentionRef.current) === null || _b === void 0 ? void 0 : _b.getSuggestions) {
-            var mentionSuggestions = suggestionMentionRef.current.getSuggestions();
+        if (suggestionMentionRef.current?.getSuggestions) {
+            const mentionSuggestions = suggestionMentionRef.current.getSuggestions();
             if (mentionSuggestions.length > 0) {
                 return mentionSuggestions;
             }
@@ -36,67 +34,61 @@ function Suggestions(_a, ref) {
     /**
      * Clean data related to EmojiSuggestions
      */
-    var resetSuggestions = (0, react_1.useCallback)(function () {
-        var _a, _b;
-        (_a = suggestionEmojiRef.current) === null || _a === void 0 ? void 0 : _a.resetSuggestions();
-        (_b = suggestionMentionRef.current) === null || _b === void 0 ? void 0 : _b.resetSuggestions();
+    const resetSuggestions = (0, react_1.useCallback)(() => {
+        suggestionEmojiRef.current?.resetSuggestions();
+        suggestionMentionRef.current?.resetSuggestions();
     }, []);
     /**
      * Listens for keyboard shortcuts and applies the action
      */
-    var triggerHotkeyActions = (0, react_1.useCallback)(function (e) {
-        var _a, _b;
-        var emojiHandler = (_a = suggestionEmojiRef.current) === null || _a === void 0 ? void 0 : _a.triggerHotkeyActions(e);
-        var mentionHandler = (_b = suggestionMentionRef.current) === null || _b === void 0 ? void 0 : _b.triggerHotkeyActions(e);
-        return emojiHandler !== null && emojiHandler !== void 0 ? emojiHandler : mentionHandler;
+    const triggerHotkeyActions = (0, react_1.useCallback)((e) => {
+        const emojiHandler = suggestionEmojiRef.current?.triggerHotkeyActions(e);
+        const mentionHandler = suggestionMentionRef.current?.triggerHotkeyActions(e);
+        return emojiHandler ?? mentionHandler;
     }, []);
-    var onSelectionChange = (0, react_1.useCallback)(function (e) {
-        var _a, _b, _c, _d;
-        var emojiHandler = (_b = (_a = suggestionEmojiRef.current) === null || _a === void 0 ? void 0 : _a.onSelectionChange) === null || _b === void 0 ? void 0 : _b.call(_a, e);
-        (_d = (_c = suggestionMentionRef.current) === null || _c === void 0 ? void 0 : _c.onSelectionChange) === null || _d === void 0 ? void 0 : _d.call(_c, e);
+    const onSelectionChange = (0, react_1.useCallback)((e) => {
+        const emojiHandler = suggestionEmojiRef.current?.onSelectionChange?.(e);
+        suggestionMentionRef.current?.onSelectionChange?.(e);
         return emojiHandler;
     }, []);
-    var updateShouldShowSuggestionMenuToFalse = (0, react_1.useCallback)(function () {
-        var _a, _b;
-        (_a = suggestionEmojiRef.current) === null || _a === void 0 ? void 0 : _a.updateShouldShowSuggestionMenuToFalse();
-        (_b = suggestionMentionRef.current) === null || _b === void 0 ? void 0 : _b.updateShouldShowSuggestionMenuToFalse();
+    const updateShouldShowSuggestionMenuToFalse = (0, react_1.useCallback)(() => {
+        suggestionEmojiRef.current?.updateShouldShowSuggestionMenuToFalse();
+        suggestionMentionRef.current?.updateShouldShowSuggestionMenuToFalse();
     }, []);
-    var setShouldBlockSuggestionCalc = (0, react_1.useCallback)(function (shouldBlock) {
-        var _a, _b;
-        (_a = suggestionEmojiRef.current) === null || _a === void 0 ? void 0 : _a.setShouldBlockSuggestionCalc(shouldBlock);
-        (_b = suggestionMentionRef.current) === null || _b === void 0 ? void 0 : _b.setShouldBlockSuggestionCalc(shouldBlock);
+    const setShouldBlockSuggestionCalc = (0, react_1.useCallback)((shouldBlock) => {
+        suggestionEmojiRef.current?.setShouldBlockSuggestionCalc(shouldBlock);
+        suggestionMentionRef.current?.setShouldBlockSuggestionCalc(shouldBlock);
     }, []);
-    var getIsSuggestionsMenuVisible = (0, react_1.useCallback)(function () {
-        var _a, _b, _c, _d;
-        var isEmojiVisible = (_b = (_a = suggestionEmojiRef.current) === null || _a === void 0 ? void 0 : _a.getIsSuggestionsMenuVisible()) !== null && _b !== void 0 ? _b : false;
-        var isSuggestionVisible = (_d = (_c = suggestionMentionRef.current) === null || _c === void 0 ? void 0 : _c.getIsSuggestionsMenuVisible()) !== null && _d !== void 0 ? _d : false;
+    const getIsSuggestionsMenuVisible = (0, react_1.useCallback)(() => {
+        const isEmojiVisible = suggestionEmojiRef.current?.getIsSuggestionsMenuVisible() ?? false;
+        const isSuggestionVisible = suggestionMentionRef.current?.getIsSuggestionsMenuVisible() ?? false;
         return isEmojiVisible || isSuggestionVisible;
     }, []);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        resetSuggestions: resetSuggestions,
-        onSelectionChange: onSelectionChange,
-        triggerHotkeyActions: triggerHotkeyActions,
-        updateShouldShowSuggestionMenuToFalse: updateShouldShowSuggestionMenuToFalse,
-        setShouldBlockSuggestionCalc: setShouldBlockSuggestionCalc,
-        getSuggestions: getSuggestions,
-        getIsSuggestionsMenuVisible: getIsSuggestionsMenuVisible,
-    }); }, [onSelectionChange, resetSuggestions, setShouldBlockSuggestionCalc, triggerHotkeyActions, updateShouldShowSuggestionMenuToFalse, getSuggestions, getIsSuggestionsMenuVisible]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        resetSuggestions,
+        onSelectionChange,
+        triggerHotkeyActions,
+        updateShouldShowSuggestionMenuToFalse,
+        setShouldBlockSuggestionCalc,
+        getSuggestions,
+        getIsSuggestionsMenuVisible,
+    }), [onSelectionChange, resetSuggestions, setShouldBlockSuggestionCalc, triggerHotkeyActions, updateShouldShowSuggestionMenuToFalse, getSuggestions, getIsSuggestionsMenuVisible]);
+    (0, react_1.useEffect)(() => {
         if (!(!prevIsDraggingOver && isDraggingOver)) {
             return;
         }
         updateShouldShowSuggestionMenuToFalse();
     }, [isDraggingOver, prevIsDraggingOver, updateShouldShowSuggestionMenuToFalse]);
-    var baseProps = {
-        value: value,
-        setSelection: setSelection,
-        selection: selection,
-        updateComment: updateComment,
-        isAutoSuggestionPickerLarge: isAutoSuggestionPickerLarge,
-        measureParentContainerAndReportCursor: measureParentContainerAndReportCursor,
-        isComposerFocused: isComposerFocused,
-        isGroupPolicyReport: isGroupPolicyReport,
-        policyID: policyID,
+    const baseProps = {
+        value,
+        setSelection,
+        selection,
+        updateComment,
+        isAutoSuggestionPickerLarge,
+        measureParentContainerAndReportCursor,
+        isComposerFocused,
+        isGroupPolicyReport,
+        policyID,
     };
     return (<react_native_1.View testID="suggestions">
             <SuggestionEmoji_1.default ref={suggestionEmojiRef} 

@@ -1,54 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
+const react_1 = require("react");
 // We use Animated for all functionality related to wide RHP to make it easier
 // to interact with react-navigation components (e.g., CardContainer, interpolator), which also use Animated.
 // eslint-disable-next-line no-restricted-imports
-var react_native_1 = require("react-native");
-var NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
-var WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Transaction_1 = require("@libs/actions/Transaction");
-var TwoFactorAuthActions_1 = require("@libs/actions/TwoFactorAuthActions");
-var hideKeyboardOnSwipe_1 = require("@libs/Navigation/AppNavigator/hideKeyboardOnSwipe");
-var ModalStackNavigators = require("@libs/Navigation/AppNavigator/ModalStackNavigators");
-var useRHPScreenOptions_1 = require("@libs/Navigation/AppNavigator/useRHPScreenOptions");
-var createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
-var CONST_1 = require("@src/CONST");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var SCREENS_1 = require("@src/SCREENS");
-var NarrowPaneContext_1 = require("./NarrowPaneContext");
-var Overlay_1 = require("./Overlay");
-var Stack = (0, createPlatformStackNavigator_1.default)();
-function RightModalNavigator(_a) {
-    var navigation = _a.navigation, route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var isExecutingRef = (0, react_1.useRef)(false);
-    var screenOptions = (0, useRHPScreenOptions_1.default)();
-    var _b = (0, react_1.useContext)(WideRHPContextProvider_1.WideRHPContext), shouldRenderSecondaryOverlay = _b.shouldRenderSecondaryOverlay, secondOverlayProgress = _b.secondOverlayProgress, dismissToWideReport = _b.dismissToWideReport;
-    var screenListeners = (0, react_1.useMemo)(function () { return ({
-        blur: function () {
-            var _a, _b;
-            var rhpParams = (_a = navigation.getState().routes.find(function (innerRoute) { return innerRoute.name === NAVIGATORS_1.default.RIGHT_MODAL_NAVIGATOR; })) === null || _a === void 0 ? void 0 : _a.params;
-            if ((rhpParams === null || rhpParams === void 0 ? void 0 : rhpParams.screen) === SCREENS_1.default.RIGHT_MODAL.TRANSACTION_DUPLICATE || ((_b = route.params) === null || _b === void 0 ? void 0 : _b.screen) !== SCREENS_1.default.RIGHT_MODAL.TRANSACTION_DUPLICATE) {
+const react_native_1 = require("react-native");
+const NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
+const WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Transaction_1 = require("@libs/actions/Transaction");
+const TwoFactorAuthActions_1 = require("@libs/actions/TwoFactorAuthActions");
+const hideKeyboardOnSwipe_1 = require("@libs/Navigation/AppNavigator/hideKeyboardOnSwipe");
+const ModalStackNavigators = require("@libs/Navigation/AppNavigator/ModalStackNavigators");
+const useRHPScreenOptions_1 = require("@libs/Navigation/AppNavigator/useRHPScreenOptions");
+const createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
+const CONST_1 = require("@src/CONST");
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const SCREENS_1 = require("@src/SCREENS");
+const NarrowPaneContext_1 = require("./NarrowPaneContext");
+const Overlay_1 = require("./Overlay");
+const Stack = (0, createPlatformStackNavigator_1.default)();
+function RightModalNavigator({ navigation, route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const isExecutingRef = (0, react_1.useRef)(false);
+    const screenOptions = (0, useRHPScreenOptions_1.default)();
+    const { shouldRenderSecondaryOverlay, secondOverlayProgress, dismissToWideReport } = (0, react_1.useContext)(WideRHPContextProvider_1.WideRHPContext);
+    const screenListeners = (0, react_1.useMemo)(() => ({
+        blur: () => {
+            const rhpParams = navigation.getState().routes.find((innerRoute) => innerRoute.name === NAVIGATORS_1.default.RIGHT_MODAL_NAVIGATOR)?.params;
+            if (rhpParams?.screen === SCREENS_1.default.RIGHT_MODAL.TRANSACTION_DUPLICATE || route.params?.screen !== SCREENS_1.default.RIGHT_MODAL.TRANSACTION_DUPLICATE) {
                 return;
             }
             // Delay clearing review duplicate data till the RHP is completely closed
             // to avoid not found showing briefly in confirmation page when RHP is closing
-            react_native_1.InteractionManager.runAfterInteractions(function () {
+            react_native_1.InteractionManager.runAfterInteractions(() => {
                 (0, Transaction_1.abandonReviewDuplicateTransactions)();
             });
         },
-    }); }, [navigation, route]);
-    var handleOverlayPress = (0, react_1.useCallback)(function () {
+    }), [navigation, route]);
+    const handleOverlayPress = (0, react_1.useCallback)(() => {
         if (isExecutingRef.current) {
             return;
         }
         isExecutingRef.current = true;
         navigation.goBack();
-        setTimeout(function () {
+        setTimeout(() => {
             isExecutingRef.current = false;
         }, CONST_1.default.ANIMATED_TRANSITION);
     }, [navigation]);
@@ -61,7 +59,7 @@ function RightModalNavigator(_a) {
                     <Stack.Navigator screenOptions={screenOptions} screenListeners={screenListeners} id={NAVIGATORS_1.default.RIGHT_MODAL_NAVIGATOR}>
                         <Stack.Screen name={SCREENS_1.default.RIGHT_MODAL.SETTINGS} component={ModalStackNavigators.SettingsModalStackNavigator}/>
                         <Stack.Screen name={SCREENS_1.default.RIGHT_MODAL.TWO_FACTOR_AUTH} component={ModalStackNavigators.TwoFactorAuthenticatorStackNavigator} listeners={{
-            beforeRemove: function () {
+            beforeRemove: () => {
                 react_native_1.InteractionManager.runAfterInteractions(TwoFactorAuthActions_1.clearTwoFactorAuthData);
             },
         }}/>

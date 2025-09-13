@@ -8,7 +8,7 @@ function defaultStringLength(value) {
     return value.length;
 }
 function toAlignment(value) {
-    var code = typeof value === 'string' ? value.codePointAt(0) : 0;
+    const code = typeof value === 'string' ? value.codePointAt(0) : 0;
     if (code === 67 /* `C` */ || code === 99 /* `c` */) {
         return 99; /* `c` */
     }
@@ -21,65 +21,63 @@ function toAlignment(value) {
     return 0;
 }
 /** Generate a markdown ([GFM](https://docs.github.com/en/github/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables)) table.. */
-function markdownTable(table, options) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
-    if (options === void 0) { options = {}; }
-    var align = ((_a = options.align) !== null && _a !== void 0 ? _a : []).concat();
-    var stringLength = (_b = options.stringLength) !== null && _b !== void 0 ? _b : defaultStringLength;
+function markdownTable(table, options = {}) {
+    const align = (options.align ?? []).concat();
+    const stringLength = options.stringLength ?? defaultStringLength;
     /** Character codes as symbols for alignment per column. */
-    var alignments = [];
+    const alignments = [];
     /** Cells per row. */
-    var cellMatrix = [];
+    const cellMatrix = [];
     /** Sizes of each cell per row. */
-    var sizeMatrix = [];
-    var longestCellByColumn = [];
-    var mostCellsPerRow = 0;
-    var rowIndex = -1;
+    const sizeMatrix = [];
+    const longestCellByColumn = [];
+    let mostCellsPerRow = 0;
+    let rowIndex = -1;
     // This is a superfluous loop if we don’t align delimiters, but otherwise we’d
     // do superfluous work when aligning, so optimize for aligning.
     while (++rowIndex < table.length) {
-        var row_1 = [];
-        var sizes_1 = [];
-        var columnIndex_1 = -1;
-        var rowData = (_c = table.at(rowIndex)) !== null && _c !== void 0 ? _c : [];
+        const row = [];
+        const sizes = [];
+        let columnIndex = -1;
+        const rowData = table.at(rowIndex) ?? [];
         if (rowData.length > mostCellsPerRow) {
             mostCellsPerRow = rowData.length;
         }
-        while (++columnIndex_1 < rowData.length) {
-            var cell = serialize(rowData.at(columnIndex_1));
+        while (++columnIndex < rowData.length) {
+            const cell = serialize(rowData.at(columnIndex));
             if (options.alignDelimiters !== false) {
-                var size = stringLength(cell);
-                sizes_1[columnIndex_1] = size;
-                if (longestCellByColumn.at(columnIndex_1) === undefined || size > ((_d = longestCellByColumn.at(columnIndex_1)) !== null && _d !== void 0 ? _d : 0)) {
-                    longestCellByColumn[columnIndex_1] = size;
+                const size = stringLength(cell);
+                sizes[columnIndex] = size;
+                if (longestCellByColumn.at(columnIndex) === undefined || size > (longestCellByColumn.at(columnIndex) ?? 0)) {
+                    longestCellByColumn[columnIndex] = size;
                 }
             }
-            row_1.push(cell);
+            row.push(cell);
         }
-        cellMatrix[rowIndex] = row_1;
-        sizeMatrix[rowIndex] = sizes_1;
+        cellMatrix[rowIndex] = row;
+        sizeMatrix[rowIndex] = sizes;
     }
     // Figure out which alignments to use.
-    var columnIndex = -1;
+    let columnIndex = -1;
     if (typeof align === 'object' && 'length' in align) {
         while (++columnIndex < mostCellsPerRow) {
             alignments[columnIndex] = toAlignment(align.at(columnIndex));
         }
     }
     else {
-        var code = toAlignment(align);
+        const code = toAlignment(align);
         while (++columnIndex < mostCellsPerRow) {
             alignments[columnIndex] = code;
         }
     }
     // Inject the alignment row.
     columnIndex = -1;
-    var row = [];
-    var sizes = [];
+    const row = [];
+    const sizes = [];
     while (++columnIndex < mostCellsPerRow) {
-        var code = alignments.at(columnIndex);
-        var before = '';
-        var after = '';
+        const code = alignments.at(columnIndex);
+        let before = '';
+        let after = '';
         if (code === 99 /* `c` */) {
             before = ':';
             after = ':';
@@ -91,11 +89,11 @@ function markdownTable(table, options) {
             after = ':';
         }
         // There *must* be at least one hyphen-minus in each alignment cell.
-        var size = options.alignDelimiters === false ? 1 : Math.max(1, ((_e = longestCellByColumn.at(columnIndex)) !== null && _e !== void 0 ? _e : 0) - before.length - after.length);
-        var cell = before + '-'.repeat(size) + after;
+        let size = options.alignDelimiters === false ? 1 : Math.max(1, (longestCellByColumn.at(columnIndex) ?? 0) - before.length - after.length);
+        const cell = before + '-'.repeat(size) + after;
         if (options.alignDelimiters !== false) {
             size = before.length + size + after.length;
-            if (size > ((_f = longestCellByColumn.at(columnIndex)) !== null && _f !== void 0 ? _f : 0)) {
+            if (size > (longestCellByColumn.at(columnIndex) ?? 0)) {
                 longestCellByColumn[columnIndex] = size;
             }
             sizes[columnIndex] = size;
@@ -106,19 +104,19 @@ function markdownTable(table, options) {
     cellMatrix.splice(1, 0, row);
     sizeMatrix.splice(1, 0, sizes);
     rowIndex = -1;
-    var lines = [];
+    const lines = [];
     while (++rowIndex < cellMatrix.length) {
-        var matrixRow = cellMatrix.at(rowIndex);
-        var matrixSizes = sizeMatrix.at(rowIndex);
+        const matrixRow = cellMatrix.at(rowIndex);
+        const matrixSizes = sizeMatrix.at(rowIndex);
         columnIndex = -1;
-        var line = [];
+        const line = [];
         while (++columnIndex < mostCellsPerRow) {
-            var cell = (_g = matrixRow === null || matrixRow === void 0 ? void 0 : matrixRow.at(columnIndex)) !== null && _g !== void 0 ? _g : '';
-            var before = '';
-            var after = '';
+            const cell = matrixRow?.at(columnIndex) ?? '';
+            let before = '';
+            let after = '';
             if (options.alignDelimiters !== false) {
-                var size = ((_h = longestCellByColumn.at(columnIndex)) !== null && _h !== void 0 ? _h : 0) - ((_j = matrixSizes === null || matrixSizes === void 0 ? void 0 : matrixSizes.at(columnIndex)) !== null && _j !== void 0 ? _j : 0);
-                var code = alignments.at(columnIndex);
+                const size = (longestCellByColumn.at(columnIndex) ?? 0) - (matrixSizes?.at(columnIndex) ?? 0);
+                const code = alignments.at(columnIndex);
                 if (code === 114 /* `r` */) {
                     before = ' '.repeat(size);
                 }

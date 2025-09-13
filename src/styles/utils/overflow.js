@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var overflowAuto_1 = require("./overflowAuto");
-var overscrollBehaviorContain_1 = require("./overscrollBehaviorContain");
+const overflowAuto_1 = require("./overflowAuto");
+const overscrollBehaviorContain_1 = require("./overscrollBehaviorContain");
 /**
  * Overflow utility styles with Bootstrap inspired naming.
  *

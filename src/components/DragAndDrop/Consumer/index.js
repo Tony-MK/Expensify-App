@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var portal_1 = require("@gorhom/portal");
-var react_1 = require("react");
-var Provider_1 = require("@components/DragAndDrop/Provider");
-function DragAndDropConsumer(_a) {
-    var children = _a.children, onDrop = _a.onDrop;
-    var _b = (0, react_1.useContext)(Provider_1.DragAndDropContext), isDraggingOver = _b.isDraggingOver, setOnDropHandler = _b.setOnDropHandler, dropZoneID = _b.dropZoneID;
-    (0, react_1.useEffect)(function () {
+const portal_1 = require("@gorhom/portal");
+const react_1 = require("react");
+const Provider_1 = require("@components/DragAndDrop/Provider");
+function DragAndDropConsumer({ children, onDrop }) {
+    const { isDraggingOver, setOnDropHandler, dropZoneID } = (0, react_1.useContext)(Provider_1.DragAndDropContext);
+    (0, react_1.useEffect)(() => {
         if (!onDrop) {
             return;
         }
-        setOnDropHandler === null || setOnDropHandler === void 0 ? void 0 : setOnDropHandler(onDrop);
+        setOnDropHandler?.(onDrop);
     }, [onDrop, setOnDropHandler]);
     if (!isDraggingOver) {
         return null;

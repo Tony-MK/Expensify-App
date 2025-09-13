@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var BaseLocationErrorMessage_1 = require("./BaseLocationErrorMessage");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const BaseLocationErrorMessage_1 = require("./BaseLocationErrorMessage");
 /** Opens app level settings from the native system settings  */
-var openAppSettings = function () {
+const openAppSettings = () => {
     react_native_1.Linking.openSettings();
 };
 function LocationErrorMessage(props) {

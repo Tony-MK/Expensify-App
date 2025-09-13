@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTestDriveURL = getTestDriveURL;
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 function getTestDriveURL(shouldUseNarrowLayout, introSelected, isUserPolicyAdmin) {
     if (introSelected) {
-        if ((introSelected === null || introSelected === void 0 ? void 0 : introSelected.choice) === CONST_1.default.ONBOARDING_CHOICES.SUBMIT && introSelected.inviteType === CONST_1.default.ONBOARDING_INVITE_TYPES.WORKSPACE) {
+        if (introSelected?.choice === CONST_1.default.ONBOARDING_CHOICES.SUBMIT && introSelected.inviteType === CONST_1.default.ONBOARDING_INVITE_TYPES.WORKSPACE) {
             return shouldUseNarrowLayout ? CONST_1.default.STORYLANE.EMPLOYEE_TOUR_MOBILE : CONST_1.default.STORYLANE.EMPLOYEE_TOUR;
         }
-        if ((introSelected === null || introSelected === void 0 ? void 0 : introSelected.choice) === CONST_1.default.ONBOARDING_CHOICES.TRACK_WORKSPACE) {
+        if (introSelected?.choice === CONST_1.default.ONBOARDING_CHOICES.TRACK_WORKSPACE) {
             return shouldUseNarrowLayout ? CONST_1.default.STORYLANE.TRACK_WORKSPACE_TOUR_MOBILE : CONST_1.default.STORYLANE.TRACK_WORKSPACE_TOUR;
         }
         return shouldUseNarrowLayout ? CONST_1.default.STORYLANE.ADMIN_TOUR_MOBILE : CONST_1.default.STORYLANE.ADMIN_TOUR;

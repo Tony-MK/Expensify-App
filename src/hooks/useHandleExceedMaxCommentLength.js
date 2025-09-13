@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ReportUtils = require("@libs/ReportUtils");
-var CONST_1 = require("@src/CONST");
-var useHandleExceedMaxCommentLength = function () {
-    var _a = (0, react_1.useState)(false), hasExceededMaxCommentLength = _a[0], setHasExceededMaxCommentLength = _a[1];
-    var validateCommentMaxLength = (0, react_1.useCallback)(function (value, parsingDetails) {
+const react_1 = require("react");
+const ReportUtils = require("@libs/ReportUtils");
+const CONST_1 = require("@src/CONST");
+const useHandleExceedMaxCommentLength = () => {
+    const [hasExceededMaxCommentLength, setHasExceededMaxCommentLength] = (0, react_1.useState)(false);
+    const validateCommentMaxLength = (0, react_1.useCallback)((value, parsingDetails) => {
         if (ReportUtils.getCommentLength(value, parsingDetails) <= CONST_1.default.MAX_COMMENT_LENGTH) {
             if (hasExceededMaxCommentLength) {
                 setHasExceededMaxCommentLength(false);
@@ -14,6 +14,6 @@ var useHandleExceedMaxCommentLength = function () {
         }
         setHasExceededMaxCommentLength(true);
     }, [hasExceededMaxCommentLength]);
-    return { hasExceededMaxCommentLength: hasExceededMaxCommentLength, validateCommentMaxLength: validateCommentMaxLength, setHasExceededMaxCommentLength: setHasExceededMaxCommentLength };
+    return { hasExceededMaxCommentLength, validateCommentMaxLength, setHasExceededMaxCommentLength };
 };
 exports.default = useHandleExceedMaxCommentLength;

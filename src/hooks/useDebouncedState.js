@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var debounce_1 = require("lodash/debounce");
-var react_1 = require("react");
-var CONST_1 = require("@src/CONST");
+const debounce_1 = require("lodash/debounce");
+const react_1 = require("react");
+const CONST_1 = require("@src/CONST");
 /**
  * A React hook that provides a state and its debounced version.
  *
@@ -18,14 +18,13 @@ var CONST_1 = require("@src/CONST");
  * @example
  * const [value, debouncedValue, setValue] = useDebouncedState<string>("", 300);
  */
-function useDebouncedState(initialValue, delay) {
-    if (delay === void 0) { delay = CONST_1.default.TIMING.USE_DEBOUNCED_STATE_DELAY; }
-    var _a = (0, react_1.useState)(initialValue), value = _a[0], setValue = _a[1];
-    var _b = (0, react_1.useState)(initialValue), debouncedValue = _b[0], setDebouncedValue = _b[1];
+function useDebouncedState(initialValue, delay = CONST_1.default.TIMING.USE_DEBOUNCED_STATE_DELAY) {
+    const [value, setValue] = (0, react_1.useState)(initialValue);
+    const [debouncedValue, setDebouncedValue] = (0, react_1.useState)(initialValue);
     // eslint-disable-next-line react-compiler/react-compiler
-    var debouncedSetDebouncedValue = (0, react_1.useRef)((0, debounce_1.default)(setDebouncedValue, delay)).current;
-    (0, react_1.useEffect)(function () { return function () { return debouncedSetDebouncedValue.cancel(); }; }, [debouncedSetDebouncedValue]);
-    var handleSetValue = (0, react_1.useCallback)(function (newValue) {
+    const debouncedSetDebouncedValue = (0, react_1.useRef)((0, debounce_1.default)(setDebouncedValue, delay)).current;
+    (0, react_1.useEffect)(() => () => debouncedSetDebouncedValue.cancel(), [debouncedSetDebouncedValue]);
+    const handleSetValue = (0, react_1.useCallback)((newValue) => {
         setValue(newValue);
         debouncedSetDebouncedValue(newValue);
     }, [debouncedSetDebouncedValue]);

@@ -1,54 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var ValidateCodeForm_1 = require("@components/ValidateCodeActionModal/ValidateCodeForm");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var UserUtils_1 = require("@libs/UserUtils");
-var Policy_1 = require("@userActions/Policy/Policy");
-var User_1 = require("@userActions/User");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-function BaseOnboardingPrivateDomain(_a) {
-    var _b, _c;
-    var shouldUseNativeStyles = _a.shouldUseNativeStyles, route = _a.route;
-    var _d = (0, react_1.useState)(false), hasMagicCodeBeenSent = _d[0], setHasMagicCodeBeenSent = _d[1];
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var loginList = (0, useOnyx_1.default)(ONYXKEYS_1.default.LOGIN_LIST, { canBeMissing: false })[0];
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false })[0];
-    var getAccessiblePoliciesAction = (0, useOnyx_1.default)(ONYXKEYS_1.default.VALIDATE_USER_AND_GET_ACCESSIBLE_POLICIES, { canBeMissing: true })[0];
-    var joinablePolicies = (0, useOnyx_1.default)(ONYXKEYS_1.default.JOINABLE_POLICIES, { canBeMissing: true })[0];
-    var joinablePoliciesLength = Object.keys(joinablePolicies !== null && joinablePolicies !== void 0 ? joinablePolicies : {}).length;
-    var onboardingIsMediumOrLargerScreenWidth = (0, useResponsiveLayout_1.default)().onboardingIsMediumOrLargerScreenWidth;
-    var email = (_b = session === null || session === void 0 ? void 0 : session.email) !== null && _b !== void 0 ? _b : '';
-    var domain = (_c = email.split('@').at(1)) !== null && _c !== void 0 ? _c : '';
-    var isValidated = (0, UserUtils_1.isCurrentUserValidated)(loginList, session === null || session === void 0 ? void 0 : session.email);
-    var onboardingValues = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true })[0];
-    var isVsb = (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.signupQualifier) === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
-    var isSmb = (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.signupQualifier) === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
-    var sendValidateCode = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const ValidateCodeForm_1 = require("@components/ValidateCodeActionModal/ValidateCodeForm");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const UserUtils_1 = require("@libs/UserUtils");
+const Policy_1 = require("@userActions/Policy/Policy");
+const User_1 = require("@userActions/User");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+function BaseOnboardingPrivateDomain({ shouldUseNativeStyles, route }) {
+    const [hasMagicCodeBeenSent, setHasMagicCodeBeenSent] = (0, react_1.useState)(false);
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [loginList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.LOGIN_LIST, { canBeMissing: false });
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false });
+    const [getAccessiblePoliciesAction] = (0, useOnyx_1.default)(ONYXKEYS_1.default.VALIDATE_USER_AND_GET_ACCESSIBLE_POLICIES, { canBeMissing: true });
+    const [joinablePolicies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.JOINABLE_POLICIES, { canBeMissing: true });
+    const joinablePoliciesLength = Object.keys(joinablePolicies ?? {}).length;
+    const { onboardingIsMediumOrLargerScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const email = session?.email ?? '';
+    const domain = email.split('@').at(1) ?? '';
+    const isValidated = (0, UserUtils_1.isCurrentUserValidated)(loginList, session?.email);
+    const [onboardingValues] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true });
+    const isVsb = onboardingValues?.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
+    const isSmb = onboardingValues?.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
+    const sendValidateCode = (0, react_1.useCallback)(() => {
         if (!email) {
             return;
         }
         (0, User_1.resendValidateCode)(email);
     }, [email]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (isValidated) {
             return;
         }
         sendValidateCode();
     }, [sendValidateCode, isValidated]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isValidated || joinablePoliciesLength === 0) {
             return;
         }
@@ -59,25 +57,24 @@ function BaseOnboardingPrivateDomain(_a) {
             <ScrollView_1.default style={[styles.w100, styles.h100, styles.flex1]} contentContainerStyle={styles.flexGrow1} keyboardShouldPersistTaps="handled">
                 <react_native_1.View style={[styles.mb5, onboardingIsMediumOrLargerScreenWidth && styles.mt5, onboardingIsMediumOrLargerScreenWidth ? styles.mh8 : styles.mh5, styles.flex1]}>
                     <Text_1.default style={styles.textHeadlineH1}>{translate('onboarding.peopleYouMayKnow')}</Text_1.default>
-                    <Text_1.default style={[styles.textAlignLeft, styles.mv5]}>{translate('onboarding.workspaceYouMayJoin', { domain: domain, email: email })}</Text_1.default>
-                    <ValidateCodeForm_1.default validateCodeActionErrorField="getAccessiblePolicies" handleSubmitForm={function (code) {
+                    <Text_1.default style={[styles.textAlignLeft, styles.mv5]}>{translate('onboarding.workspaceYouMayJoin', { domain, email })}</Text_1.default>
+                    <ValidateCodeForm_1.default validateCodeActionErrorField="getAccessiblePolicies" handleSubmitForm={(code) => {
             (0, Policy_1.getAccessiblePolicies)(code);
             setHasMagicCodeBeenSent(false);
-        }} sendValidateCode={function () {
+        }} sendValidateCode={() => {
             sendValidateCode();
             setHasMagicCodeBeenSent(true);
-        }} clearError={function () { return (0, Policy_1.clearGetAccessiblePoliciesErrors)(); }} validateError={getAccessiblePoliciesAction === null || getAccessiblePoliciesAction === void 0 ? void 0 : getAccessiblePoliciesAction.errors} hasMagicCodeBeenSent={hasMagicCodeBeenSent} shouldShowSkipButton handleSkipButtonPress={function () {
-            var _a, _b, _c;
+        }} clearError={() => (0, Policy_1.clearGetAccessiblePoliciesErrors)()} validateError={getAccessiblePoliciesAction?.errors} hasMagicCodeBeenSent={hasMagicCodeBeenSent} shouldShowSkipButton handleSkipButtonPress={() => {
             if (isVsb) {
-                Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_ACCOUNTING.getRoute((_a = route.params) === null || _a === void 0 ? void 0 : _a.backTo));
+                Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_ACCOUNTING.getRoute(route.params?.backTo));
                 return;
             }
             if (isSmb) {
-                Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_EMPLOYEES.getRoute((_b = route.params) === null || _b === void 0 ? void 0 : _b.backTo));
+                Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_EMPLOYEES.getRoute(route.params?.backTo));
                 return;
             }
-            Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_PURPOSE.getRoute((_c = route.params) === null || _c === void 0 ? void 0 : _c.backTo));
-        }} buttonStyles={[styles.flex2, styles.justifyContentEnd]} isLoading={getAccessiblePoliciesAction === null || getAccessiblePoliciesAction === void 0 ? void 0 : getAccessiblePoliciesAction.loading}/>
+            Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_PURPOSE.getRoute(route.params?.backTo));
+        }} buttonStyles={[styles.flex2, styles.justifyContentEnd]} isLoading={getAccessiblePoliciesAction?.loading}/>
                 </react_native_1.View>
             </ScrollView_1.default>
         </ScreenWrapper_1.default>);

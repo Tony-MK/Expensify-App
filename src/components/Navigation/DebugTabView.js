@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Text_1 = require("@components/Text");
-var useIndicatorStatus_1 = require("@hooks/useIndicatorStatus");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useSidebarOrderedReports_1 = require("@hooks/useSidebarOrderedReports");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReimbursementAccountUtils_1 = require("@libs/ReimbursementAccountUtils");
-var WorkspacesSettingsUtils_1 = require("@libs/WorkspacesSettingsUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var NAVIGATION_TABS_1 = require("./NavigationTabBar/NAVIGATION_TABS");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Text_1 = require("@components/Text");
+const useIndicatorStatus_1 = require("@hooks/useIndicatorStatus");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useSidebarOrderedReports_1 = require("@hooks/useSidebarOrderedReports");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReimbursementAccountUtils_1 = require("@libs/ReimbursementAccountUtils");
+const WorkspacesSettingsUtils_1 = require("@libs/WorkspacesSettingsUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const NAVIGATION_TABS_1 = require("./NavigationTabBar/NAVIGATION_TABS");
 function getSettingsMessage(status) {
     switch (status) {
         case CONST_1.default.INDICATOR_STATUS.HAS_CUSTOM_UNITS_ERROR:
@@ -52,9 +52,7 @@ function getSettingsMessage(status) {
             return undefined;
     }
 }
-function getSettingsRoute(status, reimbursementAccount, policyIDWithErrors) {
-    var _a, _b, _c;
-    if (policyIDWithErrors === void 0) { policyIDWithErrors = ''; }
+function getSettingsRoute(status, reimbursementAccount, policyIDWithErrors = '') {
     switch (status) {
         case CONST_1.default.INDICATOR_STATUS.HAS_CUSTOM_UNITS_ERROR:
             return ROUTES_1.default.WORKSPACE_DISTANCE_RATES.getRoute(policyIDWithErrors);
@@ -69,7 +67,7 @@ function getSettingsRoute(status, reimbursementAccount, policyIDWithErrors) {
         case CONST_1.default.INDICATOR_STATUS.HAS_POLICY_ERRORS:
             return ROUTES_1.default.WORKSPACE_INITIAL.getRoute(policyIDWithErrors);
         case CONST_1.default.INDICATOR_STATUS.HAS_REIMBURSEMENT_ACCOUNT_ERRORS:
-            return ROUTES_1.default.BANK_ACCOUNT_WITH_STEP_TO_OPEN.getRoute((_a = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _a === void 0 ? void 0 : _a.policyID, (0, ReimbursementAccountUtils_1.getRouteForCurrentStep)((_c = (_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.currentStep) !== null && _c !== void 0 ? _c : CONST_1.default.BANK_ACCOUNT.STEP.BANK_ACCOUNT));
+            return ROUTES_1.default.BANK_ACCOUNT_WITH_STEP_TO_OPEN.getRoute(reimbursementAccount?.achData?.policyID, (0, ReimbursementAccountUtils_1.getRouteForCurrentStep)(reimbursementAccount?.achData?.currentStep ?? CONST_1.default.BANK_ACCOUNT.STEP.BANK_ACCOUNT));
         case CONST_1.default.INDICATOR_STATUS.HAS_SUBSCRIPTION_ERRORS:
             return ROUTES_1.default.SETTINGS_SUBSCRIPTION.route;
         case CONST_1.default.INDICATOR_STATUS.HAS_SUBSCRIPTION_INFO:
@@ -84,17 +82,16 @@ function getSettingsRoute(status, reimbursementAccount, policyIDWithErrors) {
             return undefined;
     }
 }
-function DebugTabView(_a) {
-    var selectedTab = _a.selectedTab, chatTabBrickRoad = _a.chatTabBrickRoad;
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: true })[0];
-    var reportAttributes = (0, useOnyx_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_ATTRIBUTES, { selector: function (value) { return value === null || value === void 0 ? void 0 : value.reports; }, canBeMissing: true })[0];
-    var _b = (0, useIndicatorStatus_1.default)(), status = _b.status, indicatorColor = _b.indicatorColor, policyIDWithErrors = _b.policyIDWithErrors;
-    var orderedReportIDs = (0, useSidebarOrderedReports_1.useSidebarOrderedReports)().orderedReportIDs;
-    var message = (0, react_1.useMemo)(function () {
+function DebugTabView({ selectedTab, chatTabBrickRoad }) {
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: true });
+    const [reportAttributes] = (0, useOnyx_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_ATTRIBUTES, { selector: (value) => value?.reports, canBeMissing: true });
+    const { status, indicatorColor, policyIDWithErrors } = (0, useIndicatorStatus_1.default)();
+    const { orderedReportIDs } = (0, useSidebarOrderedReports_1.useSidebarOrderedReports)();
+    const message = (0, react_1.useMemo)(() => {
         if (selectedTab === NAVIGATION_TABS_1.default.HOME) {
             if (chatTabBrickRoad === CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.INFO) {
                 return 'debug.indicatorStatus.theresAReportAwaitingAction';
@@ -107,7 +104,7 @@ function DebugTabView(_a) {
             return getSettingsMessage(status);
         }
     }, [selectedTab, chatTabBrickRoad, status]);
-    var indicator = (0, react_1.useMemo)(function () {
+    const indicator = (0, react_1.useMemo)(() => {
         if (selectedTab === NAVIGATION_TABS_1.default.HOME) {
             if (chatTabBrickRoad === CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.INFO) {
                 return theme.success;
@@ -122,21 +119,21 @@ function DebugTabView(_a) {
             }
         }
     }, [selectedTab, chatTabBrickRoad, theme.success, theme.danger, status, indicatorColor]);
-    var navigateTo = (0, react_1.useCallback)(function () {
+    const navigateTo = (0, react_1.useCallback)(() => {
         if (selectedTab === NAVIGATION_TABS_1.default.HOME && !!chatTabBrickRoad) {
-            var reportID = (0, WorkspacesSettingsUtils_1.getChatTabBrickRoadReportID)(orderedReportIDs, reportAttributes);
+            const reportID = (0, WorkspacesSettingsUtils_1.getChatTabBrickRoadReportID)(orderedReportIDs, reportAttributes);
             if (reportID) {
                 Navigation_1.default.navigate(ROUTES_1.default.DEBUG_REPORT.getRoute(reportID));
             }
         }
         if (selectedTab === NAVIGATION_TABS_1.default.SETTINGS) {
-            var route = getSettingsRoute(status, reimbursementAccount, policyIDWithErrors);
+            const route = getSettingsRoute(status, reimbursementAccount, policyIDWithErrors);
             if (route) {
                 Navigation_1.default.navigate(route);
             }
         }
     }, [selectedTab, chatTabBrickRoad, orderedReportIDs, reportAttributes, status, reimbursementAccount, policyIDWithErrors]);
-    if (![NAVIGATION_TABS_1.default.HOME, NAVIGATION_TABS_1.default.SETTINGS, NAVIGATION_TABS_1.default.WORKSPACES].includes(selectedTab !== null && selectedTab !== void 0 ? selectedTab : '') || !indicator) {
+    if (![NAVIGATION_TABS_1.default.HOME, NAVIGATION_TABS_1.default.SETTINGS, NAVIGATION_TABS_1.default.WORKSPACES].includes(selectedTab ?? '') || !indicator) {
         return null;
     }
     return (<react_native_1.View testID={DebugTabView.displayName} style={[StyleUtils.getBackgroundColorStyle(theme.cardBG), styles.p3, styles.flexRow, styles.justifyContentBetween, styles.alignItemsCenter]}>

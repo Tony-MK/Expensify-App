@@ -1,52 +1,51 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var isEmpty_1 = require("lodash/isEmpty");
-var react_1 = require("react");
-var Text_1 = require("@components/Text");
-var ZeroWidthView_1 = require("@components/ZeroWidthView");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var convertToLTR_1 = require("@libs/convertToLTR");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var EmojiUtils_1 = require("@libs/EmojiUtils");
-var Parser_1 = require("@libs/Parser");
-var Performance_1 = require("@libs/Performance");
-var ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
-var variables_1 = require("@styles/variables");
-var Timing_1 = require("@userActions/Timing");
-var CONST_1 = require("@src/CONST");
-var RenderCommentHTML_1 = require("./RenderCommentHTML");
-var shouldRenderAsText_1 = require("./shouldRenderAsText");
-var TextWithEmojiFragment_1 = require("./TextWithEmojiFragment");
-function TextCommentFragment(_a) {
-    var fragment = _a.fragment, styleAsDeleted = _a.styleAsDeleted, reportActionID = _a.reportActionID, _b = _a.styleAsMuted, styleAsMuted = _b === void 0 ? false : _b, source = _a.source, style = _a.style, displayAsGroup = _a.displayAsGroup, _c = _a.iouMessage, iouMessage = _c === void 0 ? '' : _c;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var _d = (fragment !== null && fragment !== void 0 ? fragment : {}).html, html = _d === void 0 ? '' : _d;
-    var text = (0, ReportActionsUtils_1.getTextFromHtml)(html);
-    var translate = (0, useLocalize_1.default)().translate;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var message = (0, isEmpty_1.default)(iouMessage) ? text : iouMessage;
-    var processedTextArray = (0, react_1.useMemo)(function () { return (0, EmojiUtils_1.splitTextWithEmojis)(message); }, [message]);
-    (0, react_1.useEffect)(function () {
+const expensify_common_1 = require("expensify-common");
+const isEmpty_1 = require("lodash/isEmpty");
+const react_1 = require("react");
+const Text_1 = require("@components/Text");
+const ZeroWidthView_1 = require("@components/ZeroWidthView");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const convertToLTR_1 = require("@libs/convertToLTR");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const EmojiUtils_1 = require("@libs/EmojiUtils");
+const Parser_1 = require("@libs/Parser");
+const Performance_1 = require("@libs/Performance");
+const ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
+const variables_1 = require("@styles/variables");
+const Timing_1 = require("@userActions/Timing");
+const CONST_1 = require("@src/CONST");
+const RenderCommentHTML_1 = require("./RenderCommentHTML");
+const shouldRenderAsText_1 = require("./shouldRenderAsText");
+const TextWithEmojiFragment_1 = require("./TextWithEmojiFragment");
+function TextCommentFragment({ fragment, styleAsDeleted, reportActionID, styleAsMuted = false, source, style, displayAsGroup, iouMessage = '' }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { html = '' } = fragment ?? {};
+    const text = (0, ReportActionsUtils_1.getTextFromHtml)(html);
+    const { translate } = (0, useLocalize_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const message = (0, isEmpty_1.default)(iouMessage) ? text : iouMessage;
+    const processedTextArray = (0, react_1.useMemo)(() => (0, EmojiUtils_1.splitTextWithEmojis)(message), [message]);
+    (0, react_1.useEffect)(() => {
         Performance_1.default.markEnd(CONST_1.default.TIMING.SEND_MESSAGE, { message: text });
         Timing_1.default.end(CONST_1.default.TIMING.SEND_MESSAGE);
     }, [text]);
     // If the only difference between fragment.text and fragment.html is <br /> tags and emoji tag
     // on native, we render it as text, not as html
     // on other device, only render it as text if the only difference is <br /> tag
-    var containsOnlyEmojis = (0, EmojiUtils_1.containsOnlyEmojis)(text !== null && text !== void 0 ? text : '');
-    var containsOnlyCustomEmoji = (0, react_1.useMemo)(function () { return (0, EmojiUtils_1.containsOnlyCustomEmoji)(text); }, [text]);
-    var containsEmojis = CONST_1.default.REGEX.ALL_EMOJIS.test(text !== null && text !== void 0 ? text : '');
-    if (!(0, shouldRenderAsText_1.default)(html, text !== null && text !== void 0 ? text : '') && !(containsOnlyEmojis && styleAsDeleted) && (containsOnlyEmojis || !(0, EmojiUtils_1.containsCustomEmoji)(text))) {
-        var editedTag = (fragment === null || fragment === void 0 ? void 0 : fragment.isEdited) ? "<edited ".concat(styleAsDeleted ? 'deleted' : '', "></edited>") : '';
+    const containsOnlyEmojis = (0, EmojiUtils_1.containsOnlyEmojis)(text ?? '');
+    const containsOnlyCustomEmoji = (0, react_1.useMemo)(() => (0, EmojiUtils_1.containsOnlyCustomEmoji)(text), [text]);
+    const containsEmojis = CONST_1.default.REGEX.ALL_EMOJIS.test(text ?? '');
+    if (!(0, shouldRenderAsText_1.default)(html, text ?? '') && !(containsOnlyEmojis && styleAsDeleted) && (containsOnlyEmojis || !(0, EmojiUtils_1.containsCustomEmoji)(text))) {
+        const editedTag = fragment?.isEdited ? `<edited ${styleAsDeleted ? 'deleted' : ''}></edited>` : '';
         // We need to replace the space at the beginning of each line with &nbsp;
-        var escapedHtml = html.replace(/(^|<br \/>)[ ]+/gm, function (match, p1) { return p1 + '&nbsp;'.repeat(match.length - p1.length); });
-        var htmlWithDeletedTag = styleAsDeleted ? "<del>".concat(escapedHtml, "</del>") : escapedHtml;
-        var htmlContent = htmlWithDeletedTag;
+        const escapedHtml = html.replace(/(^|<br \/>)[ ]+/gm, (match, p1) => p1 + '&nbsp;'.repeat(match.length - p1.length));
+        const htmlWithDeletedTag = styleAsDeleted ? `<del>${escapedHtml}</del>` : escapedHtml;
+        let htmlContent = htmlWithDeletedTag;
         if (containsOnlyEmojis) {
             htmlContent = expensify_common_1.Str.replaceAll(htmlContent, '<emoji>', '<emoji islarge>');
         }
@@ -57,9 +56,9 @@ function TextCommentFragment(_a) {
             }
             htmlContent = expensify_common_1.Str.replaceAll(htmlContent, '<emoji>', '<emoji ismedium>');
         }
-        var htmlWithTag = editedTag ? "".concat(htmlContent).concat(editedTag) : htmlContent;
+        let htmlWithTag = editedTag ? `${htmlContent}${editedTag}` : htmlContent;
         if (styleAsMuted) {
-            htmlWithTag = "<muted-text>".concat(htmlWithTag, "<muted-text>");
+            htmlWithTag = `<muted-text>${htmlWithTag}<muted-text>`;
         }
         htmlWithTag = (0, ReportActionsUtils_1.getHtmlWithAttachmentID)(htmlWithTag, reportActionID);
         return (<RenderCommentHTML_1.default containsOnlyEmojis={containsOnlyEmojis} source={source} html={htmlWithTag}/>);
@@ -81,9 +80,9 @@ function TextCommentFragment(_a) {
                 !(0, DeviceCapabilities_1.canUseTouchScreen)() || !shouldUseNarrowLayout ? styles.userSelectText : styles.userSelectNone,
                 containsOnlyCustomEmoji && styles.customEmojiFont,
             ]}>
-                    {(0, convertToLTR_1.default)(message !== null && message !== void 0 ? message : '')}
+                    {(0, convertToLTR_1.default)(message ?? '')}
                 </Text_1.default>)}
-            {!!(fragment === null || fragment === void 0 ? void 0 : fragment.isEdited) && (<>
+            {!!fragment?.isEdited && (<>
                     <Text_1.default style={[containsOnlyEmojis && styles.onlyEmojisTextLineHeight]}> </Text_1.default>
                     <Text_1.default fontSize={variables_1.default.fontSizeSmall} color={theme.textSupporting} style={[styles.editedLabelStyles, styleAsDeleted && styles.offlineFeedback.deleted, style]}>
                         {translate('reportActionCompose.edited')}

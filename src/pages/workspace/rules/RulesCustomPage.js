@@ -1,38 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var usePolicy_1 = require("@hooks/usePolicy");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Parser_1 = require("@libs/Parser");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var Policy_1 = require("@userActions/Policy/Policy");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var RulesCustomForm_1 = require("@src/types/form/RulesCustomForm");
-function RulesCustomPage(_a) {
-    var policyID = _a.route.params.policyID;
-    var policy = (0, usePolicy_1.default)(policyID);
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = (0, react_1.useState)(function () { var _a; return Parser_1.default.htmlToMarkdown((_a = policy === null || policy === void 0 ? void 0 : policy.customRules) !== null && _a !== void 0 ? _a : ''); }), customRulesValue = _b[0], setCustomRulesValue = _b[1];
-    var onChangeCustomRules = (0, react_1.useCallback)(function (newValue) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const usePolicy_1 = require("@hooks/usePolicy");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Parser_1 = require("@libs/Parser");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const Policy_1 = require("@userActions/Policy/Policy");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const RulesCustomForm_1 = require("@src/types/form/RulesCustomForm");
+function RulesCustomPage({ route: { params: { policyID }, }, }) {
+    const policy = (0, usePolicy_1.default)(policyID);
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [customRulesValue, setCustomRulesValue] = (0, react_1.useState)(() => Parser_1.default.htmlToMarkdown(policy?.customRules ?? ''));
+    const onChangeCustomRules = (0, react_1.useCallback)((newValue) => {
         setCustomRulesValue(newValue);
     }, []);
     return (<AccessOrNotFoundWrapper_1.default policyID={policyID} accessVariants={[CONST_1.default.POLICY.ACCESS_VARIANTS.ADMIN, CONST_1.default.POLICY.ACCESS_VARIANTS.PAID]}>
             <ScreenWrapper_1.default enableEdgeToEdgeBottomSafeAreaPadding shouldEnableMaxHeight testID={RulesCustomPage.displayName}>
-                <HeaderWithBackButton_1.default title={translate('workspace.rules.customRules.title')} onBackButtonPress={function () { return Navigation_1.default.goBack(); }}/>
-                <FormProvider_1.default style={[styles.flexGrow1, styles.ph5]} formID={ONYXKEYS_1.default.FORMS.RULES_CUSTOM_FORM} onSubmit={function (_a) {
-            var customRules = _a.customRules;
+                <HeaderWithBackButton_1.default title={translate('workspace.rules.customRules.title')} onBackButtonPress={() => Navigation_1.default.goBack()}/>
+                <FormProvider_1.default style={[styles.flexGrow1, styles.ph5]} formID={ONYXKEYS_1.default.FORMS.RULES_CUSTOM_FORM} onSubmit={({ customRules }) => {
             (0, Policy_1.updateCustomRules)(policyID, customRules);
             Navigation_1.default.setNavigationActionToMicrotaskQueue(Navigation_1.default.goBack);
         }} submitButtonText={translate('workspace.editor.save')} enabledWhenOffline shouldHideFixErrorsAlert addBottomSafeAreaPadding>

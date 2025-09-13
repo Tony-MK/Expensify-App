@@ -1,24 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectToSageIntacct = connectToSageIntacct;
 exports.updateSageIntacctBillable = updateSageIntacctBillable;
@@ -45,15 +25,15 @@ exports.updateSageIntacctEntity = updateSageIntacctEntity;
 exports.updateSageIntacctAccountingMethod = updateSageIntacctAccountingMethod;
 exports.changeMappingsValueFromDefaultToTag = changeMappingsValueFromDefaultToTag;
 exports.UpdateSageIntacctTaxSolutionID = UpdateSageIntacctTaxSolutionID;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var ErrorUtils = require("@libs/ErrorUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const ErrorUtils = require("@libs/ErrorUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function connectToSageIntacct(policyID, credentials) {
-    var parameters = {
-        policyID: policyID,
+    const parameters = {
+        policyID,
         intacctCompanyID: credentials.companyID,
         intacctUserID: credentials.userID,
         intacctPassword: credentials.password,
@@ -61,82 +41,81 @@ function connectToSageIntacct(policyID, credentials) {
     API.write(types_1.WRITE_COMMANDS.CONNECT_POLICY_TO_SAGE_INTACCT, parameters, {});
 }
 function prepareOnyxDataForMappingUpdate(policyID, mappingName, mappingValue, oldMappingValue) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            mappings: (_a = {},
-                                _a[mappingName] = mappingValue,
-                                _a),
-                            pendingFields: (_b = {},
-                                _b[mappingName] = CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
-                                _b),
-                            errorFields: (_c = {},
-                                _c[mappingName] = null,
-                                _c),
+                            mappings: {
+                                [mappingName]: mappingValue,
+                            },
+                            pendingFields: {
+                                [mappingName]: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+                            },
+                            errorFields: {
+                                [mappingName]: null,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            mappings: (_d = {},
-                                _d[mappingName] = oldMappingValue !== null && oldMappingValue !== void 0 ? oldMappingValue : null,
-                                _d),
-                            pendingFields: (_e = {},
-                                _e[mappingName] = null,
-                                _e),
-                            errorFields: (_f = {},
-                                _f[mappingName] = ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
-                                _f),
+                            mappings: {
+                                [mappingName]: oldMappingValue ?? null,
+                            },
+                            pendingFields: {
+                                [mappingName]: null,
+                            },
+                            errorFields: {
+                                [mappingName]: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            pendingFields: (_g = {},
-                                _g[mappingName] = null,
-                                _g),
-                            errorFields: (_h = {},
-                                _h[mappingName] = undefined,
-                                _h),
+                            pendingFields: {
+                                [mappingName]: null,
+                            },
+                            errorFields: {
+                                [mappingName]: undefined,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    return { optimisticData: optimisticData, failureData: failureData, successData: successData };
+    return { optimisticData, failureData, successData };
 }
 function updateSageIntacctBillable(policyID, enabled) {
     if (!policyID) {
         return;
     }
-    var parameters = {
-        policyID: policyID,
-        enabled: enabled,
+    const parameters = {
+        policyID,
+        enabled,
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_BILLABLE, parameters, prepareOnyxDataForMappingUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.SYNC_ITEMS, enabled, !enabled));
 }
@@ -157,24 +136,24 @@ function getCommandForMapping(mappingName) {
     }
 }
 function updateSageIntacctMappingValue(policyID, mappingName, mappingValue, oldMappingValue) {
-    var command = getCommandForMapping(mappingName);
+    const command = getCommandForMapping(mappingName);
     if (!command) {
         return;
     }
-    var onyxData = prepareOnyxDataForMappingUpdate(policyID, mappingName, mappingValue, oldMappingValue);
+    const onyxData = prepareOnyxDataForMappingUpdate(policyID, mappingName, mappingValue, oldMappingValue);
     API.write(command, {
-        policyID: policyID,
+        policyID,
         mapping: mappingValue,
     }, onyxData);
 }
 function changeMappingsValueFromDefaultToTag(policyID, mappings) {
-    if ((mappings === null || mappings === void 0 ? void 0 : mappings.departments) === CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT) {
+    if (mappings?.departments === CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT) {
         updateSageIntacctMappingValue(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.MAPPINGS.DEPARTMENTS, CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.TAG, CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT);
     }
-    if ((mappings === null || mappings === void 0 ? void 0 : mappings.classes) === CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT) {
+    if (mappings?.classes === CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT) {
         updateSageIntacctMappingValue(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.MAPPINGS.CLASSES, CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.TAG, CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT);
     }
-    if ((mappings === null || mappings === void 0 ? void 0 : mappings.locations) === CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT) {
+    if (mappings?.locations === CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT) {
         updateSageIntacctMappingValue(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.MAPPINGS.LOCATIONS, CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.TAG, CONST_1.default.SAGE_INTACCT_MAPPING_VALUE.DEFAULT);
     }
 }
@@ -182,16 +161,16 @@ function UpdateSageIntacctTaxSolutionID(policyID, taxSolutionID) {
     if (!policyID) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
                             tax: {
-                                taxSolutionID: taxSolutionID,
+                                taxSolutionID,
                             },
                             pendingFields: {
                                 tax: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
@@ -205,10 +184,10 @@ function UpdateSageIntacctTaxSolutionID(policyID, taxSolutionID) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -228,10 +207,10 @@ function UpdateSageIntacctTaxSolutionID(policyID, taxSolutionID) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -248,16 +227,16 @@ function UpdateSageIntacctTaxSolutionID(policyID, taxSolutionID) {
             },
         },
     ];
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_TAX_SOLUTION_ID, { policyID: policyID, taxSolutionID: taxSolutionID }, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_TAX_SOLUTION_ID, { policyID, taxSolutionID }, { optimisticData, failureData, successData });
 }
 function updateSageIntacctSyncTaxConfiguration(policyID, enabled) {
     if (!policyID) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -277,10 +256,10 @@ function updateSageIntacctSyncTaxConfiguration(policyID, enabled) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -300,10 +279,10 @@ function updateSageIntacctSyncTaxConfiguration(policyID, enabled) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -320,14 +299,13 @@ function updateSageIntacctSyncTaxConfiguration(policyID, enabled) {
             },
         },
     ];
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_SYNC_TAX_CONFIGURATION, { policyID: policyID, enabled: enabled }, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_SYNC_TAX_CONFIGURATION, { policyID, enabled }, { optimisticData, failureData, successData });
 }
 function prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimensions, oldDimensions, oldDimensionName, pendingAction) {
-    var _a, _b, _c, _d, _e, _f;
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -335,19 +313,19 @@ function prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimen
                             mappings: {
                                 dimensions: newDimensions,
                             },
-                            pendingFields: (_a = {}, _a["".concat(CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX).concat(dimensionName)] = pendingAction, _a),
-                            errorFields: (_b = {}, _b["".concat(CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX).concat(dimensionName)] = null, _b),
+                            pendingFields: { [`${CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX}${dimensionName}`]: pendingAction },
+                            errorFields: { [`${CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX}${dimensionName}`]: null },
                         },
                     },
                 },
             },
         },
     ];
-    var pendingActionAfterFailure = pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD ? pendingAction : null;
-    var failureData = [
+    const pendingActionAfterFailure = pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD ? pendingAction : null;
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -355,20 +333,20 @@ function prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimen
                             mappings: {
                                 dimensions: oldDimensions,
                             },
-                            pendingFields: (_c = {}, _c["".concat(CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX).concat(oldDimensionName)] = pendingActionAfterFailure, _c),
-                            errorFields: (_d = {},
-                                _d["".concat(CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX).concat(oldDimensionName)] = ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
-                                _d),
+                            pendingFields: { [`${CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX}${oldDimensionName}`]: pendingActionAfterFailure },
+                            errorFields: {
+                                [`${CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX}${oldDimensionName}`]: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
@@ -376,164 +354,169 @@ function prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimen
                             mappings: {
                                 dimensions: newDimensions,
                             },
-                            pendingFields: (_e = {}, _e["".concat(CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX).concat(dimensionName)] = null, _e),
-                            errorFields: (_f = {}, _f["".concat(CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX).concat(dimensionName)] = null, _f),
+                            pendingFields: { [`${CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX}${dimensionName}`]: null },
+                            errorFields: { [`${CONST_1.default.SAGE_INTACCT_CONFIG.DIMENSION_PREFIX}${dimensionName}`]: null },
                         },
                     },
                 },
             },
         },
     ];
-    return { optimisticData: optimisticData, failureData: failureData, successData: successData };
+    return { optimisticData, failureData, successData };
 }
 function addSageIntacctUserDimensions(policyID, dimensionName, mapping, existingUserDimensions) {
-    var newDimensions = __spreadArray(__spreadArray([], existingUserDimensions, true), [{ mapping: mapping, dimension: dimensionName }], false);
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_USER_DIMENSION, { policyID: policyID, dimensions: JSON.stringify(newDimensions) }, prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimensions, newDimensions, dimensionName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD));
+    const newDimensions = [...existingUserDimensions, { mapping, dimension: dimensionName }];
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_USER_DIMENSION, { policyID, dimensions: JSON.stringify(newDimensions) }, prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimensions, newDimensions, dimensionName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD));
 }
 function editSageIntacctUserDimensions(policyID, previousName, name, mapping, existingUserDimensions) {
-    var newDimensions = existingUserDimensions.map(function (userDimension) {
+    const newDimensions = existingUserDimensions.map((userDimension) => {
         if (userDimension.dimension === previousName) {
-            return { dimension: name, mapping: mapping };
+            return { dimension: name, mapping };
         }
         return userDimension;
     });
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_USER_DIMENSION, { policyID: policyID, dimensions: JSON.stringify(newDimensions) }, prepareOnyxDataForUserDimensionUpdate(policyID, name, newDimensions, existingUserDimensions, previousName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE));
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_USER_DIMENSION, { policyID, dimensions: JSON.stringify(newDimensions) }, prepareOnyxDataForUserDimensionUpdate(policyID, name, newDimensions, existingUserDimensions, previousName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE));
 }
 function removeSageIntacctUserDimensions(policyID, dimensionName, existingUserDimensions) {
-    var newDimensions = existingUserDimensions.filter(function (userDimension) { return dimensionName !== userDimension.dimension; });
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_USER_DIMENSION, { policyID: policyID, dimensions: JSON.stringify(newDimensions) }, prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimensions, existingUserDimensions, dimensionName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE));
+    const newDimensions = existingUserDimensions.filter((userDimension) => dimensionName !== userDimension.dimension);
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_USER_DIMENSION, { policyID, dimensions: JSON.stringify(newDimensions) }, prepareOnyxDataForUserDimensionUpdate(policyID, dimensionName, newDimensions, existingUserDimensions, dimensionName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE));
 }
 function prepareOnyxDataForExportUpdate(policyID, settingName, settingValue, oldSettingValue) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    var exporterOptimisticData = settingName === CONST_1.default.SAGE_INTACCT_CONFIG.EXPORTER ? { exporter: settingValue } : {};
-    var exporterErrorData = settingName === CONST_1.default.SAGE_INTACCT_CONFIG.EXPORTER ? { exporter: oldSettingValue } : {};
-    var optimisticData = [
+    const exporterOptimisticData = settingName === CONST_1.default.SAGE_INTACCT_CONFIG.EXPORTER ? { exporter: settingValue } : {};
+    const exporterErrorData = settingName === CONST_1.default.SAGE_INTACCT_CONFIG.EXPORTER ? { exporter: oldSettingValue } : {};
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-            value: __assign(__assign({}, exporterOptimisticData), { connections: {
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+            value: {
+                ...exporterOptimisticData,
+                connections: {
                     intacct: {
                         config: {
-                            export: (_a = {},
-                                _a[settingName] = settingValue,
-                                _a),
-                            pendingFields: (_b = {},
-                                _b[settingName] = CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
-                                _b),
-                            errorFields: (_c = {},
-                                _c[settingName] = null,
-                                _c),
+                            export: {
+                                [settingName]: settingValue,
+                            },
+                            pendingFields: {
+                                [settingName]: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
                         },
                     },
-                } }),
+                },
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-            value: __assign(__assign({}, exporterErrorData), { connections: {
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+            value: {
+                ...exporterErrorData,
+                connections: {
                     intacct: {
                         config: {
-                            export: (_d = {},
-                                _d[settingName] = oldSettingValue !== null && oldSettingValue !== void 0 ? oldSettingValue : null,
-                                _d),
-                            pendingFields: (_e = {},
-                                _e[settingName] = null,
-                                _e),
-                            errorFields: (_f = {},
-                                _f[settingName] = ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
-                                _f),
+                            export: {
+                                [settingName]: oldSettingValue ?? null,
+                            },
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                            },
                         },
                     },
-                } }),
+                },
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            pendingFields: (_g = {},
-                                _g[settingName] = null,
-                                _g),
-                            errorFields: (_h = {},
-                                _h[settingName] = null,
-                                _h),
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    return { optimisticData: optimisticData, failureData: failureData, successData: successData };
+    return { optimisticData, failureData, successData };
 }
 function updateSageIntacctExporter(policyID, exporter, oldExporter) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.EXPORTER, exporter, oldExporter), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.EXPORTER, exporter, oldExporter);
+    const parameters = {
+        policyID,
         email: exporter,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_EXPORTER, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_EXPORTER, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctExportDate(policyID, date, oldDate) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.EXPORT_DATE, date, oldDate), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.EXPORT_DATE, date, oldDate);
+    const parameters = {
+        policyID,
         value: date,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_EXPORT_DATE, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_EXPORT_DATE, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctReimbursableExpensesExportDestination(policyID, reimbursable, oldReimbursable) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.REIMBURSABLE, reimbursable, oldReimbursable), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.REIMBURSABLE, reimbursable, oldReimbursable);
+    const parameters = {
+        policyID,
         value: reimbursable,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_REIMBURSABLE_EXPENSES_EXPORT_DESTINATION, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_REIMBURSABLE_EXPENSES_EXPORT_DESTINATION, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctNonreimbursableExpensesExportDestination(policyID, nonReimbursable, oldNonReimbursable) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE, nonReimbursable, oldNonReimbursable), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE, nonReimbursable, oldNonReimbursable);
+    const parameters = {
+        policyID,
         value: nonReimbursable,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_EXPORT_DESTINATION, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_EXPORT_DESTINATION, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctReimbursableExpensesReportExportDefaultVendor(policyID, vendor, oldVendor) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.REIMBURSABLE_VENDOR, vendor, oldVendor), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.REIMBURSABLE_VENDOR, vendor, oldVendor);
+    const parameters = {
+        policyID,
         vendorID: vendor,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_REIMBURSABLE_EXPENSES_REPORT_EXPORT_DEFAULT_VENDOR, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_REIMBURSABLE_EXPENSES_REPORT_EXPORT_DEFAULT_VENDOR, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctNonreimbursableExpensesCreditCardChargeExportDefaultVendor(policyID, vendor, oldVendor) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE_CREDIT_CARD_VENDOR, vendor, oldVendor), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE_CREDIT_CARD_VENDOR, vendor, oldVendor);
+    const parameters = {
+        policyID,
         vendorID: vendor,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_CREDIT_CARD_CHARGE_EXPORT_DEFAULT_VENDOR, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_CREDIT_CARD_CHARGE_EXPORT_DEFAULT_VENDOR, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctNonreimbursableExpensesExportAccount(policyID, nonReimbursableAccount, oldReimbursableAccount) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE_ACCOUNT, nonReimbursableAccount, oldReimbursableAccount), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE_ACCOUNT, nonReimbursableAccount, oldReimbursableAccount);
+    const parameters = {
+        policyID,
         creditCardAccountID: nonReimbursableAccount,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_EXPORT_ACCOUNT, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_EXPORT_ACCOUNT, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctNonreimbursableExpensesExportVendor(policyID, vendor, oldVendor) {
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE_VENDOR, vendor, oldVendor), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.NON_REIMBURSABLE_VENDOR, vendor, oldVendor);
+    const parameters = {
+        policyID,
         vendorID: vendor,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_EXPORT_VENDOR, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES_EXPORT_VENDOR, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctDefaultVendor(policyID, settingName, vendor, oldVendor) {
     if (settingName === CONST_1.default.SAGE_INTACCT_CONFIG.REIMBURSABLE_VENDOR) {
@@ -547,284 +530,279 @@ function updateSageIntacctDefaultVendor(policyID, settingName, vendor, oldVendor
     }
 }
 function clearSageIntacctErrorField(policyID, key) {
-    var _a;
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { connections: { intacct: { config: { errorFields: (_a = {}, _a[key] = null, _a) } } } });
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { connections: { intacct: { config: { errorFields: { [key]: null } } } } });
 }
 function clearSageIntacctPendingField(policyID, key) {
-    var _a;
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { connections: { intacct: { config: { pendingFields: (_a = {}, _a[key] = null, _a) } } } });
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { connections: { intacct: { config: { pendingFields: { [key]: null } } } } });
 }
 function removeSageIntacctUserDimensionsByName(dimensions, policyID, dimensionName) {
-    var Dimensions = dimensions.filter(function (dimension) { return dimension.dimension !== dimensionName; });
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { connections: { intacct: { config: { mappings: { dimensions: Dimensions } } } } });
+    const Dimensions = dimensions.filter((dimension) => dimension.dimension !== dimensionName);
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { connections: { intacct: { config: { mappings: { dimensions: Dimensions } } } } });
 }
 function prepareOnyxDataForConfigUpdate(policyID, settingName, settingValue, oldSettingValue) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-            value: {
-                connections: {
-                    intacct: {
-                        config: (_a = {},
-                            _a[settingName] = settingValue,
-                            _a.pendingFields = (_b = {},
-                                _b[settingName] = CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
-                                _b),
-                            _a.errorFields = (_c = {},
-                                _c[settingName] = null,
-                                _c),
-                            _a),
-                    },
-                },
-            },
-        },
-    ];
-    var failureData = [
-        {
-            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-            value: {
-                connections: {
-                    intacct: {
-                        config: (_d = {},
-                            _d[settingName] = oldSettingValue !== null && oldSettingValue !== void 0 ? oldSettingValue : null,
-                            _d.pendingFields = (_e = {},
-                                _e[settingName] = null,
-                                _e),
-                            _d.errorFields = (_f = {},
-                                _f[settingName] = ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
-                                _f),
-                            _d),
-                    },
-                },
-            },
-        },
-    ];
-    var successData = [
-        {
-            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            pendingFields: (_g = {},
-                                _g[settingName] = null,
-                                _g),
-                            errorFields: (_h = {},
-                                _h[settingName] = null,
-                                _h),
+                            [settingName]: settingValue,
+                            pendingFields: {
+                                [settingName]: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    return { optimisticData: optimisticData, failureData: failureData, successData: successData };
+    const failureData = [
+        {
+            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+            value: {
+                connections: {
+                    intacct: {
+                        config: {
+                            [settingName]: oldSettingValue ?? null,
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    ];
+    const successData = [
+        {
+            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+            value: {
+                connections: {
+                    intacct: {
+                        config: {
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    ];
+    return { optimisticData, failureData, successData };
 }
 function prepareOnyxDataForSyncUpdate(policyID, settingName, settingValue, oldSettingValue) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            sync: (_a = {},
-                                _a[settingName] = settingValue,
-                                _a),
-                            pendingFields: (_b = {},
-                                _b[settingName] = CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
-                                _b),
-                            errorFields: (_c = {},
-                                _c[settingName] = null,
-                                _c),
+                            sync: {
+                                [settingName]: settingValue,
+                            },
+                            pendingFields: {
+                                [settingName]: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            sync: (_d = {},
-                                _d[settingName] = oldSettingValue !== null && oldSettingValue !== void 0 ? oldSettingValue : null,
-                                _d),
-                            pendingFields: (_e = {},
-                                _e[settingName] = null,
-                                _e),
-                            errorFields: (_f = {},
-                                _f[settingName] = ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
-                                _f),
+                            sync: {
+                                [settingName]: oldSettingValue ?? null,
+                            },
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            pendingFields: (_g = {},
-                                _g[settingName] = null,
-                                _g),
-                            errorFields: (_h = {},
-                                _h[settingName] = null,
-                                _h),
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    return { optimisticData: optimisticData, failureData: failureData, successData: successData };
+    return { optimisticData, failureData, successData };
 }
 function prepareOnyxDataForAutoSyncUpdate(policyID, settingName, settingValue) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            autoSync: (_a = {},
-                                _a[settingName] = settingValue,
-                                _a),
-                            pendingFields: (_b = {},
-                                _b[settingName] = CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
-                                _b),
-                            errorFields: (_c = {},
-                                _c[settingName] = null,
-                                _c),
+                            autoSync: {
+                                [settingName]: settingValue,
+                            },
+                            pendingFields: {
+                                [settingName]: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            autoSync: (_d = {},
-                                _d[settingName] = !settingValue,
-                                _d),
-                            pendingFields: (_e = {},
-                                _e[settingName] = null,
-                                _e),
-                            errorFields: (_f = {},
-                                _f[settingName] = ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
-                                _f),
+                            autoSync: {
+                                [settingName]: !settingValue,
+                            },
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 connections: {
                     intacct: {
                         config: {
-                            pendingFields: (_g = {},
-                                _g[settingName] = null,
-                                _g),
-                            errorFields: (_h = {},
-                                _h[settingName] = null,
-                                _h),
+                            pendingFields: {
+                                [settingName]: null,
+                            },
+                            errorFields: {
+                                [settingName]: null,
+                            },
                         },
                     },
                 },
             },
         },
     ];
-    return { optimisticData: optimisticData, failureData: failureData, successData: successData };
+    return { optimisticData, failureData, successData };
 }
 function updateSageIntacctAutoSync(policyID, enabled) {
     if (!policyID) {
         return;
     }
-    var _a = prepareOnyxDataForAutoSyncUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.AUTO_SYNC_ENABLED, enabled), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
-        enabled: enabled,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForAutoSyncUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.AUTO_SYNC_ENABLED, enabled);
+    const parameters = {
+        policyID,
+        enabled,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_AUTO_SYNC, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_AUTO_SYNC, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctImportEmployees(policyID, enabled) {
     if (!policyID) {
         return;
     }
-    var _a = prepareOnyxDataForConfigUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.IMPORT_EMPLOYEES, enabled, !enabled), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
-        enabled: enabled,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForConfigUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.IMPORT_EMPLOYEES, enabled, !enabled);
+    const parameters = {
+        policyID,
+        enabled,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_IMPORT_EMPLOYEES, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_IMPORT_EMPLOYEES, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctApprovalMode(policyID, enabled) {
     if (!policyID) {
         return;
     }
-    var approvalModeSettingValue = enabled ? CONST_1.default.SAGE_INTACCT.APPROVAL_MODE.APPROVAL_MANUAL : '';
-    var oldApprovalModeSettingValue = enabled ? '' : CONST_1.default.SAGE_INTACCT.APPROVAL_MODE.APPROVAL_MANUAL;
-    var _a = prepareOnyxDataForConfigUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.APPROVAL_MODE, approvalModeSettingValue, oldApprovalModeSettingValue), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
+    const approvalModeSettingValue = enabled ? CONST_1.default.SAGE_INTACCT.APPROVAL_MODE.APPROVAL_MANUAL : '';
+    const oldApprovalModeSettingValue = enabled ? '' : CONST_1.default.SAGE_INTACCT.APPROVAL_MODE.APPROVAL_MANUAL;
+    const { optimisticData, failureData, successData } = prepareOnyxDataForConfigUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.APPROVAL_MODE, approvalModeSettingValue, oldApprovalModeSettingValue);
+    const parameters = {
+        policyID,
         value: approvalModeSettingValue,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_APPROVAL_MODE, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_APPROVAL_MODE, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctSyncReimbursedReports(policyID, enabled) {
     if (!policyID) {
         return;
     }
-    var _a = prepareOnyxDataForSyncUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.SYNC_REIMBURSED_REPORTS, enabled, !enabled), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
-        enabled: enabled,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForSyncUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.SYNC_REIMBURSED_REPORTS, enabled, !enabled);
+    const parameters = {
+        policyID,
+        enabled,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_SYNC_REIMBURSED_REPORTS, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_SYNC_REIMBURSED_REPORTS, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctSyncReimbursementAccountID(policyID, vendorID, oldVendorID) {
     if (!policyID || !vendorID) {
         return;
     }
-    var _a = prepareOnyxDataForSyncUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.REIMBURSEMENT_ACCOUNT_ID, vendorID, oldVendorID), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    var parameters = {
-        policyID: policyID,
-        vendorID: vendorID,
+    const { optimisticData, failureData, successData } = prepareOnyxDataForSyncUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.REIMBURSEMENT_ACCOUNT_ID, vendorID, oldVendorID);
+    const parameters = {
+        policyID,
+        vendorID,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_SYNC_REIMBURSEMENT_ACCOUNT_ID, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_SYNC_REIMBURSEMENT_ACCOUNT_ID, parameters, { optimisticData, failureData, successData });
 }
 function updateSageIntacctEntity(policyID, entity, oldEntity) {
-    var parameters = {
-        policyID: policyID,
-        entity: entity,
+    const parameters = {
+        policyID,
+        entity,
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_ENTITY, parameters, prepareOnyxDataForConfigUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.ENTITY, entity, oldEntity));
 }
@@ -832,10 +810,10 @@ function updateSageIntacctAccountingMethod(policyID, accountingMethod, oldAccoun
     if (!policyID) {
         return;
     }
-    var parameters = {
-        policyID: policyID,
-        accountingMethod: accountingMethod,
+    const parameters = {
+        policyID,
+        accountingMethod,
     };
-    var _a = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.ACCOUNTING_METHOD, accountingMethod, oldAccountingMethod), optimisticData = _a.optimisticData, failureData = _a.failureData, successData = _a.successData;
-    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_ACCOUNTING_METHOD, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    const { optimisticData, failureData, successData } = prepareOnyxDataForExportUpdate(policyID, CONST_1.default.SAGE_INTACCT_CONFIG.ACCOUNTING_METHOD, accountingMethod, oldAccountingMethod);
+    API.write(types_1.WRITE_COMMANDS.UPDATE_SAGE_INTACCT_ACCOUNTING_METHOD, parameters, { optimisticData, failureData, successData });
 }

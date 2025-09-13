@@ -1,167 +1,95 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention, import/no-import-module-exports */
-var core = require("@actions/core");
-var utils_1 = require("@actions/github/lib/utils");
-var plugin_paginate_rest_1 = require("@octokit/plugin-paginate-rest");
-var plugin_throttling_1 = require("@octokit/plugin-throttling");
-var request_error_1 = require("@octokit/request-error");
-var arrayDifference_1 = require("./arrayDifference");
-var CONST_1 = require("./CONST");
-var isEmptyObject_1 = require("./isEmptyObject");
-var GithubUtils = /** @class */ (function () {
-    function GithubUtils() {
-    }
+const core = require("@actions/core");
+const utils_1 = require("@actions/github/lib/utils");
+const plugin_paginate_rest_1 = require("@octokit/plugin-paginate-rest");
+const plugin_throttling_1 = require("@octokit/plugin-throttling");
+const request_error_1 = require("@octokit/request-error");
+const arrayDifference_1 = require("./arrayDifference");
+const CONST_1 = require("./CONST");
+const isEmptyObject_1 = require("./isEmptyObject");
+class GithubUtils {
     /**
      * Initialize internal octokit.
      * NOTE: When using GithubUtils in CI, you don't need to call this manually.
      */
-    GithubUtils.initOctokitWithToken = function (token) {
-        var Octokit = utils_1.GitHub.plugin(plugin_throttling_1.throttling, plugin_paginate_rest_1.paginateRest);
+    static initOctokitWithToken(token) {
+        const Octokit = utils_1.GitHub.plugin(plugin_throttling_1.throttling, plugin_paginate_rest_1.paginateRest);
         // Save a copy of octokit used in this class
         this.internalOctokit = new Octokit((0, utils_1.getOctokitOptions)(token, {
             throttle: {
                 retryAfterBaseValue: 2000,
-                onRateLimit: function (retryAfter, options) {
-                    console.warn("Request quota exhausted for request ".concat(options.method, " ").concat(options.url));
+                onRateLimit: (retryAfter, options) => {
+                    console.warn(`Request quota exhausted for request ${options.method} ${options.url}`);
                     // Retry five times when hitting a rate limit error, then give up
                     if (options.request.retryCount <= 5) {
-                        console.log("Retrying after ".concat(retryAfter, " seconds!"));
+                        console.log(`Retrying after ${retryAfter} seconds!`);
                         return true;
                     }
                 },
-                onAbuseLimit: function (retryAfter, options) {
+                onAbuseLimit: (retryAfter, options) => {
                     // does not retry, only logs a warning
-                    console.warn("Abuse detected for request ".concat(options.method, " ").concat(options.url));
+                    console.warn(`Abuse detected for request ${options.method} ${options.url}`);
                 },
             },
         }));
-    };
+    }
     /**
      * Default initialize method assuming running in CI, getting the token from an input.
      *
      * @private
      */
-    GithubUtils.initOctokit = function () {
-        var _a;
-        var token = (_a = process.env.GITHUB_TOKEN) !== null && _a !== void 0 ? _a : core.getInput('GITHUB_TOKEN', { required: true });
+    static initOctokit() {
+        const token = process.env.GITHUB_TOKEN ?? core.getInput('GITHUB_TOKEN', { required: true });
         if (!token) {
             console.error('GitHubUtils could not find GITHUB_TOKEN');
             process.exit(1);
         }
         this.initOctokitWithToken(token);
-    };
-    Object.defineProperty(GithubUtils, "octokit", {
-        /**
-         * Either give an existing instance of Octokit rest or create a new one
-         *
-         * @readonly
-         * @static
-         */
-        get: function () {
-            if (!this.internalOctokit) {
-                this.initOctokit();
-            }
-            // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-            return this.internalOctokit.rest;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(GithubUtils, "graphql", {
-        /**
-         * Get the graphql instance from internal octokit.
-         * @readonly
-         * @static
-         */
-        get: function () {
-            if (!this.internalOctokit) {
-                this.initOctokit();
-            }
-            // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-            return this.internalOctokit.graphql;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(GithubUtils, "paginate", {
-        /**
-         * Either give an existing instance of Octokit paginate or create a new one
-         *
-         * @readonly
-         * @static
-         */
-        get: function () {
-            if (!this.internalOctokit) {
-                this.initOctokit();
-            }
-            // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
-            return this.internalOctokit.paginate;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    /**
+     * Either give an existing instance of Octokit rest or create a new one
+     *
+     * @readonly
+     * @static
+     */
+    static get octokit() {
+        if (!this.internalOctokit) {
+            this.initOctokit();
+        }
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+        return this.internalOctokit.rest;
+    }
+    /**
+     * Get the graphql instance from internal octokit.
+     * @readonly
+     * @static
+     */
+    static get graphql() {
+        if (!this.internalOctokit) {
+            this.initOctokit();
+        }
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+        return this.internalOctokit.graphql;
+    }
+    /**
+     * Either give an existing instance of Octokit paginate or create a new one
+     *
+     * @readonly
+     * @static
+     */
+    static get paginate() {
+        if (!this.internalOctokit) {
+            this.initOctokit();
+        }
+        // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+        return this.internalOctokit.paginate;
+    }
     /**
      * Finds one open `StagingDeployCash` issue via GitHub octokit library.
      */
-    GithubUtils.getStagingDeployCash = function () {
-        var _this = this;
+    static getStagingDeployCash() {
         return this.octokit.issues
             .listForRepo({
             owner: CONST_1.default.GITHUB_OWNER,
@@ -169,29 +97,27 @@ var GithubUtils = /** @class */ (function () {
             labels: CONST_1.default.LABELS.STAGING_DEPLOY,
             state: 'open',
         })
-            .then(function (_a) {
-            var data = _a.data;
+            .then(({ data }) => {
             if (!data.length) {
-                throw new Error("Unable to find ".concat(CONST_1.default.LABELS.STAGING_DEPLOY, " issue."));
+                throw new Error(`Unable to find ${CONST_1.default.LABELS.STAGING_DEPLOY} issue.`);
             }
             if (data.length > 1) {
-                throw new Error("Found more than one ".concat(CONST_1.default.LABELS.STAGING_DEPLOY, " issue."));
+                throw new Error(`Found more than one ${CONST_1.default.LABELS.STAGING_DEPLOY} issue.`);
             }
-            var issue = data.at(0);
+            const issue = data.at(0);
             if (!issue) {
-                throw new Error("Found an undefined ".concat(CONST_1.default.LABELS.STAGING_DEPLOY, " issue."));
+                throw new Error(`Found an undefined ${CONST_1.default.LABELS.STAGING_DEPLOY} issue.`);
             }
-            return _this.getStagingDeployCashData(issue);
+            return this.getStagingDeployCashData(issue);
         });
-    };
+    }
     /**
      * Takes in a GitHub issue object and returns the data we want.
      */
-    GithubUtils.getStagingDeployCashData = function (issue) {
-        var _a, _b, _c;
+    static getStagingDeployCashData(issue) {
         try {
-            var versionRegex = new RegExp('([0-9]+)\\.([0-9]+)\\.([0-9]+)(?:-([0-9]+))?', 'g');
-            var version = ((_c = (_b = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.match(versionRegex)) === null || _b === void 0 ? void 0 : _b[0]) !== null && _c !== void 0 ? _c : '').replace(/`/g, '');
+            const versionRegex = new RegExp('([0-9]+)\\.([0-9]+)\\.([0-9]+)(?:-([0-9]+))?', 'g');
+            const version = (issue.body?.match(versionRegex)?.[0] ?? '').replace(/`/g, '');
             return {
                 title: issue.title,
                 url: issue.url,
@@ -203,146 +129,130 @@ var GithubUtils = /** @class */ (function () {
                 internalQAPRList: this.getStagingDeployCashInternalQA(issue),
                 isFirebaseChecked: issue.body ? /-\s\[x]\sI checked \[Firebase Crashlytics]/.test(issue.body) : false,
                 isGHStatusChecked: issue.body ? /-\s\[x]\sI checked \[GitHub Status]/.test(issue.body) : false,
-                version: version,
-                tag: "".concat(version, "-staging"),
+                version,
+                tag: `${version}-staging`,
             };
         }
         catch (exception) {
-            throw new Error("Unable to find ".concat(CONST_1.default.LABELS.STAGING_DEPLOY, " issue with correct data."));
+            throw new Error(`Unable to find ${CONST_1.default.LABELS.STAGING_DEPLOY} issue with correct data.`);
         }
-    };
+    }
     /**
      * Parse the PRList and Internal QA section of the StagingDeployCash issue body.
      *
      * @private
      */
-    GithubUtils.getStagingDeployCashPRList = function (issue) {
-        var _a, _b;
-        var PRListSection = (_b = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.match(/pull requests:\*\*\r?\n((?:-.*\r?\n)+)\r?\n\r?\n?/)) !== null && _b !== void 0 ? _b : null;
-        if ((PRListSection === null || PRListSection === void 0 ? void 0 : PRListSection.length) !== 2) {
+    static getStagingDeployCashPRList(issue) {
+        let PRListSection = issue.body?.match(/pull requests:\*\*\r?\n((?:-.*\r?\n)+)\r?\n\r?\n?/) ?? null;
+        if (PRListSection?.length !== 2) {
             // No PRs, return an empty array
             console.log('Hmmm...The open StagingDeployCash does not list any pull requests, continuing...');
             return [];
         }
         PRListSection = PRListSection[1];
-        var PRList = __spreadArray([], PRListSection.matchAll(new RegExp("- \\[([ x])] (".concat(CONST_1.default.PULL_REQUEST_REGEX.source, ")"), 'g')), true).map(function (match) { return ({
+        const PRList = [...PRListSection.matchAll(new RegExp(`- \\[([ x])] (${CONST_1.default.PULL_REQUEST_REGEX.source})`, 'g'))].map((match) => ({
             url: match[2],
             number: Number.parseInt(match[3], 10),
             isVerified: match[1] === 'x',
-        }); });
-        return PRList.sort(function (a, b) { return a.number - b.number; });
-    };
-    GithubUtils.getStagingDeployCashPRListMobileExpensify = function (issue) {
-        var _a, _b;
-        var mobileExpensifySection = (_b = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.match(/Mobile-Expensify PRs:\*\*\r?\n((?:-.*\r?\n)+)/)) !== null && _b !== void 0 ? _b : null;
-        if ((mobileExpensifySection === null || mobileExpensifySection === void 0 ? void 0 : mobileExpensifySection.length) !== 2) {
+        }));
+        return PRList.sort((a, b) => a.number - b.number);
+    }
+    static getStagingDeployCashPRListMobileExpensify(issue) {
+        let mobileExpensifySection = issue.body?.match(/Mobile-Expensify PRs:\*\*\r?\n((?:-.*\r?\n)+)/) ?? null;
+        if (mobileExpensifySection?.length !== 2) {
             return [];
         }
         mobileExpensifySection = mobileExpensifySection[1];
-        var mobileExpensifyPRs = __spreadArray([], mobileExpensifySection.matchAll(new RegExp("- \\[([ x])]\\s(".concat(CONST_1.default.ISSUE_OR_PULL_REQUEST_REGEX.source, ")"), 'g')), true).map(function (match) { return ({
+        const mobileExpensifyPRs = [...mobileExpensifySection.matchAll(new RegExp(`- \\[([ x])]\\s(${CONST_1.default.ISSUE_OR_PULL_REQUEST_REGEX.source})`, 'g'))].map((match) => ({
             url: match[2],
             number: Number.parseInt(match[3], 10),
             isVerified: match[1] === 'x',
-        }); });
-        return mobileExpensifyPRs.sort(function (a, b) { return a.number - b.number; });
-    };
+        }));
+        return mobileExpensifyPRs.sort((a, b) => a.number - b.number);
+    }
     /**
      * Parse DeployBlocker section of the StagingDeployCash issue body.
      *
      * @private
      */
-    GithubUtils.getStagingDeployCashDeployBlockers = function (issue) {
-        var _a, _b;
-        var deployBlockerSection = (_b = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.match(/Deploy Blockers:\*\*\r?\n((?:-.*\r?\n)+)/)) !== null && _b !== void 0 ? _b : null;
-        if ((deployBlockerSection === null || deployBlockerSection === void 0 ? void 0 : deployBlockerSection.length) !== 2) {
+    static getStagingDeployCashDeployBlockers(issue) {
+        let deployBlockerSection = issue.body?.match(/Deploy Blockers:\*\*\r?\n((?:-.*\r?\n)+)/) ?? null;
+        if (deployBlockerSection?.length !== 2) {
             return [];
         }
         deployBlockerSection = deployBlockerSection[1];
-        var deployBlockers = __spreadArray([], deployBlockerSection.matchAll(new RegExp("- \\[([ x])]\\s(".concat(CONST_1.default.ISSUE_OR_PULL_REQUEST_REGEX.source, ")"), 'g')), true).map(function (match) { return ({
+        const deployBlockers = [...deployBlockerSection.matchAll(new RegExp(`- \\[([ x])]\\s(${CONST_1.default.ISSUE_OR_PULL_REQUEST_REGEX.source})`, 'g'))].map((match) => ({
             url: match[2],
             number: Number.parseInt(match[3], 10),
             isResolved: match[1] === 'x',
-        }); });
-        return deployBlockers.sort(function (a, b) { return a.number - b.number; });
-    };
+        }));
+        return deployBlockers.sort((a, b) => a.number - b.number);
+    }
     /**
      * Parse InternalQA section of the StagingDeployCash issue body.
      *
      * @private
      */
-    GithubUtils.getStagingDeployCashInternalQA = function (issue) {
-        var _a, _b;
-        var internalQASection = (_b = (_a = issue.body) === null || _a === void 0 ? void 0 : _a.match(/Internal QA:\*\*\r?\n((?:- \[[ x]].*\r?\n)+)/)) !== null && _b !== void 0 ? _b : null;
-        if ((internalQASection === null || internalQASection === void 0 ? void 0 : internalQASection.length) !== 2) {
+    static getStagingDeployCashInternalQA(issue) {
+        let internalQASection = issue.body?.match(/Internal QA:\*\*\r?\n((?:- \[[ x]].*\r?\n)+)/) ?? null;
+        if (internalQASection?.length !== 2) {
             return [];
         }
         internalQASection = internalQASection[1];
-        var internalQAPRs = __spreadArray([], internalQASection.matchAll(new RegExp("- \\[([ x])]\\s(".concat(CONST_1.default.PULL_REQUEST_REGEX.source, ")"), 'g')), true).map(function (match) {
-            var _a, _b;
-            return ({
-                url: (_b = (_a = match[2].split('-').at(0)) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : '',
-                number: Number.parseInt(match[3], 10),
-                isResolved: match[1] === 'x',
-            });
-        });
-        return internalQAPRs.sort(function (a, b) { return a.number - b.number; });
-    };
+        const internalQAPRs = [...internalQASection.matchAll(new RegExp(`- \\[([ x])]\\s(${CONST_1.default.PULL_REQUEST_REGEX.source})`, 'g'))].map((match) => ({
+            url: match[2].split('-').at(0)?.trim() ?? '',
+            number: Number.parseInt(match[3], 10),
+            isResolved: match[1] === 'x',
+        }));
+        return internalQAPRs.sort((a, b) => a.number - b.number);
+    }
     /**
      * Generate the issue body and assignees for a StagingDeployCash.
      */
-    GithubUtils.generateStagingDeployCashBodyAndAssignees = function (tag, PRList, PRListMobileExpensify, verifiedPRList, verifiedPRListMobileExpensify, deployBlockers, resolvedDeployBlockers, resolvedInternalQAPRs, isFirebaseChecked, isGHStatusChecked) {
-        var _this = this;
-        if (verifiedPRList === void 0) { verifiedPRList = []; }
-        if (verifiedPRListMobileExpensify === void 0) { verifiedPRListMobileExpensify = []; }
-        if (deployBlockers === void 0) { deployBlockers = []; }
-        if (resolvedDeployBlockers === void 0) { resolvedDeployBlockers = []; }
-        if (resolvedInternalQAPRs === void 0) { resolvedInternalQAPRs = []; }
-        if (isFirebaseChecked === void 0) { isFirebaseChecked = false; }
-        if (isGHStatusChecked === void 0) { isGHStatusChecked = false; }
-        return this.fetchAllPullRequests(PRList.map(function (pr) { return _this.getPullRequestNumberFromURL(pr); }))
-            .then(function (data) {
-            var internalQAPRs = Array.isArray(data) ? data.filter(function (pr) { return !(0, isEmptyObject_1.isEmptyObject)(pr.labels.find(function (item) { return item.name === CONST_1.default.LABELS.INTERNAL_QA; })); }) : [];
-            return Promise.all(internalQAPRs.map(function (pr) { return _this.getPullRequestMergerLogin(pr.number).then(function (mergerLogin) { return ({ url: pr.html_url, mergerLogin: mergerLogin }); }); })).then(function (results) {
+    static generateStagingDeployCashBodyAndAssignees(tag, PRList, PRListMobileExpensify, verifiedPRList = [], verifiedPRListMobileExpensify = [], deployBlockers = [], resolvedDeployBlockers = [], resolvedInternalQAPRs = [], isFirebaseChecked = false, isGHStatusChecked = false) {
+        return this.fetchAllPullRequests(PRList.map((pr) => this.getPullRequestNumberFromURL(pr)))
+            .then((data) => {
+            const internalQAPRs = Array.isArray(data) ? data.filter((pr) => !(0, isEmptyObject_1.isEmptyObject)(pr.labels.find((item) => item.name === CONST_1.default.LABELS.INTERNAL_QA))) : [];
+            return Promise.all(internalQAPRs.map((pr) => this.getPullRequestMergerLogin(pr.number).then((mergerLogin) => ({ url: pr.html_url, mergerLogin })))).then((results) => {
                 // The format of this map is following:
                 // {
                 //    'https://github.com/Expensify/App/pull/9641': 'PauloGasparSv',
                 //    'https://github.com/Expensify/App/pull/9642': 'mountiny'
                 // }
-                var internalQAPRMap = results.reduce(function (acc, _a) {
-                    var url = _a.url, mergerLogin = _a.mergerLogin;
+                const internalQAPRMap = results.reduce((acc, { url, mergerLogin }) => {
                     acc[url] = mergerLogin;
                     return acc;
                 }, {});
                 console.log('Found the following Internal QA PRs:', internalQAPRMap);
-                var noQAPRs = Array.isArray(data) ? data.filter(function (PR) { return /\[No\s?QA]/i.test(PR.title); }).map(function (item) { return item.html_url; }) : [];
+                const noQAPRs = Array.isArray(data) ? data.filter((PR) => /\[No\s?QA]/i.test(PR.title)).map((item) => item.html_url) : [];
                 console.log('Found the following NO QA PRs:', noQAPRs);
-                var verifiedOrNoQAPRs = __spreadArray([], new Set(__spreadArray(__spreadArray(__spreadArray([], verifiedPRList, true), verifiedPRListMobileExpensify, true), noQAPRs, true)), true);
-                var sortedPRList = __spreadArray([], new Set((0, arrayDifference_1.default)(PRList, Object.keys(internalQAPRMap))), true).sort(function (a, b) { return GithubUtils.getPullRequestNumberFromURL(a) - GithubUtils.getPullRequestNumberFromURL(b); });
-                var sortedPRListMobileExpensify = __spreadArray([], new Set(PRListMobileExpensify), true).sort(function (a, b) { return GithubUtils.getPullRequestNumberFromURL(a) - GithubUtils.getPullRequestNumberFromURL(b); });
-                var sortedDeployBlockers = __spreadArray([], new Set(deployBlockers), true).sort(function (a, b) { return GithubUtils.getIssueOrPullRequestNumberFromURL(a) - GithubUtils.getIssueOrPullRequestNumberFromURL(b); });
+                const verifiedOrNoQAPRs = [...new Set([...verifiedPRList, ...verifiedPRListMobileExpensify, ...noQAPRs])];
+                const sortedPRList = [...new Set((0, arrayDifference_1.default)(PRList, Object.keys(internalQAPRMap)))].sort((a, b) => GithubUtils.getPullRequestNumberFromURL(a) - GithubUtils.getPullRequestNumberFromURL(b));
+                const sortedPRListMobileExpensify = [...new Set(PRListMobileExpensify)].sort((a, b) => GithubUtils.getPullRequestNumberFromURL(a) - GithubUtils.getPullRequestNumberFromURL(b));
+                const sortedDeployBlockers = [...new Set(deployBlockers)].sort((a, b) => GithubUtils.getIssueOrPullRequestNumberFromURL(a) - GithubUtils.getIssueOrPullRequestNumberFromURL(b));
                 // Tag version and comparison URL
                 // eslint-disable-next-line max-len
-                var issueBody = "**Release Version:** `".concat(tag, "`\r\n**Compare Changes:** https://github.com/").concat(process.env.GITHUB_REPOSITORY, "/compare/production...staging\r\n");
+                let issueBody = `**Release Version:** \`${tag}\`\r\n**Compare Changes:** https://github.com/${process.env.GITHUB_REPOSITORY}/compare/production...staging\r\n`;
                 // Add Mobile-Expensify compare link if there are Mobile-Expensify PRs
                 if (sortedPRListMobileExpensify.length > 0) {
-                    issueBody += "**Mobile-Expensify Changes:** https://github.com/".concat(CONST_1.default.GITHUB_OWNER, "/").concat(CONST_1.default.MOBILE_EXPENSIFY_REPO, "/compare/production...staging\r\n");
+                    issueBody += `**Mobile-Expensify Changes:** https://github.com/${CONST_1.default.GITHUB_OWNER}/${CONST_1.default.MOBILE_EXPENSIFY_REPO}/compare/production...staging\r\n`;
                 }
                 issueBody += '\r\n';
                 // PR list
                 if (sortedPRList.length > 0) {
                     issueBody += '**This release contains changes from the following pull requests:**\r\n';
-                    sortedPRList.forEach(function (URL) {
+                    sortedPRList.forEach((URL) => {
                         issueBody += verifiedOrNoQAPRs.includes(URL) ? '- [x]' : '- [ ]';
-                        issueBody += " ".concat(URL, "\r\n");
+                        issueBody += ` ${URL}\r\n`;
                     });
                     issueBody += '\r\n\r\n';
                 }
                 // Mobile-Expensify PR list
                 if (sortedPRListMobileExpensify.length > 0) {
                     issueBody += '**Mobile-Expensify PRs:**\r\n';
-                    sortedPRListMobileExpensify.forEach(function (URL) {
+                    sortedPRListMobileExpensify.forEach((URL) => {
                         issueBody += verifiedOrNoQAPRs.includes(URL) ? '- [x]' : '- [ ]';
-                        issueBody += " ".concat(URL, "\r\n");
+                        issueBody += ` ${URL}\r\n`;
                     });
                     issueBody += '\r\n\r\n';
                 }
@@ -350,12 +260,12 @@ var GithubUtils = /** @class */ (function () {
                 if (!(0, isEmptyObject_1.isEmptyObject)(internalQAPRMap)) {
                     console.log('Found the following verified Internal QA PRs:', resolvedInternalQAPRs);
                     issueBody += '**Internal QA:**\r\n';
-                    Object.keys(internalQAPRMap).forEach(function (URL) {
-                        var merger = internalQAPRMap[URL];
-                        var mergerMention = "@".concat(merger);
-                        issueBody += "".concat(resolvedInternalQAPRs.includes(URL) ? '- [x]' : '- [ ]', " ");
-                        issueBody += "".concat(URL);
-                        issueBody += " - ".concat(mergerMention);
+                    Object.keys(internalQAPRMap).forEach((URL) => {
+                        const merger = internalQAPRMap[URL];
+                        const mergerMention = `@${merger}`;
+                        issueBody += `${resolvedInternalQAPRs.includes(URL) ? '- [x]' : '- [ ]'} `;
+                        issueBody += `${URL}`;
+                        issueBody += ` - ${mergerMention}`;
                         issueBody += '\r\n';
                     });
                     issueBody += '\r\n\r\n';
@@ -363,7 +273,7 @@ var GithubUtils = /** @class */ (function () {
                 // Deploy blockers
                 if (deployBlockers.length > 0) {
                     issueBody += '**Deploy Blockers:**\r\n';
-                    sortedDeployBlockers.forEach(function (URL) {
+                    sortedDeployBlockers.forEach((URL) => {
                         issueBody += resolvedDeployBlockers.includes(URL) ? '- [x] ' : '- [ ] ';
                         issueBody += URL;
                         issueBody += '\r\n';
@@ -372,24 +282,24 @@ var GithubUtils = /** @class */ (function () {
                 }
                 issueBody += '**Deployer verifications:**';
                 // eslint-disable-next-line max-len
-                issueBody += "\r\n- [".concat(isFirebaseChecked ? 'x' : ' ', "] I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/ios:com.expensify.expensifylite/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **this release version** and verified that this release does not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).");
+                issueBody += `\r\n- [${isFirebaseChecked ? 'x' : ' '}] I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/ios:com.expensify.expensifylite/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **this release version** and verified that this release does not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).`;
                 // eslint-disable-next-line max-len
-                issueBody += "\r\n- [".concat(isFirebaseChecked ? 'x' : ' ', "] I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/android:org.me.mobiexpensifyg/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **the previous release version** and verified that the release did not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).");
+                issueBody += `\r\n- [${isFirebaseChecked ? 'x' : ' '}] I checked [Firebase Crashlytics](https://console.firebase.google.com/u/0/project/expensify-mobile-app/crashlytics/app/android:org.me.mobiexpensifyg/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) for **the previous release version** and verified that the release did not introduce any new crashes. More detailed instructions on this verification can be found [here](https://stackoverflowteams.com/c/expensify/questions/15095/15096).`;
                 // eslint-disable-next-line max-len
-                issueBody += "\r\n- [".concat(isGHStatusChecked ? 'x' : ' ', "] I checked [GitHub Status](https://www.githubstatus.com/) and verified there is no reported incident with Actions.");
+                issueBody += `\r\n- [${isGHStatusChecked ? 'x' : ' '}] I checked [GitHub Status](https://www.githubstatus.com/) and verified there is no reported incident with Actions.`;
                 issueBody += '\r\n\r\ncc @Expensify/applauseleads\r\n';
-                var issueAssignees = __spreadArray([], new Set(Object.values(internalQAPRMap)), true);
-                var issue = { issueBody: issueBody, issueAssignees: issueAssignees };
+                const issueAssignees = [...new Set(Object.values(internalQAPRMap))];
+                const issue = { issueBody, issueAssignees };
                 return issue;
             });
         })
-            .catch(function (err) { return console.warn('Error generating StagingDeployCash issue body! Continuing...', err); });
-    };
+            .catch((err) => console.warn('Error generating StagingDeployCash issue body! Continuing...', err));
+    }
     /**
      * Fetch all pull requests given a list of PR numbers.
      */
-    GithubUtils.fetchAllPullRequests = function (pullRequestNumbers) {
-        var oldestPR = pullRequestNumbers.sort(function (a, b) { return a - b; }).at(0);
+    static fetchAllPullRequests(pullRequestNumbers) {
+        const oldestPR = pullRequestNumbers.sort((a, b) => a - b).at(0);
         return this.paginate(this.octokit.pulls.list, {
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
@@ -397,162 +307,153 @@ var GithubUtils = /** @class */ (function () {
             sort: 'created',
             direction: 'desc',
             per_page: 100,
-        }, function (_a, done) {
-            var data = _a.data;
-            if (data.find(function (pr) { return pr.number === oldestPR; })) {
+        }, ({ data }, done) => {
+            if (data.find((pr) => pr.number === oldestPR)) {
                 done();
             }
             return data;
         })
-            .then(function (prList) { var _a; return (_a = prList === null || prList === void 0 ? void 0 : prList.filter(function (pr) { return pullRequestNumbers.includes(pr.number); })) !== null && _a !== void 0 ? _a : []; })
-            .catch(function (err) { return console.error('Failed to get PR list', err); });
-    };
-    GithubUtils.getPullRequestMergerLogin = function (pullRequestNumber) {
+            .then((prList) => prList?.filter((pr) => pullRequestNumbers.includes(pr.number)) ?? [])
+            .catch((err) => console.error('Failed to get PR list', err));
+    }
+    static getPullRequestMergerLogin(pullRequestNumber) {
         return this.octokit.pulls
             .get({
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
             pull_number: pullRequestNumber,
         })
-            .then(function (_a) {
-            var _b;
-            var pullRequest = _a.data;
-            return (_b = pullRequest.merged_by) === null || _b === void 0 ? void 0 : _b.login;
-        });
-    };
-    GithubUtils.getPullRequestBody = function (pullRequestNumber) {
+            .then(({ data: pullRequest }) => pullRequest.merged_by?.login);
+    }
+    static getPullRequestBody(pullRequestNumber) {
         return this.octokit.pulls
             .get({
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
             pull_number: pullRequestNumber,
         })
-            .then(function (_a) {
-            var pullRequestComment = _a.data;
-            return pullRequestComment.body;
-        });
-    };
-    GithubUtils.getAllReviewComments = function (pullRequestNumber) {
+            .then(({ data: pullRequestComment }) => pullRequestComment.body);
+    }
+    static getAllReviewComments(pullRequestNumber) {
         return this.paginate(this.octokit.pulls.listReviews, {
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
             pull_number: pullRequestNumber,
             per_page: 100,
-        }, function (response) { return response.data.map(function (review) { return review.body; }); });
-    };
-    GithubUtils.getAllComments = function (issueNumber) {
+        }, (response) => response.data.map((review) => review.body));
+    }
+    static getAllComments(issueNumber) {
         return this.paginate(this.octokit.issues.listComments, {
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
             issue_number: issueNumber,
             per_page: 100,
-        }, function (response) { return response.data.map(function (comment) { return comment.body; }); });
-    };
-    GithubUtils.getAllCommentDetails = function (issueNumber) {
+        }, (response) => response.data.map((comment) => comment.body));
+    }
+    static getAllCommentDetails(issueNumber) {
         return this.paginate(this.octokit.issues.listComments, {
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
             issue_number: issueNumber,
             per_page: 100,
-        }, function (response) { return response.data; });
-    };
+        }, (response) => response.data);
+    }
     /**
      * Create comment on pull request
      */
-    GithubUtils.createComment = function (repo, number, messageBody) {
-        console.log("Writing comment on #".concat(number));
+    static createComment(repo, number, messageBody) {
+        console.log(`Writing comment on #${number}`);
         return this.octokit.issues.createComment({
             owner: CONST_1.default.GITHUB_OWNER,
-            repo: repo,
+            repo,
             issue_number: number,
             body: messageBody,
         });
-    };
+    }
     /**
      * Get the most recent workflow run for the given New Expensify workflow.
      */
     /* eslint-disable rulesdir/no-default-id-values */
-    GithubUtils.getLatestWorkflowRunID = function (workflow) {
-        console.log("Fetching New Expensify workflow runs for ".concat(workflow, "..."));
+    static getLatestWorkflowRunID(workflow) {
+        console.log(`Fetching New Expensify workflow runs for ${workflow}...`);
         return this.octokit.actions
             .listWorkflowRuns({
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
             workflow_id: workflow,
         })
-            .then(function (response) { var _a, _b; return (_b = (_a = response.data.workflow_runs.at(0)) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : -1; });
-    };
+            .then((response) => response.data.workflow_runs.at(0)?.id ?? -1);
+    }
     /**
      * List workflow runs for the repository.
      */
-    GithubUtils.listWorkflowRunsForRepo = function () {
-        return __awaiter(this, arguments, void 0, function (options) {
-            var _a;
-            if (options === void 0) { options = {}; }
-            return __generator(this, function (_b) {
-                return [2 /*return*/, this.octokit.actions.listWorkflowRunsForRepo(__assign({ owner: CONST_1.default.GITHUB_OWNER, repo: CONST_1.default.APP_REPO, per_page: (_a = options.per_page) !== null && _a !== void 0 ? _a : 50 }, (options.status && { status: options.status })))];
-            });
+    static async listWorkflowRunsForRepo(options = {}) {
+        return this.octokit.actions.listWorkflowRunsForRepo({
+            owner: CONST_1.default.GITHUB_OWNER,
+            repo: CONST_1.default.APP_REPO,
+            per_page: options.per_page ?? 50,
+            ...(options.status && { status: options.status }),
         });
-    };
+    }
     /**
      * Generate the URL of an New Expensify pull request given the PR number.
      */
-    GithubUtils.getPullRequestURLFromNumber = function (value, repositoryURL) {
-        return "".concat(repositoryURL, "/pull/").concat(value);
-    };
+    static getPullRequestURLFromNumber(value, repositoryURL) {
+        return `${repositoryURL}/pull/${value}`;
+    }
     /**
      * Parse the pull request number from a URL.
      *
      * @throws {Error} If the URL is not a valid Github Pull Request.
      */
-    GithubUtils.getPullRequestNumberFromURL = function (URL) {
-        var matches = URL.match(CONST_1.default.PULL_REQUEST_REGEX);
+    static getPullRequestNumberFromURL(URL) {
+        const matches = URL.match(CONST_1.default.PULL_REQUEST_REGEX);
         if (!Array.isArray(matches) || matches.length !== 2) {
-            throw new Error("Provided URL ".concat(URL, " is not a Github Pull Request!"));
+            throw new Error(`Provided URL ${URL} is not a Github Pull Request!`);
         }
         return Number.parseInt(matches[1], 10);
-    };
+    }
     /**
      * Parse the issue number from a URL.
      *
      * @throws {Error} If the URL is not a valid Github Issue.
      */
-    GithubUtils.getIssueNumberFromURL = function (URL) {
-        var matches = URL.match(CONST_1.default.ISSUE_REGEX);
+    static getIssueNumberFromURL(URL) {
+        const matches = URL.match(CONST_1.default.ISSUE_REGEX);
         if (!Array.isArray(matches) || matches.length !== 2) {
-            throw new Error("Provided URL ".concat(URL, " is not a Github Issue!"));
+            throw new Error(`Provided URL ${URL} is not a Github Issue!`);
         }
         return Number.parseInt(matches[1], 10);
-    };
+    }
     /**
      * Parse the issue or pull request number from a URL.
      *
      * @throws {Error} If the URL is not a valid Github Issue or Pull Request.
      */
-    GithubUtils.getIssueOrPullRequestNumberFromURL = function (URL) {
-        var matches = URL.match(CONST_1.default.ISSUE_OR_PULL_REQUEST_REGEX);
+    static getIssueOrPullRequestNumberFromURL(URL) {
+        const matches = URL.match(CONST_1.default.ISSUE_OR_PULL_REQUEST_REGEX);
         if (!Array.isArray(matches) || matches.length !== 2) {
-            throw new Error("Provided URL ".concat(URL, " is not a valid Github Issue or Pull Request!"));
+            throw new Error(`Provided URL ${URL} is not a valid Github Issue or Pull Request!`);
         }
         return Number.parseInt(matches[1], 10);
-    };
+    }
     /**
      * Return the login of the actor who closed an issue or PR. If the issue is not closed, return an empty string.
      */
-    GithubUtils.getActorWhoClosedIssue = function (issueNumber) {
+    static getActorWhoClosedIssue(issueNumber) {
         return this.paginate(this.octokit.issues.listEvents, {
             owner: CONST_1.default.GITHUB_OWNER,
             repo: CONST_1.default.APP_REPO,
             issue_number: issueNumber,
             per_page: 100,
         })
-            .then(function (events) { return events.filter(function (event) { return event.event === 'closed'; }); })
-            .then(function (closedEvents) { var _a, _b, _c; return (_c = (_b = (_a = closedEvents.at(-1)) === null || _a === void 0 ? void 0 : _a.actor) === null || _b === void 0 ? void 0 : _b.login) !== null && _c !== void 0 ? _c : ''; });
-    };
+            .then((events) => events.filter((event) => event.event === 'closed'))
+            .then((closedEvents) => closedEvents.at(-1)?.actor?.login ?? '');
+    }
     /**
      * Returns a single artifact by name. If none is found, it returns undefined.
      */
-    GithubUtils.getArtifactByName = function (artifactName) {
+    static getArtifactByName(artifactName) {
         return this.octokit.actions
             .listArtifactsForRepo({
             owner: CONST_1.default.GITHUB_OWNER,
@@ -560,12 +461,12 @@ var GithubUtils = /** @class */ (function () {
             per_page: 1,
             name: artifactName,
         })
-            .then(function (response) { return response.data.artifacts.at(0); });
-    };
+            .then((response) => response.data.artifacts.at(0));
+    }
     /**
      * Given an artifact ID, returns the download URL to a zip file containing the artifact.
      */
-    GithubUtils.getArtifactDownloadURL = function (artifactId) {
+    static getArtifactDownloadURL(artifactId) {
         return this.octokit.actions
             .downloadArtifact({
             owner: CONST_1.default.GITHUB_OWNER,
@@ -573,114 +474,85 @@ var GithubUtils = /** @class */ (function () {
             artifact_id: artifactId,
             archive_format: 'zip',
         })
-            .then(function (response) { return response.url; });
-    };
+            .then((response) => response.url);
+    }
     /**
      * Get the contents of a file from the API at a given ref as a string.
      */
-    GithubUtils.getFileContents = function (path_1) {
-        return __awaiter(this, arguments, void 0, function (path, ref) {
-            var data;
-            if (ref === void 0) { ref = 'main'; }
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.octokit.repos.getContent({
-                            owner: CONST_1.default.GITHUB_OWNER,
-                            repo: CONST_1.default.APP_REPO,
-                            path: path,
-                            ref: ref,
-                        })];
-                    case 1:
-                        data = (_a.sent()).data;
-                        if (Array.isArray(data)) {
-                            throw new Error("Provided path ".concat(path, " refers to a directory, not a file"));
-                        }
-                        if (!('content' in data)) {
-                            throw new Error("Provided path ".concat(path, " is invalid"));
-                        }
-                        return [2 /*return*/, Buffer.from(data.content, 'base64').toString('utf8')];
-                }
-            });
+    static async getFileContents(path, ref = 'main') {
+        const { data } = await this.octokit.repos.getContent({
+            owner: CONST_1.default.GITHUB_OWNER,
+            repo: CONST_1.default.APP_REPO,
+            path,
+            ref,
         });
-    };
+        if (Array.isArray(data)) {
+            throw new Error(`Provided path ${path} refers to a directory, not a file`);
+        }
+        if (!('content' in data)) {
+            throw new Error(`Provided path ${path} is invalid`);
+        }
+        return Buffer.from(data.content, 'base64').toString('utf8');
+    }
     /**
      * Get commits between two tags via the GitHub API
      */
-    GithubUtils.getCommitHistoryBetweenTags = function (fromTag, toTag, repositoryName) {
-        return __awaiter(this, void 0, void 0, function () {
-            var allCommits, page, perPage, hasMorePages, response, totalCommits, error_1;
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        console.log('Getting pull requests merged between the following tags:', fromTag, toTag);
-                        core.startGroup('Fetching paginated commits:');
-                        _c.label = 1;
-                    case 1:
-                        _c.trys.push([1, 5, , 6]);
-                        allCommits = [];
-                        page = 1;
-                        perPage = 250;
-                        hasMorePages = true;
-                        _c.label = 2;
-                    case 2:
-                        if (!hasMorePages) return [3 /*break*/, 4];
-                        core.info("\uD83D\uDCC4 Fetching page ".concat(page, " of commits..."));
-                        return [4 /*yield*/, this.octokit.repos.compareCommits({
-                                owner: CONST_1.default.GITHUB_OWNER,
-                                repo: repositoryName,
-                                base: fromTag,
-                                head: toTag,
-                                per_page: perPage,
-                                page: page,
-                            })];
-                    case 3:
-                        response = _c.sent();
-                        // Check if we got a proper response with commits
-                        if (((_a = response.data) === null || _a === void 0 ? void 0 : _a.commits) && Array.isArray(response.data.commits)) {
-                            if (page === 1) {
-                                core.info("\uD83D\uDCCA Total commits: ".concat((_b = response.data.total_commits) !== null && _b !== void 0 ? _b : 'unknown'));
-                            }
-                            core.info("\u2705 compareCommits API returned ".concat(response.data.commits.length, " commits for page ").concat(page));
-                            allCommits = allCommits.concat(response.data.commits);
-                            totalCommits = response.data.total_commits;
-                            if (response.data.commits.length < perPage || (totalCommits && allCommits.length >= totalCommits)) {
-                                hasMorePages = false;
-                            }
-                            else {
-                                page++;
-                            }
-                        }
-                        else {
-                            core.warning('⚠️ GitHub API returned unexpected response format');
-                            hasMorePages = false;
-                        }
-                        return [3 /*break*/, 2];
-                    case 4:
-                        core.info("\uD83C\uDF89 Successfully fetched ".concat(allCommits.length, " total commits"));
-                        core.endGroup();
-                        console.log('');
-                        return [2 /*return*/, allCommits.map(function (commit) {
-                                var _a, _b;
-                                return ({
-                                    commit: commit.sha,
-                                    subject: commit.commit.message,
-                                    authorName: (_b = (_a = commit.commit.author) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : 'Unknown',
-                                });
-                            })];
-                    case 5:
-                        error_1 = _c.sent();
-                        if (error_1 instanceof request_error_1.RequestError && error_1.status === 404) {
-                            core.error("\u2753\u2753 Failed to get commits with the GitHub API. The base tag ('".concat(fromTag, "') or head tag ('").concat(toTag, "') likely doesn't exist on the remote repository. If this is the case, create or push them."));
-                        }
-                        core.endGroup();
-                        console.log('');
-                        throw error_1;
-                    case 6: return [2 /*return*/];
+    static async getCommitHistoryBetweenTags(fromTag, toTag, repositoryName) {
+        console.log('Getting pull requests merged between the following tags:', fromTag, toTag);
+        core.startGroup('Fetching paginated commits:');
+        try {
+            let allCommits = [];
+            let page = 1;
+            const perPage = 250;
+            let hasMorePages = true;
+            while (hasMorePages) {
+                core.info(`📄 Fetching page ${page} of commits...`);
+                const response = await this.octokit.repos.compareCommits({
+                    owner: CONST_1.default.GITHUB_OWNER,
+                    repo: repositoryName,
+                    base: fromTag,
+                    head: toTag,
+                    per_page: perPage,
+                    page,
+                });
+                // Check if we got a proper response with commits
+                if (response.data?.commits && Array.isArray(response.data.commits)) {
+                    if (page === 1) {
+                        core.info(`📊 Total commits: ${response.data.total_commits ?? 'unknown'}`);
+                    }
+                    core.info(`✅ compareCommits API returned ${response.data.commits.length} commits for page ${page}`);
+                    allCommits = allCommits.concat(response.data.commits);
+                    // Check if we got fewer commits than requested or if we've reached the total
+                    const totalCommits = response.data.total_commits;
+                    if (response.data.commits.length < perPage || (totalCommits && allCommits.length >= totalCommits)) {
+                        hasMorePages = false;
+                    }
+                    else {
+                        page++;
+                    }
                 }
-            });
-        });
-    };
-    return GithubUtils;
-}());
+                else {
+                    core.warning('⚠️ GitHub API returned unexpected response format');
+                    hasMorePages = false;
+                }
+            }
+            core.info(`🎉 Successfully fetched ${allCommits.length} total commits`);
+            core.endGroup();
+            console.log('');
+            return allCommits.map((commit) => ({
+                commit: commit.sha,
+                subject: commit.commit.message,
+                authorName: commit.commit.author?.name ?? 'Unknown',
+            }));
+        }
+        catch (error) {
+            if (error instanceof request_error_1.RequestError && error.status === 404) {
+                core.error(`❓❓ Failed to get commits with the GitHub API. The base tag ('${fromTag}') or head tag ('${toTag}') likely doesn't exist on the remote repository. If this is the case, create or push them.`);
+            }
+            core.endGroup();
+            console.log('');
+            throw error;
+        }
+    }
+}
 exports.default = GithubUtils;

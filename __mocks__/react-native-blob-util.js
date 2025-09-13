@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ReactNativeBlobUtilMock = {};
+const ReactNativeBlobUtilMock = {};
 exports.default = ReactNativeBlobUtilMock;

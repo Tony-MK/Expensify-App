@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_svg_1 = require("react-native-svg");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
-var SkeletonViewContentLoader_1 = require("./SkeletonViewContentLoader");
-function ReportHeaderSkeletonView(_a) {
-    var _b = _a.shouldAnimate, shouldAnimate = _b === void 0 ? true : _b, _c = _a.onBackButtonPress, onBackButtonPress = _c === void 0 ? function () { } : _c;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var height = styles.headerBarHeight.height;
-    var radius = 20;
-    var circleY = height / 2;
-    var circleTopY = circleY - radius;
-    var circleBottomY = circleY + radius;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_svg_1 = require("react-native-svg");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const PressableWithFeedback_1 = require("./Pressable/PressableWithFeedback");
+const SkeletonViewContentLoader_1 = require("./SkeletonViewContentLoader");
+function ReportHeaderSkeletonView({ shouldAnimate = true, onBackButtonPress = () => { } }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const height = styles.headerBarHeight.height;
+    const radius = 20;
+    const circleY = height / 2;
+    const circleTopY = circleY - radius;
+    const circleBottomY = circleY + radius;
     return (<react_native_1.View style={[styles.appContentHeader, shouldUseNarrowLayout && styles.pl2, styles.h100]}>
             <react_native_1.View style={[styles.appContentHeaderTitle, !shouldUseNarrowLayout && styles.pl5]}>
                 {shouldUseNarrowLayout && (<PressableWithFeedback_1.default onPress={onBackButtonPress} style={[styles.touchableButtonImage]} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('common.back')}>

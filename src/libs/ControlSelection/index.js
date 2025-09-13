@@ -22,7 +22,7 @@ function blockElement(element) {
         return;
     }
     // eslint-disable-next-line no-param-reassign
-    element.onselectstart = function () { return false; };
+    element.onselectstart = () => false;
 }
 /**
  * Unblock selection on particular element
@@ -32,12 +32,12 @@ function unblockElement(element) {
         return;
     }
     // eslint-disable-next-line no-param-reassign
-    element.onselectstart = function () { return true; };
+    element.onselectstart = () => true;
 }
-var ControlSelection = {
-    block: block,
-    unblock: unblock,
-    blockElement: blockElement,
-    unblockElement: unblockElement,
+const ControlSelection = {
+    block,
+    unblock,
+    blockElement,
+    unblockElement,
 };
 exports.default = ControlSelection;

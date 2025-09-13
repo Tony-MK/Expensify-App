@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useSidePanel_1 = require("@hooks/useSidePanel");
-var HelpModal_1 = require("./HelpModal");
-var useSyncSidePanelWithHistory_1 = require("./useSyncSidePanelWithHistory");
+const react_1 = require("react");
+const useSidePanel_1 = require("@hooks/useSidePanel");
+const HelpModal_1 = require("./HelpModal");
+const useSyncSidePanelWithHistory_1 = require("./useSyncSidePanelWithHistory");
 function SidePanel() {
-    var _a = (0, useSidePanel_1.default)(), sidePanelNVP = _a.sidePanelNVP, isSidePanelTransitionEnded = _a.isSidePanelTransitionEnded, shouldHideSidePanel = _a.shouldHideSidePanel, sidePanelTranslateX = _a.sidePanelTranslateX, shouldHideSidePanelBackdrop = _a.shouldHideSidePanelBackdrop, closeSidePanel = _a.closeSidePanel;
+    const { sidePanelNVP, isSidePanelTransitionEnded, shouldHideSidePanel, sidePanelTranslateX, shouldHideSidePanelBackdrop, closeSidePanel } = (0, useSidePanel_1.default)();
     // Hide side panel once animation ends
     // This hook synchronizes the side panel visibility with the browser history when it is displayed as RHP.
     // This means when you open or close the side panel, an entry connected with it is added to or removed from the browser history,

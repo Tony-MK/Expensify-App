@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const CONST_1 = require("@src/CONST");
 function ShortTermsForm(props) {
-    var _a;
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = (0, useLocalize_1.default)(), translate = _b.translate, numberFormat = _b.numberFormat;
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate, numberFormat } = (0, useLocalize_1.default)();
     return (<>
             <Text_1.default style={[styles.mb5, styles.textSupporting]}>
                 {translate('termsStep.shortTermsForm.expensifyPaymentsAccount', {
-            walletProgram: props.userWallet && ((_a = props.userWallet) === null || _a === void 0 ? void 0 : _a.walletProgramID) === CONST_1.default.WALLET.BANCORP_WALLET_PROGRAM_ID
+            walletProgram: props.userWallet && props.userWallet?.walletProgramID === CONST_1.default.WALLET.BANCORP_WALLET_PROGRAM_ID
                 ? CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK
                 : CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS,
         })}

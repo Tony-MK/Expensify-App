@@ -6,7 +6,7 @@ exports.default = default_1;
  * It should not be necessary, except that our Jest config mangles imports.
  */
 function default_1(module) {
-    var topLevelDefault = module.default;
+    const topLevelDefault = module.default;
     if (topLevelDefault && typeof topLevelDefault === 'object' && 'default' in topLevelDefault) {
         return topLevelDefault.default;
     }

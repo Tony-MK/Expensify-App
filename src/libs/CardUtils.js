@@ -1,15 +1,4 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCorrectStepForSelectedBank = exports.getBankCardDetailsImage = exports.isCurrencySupportedForECards = void 0;
 exports.getAssignedCardSortKey = getAssignedCardSortKey;
@@ -62,17 +51,17 @@ exports.getPlaidInstitutionId = getPlaidInstitutionId;
 exports.getFeedConnectionBrokenCard = getFeedConnectionBrokenCard;
 exports.getCorrectStepForPlaidSelectedBank = getCorrectStepForPlaidSelectedBank;
 exports.getEligibleBankAccountsForUkEuCard = getEligibleBankAccountsForUkEuCard;
-var date_fns_1 = require("date-fns");
-var groupBy_1 = require("lodash/groupBy");
-var expensify_card_svg_1 = require("@assets/images/expensify-card.svg");
-var Illustrations = require("@src/components/Icon/Illustrations");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var Localize_1 = require("./Localize");
-var ObjectUtils_1 = require("./ObjectUtils");
-var PersonalDetailsUtils_1 = require("./PersonalDetailsUtils");
-var StringUtils_1 = require("./StringUtils");
+const date_fns_1 = require("date-fns");
+const groupBy_1 = require("lodash/groupBy");
+const expensify_card_svg_1 = require("@assets/images/expensify-card.svg");
+const Illustrations = require("@src/components/Icon/Illustrations");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const Localize_1 = require("./Localize");
+const ObjectUtils_1 = require("./ObjectUtils");
+const PersonalDetailsUtils_1 = require("./PersonalDetailsUtils");
+const StringUtils_1 = require("./StringUtils");
 /**
  * @returns string with a month in MM format
  */
@@ -90,11 +79,10 @@ function getMonthFromExpirationDateString(expirationDateString) {
  * @returns number
  */
 function getAssignedCardSortKey(card) {
-    var _a;
     if (!isExpensifyCard(card)) {
         return 2;
     }
-    return ((_a = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _a === void 0 ? void 0 : _a.isVirtual) ? 1 : 0;
+    return card?.nameValuePairs?.isVirtual ? 1 : 0;
 }
 /**
  * @param card
@@ -114,11 +102,11 @@ function getCardDescription(card) {
     if (!card) {
         return '';
     }
-    var isPlaid = !!getPlaidInstitutionId(card.bank);
-    var bankName = isPlaid ? card === null || card === void 0 ? void 0 : card.cardName : getBankName(card.bank);
-    var cardDescriptor = card.state === CONST_1.default.EXPENSIFY_CARD.STATE.NOT_ACTIVATED ? (0, Localize_1.translateLocal)('cardTransactions.notActivated') : card.lastFourPAN;
-    var humanReadableBankName = card.bank === CONST_1.default.EXPENSIFY_CARD.BANK ? CONST_1.default.EXPENSIFY_CARD.BANK : bankName;
-    return cardDescriptor && !isPlaid ? "".concat(humanReadableBankName, " - ").concat(cardDescriptor) : "".concat(humanReadableBankName);
+    const isPlaid = !!getPlaidInstitutionId(card.bank);
+    const bankName = isPlaid ? card?.cardName : getBankName(card.bank);
+    const cardDescriptor = card.state === CONST_1.default.EXPENSIFY_CARD.STATE.NOT_ACTIVATED ? (0, Localize_1.translateLocal)('cardTransactions.notActivated') : card.lastFourPAN;
+    const humanReadableBankName = card.bank === CONST_1.default.EXPENSIFY_CARD.BANK ? CONST_1.default.EXPENSIFY_CARD.BANK : bankName;
+    return cardDescriptor && !isPlaid ? `${humanReadableBankName} - ${cardDescriptor}` : `${humanReadableBankName}`;
 }
 /**
  * @param transactionCardName
@@ -127,33 +115,31 @@ function getCardDescription(card) {
  * @returns company card name
  */
 function getCompanyCardDescription(transactionCardName, cardID, cards) {
-    if (!cardID || !(cards === null || cards === void 0 ? void 0 : cards[cardID]) || isExpensifyCard(cards[cardID])) {
+    if (!cardID || !cards?.[cardID] || isExpensifyCard(cards[cardID])) {
         return transactionCardName;
     }
-    var card = cards[cardID];
+    const card = cards[cardID];
     return card.cardName;
 }
 function isCard(item) {
     return typeof item === 'object' && 'cardID' in item && !!item.cardID && 'bank' in item && !!item.bank;
 }
 function isCardHiddenFromSearch(card) {
-    var _a, _b;
-    return !((_a = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _a === void 0 ? void 0 : _a.isVirtual) && CONST_1.default.EXPENSIFY_CARD.HIDDEN_FROM_SEARCH_STATES.includes((_b = card.state) !== null && _b !== void 0 ? _b : 0);
+    return !card?.nameValuePairs?.isVirtual && CONST_1.default.EXPENSIFY_CARD.HIDDEN_FROM_SEARCH_STATES.includes(card.state ?? 0);
 }
 function isCardClosed(card) {
-    return (card === null || card === void 0 ? void 0 : card.state) === CONST_1.default.EXPENSIFY_CARD.STATE.CLOSED;
+    return card?.state === CONST_1.default.EXPENSIFY_CARD.STATE.CLOSED;
 }
-function mergeCardListWithWorkspaceFeeds(workspaceFeeds, cardList, shouldExcludeCardHiddenFromSearch) {
-    if (shouldExcludeCardHiddenFromSearch === void 0) { shouldExcludeCardHiddenFromSearch = false; }
-    var feedCards = {};
-    Object.values(cardList !== null && cardList !== void 0 ? cardList : {}).forEach(function (card) {
+function mergeCardListWithWorkspaceFeeds(workspaceFeeds, cardList, shouldExcludeCardHiddenFromSearch = false) {
+    const feedCards = {};
+    Object.values(cardList ?? {}).forEach((card) => {
         if (!isCard(card) || (shouldExcludeCardHiddenFromSearch && isCardHiddenFromSearch(card))) {
             return;
         }
         feedCards[card.cardID] = card;
     });
-    Object.values(workspaceFeeds !== null && workspaceFeeds !== void 0 ? workspaceFeeds : {}).forEach(function (currentCardFeed) {
-        Object.values(currentCardFeed !== null && currentCardFeed !== void 0 ? currentCardFeed : {}).forEach(function (card) {
+    Object.values(workspaceFeeds ?? {}).forEach((currentCardFeed) => {
+        Object.values(currentCardFeed ?? {}).forEach((card) => {
             if (!isCard(card) || (shouldExcludeCardHiddenFromSearch && isCardHiddenFromSearch(card))) {
                 return;
             }
@@ -166,22 +152,22 @@ function mergeCardListWithWorkspaceFeeds(workspaceFeeds, cardList, shouldExclude
  * @returns string with a year in YY or YYYY format
  */
 function getYearFromExpirationDateString(expirationDateString) {
-    var stringContainsNumbersOnly = /^\d+$/.test(expirationDateString);
-    var cardYear = stringContainsNumbersOnly ? expirationDateString.substring(2) : expirationDateString.substring(3);
-    return cardYear.length === 2 ? "20".concat(cardYear) : cardYear;
+    const stringContainsNumbersOnly = /^\d+$/.test(expirationDateString);
+    const cardYear = stringContainsNumbersOnly ? expirationDateString.substring(2) : expirationDateString.substring(3);
+    return cardYear.length === 2 ? `20${cardYear}` : cardYear;
 }
 /**
  * @returns string with a month in MM/YYYY format
  */
 function formatCardExpiration(expirationDateString) {
     // already matches MM/YYYY format
-    var dateFormat = /^\d{2}\/\d{4}$/;
+    const dateFormat = /^\d{2}\/\d{4}$/;
     if (dateFormat.test(expirationDateString)) {
         return expirationDateString;
     }
-    var expirationMonth = getMonthFromExpirationDateString(expirationDateString);
-    var expirationYear = getYearFromExpirationDateString(expirationDateString);
-    return "".concat(expirationMonth, "/").concat(expirationYear);
+    const expirationMonth = getMonthFromExpirationDateString(expirationDateString);
+    const expirationYear = getYearFromExpirationDateString(expirationDateString);
+    return `${expirationMonth}/${expirationYear}`;
 }
 /**
  * @param cardList - collection of assigned cards
@@ -189,8 +175,8 @@ function formatCardExpiration(expirationDateString) {
  */
 function getDomainCards(cardList) {
     // Check for domainName to filter out personal credit cards.
-    var activeCards = Object.values(cardList !== null && cardList !== void 0 ? cardList : {}).filter(function (card) { return !!(card === null || card === void 0 ? void 0 : card.domainName) && CONST_1.default.EXPENSIFY_CARD.ACTIVE_STATES.some(function (element) { return element === card.state; }); });
-    return (0, groupBy_1.default)(activeCards, function (card) { return card.domainName; });
+    const activeCards = Object.values(cardList ?? {}).filter((card) => !!card?.domainName && CONST_1.default.EXPENSIFY_CARD.ACTIVE_STATES.some((element) => element === card.state));
+    return (0, groupBy_1.default)(activeCards, (card) => card.domainName);
 }
 /**
  * Returns a masked credit card string with spaces for every four symbols.
@@ -200,12 +186,11 @@ function getDomainCards(cardList) {
  * @param [lastFour=""] - The last four digits of the card (optional).
  * @returns - The masked card string.
  */
-function maskCard(lastFour) {
-    if (lastFour === void 0) { lastFour = ''; }
-    var totalDigits = 16;
-    var maskedLength = totalDigits - lastFour.length;
+function maskCard(lastFour = '') {
+    const totalDigits = 16;
+    const maskedLength = totalDigits - lastFour.length;
     // Create a string with '•' repeated for the masked portion
-    var maskedString = '•'.repeat(maskedLength) + lastFour;
+    const maskedString = '•'.repeat(maskedLength) + lastFour;
     // Insert space for every four symbols
     return maskedString.replace(/(.{4})/g, '$1 ').trim();
 }
@@ -222,9 +207,9 @@ function maskCardNumber(cardName, feed, showOriginalName) {
     if (!cardName || cardName === '') {
         return '';
     }
-    var hasSpace = /\s/.test(cardName);
-    var maskedString = cardName.replace(/X/g, '•');
-    var isAmexBank = [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_DIRECT].some(function (value) { return value === feed; });
+    const hasSpace = /\s/.test(cardName);
+    const maskedString = cardName.replace(/X/g, '•');
+    const isAmexBank = [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_DIRECT].some((value) => value === feed);
     if (hasSpace) {
         if (showOriginalName) {
             return cardName;
@@ -243,9 +228,9 @@ function maskCardNumber(cardName, feed, showOriginalName) {
  * @returns - Last 4 numbers
  */
 function lastFourNumbersFromCardName(cardName) {
-    var name = cardName !== null && cardName !== void 0 ? cardName : '';
-    var hasSpace = /\s/.test(name);
-    var match = name.match(/(\d{4})$/);
+    const name = cardName ?? '';
+    const hasSpace = /\s/.test(name);
+    const match = name.match(/(\d{4})$/);
     if (!cardName || cardName === '' || !hasSpace || !match) {
         return '';
     }
@@ -266,8 +251,7 @@ function getTranslationKeyForLimitType(limitType) {
             return '';
     }
 }
-function maskPin(pin) {
-    if (pin === void 0) { pin = ''; }
+function maskPin(pin = '') {
     if (!pin) {
         return '••••';
     }
@@ -277,66 +261,60 @@ function getEligibleBankAccountsForCard(bankAccountsList) {
     if (!bankAccountsList || (0, EmptyObject_1.isEmptyObject)(bankAccountsList)) {
         return [];
     }
-    return Object.values(bankAccountsList).filter(function (bankAccount) { var _a, _b; return ((_a = bankAccount === null || bankAccount === void 0 ? void 0 : bankAccount.accountData) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS && ((_b = bankAccount === null || bankAccount === void 0 ? void 0 : bankAccount.accountData) === null || _b === void 0 ? void 0 : _b.allowDebit); });
+    return Object.values(bankAccountsList).filter((bankAccount) => bankAccount?.accountData?.type === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS && bankAccount?.accountData?.allowDebit);
 }
 function getEligibleBankAccountsForUkEuCard(bankAccountsList, outputCurrency) {
     if (!bankAccountsList || (0, EmptyObject_1.isEmptyObject)(bankAccountsList)) {
         return [];
     }
-    return Object.values(bankAccountsList).filter(function (bankAccount) {
-        var _a, _b;
-        return ((_a = bankAccount === null || bankAccount === void 0 ? void 0 : bankAccount.accountData) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS &&
-            ((_b = bankAccount === null || bankAccount === void 0 ? void 0 : bankAccount.accountData) === null || _b === void 0 ? void 0 : _b.allowDebit) &&
-            (bankAccount === null || bankAccount === void 0 ? void 0 : bankAccount.bankCurrency) === outputCurrency &&
-            CONST_1.default.EXPENSIFY_UK_EU_SUPPORTED_COUNTRIES.includes(bankAccount === null || bankAccount === void 0 ? void 0 : bankAccount.bankCountry);
-    });
+    return Object.values(bankAccountsList).filter((bankAccount) => bankAccount?.accountData?.type === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS &&
+        bankAccount?.accountData?.allowDebit &&
+        bankAccount?.bankCurrency === outputCurrency &&
+        CONST_1.default.EXPENSIFY_UK_EU_SUPPORTED_COUNTRIES.includes(bankAccount?.bankCountry));
 }
 function getCardsByCardholderName(cardsList, policyMembersAccountIDs) {
-    var _a = cardsList !== null && cardsList !== void 0 ? cardsList : {}, cardList = _a.cardList, cards = __rest(_a, ["cardList"]);
-    return Object.values(cards).filter(function (card) { return card.accountID && policyMembersAccountIDs.includes(card.accountID); });
+    const { cardList, ...cards } = cardsList ?? {};
+    return Object.values(cards).filter((card) => card.accountID && policyMembersAccountIDs.includes(card.accountID));
 }
 function sortCardsByCardholderName(cards, personalDetails, localeCompare) {
-    return cards.sort(function (cardA, cardB) {
-        var _a, _b;
-        var userA = cardA.accountID ? ((_a = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[cardA.accountID]) !== null && _a !== void 0 ? _a : {}) : {};
-        var userB = cardB.accountID ? ((_b = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[cardB.accountID]) !== null && _b !== void 0 ? _b : {}) : {};
-        var aName = (0, PersonalDetailsUtils_1.getDisplayNameOrDefault)(userA);
-        var bName = (0, PersonalDetailsUtils_1.getDisplayNameOrDefault)(userB);
+    return cards.sort((cardA, cardB) => {
+        const userA = cardA.accountID ? (personalDetails?.[cardA.accountID] ?? {}) : {};
+        const userB = cardB.accountID ? (personalDetails?.[cardB.accountID] ?? {}) : {};
+        const aName = (0, PersonalDetailsUtils_1.getDisplayNameOrDefault)(userA);
+        const bName = (0, PersonalDetailsUtils_1.getDisplayNameOrDefault)(userB);
         return localeCompare(aName, bName);
     });
 }
 function filterCardsByPersonalDetails(card, searchQuery, personalDetails) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
-    var normalizedSearchQuery = StringUtils_1.default.normalize(searchQuery.toLowerCase());
-    var cardTitle = StringUtils_1.default.normalize((_c = (_b = (_a = card.nameValuePairs) === null || _a === void 0 ? void 0 : _a.cardTitle) === null || _b === void 0 ? void 0 : _b.toLowerCase()) !== null && _c !== void 0 ? _c : '');
-    var lastFourPAN = StringUtils_1.default.normalize((_e = (_d = card === null || card === void 0 ? void 0 : card.lastFourPAN) === null || _d === void 0 ? void 0 : _d.toLowerCase()) !== null && _e !== void 0 ? _e : '');
-    var accountLogin = StringUtils_1.default.normalize((_j = (_h = (_g = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[(_f = card.accountID) !== null && _f !== void 0 ? _f : CONST_1.default.DEFAULT_NUMBER_ID]) === null || _g === void 0 ? void 0 : _g.login) === null || _h === void 0 ? void 0 : _h.toLowerCase()) !== null && _j !== void 0 ? _j : '');
-    var accountName = StringUtils_1.default.normalize((_o = (_m = (_l = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[(_k = card.accountID) !== null && _k !== void 0 ? _k : CONST_1.default.DEFAULT_NUMBER_ID]) === null || _l === void 0 ? void 0 : _l.displayName) === null || _m === void 0 ? void 0 : _m.toLowerCase()) !== null && _o !== void 0 ? _o : '');
+    const normalizedSearchQuery = StringUtils_1.default.normalize(searchQuery.toLowerCase());
+    const cardTitle = StringUtils_1.default.normalize(card.nameValuePairs?.cardTitle?.toLowerCase() ?? '');
+    const lastFourPAN = StringUtils_1.default.normalize(card?.lastFourPAN?.toLowerCase() ?? '');
+    const accountLogin = StringUtils_1.default.normalize(personalDetails?.[card.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID]?.login?.toLowerCase() ?? '');
+    const accountName = StringUtils_1.default.normalize(personalDetails?.[card.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID]?.displayName?.toLowerCase() ?? '');
     return (cardTitle.includes(normalizedSearchQuery) ||
         lastFourPAN.includes(normalizedSearchQuery) ||
         accountLogin.includes(normalizedSearchQuery) ||
         accountName.includes(normalizedSearchQuery));
 }
 function getCardFeedIcon(cardFeed, illustrations) {
-    var _a;
-    var feedIcons = (_a = {},
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA] = Illustrations.VisaCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX] = Illustrations.AmexCardCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_1205] = Illustrations.AmexCardCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_FILE_DOWNLOAD] = Illustrations.AmexCardCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD] = Illustrations.MasterCardCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_DIRECT] = Illustrations.AmexCardCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BANK_OF_AMERICA] = Illustrations.BankOfAmericaCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CAPITAL_ONE] = Illustrations.CapitalOneCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CHASE] = Illustrations.ChaseCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CITIBANK] = Illustrations.CitibankCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.WELLS_FARGO] = Illustrations.WellsFargoCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BREX] = Illustrations.BrexCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE] = Illustrations.StripeCompanyCardDetailLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CSV] = illustrations.GenericCSVCompanyCardLarge,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.PEX] = illustrations.GenericCompanyCardLarge,
-        _a[CONST_1.default.EXPENSIFY_CARD.BANK] = expensify_card_svg_1.default,
-        _a);
+    const feedIcons = {
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA]: Illustrations.VisaCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX]: Illustrations.AmexCardCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_1205]: Illustrations.AmexCardCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_FILE_DOWNLOAD]: Illustrations.AmexCardCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD]: Illustrations.MasterCardCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_DIRECT]: Illustrations.AmexCardCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BANK_OF_AMERICA]: Illustrations.BankOfAmericaCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CAPITAL_ONE]: Illustrations.CapitalOneCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CHASE]: Illustrations.ChaseCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CITIBANK]: Illustrations.CitibankCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.WELLS_FARGO]: Illustrations.WellsFargoCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BREX]: Illustrations.BrexCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE]: Illustrations.StripeCompanyCardDetailLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CSV]: illustrations.GenericCSVCompanyCardLarge,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.PEX]: illustrations.GenericCompanyCardLarge,
+        [CONST_1.default.EXPENSIFY_CARD.BANK]: expensify_card_svg_1.default,
+    };
     if (cardFeed.startsWith(CONST_1.default.EXPENSIFY_CARD.BANK)) {
         return expensify_card_svg_1.default;
     }
@@ -344,7 +322,7 @@ function getCardFeedIcon(cardFeed, illustrations) {
         return feedIcons[cardFeed];
     }
     // In existing OldDot setups other variations of feeds could exist, ex: vcf2, vcf3, cdfbmo
-    var feedKey = Object.keys(feedIcons).find(function (feed) { return cardFeed.startsWith(feed); });
+    const feedKey = Object.keys(feedIcons).find((feed) => cardFeed.startsWith(feed));
     if (feedKey) {
         return feedIcons[feedKey];
     }
@@ -357,14 +335,10 @@ function getCardFeedIcon(cardFeed, illustrations) {
  * Verify if the feed is a custom feed. Those are also referred to as commercial feeds.
  */
 function isCustomFeed(feed) {
-    return [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX].some(function (value) { return feed.startsWith(value); });
+    return [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX].some((value) => feed.startsWith(value));
 }
-function getCompanyFeeds(cardFeeds, shouldFilterOutRemovedFeeds, shouldFilterOutPendingFeeds) {
-    var _a, _b;
-    if (shouldFilterOutRemovedFeeds === void 0) { shouldFilterOutRemovedFeeds = false; }
-    if (shouldFilterOutPendingFeeds === void 0) { shouldFilterOutPendingFeeds = false; }
-    return Object.fromEntries(Object.entries((_b = (_a = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _a === void 0 ? void 0 : _a.companyCards) !== null && _b !== void 0 ? _b : {}).filter(function (_a) {
-        var key = _a[0], value = _a[1];
+function getCompanyFeeds(cardFeeds, shouldFilterOutRemovedFeeds = false, shouldFilterOutPendingFeeds = false) {
+    return Object.fromEntries(Object.entries(cardFeeds?.settings?.companyCards ?? {}).filter(([key, value]) => {
         if (shouldFilterOutRemovedFeeds && value.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE) {
             return false;
         }
@@ -375,26 +349,25 @@ function getCompanyFeeds(cardFeeds, shouldFilterOutRemovedFeeds, shouldFilterOut
     }));
 }
 function getBankName(feedType) {
-    var _a;
-    var feedNamesMapping = (_a = {},
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA] = 'Visa',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD] = 'Mastercard',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX] = 'American Express',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE] = 'Stripe',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_DIRECT] = 'American Express',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BANK_OF_AMERICA] = 'Bank of America',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CAPITAL_ONE] = 'Capital One',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CHASE] = 'Chase',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CITIBANK] = 'Citibank',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.WELLS_FARGO] = 'Wells Fargo',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BREX] = 'Brex',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CSV] = CONST_1.default.COMPANY_CARDS.CARD_TYPE.CSV,
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_1205] = 'American Express',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_FILE_DOWNLOAD] = 'American Express',
-        _a[CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.PEX] = 'PEX',
-        _a);
+    const feedNamesMapping = {
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA]: 'Visa',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD]: 'Mastercard',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX]: 'American Express',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE]: 'Stripe',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_DIRECT]: 'American Express',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BANK_OF_AMERICA]: 'Bank of America',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CAPITAL_ONE]: 'Capital One',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CHASE]: 'Chase',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CITIBANK]: 'Citibank',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.WELLS_FARGO]: 'Wells Fargo',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.BREX]: 'Brex',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CSV]: CONST_1.default.COMPANY_CARDS.CARD_TYPE.CSV,
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_1205]: 'American Express',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX_FILE_DOWNLOAD]: 'American Express',
+        [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.PEX]: 'PEX',
+    };
     // In existing OldDot setups other variations of feeds could exist, ex: vcf2, vcf3, oauth.americanexpressfdx.com 2003
-    var feedKey = Object.keys(feedNamesMapping).find(function (feed) { return feedType.startsWith(feed); });
+    const feedKey = Object.keys(feedNamesMapping).find((feed) => feedType.startsWith(feed));
     if (feedType.includes(CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.CSV)) {
         return CONST_1.default.COMPANY_CARDS.CARD_TYPE.CSV;
     }
@@ -403,47 +376,45 @@ function getBankName(feedType) {
     }
     return feedNamesMapping[feedKey];
 }
-var getBankCardDetailsImage = function (bank, illustrations) {
-    var _a;
-    var iconMap = (_a = {},
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.AMEX] = Illustrations.AmexCardCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.BANK_OF_AMERICA] = Illustrations.BankOfAmericaCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.CAPITAL_ONE] = Illustrations.CapitalOneCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.CHASE] = Illustrations.ChaseCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.CITI_BANK] = Illustrations.CitibankCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.WELLS_FARGO] = Illustrations.WellsFargoCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.BREX] = Illustrations.BrexCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.STRIPE] = Illustrations.StripeCompanyCardDetail,
-        _a[CONST_1.default.COMPANY_CARDS.BANKS.OTHER] = illustrations.GenericCompanyCard,
-        _a);
+const getBankCardDetailsImage = (bank, illustrations) => {
+    const iconMap = {
+        [CONST_1.default.COMPANY_CARDS.BANKS.AMEX]: Illustrations.AmexCardCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.BANK_OF_AMERICA]: Illustrations.BankOfAmericaCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.CAPITAL_ONE]: Illustrations.CapitalOneCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.CHASE]: Illustrations.ChaseCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.CITI_BANK]: Illustrations.CitibankCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.WELLS_FARGO]: Illustrations.WellsFargoCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.BREX]: Illustrations.BrexCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.STRIPE]: Illustrations.StripeCompanyCardDetail,
+        [CONST_1.default.COMPANY_CARDS.BANKS.OTHER]: illustrations.GenericCompanyCard,
+    };
     return iconMap[bank];
 };
 exports.getBankCardDetailsImage = getBankCardDetailsImage;
-function getCustomOrFormattedFeedName(feed, companyCardNicknames, shouldAddCardsSuffix) {
-    if (shouldAddCardsSuffix === void 0) { shouldAddCardsSuffix = true; }
+function getCustomOrFormattedFeedName(feed, companyCardNicknames, shouldAddCardsSuffix = true) {
     if (!feed) {
         return;
     }
-    var customFeedName = companyCardNicknames === null || companyCardNicknames === void 0 ? void 0 : companyCardNicknames[feed];
+    const customFeedName = companyCardNicknames?.[feed];
     if (customFeedName && typeof customFeedName !== 'string') {
         return '';
     }
-    var feedName = getBankName(feed);
-    var formattedFeedName = shouldAddCardsSuffix ? (0, Localize_1.translateLocal)('workspace.companyCards.feedName', { feedName: feedName }) : feedName;
+    const feedName = getBankName(feed);
+    const formattedFeedName = shouldAddCardsSuffix ? (0, Localize_1.translateLocal)('workspace.companyCards.feedName', { feedName }) : feedName;
     // Custom feed name can be empty. Fallback to default feed name
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return customFeedName || formattedFeedName;
 }
 function getPlaidInstitutionIconUrl(feedName) {
-    var institutionId = getPlaidInstitutionId(feedName);
+    const institutionId = getPlaidInstitutionId(feedName);
     if (!institutionId) {
         return '';
     }
-    return "".concat(CONST_1.default.COMPANY_CARD_PLAID).concat(institutionId, ".png");
+    return `${CONST_1.default.COMPANY_CARD_PLAID}${institutionId}.png`;
 }
 function getPlaidInstitutionId(feedName) {
-    var feed = feedName === null || feedName === void 0 ? void 0 : feedName.split('.');
-    if (!feed || (feed === null || feed === void 0 ? void 0 : feed.at(0)) !== CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID) {
+    const feed = feedName?.split('.');
+    if (!feed || feed?.at(0) !== CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID) {
         return '';
     }
     return feed.at(1);
@@ -455,24 +426,23 @@ function isPlaidSupportedCountry(selectedCountry) {
     return CONST_1.default.PLAID_SUPPORT_COUNTRIES.includes(selectedCountry);
 }
 function getDomainOrWorkspaceAccountID(workspaceAccountID, cardFeedData) {
-    var _a;
-    return (_a = cardFeedData === null || cardFeedData === void 0 ? void 0 : cardFeedData.domainID) !== null && _a !== void 0 ? _a : workspaceAccountID;
+    return cardFeedData?.domainID ?? workspaceAccountID;
 }
 function getPlaidCountry(outputCurrency, currencyList, countryByIp) {
-    var selectedCurrency = outputCurrency ? currencyList === null || currencyList === void 0 ? void 0 : currencyList[outputCurrency] : null;
-    var countries = selectedCurrency === null || selectedCurrency === void 0 ? void 0 : selectedCurrency.countries;
+    const selectedCurrency = outputCurrency ? currencyList?.[outputCurrency] : null;
+    const countries = selectedCurrency?.countries;
     if (outputCurrency === CONST_1.default.CURRENCY.EUR) {
-        if (countryByIp && (countries === null || countries === void 0 ? void 0 : countries.includes(countryByIp))) {
+        if (countryByIp && countries?.includes(countryByIp)) {
             return countryByIp;
         }
         return '';
     }
-    var country = countries === null || countries === void 0 ? void 0 : countries[0];
-    return country !== null && country !== void 0 ? country : '';
+    const country = countries?.[0];
+    return country ?? '';
 }
 // We will simplify the logic below once we have #50450 #50451 implemented
-var getCorrectStepForSelectedBank = function (selectedBank) {
-    var banksWithFeedType = [
+const getCorrectStepForSelectedBank = (selectedBank) => {
+    const banksWithFeedType = [
         CONST_1.default.COMPANY_CARDS.BANKS.BANK_OF_AMERICA,
         CONST_1.default.COMPANY_CARDS.BANKS.CAPITAL_ONE,
         CONST_1.default.COMPANY_CARDS.BANKS.CHASE,
@@ -507,8 +477,8 @@ function getCorrectStepForPlaidSelectedBank(selectedBank) {
     return CONST_1.default.COMPANY_CARDS.STEP.BANK_CONNECTION;
 }
 function getSelectedFeed(lastSelectedFeed, cardFeeds) {
-    var defaultFeed = Object.keys(getCompanyFeeds(cardFeeds, true)).at(0);
-    return lastSelectedFeed !== null && lastSelectedFeed !== void 0 ? lastSelectedFeed : defaultFeed;
+    const defaultFeed = Object.keys(getCompanyFeeds(cardFeeds, true)).at(0);
+    return lastSelectedFeed ?? defaultFeed;
 }
 function isSelectedFeedExpired(directFeed) {
     if (!directFeed || !directFeed.expiration) {
@@ -518,30 +488,27 @@ function isSelectedFeedExpired(directFeed) {
 }
 /** Returns list of cards which can be assigned */
 function getFilteredCardList(list, directFeed, workspaceCardFeeds) {
-    var _a = list !== null && list !== void 0 ? list : {}, customFeedCardsToAssign = _a.cardList, cards = __rest(_a, ["cardList"]);
-    var assignedCards = Object.values(cards).map(function (card) { return card.cardName; });
+    const { cardList: customFeedCardsToAssign, ...cards } = list ?? {};
+    const assignedCards = Object.values(cards).map((card) => card.cardName);
     // Get cards assigned across all workspaces
-    var allWorkspaceAssignedCards = new Set();
-    Object.values(workspaceCardFeeds !== null && workspaceCardFeeds !== void 0 ? workspaceCardFeeds : {}).forEach(function (workspaceCards) {
+    const allWorkspaceAssignedCards = new Set();
+    Object.values(workspaceCardFeeds ?? {}).forEach((workspaceCards) => {
         if (!workspaceCards) {
             return;
         }
-        var cardList = workspaceCards.cardList, workspaceCardItems = __rest(workspaceCards, ["cardList"]);
-        Object.values(workspaceCardItems).forEach(function (card) {
-            if (!(card === null || card === void 0 ? void 0 : card.cardName)) {
+        const { cardList, ...workspaceCardItems } = workspaceCards;
+        Object.values(workspaceCardItems).forEach((card) => {
+            if (!card?.cardName) {
                 return;
             }
             allWorkspaceAssignedCards.add(card.cardName);
         });
     });
     if (directFeed) {
-        var unassignedDirectFeedCards = directFeed.accountList.filter(function (cardNumber) { return !assignedCards.includes(cardNumber) && !allWorkspaceAssignedCards.has(cardNumber); });
-        return Object.fromEntries(unassignedDirectFeedCards.map(function (cardNumber) { return [cardNumber, cardNumber]; }));
+        const unassignedDirectFeedCards = directFeed.accountList.filter((cardNumber) => !assignedCards.includes(cardNumber) && !allWorkspaceAssignedCards.has(cardNumber));
+        return Object.fromEntries(unassignedDirectFeedCards.map((cardNumber) => [cardNumber, cardNumber]));
     }
-    return Object.fromEntries(Object.entries(customFeedCardsToAssign !== null && customFeedCardsToAssign !== void 0 ? customFeedCardsToAssign : {}).filter(function (_a) {
-        var cardNumber = _a[0];
-        return !assignedCards.includes(cardNumber) && !allWorkspaceAssignedCards.has(cardNumber);
-    }));
+    return Object.fromEntries(Object.entries(customFeedCardsToAssign ?? {}).filter(([cardNumber]) => !assignedCards.includes(cardNumber) && !allWorkspaceAssignedCards.has(cardNumber)));
 }
 function hasOnlyOneCardToAssign(list) {
     return Object.keys(list).length === 1;
@@ -550,65 +517,55 @@ function getDefaultCardName(cardholder) {
     if (!cardholder) {
         return '';
     }
-    return "".concat(cardholder, "'s card");
+    return `${cardholder}'s card`;
 }
 function checkIfNewFeedConnected(prevFeedsData, currentFeedsData, plaidBank) {
-    var prevFeeds = Object.keys(prevFeedsData);
-    var currentFeeds = Object.keys(currentFeedsData);
+    const prevFeeds = Object.keys(prevFeedsData);
+    const currentFeeds = Object.keys(currentFeedsData);
     return {
-        isNewFeedConnected: currentFeeds.length > prevFeeds.length || (plaidBank && currentFeeds.includes("".concat(CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID, ".").concat(plaidBank))),
-        newFeed: currentFeeds.find(function (feed) { return !prevFeeds.includes(feed); }),
+        isNewFeedConnected: currentFeeds.length > prevFeeds.length || (plaidBank && currentFeeds.includes(`${CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID}.${plaidBank}`)),
+        newFeed: currentFeeds.find((feed) => !prevFeeds.includes(feed)),
     };
 }
 function filterInactiveCards(cards) {
-    var closedStates = [CONST_1.default.EXPENSIFY_CARD.STATE.CLOSED, CONST_1.default.EXPENSIFY_CARD.STATE.STATE_DEACTIVATED, CONST_1.default.EXPENSIFY_CARD.STATE.STATE_SUSPENDED];
-    return (0, ObjectUtils_1.filterObject)(cards !== null && cards !== void 0 ? cards : {}, function (key, card) { return !closedStates.includes(card.state); });
+    const closedStates = [CONST_1.default.EXPENSIFY_CARD.STATE.CLOSED, CONST_1.default.EXPENSIFY_CARD.STATE.STATE_DEACTIVATED, CONST_1.default.EXPENSIFY_CARD.STATE.STATE_SUSPENDED];
+    return (0, ObjectUtils_1.filterObject)(cards ?? {}, (key, card) => !closedStates.includes(card.state));
 }
 function getAllCardsForWorkspace(workspaceAccountID, allCardList, cardFeeds, expensifyCardSettings) {
-    var _a, _b;
-    var cards = {};
-    var companyCardsDomainFeeds = Object.entries((_b = (_a = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _a === void 0 ? void 0 : _a.companyCards) !== null && _b !== void 0 ? _b : {}).map(function (_a) {
-        var feedName = _a[0], feedData = _a[1];
-        return ({ domainID: feedData.domainID, feedName: feedName });
-    });
-    var expensifyCardsDomainIDs = Object.keys(expensifyCardSettings !== null && expensifyCardSettings !== void 0 ? expensifyCardSettings : {})
-        .map(function (key) { return key.split('_').at(-1); })
-        .filter(function (id) { return !!id; });
-    var _loop_1 = function (key, values) {
-        var isWorkspaceAccountCards = workspaceAccountID !== CONST_1.default.DEFAULT_NUMBER_ID && key.includes(workspaceAccountID.toString());
-        var isCompanyDomainCards = companyCardsDomainFeeds === null || companyCardsDomainFeeds === void 0 ? void 0 : companyCardsDomainFeeds.some(function (domainFeed) { return domainFeed.domainID && key.includes(domainFeed.domainID.toString()) && key.includes(domainFeed.feedName); });
-        var isExpensifyDomainCards = expensifyCardsDomainIDs.some(function (domainID) { return key.includes(domainID.toString()) && key.includes(CONST_1.default.EXPENSIFY_CARD.BANK); });
+    const cards = {};
+    const companyCardsDomainFeeds = Object.entries(cardFeeds?.settings?.companyCards ?? {}).map(([feedName, feedData]) => ({ domainID: feedData.domainID, feedName }));
+    const expensifyCardsDomainIDs = Object.keys(expensifyCardSettings ?? {})
+        .map((key) => key.split('_').at(-1))
+        .filter((id) => !!id);
+    for (const [key, values] of Object.entries(allCardList ?? {})) {
+        const isWorkspaceAccountCards = workspaceAccountID !== CONST_1.default.DEFAULT_NUMBER_ID && key.includes(workspaceAccountID.toString());
+        const isCompanyDomainCards = companyCardsDomainFeeds?.some((domainFeed) => domainFeed.domainID && key.includes(domainFeed.domainID.toString()) && key.includes(domainFeed.feedName));
+        const isExpensifyDomainCards = expensifyCardsDomainIDs.some((domainID) => key.includes(domainID.toString()) && key.includes(CONST_1.default.EXPENSIFY_CARD.BANK));
         if ((isWorkspaceAccountCards || isCompanyDomainCards || isExpensifyDomainCards) && values) {
-            var cardList = values.cardList, rest = __rest(values, ["cardList"]);
-            var filteredCards = filterInactiveCards(rest);
+            const { cardList, ...rest } = values;
+            const filteredCards = filterInactiveCards(rest);
             Object.assign(cards, filteredCards);
         }
-    };
-    for (var _i = 0, _c = Object.entries(allCardList !== null && allCardList !== void 0 ? allCardList : {}); _i < _c.length; _i++) {
-        var _d = _c[_i], key = _d[0], values = _d[1];
-        _loop_1(key, values);
     }
     return cards;
 }
 function isSmartLimitEnabled(cards) {
-    return Object.values(cards).some(function (card) { var _a; return ((_a = card.nameValuePairs) === null || _a === void 0 ? void 0 : _a.limitType) === CONST_1.default.EXPENSIFY_CARD.LIMIT_TYPES.SMART; });
+    return Object.values(cards).some((card) => card.nameValuePairs?.limitType === CONST_1.default.EXPENSIFY_CARD.LIMIT_TYPES.SMART);
 }
-var CUSTOM_FEEDS = [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX];
+const CUSTOM_FEEDS = [CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA, CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX];
 function getFeedType(feedKey, cardFeeds) {
-    var _a, _b;
-    if (CUSTOM_FEEDS.some(function (feed) { return feed === feedKey; })) {
-        var filteredFeeds = Object.keys((_b = (_a = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _a === void 0 ? void 0 : _a.companyCards) !== null && _b !== void 0 ? _b : {}).filter(function (str) { return str.includes(feedKey); });
-        var feedNumbers = filteredFeeds.map(function (str) { return parseInt(str.replace(feedKey, ''), 10); }).filter(Boolean);
-        feedNumbers.sort(function (a, b) { return a - b; });
-        var firstAvailableNumber = 1;
-        for (var _i = 0, feedNumbers_1 = feedNumbers; _i < feedNumbers_1.length; _i++) {
-            var num = feedNumbers_1[_i];
+    if (CUSTOM_FEEDS.some((feed) => feed === feedKey)) {
+        const filteredFeeds = Object.keys(cardFeeds?.settings?.companyCards ?? {}).filter((str) => str.includes(feedKey));
+        const feedNumbers = filteredFeeds.map((str) => parseInt(str.replace(feedKey, ''), 10)).filter(Boolean);
+        feedNumbers.sort((a, b) => a - b);
+        let firstAvailableNumber = 1;
+        for (const num of feedNumbers) {
             if (num && num !== firstAvailableNumber) {
-                return "".concat(feedKey).concat(firstAvailableNumber);
+                return `${feedKey}${firstAvailableNumber}`;
             }
             firstAvailableNumber++;
         }
-        return "".concat(feedKey).concat(firstAvailableNumber);
+        return `${feedKey}${firstAvailableNumber}`;
     }
     return feedKey;
 }
@@ -623,15 +580,14 @@ function flatAllCardsList(allCardsList, workspaceAccountID, domainIDs) {
     if (!allCardsList) {
         return;
     }
-    return Object.entries(allCardsList).reduce(function (acc, _a) {
-        var key = _a[0], cards = _a[1];
-        var isWorkspaceAccountCards = key.includes(workspaceAccountID.toString());
-        var isDomainCards = domainIDs === null || domainIDs === void 0 ? void 0 : domainIDs.some(function (domainID) { return key.includes(domainID.toString()); });
+    return Object.entries(allCardsList).reduce((acc, [key, cards]) => {
+        const isWorkspaceAccountCards = key.includes(workspaceAccountID.toString());
+        const isDomainCards = domainIDs?.some((domainID) => key.includes(domainID.toString()));
         if ((!isWorkspaceAccountCards && !isDomainCards) || key.includes(CONST_1.default.EXPENSIFY_CARD.BANK)) {
             return acc;
         }
-        var _b = cards !== null && cards !== void 0 ? cards : {}, cardList = _b.cardList, feedCards = __rest(_b, ["cardList"]);
-        var filteredCards = filterInactiveCards(feedCards);
+        const { cardList, ...feedCards } = cards ?? {};
+        const filteredCards = filterInactiveCards(feedCards);
         Object.assign(acc, filteredCards);
         return acc;
     }, {});
@@ -646,36 +602,36 @@ function checkIfFeedConnectionIsBroken(feedCards, feedToExclude) {
     if (!feedCards || (0, EmptyObject_1.isEmptyObject)(feedCards)) {
         return false;
     }
-    return Object.values(feedCards).some(function (card) { return !(0, EmptyObject_1.isEmptyObject)(card) && card.bank !== feedToExclude && card.lastScrapeResult && !CONST_1.default.COMPANY_CARDS.BROKEN_CONNECTION_IGNORED_STATUSES.includes(card.lastScrapeResult); });
+    return Object.values(feedCards).some((card) => !(0, EmptyObject_1.isEmptyObject)(card) && card.bank !== feedToExclude && card.lastScrapeResult && !CONST_1.default.COMPANY_CARDS.BROKEN_CONNECTION_IGNORED_STATUSES.includes(card.lastScrapeResult));
 }
 /**
  * Checks if an Expensify Card was issued for a given workspace.
  */
 function hasIssuedExpensifyCard(workspaceAccountID, allCardList) {
-    var cards = getAllCardsForWorkspace(workspaceAccountID, allCardList);
-    return Object.values(cards).some(function (card) { return card.bank === CONST_1.default.EXPENSIFY_CARD.BANK; });
+    const cards = getAllCardsForWorkspace(workspaceAccountID, allCardList);
+    return Object.values(cards).some((card) => card.bank === CONST_1.default.EXPENSIFY_CARD.BANK);
 }
 /**
  * Check if the Expensify Card is fully set up and a new card can be issued
  */
 function isExpensifyCardFullySetUp(policy, cardSettings) {
-    return !!((policy === null || policy === void 0 ? void 0 : policy.areExpensifyCardsEnabled) && (cardSettings === null || cardSettings === void 0 ? void 0 : cardSettings.paymentBankAccountID));
+    return !!(policy?.areExpensifyCardsEnabled && cardSettings?.paymentBankAccountID);
 }
-var isCurrencySupportedForECards = function (currency) {
+const isCurrencySupportedForECards = (currency) => {
     if (!currency) {
         return false;
     }
-    var supportedCurrencies = [CONST_1.default.CURRENCY.GBP, CONST_1.default.CURRENCY.EUR];
+    const supportedCurrencies = [CONST_1.default.CURRENCY.GBP, CONST_1.default.CURRENCY.EUR];
     return supportedCurrencies.includes(currency);
 };
 exports.isCurrencySupportedForECards = isCurrencySupportedForECards;
 function getFundIdFromSettingsKey(key) {
-    var prefix = ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS;
-    if (!(key === null || key === void 0 ? void 0 : key.startsWith(prefix))) {
+    const prefix = ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS;
+    if (!key?.startsWith(prefix)) {
         return CONST_1.default.DEFAULT_NUMBER_ID;
     }
-    var fundIDStr = key.substring(prefix.length);
-    var fundID = Number(fundIDStr);
+    const fundIDStr = key.substring(prefix.length);
+    const fundID = Number(fundIDStr);
     return Number.isNaN(fundID) ? CONST_1.default.DEFAULT_NUMBER_ID : fundID;
 }
 /**
@@ -688,5 +644,5 @@ function getFeedConnectionBrokenCard(feedCards, feedToExclude) {
     if (!feedCards || (0, EmptyObject_1.isEmptyObject)(feedCards)) {
         return undefined;
     }
-    return Object.values(feedCards).find(function (card) { return !(0, EmptyObject_1.isEmptyObject)(card) && card.bank !== feedToExclude && card.lastScrapeResult !== 200; });
+    return Object.values(feedCards).find((card) => !(0, EmptyObject_1.isEmptyObject)(card) && card.bank !== feedToExclude && card.lastScrapeResult !== 200);
 }

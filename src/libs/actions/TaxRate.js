@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateTaxValue = exports.validateTaxCode = exports.validateTaxName = void 0;
 exports.createPolicyTax = createPolicyTax;
@@ -22,57 +11,55 @@ exports.deletePolicyTaxes = deletePolicyTaxes;
 exports.updatePolicyTaxValue = updatePolicyTaxValue;
 exports.renamePolicyTax = renamePolicyTax;
 exports.setPolicyTaxCode = setPolicyTaxCode;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var Localize_1 = require("@libs/Localize");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ErrorUtils_1 = require("@src/libs/ErrorUtils");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var WorkspaceNewTaxForm_1 = require("@src/types/form/WorkspaceNewTaxForm");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const Localize_1 = require("@libs/Localize");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ErrorUtils_1 = require("@src/libs/ErrorUtils");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const WorkspaceNewTaxForm_1 = require("@src/types/form/WorkspaceNewTaxForm");
 // eslint-disable-next-line import/no-named-default
-var WorkspaceTaxCodeForm_1 = require("@src/types/form/WorkspaceTaxCodeForm");
+const WorkspaceTaxCodeForm_1 = require("@src/types/form/WorkspaceTaxCodeForm");
 /**
  * Get tax value with percentage
  */
 function getTaxValueWithPercentage(value) {
-    return "".concat(value, "%");
+    return `${value}%`;
 }
 function covertTaxNameToID(name) {
-    return "id_".concat(name.toUpperCase().replaceAll(' ', '_'));
+    return `id_${name.toUpperCase().replaceAll(' ', '_')}`;
 }
 /**
  *  Function to validate tax name
  */
-var validateTaxName = function (policy, values) {
-    var _a;
-    var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [WorkspaceNewTaxForm_1.default.NAME]);
-    var name = values[WorkspaceNewTaxForm_1.default.NAME];
+const validateTaxName = (policy, values) => {
+    const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [WorkspaceNewTaxForm_1.default.NAME]);
+    const name = values[WorkspaceNewTaxForm_1.default.NAME];
     if (name.length > CONST_1.default.TAX_RATES.NAME_MAX_LENGTH) {
         errors[WorkspaceNewTaxForm_1.default.NAME] = (0, Localize_1.translateLocal)('common.error.characterLimitExceedCounter', {
             length: name.length,
             limit: CONST_1.default.TAX_RATES.NAME_MAX_LENGTH,
         });
     }
-    else if (((_a = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _a === void 0 ? void 0 : _a.taxes) && (0, ValidationUtils_1.isExistingTaxName)(name, policy.taxRates.taxes)) {
+    else if (policy?.taxRates?.taxes && (0, ValidationUtils_1.isExistingTaxName)(name, policy.taxRates.taxes)) {
         errors[WorkspaceNewTaxForm_1.default.NAME] = (0, Localize_1.translateLocal)('workspace.taxes.error.taxRateAlreadyExists');
     }
     return errors;
 };
 exports.validateTaxName = validateTaxName;
-var validateTaxCode = function (policy, values) {
-    var _a;
-    var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [WorkspaceTaxCodeForm_1.default.TAX_CODE]);
-    var taxCode = values[WorkspaceTaxCodeForm_1.default.TAX_CODE];
+const validateTaxCode = (policy, values) => {
+    const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [WorkspaceTaxCodeForm_1.default.TAX_CODE]);
+    const taxCode = values[WorkspaceTaxCodeForm_1.default.TAX_CODE];
     if (taxCode.length > CONST_1.default.TAX_RATES.NAME_MAX_LENGTH) {
         errors[WorkspaceTaxCodeForm_1.default.TAX_CODE] = (0, Localize_1.translateLocal)('common.error.characterLimitExceedCounter', {
             length: taxCode.length,
             limit: CONST_1.default.TAX_RATES.NAME_MAX_LENGTH,
         });
     }
-    else if (((_a = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _a === void 0 ? void 0 : _a.taxes) && (0, ValidationUtils_1.isExistingTaxCode)(taxCode, policy.taxRates.taxes)) {
+    else if (policy?.taxRates?.taxes && (0, ValidationUtils_1.isExistingTaxCode)(taxCode, policy.taxRates.taxes)) {
         errors[WorkspaceTaxCodeForm_1.default.TAX_CODE] = (0, Localize_1.translateLocal)('workspace.taxes.error.taxCodeAlreadyExists');
     }
     return errors;
@@ -81,9 +68,9 @@ exports.validateTaxCode = validateTaxCode;
 /**
  *  Function to validate tax value
  */
-var validateTaxValue = function (values) {
-    var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [WorkspaceNewTaxForm_1.default.VALUE]);
-    var value = values[WorkspaceNewTaxForm_1.default.VALUE];
+const validateTaxValue = (values) => {
+    const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [WorkspaceNewTaxForm_1.default.VALUE]);
+    const value = values[WorkspaceNewTaxForm_1.default.VALUE];
     if (!(0, ValidationUtils_1.isValidPercentage)(value)) {
         errors[WorkspaceNewTaxForm_1.default.VALUE] = (0, Localize_1.translateLocal)('workspace.taxes.error.valuePercentageRange');
     }
@@ -94,33 +81,35 @@ exports.validateTaxValue = validateTaxValue;
  * Get new tax ID
  */
 function getNextTaxCode(name, taxRates) {
-    var newID = covertTaxNameToID(name);
-    if (!(taxRates === null || taxRates === void 0 ? void 0 : taxRates[newID])) {
+    const newID = covertTaxNameToID(name);
+    if (!taxRates?.[newID]) {
         return newID;
     }
     // If the tax ID already exists, we need to find a unique ID
-    var nextID = 1;
-    while (taxRates === null || taxRates === void 0 ? void 0 : taxRates[covertTaxNameToID("".concat(name, "_").concat(nextID))]) {
+    let nextID = 1;
+    while (taxRates?.[covertTaxNameToID(`${name}_${nextID}`)]) {
         nextID++;
     }
-    return covertTaxNameToID("".concat(name, "_").concat(nextID));
+    return covertTaxNameToID(`${name}_${nextID}`);
 }
 function createPolicyTax(policyID, taxRate) {
-    var _a, _b, _c;
     if (!taxRate.code) {
         console.debug('Policy or tax rates not found');
         return;
     }
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_a = {},
-                            _a[taxRate.code] = __assign(__assign({}, taxRate), { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD }),
-                            _a),
+                        taxes: {
+                            [taxRate.code]: {
+                                ...taxRate,
+                                pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD,
+                            },
+                        },
                     },
                 },
             },
@@ -128,15 +117,15 @@ function createPolicyTax(policyID, taxRate) {
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_b = {},
-                            _b[taxRate.code] = {
+                        taxes: {
+                            [taxRate.code]: {
                                 errors: null,
                                 pendingAction: null,
                             },
-                            _b),
+                        },
                     },
                 },
             },
@@ -144,21 +133,21 @@ function createPolicyTax(policyID, taxRate) {
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_c = {},
-                            _c[taxRate.code] = {
+                        taxes: {
+                            [taxRate.code]: {
                                 errors: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('workspace.taxes.error.createFailureMessage'),
                             },
-                            _c),
+                        },
                     },
                 },
             },
         ],
     };
-    var parameters = {
-        policyID: policyID,
+    const parameters = {
+        policyID,
         taxFields: JSON.stringify({
             name: taxRate.name,
             value: taxRate.value,
@@ -169,56 +158,53 @@ function createPolicyTax(policyID, taxRate) {
     API.write(types_1.WRITE_COMMANDS.CREATE_POLICY_TAX, parameters, onyxData);
 }
 function clearTaxRateFieldError(policyID, taxID, field) {
-    var _a, _b, _c;
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), {
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, {
         taxRates: {
-            taxes: (_a = {},
-                _a[taxID] = {
-                    pendingFields: (_b = {},
-                        _b[field] = null,
-                        _b),
-                    errorFields: (_c = {},
-                        _c[field] = null,
-                        _c),
+            taxes: {
+                [taxID]: {
+                    pendingFields: {
+                        [field]: null,
+                    },
+                    errorFields: {
+                        [field]: null,
+                    },
                 },
-                _a),
+            },
         },
     });
 }
 function clearTaxRateError(policyID, taxID, pendingAction) {
-    var _a, _b;
     if (pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD) {
-        react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), {
+        react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, {
             taxRates: {
-                taxes: (_a = {},
-                    _a[taxID] = null,
-                    _a),
+                taxes: {
+                    [taxID]: null,
+                },
             },
         });
         return;
     }
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), {
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, {
         taxRates: {
-            taxes: (_b = {},
-                _b[taxID] = { pendingAction: null, errors: null, errorFields: null },
-                _b),
+            taxes: {
+                [taxID]: { pendingAction: null, errors: null, errorFields: null },
+            },
         },
     });
 }
 function setPolicyTaxesEnabled(policy, taxesIDsToUpdate, isEnabled) {
-    var _a;
     if (!policy) {
         return;
     }
-    var originalTaxes = __assign({}, (_a = policy.taxRates) === null || _a === void 0 ? void 0 : _a.taxes);
-    var onyxData = {
+    const originalTaxes = { ...policy.taxRates?.taxes };
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policy.id),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policy.id}`,
                 value: {
                     taxRates: {
-                        taxes: taxesIDsToUpdate.reduce(function (acc, taxID) {
+                        taxes: taxesIDsToUpdate.reduce((acc, taxID) => {
                             acc[taxID] = {
                                 isDisabled: !isEnabled,
                                 pendingFields: { isDisabled: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE },
@@ -234,10 +220,10 @@ function setPolicyTaxesEnabled(policy, taxesIDsToUpdate, isEnabled) {
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policy.id),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policy.id}`,
                 value: {
                     taxRates: {
-                        taxes: taxesIDsToUpdate.reduce(function (acc, taxID) {
+                        taxes: taxesIDsToUpdate.reduce((acc, taxID) => {
                             acc[taxID] = { pendingFields: { isDisabled: null }, errorFields: { isDisabled: null }, pendingAction: null };
                             return acc;
                         }, {}),
@@ -248,10 +234,10 @@ function setPolicyTaxesEnabled(policy, taxesIDsToUpdate, isEnabled) {
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policy.id),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policy.id}`,
                 value: {
                     taxRates: {
-                        taxes: taxesIDsToUpdate.reduce(function (acc, taxID) {
+                        taxes: taxesIDsToUpdate.reduce((acc, taxID) => {
                             acc[taxID] = {
                                 isDisabled: !!originalTaxes[taxID].isDisabled,
                                 pendingFields: { isDisabled: null },
@@ -265,33 +251,31 @@ function setPolicyTaxesEnabled(policy, taxesIDsToUpdate, isEnabled) {
             },
         ],
     };
-    var parameters = {
+    const parameters = {
         policyID: policy.id,
-        taxFieldsArray: JSON.stringify(taxesIDsToUpdate.map(function (taxID) { return ({ taxCode: taxID, enabled: isEnabled }); })),
+        taxFieldsArray: JSON.stringify(taxesIDsToUpdate.map((taxID) => ({ taxCode: taxID, enabled: isEnabled }))),
     };
     API.write(types_1.WRITE_COMMANDS.SET_POLICY_TAXES_ENABLED, parameters, onyxData);
 }
 function deletePolicyTaxes(policy, taxesToDelete, localeCompare) {
-    var _a, _b, _c;
-    var _d, _e, _f;
-    var policyTaxRates = (_d = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _d === void 0 ? void 0 : _d.taxes;
-    var foreignTaxDefault = (_e = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _e === void 0 ? void 0 : _e.foreignTaxDefault;
-    var firstTaxID = Object.keys(policyTaxRates !== null && policyTaxRates !== void 0 ? policyTaxRates : {})
-        .sort(function (a, b) { return localeCompare(a, b); })
+    const policyTaxRates = policy?.taxRates?.taxes;
+    const foreignTaxDefault = policy?.taxRates?.foreignTaxDefault;
+    const firstTaxID = Object.keys(policyTaxRates ?? {})
+        .sort((a, b) => localeCompare(a, b))
         .at(0);
-    var distanceRateCustomUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
-    var customUnitID = distanceRateCustomUnit === null || distanceRateCustomUnit === void 0 ? void 0 : distanceRateCustomUnit.customUnitID;
-    var ratesToUpdate = Object.values((_f = distanceRateCustomUnit === null || distanceRateCustomUnit === void 0 ? void 0 : distanceRateCustomUnit.rates) !== null && _f !== void 0 ? _f : {}).filter(function (rate) { var _a, _b; return !!((_a = rate.attributes) === null || _a === void 0 ? void 0 : _a.taxRateExternalID) && taxesToDelete.includes((_b = rate.attributes) === null || _b === void 0 ? void 0 : _b.taxRateExternalID); });
+    const distanceRateCustomUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
+    const customUnitID = distanceRateCustomUnit?.customUnitID;
+    const ratesToUpdate = Object.values(distanceRateCustomUnit?.rates ?? {}).filter((rate) => !!rate.attributes?.taxRateExternalID && taxesToDelete.includes(rate.attributes?.taxRateExternalID));
     if (!policyTaxRates) {
         console.debug('Policy or tax rates not found');
         return;
     }
-    var isForeignTaxRemoved = foreignTaxDefault && taxesToDelete.includes(foreignTaxDefault);
-    var optimisticRates = {};
-    var successRates = {};
-    var failureRates = {};
-    ratesToUpdate.forEach(function (rate) {
-        var rateID = rate.customUnitRateID;
+    const isForeignTaxRemoved = foreignTaxDefault && taxesToDelete.includes(foreignTaxDefault);
+    const optimisticRates = {};
+    const successRates = {};
+    const failureRates = {};
+    ratesToUpdate.forEach((rate) => {
+        const rateID = rate.customUnitRateID;
         optimisticRates[rateID] = {
             attributes: {
                 taxRateExternalID: null,
@@ -304,7 +288,7 @@ function deletePolicyTaxes(policy, taxesToDelete, localeCompare) {
         };
         successRates[rateID] = { pendingFields: { taxRateExternalID: null, taxClaimablePercentage: null } };
         failureRates[rateID] = {
-            attributes: __assign({}, rate === null || rate === void 0 ? void 0 : rate.attributes),
+            attributes: { ...rate?.attributes },
             pendingFields: { taxRateExternalID: null, taxClaimablePercentage: null },
             errorFields: {
                 taxRateExternalID: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('common.genericErrorMessage'),
@@ -312,101 +296,99 @@ function deletePolicyTaxes(policy, taxesToDelete, localeCompare) {
             },
         };
     });
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policy.id),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policy.id}`,
                 value: {
                     taxRates: {
                         pendingFields: { foreignTaxDefault: isForeignTaxRemoved ? CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE : null },
                         foreignTaxDefault: isForeignTaxRemoved ? firstTaxID : foreignTaxDefault,
-                        taxes: taxesToDelete.reduce(function (acc, taxID) {
+                        taxes: taxesToDelete.reduce((acc, taxID) => {
                             acc[taxID] = { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE, errors: null, isDisabled: true };
                             return acc;
                         }, {}),
                     },
                     customUnits: distanceRateCustomUnit &&
-                        customUnitID && (_a = {},
-                        _a[customUnitID] = {
+                        customUnitID && {
+                        [customUnitID]: {
                             rates: optimisticRates,
                         },
-                        _a),
+                    },
                 },
             },
         ],
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policy.id),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policy.id}`,
                 value: {
                     taxRates: {
                         pendingFields: { foreignTaxDefault: null },
-                        taxes: taxesToDelete.reduce(function (acc, taxID) {
+                        taxes: taxesToDelete.reduce((acc, taxID) => {
                             acc[taxID] = null;
                             return acc;
                         }, {}),
                     },
                     customUnits: distanceRateCustomUnit &&
-                        customUnitID && (_b = {},
-                        _b[customUnitID] = {
+                        customUnitID && {
+                        [customUnitID]: {
                             rates: successRates,
                         },
-                        _b),
+                    },
                 },
             },
         ],
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policy.id),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policy.id}`,
                 value: {
                     taxRates: {
                         pendingFields: { foreignTaxDefault: null },
-                        taxes: taxesToDelete.reduce(function (acc, taxID) {
-                            var _a;
+                        taxes: taxesToDelete.reduce((acc, taxID) => {
                             acc[taxID] = {
                                 pendingAction: null,
                                 errors: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('workspace.taxes.error.deleteFailureMessage'),
-                                isDisabled: !!((_a = policyTaxRates === null || policyTaxRates === void 0 ? void 0 : policyTaxRates[taxID]) === null || _a === void 0 ? void 0 : _a.isDisabled),
+                                isDisabled: !!policyTaxRates?.[taxID]?.isDisabled,
                             };
                             return acc;
                         }, {}),
                     },
                     customUnits: distanceRateCustomUnit &&
-                        customUnitID && (_c = {},
-                        _c[customUnitID] = {
+                        customUnitID && {
+                        [customUnitID]: {
                             rates: failureRates,
                         },
-                        _c),
+                    },
                 },
             },
         ],
     };
-    var parameters = {
+    const parameters = {
         policyID: policy.id,
-        taxNames: JSON.stringify(taxesToDelete.map(function (taxID) { return policyTaxRates[taxID].name; })),
+        taxNames: JSON.stringify(taxesToDelete.map((taxID) => policyTaxRates[taxID].name)),
     };
     API.write(types_1.WRITE_COMMANDS.DELETE_POLICY_TAXES, parameters, onyxData);
 }
 function updatePolicyTaxValue(policyID, taxID, taxValue, originalTaxRate) {
-    var _a, _b, _c;
-    var stringTaxValue = "".concat(taxValue, "%");
-    var onyxData = {
+    const stringTaxValue = `${taxValue}%`;
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_a = {},
-                            _a[taxID] = {
+                        taxes: {
+                            [taxID]: {
                                 value: stringTaxValue,
                                 pendingFields: { value: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE },
                                 pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                                 errorFields: { value: null },
                             },
-                            _a),
+                        },
                     },
                 },
             },
@@ -414,12 +396,12 @@ function updatePolicyTaxValue(policyID, taxID, taxValue, originalTaxRate) {
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_b = {},
-                            _b[taxID] = { pendingFields: { value: null }, pendingAction: null, errorFields: { value: null } },
-                            _b),
+                        taxes: {
+                            [taxID]: { pendingFields: { value: null }, pendingAction: null, errorFields: { value: null } },
+                        },
                     },
                 },
             },
@@ -427,46 +409,45 @@ function updatePolicyTaxValue(policyID, taxID, taxValue, originalTaxRate) {
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_c = {},
-                            _c[taxID] = {
+                        taxes: {
+                            [taxID]: {
                                 value: originalTaxRate.value,
                                 pendingFields: { value: null },
                                 pendingAction: null,
                                 errorFields: { value: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('workspace.taxes.error.updateFailureMessage') },
                             },
-                            _c),
+                        },
                     },
                 },
             },
         ],
     };
-    var parameters = {
-        policyID: policyID,
+    const parameters = {
+        policyID,
         taxCode: taxID,
         taxRate: stringTaxValue,
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_POLICY_TAX_VALUE, parameters, onyxData);
 }
 function renamePolicyTax(policyID, taxID, newName, originalTaxRate) {
-    var _a, _b, _c;
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_a = {},
-                            _a[taxID] = {
+                        taxes: {
+                            [taxID]: {
                                 name: newName,
                                 pendingFields: { name: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE },
                                 pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                                 errorFields: { name: null },
                             },
-                            _a),
+                        },
                     },
                 },
             },
@@ -474,12 +455,12 @@ function renamePolicyTax(policyID, taxID, newName, originalTaxRate) {
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_b = {},
-                            _b[taxID] = { pendingFields: { name: null }, pendingAction: null, errorFields: { name: null } },
-                            _b),
+                        taxes: {
+                            [taxID]: { pendingFields: { name: null }, pendingAction: null, errorFields: { name: null } },
+                        },
                     },
                 },
             },
@@ -487,71 +468,88 @@ function renamePolicyTax(policyID, taxID, newName, originalTaxRate) {
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
-                        taxes: (_c = {},
-                            _c[taxID] = {
+                        taxes: {
+                            [taxID]: {
                                 name: originalTaxRate.name,
                                 pendingFields: { name: null },
                                 pendingAction: null,
                                 errorFields: { name: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('workspace.taxes.error.updateFailureMessage') },
                             },
-                            _c),
+                        },
                     },
                 },
             },
         ],
     };
-    var parameters = {
-        policyID: policyID,
+    const parameters = {
+        policyID,
         taxCode: taxID,
-        newName: newName,
+        newName,
     };
     API.write(types_1.WRITE_COMMANDS.RENAME_POLICY_TAX, parameters, onyxData);
 }
 function setPolicyTaxCode(policyID, oldTaxCode, newTaxCode, originalTaxRate, oldForeignTaxDefault, oldDefaultExternalID, distanceRateCustomUnit) {
-    var _a, _b, _c, _d, _e;
-    var _f;
-    var optimisticDistanceRateCustomUnit = distanceRateCustomUnit && __assign(__assign({}, distanceRateCustomUnit), { rates: __assign({}, Object.keys(distanceRateCustomUnit.rates).reduce(function (rates, rateID) {
-            var _a;
-            if (((_a = distanceRateCustomUnit.rates[rateID].attributes) === null || _a === void 0 ? void 0 : _a.taxRateExternalID) === oldTaxCode) {
-                // eslint-disable-next-line no-param-reassign
-                rates[rateID] = {
-                    attributes: {
-                        taxRateExternalID: newTaxCode,
-                    },
-                };
-            }
-            return rates;
-        }, {})) });
-    var onyxData = {
+    const optimisticDistanceRateCustomUnit = distanceRateCustomUnit && {
+        ...distanceRateCustomUnit,
+        rates: {
+            ...Object.keys(distanceRateCustomUnit.rates).reduce((rates, rateID) => {
+                if (distanceRateCustomUnit.rates[rateID].attributes?.taxRateExternalID === oldTaxCode) {
+                    // eslint-disable-next-line no-param-reassign
+                    rates[rateID] = {
+                        attributes: {
+                            taxRateExternalID: newTaxCode,
+                        },
+                    };
+                }
+                return rates;
+            }, {}),
+        },
+    };
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-                value: __assign({ taxRates: {
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+                value: {
+                    taxRates: {
                         defaultExternalID: oldTaxCode === oldDefaultExternalID ? newTaxCode : oldDefaultExternalID,
                         foreignTaxDefault: oldTaxCode === oldForeignTaxDefault ? newTaxCode : oldForeignTaxDefault,
-                        taxes: (_a = {},
-                            _a[oldTaxCode] = null,
-                            _a[newTaxCode] = __assign(__assign({}, originalTaxRate), { pendingFields: __assign(__assign({}, originalTaxRate.pendingFields), { code: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE }), pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE, errorFields: { code: null }, previousTaxCode: oldTaxCode }),
-                            _a),
-                    } }, (!!distanceRateCustomUnit && { customUnits: (_b = {}, _b[distanceRateCustomUnit.customUnitID] = optimisticDistanceRateCustomUnit, _b) })),
+                        taxes: {
+                            [oldTaxCode]: null,
+                            [newTaxCode]: {
+                                ...originalTaxRate,
+                                pendingFields: { ...originalTaxRate.pendingFields, code: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE },
+                                pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
+                                errorFields: { code: null },
+                                previousTaxCode: oldTaxCode,
+                            },
+                        },
+                    },
+                    ...(!!distanceRateCustomUnit && { customUnits: { [distanceRateCustomUnit.customUnitID]: optimisticDistanceRateCustomUnit } }),
+                },
             },
         ],
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     taxRates: {
                         defaultExternalID: oldTaxCode === oldDefaultExternalID ? newTaxCode : oldDefaultExternalID,
                         foreignTaxDefault: oldTaxCode === oldForeignTaxDefault ? newTaxCode : oldForeignTaxDefault,
-                        taxes: (_c = {},
-                            _c[oldTaxCode] = null,
-                            _c[newTaxCode] = __assign(__assign({}, originalTaxRate), { code: newTaxCode, pendingFields: __assign(__assign({}, originalTaxRate.pendingFields), { code: null }), pendingAction: null, errorFields: { code: null } }),
-                            _c),
+                        taxes: {
+                            [oldTaxCode]: null,
+                            [newTaxCode]: {
+                                ...originalTaxRate,
+                                code: newTaxCode,
+                                pendingFields: { ...originalTaxRate.pendingFields, code: null },
+                                pendingAction: null,
+                                errorFields: { code: null },
+                            },
+                        },
                     },
                 },
             },
@@ -559,23 +557,32 @@ function setPolicyTaxCode(policyID, oldTaxCode, newTaxCode, originalTaxRate, old
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-                value: __assign({ taxRates: {
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+                value: {
+                    taxRates: {
                         defaultExternalID: oldDefaultExternalID,
                         foreignTaxDefault: oldForeignTaxDefault,
-                        taxes: (_d = {},
-                            _d[newTaxCode] = null,
-                            _d[oldTaxCode] = __assign(__assign({}, originalTaxRate), { code: originalTaxRate.code, pendingFields: __assign(__assign({}, originalTaxRate.pendingFields), { code: null }), pendingAction: null, errorFields: { code: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('workspace.taxes.error.updateFailureMessage') } }),
-                            _d),
-                    } }, (!!distanceRateCustomUnit && { customUnits: (_e = {}, _e[distanceRateCustomUnit.customUnitID] = distanceRateCustomUnit, _e) })),
+                        taxes: {
+                            [newTaxCode]: null,
+                            [oldTaxCode]: {
+                                ...originalTaxRate,
+                                code: originalTaxRate.code,
+                                pendingFields: { ...originalTaxRate.pendingFields, code: null },
+                                pendingAction: null,
+                                errorFields: { code: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('workspace.taxes.error.updateFailureMessage') },
+                            },
+                        },
+                    },
+                    ...(!!distanceRateCustomUnit && { customUnits: { [distanceRateCustomUnit.customUnitID]: distanceRateCustomUnit } }),
+                },
             },
         ],
     };
-    var parameters = {
-        policyID: policyID,
-        oldTaxCode: oldTaxCode,
-        newTaxCode: newTaxCode,
-        taxID: (_f = originalTaxRate.name) !== null && _f !== void 0 ? _f : '',
+    const parameters = {
+        policyID,
+        oldTaxCode,
+        newTaxCode,
+        taxID: originalTaxRate.name ?? '',
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_POLICY_TAX_CODE, parameters, onyxData);
 }

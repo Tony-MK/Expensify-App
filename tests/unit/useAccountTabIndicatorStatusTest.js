@@ -1,100 +1,97 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("@testing-library/react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var useAccountTabIndicatorStatus_1 = require("@hooks/useAccountTabIndicatorStatus");
+const react_native_1 = require("@testing-library/react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const useAccountTabIndicatorStatus_1 = require("@hooks/useAccountTabIndicatorStatus");
 // eslint-disable-next-line no-restricted-imports
-var theme_1 = require("@styles/theme");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
-var getMockForStatus = function (status) {
-    var _a;
-    return (_a = {},
-        _a[ONYXKEYS_1.default.BANK_ACCOUNT_LIST] = {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            12345: {
-                methodID: 12345,
-                errors: status === CONST_1.default.INDICATOR_STATUS.HAS_PAYMENT_METHOD_ERROR
-                    ? {
+const theme_1 = require("@styles/theme");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
+const getMockForStatus = (status) => ({
+    [ONYXKEYS_1.default.BANK_ACCOUNT_LIST]: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        12345: {
+            methodID: 12345,
+            errors: status === CONST_1.default.INDICATOR_STATUS.HAS_PAYMENT_METHOD_ERROR
+                ? {
+                    error: 'Something went wrong',
+                }
+                : undefined,
+        },
+    },
+    [ONYXKEYS_1.default.USER_WALLET]: {
+        bankAccountID: 12345,
+        errors: status === CONST_1.default.INDICATOR_STATUS.HAS_USER_WALLET_ERRORS
+            ? {
+                error: 'Something went wrong',
+            }
+            : undefined,
+    },
+    [ONYXKEYS_1.default.WALLET_TERMS]: {
+        errors: status === CONST_1.default.INDICATOR_STATUS.HAS_WALLET_TERMS_ERRORS
+            ? {
+                error: 'Something went wrong',
+            }
+            : undefined,
+        chatReportID: status === CONST_1.default.INDICATOR_STATUS.HAS_WALLET_TERMS_ERRORS ? undefined : '123',
+    },
+    [ONYXKEYS_1.default.LOGIN_LIST]: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        'johndoe12@expensify.com': {
+            partnerName: 'John Doe',
+            partnerUserID: 'johndoe12@expensify.com',
+            validatedDate: status !== CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_INFO ? new Date().toISOString() : undefined,
+            errorFields: status === CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_ERROR
+                ? {
+                    field: {
                         error: 'Something went wrong',
-                    }
-                    : undefined,
-            },
+                    },
+                }
+                : undefined,
         },
-        _a[ONYXKEYS_1.default.USER_WALLET] = {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        'otheruser@expensify.com': {
+            partnerName: 'Other User',
+            partnerUserID: status === CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_INFO ? 'different@expensify.com' : 'otheruser@expensify.com',
+            validatedDate: status === CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_INFO ? undefined : new Date().toISOString(),
+            errorFields: undefined,
+        },
+    },
+    [ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT]: {
+        achData: {
             bankAccountID: 12345,
-            errors: status === CONST_1.default.INDICATOR_STATUS.HAS_USER_WALLET_ERRORS
-                ? {
-                    error: 'Something went wrong',
-                }
-                : undefined,
         },
-        _a[ONYXKEYS_1.default.WALLET_TERMS] = {
-            errors: status === CONST_1.default.INDICATOR_STATUS.HAS_WALLET_TERMS_ERRORS
-                ? {
-                    error: 'Something went wrong',
-                }
-                : undefined,
-            chatReportID: status === CONST_1.default.INDICATOR_STATUS.HAS_WALLET_TERMS_ERRORS ? undefined : '123',
+        errors: status === CONST_1.default.INDICATOR_STATUS.HAS_REIMBURSEMENT_ACCOUNT_ERRORS
+            ? {
+                error: 'Something went wrong',
+            }
+            : undefined,
+    },
+    [ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS]: {
+        errorFields: status === CONST_1.default.INDICATOR_STATUS.HAS_PHONE_NUMBER_ERROR
+            ? {
+                phoneNumber: 'Invalid phone number',
+            }
+            : undefined,
+    },
+    [`${ONYXKEYS_1.default.CARD_LIST}`]: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        card123: {
+            bank: 'OTHER_BANK',
+            lastScrapeResult: status === CONST_1.default.INDICATOR_STATUS.HAS_CARD_CONNECTION_ERROR ? 403 : 200,
         },
-        _a[ONYXKEYS_1.default.LOGIN_LIST] = {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            'johndoe12@expensify.com': {
-                partnerName: 'John Doe',
-                partnerUserID: 'johndoe12@expensify.com',
-                validatedDate: status !== CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_INFO ? new Date().toISOString() : undefined,
-                errorFields: status === CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_ERROR
-                    ? {
-                        field: {
-                            error: 'Something went wrong',
-                        },
-                    }
-                    : undefined,
-            },
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            'otheruser@expensify.com': {
-                partnerName: 'Other User',
-                partnerUserID: status === CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_INFO ? 'different@expensify.com' : 'otheruser@expensify.com',
-                validatedDate: status === CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_INFO ? undefined : new Date().toISOString(),
-                errorFields: undefined,
-            },
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        card456: {
+            bank: 'ANOTHER_BANK',
+            lastScrapeResult: status === CONST_1.default.INDICATOR_STATUS.HAS_CARD_CONNECTION_ERROR ? 403 : 200,
         },
-        _a[ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT] = {
-            achData: {
-                bankAccountID: 12345,
-            },
-            errors: status === CONST_1.default.INDICATOR_STATUS.HAS_REIMBURSEMENT_ACCOUNT_ERRORS
-                ? {
-                    error: 'Something went wrong',
-                }
-                : undefined,
-        },
-        _a[ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS] = {
-            errorFields: status === CONST_1.default.INDICATOR_STATUS.HAS_PHONE_NUMBER_ERROR
-                ? {
-                    phoneNumber: 'Invalid phone number',
-                }
-                : undefined,
-        },
-        _a["".concat(ONYXKEYS_1.default.CARD_LIST)] = {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            card123: {
-                bank: 'OTHER_BANK',
-                lastScrapeResult: status === CONST_1.default.INDICATOR_STATUS.HAS_CARD_CONNECTION_ERROR ? 403 : 200,
-            },
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            card456: {
-                bank: 'ANOTHER_BANK',
-                lastScrapeResult: status === CONST_1.default.INDICATOR_STATUS.HAS_CARD_CONNECTION_ERROR ? 403 : 200,
-            },
-        },
-        _a[ONYXKEYS_1.default.SESSION] = {
-            email: 'johndoe12@expensify.com',
-        },
-        _a);
-};
-var TEST_CASES = [
+    },
+    [ONYXKEYS_1.default.SESSION]: {
+        email: 'johndoe12@expensify.com',
+    },
+});
+const TEST_CASES = [
     {
         name: 'has user wallet errors',
         indicatorColor: theme_1.defaultTheme.danger,
@@ -136,86 +133,83 @@ var TEST_CASES = [
         status: CONST_1.default.INDICATOR_STATUS.HAS_LOGIN_LIST_INFO,
     },
 ];
-describe('useAccountTabIndicatorStatus', function () {
-    beforeAll(function () {
+describe('useAccountTabIndicatorStatus', () => {
+    beforeAll(() => {
         react_native_onyx_1.default.init({
             keys: ONYXKEYS_1.default,
         });
     });
-    describe.each(TEST_CASES)('$name', function (testCase) {
-        beforeAll(function () {
+    describe.each(TEST_CASES)('$name', (testCase) => {
+        beforeAll(() => {
             return react_native_onyx_1.default.multiSet(getMockForStatus(testCase.status)).then(waitForBatchedUpdates_1.default);
         });
-        it('returns correct indicatorColor', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var indicatorColor = result.current.indicatorColor;
+        it('returns correct indicatorColor', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { indicatorColor } = result.current;
             expect(indicatorColor).toBe(testCase.indicatorColor);
         });
-        it('returns correct status', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var status = result.current.status;
+        it('returns correct status', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { status } = result.current;
             expect(status).toBe(testCase.status);
         });
     });
-    describe('no errors or info', function () {
-        beforeAll(function () {
-            var _a;
-            return react_native_onyx_1.default.multiSet((_a = {},
-                _a[ONYXKEYS_1.default.BANK_ACCOUNT_LIST] = {},
-                _a[ONYXKEYS_1.default.USER_WALLET] = {},
-                _a[ONYXKEYS_1.default.WALLET_TERMS] = {},
-                _a[ONYXKEYS_1.default.LOGIN_LIST] = {},
-                _a[ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT] = {},
-                _a[ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS] = {},
-                _a["".concat(ONYXKEYS_1.default.CARD_LIST)] = {},
-                _a[ONYXKEYS_1.default.SESSION] = {
+    describe('no errors or info', () => {
+        beforeAll(() => {
+            return react_native_onyx_1.default.multiSet({
+                [ONYXKEYS_1.default.BANK_ACCOUNT_LIST]: {},
+                [ONYXKEYS_1.default.USER_WALLET]: {},
+                [ONYXKEYS_1.default.WALLET_TERMS]: {},
+                [ONYXKEYS_1.default.LOGIN_LIST]: {},
+                [ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT]: {},
+                [ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS]: {},
+                [`${ONYXKEYS_1.default.CARD_LIST}`]: {},
+                [ONYXKEYS_1.default.SESSION]: {
                     email: 'johndoe12@expensify.com',
                 },
-                _a)).then(waitForBatchedUpdates_1.default);
+            }).then(waitForBatchedUpdates_1.default);
         });
-        it('returns undefined status when no errors or info exist', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var status = result.current.status;
+        it('returns undefined status when no errors or info exist', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { status } = result.current;
             expect(status).toBeUndefined();
         });
-        it('returns success color when no errors or info exist', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var indicatorColor = result.current.indicatorColor;
+        it('returns success color when no errors or info exist', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { indicatorColor } = result.current;
             expect(indicatorColor).toBe(theme_1.defaultTheme.success);
         });
     });
-    describe('wallet terms with chatReportID', function () {
-        beforeAll(function () {
-            var _a;
-            return react_native_onyx_1.default.multiSet((_a = {},
-                _a[ONYXKEYS_1.default.BANK_ACCOUNT_LIST] = {},
-                _a[ONYXKEYS_1.default.USER_WALLET] = {},
-                _a[ONYXKEYS_1.default.WALLET_TERMS] = {
+    describe('wallet terms with chatReportID', () => {
+        beforeAll(() => {
+            return react_native_onyx_1.default.multiSet({
+                [ONYXKEYS_1.default.BANK_ACCOUNT_LIST]: {},
+                [ONYXKEYS_1.default.USER_WALLET]: {},
+                [ONYXKEYS_1.default.WALLET_TERMS]: {
                     errors: {
                         error: 'Something went wrong',
                     },
                     chatReportID: '123',
                 },
-                _a[ONYXKEYS_1.default.LOGIN_LIST] = {},
-                _a[ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT] = {},
-                _a[ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS] = {},
-                _a["".concat(ONYXKEYS_1.default.CARD_LIST)] = {},
-                _a[ONYXKEYS_1.default.SESSION] = {
+                [ONYXKEYS_1.default.LOGIN_LIST]: {},
+                [ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT]: {},
+                [ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS]: {},
+                [`${ONYXKEYS_1.default.CARD_LIST}`]: {},
+                [ONYXKEYS_1.default.SESSION]: {
                     email: 'johndoe12@expensify.com',
                 },
-                _a)).then(waitForBatchedUpdates_1.default);
+            }).then(waitForBatchedUpdates_1.default);
         });
-        it('does not show wallet terms error when chatReportID exists', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var status = result.current.status;
+        it('does not show wallet terms error when chatReportID exists', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { status } = result.current;
             expect(status).toBeUndefined();
         });
     });
-    describe('multiple errors', function () {
-        beforeAll(function () {
-            var _a;
-            return react_native_onyx_1.default.multiSet((_a = {},
-                _a[ONYXKEYS_1.default.BANK_ACCOUNT_LIST] = {
+    describe('multiple errors', () => {
+        beforeAll(() => {
+            return react_native_onyx_1.default.multiSet({
+                [ONYXKEYS_1.default.BANK_ACCOUNT_LIST]: {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     12345: {
                         methodID: 12345,
@@ -224,47 +218,46 @@ describe('useAccountTabIndicatorStatus', function () {
                         },
                     },
                 },
-                _a[ONYXKEYS_1.default.USER_WALLET] = {
+                [ONYXKEYS_1.default.USER_WALLET]: {
                     bankAccountID: 12345,
                     errors: {
                         error: 'Wallet error',
                     },
                 },
-                _a[ONYXKEYS_1.default.WALLET_TERMS] = {},
-                _a[ONYXKEYS_1.default.LOGIN_LIST] = {},
-                _a[ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT] = {},
-                _a[ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS] = {},
-                _a["".concat(ONYXKEYS_1.default.CARD_LIST)] = {},
-                _a[ONYXKEYS_1.default.SESSION] = {
+                [ONYXKEYS_1.default.WALLET_TERMS]: {},
+                [ONYXKEYS_1.default.LOGIN_LIST]: {},
+                [ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT]: {},
+                [ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS]: {},
+                [`${ONYXKEYS_1.default.CARD_LIST}`]: {},
+                [ONYXKEYS_1.default.SESSION]: {
                     email: 'johndoe12@expensify.com',
                 },
-                _a)).then(waitForBatchedUpdates_1.default);
+            }).then(waitForBatchedUpdates_1.default);
         });
-        it('returns the first error status found', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var status = result.current.status;
+        it('returns the first error status found', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { status } = result.current;
             // Should return the first error in the errorChecking object
             expect(status).toBe(CONST_1.default.INDICATOR_STATUS.HAS_USER_WALLET_ERRORS);
         });
-        it('returns danger color for multiple errors', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var indicatorColor = result.current.indicatorColor;
+        it('returns danger color for multiple errors', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { indicatorColor } = result.current;
             expect(indicatorColor).toBe(theme_1.defaultTheme.danger);
         });
     });
-    describe('error takes priority over info', function () {
-        beforeAll(function () {
-            var _a;
-            return react_native_onyx_1.default.multiSet((_a = {},
-                _a[ONYXKEYS_1.default.BANK_ACCOUNT_LIST] = {},
-                _a[ONYXKEYS_1.default.USER_WALLET] = {
+    describe('error takes priority over info', () => {
+        beforeAll(() => {
+            return react_native_onyx_1.default.multiSet({
+                [ONYXKEYS_1.default.BANK_ACCOUNT_LIST]: {},
+                [ONYXKEYS_1.default.USER_WALLET]: {
                     bankAccountID: 12345,
                     errors: {
                         error: 'Wallet error',
                     },
                 },
-                _a[ONYXKEYS_1.default.WALLET_TERMS] = {},
-                _a[ONYXKEYS_1.default.LOGIN_LIST] = {
+                [ONYXKEYS_1.default.WALLET_TERMS]: {},
+                [ONYXKEYS_1.default.LOGIN_LIST]: {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     'johndoe12@expensify.com': {
                         partnerName: 'John Doe',
@@ -272,42 +265,41 @@ describe('useAccountTabIndicatorStatus', function () {
                         validatedDate: undefined, // This would trigger info status
                     },
                 },
-                _a[ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT] = {},
-                _a[ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS] = {},
-                _a["".concat(ONYXKEYS_1.default.CARD_LIST)] = {},
-                _a[ONYXKEYS_1.default.SESSION] = {
+                [ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT]: {},
+                [ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS]: {},
+                [`${ONYXKEYS_1.default.CARD_LIST}`]: {},
+                [ONYXKEYS_1.default.SESSION]: {
                     email: 'johndoe12@expensify.com',
                 },
-                _a)).then(waitForBatchedUpdates_1.default);
+            }).then(waitForBatchedUpdates_1.default);
         });
-        it('returns error status when both error and info exist', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var status = result.current.status;
+        it('returns error status when both error and info exist', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { status } = result.current;
             expect(status).toBe(CONST_1.default.INDICATOR_STATUS.HAS_USER_WALLET_ERRORS);
         });
-        it('returns danger color when error takes priority', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var indicatorColor = result.current.indicatorColor;
+        it('returns danger color when error takes priority', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { indicatorColor } = result.current;
             expect(indicatorColor).toBe(theme_1.defaultTheme.danger);
         });
     });
-    describe('missing data', function () {
-        beforeAll(function () {
-            var _a;
-            return react_native_onyx_1.default.multiSet((_a = {},
-                _a[ONYXKEYS_1.default.BANK_ACCOUNT_LIST] = null,
-                _a[ONYXKEYS_1.default.USER_WALLET] = null,
-                _a[ONYXKEYS_1.default.WALLET_TERMS] = null,
-                _a[ONYXKEYS_1.default.LOGIN_LIST] = null,
-                _a[ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT] = null,
-                _a[ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS] = null,
-                _a["".concat(ONYXKEYS_1.default.CARD_LIST)] = null,
-                _a[ONYXKEYS_1.default.SESSION] = null,
-                _a)).then(waitForBatchedUpdates_1.default);
+    describe('missing data', () => {
+        beforeAll(() => {
+            return react_native_onyx_1.default.multiSet({
+                [ONYXKEYS_1.default.BANK_ACCOUNT_LIST]: null,
+                [ONYXKEYS_1.default.USER_WALLET]: null,
+                [ONYXKEYS_1.default.WALLET_TERMS]: null,
+                [ONYXKEYS_1.default.LOGIN_LIST]: null,
+                [ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT]: null,
+                [ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS]: null,
+                [`${ONYXKEYS_1.default.CARD_LIST}`]: null,
+                [ONYXKEYS_1.default.SESSION]: null,
+            }).then(waitForBatchedUpdates_1.default);
         });
-        it('handles missing data gracefully', function () {
-            var result = (0, react_native_1.renderHook)(function () { return (0, useAccountTabIndicatorStatus_1.default)(); }).result;
-            var _a = result.current, status = _a.status, indicatorColor = _a.indicatorColor;
+        it('handles missing data gracefully', () => {
+            const { result } = (0, react_native_1.renderHook)(() => (0, useAccountTabIndicatorStatus_1.default)());
+            const { status, indicatorColor } = result.current;
             expect(status).toBeUndefined();
             expect(indicatorColor).toBe(theme_1.defaultTheme.success);
         });

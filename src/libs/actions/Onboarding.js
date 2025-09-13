@@ -5,11 +5,11 @@ exports.setPersonalDetails = setPersonalDetails;
 exports.clearWorkspaceDetailsDraft = clearWorkspaceDetailsDraft;
 exports.setWorkspaceCurrency = setWorkspaceCurrency;
 exports.verifyTestDriveRecipient = verifyTestDriveRecipient;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var AccountExistsError_1 = require("@libs/Errors/AccountExistsError");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const AccountExistsError_1 = require("@libs/Errors/AccountExistsError");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
  * Clear Personal Details draft
  */
@@ -20,7 +20,7 @@ function clearPersonalDetailsDraft() {
  * Set the personal details Onyx data
  */
 function setPersonalDetails(firstName, lastName) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.FORMS.ONBOARDING_PERSONAL_DETAILS_FORM, { firstName: firstName, lastName: lastName });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.FORMS.ONBOARDING_PERSONAL_DETAILS_FORM, { firstName, lastName });
 }
 /**
  * Clear Workspace Details draft
@@ -32,16 +32,16 @@ function clearWorkspaceDetailsDraft() {
  * Set the workspace currency Onyx data
  */
 function setWorkspaceCurrency(currency) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.FORMS.ONBOARDING_WORKSPACE_DETAILS_FORM_DRAFT, { currency: currency });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.FORMS.ONBOARDING_WORKSPACE_DETAILS_FORM_DRAFT, { currency });
 }
 function verifyTestDriveRecipient(email) {
     // eslint-disable-next-line rulesdir/no-api-side-effects-method
-    return API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.VERIFY_TEST_DRIVE_RECIPIENT, { email: email }).then(function (response) {
+    return API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.VERIFY_TEST_DRIVE_RECIPIENT, { email }).then((response) => {
         // If accountExists is undefined, it means we couldn't determine the account status due to an unstable internet connection.
-        if ((response === null || response === void 0 ? void 0 : response.accountExists) === false) {
+        if (response?.accountExists === false) {
             // We can invite this user since they do not have an account yet
             return;
         }
-        throw new AccountExistsError_1.default(response === null || response === void 0 ? void 0 : response.accountExists);
+        throw new AccountExistsError_1.default(response?.accountExists);
     });
 }

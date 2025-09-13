@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var useDragAndDrop = function () { return ({ isDraggingOver: false }); };
+const useDragAndDrop = () => ({ isDraggingOver: false });
 exports.default = useDragAndDrop;

@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var Button_1 = require("./Button");
-var Header_1 = require("./Header");
-var Icon_1 = require("./Icon");
-var Expensicons_1 = require("./Icon/Expensicons");
-var ImageSVG_1 = require("./ImageSVG");
-var Pressable_1 = require("./Pressable");
-var Text_1 = require("./Text");
-var Tooltip_1 = require("./Tooltip");
-function ConfirmContent(_a) {
-    var title = _a.title, onConfirm = _a.onConfirm, _b = _a.onCancel, onCancel = _b === void 0 ? function () { } : _b, _c = _a.confirmText, confirmText = _c === void 0 ? '' : _c, _d = _a.cancelText, cancelText = _d === void 0 ? '' : _d, _e = _a.prompt, prompt = _e === void 0 ? '' : _e, _f = _a.success, success = _f === void 0 ? true : _f, _g = _a.danger, danger = _g === void 0 ? false : _g, _h = _a.shouldDisableConfirmButtonWhenOffline, shouldDisableConfirmButtonWhenOffline = _h === void 0 ? false : _h, _j = _a.shouldShowCancelButton, shouldShowCancelButton = _j === void 0 ? false : _j, iconSource = _a.iconSource, iconFill = _a.iconFill, _k = _a.shouldCenterContent, shouldCenterContent = _k === void 0 ? false : _k, _l = _a.shouldStackButtons, shouldStackButtons = _l === void 0 ? true : _l, titleStyles = _a.titleStyles, promptStyles = _a.promptStyles, contentStyles = _a.contentStyles, iconAdditionalStyles = _a.iconAdditionalStyles, _m = _a.iconWidth, iconWidth = _m === void 0 ? variables_1.default.appModalAppIconSize : _m, _o = _a.iconHeight, iconHeight = _o === void 0 ? variables_1.default.appModalAppIconSize : _o, _p = _a.shouldCenterIcon, shouldCenterIcon = _p === void 0 ? false : _p, _q = _a.shouldShowDismissIcon, shouldShowDismissIcon = _q === void 0 ? false : _q, image = _a.image, imageStyles = _a.imageStyles, titleContainerStyles = _a.titleContainerStyles, _r = _a.shouldReverseStackedButtons, shouldReverseStackedButtons = _r === void 0 ? false : _r, isVisible = _a.isVisible, isConfirmLoading = _a.isConfirmLoading;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var theme = (0, useTheme_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var isCentered = shouldCenterContent;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const Button_1 = require("./Button");
+const Header_1 = require("./Header");
+const Icon_1 = require("./Icon");
+const Expensicons_1 = require("./Icon/Expensicons");
+const ImageSVG_1 = require("./ImageSVG");
+const Pressable_1 = require("./Pressable");
+const Text_1 = require("./Text");
+const Tooltip_1 = require("./Tooltip");
+function ConfirmContent({ title, onConfirm, onCancel = () => { }, confirmText = '', cancelText = '', prompt = '', success = true, danger = false, shouldDisableConfirmButtonWhenOffline = false, shouldShowCancelButton = false, iconSource, iconFill, shouldCenterContent = false, shouldStackButtons = true, titleStyles, promptStyles, contentStyles, iconAdditionalStyles, iconWidth = variables_1.default.appModalAppIconSize, iconHeight = variables_1.default.appModalAppIconSize, shouldCenterIcon = false, shouldShowDismissIcon = false, image, imageStyles, titleContainerStyles, shouldReverseStackedButtons = false, isVisible, isConfirmLoading, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const isCentered = shouldCenterContent;
     return (<>
             {!!image && (<react_native_1.View style={imageStyles}>
                     <ImageSVG_1.default contentFit="contain" src={image} height={CONST_1.default.CONFIRM_CONTENT_SVG_SIZE.HEIGHT} width={CONST_1.default.CONFIRM_CONTENT_SVG_SIZE.WIDTH} style={styles.alignSelfCenter}/>
@@ -38,7 +37,7 @@ function ConfirmContent(_a) {
                     </react_native_1.View>)}
                 <react_native_1.View style={isCentered ? [styles.alignItemsCenter, styles.mb6] : []}>
                     {!!iconSource && (<react_native_1.View style={[shouldCenterIcon ? styles.justifyContentCenter : null, styles.flexRow, styles.mb3]}>
-                            <Icon_1.default src={iconSource} fill={iconFill === false ? undefined : (iconFill !== null && iconFill !== void 0 ? iconFill : theme.icon)} width={iconWidth} height={iconHeight} additionalStyles={iconAdditionalStyles}/>
+                            <Icon_1.default src={iconSource} fill={iconFill === false ? undefined : (iconFill ?? theme.icon)} width={iconWidth} height={iconHeight} additionalStyles={iconAdditionalStyles}/>
                         </react_native_1.View>)}
                     <react_native_1.View style={[styles.flexRow, isCentered ? {} : styles.mb4, titleContainerStyles]}>
                         <Header_1.default title={title} textStyles={titleStyles}/>

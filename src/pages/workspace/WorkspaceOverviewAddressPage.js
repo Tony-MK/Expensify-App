@@ -1,37 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useLocalize_1 = require("@hooks/useLocalize");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var AddressPage_1 = require("@pages/AddressPage");
-var Policy_1 = require("@userActions/Policy/Policy");
-var withPolicy_1 = require("./withPolicy");
-function WorkspaceOverviewAddressPage(_a) {
-    var policy = _a.policy, route = _a.route;
-    var translate = (0, useLocalize_1.default)().translate;
-    var backTo = route.params.backTo;
-    var address = (0, react_1.useMemo)(function () {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
-        var tempAddress = policy === null || policy === void 0 ? void 0 : policy.address;
-        var result = {
-            street: (_a = tempAddress === null || tempAddress === void 0 ? void 0 : tempAddress.addressStreet) !== null && _a !== void 0 ? _a : '',
-            city: (_c = (_b = tempAddress === null || tempAddress === void 0 ? void 0 : tempAddress.city) === null || _b === void 0 ? void 0 : _b.trim()) !== null && _c !== void 0 ? _c : '',
-            state: (_e = (_d = tempAddress === null || tempAddress === void 0 ? void 0 : tempAddress.state) === null || _d === void 0 ? void 0 : _d.trim()) !== null && _e !== void 0 ? _e : '',
-            zip: (_g = (_f = tempAddress === null || tempAddress === void 0 ? void 0 : tempAddress.zipCode) === null || _f === void 0 ? void 0 : _f.trim().toUpperCase()) !== null && _g !== void 0 ? _g : '',
-            country: (_h = tempAddress === null || tempAddress === void 0 ? void 0 : tempAddress.country) !== null && _h !== void 0 ? _h : '',
+const react_1 = require("react");
+const useLocalize_1 = require("@hooks/useLocalize");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const AddressPage_1 = require("@pages/AddressPage");
+const Policy_1 = require("@userActions/Policy/Policy");
+const withPolicy_1 = require("./withPolicy");
+function WorkspaceOverviewAddressPage({ policy, route }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const backTo = route.params.backTo;
+    const address = (0, react_1.useMemo)(() => {
+        const tempAddress = policy?.address;
+        const result = {
+            street: tempAddress?.addressStreet ?? '',
+            city: tempAddress?.city?.trim() ?? '',
+            state: tempAddress?.state?.trim() ?? '',
+            zip: tempAddress?.zipCode?.trim().toUpperCase() ?? '',
+            country: tempAddress?.country ?? '',
         };
         return result;
     }, [policy]);
-    var updatePolicyAddress = function (values) {
-        var _a, _b, _c, _d, _e, _f;
+    const updatePolicyAddress = (values) => {
         if (!policy) {
             return;
         }
-        (0, Policy_1.updateAddress)(policy === null || policy === void 0 ? void 0 : policy.id, {
-            addressStreet: "".concat((_b = (_a = values.addressLine1) === null || _a === void 0 ? void 0 : _a.trim()) !== null && _b !== void 0 ? _b : '', "\n").concat((_d = (_c = values.addressLine2) === null || _c === void 0 ? void 0 : _c.trim()) !== null && _d !== void 0 ? _d : ''),
+        (0, Policy_1.updateAddress)(policy?.id, {
+            addressStreet: `${values.addressLine1?.trim() ?? ''}\n${values.addressLine2?.trim() ?? ''}`,
             city: values.city.trim(),
             state: values.state.trim(),
-            zipCode: (_f = (_e = values === null || values === void 0 ? void 0 : values.zipPostCode) === null || _e === void 0 ? void 0 : _e.trim().toUpperCase()) !== null && _f !== void 0 ? _f : '',
+            zipCode: values?.zipPostCode?.trim().toUpperCase() ?? '',
             country: values.country,
         });
         Navigation_1.default.goBack(backTo);

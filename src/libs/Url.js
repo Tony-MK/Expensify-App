@@ -8,10 +8,10 @@ exports.hasURL = hasURL;
 exports.addLeadingForwardSlash = addLeadingForwardSlash;
 exports.extractUrlDomain = extractUrlDomain;
 require("react-native-url-polyfill/auto");
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 function addLeadingForwardSlash(url) {
     if (!url.startsWith('/')) {
-        return "/".concat(url);
+        return `/${url}`;
     }
     return url;
 }
@@ -20,8 +20,8 @@ function addLeadingForwardSlash(url) {
  */
 function getPathFromURL(url) {
     try {
-        var parsedUrl = new URL(url);
-        var path = parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+        const parsedUrl = new URL(url);
+        const path = parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
         return path.substring(1); // Remove the leading '/'
     }
     catch (error) {
@@ -33,10 +33,10 @@ function getPathFromURL(url) {
  * Determine if two urls have the same origin
  */
 function hasSameExpensifyOrigin(url1, url2) {
-    var removeW3 = function (host) { return host.replace(/^www\./i, ''); };
+    const removeW3 = (host) => host.replace(/^www\./i, '');
     try {
-        var parsedUrl1 = new URL(url1);
-        var parsedUrl2 = new URL(url2);
+        const parsedUrl1 = new URL(url1);
+        const parsedUrl2 = new URL(url2);
         return removeW3(parsedUrl1.host) === removeW3(parsedUrl2.host);
     }
     catch (error) {
@@ -50,21 +50,21 @@ function hasSameExpensifyOrigin(url1, url2) {
  */
 function appendParam(url, paramName, paramValue) {
     // If parameter exists, replace it
-    if (url.includes("".concat(paramName, "="))) {
-        var regex = new RegExp("".concat(paramName, "=([^&]*)"));
-        return url.replace(regex, "".concat(paramName, "=").concat(paramValue));
+    if (url.includes(`${paramName}=`)) {
+        const regex = new RegExp(`${paramName}=([^&]*)`);
+        return url.replace(regex, `${paramName}=${paramValue}`);
     }
     // If parameter doesn't exist, append it
-    var separator = url.includes('?') ? '&' : '?';
-    return "".concat(url).concat(separator).concat(paramName, "=").concat(paramValue);
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}${paramName}=${paramValue}`;
 }
 function hasURL(text) {
-    var urlPattern = /((https|http)?:\/\/[^\s]+)/g;
+    const urlPattern = /((https|http)?:\/\/[^\s]+)/g;
     return urlPattern.test(text);
 }
 function extractUrlDomain(url) {
-    var match = String(url).match(CONST_1.default.REGEX.DOMAIN_BASE);
-    return match === null || match === void 0 ? void 0 : match[1];
+    const match = String(url).match(CONST_1.default.REGEX.DOMAIN_BASE);
+    return match?.[1];
 }
 function getSearchParamFromUrl(currentUrl, param) {
     return currentUrl ? new URL(currentUrl).searchParams.get(param) : null;

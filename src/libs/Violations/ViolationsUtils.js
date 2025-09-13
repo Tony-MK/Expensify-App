@@ -1,49 +1,28 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var isEmpty_1 = require("lodash/isEmpty");
-var keyBy_1 = require("lodash/keyBy");
-var reject_1 = require("lodash/reject");
-var react_native_onyx_1 = require("react-native-onyx");
-var CurrencyUtils = require("@libs/CurrencyUtils");
-var DateUtils_1 = require("@libs/DateUtils");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Parser_1 = require("@libs/Parser");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var TransactionUtils = require("@libs/TransactionUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const isEmpty_1 = require("lodash/isEmpty");
+const keyBy_1 = require("lodash/keyBy");
+const reject_1 = require("lodash/reject");
+const react_native_onyx_1 = require("react-native-onyx");
+const CurrencyUtils = require("@libs/CurrencyUtils");
+const DateUtils_1 = require("@libs/DateUtils");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Parser_1 = require("@libs/Parser");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const TransactionUtils = require("@libs/TransactionUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
  * Calculates tag out of policy and missing tag violations for the given transaction
  */
 function getTagViolationsForSingleLevelTags(updatedTransaction, transactionViolations, policyRequiresTags, policyTagList) {
-    var _a, _b, _c, _d;
-    var policyTagKeys = Object.keys(policyTagList);
-    var policyTagListName = (_a = policyTagKeys.at(0)) !== null && _a !== void 0 ? _a : '';
-    var policyTags = (_b = policyTagList[policyTagListName]) === null || _b === void 0 ? void 0 : _b.tags;
-    var hasTagOutOfPolicyViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.TAG_OUT_OF_POLICY; });
-    var hasMissingTagViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.MISSING_TAG; });
-    var isTagInPolicy = policyTags ? !!((_d = policyTags[(_c = updatedTransaction.tag) !== null && _c !== void 0 ? _c : '']) === null || _d === void 0 ? void 0 : _d.enabled) : false;
-    var newTransactionViolations = __spreadArray([], transactionViolations, true);
+    const policyTagKeys = Object.keys(policyTagList);
+    const policyTagListName = policyTagKeys.at(0) ?? '';
+    const policyTags = policyTagList[policyTagListName]?.tags;
+    const hasTagOutOfPolicyViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.TAG_OUT_OF_POLICY);
+    const hasMissingTagViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.MISSING_TAG);
+    const isTagInPolicy = policyTags ? !!policyTags[updatedTransaction.tag ?? '']?.enabled : false;
+    let newTransactionViolations = [...transactionViolations];
     // Add 'tagOutOfPolicy' violation if tag is not in policy
     if (!hasTagOutOfPolicyViolation && updatedTransaction.tag && !isTagInPolicy) {
         newTransactionViolations.push({ name: CONST_1.default.VIOLATIONS.TAG_OUT_OF_POLICY, type: CONST_1.default.VIOLATION_TYPES.VIOLATION });
@@ -66,18 +45,16 @@ function getTagViolationsForSingleLevelTags(updatedTransaction, transactionViola
  * Calculates missing tag violations for policies with dependent tags
  */
 function getTagViolationsForDependentTags(policyTagList, transactionViolations, tagName) {
-    var tagViolations = __spreadArray([], transactionViolations, true);
+    const tagViolations = [...transactionViolations];
     if (!tagName) {
-        Object.values(policyTagList).forEach(function (tagList) {
-            return tagViolations.push({
-                name: CONST_1.default.VIOLATIONS.MISSING_TAG,
-                type: CONST_1.default.VIOLATION_TYPES.VIOLATION,
-                data: { tagName: tagList.name },
-            });
-        });
+        Object.values(policyTagList).forEach((tagList) => tagViolations.push({
+            name: CONST_1.default.VIOLATIONS.MISSING_TAG,
+            type: CONST_1.default.VIOLATION_TYPES.VIOLATION,
+            data: { tagName: tagList.name },
+        }));
     }
     else {
-        var tags = TransactionUtils.getTagArrayFromName(tagName);
+        const tags = TransactionUtils.getTagArrayFromName(tagName);
         if (Object.keys(policyTagList).length !== tags.length || tags.includes('')) {
             tagViolations.push({
                 name: CONST_1.default.VIOLATIONS.ALL_TAG_LEVELS_REQUIRED,
@@ -92,17 +69,16 @@ function getTagViolationsForDependentTags(policyTagList, transactionViolations, 
  * Calculates missing tag violations for policies with independent tags
  */
 function getTagViolationForIndependentTags(policyTagList, transactionViolations, transaction) {
-    var _a, _b;
-    var policyTagKeys = (0, PolicyUtils_1.getSortedTagKeys)(policyTagList);
-    var selectedTags = TransactionUtils.getTagArrayFromName((_a = transaction === null || transaction === void 0 ? void 0 : transaction.tag) !== null && _a !== void 0 ? _a : '');
-    var newTransactionViolations = __spreadArray([], transactionViolations, true);
-    newTransactionViolations = newTransactionViolations.filter(function (violation) { return violation.name !== CONST_1.default.VIOLATIONS.SOME_TAG_LEVELS_REQUIRED && violation.name !== CONST_1.default.VIOLATIONS.TAG_OUT_OF_POLICY; });
+    const policyTagKeys = (0, PolicyUtils_1.getSortedTagKeys)(policyTagList);
+    const selectedTags = TransactionUtils.getTagArrayFromName(transaction?.tag ?? '');
+    let newTransactionViolations = [...transactionViolations];
+    newTransactionViolations = newTransactionViolations.filter((violation) => violation.name !== CONST_1.default.VIOLATIONS.SOME_TAG_LEVELS_REQUIRED && violation.name !== CONST_1.default.VIOLATIONS.TAG_OUT_OF_POLICY);
     // We first get the errorIndexes for someTagLevelsRequired. If it's not empty, we push SOME_TAG_LEVELS_REQUIRED in Onyx.
     // Otherwise, we put TAG_OUT_OF_POLICY in Onyx (when applicable)
-    var errorIndexes = [];
-    for (var i = 0; i < policyTagKeys.length; i++) {
-        var isTagRequired = (_b = policyTagList[policyTagKeys[i]].required) !== null && _b !== void 0 ? _b : true;
-        var isTagSelected = !!selectedTags.at(i);
+    const errorIndexes = [];
+    for (let i = 0; i < policyTagKeys.length; i++) {
+        const isTagRequired = policyTagList[policyTagKeys[i]].required ?? true;
+        const isTagSelected = !!selectedTags.at(i);
         if (isTagRequired && (!isTagSelected || (selectedTags.length === 1 && selectedTags.at(0) === ''))) {
             errorIndexes.push(i);
         }
@@ -112,16 +88,16 @@ function getTagViolationForIndependentTags(policyTagList, transactionViolations,
             name: CONST_1.default.VIOLATIONS.SOME_TAG_LEVELS_REQUIRED,
             type: CONST_1.default.VIOLATION_TYPES.VIOLATION,
             data: {
-                errorIndexes: errorIndexes,
+                errorIndexes,
             },
         });
     }
     else {
-        var hasInvalidTag = false;
-        var _loop_1 = function (i) {
-            var selectedTag = selectedTags.at(i);
-            var tags = policyTagList[policyTagKeys[i]].tags;
-            var isTagInPolicy = Object.values(tags).some(function (tag) { return tag.name === selectedTag && !!tag.enabled; });
+        let hasInvalidTag = false;
+        for (let i = 0; i < policyTagKeys.length; i++) {
+            const selectedTag = selectedTags.at(i);
+            const tags = policyTagList[policyTagKeys[i]].tags;
+            const isTagInPolicy = Object.values(tags).some((tag) => tag.name === selectedTag && !!tag.enabled);
             if (!isTagInPolicy && selectedTag) {
                 newTransactionViolations.push({
                     name: CONST_1.default.VIOLATIONS.TAG_OUT_OF_POLICY,
@@ -131,13 +107,8 @@ function getTagViolationForIndependentTags(policyTagList, transactionViolations,
                     },
                 });
                 hasInvalidTag = true;
-                return "break";
-            }
-        };
-        for (var i = 0; i < policyTagKeys.length; i++) {
-            var state_1 = _loop_1(i);
-            if (state_1 === "break")
                 break;
+            }
         }
         if (!hasInvalidTag) {
             newTransactionViolations = (0, reject_1.default)(newTransactionViolations, {
@@ -151,16 +122,15 @@ function getTagViolationForIndependentTags(policyTagList, transactionViolations,
  * Calculates tag violations for a transaction on a policy with multi level tags
  */
 function getTagViolationsForMultiLevelTags(updatedTransaction, transactionViolations, policyTagList, hasDependentTags) {
-    var _a;
-    var tagViolations = [
+    const tagViolations = [
         CONST_1.default.VIOLATIONS.SOME_TAG_LEVELS_REQUIRED,
         CONST_1.default.VIOLATIONS.TAG_OUT_OF_POLICY,
         CONST_1.default.VIOLATIONS.MISSING_TAG,
         CONST_1.default.VIOLATIONS.ALL_TAG_LEVELS_REQUIRED,
     ];
-    var filteredTransactionViolations = transactionViolations.filter(function (violation) { return !tagViolations.includes(violation.name); });
+    const filteredTransactionViolations = transactionViolations.filter((violation) => !tagViolations.includes(violation.name));
     if (hasDependentTags) {
-        return getTagViolationsForDependentTags(policyTagList, filteredTransactionViolations, (_a = updatedTransaction.tag) !== null && _a !== void 0 ? _a : '');
+        return getTagViolationsForDependentTags(policyTagList, filteredTransactionViolations, updatedTransaction.tag ?? '');
     }
     return getTagViolationForIndependentTags(policyTagList, filteredTransactionViolations, updatedTransaction);
 }
@@ -169,26 +139,26 @@ function getTagViolationsForMultiLevelTags(updatedTransaction, transactionViolat
  */
 function getTagViolationMessagesForMultiLevelTags(tagName, errorIndexes, tags, translate) {
     if ((0, isEmpty_1.default)(errorIndexes) || (0, isEmpty_1.default)(tags)) {
-        return translate('violations.someTagLevelsRequired', { tagName: tagName });
+        return translate('violations.someTagLevelsRequired', { tagName });
     }
-    var tagsWithIndexes = (0, keyBy_1.default)(Object.values(tags), 'orderWeight');
-    return errorIndexes.map(function (i) { var _a; return translate('violations.someTagLevelsRequired', { tagName: (_a = tagsWithIndexes[i]) === null || _a === void 0 ? void 0 : _a.name }); }).join('. ');
+    const tagsWithIndexes = (0, keyBy_1.default)(Object.values(tags), 'orderWeight');
+    return errorIndexes.map((i) => translate('violations.someTagLevelsRequired', { tagName: tagsWithIndexes[i]?.name })).join('. ');
 }
 /**
  * Extracts unique error messages from errors and actions
  */
 function extractErrorMessages(errors, errorActions, translate) {
-    var uniqueMessages = new Set();
+    const uniqueMessages = new Set();
     // Combine transaction and action errors
-    var allErrors = __assign({}, errors);
-    errorActions.forEach(function (action) {
+    let allErrors = { ...errors };
+    errorActions.forEach((action) => {
         if (!action.errors) {
             return;
         }
-        allErrors = __assign(__assign({}, allErrors), action.errors);
+        allErrors = { ...allErrors, ...action.errors };
     });
     // Extract error messages
-    Object.values(allErrors).forEach(function (errorValue) {
+    Object.values(allErrors).forEach((errorValue) => {
         if (!errorValue) {
             return;
         }
@@ -199,7 +169,7 @@ function extractErrorMessages(errors, errorActions, translate) {
             uniqueMessages.add(translate('iou.error.receiptFailureMessageShort'));
         }
         else {
-            Object.values(errorValue).forEach(function (nestedErrorValue) {
+            Object.values(errorValue).forEach((nestedErrorValue) => {
                 if (!nestedErrorValue) {
                     return;
                 }
@@ -209,30 +179,29 @@ function extractErrorMessages(errors, errorActions, translate) {
     });
     return Array.from(uniqueMessages);
 }
-var ViolationsUtils = {
+const ViolationsUtils = {
     /**
      * Checks a transaction for policy violations and returns an object with Onyx method, key and updated transaction
      * violations.
      */
-    getViolationsOnyxData: function (updatedTransaction, transactionViolations, policy, policyTagList, policyCategories, hasDependentTags, isInvoiceTransaction) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-        var isScanning = TransactionUtils.isScanning(updatedTransaction);
-        var isScanRequest = TransactionUtils.isScanRequest(updatedTransaction);
-        var isPartialTransaction = TransactionUtils.isPartial(updatedTransaction);
+    getViolationsOnyxData(updatedTransaction, transactionViolations, policy, policyTagList, policyCategories, hasDependentTags, isInvoiceTransaction) {
+        const isScanning = TransactionUtils.isScanning(updatedTransaction);
+        const isScanRequest = TransactionUtils.isScanRequest(updatedTransaction);
+        const isPartialTransaction = TransactionUtils.isPartial(updatedTransaction);
         if (isPartialTransaction && isScanning) {
             return {
                 onyxMethod: react_native_onyx_1.default.METHOD.SET,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat(updatedTransaction.transactionID),
+                key: `${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${updatedTransaction.transactionID}`,
                 value: transactionViolations,
             };
         }
-        var newTransactionViolations = __spreadArray([], transactionViolations, true);
-        var shouldShowSmartScanFailedError = isScanRequest && ((_a = updatedTransaction.receipt) === null || _a === void 0 ? void 0 : _a.state) === CONST_1.default.IOU.RECEIPT_STATE.SCAN_FAILED;
-        var hasSmartScanFailedError = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.SMARTSCAN_FAILED; });
+        let newTransactionViolations = [...transactionViolations];
+        const shouldShowSmartScanFailedError = isScanRequest && updatedTransaction.receipt?.state === CONST_1.default.IOU.RECEIPT_STATE.SCAN_FAILED;
+        const hasSmartScanFailedError = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.SMARTSCAN_FAILED);
         if (shouldShowSmartScanFailedError && !hasSmartScanFailedError) {
             return {
                 onyxMethod: react_native_onyx_1.default.METHOD.SET,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat(updatedTransaction.transactionID),
+                key: `${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${updatedTransaction.transactionID}`,
                 value: [{ name: CONST_1.default.VIOLATIONS.SMARTSCAN_FAILED, type: CONST_1.default.VIOLATION_TYPES.WARNING, showInReview: true }],
             };
         }
@@ -240,12 +209,12 @@ var ViolationsUtils = {
             newTransactionViolations = (0, reject_1.default)(newTransactionViolations, { name: CONST_1.default.VIOLATIONS.SMARTSCAN_FAILED });
         }
         // Calculate client-side category violations
-        var policyRequiresCategories = !!policy.requiresCategory;
+        const policyRequiresCategories = !!policy.requiresCategory;
         if (policyRequiresCategories) {
-            var hasCategoryOutOfPolicyViolation = transactionViolations.some(function (violation) { return violation.name === 'categoryOutOfPolicy'; });
-            var hasMissingCategoryViolation = transactionViolations.some(function (violation) { return violation.name === 'missingCategory'; });
-            var categoryKey = updatedTransaction.category;
-            var isCategoryInPolicy = categoryKey ? (_b = policyCategories === null || policyCategories === void 0 ? void 0 : policyCategories[categoryKey]) === null || _b === void 0 ? void 0 : _b.enabled : false;
+            const hasCategoryOutOfPolicyViolation = transactionViolations.some((violation) => violation.name === 'categoryOutOfPolicy');
+            const hasMissingCategoryViolation = transactionViolations.some((violation) => violation.name === 'missingCategory');
+            const categoryKey = updatedTransaction.category;
+            const isCategoryInPolicy = categoryKey ? policyCategories?.[categoryKey]?.enabled : false;
             // Add 'categoryOutOfPolicy' violation if category is not in policy
             if (!hasCategoryOutOfPolicyViolation && categoryKey && !isCategoryInPolicy) {
                 newTransactionViolations.push({ name: 'categoryOutOfPolicy', type: CONST_1.default.VIOLATION_TYPES.VIOLATION });
@@ -264,16 +233,16 @@ var ViolationsUtils = {
             }
         }
         // Calculate client-side tag violations
-        var policyRequiresTags = !!policy.requiresTag;
+        const policyRequiresTags = !!policy.requiresTag;
         if (policyRequiresTags) {
             newTransactionViolations =
                 Object.keys(policyTagList).length === 1
                     ? getTagViolationsForSingleLevelTags(updatedTransaction, newTransactionViolations, policyRequiresTags, policyTagList)
                     : getTagViolationsForMultiLevelTags(updatedTransaction, newTransactionViolations, policyTagList, hasDependentTags);
         }
-        var customUnitRateID = (_d = (_c = updatedTransaction === null || updatedTransaction === void 0 ? void 0 : updatedTransaction.comment) === null || _c === void 0 ? void 0 : _c.customUnit) === null || _d === void 0 ? void 0 : _d.customUnitRateID;
+        const customUnitRateID = updatedTransaction?.comment?.customUnit?.customUnitRateID;
         if (customUnitRateID && customUnitRateID.length > 0) {
-            var distanceRateCustomRate = (0, PolicyUtils_1.getDistanceRateCustomUnitRate)(policy, customUnitRateID);
+            const distanceRateCustomRate = (0, PolicyUtils_1.getDistanceRateCustomUnitRate)(policy, customUnitRateID);
             if (distanceRateCustomRate) {
                 newTransactionViolations = (0, reject_1.default)(newTransactionViolations, { name: CONST_1.default.VIOLATIONS.CUSTOM_UNIT_OUT_OF_POLICY });
             }
@@ -285,52 +254,52 @@ var ViolationsUtils = {
                 });
             }
         }
-        var isControlPolicy = policy.type === CONST_1.default.POLICY.TYPE.CORPORATE;
-        var inputDate = new Date((_e = updatedTransaction.modifiedCreated) !== null && _e !== void 0 ? _e : updatedTransaction.created);
-        var shouldDisplayFutureDateViolation = !isInvoiceTransaction && DateUtils_1.default.isFutureDay(inputDate) && isControlPolicy;
-        var hasReceiptRequiredViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.RECEIPT_REQUIRED && violation.data; });
-        var hasCategoryReceiptRequiredViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.RECEIPT_REQUIRED && !violation.data; });
-        var hasOverLimitViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.OVER_LIMIT; });
+        const isControlPolicy = policy.type === CONST_1.default.POLICY.TYPE.CORPORATE;
+        const inputDate = new Date(updatedTransaction.modifiedCreated ?? updatedTransaction.created);
+        const shouldDisplayFutureDateViolation = !isInvoiceTransaction && DateUtils_1.default.isFutureDay(inputDate) && isControlPolicy;
+        const hasReceiptRequiredViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.RECEIPT_REQUIRED && violation.data);
+        const hasCategoryReceiptRequiredViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.RECEIPT_REQUIRED && !violation.data);
+        const hasOverLimitViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.OVER_LIMIT);
         // TODO: Uncomment when the OVER_TRIP_LIMIT violation is implemented
         // const hasOverTripLimitViolation = transactionViolations.some((violation) => violation.name === CONST.VIOLATIONS.OVER_TRIP_LIMIT);
-        var hasCategoryOverLimitViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.OVER_CATEGORY_LIMIT; });
-        var hasMissingCommentViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.MISSING_COMMENT; });
-        var hasTaxOutOfPolicyViolation = transactionViolations.some(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.TAX_OUT_OF_POLICY; });
-        var isPolicyTrackTaxEnabled = !!((_f = policy === null || policy === void 0 ? void 0 : policy.tax) === null || _f === void 0 ? void 0 : _f.trackingEnabled);
-        var isTaxInPolicy = Object.keys((_h = (_g = policy.taxRates) === null || _g === void 0 ? void 0 : _g.taxes) !== null && _h !== void 0 ? _h : {}).some(function (key) { return key === updatedTransaction.taxCode; });
+        const hasCategoryOverLimitViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.OVER_CATEGORY_LIMIT);
+        const hasMissingCommentViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.MISSING_COMMENT);
+        const hasTaxOutOfPolicyViolation = transactionViolations.some((violation) => violation.name === CONST_1.default.VIOLATIONS.TAX_OUT_OF_POLICY);
+        const isPolicyTrackTaxEnabled = !!policy?.tax?.trackingEnabled;
+        const isTaxInPolicy = Object.keys(policy.taxRates?.taxes ?? {}).some((key) => key === updatedTransaction.taxCode);
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        var amount = updatedTransaction.modifiedAmount || updatedTransaction.amount;
+        const amount = updatedTransaction.modifiedAmount || updatedTransaction.amount;
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        var currency = updatedTransaction.modifiedCurrency || updatedTransaction.currency;
-        var canCalculateAmountViolations = policy.outputCurrency === currency;
-        var categoryName = updatedTransaction.category;
-        var categoryMaxAmountNoReceipt = (_j = policyCategories[categoryName !== null && categoryName !== void 0 ? categoryName : '']) === null || _j === void 0 ? void 0 : _j.maxAmountNoReceipt;
-        var maxAmountNoReceipt = policy.maxExpenseAmountNoReceipt;
+        const currency = updatedTransaction.modifiedCurrency || updatedTransaction.currency;
+        const canCalculateAmountViolations = policy.outputCurrency === currency;
+        const categoryName = updatedTransaction.category;
+        const categoryMaxAmountNoReceipt = policyCategories[categoryName ?? '']?.maxAmountNoReceipt;
+        const maxAmountNoReceipt = policy.maxExpenseAmountNoReceipt;
         // The category maxExpenseAmountNoReceipt and maxExpenseAmount settings override the respective policy settings.
-        var shouldShowReceiptRequiredViolation = canCalculateAmountViolations &&
+        const shouldShowReceiptRequiredViolation = canCalculateAmountViolations &&
             !isInvoiceTransaction &&
             typeof categoryMaxAmountNoReceipt !== 'number' &&
             typeof maxAmountNoReceipt === 'number' &&
             Math.abs(amount) > maxAmountNoReceipt &&
             !TransactionUtils.hasReceipt(updatedTransaction) &&
             isControlPolicy;
-        var shouldShowCategoryReceiptRequiredViolation = canCalculateAmountViolations &&
+        const shouldShowCategoryReceiptRequiredViolation = canCalculateAmountViolations &&
             !isInvoiceTransaction &&
             typeof categoryMaxAmountNoReceipt === 'number' &&
             Math.abs(amount) > categoryMaxAmountNoReceipt &&
             !TransactionUtils.hasReceipt(updatedTransaction) &&
             isControlPolicy;
-        var overLimitAmount = policy.maxExpenseAmount;
-        var categoryOverLimit = (_k = policyCategories[categoryName !== null && categoryName !== void 0 ? categoryName : '']) === null || _k === void 0 ? void 0 : _k.maxExpenseAmount;
-        var shouldShowOverLimitViolation = canCalculateAmountViolations &&
+        const overLimitAmount = policy.maxExpenseAmount;
+        const categoryOverLimit = policyCategories[categoryName ?? '']?.maxExpenseAmount;
+        const shouldShowOverLimitViolation = canCalculateAmountViolations &&
             !isInvoiceTransaction &&
             typeof categoryOverLimit !== 'number' &&
             typeof overLimitAmount === 'number' &&
             Math.abs(amount) > overLimitAmount &&
             isControlPolicy;
-        var shouldCategoryShowOverLimitViolation = canCalculateAmountViolations && !isInvoiceTransaction && typeof categoryOverLimit === 'number' && Math.abs(amount) > categoryOverLimit && isControlPolicy;
-        var shouldShowMissingComment = !isInvoiceTransaction && ((_l = policyCategories === null || policyCategories === void 0 ? void 0 : policyCategories[categoryName !== null && categoryName !== void 0 ? categoryName : '']) === null || _l === void 0 ? void 0 : _l.areCommentsRequired) && !((_m = updatedTransaction.comment) === null || _m === void 0 ? void 0 : _m.comment) && isControlPolicy;
-        var hasFutureDateViolation = transactionViolations.some(function (violation) { return violation.name === 'futureDate'; });
+        const shouldCategoryShowOverLimitViolation = canCalculateAmountViolations && !isInvoiceTransaction && typeof categoryOverLimit === 'number' && Math.abs(amount) > categoryOverLimit && isControlPolicy;
+        const shouldShowMissingComment = !isInvoiceTransaction && policyCategories?.[categoryName ?? '']?.areCommentsRequired && !updatedTransaction.comment?.comment && isControlPolicy;
+        const hasFutureDateViolation = transactionViolations.some((violation) => violation.name === 'futureDate');
         // Add 'futureDate' violation if transaction date is in the future and policy type is corporate
         if (!hasFutureDateViolation && shouldDisplayFutureDateViolation) {
             newTransactionViolations.push({ name: CONST_1.default.VIOLATIONS.FUTURE_DATE, type: CONST_1.default.VIOLATION_TYPES.VIOLATION, showInReview: true });
@@ -404,7 +373,7 @@ var ViolationsUtils = {
         }
         return {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat(updatedTransaction.transactionID),
+            key: `${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${updatedTransaction.transactionID}`,
             value: newTransactionViolations,
         };
     },
@@ -415,10 +384,8 @@ var ViolationsUtils = {
      * possible values could be either translation keys that resolve to  strings or translation keys that resolve to
      * functions.
      */
-    getViolationTranslation: function (violation, translate, canEdit, tags) {
-        var _a, _b, _c, _d;
-        if (canEdit === void 0) { canEdit = true; }
-        var _e = (_a = violation.data) !== null && _a !== void 0 ? _a : {}, _f = _e.brokenBankConnection, brokenBankConnection = _f === void 0 ? false : _f, _g = _e.isAdmin, isAdmin = _g === void 0 ? false : _g, email = _e.email, _h = _e.isTransactionOlderThan7Days, isTransactionOlderThan7Days = _h === void 0 ? false : _h, member = _e.member, category = _e.category, _j = _e.formattedLimit, formattedLimit = _j === void 0 ? '' : _j, _k = _e.surcharge, surcharge = _k === void 0 ? 0 : _k, _l = _e.invoiceMarkup, invoiceMarkup = _l === void 0 ? 0 : _l, _m = _e.maxAge, maxAge = _m === void 0 ? 0 : _m, tagName = _e.tagName, taxName = _e.taxName, type = _e.type, rterType = _e.rterType, _o = _e.message, message = _o === void 0 ? '' : _o, _p = _e.errorIndexes, errorIndexes = _p === void 0 ? [] : _p;
+    getViolationTranslation(violation, translate, canEdit = true, tags) {
+        const { brokenBankConnection = false, isAdmin = false, email, isTransactionOlderThan7Days = false, member, category, formattedLimit = '', surcharge = 0, invoiceMarkup = 0, maxAge = 0, tagName, taxName, type, rterType, message = '', errorIndexes = [], } = violation.data ?? {};
         switch (violation.name) {
             case 'allTagLevelsRequired':
                 return translate('violations.allTagLevelsRequired');
@@ -427,11 +394,11 @@ var ViolationsUtils = {
             case 'billableExpense':
                 return translate('violations.billableExpense');
             case 'cashExpenseWithNoReceipt':
-                return translate('violations.cashExpenseWithNoReceipt', { formattedLimit: formattedLimit });
+                return translate('violations.cashExpenseWithNoReceipt', { formattedLimit });
             case 'categoryOutOfPolicy':
                 return translate('violations.categoryOutOfPolicy');
             case 'conversionSurcharge':
-                return translate('violations.conversionSurcharge', { surcharge: surcharge });
+                return translate('violations.conversionSurcharge', { surcharge });
             case 'customUnitOutOfPolicy':
                 return translate('violations.customUnitOutOfPolicy');
             case 'duplicatedTransaction':
@@ -441,58 +408,58 @@ var ViolationsUtils = {
             case 'futureDate':
                 return translate('violations.futureDate');
             case 'invoiceMarkup':
-                return translate('violations.invoiceMarkup', { invoiceMarkup: invoiceMarkup });
+                return translate('violations.invoiceMarkup', { invoiceMarkup });
             case 'maxAge':
-                return translate('violations.maxAge', { maxAge: maxAge });
+                return translate('violations.maxAge', { maxAge });
             case 'missingCategory':
                 return translate('violations.missingCategory');
             case 'missingComment':
                 return translate('violations.missingComment');
             case 'missingTag':
-                return translate('violations.missingTag', { tagName: tagName });
+                return translate('violations.missingTag', { tagName });
             case 'modifiedAmount':
-                return translate('violations.modifiedAmount', { type: type, displayPercentVariance: (_b = violation.data) === null || _b === void 0 ? void 0 : _b.displayPercentVariance });
+                return translate('violations.modifiedAmount', { type, displayPercentVariance: violation.data?.displayPercentVariance });
             case 'modifiedDate':
                 return translate('violations.modifiedDate');
             case 'nonExpensiworksExpense':
                 return translate('violations.nonExpensiworksExpense');
             case 'overAutoApprovalLimit':
-                return translate('violations.overAutoApprovalLimit', { formattedLimit: formattedLimit });
+                return translate('violations.overAutoApprovalLimit', { formattedLimit });
             case 'overCategoryLimit':
-                return translate('violations.overCategoryLimit', { formattedLimit: formattedLimit });
+                return translate('violations.overCategoryLimit', { formattedLimit });
             case 'overLimit':
-                return translate('violations.overLimit', { formattedLimit: formattedLimit });
+                return translate('violations.overLimit', { formattedLimit });
             case 'overTripLimit':
-                return translate('violations.overTripLimit', { formattedLimit: formattedLimit });
+                return translate('violations.overTripLimit', { formattedLimit });
             case 'overLimitAttendee':
-                return translate('violations.overLimitAttendee', { formattedLimit: formattedLimit });
+                return translate('violations.overLimitAttendee', { formattedLimit });
             case 'perDayLimit':
-                return translate('violations.perDayLimit', { formattedLimit: formattedLimit });
+                return translate('violations.perDayLimit', { formattedLimit });
             case 'receiptNotSmartScanned':
                 return translate('violations.receiptNotSmartScanned');
             case 'receiptRequired':
-                return translate('violations.receiptRequired', { formattedLimit: formattedLimit, category: category });
+                return translate('violations.receiptRequired', { formattedLimit, category });
             case 'customRules':
-                return translate('violations.customRules', { message: message });
+                return translate('violations.customRules', { message });
             case 'rter':
                 return translate('violations.rter', {
-                    brokenBankConnection: brokenBankConnection,
-                    isAdmin: isAdmin,
-                    email: email,
-                    isTransactionOlderThan7Days: isTransactionOlderThan7Days,
-                    member: member,
-                    rterType: rterType,
+                    brokenBankConnection,
+                    isAdmin,
+                    email,
+                    isTransactionOlderThan7Days,
+                    member,
+                    rterType,
                 });
             case 'smartscanFailed':
-                return translate('violations.smartscanFailed', { canEdit: canEdit });
+                return translate('violations.smartscanFailed', { canEdit });
             case 'someTagLevelsRequired':
-                return getTagViolationMessagesForMultiLevelTags(tagName, errorIndexes, tags !== null && tags !== void 0 ? tags : {}, translate);
+                return getTagViolationMessagesForMultiLevelTags(tagName, errorIndexes, tags ?? {}, translate);
             case 'tagOutOfPolicy':
-                return translate('violations.tagOutOfPolicy', { tagName: tagName });
+                return translate('violations.tagOutOfPolicy', { tagName });
             case 'taxAmountChanged':
                 return translate('violations.taxAmountChanged');
             case 'taxOutOfPolicy':
-                return translate('violations.taxOutOfPolicy', { taxName: taxName });
+                return translate('violations.taxOutOfPolicy', { taxName });
             case 'taxRateChanged':
                 return translate('violations.taxRateChanged');
             case 'taxRequired':
@@ -501,7 +468,7 @@ var ViolationsUtils = {
                 return translate('violations.hold');
             case CONST_1.default.VIOLATIONS.PROHIBITED_EXPENSE:
                 return translate('violations.prohibitedExpense', {
-                    prohibitedExpenseType: (_d = (_c = violation.data) === null || _c === void 0 ? void 0 : _c.prohibitedExpenseRule) !== null && _d !== void 0 ? _d : '',
+                    prohibitedExpenseType: violation.data?.prohibitedExpenseRule ?? '',
                 });
             case CONST_1.default.VIOLATIONS.RECEIPT_GENERATED_WITH_AI:
                 return translate('violations.receiptGeneratedWithAI');
@@ -514,21 +481,26 @@ var ViolationsUtils = {
         }
     },
     // We have to use regex, because Violation limit is given in a inconvenient form: "$2,000.00"
-    getViolationAmountLimit: function (violation) {
-        var _a, _b;
-        return Number((_b = (_a = violation.data) === null || _a === void 0 ? void 0 : _a.formattedLimit) === null || _b === void 0 ? void 0 : _b.replace(CONST_1.default.VIOLATION_LIMIT_REGEX, ''));
+    getViolationAmountLimit(violation) {
+        return Number(violation.data?.formattedLimit?.replace(CONST_1.default.VIOLATION_LIMIT_REGEX, ''));
     },
-    getRBRMessages: function (transaction, transactionViolations, translate, missingFieldError, transactionThreadActions, tags) {
-        var _a, _b;
-        var errorMessages = extractErrorMessages((_a = transaction === null || transaction === void 0 ? void 0 : transaction.errors) !== null && _a !== void 0 ? _a : {}, (_b = transactionThreadActions === null || transactionThreadActions === void 0 ? void 0 : transactionThreadActions.filter(function (e) { return !!e.errors; })) !== null && _b !== void 0 ? _b : [], translate);
-        return __spreadArray(__spreadArray(__spreadArray([], errorMessages, true), (missingFieldError ? ["".concat(missingFieldError, ".")] : []), true), transactionViolations.map(function (violation) {
-            var message = ViolationsUtils.getViolationTranslation(violation, translate, true, tags);
-            if (!message) {
-                return;
-            }
-            var textMessage = Parser_1.default.htmlToText(message);
-            return textMessage.endsWith('.') ? message : "".concat(message, ".");
-        }), true).filter(Boolean)
+    getRBRMessages(transaction, transactionViolations, translate, missingFieldError, transactionThreadActions, tags) {
+        const errorMessages = extractErrorMessages(transaction?.errors ?? {}, transactionThreadActions?.filter((e) => !!e.errors) ?? [], translate);
+        return [
+            ...errorMessages,
+            ...(missingFieldError ? [`${missingFieldError}.`] : []),
+            // Some violations end with a period already so lets make sure the connected messages have only single period between them
+            // and end with a single dot.
+            ...transactionViolations.map((violation) => {
+                const message = ViolationsUtils.getViolationTranslation(violation, translate, true, tags);
+                if (!message) {
+                    return;
+                }
+                const textMessage = Parser_1.default.htmlToText(message);
+                return textMessage.endsWith('.') ? message : `${message}.`;
+            }),
+        ]
+            .filter(Boolean)
             .join(' ');
     },
 };

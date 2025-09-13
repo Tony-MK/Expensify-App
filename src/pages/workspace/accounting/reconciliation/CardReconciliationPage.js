@@ -1,40 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var RenderHTML_1 = require("@components/RenderHTML");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var useEnvironment_1 = require("@hooks/useEnvironment");
-var useExpensifyCardFeeds_1 = require("@hooks/useExpensifyCardFeeds");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var AccountingUtils_1 = require("@libs/AccountingUtils");
-var PolicyConnections_1 = require("@libs/actions/PolicyConnections");
-var CardUtils_1 = require("@libs/CardUtils");
-var Navigation_1 = require("@navigation/Navigation");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var withPolicyConnections_1 = require("@pages/workspace/withPolicyConnections");
-var ToggleSettingsOptionRow_1 = require("@pages/workspace/workflows/ToggleSettingsOptionRow");
-var Card_1 = require("@userActions/Card");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-function CardReconciliationPage(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-    var policy = _a.policy, route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var workspaceAccountID = (_b = policy === null || policy === void 0 ? void 0 : policy.workspaceAccountID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID;
-    var policyID = policy === null || policy === void 0 ? void 0 : policy.id;
-    var allCardSettings = (0, useExpensifyCardFeeds_1.default)(policyID);
-    var environmentURL = (0, useEnvironment_1.default)().environmentURL;
-    var fullySetUpCardSetting = (0, react_1.useMemo)(function () {
-        var entries = Object.entries(allCardSettings !== null && allCardSettings !== void 0 ? allCardSettings : {});
-        var initialValue = {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const RenderHTML_1 = require("@components/RenderHTML");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const useEnvironment_1 = require("@hooks/useEnvironment");
+const useExpensifyCardFeeds_1 = require("@hooks/useExpensifyCardFeeds");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const AccountingUtils_1 = require("@libs/AccountingUtils");
+const PolicyConnections_1 = require("@libs/actions/PolicyConnections");
+const CardUtils_1 = require("@libs/CardUtils");
+const Navigation_1 = require("@navigation/Navigation");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const withPolicyConnections_1 = require("@pages/workspace/withPolicyConnections");
+const ToggleSettingsOptionRow_1 = require("@pages/workspace/workflows/ToggleSettingsOptionRow");
+const Card_1 = require("@userActions/Card");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+function CardReconciliationPage({ policy, route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const workspaceAccountID = policy?.workspaceAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const policyID = policy?.id;
+    const allCardSettings = (0, useExpensifyCardFeeds_1.default)(policyID);
+    const { environmentURL } = (0, useEnvironment_1.default)();
+    const fullySetUpCardSetting = (0, react_1.useMemo)(() => {
+        const entries = Object.entries(allCardSettings ?? {});
+        const initialValue = {
             key: '',
             cardSetting: {
                 monthlySettlementDate: new Date(),
@@ -42,61 +40,60 @@ function CardReconciliationPage(_a) {
                 paymentBankAccountID: CONST_1.default.DEFAULT_NUMBER_ID,
             },
         };
-        return entries.reduce(function (acc, _a) {
-            var key = _a[0], cardSetting = _a[1];
+        return entries.reduce((acc, [key, cardSetting]) => {
             if (cardSetting && (0, CardUtils_1.isExpensifyCardFullySetUp)(policy, cardSetting)) {
                 return {
-                    key: key,
-                    cardSetting: cardSetting,
+                    key,
+                    cardSetting,
                 };
             }
             return acc;
         }, initialValue);
     }, [allCardSettings, policy]);
-    var domainID = fullySetUpCardSetting.key.split('_').at(-1);
-    var effectiveDomainID = Number(domainID !== null && domainID !== void 0 ? domainID : workspaceAccountID);
-    var isContinuousReconciliationOn = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION).concat(effectiveDomainID), { canBeMissing: true })[0];
-    var currentConnectionName = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION).concat(effectiveDomainID), { canBeMissing: true })[0];
-    var bankAccountList = (0, useOnyx_1.default)(ONYXKEYS_1.default.BANK_ACCOUNT_LIST, { canBeMissing: true })[0];
-    var paymentBankAccountID = (_d = (_c = fullySetUpCardSetting.cardSetting) === null || _c === void 0 ? void 0 : _c.paymentBankAccountID) !== null && _d !== void 0 ? _d : CONST_1.default.DEFAULT_NUMBER_ID;
-    var bankAccountTitle = (_f = (_e = bankAccountList === null || bankAccountList === void 0 ? void 0 : bankAccountList[paymentBankAccountID]) === null || _e === void 0 ? void 0 : _e.title) !== null && _f !== void 0 ? _f : '';
-    var connection = route.params.connection;
-    var connectionName = (0, AccountingUtils_1.getConnectionNameFromRouteParam)(connection);
-    var autoSync = !!((_k = (_j = (_h = (_g = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _g === void 0 ? void 0 : _g[connectionName]) === null || _h === void 0 ? void 0 : _h.config) === null || _j === void 0 ? void 0 : _j.autoSync) === null || _k === void 0 ? void 0 : _k.enabled);
-    var shouldShow = !!((_l = fullySetUpCardSetting.cardSetting) === null || _l === void 0 ? void 0 : _l.paymentBankAccountID);
-    var handleToggleContinuousReconciliation = function (value) {
+    const domainID = fullySetUpCardSetting.key.split('_').at(-1);
+    const effectiveDomainID = Number(domainID ?? workspaceAccountID);
+    const [isContinuousReconciliationOn] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION}${effectiveDomainID}`, { canBeMissing: true });
+    const [currentConnectionName] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION}${effectiveDomainID}`, { canBeMissing: true });
+    const [bankAccountList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.BANK_ACCOUNT_LIST, { canBeMissing: true });
+    const paymentBankAccountID = fullySetUpCardSetting.cardSetting?.paymentBankAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const bankAccountTitle = bankAccountList?.[paymentBankAccountID]?.title ?? '';
+    const { connection } = route.params;
+    const connectionName = (0, AccountingUtils_1.getConnectionNameFromRouteParam)(connection);
+    const autoSync = !!policy?.connections?.[connectionName]?.config?.autoSync?.enabled;
+    const shouldShow = !!fullySetUpCardSetting.cardSetting?.paymentBankAccountID;
+    const handleToggleContinuousReconciliation = (value) => {
         (0, Card_1.toggleContinuousReconciliation)(effectiveDomainID, value, connectionName, currentConnectionName);
         if (value) {
             Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_ACCOUNTING_RECONCILIATION_ACCOUNT_SETTINGS.getRoute(policyID, connection));
         }
     };
-    var accountingAdvancedSettingsLink = (0, react_1.useMemo)(function () {
+    const accountingAdvancedSettingsLink = (0, react_1.useMemo)(() => {
         if (!policyID) {
             return '';
         }
-        var backTo = ROUTES_1.default.WORKSPACE_ACCOUNTING_CARD_RECONCILIATION.getRoute(policyID, connection);
+        const backTo = ROUTES_1.default.WORKSPACE_ACCOUNTING_CARD_RECONCILIATION.getRoute(policyID, connection);
         switch (connection) {
             case CONST_1.default.POLICY.CONNECTIONS.ROUTE.QBO:
-                return "".concat(environmentURL, "/").concat(ROUTES_1.default.WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_AUTO_SYNC.getRoute(policyID, backTo));
+                return `${environmentURL}/${ROUTES_1.default.WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_AUTO_SYNC.getRoute(policyID, backTo)}`;
             case CONST_1.default.POLICY.CONNECTIONS.ROUTE.XERO:
-                return "".concat(environmentURL, "/").concat(ROUTES_1.default.POLICY_ACCOUNTING_XERO_AUTO_SYNC.getRoute(policyID, backTo));
+                return `${environmentURL}/${ROUTES_1.default.POLICY_ACCOUNTING_XERO_AUTO_SYNC.getRoute(policyID, backTo)}`;
             case CONST_1.default.POLICY.CONNECTIONS.ROUTE.NETSUITE:
-                return "".concat(environmentURL, "/").concat(ROUTES_1.default.POLICY_ACCOUNTING_NETSUITE_AUTO_SYNC.getRoute(policyID, backTo));
+                return `${environmentURL}/${ROUTES_1.default.POLICY_ACCOUNTING_NETSUITE_AUTO_SYNC.getRoute(policyID, backTo)}`;
             case CONST_1.default.POLICY.CONNECTIONS.ROUTE.SAGE_INTACCT:
-                return "".concat(environmentURL, "/").concat(ROUTES_1.default.POLICY_ACCOUNTING_SAGE_INTACCT_ADVANCED.getRoute(policyID));
+                return `${environmentURL}/${ROUTES_1.default.POLICY_ACCOUNTING_SAGE_INTACCT_ADVANCED.getRoute(policyID)}`;
             case CONST_1.default.POLICY.CONNECTIONS.ROUTE.QBD:
-                return "".concat(environmentURL, "/").concat(ROUTES_1.default.WORKSPACE_ACCOUNTING_QUICKBOOKS_DESKTOP_ADVANCED.getRoute(policyID, backTo));
+                return `${environmentURL}/${ROUTES_1.default.WORKSPACE_ACCOUNTING_QUICKBOOKS_DESKTOP_ADVANCED.getRoute(policyID, backTo)}`;
             default:
                 return '';
         }
     }, [connection, policyID, environmentURL]);
-    var fetchPolicyAccountingData = (0, react_1.useCallback)(function () {
+    const fetchPolicyAccountingData = (0, react_1.useCallback)(() => {
         if (!policyID) {
             return;
         }
         (0, PolicyConnections_1.openPolicyAccountingPage)(policyID);
     }, [policyID]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (isContinuousReconciliationOn !== undefined) {
             return;
         }
@@ -109,11 +106,11 @@ function CardReconciliationPage(_a) {
                     <ToggleSettingsOptionRow_1.default key={translate('workspace.accounting.continuousReconciliation')} title={translate('workspace.accounting.continuousReconciliation')} subtitle={translate('workspace.accounting.saveHoursOnReconciliation')} shouldPlaceSubtitleBelowSwitch switchAccessibilityLabel={translate('workspace.accounting.continuousReconciliation')} disabled={!autoSync} isActive={!!isContinuousReconciliationOn} onToggle={handleToggleContinuousReconciliation} wrapperStyle={styles.ph5}/>
                     {!autoSync && (<react_native_1.View style={[styles.renderHTML, styles.ph5, styles.mt2]}>
                             <RenderHTML_1.default html={translate('workspace.accounting.enableContinuousReconciliation', {
-                accountingAdvancedSettingsLink: accountingAdvancedSettingsLink,
+                accountingAdvancedSettingsLink,
                 connectionName: CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName],
             })}/>
                         </react_native_1.View>)}
-                    {!!paymentBankAccountID && !!isContinuousReconciliationOn && (<MenuItemWithTopDescription_1.default style={styles.mt5} title={bankAccountTitle} description={translate('workspace.accounting.reconciliationAccount')} shouldShowRightIcon onPress={function () { return Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_ACCOUNTING_RECONCILIATION_ACCOUNT_SETTINGS.getRoute(policyID, connection)); }}/>)}
+                    {!!paymentBankAccountID && !!isContinuousReconciliationOn && (<MenuItemWithTopDescription_1.default style={styles.mt5} title={bankAccountTitle} description={translate('workspace.accounting.reconciliationAccount')} shouldShowRightIcon onPress={() => Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_ACCOUNTING_RECONCILIATION_ACCOUNT_SETTINGS.getRoute(policyID, connection))}/>)}
                 </ScrollView_1.default>
             </ScreenWrapper_1.default>
         </AccessOrNotFoundWrapper_1.default>);

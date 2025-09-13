@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
-var prefixes = [
+const CONST_1 = require("@src/CONST");
+const prefixes = [
     'app://-/',
     'new-expensify://',
     'https://www.expensify.cash',

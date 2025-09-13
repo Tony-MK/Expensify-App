@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_airship_1 = require("@ua/react-native-airship");
-var Log_1 = require("@libs/Log");
-var ShortcutManager_1 = require("@libs/ShortcutManager");
-var CONFIG_1 = require("@src/CONFIG");
-var ForegroundNotifications_1 = require("./ForegroundNotifications");
-var NotificationType_1 = require("./NotificationType");
-var parsePushNotificationPayload_1 = require("./parsePushNotificationPayload");
-var notificationEventActionMap = {};
+const react_native_airship_1 = require("@ua/react-native-airship");
+const Log_1 = require("@libs/Log");
+const ShortcutManager_1 = require("@libs/ShortcutManager");
+const CONFIG_1 = require("@src/CONFIG");
+const ForegroundNotifications_1 = require("./ForegroundNotifications");
+const NotificationType_1 = require("./NotificationType");
+const parsePushNotificationPayload_1 = require("./parsePushNotificationPayload");
+const notificationEventActionMap = {};
 /**
  * Handle a push notification event, and trigger and bound actions.
  */
 function pushNotificationEventCallback(eventType, notification) {
-    var _a;
-    var actionMap = (_a = notificationEventActionMap[eventType]) !== null && _a !== void 0 ? _a : {};
-    var data = (0, parsePushNotificationPayload_1.default)(notification.extras.payload);
-    Log_1.default.info("[PushNotification] Callback triggered for ".concat(eventType));
+    const actionMap = notificationEventActionMap[eventType] ?? {};
+    const data = (0, parsePushNotificationPayload_1.default)(notification.extras.payload);
+    Log_1.default.info(`[PushNotification] Callback triggered for ${eventType}`);
     if (!data) {
         Log_1.default.warn('[PushNotification] Notification has null or undefined payload, not executing any callback.');
         return;
@@ -24,7 +23,7 @@ function pushNotificationEventCallback(eventType, notification) {
         Log_1.default.warn('[PushNotification] No type value provided in payload, not executing any callback.');
         return;
     }
-    var action = actionMap[data.type];
+    const action = actionMap[data.type];
     if (!action) {
         Log_1.default.warn('[PushNotification] No callback set up: ', {
             event: eventType,
@@ -46,21 +45,21 @@ function pushNotificationEventCallback(eventType, notification) {
  * WARNING: Moving or changing this code could break Push Notification processing in non-obvious ways.
  *          DO NOT ALTER UNLESS YOU KNOW WHAT YOU'RE DOING. See this PR for details: https://github.com/Expensify/App/pull/3877
  */
-var init = function () {
+const init = () => {
     // Setup event listeners
-    react_native_airship_1.default.addListener(react_native_airship_1.EventType.PushReceived, function (notification) { return pushNotificationEventCallback(react_native_airship_1.EventType.PushReceived, notification.pushPayload); });
+    react_native_airship_1.default.addListener(react_native_airship_1.EventType.PushReceived, (notification) => pushNotificationEventCallback(react_native_airship_1.EventType.PushReceived, notification.pushPayload));
     // Note: the NotificationResponse event has a nested PushReceived event,
     // so event.notification refers to the same thing as notification above ^
-    react_native_airship_1.default.addListener(react_native_airship_1.EventType.NotificationResponse, function (event) { return pushNotificationEventCallback(react_native_airship_1.EventType.NotificationResponse, event.pushPayload); });
+    react_native_airship_1.default.addListener(react_native_airship_1.EventType.NotificationResponse, (event) => pushNotificationEventCallback(react_native_airship_1.EventType.NotificationResponse, event.pushPayload));
     ForegroundNotifications_1.default.configureForegroundNotifications();
 };
 /**
  * Register this device for push notifications for the given notificationID.
  */
-var register = function (notificationID) {
+const register = (notificationID) => {
     react_native_airship_1.default.contact
         .getNamedUserId()
-        .then(function (userID) {
+        .then((userID) => {
         // In the HybridApp, the contact identity is set on the YAPL side after sign-in.
         // Since the Airship instance is shared between NewDot and OldDot,
         // NewDot users won't see the push notification permission prompt as we return early in this case.
@@ -70,12 +69,11 @@ var register = function (notificationID) {
             return;
         }
         // Get permissions to display push notifications if not determined (prompts user on iOS, but not Android)
-        react_native_airship_1.default.push.getNotificationStatus().then(function (_a) {
-            var notificationPermissionStatus = _a.notificationPermissionStatus;
+        react_native_airship_1.default.push.getNotificationStatus().then(({ notificationPermissionStatus }) => {
             if (notificationPermissionStatus !== react_native_airship_1.PermissionStatus.NotDetermined) {
                 return;
             }
-            react_native_airship_1.default.push.enableUserNotifications().then(function (isEnabled) {
+            react_native_airship_1.default.push.enableUserNotifications().then((isEnabled) => {
                 if (isEnabled) {
                     return;
                 }
@@ -84,17 +82,17 @@ var register = function (notificationID) {
         });
         // Register this device as a named user in AirshipAPI.
         // Regardless of the user's opt-in status, we still want to receive silent push notifications.
-        Log_1.default.info("[PushNotification] Subscribing to notifications");
+        Log_1.default.info(`[PushNotification] Subscribing to notifications`);
         react_native_airship_1.default.contact.identify(notificationID.toString());
     })
-        .catch(function (error) {
+        .catch((error) => {
         Log_1.default.warn('[PushNotification] Failed to register for push notifications! Reason: ', error);
     });
 };
 /**
  * Deregister this device from push notifications.
  */
-var deregister = function () {
+const deregister = () => {
     Log_1.default.info('[PushNotification] Unsubscribing from push notifications.');
     react_native_airship_1.default.contact.reset();
     react_native_airship_1.default.removeAllListeners(react_native_airship_1.EventType.PushReceived);
@@ -114,7 +112,7 @@ var deregister = function () {
  * @param triggerEvent - The event that should trigger this callback. Should be one of UrbanAirship.EventType
  */
 function bind(triggerEvent, notificationType, callback) {
-    var actionMap = notificationEventActionMap[triggerEvent];
+    let actionMap = notificationEventActionMap[triggerEvent];
     if (!actionMap) {
         actionMap = {};
     }
@@ -124,28 +122,28 @@ function bind(triggerEvent, notificationType, callback) {
 /**
  * Bind a callback to be executed when a push notification of a given type is received.
  */
-var onReceived = function (notificationType, callback) {
+const onReceived = (notificationType, callback) => {
     bind(react_native_airship_1.EventType.PushReceived, notificationType, callback);
 };
 /**
  * Bind a callback to be executed when a push notification of a given type is tapped by the user.
  */
-var onSelected = function (notificationType, callback) {
+const onSelected = (notificationType, callback) => {
     bind(react_native_airship_1.EventType.NotificationResponse, notificationType, callback);
 };
 /**
  * Clear all push notifications
  */
-var clearNotifications = function () {
+const clearNotifications = () => {
     react_native_airship_1.default.push.clearNotifications();
 };
-var PushNotification = {
-    init: init,
-    register: register,
-    deregister: deregister,
-    onReceived: onReceived,
-    onSelected: onSelected,
+const PushNotification = {
+    init,
+    register,
+    deregister,
+    onReceived,
+    onSelected,
     TYPE: NotificationType_1.default,
-    clearNotifications: clearNotifications,
+    clearNotifications,
 };
 exports.default = PushNotification;

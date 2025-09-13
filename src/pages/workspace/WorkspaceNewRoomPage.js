@@ -1,74 +1,74 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@react-navigation/core");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var BlockingView_1 = require("@components/BlockingViews/BlockingView");
-var Button_1 = require("@components/Button");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var Illustrations = require("@components/Icon/Illustrations");
-var RoomNameInput_1 = require("@components/RoomNameInput");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextInput_1 = require("@components/TextInput");
-var ValuePicker_1 = require("@components/ValuePicker");
-var useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useSafeAreaInsets_1 = require("@hooks/useSafeAreaInsets");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var variables_1 = require("@styles/variables");
-var Report_1 = require("@userActions/Report");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var NewRoomForm_1 = require("@src/types/form/NewRoomForm");
+const core_1 = require("@react-navigation/core");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const BlockingView_1 = require("@components/BlockingViews/BlockingView");
+const Button_1 = require("@components/Button");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const Illustrations = require("@components/Icon/Illustrations");
+const RoomNameInput_1 = require("@components/RoomNameInput");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextInput_1 = require("@components/TextInput");
+const ValuePicker_1 = require("@components/ValuePicker");
+const useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useSafeAreaInsets_1 = require("@hooks/useSafeAreaInsets");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const variables_1 = require("@styles/variables");
+const Report_1 = require("@userActions/Report");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const NewRoomForm_1 = require("@src/types/form/NewRoomForm");
 function EmptyWorkspaceView() {
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var bottomSafeAreaPaddingStyle = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({ addBottomSafeAreaPadding: true, additionalPaddingBottom: styles.mb5.marginBottom, styleProperty: 'marginBottom' });
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const bottomSafeAreaPaddingStyle = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({ addBottomSafeAreaPadding: true, additionalPaddingBottom: styles.mb5.marginBottom, styleProperty: 'marginBottom' });
     return (<>
             <BlockingView_1.default icon={Illustrations.TeleScope} iconWidth={variables_1.default.emptyListIconWidth} iconHeight={variables_1.default.emptyListIconHeight} title={translate('workspace.emptyWorkspace.notFound')} subtitle={translate('workspace.emptyWorkspace.description')} addBottomSafeAreaPadding/>
-            <Button_1.default success large text={translate('footer.learnMore')} onPress={function () { return Navigation_1.default.navigate(ROUTES_1.default.WORKSPACES_LIST.getRoute(Navigation_1.default.getActiveRoute())); }} style={[styles.mh5, bottomSafeAreaPaddingStyle]}/>
+            <Button_1.default success large text={translate('footer.learnMore')} onPress={() => Navigation_1.default.navigate(ROUTES_1.default.WORKSPACES_LIST.getRoute(Navigation_1.default.getActiveRoute()))} style={[styles.mh5, bottomSafeAreaPaddingStyle]}/>
         </>);
 }
 function WorkspaceNewRoomPage(_, ref) {
-    var styles = (0, useThemeStyles_1.default)();
-    var isFocused = (0, core_1.useIsFocused)();
-    var _a = (0, useLocalize_1.default)(), translate = _a.translate, localeCompare = _a.localeCompare;
-    var _b = (0, react_1.useState)(false), shouldEnableValidation = _b[0], setShouldEnableValidation = _b[1];
-    var policies = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: false })[0];
-    var reports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false })[0];
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false })[0];
-    var activePolicyID = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ACTIVE_POLICY_ID, { canBeMissing: false })[0];
+    const styles = (0, useThemeStyles_1.default)();
+    const isFocused = (0, core_1.useIsFocused)();
+    const { translate, localeCompare } = (0, useLocalize_1.default)();
+    const [shouldEnableValidation, setShouldEnableValidation] = (0, react_1.useState)(false);
+    const [policies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: false });
+    const [reports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false });
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false });
+    const [activePolicyID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ACTIVE_POLICY_ID, { canBeMissing: false });
     // We need to use isSmallScreenWidth instead of shouldUseNarrowLayout to show offline indicator on small screen only
-    var top = (0, useSafeAreaInsets_1.default)().top;
-    var _c = (0, react_1.useState)(CONST_1.default.REPORT.VISIBILITY.RESTRICTED), visibility = _c[0], setVisibility = _c[1];
-    var _d = (0, react_1.useState)(CONST_1.default.REPORT.WRITE_CAPABILITIES.ALL), writeCapability = _d[0], setWriteCapability = _d[1];
-    var visibilityDescription = (0, react_1.useMemo)(function () { return translate("newRoomPage.".concat(visibility, "Description")); }, [translate, visibility]);
-    var roomPageInputRef = (0, react_1.useRef)(null);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        focus: function () { var _a; return (_a = roomPageInputRef.current) === null || _a === void 0 ? void 0 : _a.focus(); },
-    }); });
-    var workspaceOptions = (0, react_1.useMemo)(function () {
-        var _a, _b;
-        return (_b = (_a = (0, PolicyUtils_1.getActivePolicies)(policies, session === null || session === void 0 ? void 0 : session.email)) === null || _a === void 0 ? void 0 : _a.filter(function (policy) { return policy.type !== CONST_1.default.POLICY.TYPE.PERSONAL; }).map(function (policy) { return ({
-            label: policy.name,
-            value: policy.id,
-        }); }).sort(function (a, b) { return localeCompare(a.label, b.label); })) !== null && _b !== void 0 ? _b : [];
-    }, [policies, session === null || session === void 0 ? void 0 : session.email, localeCompare]);
-    var _e = (0, react_1.useState)(function () {
-        if (!!activePolicyID && workspaceOptions.some(function (option) { return option.value === activePolicyID; })) {
+    const { top } = (0, useSafeAreaInsets_1.default)();
+    const [visibility, setVisibility] = (0, react_1.useState)(CONST_1.default.REPORT.VISIBILITY.RESTRICTED);
+    const [writeCapability, setWriteCapability] = (0, react_1.useState)(CONST_1.default.REPORT.WRITE_CAPABILITIES.ALL);
+    const visibilityDescription = (0, react_1.useMemo)(() => translate(`newRoomPage.${visibility}Description`), [translate, visibility]);
+    const roomPageInputRef = (0, react_1.useRef)(null);
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        focus: () => roomPageInputRef.current?.focus(),
+    }));
+    const workspaceOptions = (0, react_1.useMemo)(() => (0, PolicyUtils_1.getActivePolicies)(policies, session?.email)
+        ?.filter((policy) => policy.type !== CONST_1.default.POLICY.TYPE.PERSONAL)
+        .map((policy) => ({
+        label: policy.name,
+        value: policy.id,
+    }))
+        .sort((a, b) => localeCompare(a.label, b.label)) ?? [], [policies, session?.email, localeCompare]);
+    const [policyID, setPolicyID] = (0, react_1.useState)(() => {
+        if (!!activePolicyID && workspaceOptions.some((option) => option.value === activePolicyID)) {
             return activePolicyID;
         }
         return '';
-    }), policyID = _e[0], setPolicyID = _e[1];
-    var isAdminPolicy = (0, react_1.useMemo)(function () {
+    });
+    const isAdminPolicy = (0, react_1.useMemo)(() => {
         if (!policyID) {
             return false;
         }
@@ -77,50 +77,49 @@ function WorkspaceNewRoomPage(_, ref) {
     /**
      * @param values - form input values passed by the Form component
      */
-    var submit = function (values) {
-        var _a, _b;
+    const submit = (values) => {
         (0, Report_1.setNewRoomFormLoading)();
-        var participants = [(_a = session === null || session === void 0 ? void 0 : session.accountID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID];
-        var parsedDescription = (0, ReportUtils_1.getParsedComment)((_b = values.reportDescription) !== null && _b !== void 0 ? _b : '', { policyID: policyID });
-        var policyReport = (0, ReportUtils_1.buildOptimisticChatReport)({
+        const participants = [session?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID];
+        const parsedDescription = (0, ReportUtils_1.getParsedComment)(values.reportDescription ?? '', { policyID });
+        const policyReport = (0, ReportUtils_1.buildOptimisticChatReport)({
             participantList: participants,
             reportName: values.roomName,
             chatType: CONST_1.default.REPORT.CHAT_TYPE.POLICY_ROOM,
-            policyID: policyID,
+            policyID,
             ownerAccountID: CONST_1.default.REPORT.OWNER_ACCOUNT_ID_FAKE,
-            visibility: visibility,
+            visibility,
             writeCapability: writeCapability || CONST_1.default.REPORT.WRITE_CAPABILITIES.ALL,
             notificationPreference: CONST_1.default.REPORT.NOTIFICATION_PREFERENCE.DAILY,
             description: parsedDescription,
         });
-        react_native_1.InteractionManager.runAfterInteractions(function () {
-            requestAnimationFrame(function () {
+        react_native_1.InteractionManager.runAfterInteractions(() => {
+            requestAnimationFrame(() => {
                 (0, Report_1.addPolicyReport)(policyReport);
             });
         });
     };
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isFocused) {
             return;
         }
         setShouldEnableValidation(false);
-        (0, Report_1.clearNewRoomFormError)().then(function () { return setShouldEnableValidation(true); });
+        (0, Report_1.clearNewRoomFormError)().then(() => setShouldEnableValidation(true));
     }, [isFocused]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (policyID) {
-            if (!workspaceOptions.some(function (opt) { return opt.value === policyID; })) {
+            if (!workspaceOptions.some((opt) => opt.value === policyID)) {
                 setPolicyID('');
             }
             return;
         }
-        if (!!activePolicyID && workspaceOptions.some(function (opt) { return opt.value === activePolicyID; })) {
+        if (!!activePolicyID && workspaceOptions.some((opt) => opt.value === activePolicyID)) {
             setPolicyID(activePolicyID);
         }
         else {
             setPolicyID('');
         }
     }, [activePolicyID, policyID, workspaceOptions]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (isAdminPolicy) {
             return;
         }
@@ -130,11 +129,11 @@ function WorkspaceNewRoomPage(_, ref) {
      * @param values - form input values passed by the Form component
      * @returns an object containing validation errors, if any were found during validation
      */
-    var validate = (0, react_1.useCallback)(function (values) {
+    const validate = (0, react_1.useCallback)((values) => {
         if (!shouldEnableValidation) {
             return {};
         }
-        var errors = {};
+        const errors = {};
         if (!values.roomName || values.roomName === CONST_1.default.POLICY.ROOM_PREFIX) {
             // We error if the user doesn't enter a room name or left blank
             (0, ErrorUtils_1.addErrorMessage)(errors, 'roomName', translate('newRoomPage.pleaseEnterRoomName'));
@@ -154,7 +153,7 @@ function WorkspaceNewRoomPage(_, ref) {
         else if (values.roomName.length > CONST_1.default.TITLE_CHARACTER_LIMIT) {
             (0, ErrorUtils_1.addErrorMessage)(errors, 'roomName', translate('common.error.characterLimitExceedCounter', { length: values.roomName.length, limit: CONST_1.default.TITLE_CHARACTER_LIMIT }));
         }
-        var descriptionLength = (0, ReportUtils_1.getCommentLength)(values.reportDescription, { policyID: policyID });
+        const descriptionLength = (0, ReportUtils_1.getCommentLength)(values.reportDescription, { policyID });
         if (descriptionLength > CONST_1.default.REPORT_DESCRIPTION.MAX_LENGTH) {
             (0, ErrorUtils_1.addErrorMessage)(errors, 'reportDescription', translate('common.error.characterLimitExceedCounter', { length: descriptionLength, limit: CONST_1.default.REPORT_DESCRIPTION.MAX_LENGTH }));
         }
@@ -163,21 +162,17 @@ function WorkspaceNewRoomPage(_, ref) {
         }
         return errors;
     }, [reports, policyID, translate, shouldEnableValidation]);
-    var writeCapabilityOptions = (0, react_1.useMemo)(function () {
-        return Object.values(CONST_1.default.REPORT.WRITE_CAPABILITIES).map(function (value) { return ({
-            value: value,
-            label: translate("writeCapabilityPage.writeCapability.".concat(value)),
-        }); });
-    }, [translate]);
-    var visibilityOptions = (0, react_1.useMemo)(function () {
-        return Object.values(CONST_1.default.REPORT.VISIBILITY)
-            .filter(function (visibilityOption) { return visibilityOption !== CONST_1.default.REPORT.VISIBILITY.PUBLIC_ANNOUNCE; })
-            .map(function (visibilityOption) { return ({
-            label: translate("newRoomPage.visibilityOptions.".concat(visibilityOption)),
-            value: visibilityOption,
-            description: translate("newRoomPage.".concat(visibilityOption, "Description")),
-        }); });
-    }, [translate]);
+    const writeCapabilityOptions = (0, react_1.useMemo)(() => Object.values(CONST_1.default.REPORT.WRITE_CAPABILITIES).map((value) => ({
+        value,
+        label: translate(`writeCapabilityPage.writeCapability.${value}`),
+    })), [translate]);
+    const visibilityOptions = (0, react_1.useMemo)(() => Object.values(CONST_1.default.REPORT.VISIBILITY)
+        .filter((visibilityOption) => visibilityOption !== CONST_1.default.REPORT.VISIBILITY.PUBLIC_ANNOUNCE)
+        .map((visibilityOption) => ({
+        label: translate(`newRoomPage.visibilityOptions.${visibilityOption}`),
+        value: visibilityOption,
+        description: translate(`newRoomPage.${visibilityOption}Description`),
+    })), [translate]);
     return (<ScreenWrapper_1.default enableEdgeToEdgeBottomSafeAreaPadding includePaddingTop={false} shouldShowOfflineIndicator shouldEnablePickerAvoiding={false} shouldEnableKeyboardAvoidingView={workspaceOptions.length !== 0} keyboardVerticalOffset={variables_1.default.contentHeaderHeight + variables_1.default.tabSelectorButtonHeight + variables_1.default.tabSelectorButtonPadding + top} 
     // Disable the focus trap of this page to activate the parent focus trap in `NewChatSelectorPage`.
     focusTrapSettings={{ active: false }} testID={WorkspaceNewRoomPage.displayName}>
@@ -189,13 +184,13 @@ function WorkspaceNewRoomPage(_, ref) {
                         <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={NewRoomForm_1.default.REPORT_DESCRIPTION} label={translate('reportDescriptionPage.roomDescriptionOptional')} accessibilityLabel={translate('reportDescriptionPage.roomDescriptionOptional')} role={CONST_1.default.ROLE.PRESENTATION} autoGrowHeight maxAutoGrowHeight={variables_1.default.textInputAutoGrowMaxHeight} autoCapitalize="none" shouldInterceptSwipe type="markdown"/>
                     </react_native_1.View>
                     <react_native_1.View style={[styles.mhn5]}>
-                        <InputWrapper_1.default InputComponent={ValuePicker_1.default} inputID={NewRoomForm_1.default.POLICY_ID} label={translate('workspace.common.workspace')} items={workspaceOptions} value={policyID} onValueChange={function (value) { return setPolicyID(value); }}/>
+                        <InputWrapper_1.default InputComponent={ValuePicker_1.default} inputID={NewRoomForm_1.default.POLICY_ID} label={translate('workspace.common.workspace')} items={workspaceOptions} value={policyID} onValueChange={(value) => setPolicyID(value)}/>
                     </react_native_1.View>
                     {isAdminPolicy && (<react_native_1.View style={styles.mhn5}>
-                            <InputWrapper_1.default InputComponent={ValuePicker_1.default} inputID={NewRoomForm_1.default.WRITE_CAPABILITY} label={translate('writeCapabilityPage.label')} items={writeCapabilityOptions} value={writeCapability} onValueChange={function (value) { return setWriteCapability(value); }}/>
+                            <InputWrapper_1.default InputComponent={ValuePicker_1.default} inputID={NewRoomForm_1.default.WRITE_CAPABILITY} label={translate('writeCapabilityPage.label')} items={writeCapabilityOptions} value={writeCapability} onValueChange={(value) => setWriteCapability(value)}/>
                         </react_native_1.View>)}
                     <react_native_1.View style={[styles.mb1, styles.mhn5]}>
-                        <InputWrapper_1.default InputComponent={ValuePicker_1.default} inputID={NewRoomForm_1.default.VISIBILITY} label={translate('newRoomPage.visibility')} items={visibilityOptions} onValueChange={function (value) { return setVisibility(value); }} value={visibility} furtherDetails={visibilityDescription} shouldShowTooltips={false}/>
+                        <InputWrapper_1.default InputComponent={ValuePicker_1.default} inputID={NewRoomForm_1.default.VISIBILITY} label={translate('newRoomPage.visibility')} items={visibilityOptions} onValueChange={(value) => setVisibility(value)} value={visibility} furtherDetails={visibilityDescription} shouldShowTooltips={false}/>
                     </react_native_1.View>
                 </FormProvider_1.default>)}
         </ScreenWrapper_1.default>);

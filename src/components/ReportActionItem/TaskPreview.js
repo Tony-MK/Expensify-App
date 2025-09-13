@@ -1,91 +1,78 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Avatar_1 = require("@components/Avatar");
-var Checkbox_1 = require("@components/Checkbox");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var RenderHTML_1 = require("@components/RenderHTML");
-var ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
-var UserDetailsTooltip_1 = require("@components/UserDetailsTooltip");
-var withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useParentReport_1 = require("@hooks/useParentReport");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Session_1 = require("@libs/actions/Session");
-var Task_1 = require("@libs/actions/Task");
-var ControlSelection_1 = require("@libs/ControlSelection");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var getButtonState_1 = require("@libs/getButtonState");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Parser_1 = require("@libs/Parser");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function TaskPreview(_a) {
-    var _b, _c, _d, _e, _f, _g, _h;
-    var taskReport = _a.taskReport, action = _a.action, contextMenuAnchor = _a.contextMenuAnchor, chatReportID = _a.chatReportID, checkIfContextMenuActive = _a.checkIfContextMenuActive, currentUserPersonalDetails = _a.currentUserPersonalDetails, onShowContextMenu = _a.onShowContextMenu, _j = _a.isHovered, isHovered = _j === void 0 ? false : _j, style = _a.style, _k = _a.shouldDisplayContextMenu, shouldDisplayContextMenu = _k === void 0 ? true : _k;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var theme = (0, useTheme_1.default)();
-    var taskReportID = (_b = taskReport === null || taskReport === void 0 ? void 0 : taskReport.reportID) !== null && _b !== void 0 ? _b : action === null || action === void 0 ? void 0 : action.childReportID;
-    var taskTitle = (_d = (_c = action === null || action === void 0 ? void 0 : action.childReportName) !== null && _c !== void 0 ? _c : taskReport === null || taskReport === void 0 ? void 0 : taskReport.reportName) !== null && _d !== void 0 ? _d : '';
-    var taskTitleWithoutImage = Parser_1.default.replace(Parser_1.default.htmlToMarkdown(taskTitle), { disabledRules: __spreadArray([], CONST_1.default.TASK_TITLE_DISABLED_RULES, true) });
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Avatar_1 = require("@components/Avatar");
+const Checkbox_1 = require("@components/Checkbox");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const RenderHTML_1 = require("@components/RenderHTML");
+const ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
+const UserDetailsTooltip_1 = require("@components/UserDetailsTooltip");
+const withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useParentReport_1 = require("@hooks/useParentReport");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Session_1 = require("@libs/actions/Session");
+const Task_1 = require("@libs/actions/Task");
+const ControlSelection_1 = require("@libs/ControlSelection");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const getButtonState_1 = require("@libs/getButtonState");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Parser_1 = require("@libs/Parser");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function TaskPreview({ taskReport, action, contextMenuAnchor, chatReportID, checkIfContextMenuActive, currentUserPersonalDetails, onShowContextMenu, isHovered = false, style, shouldDisplayContextMenu = true, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const taskReportID = taskReport?.reportID ?? action?.childReportID;
+    const taskTitle = action?.childReportName ?? taskReport?.reportName ?? '';
+    const taskTitleWithoutImage = Parser_1.default.replace(Parser_1.default.htmlToMarkdown(taskTitle), { disabledRules: [...CONST_1.default.TASK_TITLE_DISABLED_RULES] });
     // The reportAction might not contain details regarding the taskReport
     // Only the direct parent reportAction will contain details about the taskReport
     // Other linked reportActions will only contain the taskReportID and we will grab the details from there
-    var isTaskCompleted = !(0, EmptyObject_1.isEmptyObject)(taskReport)
-        ? (taskReport === null || taskReport === void 0 ? void 0 : taskReport.stateNum) === CONST_1.default.REPORT.STATE_NUM.APPROVED && taskReport.statusNum === CONST_1.default.REPORT.STATUS_NUM.APPROVED
-        : (action === null || action === void 0 ? void 0 : action.childStateNum) === CONST_1.default.REPORT.STATE_NUM.APPROVED && (action === null || action === void 0 ? void 0 : action.childStatusNum) === CONST_1.default.REPORT.STATUS_NUM.APPROVED;
-    var taskAssigneeAccountID = (_f = (_e = (0, Task_1.getTaskAssigneeAccountID)(taskReport)) !== null && _e !== void 0 ? _e : action === null || action === void 0 ? void 0 : action.childManagerAccountID) !== null && _f !== void 0 ? _f : CONST_1.default.DEFAULT_NUMBER_ID;
-    var parentReport = (0, useParentReport_1.default)(taskReport === null || taskReport === void 0 ? void 0 : taskReport.reportID);
-    var isParentReportArchived = (0, useReportIsArchived_1.default)(parentReport === null || parentReport === void 0 ? void 0 : parentReport.reportID);
-    var isTaskActionable = (0, Task_1.canActionTask)(taskReport, currentUserPersonalDetails.accountID, parentReport, isParentReportArchived);
-    var hasAssignee = taskAssigneeAccountID > 0;
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var avatar = (_h = (_g = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[taskAssigneeAccountID]) === null || _g === void 0 ? void 0 : _g.avatar) !== null && _h !== void 0 ? _h : Expensicons.FallbackAvatar;
-    var avatarSize = CONST_1.default.AVATAR_SIZE.SMALL;
-    var isDeletedParentAction = (0, ReportUtils_1.isCanceledTaskReport)(taskReport, action);
-    var iconWrapperStyle = StyleUtils.getTaskPreviewIconWrapper(hasAssignee ? avatarSize : undefined);
-    var shouldShowGreenDotIndicator = (0, ReportUtils_1.isOpenTaskReport)(taskReport, action) && (0, ReportUtils_1.isReportManager)(taskReport);
+    const isTaskCompleted = !(0, EmptyObject_1.isEmptyObject)(taskReport)
+        ? taskReport?.stateNum === CONST_1.default.REPORT.STATE_NUM.APPROVED && taskReport.statusNum === CONST_1.default.REPORT.STATUS_NUM.APPROVED
+        : action?.childStateNum === CONST_1.default.REPORT.STATE_NUM.APPROVED && action?.childStatusNum === CONST_1.default.REPORT.STATUS_NUM.APPROVED;
+    const taskAssigneeAccountID = (0, Task_1.getTaskAssigneeAccountID)(taskReport) ?? action?.childManagerAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const parentReport = (0, useParentReport_1.default)(taskReport?.reportID);
+    const isParentReportArchived = (0, useReportIsArchived_1.default)(parentReport?.reportID);
+    const isTaskActionable = (0, Task_1.canActionTask)(taskReport, currentUserPersonalDetails.accountID, parentReport, isParentReportArchived);
+    const hasAssignee = taskAssigneeAccountID > 0;
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const avatar = personalDetails?.[taskAssigneeAccountID]?.avatar ?? Expensicons.FallbackAvatar;
+    const avatarSize = CONST_1.default.AVATAR_SIZE.SMALL;
+    const isDeletedParentAction = (0, ReportUtils_1.isCanceledTaskReport)(taskReport, action);
+    const iconWrapperStyle = StyleUtils.getTaskPreviewIconWrapper(hasAssignee ? avatarSize : undefined);
+    const shouldShowGreenDotIndicator = (0, ReportUtils_1.isOpenTaskReport)(taskReport, action) && (0, ReportUtils_1.isReportManager)(taskReport);
     if (isDeletedParentAction) {
-        return <RenderHTML_1.default html={"<deleted-action>".concat(translate('parentReportAction.deletedTask'), "</deleted-action>")}/>;
+        return <RenderHTML_1.default html={`<deleted-action>${translate('parentReportAction.deletedTask')}</deleted-action>`}/>;
     }
-    var getTaskHTML = function () {
+    const getTaskHTML = () => {
         if (isTaskCompleted) {
-            return "<del><comment center>".concat(taskTitleWithoutImage, "</comment></del>");
+            return `<del><comment center>${taskTitleWithoutImage}</comment></del>`;
         }
-        return "<comment center>".concat(taskTitleWithoutImage, "</comment>");
+        return `<comment center>${taskTitleWithoutImage}</comment>`;
     };
     return (<react_native_1.View style={[styles.chatItemMessage, !hasAssignee && styles.mv1]}>
-            <PressableWithoutFeedback_1.default onPress={function () { return Navigation_1.default.navigate(ROUTES_1.default.REPORT_WITH_ID.getRoute(taskReportID, undefined, undefined, Navigation_1.default.getActiveRoute())); }} onPressIn={function () { return (0, DeviceCapabilities_1.canUseTouchScreen)() && ControlSelection_1.default.block(); }} onPressOut={function () { return ControlSelection_1.default.unblock(); }} onLongPress={function (event) {
-            return onShowContextMenu(function () {
-                if (!shouldDisplayContextMenu) {
-                    return;
-                }
-                return (0, ShowContextMenuContext_1.showContextMenuForReport)(event, contextMenuAnchor, chatReportID, action, checkIfContextMenuActive);
-            });
-        }} shouldUseHapticsOnLongPress style={[styles.flexRow, styles.justifyContentBetween, style]} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('task.task')}>
+            <PressableWithoutFeedback_1.default onPress={() => Navigation_1.default.navigate(ROUTES_1.default.REPORT_WITH_ID.getRoute(taskReportID, undefined, undefined, Navigation_1.default.getActiveRoute()))} onPressIn={() => (0, DeviceCapabilities_1.canUseTouchScreen)() && ControlSelection_1.default.block()} onPressOut={() => ControlSelection_1.default.unblock()} onLongPress={(event) => onShowContextMenu(() => {
+            if (!shouldDisplayContextMenu) {
+                return;
+            }
+            return (0, ShowContextMenuContext_1.showContextMenuForReport)(event, contextMenuAnchor, chatReportID, action, checkIfContextMenuActive);
+        })} shouldUseHapticsOnLongPress style={[styles.flexRow, styles.justifyContentBetween, style]} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('task.task')}>
                 <react_native_1.View style={[styles.flex1, styles.flexRow, styles.alignItemsStart, styles.mr2]}>
                     <react_native_1.View style={iconWrapperStyle}>
-                        <Checkbox_1.default style={[styles.mr2]} isChecked={isTaskCompleted} disabled={!isTaskActionable} onPress={(0, Session_1.callFunctionIfActionIsAllowed)(function () {
+                        <Checkbox_1.default style={[styles.mr2]} isChecked={isTaskCompleted} disabled={!isTaskActionable} onPress={(0, Session_1.callFunctionIfActionIsAllowed)(() => {
             if (isTaskCompleted) {
                 (0, Task_1.reopenTask)(taskReport, taskReportID);
             }

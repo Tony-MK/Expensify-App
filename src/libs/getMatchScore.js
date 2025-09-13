@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = getMatchScore;
 function getMatchScore(str, query) {
-    var lowerStr = str.toLowerCase();
-    var lowerQuery = query.toLowerCase();
+    const lowerStr = str.toLowerCase();
+    const lowerQuery = query.toLowerCase();
     if (lowerStr === lowerQuery) {
         return 3;
     }

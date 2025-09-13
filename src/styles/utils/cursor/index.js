@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Web-only style.
  * NOTE: We are asserting "cursor" to valid react-native types, because it isn't possible to augment "cursor".
  */
-var cursor = {
+const cursor = {
     cursorDefault: {
         cursor: 'default',
     },

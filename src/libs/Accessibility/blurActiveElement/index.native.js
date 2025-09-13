@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var blurActiveElement = function () { };
+const blurActiveElement = () => { };
 exports.default = blurActiveElement;

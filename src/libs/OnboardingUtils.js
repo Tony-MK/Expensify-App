@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shouldOnboardingRedirectToOldDot = shouldOnboardingRedirectToOldDot;
-var CONST_1 = require("@src/CONST");
-var getPlatform_1 = require("./getPlatform");
-var supportedIntegrationsInNewDot = ['quickbooksOnline', 'quickbooksDesktop', 'xero', 'netsuite', 'intacct', 'other'];
+const CONST_1 = require("@src/CONST");
+const getPlatform_1 = require("./getPlatform");
+const supportedIntegrationsInNewDot = ['quickbooksOnline', 'quickbooksDesktop', 'xero', 'netsuite', 'intacct', 'other'];
 /**
  * Determines if the user should be redirected to old dot based on company size and platform
  * @param companySize - The company size from onboarding
@@ -16,9 +16,9 @@ function shouldOnboardingRedirectToOldDot(companySize, userReportedIntegration) 
         return false;
     }
     // Check if the integration is supported in NewDot
-    var isSupportedIntegration = (!!userReportedIntegration && supportedIntegrationsInNewDot.includes(userReportedIntegration)) || userReportedIntegration === undefined;
+    const isSupportedIntegration = (!!userReportedIntegration && supportedIntegrationsInNewDot.includes(userReportedIntegration)) || userReportedIntegration === undefined;
     // Don't redirect if integration is supported and company size is MICRO or SMALL
-    var isMicroOrSmallCompany = companySize === CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO || companySize === CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL;
+    const isMicroOrSmallCompany = companySize === CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO || companySize === CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL;
     if (isSupportedIntegration && isMicroOrSmallCompany) {
         return false;
     }

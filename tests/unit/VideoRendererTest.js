@@ -1,50 +1,48 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("@testing-library/react-native");
-var react_1 = require("react");
-var AttachmentContext_1 = require("@components/AttachmentContext");
-var VideoRenderer_1 = require("@components/HTMLEngineProvider/HTMLRenderers/VideoRenderer");
-var ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-jest.mock('@libs/Navigation/Navigation', function () { return ({
+const react_native_1 = require("@testing-library/react-native");
+const react_1 = require("react");
+const AttachmentContext_1 = require("@components/AttachmentContext");
+const VideoRenderer_1 = require("@components/HTMLEngineProvider/HTMLRenderers/VideoRenderer");
+const ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+jest.mock('@libs/Navigation/Navigation', () => ({
     navigate: jest.fn(),
-}); });
+}));
 // Mock VideoPlayerPreview to simplify testing
-jest.mock('@components/VideoPlayerPreview', function () {
-    return function (_a) {
-        var onShowModalPress = _a.onShowModalPress, fileName = _a.fileName;
+jest.mock('@components/VideoPlayerPreview', () => {
+    return ({ onShowModalPress, fileName }) => {
         // Get PressableWithoutFeedback inside the component to avoid Jest mock issues
-        var PressableWithoutFeedback = require('@components/Pressable').PressableWithoutFeedback;
-        var handlePress = function () {
-            onShowModalPress === null || onShowModalPress === void 0 ? void 0 : onShowModalPress();
+        const { PressableWithoutFeedback } = require('@components/Pressable');
+        const handlePress = () => {
+            onShowModalPress?.();
         };
         return (<PressableWithoutFeedback testID="show-modal-button" onPress={handlePress} accessibilityRole="button" accessibilityLabel={fileName}/>);
     };
 });
-var mockShowContextMenuValue = {
+const mockShowContextMenuValue = {
     anchor: null,
     report: undefined,
     isReportArchived: false,
     action: undefined,
     transactionThreadReport: undefined,
-    checkIfContextMenuActive: function () { },
+    checkIfContextMenuActive: () => { },
     isDisabled: true,
-    onShowContextMenu: function (callback) { return callback(); },
+    onShowContextMenu: (callback) => callback(),
 };
-var mockTNodeAttributes = (_a = {},
-    _a[CONST_1.default.ATTACHMENT_SOURCE_ATTRIBUTE] = 'video/test.mp4',
-    _a[CONST_1.default.ATTACHMENT_THUMBNAIL_URL_ATTRIBUTE] = 'thumbnail/test.jpg',
-    _a[CONST_1.default.ATTACHMENT_THUMBNAIL_WIDTH_ATTRIBUTE] = '640',
-    _a[CONST_1.default.ATTACHMENT_THUMBNAIL_HEIGHT_ATTRIBUTE] = '480',
-    _a[CONST_1.default.ATTACHMENT_DURATION_ATTRIBUTE] = '60',
-    _a);
-describe('VideoRenderer', function () {
-    beforeEach(function () {
+const mockTNodeAttributes = {
+    [CONST_1.default.ATTACHMENT_SOURCE_ATTRIBUTE]: 'video/test.mp4',
+    [CONST_1.default.ATTACHMENT_THUMBNAIL_URL_ATTRIBUTE]: 'thumbnail/test.jpg',
+    [CONST_1.default.ATTACHMENT_THUMBNAIL_WIDTH_ATTRIBUTE]: '640',
+    [CONST_1.default.ATTACHMENT_THUMBNAIL_HEIGHT_ATTRIBUTE]: '480',
+    [CONST_1.default.ATTACHMENT_DURATION_ATTRIBUTE]: '60',
+};
+describe('VideoRenderer', () => {
+    beforeEach(() => {
         jest.clearAllMocks();
     });
-    it('should open the report attachment with isAuthTokenRequired=true', function () {
+    it('should open the report attachment with isAuthTokenRequired=true', () => {
         // Given a VideoRenderer component with a valid attributes
         (0, react_native_1.render)(<ShowContextMenuContext_1.ShowContextMenuContext.Provider value={mockShowContextMenuValue}>
                 <AttachmentContext_1.AttachmentContext.Provider value={{ type: CONST_1.default.ATTACHMENT_TYPE.SEARCH }}>
@@ -56,9 +54,9 @@ describe('VideoRenderer', function () {
         react_native_1.fireEvent.press(react_native_1.screen.getByTestId('show-modal-button'));
         expect(Navigation_1.default.navigate).toHaveBeenCalled();
         // Then it should navigate to the attachments route with isAuthTokenRequired=true
-        var mockNavigate = jest.spyOn(Navigation_1.default, 'navigate');
-        var firstCall = mockNavigate.mock.calls.at(0);
-        var navigateArgs = firstCall === null || firstCall === void 0 ? void 0 : firstCall.at(0);
+        const mockNavigate = jest.spyOn(Navigation_1.default, 'navigate');
+        const firstCall = mockNavigate.mock.calls.at(0);
+        const navigateArgs = firstCall?.at(0);
         expect(navigateArgs).toContain('isAuthTokenRequired=true');
     });
 });

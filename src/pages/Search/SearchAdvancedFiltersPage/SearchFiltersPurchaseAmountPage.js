@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var SearchFiltersAmountBase_1 = require("@components/Search/SearchFiltersAmountBase");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const SearchFiltersAmountBase_1 = require("@components/Search/SearchFiltersAmountBase");
+const CONST_1 = require("@src/CONST");
 function SearchFiltersPurchaseAmountPage() {
     return (<SearchFiltersAmountBase_1.default filterKey={CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.PURCHASE_AMOUNT} title="common.purchaseAmount" testID={SearchFiltersPurchaseAmountPage.displayName}/>);
 }

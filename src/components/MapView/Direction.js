@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var maps_1 = require("@rnmapbox/maps");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function Direction(_a) {
-    var coordinates = _a.coordinates;
-    var styles = (0, useThemeStyles_1.default)();
+const maps_1 = require("@rnmapbox/maps");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function Direction({ coordinates }) {
+    const styles = (0, useThemeStyles_1.default)();
     if (coordinates.length < 1) {
         return null;
     }
@@ -13,7 +12,7 @@ function Direction(_a) {
             properties: {},
             geometry: {
                 type: 'LineString',
-                coordinates: coordinates,
+                coordinates,
             },
         }}>
             <maps_1.default.LineLayer id="routeFill" style={styles.mapDirection}/>

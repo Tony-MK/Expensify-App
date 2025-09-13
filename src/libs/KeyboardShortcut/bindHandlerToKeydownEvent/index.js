@@ -1,26 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var getKeyEventModifiers_1 = require("@libs/KeyboardShortcut/getKeyEventModifiers");
-var isEnterWhileComposition_1 = require("@libs/KeyboardShortcut/isEnterWhileComposition");
-var CONST_1 = require("@src/CONST");
+const getKeyEventModifiers_1 = require("@libs/KeyboardShortcut/getKeyEventModifiers");
+const isEnterWhileComposition_1 = require("@libs/KeyboardShortcut/isEnterWhileComposition");
+const CONST_1 = require("@src/CONST");
 /**
  * Checks if an event for that key is configured and if so, runs it.
  */
-var bindHandlerToKeydownEvent = function (getDisplayName, eventHandlers, keyCommandEvent, event) {
+const bindHandlerToKeydownEvent = (getDisplayName, eventHandlers, keyCommandEvent, event) => {
     if (!(event instanceof KeyboardEvent) || (0, isEnterWhileComposition_1.default)(event)) {
         return;
     }
-    var eventModifiers = (0, getKeyEventModifiers_1.default)(keyCommandEvent);
-    var displayName = getDisplayName(keyCommandEvent.input, eventModifiers);
+    const eventModifiers = (0, getKeyEventModifiers_1.default)(keyCommandEvent);
+    const displayName = getDisplayName(keyCommandEvent.input, eventModifiers);
     // If we didn't register any event handlers for a key we ignore it
     if (!eventHandlers[displayName]) {
         return;
     }
     // Loop over all the callbacks
-    Object.values(eventHandlers[displayName]).every(function (callback) {
-        var textArea = event.target;
-        var contentEditable = textArea === null || textArea === void 0 ? void 0 : textArea.contentEditable;
-        var nodeName = textArea === null || textArea === void 0 ? void 0 : textArea.nodeName;
+    Object.values(eventHandlers[displayName]).every((callback) => {
+        const textArea = event.target;
+        const contentEditable = textArea?.contentEditable;
+        const nodeName = textArea?.nodeName;
         // Early return for excludedNodes
         if (callback.excludedNodes.includes(nodeName)) {
             return true;
@@ -30,7 +30,7 @@ var bindHandlerToKeydownEvent = function (getDisplayName, eventHandlers, keyComm
             return true;
         }
         // Determine if the event should bubble before executing the callback (which may have side-effects)
-        var shouldBubble = callback.shouldBubble || false;
+        let shouldBubble = callback.shouldBubble || false;
         if (typeof callback.shouldBubble === 'function') {
             shouldBubble = callback.shouldBubble();
         }

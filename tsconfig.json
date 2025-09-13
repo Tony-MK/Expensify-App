@@ -1,10 +1,13 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "extends": "expo/tsconfig.base",
     "compilerOptions": {
+        "target": "es2020",
         "module": "commonjs",
         "moduleResolution": "node",
-        "types": ["react-native", "react-native-web", "jest", "node"],
+        "jsx": "react-native",
+        "skipLibCheck": true,
+        "types": ["node"],
+        "typeRoots": ["./node_modules/@types", "./types"],
         "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "isolatedModules": true,
         "strict": true,
@@ -35,7 +38,6 @@
         "docs",
         "assets",
         "config",
-        "tests",
         "jest",
         "prompts",
         "__mocks__",
@@ -46,5 +48,5 @@
         "**/*.nitro/*.ts",
         "**/*.nitro/*.tsx"
     ],
-    "exclude": ["**/node_modules/*", "**/dist/*", ".github/actions/**/index.js", "**/docs/*"]
+    "exclude": ["**/node_modules/*", "**/dist/*", ".github/actions/**/index.js", "**/docs/*", "tests/**/*", "**/*.test.*", "**/__tests__/*"]
 }

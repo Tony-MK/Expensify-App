@@ -1,50 +1,46 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Avatar_1 = require("@components/Avatar");
-var Badge_1 = require("@components/Badge");
-var Button_1 = require("@components/Button");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var TextWithTooltip_1 = require("@components/TextWithTooltip");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useParentReport_1 = require("@hooks/useParentReport");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Session_1 = require("@libs/actions/Session");
-var Task_1 = require("@libs/actions/Task");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var AvatarWithTextCell_1 = require("./AvatarWithTextCell");
-var DateCell_1 = require("./DateCell");
-var UserInfoCell_1 = require("./UserInfoCell");
-function TitleCell(_a) {
-    var taskItem = _a.taskItem, showTooltip = _a.showTooltip, isLargeScreenWidth = _a.isLargeScreenWidth;
-    var styles = (0, useThemeStyles_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Avatar_1 = require("@components/Avatar");
+const Badge_1 = require("@components/Badge");
+const Button_1 = require("@components/Button");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const TextWithTooltip_1 = require("@components/TextWithTooltip");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useParentReport_1 = require("@hooks/useParentReport");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Session_1 = require("@libs/actions/Session");
+const Task_1 = require("@libs/actions/Task");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const AvatarWithTextCell_1 = require("./AvatarWithTextCell");
+const DateCell_1 = require("./DateCell");
+const UserInfoCell_1 = require("./UserInfoCell");
+function TitleCell({ taskItem, showTooltip, isLargeScreenWidth }) {
+    const styles = (0, useThemeStyles_1.default)();
     return (<TextWithTooltip_1.default text={taskItem.reportName} shouldShowTooltip={showTooltip} style={[isLargeScreenWidth ? styles.lineHeightLarge : styles.lh20, styles.pre, styles.justifyContentCenter]}/>);
 }
-function DescriptionCell(_a) {
-    var taskItem = _a.taskItem, showTooltip = _a.showTooltip, isLargeScreenWidth = _a.isLargeScreenWidth;
-    var styles = (0, useThemeStyles_1.default)();
+function DescriptionCell({ taskItem, showTooltip, isLargeScreenWidth }) {
+    const styles = (0, useThemeStyles_1.default)();
     return (<TextWithTooltip_1.default shouldShowTooltip={showTooltip} text={taskItem.description} style={[styles.lineHeightLarge, styles.pre, styles.justifyContentCenter, isLargeScreenWidth ? undefined : [styles.textMicro, styles.textSupporting]]}/>);
 }
-function ActionCell(_a) {
-    var _b;
-    var taskItem = _a.taskItem, isLargeScreenWidth = _a.isLargeScreenWidth;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var session = (0, OnyxListItemProvider_1.useSession)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var parentReport = (0, useParentReport_1.default)((_b = taskItem === null || taskItem === void 0 ? void 0 : taskItem.report) === null || _b === void 0 ? void 0 : _b.reportID);
-    var isParentReportArchived = (0, useReportIsArchived_1.default)(parentReport === null || parentReport === void 0 ? void 0 : parentReport.reportID);
-    var isTaskActionable = (0, Task_1.canActionTask)(taskItem.report, session === null || session === void 0 ? void 0 : session.accountID, parentReport, isParentReportArchived);
-    var isTaskCompleted = taskItem.statusNum === CONST_1.default.REPORT.STATUS_NUM.APPROVED && taskItem.stateNum === CONST_1.default.REPORT.STATE_NUM.APPROVED;
+function ActionCell({ taskItem, isLargeScreenWidth }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const session = (0, OnyxListItemProvider_1.useSession)();
+    const { translate } = (0, useLocalize_1.default)();
+    const parentReport = (0, useParentReport_1.default)(taskItem?.report?.reportID);
+    const isParentReportArchived = (0, useReportIsArchived_1.default)(parentReport?.reportID);
+    const isTaskActionable = (0, Task_1.canActionTask)(taskItem.report, session?.accountID, parentReport, isParentReportArchived);
+    const isTaskCompleted = taskItem.statusNum === CONST_1.default.REPORT.STATUS_NUM.APPROVED && taskItem.stateNum === CONST_1.default.REPORT.STATE_NUM.APPROVED;
     if (isTaskCompleted) {
         return (<react_native_1.View style={[StyleUtils.getHeight(variables_1.default.h28), styles.justifyContentCenter]}>
                 <Badge_1.default success text={translate('task.completed')} icon={Expensicons.Checkmark} iconStyles={styles.mr0} textStyles={StyleUtils.getFontSizeStyle(variables_1.default.fontSizeExtraSmall)} badgeStyles={[
@@ -58,18 +54,17 @@ function ActionCell(_a) {
             ]}/>
             </react_native_1.View>);
     }
-    return (<Button_1.default small success text={translate('task.action')} style={[styles.w100]} isDisabled={!isTaskActionable} onPress={(0, Session_1.callFunctionIfActionIsAllowed)(function () {
+    return (<Button_1.default small success text={translate('task.action')} style={[styles.w100]} isDisabled={!isTaskActionable} onPress={(0, Session_1.callFunctionIfActionIsAllowed)(() => {
             (0, Task_1.completeTask)(taskItem, taskItem.reportID);
         })}/>);
 }
-function TaskListItemRow(_a) {
-    var item = _a.item, containerStyle = _a.containerStyle, showTooltip = _a.showTooltip;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var isLargeScreenWidth = (0, useResponsiveLayout_1.default)().isLargeScreenWidth;
+function TaskListItemRow({ item, containerStyle, showTooltip }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const { isLargeScreenWidth } = (0, useResponsiveLayout_1.default)();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var shouldDisplayCompactArrowIcon = !!(item.parentReportIcon || item.parentReportName);
+    const shouldDisplayCompactArrowIcon = !!(item.parentReportIcon || item.parentReportName);
     if (!isLargeScreenWidth) {
         return (<react_native_1.View style={[containerStyle, styles.gap3]}>
                 <react_native_1.View style={[styles.flexRow, styles.alignItemsCenter, styles.gap3]}>
@@ -81,7 +76,7 @@ function TaskListItemRow(_a) {
                         {shouldDisplayCompactArrowIcon && (<Icon_1.default src={Expensicons.ArrowRightLong} width={variables_1.default.iconSizeXXSmall} height={variables_1.default.iconSizeXXSmall} fill={theme.icon}/>)}
 
                         <react_native_1.View style={[styles.flex1, styles.mw50]}>
-                            <AvatarWithTextCell_1.default reportName={item === null || item === void 0 ? void 0 : item.parentReportName} icon={item === null || item === void 0 ? void 0 : item.parentReportIcon}/>
+                            <AvatarWithTextCell_1.default reportName={item?.parentReportName} icon={item?.parentReportIcon}/>
                         </react_native_1.View>
                     </react_native_1.View>
 
@@ -119,7 +114,7 @@ function TaskListItemRow(_a) {
                     <UserInfoCell_1.default accountID={item.createdBy.accountID} avatar={item.createdBy.avatar} displayName={item.formattedCreatedBy}/>
                 </react_native_1.View>
                 <react_native_1.View style={[StyleUtils.getReportTableColumnStyles(CONST_1.default.SEARCH.TABLE_COLUMNS.IN)]}>
-                    <AvatarWithTextCell_1.default reportName={item === null || item === void 0 ? void 0 : item.parentReportName} icon={item === null || item === void 0 ? void 0 : item.parentReportIcon}/>
+                    <AvatarWithTextCell_1.default reportName={item?.parentReportName} icon={item?.parentReportIcon}/>
                 </react_native_1.View>
                 <react_native_1.View style={[StyleUtils.getReportTableColumnStyles(CONST_1.default.SEARCH.TABLE_COLUMNS.ASSIGNEE)]}>
                     <UserInfoCell_1.default accountID={item.assignee.accountID} avatar={item.assignee.avatar} displayName={item.formattedAssignee}/>

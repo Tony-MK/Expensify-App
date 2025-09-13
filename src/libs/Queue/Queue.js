@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Log_1 = require("@libs/Log");
-var CONST_1 = require("@src/CONST");
+const Log_1 = require("@libs/Log");
+const CONST_1 = require("@src/CONST");
 // Function to create a new queue
 function createQueue(processItem) {
     // Array to hold the elements of the queue
-    var elements = [];
-    var isProcessing = false;
+    const elements = [];
+    let isProcessing = false;
     // Function to remove an item from the front of the queue
     function dequeue() {
         return elements.shift();
@@ -17,17 +17,16 @@ function createQueue(processItem) {
     }
     // Function to process the next item in the queue
     function processNext() {
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             if (!isEmpty()) {
-                var nextItem = dequeue();
+                const nextItem = dequeue();
                 if (nextItem) {
                     processItem(nextItem)
-                        .catch(function (error) {
-                        var _a;
-                        var errorMessage = (_a = error.message) !== null && _a !== void 0 ? _a : CONST_1.default.ERROR.UNKNOWN_ERROR;
-                        Log_1.default.hmmm('Queue error:', { errorMessage: errorMessage });
+                        .catch((error) => {
+                        const errorMessage = error.message ?? CONST_1.default.ERROR.UNKNOWN_ERROR;
+                        Log_1.default.hmmm('Queue error:', { errorMessage });
                     })
-                        .finally(function () {
+                        .finally(() => {
                         processNext().then(resolve);
                     });
                 }
@@ -62,12 +61,12 @@ function createQueue(processItem) {
     }
     // Return an object with the queue operations
     return {
-        run: run,
-        enqueue: enqueue,
-        dequeue: dequeue,
-        isEmpty: isEmpty,
-        peek: peek,
-        size: size,
+        run,
+        enqueue,
+        dequeue,
+        isEmpty,
+        peek,
+        size,
     };
 }
 exports.default = createQueue;

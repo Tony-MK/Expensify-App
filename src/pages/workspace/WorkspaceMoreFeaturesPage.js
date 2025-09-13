@@ -1,98 +1,96 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Illustrations = require("@components/Icon/Illustrations");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Section_1 = require("@components/Section");
-var Text_1 = require("@components/Text");
-var useCardFeeds_1 = require("@hooks/useCardFeeds");
-var useDefaultFundID_1 = require("@hooks/useDefaultFundID");
-var useIsPolicyConnectedToUberReceiptPartner_1 = require("@hooks/useIsPolicyConnectedToUberReceiptPartner");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CardUtils_1 = require("@libs/CardUtils");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var Category_1 = require("@userActions/Policy/Category");
-var DistanceRate_1 = require("@userActions/Policy/DistanceRate");
-var PerDiem_1 = require("@userActions/Policy/PerDiem");
-var Policy_1 = require("@userActions/Policy/Policy");
-var Tag_1 = require("@userActions/Policy/Tag");
-var Report_1 = require("@userActions/Report");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var AccessOrNotFoundWrapper_1 = require("./AccessOrNotFoundWrapper");
-var withPolicyAndFullscreenLoading_1 = require("./withPolicyAndFullscreenLoading");
-var ToggleSettingsOptionRow_1 = require("./workflows/ToggleSettingsOptionRow");
-function WorkspaceMoreFeaturesPage(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12;
-    var policy = _a.policy, route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var translate = (0, useLocalize_1.default)().translate;
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var hasAccountingConnection = (0, PolicyUtils_1.hasAccountingConnections)(policy);
-    var isAccountingEnabled = !!(policy === null || policy === void 0 ? void 0 : policy.areConnectionsEnabled) || !(0, EmptyObject_1.isEmptyObject)(policy === null || policy === void 0 ? void 0 : policy.connections);
-    var isSyncTaxEnabled = !!((_d = (_c = (_b = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _b === void 0 ? void 0 : _b.quickbooksOnline) === null || _c === void 0 ? void 0 : _c.config) === null || _d === void 0 ? void 0 : _d.syncTax) ||
-        !!((_g = (_f = (_e = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _e === void 0 ? void 0 : _e.xero) === null || _f === void 0 ? void 0 : _f.config) === null || _g === void 0 ? void 0 : _g.importTaxRates) ||
-        !!((_m = (_l = (_k = (_j = (_h = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _h === void 0 ? void 0 : _h.netsuite) === null || _j === void 0 ? void 0 : _j.options) === null || _k === void 0 ? void 0 : _k.config) === null || _l === void 0 ? void 0 : _l.syncOptions) === null || _m === void 0 ? void 0 : _m.syncTax);
-    var policyID = policy === null || policy === void 0 ? void 0 : policy.id;
-    var workspaceAccountID = (_o = policy === null || policy === void 0 ? void 0 : policy.workspaceAccountID) !== null && _o !== void 0 ? _o : CONST_1.default.DEFAULT_NUMBER_ID;
-    var cardsList = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID.toString(), "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK), {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Illustrations = require("@components/Icon/Illustrations");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Section_1 = require("@components/Section");
+const Text_1 = require("@components/Text");
+const useCardFeeds_1 = require("@hooks/useCardFeeds");
+const useDefaultFundID_1 = require("@hooks/useDefaultFundID");
+const useIsPolicyConnectedToUberReceiptPartner_1 = require("@hooks/useIsPolicyConnectedToUberReceiptPartner");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CardUtils_1 = require("@libs/CardUtils");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const Category_1 = require("@userActions/Policy/Category");
+const DistanceRate_1 = require("@userActions/Policy/DistanceRate");
+const PerDiem_1 = require("@userActions/Policy/PerDiem");
+const Policy_1 = require("@userActions/Policy/Policy");
+const Tag_1 = require("@userActions/Policy/Tag");
+const Report_1 = require("@userActions/Report");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const AccessOrNotFoundWrapper_1 = require("./AccessOrNotFoundWrapper");
+const withPolicyAndFullscreenLoading_1 = require("./withPolicyAndFullscreenLoading");
+const ToggleSettingsOptionRow_1 = require("./workflows/ToggleSettingsOptionRow");
+function WorkspaceMoreFeaturesPage({ policy, route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const hasAccountingConnection = (0, PolicyUtils_1.hasAccountingConnections)(policy);
+    const isAccountingEnabled = !!policy?.areConnectionsEnabled || !(0, EmptyObject_1.isEmptyObject)(policy?.connections);
+    const isSyncTaxEnabled = !!policy?.connections?.quickbooksOnline?.config?.syncTax ||
+        !!policy?.connections?.xero?.config?.importTaxRates ||
+        !!policy?.connections?.netsuite?.options?.config?.syncOptions?.syncTax;
+    const policyID = policy?.id;
+    const workspaceAccountID = policy?.workspaceAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const [cardsList] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID.toString()}_${CONST_1.default.EXPENSIFY_CARD.BANK}`, {
         selector: CardUtils_1.filterInactiveCards,
         canBeMissing: true,
-    })[0];
-    var isUberConnected = (0, useIsPolicyConnectedToUberReceiptPartner_1.default)({ policyID: policyID });
-    var cardFeeds = (0, useCardFeeds_1.default)(policyID)[0];
-    var _13 = (0, react_1.useState)(false), isOrganizeWarningModalOpen = _13[0], setIsOrganizeWarningModalOpen = _13[1];
-    var _14 = (0, react_1.useState)(false), isIntegrateWarningModalOpen = _14[0], setIsIntegrateWarningModalOpen = _14[1];
-    var _15 = (0, react_1.useState)(false), isReceiptPartnersWarningModalOpen = _15[0], setIsReceiptPartnersWarningModalOpen = _15[1];
-    var _16 = (0, react_1.useState)(false), isDisableExpensifyCardWarningModalOpen = _16[0], setIsDisableExpensifyCardWarningModalOpen = _16[1];
-    var _17 = (0, react_1.useState)(false), isDisableCompanyCardsWarningModalOpen = _17[0], setIsDisableCompanyCardsWarningModalOpen = _17[1];
-    var _18 = (0, react_1.useState)(false), isDisableWorkflowWarningModalOpen = _18[0], setIsDisableWorkflowWarningModalOpen = _18[1];
-    var perDiemCustomUnit = (0, PolicyUtils_1.getPerDiemCustomUnit)(policy);
-    var distanceRateCustomUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
-    var cardList = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST), { canBeMissing: true })[0];
-    var workspaceCards = (0, CardUtils_1.getAllCardsForWorkspace)(workspaceAccountID, cardList, cardFeeds);
-    var isSmartLimitEnabled = (0, CardUtils_1.isSmartLimitEnabled)(workspaceCards);
-    var allTransactionViolations = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, { canBeMissing: true })[0];
-    var policyTagLists = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_TAGS).concat(policy === null || policy === void 0 ? void 0 : policy.id), { canBeMissing: true })[0];
-    var defaultFundID = (0, useDefaultFundID_1.default)(policyID);
-    var cardSettings = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(defaultFundID), { canBeMissing: true })[0];
-    var paymentBankAccountID = cardSettings === null || cardSettings === void 0 ? void 0 : cardSettings.paymentBankAccountID;
-    var onDisabledOrganizeSwitchPress = (0, react_1.useCallback)(function () {
+    });
+    const isUberConnected = (0, useIsPolicyConnectedToUberReceiptPartner_1.default)({ policyID });
+    const [cardFeeds] = (0, useCardFeeds_1.default)(policyID);
+    const [isOrganizeWarningModalOpen, setIsOrganizeWarningModalOpen] = (0, react_1.useState)(false);
+    const [isIntegrateWarningModalOpen, setIsIntegrateWarningModalOpen] = (0, react_1.useState)(false);
+    const [isReceiptPartnersWarningModalOpen, setIsReceiptPartnersWarningModalOpen] = (0, react_1.useState)(false);
+    const [isDisableExpensifyCardWarningModalOpen, setIsDisableExpensifyCardWarningModalOpen] = (0, react_1.useState)(false);
+    const [isDisableCompanyCardsWarningModalOpen, setIsDisableCompanyCardsWarningModalOpen] = (0, react_1.useState)(false);
+    const [isDisableWorkflowWarningModalOpen, setIsDisableWorkflowWarningModalOpen] = (0, react_1.useState)(false);
+    const perDiemCustomUnit = (0, PolicyUtils_1.getPerDiemCustomUnit)(policy);
+    const distanceRateCustomUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
+    const [cardList] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}`, { canBeMissing: true });
+    const workspaceCards = (0, CardUtils_1.getAllCardsForWorkspace)(workspaceAccountID, cardList, cardFeeds);
+    const isSmartLimitEnabled = (0, CardUtils_1.isSmartLimitEnabled)(workspaceCards);
+    const [allTransactionViolations] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, { canBeMissing: true });
+    const [policyTagLists] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_TAGS}${policy?.id}`, { canBeMissing: true });
+    const defaultFundID = (0, useDefaultFundID_1.default)(policyID);
+    const [cardSettings] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${defaultFundID}`, { canBeMissing: true });
+    const paymentBankAccountID = cardSettings?.paymentBankAccountID;
+    const onDisabledOrganizeSwitchPress = (0, react_1.useCallback)(() => {
         if (!hasAccountingConnection) {
             return;
         }
         setIsOrganizeWarningModalOpen(true);
     }, [hasAccountingConnection]);
-    var onDisabledWorkflowPress = (0, react_1.useCallback)(function () {
+    const onDisabledWorkflowPress = (0, react_1.useCallback)(() => {
         if (!isSmartLimitEnabled) {
             return;
         }
         setIsDisableWorkflowWarningModalOpen(true);
     }, [isSmartLimitEnabled]);
-    var spendItems = [
+    const spendItems = [
         {
             icon: Illustrations.Car,
             titleTranslationKey: 'workspace.moreFeatures.distanceRates.title',
             subtitleTranslationKey: 'workspace.moreFeatures.distanceRates.subtitle',
-            isActive: (_p = policy === null || policy === void 0 ? void 0 : policy.areDistanceRatesEnabled) !== null && _p !== void 0 ? _p : false,
-            pendingAction: (_q = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _q === void 0 ? void 0 : _q.areDistanceRatesEnabled,
-            action: function (isEnabled) {
+            isActive: policy?.areDistanceRatesEnabled ?? false,
+            pendingAction: policy?.pendingFields?.areDistanceRatesEnabled,
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
@@ -103,16 +101,16 @@ function WorkspaceMoreFeaturesPage(_a) {
             icon: Illustrations.HandCard,
             titleTranslationKey: 'workspace.moreFeatures.expensifyCard.title',
             subtitleTranslationKey: 'workspace.moreFeatures.expensifyCard.subtitle',
-            isActive: (_r = policy === null || policy === void 0 ? void 0 : policy.areExpensifyCardsEnabled) !== null && _r !== void 0 ? _r : false,
-            pendingAction: (_s = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _s === void 0 ? void 0 : _s.areExpensifyCardsEnabled,
-            disabled: (!!(policy === null || policy === void 0 ? void 0 : policy.areExpensifyCardsEnabled) && !!paymentBankAccountID) || !(0, EmptyObject_1.isEmptyObject)(cardsList),
-            action: function (isEnabled) {
+            isActive: policy?.areExpensifyCardsEnabled ?? false,
+            pendingAction: policy?.pendingFields?.areExpensifyCardsEnabled,
+            disabled: (!!policy?.areExpensifyCardsEnabled && !!paymentBankAccountID) || !(0, EmptyObject_1.isEmptyObject)(cardsList),
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
                 (0, Policy_1.enableExpensifyCard)(policyID, isEnabled);
             },
-            disabledAction: function () {
+            disabledAction: () => {
                 setIsDisableExpensifyCardWarningModalOpen(true);
             },
         },
@@ -121,16 +119,16 @@ function WorkspaceMoreFeaturesPage(_a) {
         icon: Illustrations.CompanyCard,
         titleTranslationKey: 'workspace.moreFeatures.companyCards.title',
         subtitleTranslationKey: 'workspace.moreFeatures.companyCards.subtitle',
-        isActive: (_t = policy === null || policy === void 0 ? void 0 : policy.areCompanyCardsEnabled) !== null && _t !== void 0 ? _t : false,
-        pendingAction: (_u = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _u === void 0 ? void 0 : _u.areCompanyCardsEnabled,
+        isActive: policy?.areCompanyCardsEnabled ?? false,
+        pendingAction: policy?.pendingFields?.areCompanyCardsEnabled,
         disabled: !(0, EmptyObject_1.isEmptyObject)((0, CardUtils_1.getCompanyFeeds)(cardFeeds)),
-        action: function (isEnabled) {
+        action: (isEnabled) => {
             if (!policyID) {
                 return;
             }
             (0, Policy_1.enableCompanyCards)(policyID, isEnabled, true);
         },
-        disabledAction: function () {
+        disabledAction: () => {
             setIsDisableCompanyCardsWarningModalOpen(true);
         },
     });
@@ -138,9 +136,9 @@ function WorkspaceMoreFeaturesPage(_a) {
         icon: Illustrations.PerDiem,
         titleTranslationKey: 'workspace.moreFeatures.perDiem.title',
         subtitleTranslationKey: 'workspace.moreFeatures.perDiem.subtitle',
-        isActive: (_v = policy === null || policy === void 0 ? void 0 : policy.arePerDiemRatesEnabled) !== null && _v !== void 0 ? _v : false,
-        pendingAction: (_w = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _w === void 0 ? void 0 : _w.arePerDiemRatesEnabled,
-        action: function (isEnabled) {
+        isActive: policy?.arePerDiemRatesEnabled ?? false,
+        pendingAction: policy?.pendingFields?.arePerDiemRatesEnabled,
+        action: (isEnabled) => {
             if (!policyID) {
                 return;
             }
@@ -148,17 +146,17 @@ function WorkspaceMoreFeaturesPage(_a) {
                 Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_UPGRADE.getRoute(policyID, CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.perDiem.alias, ROUTES_1.default.WORKSPACE_MORE_FEATURES.getRoute(policyID)));
                 return;
             }
-            (0, PerDiem_1.enablePerDiem)(policyID, isEnabled, perDiemCustomUnit === null || perDiemCustomUnit === void 0 ? void 0 : perDiemCustomUnit.customUnitID, true);
+            (0, PerDiem_1.enablePerDiem)(policyID, isEnabled, perDiemCustomUnit?.customUnitID, true);
         },
     });
-    var manageItems = [
+    const manageItems = [
         {
             icon: Illustrations.Workflows,
             titleTranslationKey: 'workspace.moreFeatures.workflows.title',
             subtitleTranslationKey: 'workspace.moreFeatures.workflows.subtitle',
-            isActive: (_x = policy === null || policy === void 0 ? void 0 : policy.areWorkflowsEnabled) !== null && _x !== void 0 ? _x : false,
-            pendingAction: (_y = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _y === void 0 ? void 0 : _y.areWorkflowsEnabled,
-            action: function (isEnabled) {
+            isActive: policy?.areWorkflowsEnabled ?? false,
+            pendingAction: policy?.pendingFields?.areWorkflowsEnabled,
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
@@ -171,9 +169,9 @@ function WorkspaceMoreFeaturesPage(_a) {
             icon: Illustrations.Rules,
             titleTranslationKey: 'workspace.moreFeatures.rules.title',
             subtitleTranslationKey: 'workspace.moreFeatures.rules.subtitle',
-            isActive: (_z = policy === null || policy === void 0 ? void 0 : policy.areRulesEnabled) !== null && _z !== void 0 ? _z : false,
-            pendingAction: (_0 = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _0 === void 0 ? void 0 : _0.areRulesEnabled,
-            action: function (isEnabled) {
+            isActive: policy?.areRulesEnabled ?? false,
+            pendingAction: policy?.pendingFields?.areRulesEnabled,
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
@@ -185,14 +183,14 @@ function WorkspaceMoreFeaturesPage(_a) {
             },
         },
     ];
-    var earnItems = [
+    const earnItems = [
         {
             icon: Illustrations.InvoiceBlue,
             titleTranslationKey: 'workspace.moreFeatures.invoices.title',
             subtitleTranslationKey: 'workspace.moreFeatures.invoices.subtitle',
-            isActive: (_1 = policy === null || policy === void 0 ? void 0 : policy.areInvoicesEnabled) !== null && _1 !== void 0 ? _1 : false,
-            pendingAction: (_2 = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _2 === void 0 ? void 0 : _2.areInvoicesEnabled,
-            action: function (isEnabled) {
+            isActive: policy?.areInvoicesEnabled ?? false,
+            pendingAction: policy?.pendingFields?.areInvoicesEnabled,
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
@@ -200,16 +198,16 @@ function WorkspaceMoreFeaturesPage(_a) {
             },
         },
     ];
-    var organizeItems = [
+    const organizeItems = [
         {
             icon: Illustrations.FolderOpen,
             titleTranslationKey: 'workspace.moreFeatures.categories.title',
             subtitleTranslationKey: 'workspace.moreFeatures.categories.subtitle',
-            isActive: (_3 = policy === null || policy === void 0 ? void 0 : policy.areCategoriesEnabled) !== null && _3 !== void 0 ? _3 : false,
+            isActive: policy?.areCategoriesEnabled ?? false,
             disabled: hasAccountingConnection,
             disabledAction: onDisabledOrganizeSwitchPress,
-            pendingAction: (_4 = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _4 === void 0 ? void 0 : _4.areCategoriesEnabled,
-            action: function (isEnabled) {
+            pendingAction: policy?.pendingFields?.areCategoriesEnabled,
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
@@ -220,11 +218,11 @@ function WorkspaceMoreFeaturesPage(_a) {
             icon: Illustrations.Tag,
             titleTranslationKey: 'workspace.moreFeatures.tags.title',
             subtitleTranslationKey: 'workspace.moreFeatures.tags.subtitle',
-            isActive: (_5 = policy === null || policy === void 0 ? void 0 : policy.areTagsEnabled) !== null && _5 !== void 0 ? _5 : false,
+            isActive: policy?.areTagsEnabled ?? false,
             disabled: hasAccountingConnection,
-            pendingAction: (_6 = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _6 === void 0 ? void 0 : _6.areTagsEnabled,
+            pendingAction: policy?.pendingFields?.areTagsEnabled,
             disabledAction: onDisabledOrganizeSwitchPress,
-            action: function (isEnabled) {
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
@@ -235,11 +233,11 @@ function WorkspaceMoreFeaturesPage(_a) {
             icon: Illustrations.Coins,
             titleTranslationKey: 'workspace.moreFeatures.taxes.title',
             subtitleTranslationKey: 'workspace.moreFeatures.taxes.subtitle',
-            isActive: ((_8 = (_7 = policy === null || policy === void 0 ? void 0 : policy.tax) === null || _7 === void 0 ? void 0 : _7.trackingEnabled) !== null && _8 !== void 0 ? _8 : false) || isSyncTaxEnabled,
+            isActive: (policy?.tax?.trackingEnabled ?? false) || isSyncTaxEnabled,
             disabled: hasAccountingConnection,
-            pendingAction: (_9 = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _9 === void 0 ? void 0 : _9.tax,
+            pendingAction: policy?.pendingFields?.tax,
             disabledAction: onDisabledOrganizeSwitchPress,
-            action: function (isEnabled) {
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
@@ -247,28 +245,28 @@ function WorkspaceMoreFeaturesPage(_a) {
             },
         },
     ];
-    var integrateItems = [
+    const integrateItems = [
         {
             icon: Illustrations.Accounting,
             titleTranslationKey: 'workspace.moreFeatures.connections.title',
             subtitleTranslationKey: 'workspace.moreFeatures.connections.subtitle',
             isActive: isAccountingEnabled,
-            pendingAction: (_10 = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _10 === void 0 ? void 0 : _10.areConnectionsEnabled,
-            disabledAction: function () {
+            pendingAction: policy?.pendingFields?.areConnectionsEnabled,
+            disabledAction: () => {
                 if (!hasAccountingConnection) {
                     return;
                 }
                 setIsIntegrateWarningModalOpen(true);
             },
-            action: function (isEnabled) {
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
                 (0, Policy_1.enablePolicyConnections)(policyID, isEnabled);
             },
             disabled: hasAccountingConnection,
-            errors: (0, ErrorUtils_1.getLatestErrorField)(policy !== null && policy !== void 0 ? policy : {}, CONST_1.default.POLICY.MORE_FEATURES.ARE_CONNECTIONS_ENABLED),
-            onCloseError: function () {
+            errors: (0, ErrorUtils_1.getLatestErrorField)(policy ?? {}, CONST_1.default.POLICY.MORE_FEATURES.ARE_CONNECTIONS_ENABLED),
+            onCloseError: () => {
                 if (!policyID) {
                     return;
                 }
@@ -281,23 +279,23 @@ function WorkspaceMoreFeaturesPage(_a) {
             icon: Illustrations.ReceiptPartners,
             titleTranslationKey: 'workspace.moreFeatures.receiptPartners.title',
             subtitleTranslationKey: 'workspace.moreFeatures.receiptPartners.subtitle',
-            isActive: (_11 = policy === null || policy === void 0 ? void 0 : policy.areReceiptPartnersEnabled) !== null && _11 !== void 0 ? _11 : false,
-            pendingAction: (_12 = policy === null || policy === void 0 ? void 0 : policy.pendingFields) === null || _12 === void 0 ? void 0 : _12.areReceiptPartnersEnabled,
-            disabledAction: function () {
+            isActive: policy?.areReceiptPartnersEnabled ?? false,
+            pendingAction: policy?.pendingFields?.areReceiptPartnersEnabled,
+            disabledAction: () => {
                 if (!isUberConnected) {
                     return;
                 }
                 setIsReceiptPartnersWarningModalOpen(true);
             },
-            action: function (isEnabled) {
+            action: (isEnabled) => {
                 if (!policyID) {
                     return;
                 }
                 (0, Policy_1.enablePolicyReceiptPartners)(policyID, isEnabled);
             },
             disabled: isUberConnected,
-            errors: (0, ErrorUtils_1.getLatestErrorField)(policy !== null && policy !== void 0 ? policy : {}, CONST_1.default.POLICY.MORE_FEATURES.ARE_RECEIPT_PARTNERS_ENABLED),
-            onCloseError: function () {
+            errors: (0, ErrorUtils_1.getLatestErrorField)(policy ?? {}, CONST_1.default.POLICY.MORE_FEATURES.ARE_RECEIPT_PARTNERS_ENABLED),
+            onCloseError: () => {
                 if (!policyID) {
                     return;
                 }
@@ -305,7 +303,7 @@ function WorkspaceMoreFeaturesPage(_a) {
             },
         });
     }
-    var sections = [
+    const sections = [
         {
             titleTranslationKey: 'workspace.moreFeatures.integrateSection.title',
             subtitleTranslationKey: 'workspace.moreFeatures.integrateSection.subtitle',
@@ -332,11 +330,11 @@ function WorkspaceMoreFeaturesPage(_a) {
             items: earnItems,
         },
     ];
-    var renderItem = (0, react_1.useCallback)(function (item) { return (<react_native_1.View key={item.titleTranslationKey} style={[styles.workspaceSectionMoreFeaturesItem, shouldUseNarrowLayout && styles.flexBasis100, shouldUseNarrowLayout && StyleUtils.getMinimumWidth(0)]}>
+    const renderItem = (0, react_1.useCallback)((item) => (<react_native_1.View key={item.titleTranslationKey} style={[styles.workspaceSectionMoreFeaturesItem, shouldUseNarrowLayout && styles.flexBasis100, shouldUseNarrowLayout && StyleUtils.getMinimumWidth(0)]}>
                 <ToggleSettingsOptionRow_1.default icon={item.icon} disabled={item.disabled} disabledAction={item.disabledAction} title={translate(item.titleTranslationKey)} titleStyle={styles.textStrong} subtitle={translate(item.subtitleTranslationKey)} switchAccessibilityLabel={translate(item.subtitleTranslationKey)} isActive={item.isActive} pendingAction={item.pendingAction} onToggle={item.action} showLockIcon={item.disabled} errors={item.errors} onCloseError={item.onCloseError}/>
-            </react_native_1.View>); }, [styles, StyleUtils, shouldUseNarrowLayout, translate]);
+            </react_native_1.View>), [styles, StyleUtils, shouldUseNarrowLayout, translate]);
     /** Used to fill row space in the Section items when there are odd number of items to create equal margins for last odd item. */
-    var sectionRowFillerItem = (0, react_1.useCallback)(function (section) {
+    const sectionRowFillerItem = (0, react_1.useCallback)((section) => {
         if (section.items.length % 2 === 0) {
             return null;
         }
@@ -349,16 +347,16 @@ function WorkspaceMoreFeaturesPage(_a) {
                 styles.bgTransparent,
             ]}/>);
     }, [styles, StyleUtils, shouldUseNarrowLayout]);
-    var renderSection = (0, react_1.useCallback)(function (section) { return (<react_native_1.View key={section.titleTranslationKey} style={[styles.mt3, shouldUseNarrowLayout ? styles.workspaceSectionMobile : {}]}>
-                <Section_1.default containerStyles={[styles.ph1, styles.pv0, styles.bgTransparent, styles.noBorderRadius]} childrenStyles={[styles.flexRow, styles.flexWrap, styles.columnGap3]} renderTitle={function () { return <Text_1.default style={styles.mutedNormalTextLabel}>{translate(section.titleTranslationKey)}</Text_1.default>; }} subtitleMuted>
+    const renderSection = (0, react_1.useCallback)((section) => (<react_native_1.View key={section.titleTranslationKey} style={[styles.mt3, shouldUseNarrowLayout ? styles.workspaceSectionMobile : {}]}>
+                <Section_1.default containerStyles={[styles.ph1, styles.pv0, styles.bgTransparent, styles.noBorderRadius]} childrenStyles={[styles.flexRow, styles.flexWrap, styles.columnGap3]} renderTitle={() => <Text_1.default style={styles.mutedNormalTextLabel}>{translate(section.titleTranslationKey)}</Text_1.default>} subtitleMuted>
                     {section.items.map(renderItem)}
                     {sectionRowFillerItem(section)}
                 </Section_1.default>
-            </react_native_1.View>); }, [shouldUseNarrowLayout, styles, renderItem, translate, sectionRowFillerItem]);
-    var fetchFeatures = (0, react_1.useCallback)(function () {
+            </react_native_1.View>), [shouldUseNarrowLayout, styles, renderItem, translate, sectionRowFillerItem]);
+    const fetchFeatures = (0, react_1.useCallback)(() => {
         (0, Policy_1.openPolicyMoreFeaturesPage)(route.params.policyID);
     }, [route.params.policyID]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         fetchFeatures();
         // eslint-disable-next-line react-compiler/react-compiler
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -366,28 +364,28 @@ function WorkspaceMoreFeaturesPage(_a) {
     (0, useNetwork_1.default)({ onReconnect: fetchFeatures });
     return (<AccessOrNotFoundWrapper_1.default accessVariants={[CONST_1.default.POLICY.ACCESS_VARIANTS.ADMIN, CONST_1.default.POLICY.ACCESS_VARIANTS.PAID]} policyID={route.params.policyID}>
             <ScreenWrapper_1.default enableEdgeToEdgeBottomSafeAreaPadding style={[styles.defaultModalContainer]} testID={WorkspaceMoreFeaturesPage.displayName} shouldShowOfflineIndicatorInWideScreen>
-                <HeaderWithBackButton_1.default icon={Illustrations.Gears} shouldUseHeadlineHeader title={translate('workspace.common.moreFeatures')} shouldShowBackButton={shouldUseNarrowLayout} onBackButtonPress={function () { return Navigation_1.default.goBack(); }}/>
+                <HeaderWithBackButton_1.default icon={Illustrations.Gears} shouldUseHeadlineHeader title={translate('workspace.common.moreFeatures')} shouldShowBackButton={shouldUseNarrowLayout} onBackButtonPress={() => Navigation_1.default.goBack()}/>
 
                 <ScrollView_1.default addBottomSafeAreaPadding>
                     <Text_1.default style={[styles.ph5, styles.mb5, styles.mt3, styles.textSupporting, styles.workspaceSectionMobile]}>{translate('workspace.moreFeatures.subtitle')}</Text_1.default>
                     {sections.map(renderSection)}
                 </ScrollView_1.default>
 
-                <ConfirmModal_1.default title={translate('workspace.moreFeatures.connectionsWarningModal.featureEnabledTitle')} onConfirm={function () {
+                <ConfirmModal_1.default title={translate('workspace.moreFeatures.connectionsWarningModal.featureEnabledTitle')} onConfirm={() => {
             if (!policyID) {
                 return;
             }
             setIsOrganizeWarningModalOpen(false);
             Navigation_1.default.navigate(ROUTES_1.default.POLICY_ACCOUNTING.getRoute(policyID));
-        }} onCancel={function () { return setIsOrganizeWarningModalOpen(false); }} isVisible={isOrganizeWarningModalOpen} prompt={translate('workspace.moreFeatures.connectionsWarningModal.featureEnabledText')} confirmText={translate('workspace.moreFeatures.connectionsWarningModal.manageSettings')} cancelText={translate('common.cancel')}/>
-                <ConfirmModal_1.default title={translate('workspace.moreFeatures.connectionsWarningModal.featureEnabledTitle')} onConfirm={function () {
+        }} onCancel={() => setIsOrganizeWarningModalOpen(false)} isVisible={isOrganizeWarningModalOpen} prompt={translate('workspace.moreFeatures.connectionsWarningModal.featureEnabledText')} confirmText={translate('workspace.moreFeatures.connectionsWarningModal.manageSettings')} cancelText={translate('common.cancel')}/>
+                <ConfirmModal_1.default title={translate('workspace.moreFeatures.connectionsWarningModal.featureEnabledTitle')} onConfirm={() => {
             if (!policyID) {
                 return;
             }
             setIsIntegrateWarningModalOpen(false);
             Navigation_1.default.navigate(ROUTES_1.default.POLICY_ACCOUNTING.getRoute(policyID));
-        }} onCancel={function () { return setIsIntegrateWarningModalOpen(false); }} isVisible={isIntegrateWarningModalOpen} prompt={translate('workspace.moreFeatures.connectionsWarningModal.disconnectText')} confirmText={translate('workspace.moreFeatures.connectionsWarningModal.manageSettings')} cancelText={translate('common.cancel')}/>
-                {isBetaEnabled(CONST_1.default.BETAS.UBER_FOR_BUSINESS) && (<ConfirmModal_1.default title={translate('workspace.moreFeatures.receiptPartnersWarningModal.featureEnabledTitle')} onConfirm={function () {
+        }} onCancel={() => setIsIntegrateWarningModalOpen(false)} isVisible={isIntegrateWarningModalOpen} prompt={translate('workspace.moreFeatures.connectionsWarningModal.disconnectText')} confirmText={translate('workspace.moreFeatures.connectionsWarningModal.manageSettings')} cancelText={translate('common.cancel')}/>
+                {isBetaEnabled(CONST_1.default.BETAS.UBER_FOR_BUSINESS) && (<ConfirmModal_1.default title={translate('workspace.moreFeatures.receiptPartnersWarningModal.featureEnabledTitle')} onConfirm={() => {
                 if (!policyID) {
                     return;
                 }
@@ -395,18 +393,18 @@ function WorkspaceMoreFeaturesPage(_a) {
                 // TODO: Navigate to Receipt Partners settings page when it exists
                 // Navigation.navigate(ROUTES.POLICY_RECEIPT_PARTNERS.getRoute(policyID));
             }} isVisible={isReceiptPartnersWarningModalOpen} prompt={translate('workspace.moreFeatures.receiptPartnersWarningModal.disconnectText')} confirmText={translate('workspace.moreFeatures.receiptPartnersWarningModal.confirmText')} shouldShowCancelButton={false}/>)}
-                <ConfirmModal_1.default title={translate('workspace.moreFeatures.expensifyCard.disableCardTitle')} isVisible={isDisableExpensifyCardWarningModalOpen} onConfirm={function () {
+                <ConfirmModal_1.default title={translate('workspace.moreFeatures.expensifyCard.disableCardTitle')} isVisible={isDisableExpensifyCardWarningModalOpen} onConfirm={() => {
             setIsDisableExpensifyCardWarningModalOpen(false);
             (0, Report_1.navigateToConciergeChat)();
-        }} onCancel={function () { return setIsDisableExpensifyCardWarningModalOpen(false); }} prompt={translate('workspace.moreFeatures.expensifyCard.disableCardPrompt')} confirmText={translate('workspace.moreFeatures.expensifyCard.disableCardButton')} cancelText={translate('common.cancel')}/>
-                <ConfirmModal_1.default title={translate('workspace.moreFeatures.companyCards.disableCardTitle')} isVisible={isDisableCompanyCardsWarningModalOpen} onConfirm={function () {
+        }} onCancel={() => setIsDisableExpensifyCardWarningModalOpen(false)} prompt={translate('workspace.moreFeatures.expensifyCard.disableCardPrompt')} confirmText={translate('workspace.moreFeatures.expensifyCard.disableCardButton')} cancelText={translate('common.cancel')}/>
+                <ConfirmModal_1.default title={translate('workspace.moreFeatures.companyCards.disableCardTitle')} isVisible={isDisableCompanyCardsWarningModalOpen} onConfirm={() => {
             setIsDisableCompanyCardsWarningModalOpen(false);
             (0, Report_1.navigateToConciergeChat)();
-        }} onCancel={function () { return setIsDisableCompanyCardsWarningModalOpen(false); }} prompt={translate('workspace.moreFeatures.companyCards.disableCardPrompt')} confirmText={translate('workspace.moreFeatures.companyCards.disableCardButton')} cancelText={translate('common.cancel')}/>
-                <ConfirmModal_1.default title={translate('workspace.moreFeatures.workflowWarningModal.featureEnabledTitle')} isVisible={isDisableWorkflowWarningModalOpen} onConfirm={function () {
+        }} onCancel={() => setIsDisableCompanyCardsWarningModalOpen(false)} prompt={translate('workspace.moreFeatures.companyCards.disableCardPrompt')} confirmText={translate('workspace.moreFeatures.companyCards.disableCardButton')} cancelText={translate('common.cancel')}/>
+                <ConfirmModal_1.default title={translate('workspace.moreFeatures.workflowWarningModal.featureEnabledTitle')} isVisible={isDisableWorkflowWarningModalOpen} onConfirm={() => {
             setIsDisableWorkflowWarningModalOpen(false);
             Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_EXPENSIFY_CARD.getRoute(policyID));
-        }} onCancel={function () { return setIsDisableWorkflowWarningModalOpen(false); }} prompt={translate('workspace.moreFeatures.workflowWarningModal.featureEnabledText')} confirmText={translate('workspace.moreFeatures.workflowWarningModal.confirmText')} cancelText={translate('common.cancel')}/>
+        }} onCancel={() => setIsDisableWorkflowWarningModalOpen(false)} prompt={translate('workspace.moreFeatures.workflowWarningModal.featureEnabledText')} confirmText={translate('workspace.moreFeatures.workflowWarningModal.confirmText')} cancelText={translate('common.cancel')}/>
             </ScreenWrapper_1.default>
         </AccessOrNotFoundWrapper_1.default>);
 }

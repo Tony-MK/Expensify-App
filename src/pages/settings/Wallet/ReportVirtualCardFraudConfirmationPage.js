@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Expensicons = require("@components/Icon/Expensicons");
-var ImageSVG_1 = require("@components/ImageSVG");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@navigation/Navigation");
-var ROUTES_1 = require("@src/ROUTES");
-function ReportVirtualCardFraudConfirmationPage(_a) {
-    var _b = _a.route.params.cardID, cardID = _b === void 0 ? '' : _b;
-    var themeStyles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var close = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Expensicons = require("@components/Icon/Expensicons");
+const ImageSVG_1 = require("@components/ImageSVG");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@navigation/Navigation");
+const ROUTES_1 = require("@src/ROUTES");
+function ReportVirtualCardFraudConfirmationPage({ route: { params: { cardID = '' }, }, }) {
+    const themeStyles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const close = (0, react_1.useCallback)(() => {
         Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_WALLET_DOMAIN_CARD.getRoute(cardID));
     }, [cardID]);
     return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom includePaddingTop shouldEnableMaxHeight testID={ReportVirtualCardFraudConfirmationPage.displayName} offlineIndicatorStyle={themeStyles.mtAuto}>

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = require("path");
+const path_1 = require("path");
 /* eslint-disable @typescript-eslint/naming-convention */
 exports.default = {
     'react-native-config': 'react-web-config',

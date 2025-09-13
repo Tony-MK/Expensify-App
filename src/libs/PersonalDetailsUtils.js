@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPhoneNumber = exports.getShortMentionIfFound = void 0;
 exports.getDisplayNameOrDefault = getDisplayNameOrDefault;
@@ -28,53 +17,48 @@ exports.extractFirstAndLastNameFromAvailableDetails = extractFirstAndLastNameFro
 exports.getNewAccountIDsAndLogins = getNewAccountIDsAndLogins;
 exports.getUserNameByEmail = getUserNameByEmail;
 exports.getLoginByAccountID = getLoginByAccountID;
-var expensify_common_1 = require("expensify-common");
-var react_native_onyx_1 = require("react-native-onyx");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var Localize_1 = require("./Localize");
-var LoginUtils_1 = require("./LoginUtils");
-var PhoneNumber_1 = require("./PhoneNumber");
-var UserUtils_1 = require("./UserUtils");
-var personalDetails = [];
-var allPersonalDetails = {};
-var emailToPersonalDetailsCache = {};
+const expensify_common_1 = require("expensify-common");
+const react_native_onyx_1 = require("react-native-onyx");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const Localize_1 = require("./Localize");
+const LoginUtils_1 = require("./LoginUtils");
+const PhoneNumber_1 = require("./PhoneNumber");
+const UserUtils_1 = require("./UserUtils");
+let personalDetails = [];
+let allPersonalDetails = {};
+let emailToPersonalDetailsCache = {};
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-    callback: function (val) {
-        personalDetails = Object.values(val !== null && val !== void 0 ? val : {});
+    callback: (val) => {
+        personalDetails = Object.values(val ?? {});
         allPersonalDetails = val;
-        emailToPersonalDetailsCache = personalDetails.reduce(function (acc, detail) {
-            if (detail === null || detail === void 0 ? void 0 : detail.login) {
+        emailToPersonalDetailsCache = personalDetails.reduce((acc, detail) => {
+            if (detail?.login) {
                 acc[detail.login.toLowerCase()] = detail;
             }
             return acc;
         }, {});
     },
 });
-var hiddenTranslation = '';
-var youTranslation = '';
+let hiddenTranslation = '';
+let youTranslation = '';
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.ARE_TRANSLATIONS_LOADING,
     initWithStoredValues: false,
-    callback: function (value) {
-        if (value !== null && value !== void 0 ? value : true) {
+    callback: (value) => {
+        if (value ?? true) {
             return;
         }
         hiddenTranslation = (0, Localize_1.translateLocal)('common.hidden');
         youTranslation = (0, Localize_1.translateLocal)('common.you').toLowerCase();
     },
 });
-var regexMergedAccount = new RegExp(CONST_1.default.REGEX.MERGED_ACCOUNT_PREFIX);
-function getDisplayNameOrDefault(passedPersonalDetails, defaultValue, shouldFallbackToHidden, shouldAddCurrentUserPostfix, youAfterTranslation) {
-    var _a, _b;
-    if (defaultValue === void 0) { defaultValue = ''; }
-    if (shouldFallbackToHidden === void 0) { shouldFallbackToHidden = true; }
-    if (shouldAddCurrentUserPostfix === void 0) { shouldAddCurrentUserPostfix = false; }
-    if (youAfterTranslation === void 0) { youAfterTranslation = youTranslation; }
-    var displayName = (_a = passedPersonalDetails === null || passedPersonalDetails === void 0 ? void 0 : passedPersonalDetails.displayName) !== null && _a !== void 0 ? _a : '';
-    var login = (_b = passedPersonalDetails === null || passedPersonalDetails === void 0 ? void 0 : passedPersonalDetails.login) !== null && _b !== void 0 ? _b : '';
+const regexMergedAccount = new RegExp(CONST_1.default.REGEX.MERGED_ACCOUNT_PREFIX);
+function getDisplayNameOrDefault(passedPersonalDetails, defaultValue = '', shouldFallbackToHidden = true, shouldAddCurrentUserPostfix = false, youAfterTranslation = youTranslation) {
+    let displayName = passedPersonalDetails?.displayName ?? '';
+    let login = passedPersonalDetails?.login ?? '';
     // If the displayName starts with the merged account prefix, remove it.
     if (regexMergedAccount.test(displayName)) {
         // Remove the merged account prefix from the displayName.
@@ -89,9 +73,9 @@ function getDisplayNameOrDefault(passedPersonalDetails, defaultValue, shouldFall
         login = expensify_common_1.Str.removeSMSDomain(login);
     }
     if (shouldAddCurrentUserPostfix && !!displayName) {
-        displayName = "".concat(displayName, " (").concat(youAfterTranslation, ")");
+        displayName = `${displayName} (${youAfterTranslation})`;
     }
-    if ((passedPersonalDetails === null || passedPersonalDetails === void 0 ? void 0 : passedPersonalDetails.accountID) === CONST_1.default.ACCOUNT_ID.CONCIERGE) {
+    if (passedPersonalDetails?.accountID === CONST_1.default.ACCOUNT_ID.CONCIERGE) {
         displayName = CONST_1.default.CONCIERGE_DISPLAY_NAME;
     }
     if (displayName) {
@@ -112,15 +96,16 @@ function getDisplayNameOrDefault(passedPersonalDetails, defaultValue, shouldFall
  * @param shouldChangeUserDisplayName - It will replace the current user's personal detail object's displayName with 'You'.
  * @returns - Array of personal detail objects
  */
-function getPersonalDetailsByIDs(_a) {
-    var accountIDs = _a.accountIDs, currentUserAccountID = _a.currentUserAccountID, _b = _a.shouldChangeUserDisplayName, shouldChangeUserDisplayName = _b === void 0 ? false : _b, _c = _a.personalDetailsParam, personalDetailsParam = _c === void 0 ? allPersonalDetails : _c;
-    var result = accountIDs
-        .filter(function (accountID) { return !!(personalDetailsParam === null || personalDetailsParam === void 0 ? void 0 : personalDetailsParam[accountID]); })
-        .map(function (accountID) {
-        var _a;
-        var detail = ((_a = personalDetailsParam === null || personalDetailsParam === void 0 ? void 0 : personalDetailsParam[accountID]) !== null && _a !== void 0 ? _a : {});
+function getPersonalDetailsByIDs({ accountIDs, currentUserAccountID, shouldChangeUserDisplayName = false, personalDetailsParam = allPersonalDetails, }) {
+    const result = accountIDs
+        .filter((accountID) => !!personalDetailsParam?.[accountID])
+        .map((accountID) => {
+        const detail = (personalDetailsParam?.[accountID] ?? {});
         if (shouldChangeUserDisplayName && currentUserAccountID === detail.accountID) {
-            return __assign(__assign({}, detail), { displayName: (0, Localize_1.translateLocal)('common.you') });
+            return {
+                ...detail,
+                displayName: (0, Localize_1.translateLocal)('common.you'),
+            };
         }
         return detail;
     });
@@ -136,8 +121,8 @@ function getPersonalDetailByEmail(email) {
  * @returns Array of accountIDs according to passed logins
  */
 function getAccountIDsByLogins(logins) {
-    return logins.reduce(function (foundAccountIDs, login) {
-        var currentDetail = personalDetails.find(function (detail) { return (detail === null || detail === void 0 ? void 0 : detail.login) === (login === null || login === void 0 ? void 0 : login.toLowerCase()); });
+    return logins.reduce((foundAccountIDs, login) => {
+        const currentDetail = personalDetails.find((detail) => detail?.login === login?.toLowerCase());
         if (!currentDetail) {
             // generate an account ID because in this case the detail is probably new, so we don't have a real accountID yet
             foundAccountIDs.push((0, UserUtils_1.generateAccountID)(login));
@@ -155,8 +140,7 @@ function getAccountIDsByLogins(logins) {
  * @returns Login according to passed accountID
  */
 function getLoginByAccountID(accountID) {
-    var _a;
-    return (_a = allPersonalDetails === null || allPersonalDetails === void 0 ? void 0 : allPersonalDetails[accountID]) === null || _a === void 0 ? void 0 : _a.login;
+    return allPersonalDetails?.[accountID]?.login;
 }
 /**
  * Given a list of accountIDs, find the associated personal detail and return related logins.
@@ -165,8 +149,8 @@ function getLoginByAccountID(accountID) {
  * @returns Array of logins according to passed accountIDs
  */
 function getLoginsByAccountIDs(accountIDs) {
-    return accountIDs.reduce(function (foundLogins, accountID) {
-        var currentLogin = getLoginByAccountID(accountID);
+    return accountIDs.reduce((foundLogins, accountID) => {
+        const currentLogin = getLoginByAccountID(accountID);
         if (currentLogin) {
             foundLogins.push(currentLogin);
         }
@@ -177,31 +161,29 @@ function getLoginsByAccountIDs(accountIDs) {
  * Provided a set of invited logins and optimistic accountIDs. Returns the ones which are not known to the user i.e. they do not exist in the personalDetailsList.
  */
 function getNewAccountIDsAndLogins(logins, accountIDs) {
-    var newAccountIDs = [];
-    var newLogins = [];
-    logins.forEach(function (login, index) {
-        var _a;
-        var accountID = (_a = accountIDs.at(index)) !== null && _a !== void 0 ? _a : -1;
-        if ((0, EmptyObject_1.isEmptyObject)(allPersonalDetails === null || allPersonalDetails === void 0 ? void 0 : allPersonalDetails[accountID])) {
+    const newAccountIDs = [];
+    const newLogins = [];
+    logins.forEach((login, index) => {
+        const accountID = accountIDs.at(index) ?? -1;
+        if ((0, EmptyObject_1.isEmptyObject)(allPersonalDetails?.[accountID])) {
             newAccountIDs.push(accountID);
             newLogins.push(login);
         }
     });
-    return { newAccountIDs: newAccountIDs, newLogins: newLogins };
+    return { newAccountIDs, newLogins };
 }
 /**
  * Given a list of logins and accountIDs, return Onyx data for users with no existing personal details stored. These users might be brand new or unknown.
  * They will have an "optimistic" accountID that must be cleaned up later.
  */
 function getPersonalDetailsOnyxDataForOptimisticUsers(newLogins, newAccountIDs, formatPhoneNumber) {
-    var personalDetailsNew = {};
-    var personalDetailsCleanup = {};
-    newLogins.forEach(function (login, index) {
-        var _a;
-        var accountID = (_a = newAccountIDs.at(index)) !== null && _a !== void 0 ? _a : -1;
+    const personalDetailsNew = {};
+    const personalDetailsCleanup = {};
+    newLogins.forEach((login, index) => {
+        const accountID = newAccountIDs.at(index) ?? -1;
         personalDetailsNew[accountID] = {
-            login: login,
-            accountID: accountID,
+            login,
+            accountID,
             displayName: formatPhoneNumber(login),
             isOptimisticPersonalDetail: true,
         };
@@ -211,14 +193,14 @@ function getPersonalDetailsOnyxDataForOptimisticUsers(newLogins, newAccountIDs, 
          */
         personalDetailsCleanup[accountID] = null;
     });
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
             value: personalDetailsNew,
         },
     ];
-    var finallyData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
@@ -226,8 +208,8 @@ function getPersonalDetailsOnyxDataForOptimisticUsers(newLogins, newAccountIDs, 
         },
     ];
     return {
-        optimisticData: optimisticData,
-        finallyData: finallyData,
+        optimisticData,
+        finallyData,
     };
 }
 /**
@@ -237,7 +219,7 @@ function getPersonalDetailsOnyxDataForOptimisticUsers(newLogins, newAccountIDs, 
  * @returns - formatted piece
  */
 function formatPiece(piece) {
-    return piece ? "".concat(piece, ", ") : '';
+    return piece ? `${piece}, ` : '';
 }
 /**
  *
@@ -245,19 +227,16 @@ function formatPiece(piece) {
  * @param street2 - street line 2
  * @returns formatted street
  */
-function getFormattedStreet(street1, street2) {
-    if (street1 === void 0) { street1 = ''; }
-    if (street2 === void 0) { street2 = ''; }
-    return "".concat(street1, "\n").concat(street2);
+function getFormattedStreet(street1 = '', street2 = '') {
+    return `${street1}\n${street2}`;
 }
 /**
  *
  * @param - formatted address
  * @returns [street1, street2]
  */
-function getStreetLines(street) {
-    if (street === void 0) { street = ''; }
-    var streets = street.split('\n');
+function getStreetLines(street = '') {
+    const streets = street.split('\n');
     return [streets.at(0), streets.at(1)];
 }
 /**
@@ -267,9 +246,9 @@ function getStreetLines(street) {
  * @returns - current address object
  */
 function getCurrentAddress(privatePersonalDetails) {
-    var addresses = (privatePersonalDetails !== null && privatePersonalDetails !== void 0 ? privatePersonalDetails : {}).addresses;
-    var currentAddress = addresses === null || addresses === void 0 ? void 0 : addresses.find(function (address) { return address.current; });
-    return currentAddress !== null && currentAddress !== void 0 ? currentAddress : addresses === null || addresses === void 0 ? void 0 : addresses[addresses.length - 1];
+    const { addresses } = privatePersonalDetails ?? {};
+    const currentAddress = addresses?.find((address) => address.current);
+    return currentAddress ?? addresses?.[addresses.length - 1];
 }
 /**
  * Formats an address object into an easily readable string
@@ -278,9 +257,9 @@ function getCurrentAddress(privatePersonalDetails) {
  * @returns - formatted address
  */
 function getFormattedAddress(privatePersonalDetails) {
-    var address = getCurrentAddress(privatePersonalDetails);
-    var _a = getStreetLines(address === null || address === void 0 ? void 0 : address.street), street1 = _a[0], street2 = _a[1];
-    var formattedAddress = formatPiece(street1) + formatPiece(street2) + formatPiece(address === null || address === void 0 ? void 0 : address.city) + formatPiece(address === null || address === void 0 ? void 0 : address.state) + formatPiece(address === null || address === void 0 ? void 0 : address.zip) + formatPiece(address === null || address === void 0 ? void 0 : address.country);
+    const address = getCurrentAddress(privatePersonalDetails);
+    const [street1, street2] = getStreetLines(address?.street);
+    const formattedAddress = formatPiece(street1) + formatPiece(street2) + formatPiece(address?.city) + formatPiece(address?.state) + formatPiece(address?.zip) + formatPiece(address?.country);
     // Remove the last comma of the address
     return formattedAddress.trim().replace(/,$/, '');
 }
@@ -289,9 +268,8 @@ function getFormattedAddress(privatePersonalDetails) {
  * @returns - The effective display name
  */
 function getEffectiveDisplayName(formatPhoneNumber, personalDetail) {
-    var _a;
     if (personalDetail) {
-        return formatPhoneNumber((_a = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.login) !== null && _a !== void 0 ? _a : '') || personalDetail.displayName;
+        return formatPhoneNumber(personalDetail?.login ?? '') || personalDetail.displayName;
     }
     return undefined;
 }
@@ -299,16 +277,15 @@ function getEffectiveDisplayName(formatPhoneNumber, personalDetail) {
  * Creates a new displayName for a user based on passed personal details or login.
  */
 function createDisplayName(login, passedPersonalDetails, formatPhoneNumber) {
-    var _a, _b;
     // If we have a number like +15857527441@expensify.sms then let's remove @expensify.sms and format it
     // so that the option looks cleaner in our UI.
-    var userLogin = formatPhoneNumber(login);
+    const userLogin = formatPhoneNumber(login);
     if (!passedPersonalDetails) {
         return userLogin;
     }
-    var firstName = (_a = passedPersonalDetails.firstName) !== null && _a !== void 0 ? _a : '';
-    var lastName = (_b = passedPersonalDetails.lastName) !== null && _b !== void 0 ? _b : '';
-    var fullName = "".concat(firstName, " ").concat(lastName).trim();
+    const firstName = passedPersonalDetails.firstName ?? '';
+    const lastName = passedPersonalDetails.lastName ?? '';
+    const fullName = `${firstName} ${lastName}`.trim();
     // It's possible for fullName to be empty string, so we must use "||" to fallback to userLogin.
     return fullName || userLogin;
 }
@@ -317,19 +294,18 @@ function createDisplayName(login, passedPersonalDetails, formatPhoneNumber) {
  * If the login is the same as the displayName, then they don't exist,
  * so we return empty strings instead.
  */
-function extractFirstAndLastNameFromAvailableDetails(_a) {
-    var login = _a.login, displayName = _a.displayName, firstName = _a.firstName, lastName = _a.lastName;
+function extractFirstAndLastNameFromAvailableDetails({ login, displayName, firstName, lastName }) {
     // It's possible for firstName to be empty string, so we must use "||" to consider lastName instead.
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     if (firstName || lastName) {
-        return { firstName: firstName !== null && firstName !== void 0 ? firstName : '', lastName: lastName !== null && lastName !== void 0 ? lastName : '' };
+        return { firstName: firstName ?? '', lastName: lastName ?? '' };
     }
     if (login && expensify_common_1.Str.removeSMSDomain(login) === displayName) {
         return { firstName: '', lastName: '' };
     }
     if (displayName) {
-        var firstSpaceIndex = displayName.indexOf(' ');
-        var lastSpaceIndex = displayName.lastIndexOf(' ');
+        const firstSpaceIndex = displayName.indexOf(' ');
+        const lastSpaceIndex = displayName.lastIndexOf(' ');
         if (firstSpaceIndex === -1) {
             return { firstName: displayName, lastName: '' };
         }
@@ -341,22 +317,20 @@ function extractFirstAndLastNameFromAvailableDetails(_a) {
     return { firstName: '', lastName: '' };
 }
 function getUserNameByEmail(email, nameToDisplay) {
-    var userDetails = getPersonalDetailByEmail(email);
+    const userDetails = getPersonalDetailByEmail(email);
     if (userDetails) {
         return userDetails[nameToDisplay] ? userDetails[nameToDisplay] : userDetails.login;
     }
     return email;
 }
-var getShortMentionIfFound = function (displayText, userAccountID, currentUserPersonalDetails, userLogin) {
-    var _a;
-    if (userLogin === void 0) { userLogin = ''; }
+const getShortMentionIfFound = (displayText, userAccountID, currentUserPersonalDetails, userLogin = '') => {
     // If the userAccountID does not exist, this is an email-based mention so the displayText must be an email.
     // If the userAccountID exists but userLogin is different from displayText, this means the displayText is either user display name, Hidden, or phone number, in which case we should return it as is.
     if (userAccountID && userLogin !== displayText) {
         return displayText;
     }
     // If the emails are not in the same private domain, we also return the displayText
-    if (!(0, LoginUtils_1.areEmailsFromSamePrivateDomain)(displayText, (_a = currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.login) !== null && _a !== void 0 ? _a : '')) {
+    if (!(0, LoginUtils_1.areEmailsFromSamePrivateDomain)(displayText, currentUserPersonalDetails?.login ?? '')) {
         return displayText;
     }
     // Otherwise, the emails must be of the same private domain, so we should remove the domain part
@@ -366,13 +340,12 @@ exports.getShortMentionIfFound = getShortMentionIfFound;
 /**
  * Gets the phone number to display for SMS logins
  */
-var getPhoneNumber = function (details) {
-    var _a;
-    var _b = details !== null && details !== void 0 ? details : {}, _c = _b.login, login = _c === void 0 ? '' : _c, _d = _b.displayName, displayName = _d === void 0 ? '' : _d;
+const getPhoneNumber = (details) => {
+    const { login = '', displayName = '' } = details ?? {};
     // If the user hasn't set a displayName, it is set to their phone number
-    var parsedPhoneNumber = (0, PhoneNumber_1.parsePhoneNumber)(displayName);
+    const parsedPhoneNumber = (0, PhoneNumber_1.parsePhoneNumber)(displayName);
     if (parsedPhoneNumber.possible) {
-        return (_a = parsedPhoneNumber === null || parsedPhoneNumber === void 0 ? void 0 : parsedPhoneNumber.number) === null || _a === void 0 ? void 0 : _a.e164;
+        return parsedPhoneNumber?.number?.e164;
     }
     // If the user has set a displayName, get the phone number from the SMS login
     return login ? expensify_common_1.Str.removeSMSDomain(login) : '';

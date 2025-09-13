@@ -1,131 +1,119 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_onyx_1 = require("react-native-onyx");
-var ComposeProviders_1 = require("@components/ComposeProviders");
-var DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var InitialURLContextProvider_1 = require("@components/InitialURLContextProvider");
-var LockedAccountModalProvider_1 = require("@components/LockedAccountModalProvider");
-var OptionListContextProvider_1 = require("@components/OptionListContextProvider");
-var PriorityModeController_1 = require("@components/PriorityModeController");
-var SearchContext_1 = require("@components/Search/SearchContext");
-var SearchRouterContext_1 = require("@components/Search/SearchRouter/SearchRouterContext");
-var SearchRouterModal_1 = require("@components/Search/SearchRouter/SearchRouterModal");
-var WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useOnboardingFlow_1 = require("@hooks/useOnboardingFlow");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSidebarOrderedReports_1 = require("@hooks/useSidebarOrderedReports");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var Delegate_1 = require("@libs/actions/Delegate");
-var setFullscreenVisibility_1 = require("@libs/actions/setFullscreenVisibility");
-var ActiveClientManager_1 = require("@libs/ActiveClientManager");
-var types_1 = require("@libs/API/types");
-var HttpUtils_1 = require("@libs/HttpUtils");
-var KeyboardShortcut_1 = require("@libs/KeyboardShortcut");
-var Log_1 = require("@libs/Log");
-var NavBarManager_1 = require("@libs/NavBarManager");
-var currentUrl_1 = require("@libs/Navigation/currentUrl");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
-var presentation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/presentation");
-var NetworkConnection_1 = require("@libs/NetworkConnection");
-var OnboardingUtils_1 = require("@libs/OnboardingUtils");
-var onyxSubscribe_1 = require("@libs/onyxSubscribe");
-var Pusher_1 = require("@libs/Pusher");
-var PusherConnectionManager_1 = require("@libs/PusherConnectionManager");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var SessionUtils = require("@libs/SessionUtils");
-var Url_1 = require("@libs/Url");
-var ConnectionCompletePage_1 = require("@pages/ConnectionCompletePage");
-var NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
-var RequireTwoFactorAuthenticationPage_1 = require("@pages/RequireTwoFactorAuthenticationPage");
-var DesktopSignInRedirectPage_1 = require("@pages/signin/DesktopSignInRedirectPage");
-var WorkspacesListPage_1 = require("@pages/workspace/WorkspacesListPage");
-var App = require("@userActions/App");
-var Download = require("@userActions/Download");
-var Modal = require("@userActions/Modal");
-var PersonalDetails = require("@userActions/PersonalDetails");
-var Report = require("@userActions/Report");
-var Session = require("@userActions/Session");
-var User = require("@userActions/User");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_onyx_1 = require("react-native-onyx");
+const ComposeProviders_1 = require("@components/ComposeProviders");
+const DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const InitialURLContextProvider_1 = require("@components/InitialURLContextProvider");
+const LockedAccountModalProvider_1 = require("@components/LockedAccountModalProvider");
+const OptionListContextProvider_1 = require("@components/OptionListContextProvider");
+const PriorityModeController_1 = require("@components/PriorityModeController");
+const SearchContext_1 = require("@components/Search/SearchContext");
+const SearchRouterContext_1 = require("@components/Search/SearchRouter/SearchRouterContext");
+const SearchRouterModal_1 = require("@components/Search/SearchRouter/SearchRouterModal");
+const WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useOnboardingFlow_1 = require("@hooks/useOnboardingFlow");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSidebarOrderedReports_1 = require("@hooks/useSidebarOrderedReports");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const Delegate_1 = require("@libs/actions/Delegate");
+const setFullscreenVisibility_1 = require("@libs/actions/setFullscreenVisibility");
+const ActiveClientManager_1 = require("@libs/ActiveClientManager");
+const types_1 = require("@libs/API/types");
+const HttpUtils_1 = require("@libs/HttpUtils");
+const KeyboardShortcut_1 = require("@libs/KeyboardShortcut");
+const Log_1 = require("@libs/Log");
+const NavBarManager_1 = require("@libs/NavBarManager");
+const currentUrl_1 = require("@libs/Navigation/currentUrl");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
+const presentation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/presentation");
+const NetworkConnection_1 = require("@libs/NetworkConnection");
+const OnboardingUtils_1 = require("@libs/OnboardingUtils");
+const onyxSubscribe_1 = require("@libs/onyxSubscribe");
+const Pusher_1 = require("@libs/Pusher");
+const PusherConnectionManager_1 = require("@libs/PusherConnectionManager");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const SessionUtils = require("@libs/SessionUtils");
+const Url_1 = require("@libs/Url");
+const ConnectionCompletePage_1 = require("@pages/ConnectionCompletePage");
+const NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
+const RequireTwoFactorAuthenticationPage_1 = require("@pages/RequireTwoFactorAuthenticationPage");
+const DesktopSignInRedirectPage_1 = require("@pages/signin/DesktopSignInRedirectPage");
+const WorkspacesListPage_1 = require("@pages/workspace/WorkspacesListPage");
+const App = require("@userActions/App");
+const Download = require("@userActions/Download");
+const Modal = require("@userActions/Modal");
+const PersonalDetails = require("@userActions/PersonalDetails");
+const Report = require("@userActions/Report");
+const Session = require("@userActions/Session");
+const User = require("@userActions/User");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
 require("@src/libs/subscribeToFullReconnect");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var SCREENS_1 = require("@src/SCREENS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var attachmentModalScreenOptions_1 = require("./attachmentModalScreenOptions");
-var createRootStackNavigator_1 = require("./createRootStackNavigator");
-var GetStateForActionHandlers_1 = require("./createRootStackNavigator/GetStateForActionHandlers");
-var defaultScreenOptions_1 = require("./defaultScreenOptions");
-var ModalStackNavigators_1 = require("./ModalStackNavigators");
-var ExplanationModalNavigator_1 = require("./Navigators/ExplanationModalNavigator");
-var FeatureTrainingModalNavigator_1 = require("./Navigators/FeatureTrainingModalNavigator");
-var MigratedUserWelcomeModalNavigator_1 = require("./Navigators/MigratedUserWelcomeModalNavigator");
-var OnboardingModalNavigator_1 = require("./Navigators/OnboardingModalNavigator");
-var RightModalNavigator_1 = require("./Navigators/RightModalNavigator");
-var TestDriveModalNavigator_1 = require("./Navigators/TestDriveModalNavigator");
-var TestToolsModalNavigator_1 = require("./Navigators/TestToolsModalNavigator");
-var TestDriveDemoNavigator_1 = require("./TestDriveDemoNavigator");
-var useModalCardStyleInterpolator_1 = require("./useModalCardStyleInterpolator");
-var useRootNavigatorScreenOptions_1 = require("./useRootNavigatorScreenOptions");
-var loadAttachmentModalScreen = function () { return require('../../../pages/media/AttachmentModalScreen').default; };
-var loadValidateLoginPage = function () { return require('../../../pages/ValidateLoginPage').default; };
-var loadLogOutPreviousUserPage = function () { return require('../../../pages/LogOutPreviousUserPage').default; };
-var loadConciergePage = function () { return require('../../../pages/ConciergePage').default; };
-var loadTrackExpensePage = function () { return require('../../../pages/TrackExpensePage').default; };
-var loadSubmitExpensePage = function () { return require('../../../pages/SubmitExpensePage').default; };
-var loadProfileAvatar = function () { return require('../../../pages/settings/Profile/ProfileAvatar').default; };
-var loadWorkspaceAvatar = function () { return require('../../../pages/workspace/WorkspaceAvatar').default; };
-var loadReportAvatar = function () { return require('../../../pages/ReportAvatar').default; };
-var loadReceiptView = function () { return require('../../../pages/TransactionReceiptPage').default; };
-var loadWorkspaceJoinUser = function () { return require('@pages/workspace/WorkspaceJoinUserPage').default; };
-var loadReportSplitNavigator = function () { return require('./Navigators/ReportsSplitNavigator').default; };
-var loadSettingsSplitNavigator = function () { return require('./Navigators/SettingsSplitNavigator').default; };
-var loadWorkspaceSplitNavigator = function () { return require('./Navigators/WorkspaceSplitNavigator').default; };
-var loadSearchNavigator = function () { return require('./Navigators/SearchFullscreenNavigator').default; };
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const SCREENS_1 = require("@src/SCREENS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const attachmentModalScreenOptions_1 = require("./attachmentModalScreenOptions");
+const createRootStackNavigator_1 = require("./createRootStackNavigator");
+const GetStateForActionHandlers_1 = require("./createRootStackNavigator/GetStateForActionHandlers");
+const defaultScreenOptions_1 = require("./defaultScreenOptions");
+const ModalStackNavigators_1 = require("./ModalStackNavigators");
+const ExplanationModalNavigator_1 = require("./Navigators/ExplanationModalNavigator");
+const FeatureTrainingModalNavigator_1 = require("./Navigators/FeatureTrainingModalNavigator");
+const MigratedUserWelcomeModalNavigator_1 = require("./Navigators/MigratedUserWelcomeModalNavigator");
+const OnboardingModalNavigator_1 = require("./Navigators/OnboardingModalNavigator");
+const RightModalNavigator_1 = require("./Navigators/RightModalNavigator");
+const TestDriveModalNavigator_1 = require("./Navigators/TestDriveModalNavigator");
+const TestToolsModalNavigator_1 = require("./Navigators/TestToolsModalNavigator");
+const TestDriveDemoNavigator_1 = require("./TestDriveDemoNavigator");
+const useModalCardStyleInterpolator_1 = require("./useModalCardStyleInterpolator");
+const useRootNavigatorScreenOptions_1 = require("./useRootNavigatorScreenOptions");
+const loadAttachmentModalScreen = () => require('../../../pages/media/AttachmentModalScreen').default;
+const loadValidateLoginPage = () => require('../../../pages/ValidateLoginPage').default;
+const loadLogOutPreviousUserPage = () => require('../../../pages/LogOutPreviousUserPage').default;
+const loadConciergePage = () => require('../../../pages/ConciergePage').default;
+const loadTrackExpensePage = () => require('../../../pages/TrackExpensePage').default;
+const loadSubmitExpensePage = () => require('../../../pages/SubmitExpensePage').default;
+const loadProfileAvatar = () => require('../../../pages/settings/Profile/ProfileAvatar').default;
+const loadWorkspaceAvatar = () => require('../../../pages/workspace/WorkspaceAvatar').default;
+const loadReportAvatar = () => require('../../../pages/ReportAvatar').default;
+const loadReceiptView = () => require('../../../pages/TransactionReceiptPage').default;
+const loadWorkspaceJoinUser = () => require('@pages/workspace/WorkspaceJoinUserPage').default;
+const loadReportSplitNavigator = () => require('./Navigators/ReportsSplitNavigator').default;
+const loadSettingsSplitNavigator = () => require('./Navigators/SettingsSplitNavigator').default;
+const loadWorkspaceSplitNavigator = () => require('./Navigators/WorkspaceSplitNavigator').default;
+const loadSearchNavigator = () => require('./Navigators/SearchFullscreenNavigator').default;
 function initializePusher() {
     return Pusher_1.default.init({
         appKey: CONFIG_1.default.PUSHER.APP_KEY,
         cluster: CONFIG_1.default.PUSHER.CLUSTER,
-        authEndpoint: "".concat(CONFIG_1.default.EXPENSIFY.DEFAULT_API_ROOT, "api/AuthenticatePusher?"),
-    }).then(function () {
+        authEndpoint: `${CONFIG_1.default.EXPENSIFY.DEFAULT_API_ROOT}api/AuthenticatePusher?`,
+    }).then(() => {
         User.subscribeToUserEvents();
     });
 }
-var timezone;
-var currentAccountID = -1;
-var lastUpdateIDAppliedToClient;
+let timezone;
+let currentAccountID = -1;
+let lastUpdateIDAppliedToClient;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (value) {
-        var _a;
+    callback: (value) => {
         // When signed out, val hasn't accountID
         if (!(value && 'accountID' in value)) {
             currentAccountID = -1;
             timezone = null;
             return;
         }
-        currentAccountID = (_a = value.accountID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID;
+        currentAccountID = value.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
         if (Navigation_1.default.isActiveRoute(ROUTES_1.default.SIGN_IN_MODAL)) {
             // This means sign in in RHP was successful, so we can subscribe to user events
             initializePusher();
@@ -134,16 +122,15 @@ react_native_onyx_1.default.connect({
 });
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.PERSONAL_DETAILS_LIST,
-    callback: function (value) {
-        var _a, _b;
+    callback: (value) => {
         if (!value || !(0, EmptyObject_1.isEmptyObject)(timezone)) {
             return;
         }
-        timezone = (_b = (_a = value === null || value === void 0 ? void 0 : value[currentAccountID]) === null || _a === void 0 ? void 0 : _a.timezone) !== null && _b !== void 0 ? _b : {};
-        var currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        timezone = value?.[currentAccountID]?.timezone ?? {};
+        const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         // If the current timezone is different than the user's timezone, and their timezone is set to automatic
         // then update their timezone.
-        if (!(0, EmptyObject_1.isEmptyObject)(currentTimezone) && (timezone === null || timezone === void 0 ? void 0 : timezone.automatic) && (timezone === null || timezone === void 0 ? void 0 : timezone.selected) !== currentTimezone) {
+        if (!(0, EmptyObject_1.isEmptyObject)(currentTimezone) && timezone?.automatic && timezone?.selected !== currentTimezone) {
             PersonalDetails.updateAutomaticTimezone({
                 automatic: true,
                 selected: currentTimezone,
@@ -153,7 +140,7 @@ react_native_onyx_1.default.connect({
 });
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.ONYX_UPDATES_LAST_UPDATE_ID_APPLIED_TO_CLIENT,
-    callback: function (value) {
+    callback: (value) => {
         lastUpdateIDAppliedToClient = value;
     },
 });
@@ -166,110 +153,111 @@ function handleNetworkReconnect(isLoadingApp) {
         App.reconnectApp(lastUpdateIDAppliedToClient);
     }
 }
-var RootStack = (0, createRootStackNavigator_1.default)();
+const RootStack = (0, createRootStackNavigator_1.default)();
 // We want to delay the re-rendering for components(e.g. ReportActionCompose)
 // that depends on modal visibility until Modal is completely closed and its focused
 // When modal screen is focused, update modal visibility in Onyx
 // https://reactnavigation.org/docs/navigation-events/
-var modalScreenListeners = {
-    focus: function () {
+const modalScreenListeners = {
+    focus: () => {
         Modal.setModalVisibility(true, CONST_1.default.MODAL.MODAL_TYPE.RIGHT_DOCKED);
     },
-    blur: function () {
+    blur: () => {
         Modal.setModalVisibility(false);
     },
-    beforeRemove: function () {
+    beforeRemove: () => {
         Modal.setModalVisibility(false);
         Modal.willAlertModalBecomeVisible(false);
     },
 };
-var fullScreenListeners = {
-    focus: function () {
+const fullScreenListeners = {
+    focus: () => {
         (0, setFullscreenVisibility_1.default)(true);
     },
-    beforeRemove: function () {
+    beforeRemove: () => {
         (0, setFullscreenVisibility_1.default)(false);
     },
 };
 // Extended modal screen listeners with additional cancellation of pending requests
-var modalScreenListenersWithCancelSearch = __assign(__assign({}, modalScreenListeners), { beforeRemove: function () {
+const modalScreenListenersWithCancelSearch = {
+    ...modalScreenListeners,
+    beforeRemove: () => {
         modalScreenListeners.beforeRemove();
         HttpUtils_1.default.cancelPendingRequests(types_1.READ_COMMANDS.SEARCH_FOR_REPORTS);
-    } });
+    },
+};
 function AuthScreens() {
-    var _a;
-    var theme = (0, useTheme_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var rootNavigatorScreenOptions = (0, useRootNavigatorScreenOptions_1.default)();
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var isLoadingApp = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true })[0];
-    var toggleSearch = (0, SearchRouterContext_1.useSearchRouterContext)().toggleSearch;
-    var currentUrl = (0, currentUrl_1.default)();
-    var delegatorEmail = (0, Url_1.getSearchParamFromUrl)(currentUrl, 'delegatorEmail');
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, {
+    const theme = (0, useTheme_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const rootNavigatorScreenOptions = (0, useRootNavigatorScreenOptions_1.default)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const [isLoadingApp] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true });
+    const { toggleSearch } = (0, SearchRouterContext_1.useSearchRouterContext)();
+    const currentUrl = (0, currentUrl_1.default)();
+    const delegatorEmail = (0, Url_1.getSearchParamFromUrl)(currentUrl, 'delegatorEmail');
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, {
         canBeMissing: true,
-    })[0];
-    var onboardingCompanySize = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_COMPANY_SIZE, { canBeMissing: true })[0];
-    var userReportedIntegration = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_USER_REPORTED_INTEGRATION, { canBeMissing: true })[0];
-    var modal = (0, react_1.useRef)({});
-    var isOnboardingCompleted = (0, useOnboardingFlow_1.default)().isOnboardingCompleted;
-    var isOnboardingLoading = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true, selector: function (value) { return !!(value === null || value === void 0 ? void 0 : value.isLoading); } })[0];
-    var prevIsOnboardingLoading = (0, usePrevious_1.default)(isOnboardingLoading);
-    var _b = (0, react_1.useState)(!!(account === null || account === void 0 ? void 0 : account.needsTwoFactorAuthSetup) && !account.requiresTwoFactorAuth), shouldShowRequire2FAPage = _b[0], setShouldShowRequire2FAPage = _b[1];
-    var navigation = (0, native_1.useNavigation)();
-    var _c = (0, react_1.useContext)(InitialURLContextProvider_1.InitialURLContext), initialURL = _c.initialURL, isAuthenticatedAtStartup = _c.isAuthenticatedAtStartup, setIsAuthenticatedAtStartup = _c.setIsAuthenticatedAtStartup;
-    var modalCardStyleInterpolator = (0, useModalCardStyleInterpolator_1.default)();
+    });
+    const [onboardingCompanySize] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_COMPANY_SIZE, { canBeMissing: true });
+    const [userReportedIntegration] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_USER_REPORTED_INTEGRATION, { canBeMissing: true });
+    const modal = (0, react_1.useRef)({});
+    const { isOnboardingCompleted } = (0, useOnboardingFlow_1.default)();
+    const [isOnboardingLoading] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true, selector: (value) => !!value?.isLoading });
+    const prevIsOnboardingLoading = (0, usePrevious_1.default)(isOnboardingLoading);
+    const [shouldShowRequire2FAPage, setShouldShowRequire2FAPage] = (0, react_1.useState)(!!account?.needsTwoFactorAuthSetup && !account.requiresTwoFactorAuth);
+    const navigation = (0, native_1.useNavigation)();
+    const { initialURL, isAuthenticatedAtStartup, setIsAuthenticatedAtStartup } = (0, react_1.useContext)(InitialURLContextProvider_1.InitialURLContext);
+    const modalCardStyleInterpolator = (0, useModalCardStyleInterpolator_1.default)();
     // State to track whether the delegator's authentication is completed before displaying data
-    var _d = (0, react_1.useState)(false), isDelegatorFromOldDotIsReady = _d[0], setIsDelegatorFromOldDotIsReady = _d[1];
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true })[0];
-    var lastOpenedPublicRoomID = (0, useOnyx_1.default)(ONYXKEYS_1.default.LAST_OPENED_PUBLIC_ROOM_ID, { canBeMissing: true })[0];
-    var initialLastUpdateIDAppliedToClient = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONYX_UPDATES_LAST_UPDATE_ID_APPLIED_TO_CLIENT, { canBeMissing: true })[0];
+    const [isDelegatorFromOldDotIsReady, setIsDelegatorFromOldDotIsReady] = (0, react_1.useState)(false);
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true });
+    const [lastOpenedPublicRoomID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.LAST_OPENED_PUBLIC_ROOM_ID, { canBeMissing: true });
+    const [initialLastUpdateIDAppliedToClient] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONYX_UPDATES_LAST_UPDATE_ID_APPLIED_TO_CLIENT, { canBeMissing: true });
     // On HybridApp we need to prevent flickering during transition to OldDot
-    var shouldRenderOnboardingExclusivelyOnHybridApp = (0, react_1.useMemo)(function () {
+    const shouldRenderOnboardingExclusivelyOnHybridApp = (0, react_1.useMemo)(() => {
         return CONFIG_1.default.IS_HYBRID_APP && Navigation_1.default.getActiveRoute().includes(ROUTES_1.default.ONBOARDING_INTERESTED_FEATURES.route) && isOnboardingCompleted === true;
     }, [isOnboardingCompleted]);
-    var shouldRenderOnboardingExclusively = (0, react_1.useMemo)(function () {
+    const shouldRenderOnboardingExclusively = (0, react_1.useMemo)(() => {
         return (!CONFIG_1.default.IS_HYBRID_APP &&
             Navigation_1.default.getActiveRoute().includes(ROUTES_1.default.ONBOARDING_INTERESTED_FEATURES.route) &&
             (0, OnboardingUtils_1.shouldOnboardingRedirectToOldDot)(onboardingCompanySize, userReportedIntegration) &&
             isOnboardingCompleted === true &&
             (!!isOnboardingLoading || !!prevIsOnboardingLoading));
     }, [onboardingCompanySize, isOnboardingCompleted, isOnboardingLoading, prevIsOnboardingLoading, userReportedIntegration]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         NavBarManager_1.default.setButtonStyle(theme.navigationBarButtonsStyle);
-        return function () {
+        return () => {
             NavBarManager_1.default.setButtonStyle(CONST_1.default.NAVIGATION_BAR_BUTTONS_STYLE.LIGHT);
         };
     }, [theme]);
-    (0, react_1.useEffect)(function () {
-        if (!(account === null || account === void 0 ? void 0 : account.needsTwoFactorAuthSetup) || !!account.requiresTwoFactorAuth || shouldShowRequire2FAPage) {
+    (0, react_1.useEffect)(() => {
+        if (!account?.needsTwoFactorAuthSetup || !!account.requiresTwoFactorAuth || shouldShowRequire2FAPage) {
             return;
         }
         setShouldShowRequire2FAPage(true);
-    }, [account === null || account === void 0 ? void 0 : account.needsTwoFactorAuthSetup, account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth, shouldShowRequire2FAPage]);
-    (0, react_1.useEffect)(function () {
+    }, [account?.needsTwoFactorAuthSetup, account?.requiresTwoFactorAuth, shouldShowRequire2FAPage]);
+    (0, react_1.useEffect)(() => {
         if (!shouldShowRequire2FAPage) {
             return;
         }
         Navigation_1.default.navigate(ROUTES_1.default.REQUIRE_TWO_FACTOR_AUTH);
     }, [shouldShowRequire2FAPage]);
-    (0, react_1.useEffect)(function () {
-        var _a;
-        var shortcutsOverviewShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.SHORTCUTS;
-        var searchShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.SEARCH;
-        var chatShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.NEW_CHAT;
-        var markAllMessagesAsReadShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.MARK_ALL_MESSAGES_AS_READ;
-        var isLoggingInAsNewUser = !!(session === null || session === void 0 ? void 0 : session.email) && SessionUtils.isLoggingInAsNewUser(currentUrl, session.email);
+    (0, react_1.useEffect)(() => {
+        const shortcutsOverviewShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.SHORTCUTS;
+        const searchShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.SEARCH;
+        const chatShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.NEW_CHAT;
+        const markAllMessagesAsReadShortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.MARK_ALL_MESSAGES_AS_READ;
+        const isLoggingInAsNewUser = !!session?.email && SessionUtils.isLoggingInAsNewUser(currentUrl, session.email);
         // Sign out the current user if we're transitioning with a different user
-        var isTransitioning = currentUrl.includes(ROUTES_1.default.TRANSITION_BETWEEN_APPS);
-        var isSupportalTransition = currentUrl.includes('authTokenType=support');
+        const isTransitioning = currentUrl.includes(ROUTES_1.default.TRANSITION_BETWEEN_APPS);
+        const isSupportalTransition = currentUrl.includes('authTokenType=support');
         if (isLoggingInAsNewUser && isTransitioning) {
             Session.signOutAndRedirectToSignIn(false, isSupportalTransition);
             return;
         }
         NetworkConnection_1.default.listenForReconnect();
-        NetworkConnection_1.default.onReconnect(function () { return handleNetworkReconnect(!!isLoadingApp); });
+        NetworkConnection_1.default.onReconnect(() => handleNetworkReconnect(!!isLoadingApp));
         PusherConnectionManager_1.default.init();
         initializePusher();
         // Sometimes when we transition from old dot to new dot, the client is not the leader
@@ -281,14 +269,16 @@ function AuthScreens() {
         // or returning from background. If so, we'll assume they have some app data already and we can call reconnectApp() instead of openApp() and connect() for delegator from OldDot.
         if (SessionUtils.didUserLogInDuringSession() || delegatorEmail) {
             if (delegatorEmail) {
-                (_a = (0, Delegate_1.connect)(delegatorEmail, true)) === null || _a === void 0 ? void 0 : _a.then(function (success) {
+                (0, Delegate_1.connect)(delegatorEmail, true)
+                    ?.then((success) => {
                     App.setAppLoading(!!success);
-                }).finally(function () {
+                })
+                    .finally(() => {
                     setIsDelegatorFromOldDotIsReady(true);
                 });
             }
             else {
-                var reportID = (0, ReportUtils_1.getReportIDFromLink)(initialURL !== null && initialURL !== void 0 ? initialURL : null);
+                const reportID = (0, ReportUtils_1.getReportIDFromLink)(initialURL ?? null);
                 if (reportID && !isAuthenticatedAtStartup) {
                     Report.openReport(reportID);
                     // Don't want to call `openReport` again when logging out and then logging in
@@ -308,17 +298,17 @@ function AuthScreens() {
             Report.openLastOpenedPublicRoom(lastOpenedPublicRoomID);
         }
         Download.clearDownloads();
-        var unsubscribeOnyxModal = (0, onyxSubscribe_1.default)({
+        const unsubscribeOnyxModal = (0, onyxSubscribe_1.default)({
             key: ONYXKEYS_1.default.MODAL,
-            callback: function (modalArg) {
+            callback: (modalArg) => {
                 if (modalArg === null || typeof modalArg !== 'object') {
                     return;
                 }
                 modal.current = modalArg;
             },
         });
-        var shortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.ESCAPE;
-        var unsubscribeEscapeKey = KeyboardShortcut_1.default.subscribe(shortcutConfig.shortcutKey, function () {
+        const shortcutConfig = CONST_1.default.KEYBOARD_SHORTCUTS.ESCAPE;
+        const unsubscribeEscapeKey = KeyboardShortcut_1.default.subscribe(shortcutConfig.shortcutKey, () => {
             if (modal.current.willAlertModalBecomeVisible) {
                 return;
             }
@@ -328,8 +318,8 @@ function AuthScreens() {
             Navigation_1.default.dismissModal();
         }, shortcutConfig.descriptionKey, shortcutConfig.modifiers, true, true);
         // Listen to keyboard shortcuts for opening certain pages
-        var unsubscribeShortcutsOverviewShortcut = KeyboardShortcut_1.default.subscribe(shortcutsOverviewShortcutConfig.shortcutKey, function () {
-            Modal.close(function () {
+        const unsubscribeShortcutsOverviewShortcut = KeyboardShortcut_1.default.subscribe(shortcutsOverviewShortcutConfig.shortcutKey, () => {
+            Modal.close(() => {
                 if (Navigation_1.default.isOnboardingFlow()) {
                     return;
                 }
@@ -342,22 +332,22 @@ function AuthScreens() {
         // Listen for the key K being pressed so that focus can be given to
         // Search Router, or new group chat
         // based on the key modifiers pressed and the operating system
-        var unsubscribeSearchShortcut = KeyboardShortcut_1.default.subscribe(searchShortcutConfig.shortcutKey, function () {
-            Session.callFunctionIfActionIsAllowed(function () {
+        const unsubscribeSearchShortcut = KeyboardShortcut_1.default.subscribe(searchShortcutConfig.shortcutKey, () => {
+            Session.callFunctionIfActionIsAllowed(() => {
                 if (Navigation_1.default.isOnboardingFlow()) {
                     return;
                 }
                 toggleSearch();
             })();
         }, shortcutsOverviewShortcutConfig.descriptionKey, shortcutsOverviewShortcutConfig.modifiers, true);
-        var unsubscribeChatShortcut = KeyboardShortcut_1.default.subscribe(chatShortcutConfig.shortcutKey, function () {
+        const unsubscribeChatShortcut = KeyboardShortcut_1.default.subscribe(chatShortcutConfig.shortcutKey, () => {
             if (Navigation_1.default.isOnboardingFlow()) {
                 return;
             }
-            Modal.close(Session.callFunctionIfActionIsAllowed(function () { return Navigation_1.default.navigate(ROUTES_1.default.NEW); }));
+            Modal.close(Session.callFunctionIfActionIsAllowed(() => Navigation_1.default.navigate(ROUTES_1.default.NEW)));
         }, chatShortcutConfig.descriptionKey, chatShortcutConfig.modifiers, true);
-        var unsubscribeMarkAllMessagesAsReadShortcut = KeyboardShortcut_1.default.subscribe(markAllMessagesAsReadShortcutConfig.shortcutKey, Report.markAllMessagesAsRead, markAllMessagesAsReadShortcutConfig.descriptionKey, markAllMessagesAsReadShortcutConfig.modifiers, true);
-        return function () {
+        const unsubscribeMarkAllMessagesAsReadShortcut = KeyboardShortcut_1.default.subscribe(markAllMessagesAsReadShortcutConfig.shortcutKey, Report.markAllMessagesAsRead, markAllMessagesAsReadShortcutConfig.descriptionKey, markAllMessagesAsReadShortcutConfig.modifiers, true);
+        return () => {
             unsubscribeEscapeKey();
             unsubscribeOnyxModal();
             unsubscribeShortcutsOverviewShortcut();
@@ -370,8 +360,7 @@ function AuthScreens() {
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, []);
     // Animation is disabled when navigating to the sidebar screen
-    var getWorkspaceSplitNavigatorOptions = function (_a) {
-        var route = _a.route;
+    const getWorkspaceSplitNavigatorOptions = ({ route }) => {
         // We don't need to do anything special for the wide screen.
         if (!shouldUseNarrowLayout) {
             return rootNavigatorScreenOptions.splitNavigator;
@@ -380,74 +369,86 @@ function AuthScreens() {
         // If it is opened from other tab, we don't want to animate it on the entry.
         // There is a hook inside the workspace navigator that changes animation to SLIDE_FROM_RIGHT after entering.
         // This way it can be animated properly when going back to the settings split.
-        var animationEnabled = !GetStateForActionHandlers_1.workspaceSplitsWithoutEnteringAnimation.has(route.key);
-        return __assign(__assign({}, rootNavigatorScreenOptions.splitNavigator), { animation: animationEnabled ? animation_1.default.SLIDE_FROM_RIGHT : animation_1.default.NONE, web: __assign(__assign({}, rootNavigatorScreenOptions.splitNavigator.web), { cardStyleInterpolator: function (props) { return modalCardStyleInterpolator({ props: props, isFullScreenModal: true, animationEnabled: animationEnabled }); } }) });
+        const animationEnabled = !GetStateForActionHandlers_1.workspaceSplitsWithoutEnteringAnimation.has(route.key);
+        return {
+            ...rootNavigatorScreenOptions.splitNavigator,
+            animation: animationEnabled ? animation_1.default.SLIDE_FROM_RIGHT : animation_1.default.NONE,
+            web: {
+                ...rootNavigatorScreenOptions.splitNavigator.web,
+                cardStyleInterpolator: (props) => modalCardStyleInterpolator({ props, isFullScreenModal: true, animationEnabled }),
+            },
+        };
     };
     // Animation is enabled when navigating to any screen different than split sidebar screen
-    var getFullscreenNavigatorOptions = function (_a) {
-        var route = _a.route;
+    const getFullscreenNavigatorOptions = ({ route }) => {
         // We don't need to do anything special for the wide screen.
         if (!shouldUseNarrowLayout) {
             return rootNavigatorScreenOptions.splitNavigator;
         }
         // On the narrow screen, we want to animate this navigator if pushed SplitNavigator includes desired screen
-        var animationEnabled = GetStateForActionHandlers_1.screensWithEnteringAnimation.has(route.key);
-        return __assign(__assign({}, rootNavigatorScreenOptions.splitNavigator), { animation: animationEnabled ? animation_1.default.SLIDE_FROM_RIGHT : animation_1.default.NONE, web: __assign(__assign({}, rootNavigatorScreenOptions.splitNavigator.web), { cardStyleInterpolator: function (props) { return modalCardStyleInterpolator({ props: props, isFullScreenModal: true, animationEnabled: animationEnabled }); } }) });
+        const animationEnabled = GetStateForActionHandlers_1.screensWithEnteringAnimation.has(route.key);
+        return {
+            ...rootNavigatorScreenOptions.splitNavigator,
+            animation: animationEnabled ? animation_1.default.SLIDE_FROM_RIGHT : animation_1.default.NONE,
+            web: {
+                ...rootNavigatorScreenOptions.splitNavigator.web,
+                cardStyleInterpolator: (props) => modalCardStyleInterpolator({ props, isFullScreenModal: true, animationEnabled }),
+            },
+        };
     };
-    var clearStatus = function () {
+    const clearStatus = () => {
         User.clearCustomStatus();
         User.clearDraftCustomStatus();
     };
-    (0, react_1.useEffect)(function () {
-        var _a;
-        if (!((_a = currentUserPersonalDetails.status) === null || _a === void 0 ? void 0 : _a.clearAfter)) {
+    (0, react_1.useEffect)(() => {
+        if (!currentUserPersonalDetails.status?.clearAfter) {
             return;
         }
-        var currentTime = new Date();
-        var clearAfterTime = new Date(currentUserPersonalDetails.status.clearAfter);
+        const currentTime = new Date();
+        const clearAfterTime = new Date(currentUserPersonalDetails.status.clearAfter);
         if (Number.isNaN(clearAfterTime.getTime())) {
             return;
         }
-        var subMillisecondsTime = clearAfterTime.getTime() - currentTime.getTime();
+        const subMillisecondsTime = clearAfterTime.getTime() - currentTime.getTime();
         if (subMillisecondsTime > 0) {
-            var intervalId_1 = null;
-            var timeoutId_1 = null;
+            let intervalId = null;
+            let timeoutId = null;
             if (subMillisecondsTime > CONST_1.default.LIMIT_TIMEOUT) {
-                intervalId_1 = setInterval(function () {
-                    var now = new Date();
-                    var remainingTime = clearAfterTime.getTime() - now.getTime();
+                intervalId = setInterval(() => {
+                    const now = new Date();
+                    const remainingTime = clearAfterTime.getTime() - now.getTime();
                     if (remainingTime <= 0) {
                         clearStatus();
-                        if (intervalId_1) {
-                            clearInterval(intervalId_1);
+                        if (intervalId) {
+                            clearInterval(intervalId);
                         }
                     }
                     else if (remainingTime <= CONST_1.default.LIMIT_TIMEOUT) {
-                        if (intervalId_1) {
-                            clearInterval(intervalId_1);
+                        if (intervalId) {
+                            clearInterval(intervalId);
                         }
-                        timeoutId_1 = setTimeout(function () {
+                        timeoutId = setTimeout(() => {
                             clearStatus();
                         }, remainingTime);
                     }
                 }, CONST_1.default.LIMIT_TIMEOUT);
             }
             else {
-                timeoutId_1 = setTimeout(function () {
+                timeoutId = setTimeout(() => {
                     clearStatus();
                 }, subMillisecondsTime);
             }
-            return function () {
-                if (intervalId_1) {
-                    clearInterval(intervalId_1);
+            return () => {
+                if (intervalId) {
+                    clearInterval(intervalId);
                 }
-                if (timeoutId_1) {
-                    clearTimeout(timeoutId_1);
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
                 }
             };
         }
         clearStatus();
-    }, [(_a = currentUserPersonalDetails.status) === null || _a === void 0 ? void 0 : _a.clearAfter]);
+    }, [currentUserPersonalDetails.status?.clearAfter]);
     if (delegatorEmail && !isDelegatorFromOldDotIsReady) {
         return <FullscreenLoadingIndicator_1.default />;
     }
@@ -473,7 +474,11 @@ function AuthScreens() {
                 <RootStack.Screen name={NAVIGATORS_1.default.SETTINGS_SPLIT_NAVIGATOR} options={getFullscreenNavigatorOptions} getComponent={loadSettingsSplitNavigator}/>
                 <RootStack.Screen name={NAVIGATORS_1.default.SEARCH_FULLSCREEN_NAVIGATOR} options={getFullscreenNavigatorOptions} getComponent={loadSearchNavigator}/>
                 <RootStack.Screen name={NAVIGATORS_1.default.WORKSPACE_SPLIT_NAVIGATOR} options={getWorkspaceSplitNavigatorOptions} getComponent={loadWorkspaceSplitNavigator}/>
-                <RootStack.Screen name={SCREENS_1.default.VALIDATE_LOGIN} options={__assign(__assign({}, rootNavigatorScreenOptions.fullScreen), { headerShown: false, title: 'New Expensify' })} listeners={fullScreenListeners} getComponent={loadValidateLoginPage}/>
+                <RootStack.Screen name={SCREENS_1.default.VALIDATE_LOGIN} options={{
+            ...rootNavigatorScreenOptions.fullScreen,
+            headerShown: false,
+            title: 'New Expensify',
+        }} listeners={fullScreenListeners} getComponent={loadValidateLoginPage}/>
                 <RootStack.Screen name={SCREENS_1.default.WORKSPACES_LIST} options={rootNavigatorScreenOptions.workspacesListPage} component={WorkspacesListPage_1.default}/>
                 <RootStack.Screen name={SCREENS_1.default.TRANSITION_BETWEEN_APPS} options={defaultScreenOptions_1.default} getComponent={loadLogOutPreviousUserPage}/>
                 <RootStack.Screen name={SCREENS_1.default.CONCIERGE} options={defaultScreenOptions_1.default} getComponent={loadConciergePage}/>
@@ -494,17 +499,19 @@ function AuthScreens() {
             presentation: presentation_1.default.TRANSPARENT_MODAL,
         }} getComponent={loadReportAvatar} listeners={modalScreenListeners}/>
                 <RootStack.Screen name={SCREENS_1.default.NOT_FOUND} options={rootNavigatorScreenOptions.fullScreen} component={NotFoundPage_1.default}/>
-                <RootStack.Screen name={NAVIGATORS_1.default.RIGHT_MODAL_NAVIGATOR} options={rootNavigatorScreenOptions.rightModalNavigator} component={RightModalNavigator_1.default} listeners={__assign(__assign({}, modalScreenListenersWithCancelSearch), { beforeRemove: function () {
-                var _a, _b, _c;
+                <RootStack.Screen name={NAVIGATORS_1.default.RIGHT_MODAL_NAVIGATOR} options={rootNavigatorScreenOptions.rightModalNavigator} component={RightModalNavigator_1.default} listeners={{
+            ...modalScreenListenersWithCancelSearch,
+            beforeRemove: () => {
                 modalScreenListenersWithCancelSearch.beforeRemove();
                 // When a 2FA RHP page is closed, if the 2FA require page is visible and the user has now enabled the 2FA, then remove the 2FA require page from the navigator.
-                var routeParams = (_c = (_b = (_a = navigation.getState()) === null || _a === void 0 ? void 0 : _a.routes) === null || _b === void 0 ? void 0 : _b.at(-1)) === null || _c === void 0 ? void 0 : _c.params;
-                var screen = routeParams && 'screen' in routeParams ? routeParams.screen : '';
-                if (!shouldShowRequire2FAPage || !(account === null || account === void 0 ? void 0 : account.requiresTwoFactorAuth) || screen !== SCREENS_1.default.RIGHT_MODAL.TWO_FACTOR_AUTH) {
+                const routeParams = navigation.getState()?.routes?.at(-1)?.params;
+                const screen = routeParams && 'screen' in routeParams ? routeParams.screen : '';
+                if (!shouldShowRequire2FAPage || !account?.requiresTwoFactorAuth || screen !== SCREENS_1.default.RIGHT_MODAL.TWO_FACTOR_AUTH) {
                     return;
                 }
                 setShouldShowRequire2FAPage(false);
-            } })}/>
+            },
+        }}/>
                 <RootStack.Screen name={SCREENS_1.default.DESKTOP_SIGN_IN_REDIRECT} options={rootNavigatorScreenOptions.fullScreen} component={DesktopSignInRedirectPage_1.default}/>
                 <RootStack.Screen name={NAVIGATORS_1.default.SHARE_MODAL_NAVIGATOR} options={rootNavigatorScreenOptions.fullScreen} component={ModalStackNavigators_1.ShareModalStackNavigator} listeners={modalScreenListeners}/>
                 <RootStack.Screen name={NAVIGATORS_1.default.EXPLANATION_MODAL_NAVIGATOR} options={rootNavigatorScreenOptions.basicModalNavigator} component={ExplanationModalNavigator_1.default}/>
@@ -512,12 +519,12 @@ function AuthScreens() {
                 <RootStack.Screen name={NAVIGATORS_1.default.TEST_DRIVE_MODAL_NAVIGATOR} options={rootNavigatorScreenOptions.basicModalNavigator} component={TestDriveModalNavigator_1.default}/>
                 <RootStack.Screen name={NAVIGATORS_1.default.TEST_DRIVE_DEMO_NAVIGATOR} options={rootNavigatorScreenOptions.basicModalNavigator} component={TestDriveDemoNavigator_1.default}/>
                 <RootStack.Screen name={NAVIGATORS_1.default.FEATURE_TRAINING_MODAL_NAVIGATOR} options={rootNavigatorScreenOptions.basicModalNavigator} component={FeatureTrainingModalNavigator_1.default} listeners={modalScreenListeners}/>
-                {(isOnboardingCompleted === false || shouldRenderOnboardingExclusivelyOnHybridApp || shouldRenderOnboardingExclusively) && (<RootStack.Screen name={NAVIGATORS_1.default.ONBOARDING_MODAL_NAVIGATOR} options={__assign(__assign({}, rootNavigatorScreenOptions.basicModalNavigator), { gestureEnabled: false })} component={OnboardingModalNavigator_1.default} listeners={{
-                focus: function () {
+                {(isOnboardingCompleted === false || shouldRenderOnboardingExclusivelyOnHybridApp || shouldRenderOnboardingExclusively) && (<RootStack.Screen name={NAVIGATORS_1.default.ONBOARDING_MODAL_NAVIGATOR} options={{ ...rootNavigatorScreenOptions.basicModalNavigator, gestureEnabled: false }} component={OnboardingModalNavigator_1.default} listeners={{
+                focus: () => {
                     Modal.setDisableDismissOnEscape(true);
                 },
             }}/>)}
-                {shouldShowRequire2FAPage && (<RootStack.Screen name={SCREENS_1.default.REQUIRE_TWO_FACTOR_AUTH} options={__assign(__assign({}, rootNavigatorScreenOptions.fullScreen), { gestureEnabled: false })} component={RequireTwoFactorAuthenticationPage_1.default}/>)}
+                {shouldShowRequire2FAPage && (<RootStack.Screen name={SCREENS_1.default.REQUIRE_TWO_FACTOR_AUTH} options={{ ...rootNavigatorScreenOptions.fullScreen, gestureEnabled: false }} component={RequireTwoFactorAuthenticationPage_1.default}/>)}
                 <RootStack.Screen name={SCREENS_1.default.WORKSPACE_JOIN_USER} options={{
             headerShown: false,
         }} listeners={modalScreenListeners} getComponent={loadWorkspaceJoinUser}/>
@@ -531,18 +538,26 @@ function AuthScreens() {
         }} getComponent={loadReceiptView} listeners={modalScreenListeners}/>
                 <RootStack.Screen name={SCREENS_1.default.CONNECTION_COMPLETE} options={rootNavigatorScreenOptions.fullScreen} component={ConnectionCompletePage_1.default}/>
                 <RootStack.Screen name={SCREENS_1.default.BANK_CONNECTION_COMPLETE} options={rootNavigatorScreenOptions.fullScreen} component={ConnectionCompletePage_1.default}/>
-                <RootStack.Screen name={NAVIGATORS_1.default.TEST_TOOLS_MODAL_NAVIGATOR} options={__assign(__assign({}, rootNavigatorScreenOptions.basicModalNavigator), { native: {
-                contentStyle: __assign({}, StyleUtils.getBackgroundColorWithOpacityStyle(theme.overlay, 0.72)),
+                <RootStack.Screen name={NAVIGATORS_1.default.TEST_TOOLS_MODAL_NAVIGATOR} options={{
+            ...rootNavigatorScreenOptions.basicModalNavigator,
+            native: {
+                contentStyle: {
+                    ...StyleUtils.getBackgroundColorWithOpacityStyle(theme.overlay, 0.72),
+                },
                 animation: animation_1.InternalPlatformAnimations.FADE,
-            }, web: {
-                cardStyle: __assign({}, StyleUtils.getBackgroundColorWithOpacityStyle(theme.overlay, 0.72)),
+            },
+            web: {
+                cardStyle: {
+                    ...StyleUtils.getBackgroundColorWithOpacityStyle(theme.overlay, 0.72),
+                },
                 animation: animation_1.InternalPlatformAnimations.FADE,
-            } })} component={TestToolsModalNavigator_1.default} listeners={modalScreenListeners}/>
+            },
+        }} component={TestToolsModalNavigator_1.default} listeners={modalScreenListeners}/>
             </RootStack.Navigator>
             <SearchRouterModal_1.default />
             <PriorityModeController_1.default />
         </ComposeProviders_1.default>);
 }
 AuthScreens.displayName = 'AuthScreens';
-var AuthScreensMemoized = (0, react_1.memo)(AuthScreens, function () { return true; });
+const AuthScreensMemoized = (0, react_1.memo)(AuthScreens, () => true);
 exports.default = AuthScreensMemoized;

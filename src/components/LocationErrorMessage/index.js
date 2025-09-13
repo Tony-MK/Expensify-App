@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var CONST_1 = require("@src/CONST");
-var BaseLocationErrorMessage_1 = require("./BaseLocationErrorMessage");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const CONST_1 = require("@src/CONST");
+const BaseLocationErrorMessage_1 = require("./BaseLocationErrorMessage");
 /** Opens expensify help site in a new browser tab */
-var navigateToExpensifyHelpSite = function () {
+const navigateToExpensifyHelpSite = () => {
     react_native_1.Linking.openURL(CONST_1.default.NEWHELP_URL);
 };
 function LocationErrorMessage(props) {

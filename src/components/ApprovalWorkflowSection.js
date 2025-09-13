@@ -1,33 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var MenuItem_1 = require("./MenuItem");
-var PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
-var Text_1 = require("./Text");
-function ApprovalWorkflowSection(_a) {
-    var approvalWorkflow = _a.approvalWorkflow, onPress = _a.onPress;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var _b = (0, useLocalize_1.default)(), translate = _b.translate, toLocaleOrdinal = _b.toLocaleOrdinal, localeCompare = _b.localeCompare;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var approverTitle = (0, react_1.useCallback)(function (index) {
-        return approvalWorkflow.approvers.length > 1 ? "".concat(toLocaleOrdinal(index + 1, true), " ").concat(translate('workflowsPage.approver').toLowerCase()) : "".concat(translate('workflowsPage.approver'));
-    }, [approvalWorkflow.approvers.length, toLocaleOrdinal, translate]);
-    var members = (0, react_1.useMemo)(function () {
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const MenuItem_1 = require("./MenuItem");
+const PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
+const Text_1 = require("./Text");
+function ApprovalWorkflowSection({ approvalWorkflow, onPress }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const { translate, toLocaleOrdinal, localeCompare } = (0, useLocalize_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const approverTitle = (0, react_1.useCallback)((index) => approvalWorkflow.approvers.length > 1 ? `${toLocaleOrdinal(index + 1, true)} ${translate('workflowsPage.approver').toLowerCase()}` : `${translate('workflowsPage.approver')}`, [approvalWorkflow.approvers.length, toLocaleOrdinal, translate]);
+    const members = (0, react_1.useMemo)(() => {
         if (approvalWorkflow.isDefault) {
             return translate('workspace.common.everyone');
         }
         return (0, OptionsListUtils_1.sortAlphabetically)(approvalWorkflow.members, 'displayName', localeCompare)
-            .map(function (m) { return expensify_common_1.Str.removeSMSDomain(m.displayName); })
+            .map((m) => expensify_common_1.Str.removeSMSDomain(m.displayName))
             .join(', ');
     }, [approvalWorkflow.isDefault, approvalWorkflow.members, translate, localeCompare]);
     return (<PressableWithoutFeedback_1.default accessibilityRole="button" style={[styles.border, shouldUseNarrowLayout ? styles.p3 : styles.p4, styles.flexRow, styles.justifyContentBetween, styles.mt6, styles.mbn3]} onPress={onPress} accessibilityLabel={translate('workflowsPage.addApprovalsTitle')}>
@@ -40,12 +37,12 @@ function ApprovalWorkflowSection(_a) {
                     </react_native_1.View>)}
                 <MenuItem_1.default title={translate('workflowsExpensesFromPage.title')} style={styles.p0} titleStyle={styles.textLabelSupportingNormal} descriptionTextStyle={[styles.textNormalThemeText, styles.lineHeightXLarge]} description={members} numberOfLinesDescription={4} icon={Expensicons.Users} iconHeight={20} iconWidth={20} iconFill={theme.icon} onPress={onPress} shouldRemoveBackground/>
 
-                {approvalWorkflow.approvers.map(function (approver, index) { return (
+                {approvalWorkflow.approvers.map((approver, index) => (
         // eslint-disable-next-line react/no-array-index-key
-        <react_native_1.View key={"approver-".concat(approver.email, "-").concat(index)}>
+        <react_native_1.View key={`approver-${approver.email}-${index}`}>
                         <react_native_1.View style={styles.workflowApprovalVerticalLine}/>
                         <MenuItem_1.default title={approverTitle(index)} style={styles.p0} titleStyle={styles.textLabelSupportingNormal} descriptionTextStyle={[styles.textNormalThemeText, styles.lineHeightXLarge]} description={expensify_common_1.Str.removeSMSDomain(approver.displayName)} icon={Expensicons.UserCheck} iconHeight={20} iconWidth={20} numberOfLinesDescription={1} iconFill={theme.icon} onPress={onPress} shouldRemoveBackground/>
-                    </react_native_1.View>); })}
+                    </react_native_1.View>))}
             </react_native_1.View>
             <Icon_1.default src={Expensicons.ArrowRight} fill={theme.icon} additionalStyles={[styles.alignSelfCenter]}/>
         </PressableWithoutFeedback_1.default>);

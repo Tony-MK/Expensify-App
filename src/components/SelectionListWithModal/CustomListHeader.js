@@ -1,15 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Text_1 = require("@components/Text");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function CustomListHeader(_a) {
-    var canSelectMultiple = _a.canSelectMultiple, _b = _a.leftHeaderText, leftHeaderText = _b === void 0 ? '' : _b, _c = _a.rightHeaderText, rightHeaderText = _c === void 0 ? '' : _c, _d = _a.rightHeaderMinimumWidth, rightHeaderMinimumWidth = _d === void 0 ? 60 : _d;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var header = (<react_native_1.View style={[
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Text_1 = require("@components/Text");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function CustomListHeader({ canSelectMultiple, leftHeaderText = '', rightHeaderText = '', rightHeaderMinimumWidth = 60 }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const header = (<react_native_1.View style={[
             styles.flex1,
             styles.flexRow,
             styles.justifyContentBetween,

@@ -8,7 +8,7 @@ exports.stripSpacesFromAmount = stripSpacesFromAmount;
 exports.replaceCommasWithPeriod = replaceCommasWithPeriod;
 exports.validateAmount = validateAmount;
 exports.validatePercentage = validatePercentage;
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 /**
  * Strip comma from the amount
  */
@@ -36,23 +36,20 @@ function stripDecimalsFromAmount(amount) {
  * @param amount - Changed amount from user input
  * @param shouldAllowNegative - Should allow negative numbers
  */
-function addLeadingZero(amount, shouldAllowNegative) {
-    if (shouldAllowNegative === void 0) { shouldAllowNegative = false; }
+function addLeadingZero(amount, shouldAllowNegative = false) {
     if (shouldAllowNegative && amount.startsWith('-.')) {
-        return "-0".concat(amount);
+        return `-0${amount}`;
     }
-    return amount.startsWith('.') ? "0".concat(amount) : amount;
+    return amount.startsWith('.') ? `0${amount}` : amount;
 }
 /**
  * Check if amount is a decimal up to 3 digits
  */
-function validateAmount(amount, decimals, amountMaxLength, shouldAllowNegative) {
-    if (amountMaxLength === void 0) { amountMaxLength = CONST_1.default.IOU.AMOUNT_MAX_LENGTH; }
-    if (shouldAllowNegative === void 0) { shouldAllowNegative = false; }
-    var regexString = decimals === 0
-        ? "^".concat(shouldAllowNegative ? '-?' : '', "\\d{1,").concat(amountMaxLength, "}$") // Don't allow decimal point if decimals === 0
-        : "^".concat(shouldAllowNegative ? '-?' : '', "\\d{1,").concat(amountMaxLength, "}(\\.\\d{0,").concat(decimals, "})?$"); // Allow the decimal point and the desired number of digits after the point
-    var decimalNumberRegex = new RegExp(regexString, 'i');
+function validateAmount(amount, decimals, amountMaxLength = CONST_1.default.IOU.AMOUNT_MAX_LENGTH, shouldAllowNegative = false) {
+    const regexString = decimals === 0
+        ? `^${shouldAllowNegative ? '-?' : ''}\\d{1,${amountMaxLength}}$` // Don't allow decimal point if decimals === 0
+        : `^${shouldAllowNegative ? '-?' : ''}\\d{1,${amountMaxLength}}(\\.\\d{0,${decimals}})?$`; // Allow the decimal point and the desired number of digits after the point
+    const decimalNumberRegex = new RegExp(regexString, 'i');
     if (shouldAllowNegative) {
         return amount === '' || amount === '-' || decimalNumberRegex.test(amount);
     }
@@ -62,8 +59,8 @@ function validateAmount(amount, decimals, amountMaxLength, shouldAllowNegative) 
  * Check if percentage is between 0 and 100
  */
 function validatePercentage(amount) {
-    var regexString = '^(100|[0-9]{1,2})$';
-    var percentageRegex = new RegExp(regexString, 'i');
+    const regexString = '^(100|[0-9]{1,2})$';
+    const percentageRegex = new RegExp(regexString, 'i');
     return amount === '' || percentageRegex.test(amount);
 }
 /**
@@ -73,11 +70,11 @@ function validatePercentage(amount) {
 function replaceAllDigits(text, convertFn) {
     return text
         .split('')
-        .map(function (char) {
+        .map((char) => {
         try {
             return convertFn(char);
         }
-        catch (_a) {
+        catch {
             return char;
         }
     })

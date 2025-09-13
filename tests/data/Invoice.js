@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertedInvoiceChat = exports.transaction = exports.policy = void 0;
-var CONST_1 = require("@src/CONST");
-var policy = {
+const CONST_1 = require("@src/CONST");
+const policy = {
     id: 'CC048FA711B35B1F',
     type: 'team',
     name: "53019's Workspace",
@@ -169,7 +169,7 @@ var policy = {
     },
 };
 exports.policy = policy;
-var transaction = {
+const transaction = {
     amount: 100,
     comment: {
         customUnit: {
@@ -218,7 +218,7 @@ var transaction = {
     billable: false,
 };
 exports.transaction = transaction;
-var convertedInvoiceChat = {
+const convertedInvoiceChat = {
     chatType: CONST_1.default.REPORT.CHAT_TYPE.INVOICE,
     currency: 'USD',
     description: '',

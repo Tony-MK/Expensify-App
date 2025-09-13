@@ -1,30 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_keyboard_controller_1 = require("react-native-keyboard-controller");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var ActionSheetAwareScrollViewContext_1 = require("./ActionSheetAwareScrollViewContext");
-var KeyboardState = {
+const react_1 = require("react");
+const react_native_keyboard_controller_1 = require("react-native-keyboard-controller");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const ActionSheetAwareScrollViewContext_1 = require("./ActionSheetAwareScrollViewContext");
+const KeyboardState = {
     UNKNOWN: 0,
     OPENING: 1,
     OPEN: 2,
     CLOSING: 3,
     CLOSED: 4,
 };
-var SPRING_CONFIG = {
+const SPRING_CONFIG = {
     mass: 3,
     stiffness: 1000,
     damping: 500,
 };
-var useAnimatedKeyboard = function () {
-    var state = (0, react_native_reanimated_1.useSharedValue)(KeyboardState.UNKNOWN);
-    var height = (0, react_native_reanimated_1.useSharedValue)(0);
-    var lastHeight = (0, react_native_reanimated_1.useSharedValue)(0);
-    var heightWhenOpened = (0, react_native_reanimated_1.useSharedValue)(0);
+const useAnimatedKeyboard = () => {
+    const state = (0, react_native_reanimated_1.useSharedValue)(KeyboardState.UNKNOWN);
+    const height = (0, react_native_reanimated_1.useSharedValue)(0);
+    const lastHeight = (0, react_native_reanimated_1.useSharedValue)(0);
+    const heightWhenOpened = (0, react_native_reanimated_1.useSharedValue)(0);
     (0, react_native_keyboard_controller_1.useKeyboardHandler)({
-        onStart: function (e) {
+        onStart: (e) => {
             'worklet';
             // Save the last keyboard height
             if (e.height !== 0) {
@@ -35,32 +35,32 @@ var useAnimatedKeyboard = function () {
             lastHeight.set(e.height);
             state.set(e.height > 0 ? KeyboardState.OPENING : KeyboardState.CLOSING);
         },
-        onMove: function (e) {
+        onMove: (e) => {
             'worklet';
             height.set(e.height);
         },
-        onEnd: function (e) {
+        onEnd: (e) => {
             'worklet';
             state.set(e.height > 0 ? KeyboardState.OPEN : KeyboardState.CLOSED);
             height.set(e.height);
         },
     }, []);
-    return { state: state, height: height, heightWhenOpened: heightWhenOpened };
+    return { state, height, heightWhenOpened };
 };
 function useActionSheetKeyboardSpace(props) {
-    var _a = (0, useSafeAreaPaddings_1.default)().unmodifiedPaddings, _b = _a.top, paddingTop = _b === void 0 ? 0 : _b, _c = _a.bottom, paddingBottom = _c === void 0 ? 0 : _c;
-    var keyboard = useAnimatedKeyboard();
-    var position = props.position;
+    const { unmodifiedPaddings: { top: paddingTop = 0, bottom: paddingBottom = 0 }, } = (0, useSafeAreaPaddings_1.default)();
+    const keyboard = useAnimatedKeyboard();
+    const { position } = props;
     // Similar to using `global` in worklet but it's just a local object
-    var syncLocalWorkletState = (0, react_native_reanimated_1.useSharedValue)(KeyboardState.UNKNOWN);
-    var windowHeight = (0, useWindowDimensions_1.default)().windowHeight;
-    var _d = (0, react_1.useContext)(ActionSheetAwareScrollViewContext_1.ActionSheetAwareScrollViewContext), currentActionSheetState = _d.currentActionSheetState, transition = _d.transitionActionSheetStateWorklet, resetStateMachine = _d.resetStateMachine;
+    const syncLocalWorkletState = (0, react_native_reanimated_1.useSharedValue)(KeyboardState.UNKNOWN);
+    const { windowHeight } = (0, useWindowDimensions_1.default)();
+    const { currentActionSheetState, transitionActionSheetStateWorklet: transition, resetStateMachine } = (0, react_1.useContext)(ActionSheetAwareScrollViewContext_1.ActionSheetAwareScrollViewContext);
     // Reset state machine when component unmounts
     // eslint-disable-next-line arrow-body-style
-    (0, react_1.useEffect)(function () {
-        return function () { return resetStateMachine(); };
+    (0, react_1.useEffect)(() => {
+        return () => resetStateMachine();
     }, [resetStateMachine]);
-    (0, react_native_reanimated_1.useAnimatedReaction)(function () { return keyboard.state.get(); }, function (lastState) {
+    (0, react_native_reanimated_1.useAnimatedReaction)(() => keyboard.state.get(), (lastState) => {
         if (lastState === syncLocalWorkletState.get()) {
             return;
         }
@@ -73,27 +73,26 @@ function useActionSheetKeyboardSpace(props) {
             transition({ type: ActionSheetAwareScrollViewContext_1.Actions.CLOSE_KEYBOARD });
         }
     }, []);
-    var translateY = (0, react_native_reanimated_1.useDerivedValue)(function () {
-        var _a, _b, _c;
-        var _d = currentActionSheetState.get(), current = _d.current, previous = _d.previous;
+    const translateY = (0, react_native_reanimated_1.useDerivedValue)(() => {
+        const { current, previous } = currentActionSheetState.get();
         // We don't need to run any additional logic. it will always return 0 for idle state
         if (current.state === ActionSheetAwareScrollViewContext_1.States.IDLE) {
             return (0, react_native_reanimated_1.withSpring)(0, SPRING_CONFIG);
         }
-        var keyboardHeight = keyboard.height.get() === 0 ? 0 : keyboard.height.get() - paddingBottom;
+        const keyboardHeight = keyboard.height.get() === 0 ? 0 : keyboard.height.get() - paddingBottom;
         // Sometimes we need to know the last keyboard height
-        var lastKeyboardHeight = keyboard.heightWhenOpened.get() - paddingBottom;
-        var _e = (_a = current.payload) !== null && _a !== void 0 ? _a : {}, _f = _e.popoverHeight, popoverHeight = _f === void 0 ? 0 : _f, frameY = _e.frameY, height = _e.height;
-        var invertedKeyboardHeight = keyboard.state.get() === KeyboardState.CLOSED ? lastKeyboardHeight : 0;
-        var elementOffset = frameY !== undefined && height !== undefined && popoverHeight !== undefined ? frameY + paddingTop + height - (windowHeight - popoverHeight) : 0;
+        const lastKeyboardHeight = keyboard.heightWhenOpened.get() - paddingBottom;
+        const { popoverHeight = 0, frameY, height } = current.payload ?? {};
+        const invertedKeyboardHeight = keyboard.state.get() === KeyboardState.CLOSED ? lastKeyboardHeight : 0;
+        const elementOffset = frameY !== undefined && height !== undefined && popoverHeight !== undefined ? frameY + paddingTop + height - (windowHeight - popoverHeight) : 0;
         // when the state is not idle we know for sure we have the previous state
-        var previousPayload = (_b = previous.payload) !== null && _b !== void 0 ? _b : {};
-        var previousElementOffset = previousPayload.frameY !== undefined && previousPayload.height !== undefined && previousPayload.popoverHeight !== undefined
+        const previousPayload = previous.payload ?? {};
+        const previousElementOffset = previousPayload.frameY !== undefined && previousPayload.height !== undefined && previousPayload.popoverHeight !== undefined
             ? previousPayload.frameY + paddingTop + previousPayload.height - (windowHeight - previousPayload.popoverHeight)
             : 0;
-        var isOpeningKeyboard = syncLocalWorkletState.get() === 1;
-        var isClosingKeyboard = syncLocalWorkletState.get() === 3;
-        var isClosedKeyboard = syncLocalWorkletState.get() === 4;
+        const isOpeningKeyboard = syncLocalWorkletState.get() === 1;
+        const isClosingKeyboard = syncLocalWorkletState.get() === 3;
+        const isClosedKeyboard = syncLocalWorkletState.get() === 4;
         // Depending on the current and sometimes previous state we can return
         // either animation or just a value
         switch (current.state) {
@@ -102,13 +101,13 @@ function useActionSheetKeyboardSpace(props) {
                     return lastKeyboardHeight - keyboardHeight;
                 }
                 if (previous.state === ActionSheetAwareScrollViewContext_1.States.KEYBOARD_CLOSED_POPOVER || (previous.state === ActionSheetAwareScrollViewContext_1.States.KEYBOARD_OPEN && elementOffset < 0)) {
-                    var returnValue = Math.max(keyboard.heightWhenOpened.get() - keyboard.height.get() - paddingBottom, 0) + Math.max(elementOffset, 0);
+                    const returnValue = Math.max(keyboard.heightWhenOpened.get() - keyboard.height.get() - paddingBottom, 0) + Math.max(elementOffset, 0);
                     return returnValue;
                 }
                 return (0, react_native_reanimated_1.withSpring)(0, SPRING_CONFIG);
             }
             case ActionSheetAwareScrollViewContext_1.States.POPOVER_CLOSED: {
-                return (0, react_native_reanimated_1.withSpring)(0, SPRING_CONFIG, function () {
+                return (0, react_native_reanimated_1.withSpring)(0, SPRING_CONFIG, () => {
                     transition({
                         type: ActionSheetAwareScrollViewContext_1.Actions.END_TRANSITION,
                     });
@@ -117,10 +116,10 @@ function useActionSheetKeyboardSpace(props) {
             case ActionSheetAwareScrollViewContext_1.States.POPOVER_OPEN: {
                 if (popoverHeight) {
                     if (previousElementOffset !== 0 || elementOffset > previousElementOffset) {
-                        var returnValue_1 = elementOffset < 0 ? 0 : elementOffset;
-                        return (0, react_native_reanimated_1.withSpring)(returnValue_1, SPRING_CONFIG);
+                        const returnValue = elementOffset < 0 ? 0 : elementOffset;
+                        return (0, react_native_reanimated_1.withSpring)(returnValue, SPRING_CONFIG);
                     }
-                    var returnValue = Math.max(previousElementOffset, 0);
+                    const returnValue = Math.max(previousElementOffset, 0);
                     return (0, react_native_reanimated_1.withSpring)(returnValue, SPRING_CONFIG);
                 }
                 return 0;
@@ -129,10 +128,10 @@ function useActionSheetKeyboardSpace(props) {
                 if (keyboard.state.get() === KeyboardState.OPEN) {
                     return (0, react_native_reanimated_1.withSpring)(0, SPRING_CONFIG);
                 }
-                var nextOffset = elementOffset + lastKeyboardHeight;
-                var scrollOffset = (_c = position === null || position === void 0 ? void 0 : position.get()) !== null && _c !== void 0 ? _c : 0;
+                const nextOffset = elementOffset + lastKeyboardHeight;
+                const scrollOffset = position?.get() ?? 0;
                 // Check if there's a space not filled by content and we need to move
-                var hasWhiteGap = popoverHeight &&
+                const hasWhiteGap = popoverHeight &&
                     // Content would go too far up (beyond popover bounds)
                     (nextOffset < -popoverHeight ||
                         // Or content would go below top of screen (only if not significantly scrolled)
@@ -156,10 +155,10 @@ function useActionSheetKeyboardSpace(props) {
                     }
                 }
                 if (elementOffset < 0) {
-                    var heightDifference = (frameY !== null && frameY !== void 0 ? frameY : 0) - keyboardHeight - paddingTop - paddingBottom;
+                    const heightDifference = (frameY ?? 0) - keyboardHeight - paddingTop - paddingBottom;
                     if (isClosingKeyboard) {
                         if (hasWhiteGap) {
-                            var targetOffset = Math.max(heightDifference - (scrollOffset > 0 ? scrollOffset / 2 : 0), -popoverHeight);
+                            const targetOffset = Math.max(heightDifference - (scrollOffset > 0 ? scrollOffset / 2 : 0), -popoverHeight);
                             return (0, react_native_reanimated_1.withSequence)((0, react_native_reanimated_1.withTiming)(keyboardHeight, { duration: 0 }), (0, react_native_reanimated_1.withSpring)(targetOffset, SPRING_CONFIG));
                         }
                         return (0, react_native_reanimated_1.withSpring)(Math.max(elementOffset + lastKeyboardHeight, -popoverHeight), SPRING_CONFIG);
@@ -177,11 +176,11 @@ function useActionSheetKeyboardSpace(props) {
                     return 0;
                 }
                 if (keyboard.state.get() === KeyboardState.CLOSED) {
-                    var returnValue = elementOffset + lastKeyboardHeight;
+                    const returnValue = elementOffset + lastKeyboardHeight;
                     return returnValue;
                 }
                 if (keyboard.height.get() > 0) {
-                    var returnValue = keyboard.heightWhenOpened.get() - keyboard.height.get() + elementOffset;
+                    const returnValue = keyboard.heightWhenOpened.get() - keyboard.height.get() + elementOffset;
                     return returnValue;
                 }
                 return (0, react_native_reanimated_1.withTiming)(elementOffset + lastKeyboardHeight, {
@@ -192,9 +191,9 @@ function useActionSheetKeyboardSpace(props) {
                 return 0;
         }
     }, []);
-    var animatedStyle = (0, react_native_reanimated_1.useAnimatedStyle)(function () { return ({
+    const animatedStyle = (0, react_native_reanimated_1.useAnimatedStyle)(() => ({
         paddingTop: translateY.get(),
-    }); });
-    return { animatedStyle: animatedStyle };
+    }));
+    return { animatedStyle };
 }
 exports.default = useActionSheetKeyboardSpace;

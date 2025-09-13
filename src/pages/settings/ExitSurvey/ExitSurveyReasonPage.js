@@ -1,33 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var RadioButtons_1 = require("@components/RadioButtons");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@navigation/Navigation");
-var ExitSurvey_1 = require("@userActions/ExitSurvey");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var ExitSurveyReasonForm_1 = require("@src/types/form/ExitSurveyReasonForm");
-var ExitSurveyOffline_1 = require("./ExitSurveyOffline");
+const react_1 = require("react");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const RadioButtons_1 = require("@components/RadioButtons");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@navigation/Navigation");
+const ExitSurvey_1 = require("@userActions/ExitSurvey");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const ExitSurveyReasonForm_1 = require("@src/types/form/ExitSurveyReasonForm");
+const ExitSurveyOffline_1 = require("./ExitSurveyOffline");
 function ExitSurveyReasonPage() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var draftReason = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM_DRAFT, {
-        selector: function (value) { var _a; return (_a = value === null || value === void 0 ? void 0 : value[ExitSurveyReasonForm_1.default.REASON]) !== null && _a !== void 0 ? _a : null; },
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [draftReason] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM_DRAFT, {
+        selector: (value) => value?.[ExitSurveyReasonForm_1.default.REASON] ?? null,
         canBeMissing: true,
-    })[0];
-    var _a = (0, react_1.useState)(draftReason !== null && draftReason !== void 0 ? draftReason : null), reason = _a[0], setReason = _a[1];
-    (0, react_1.useEffect)(function () {
+    });
+    const [reason, setReason] = (0, react_1.useState)(draftReason ?? null);
+    (0, react_1.useEffect)(() => {
         // disabling lint because || is fine to use as a logical operator (as opposed to being used to define a default value)
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         if (reason || !draftReason) {
@@ -35,22 +35,20 @@ function ExitSurveyReasonPage() {
         }
         setReason(draftReason);
     }, [reason, draftReason]);
-    var reasons = (0, react_1.useMemo)(function () {
-        return Object.values(CONST_1.default.EXIT_SURVEY.REASONS).map(function (value) { return ({
-            value: value,
-            label: translate("exitSurvey.reasons.".concat(value)),
-            style: styles.mt6,
-        }); });
-    }, [styles, translate]);
+    const reasons = (0, react_1.useMemo)(() => Object.values(CONST_1.default.EXIT_SURVEY.REASONS).map((value) => ({
+        value,
+        label: translate(`exitSurvey.reasons.${value}`),
+        style: styles.mt6,
+    })), [styles, translate]);
     return (<ScreenWrapper_1.default testID={ExitSurveyReasonPage.displayName}>
-            <HeaderWithBackButton_1.default title={translate('exitSurvey.header')} onBackButtonPress={function () { return Navigation_1.default.goBack(); }}/>
-            <FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM} style={[styles.flex1, styles.mt3, styles.mh5]} validate={function () {
-            var errors = {};
+            <HeaderWithBackButton_1.default title={translate('exitSurvey.header')} onBackButtonPress={() => Navigation_1.default.goBack()}/>
+            <FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM} style={[styles.flex1, styles.mt3, styles.mh5]} validate={() => {
+            const errors = {};
             if (!reason) {
                 errors[ExitSurveyReasonForm_1.default.REASON] = translate('common.error.fieldRequired');
             }
             return errors;
-        }} onSubmit={function () {
+        }} onSubmit={() => {
             if (!reason) {
                 return;
             }

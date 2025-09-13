@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InternalPlatformAnimations = void 0;
-var InternalPlatformAnimations = {
+const InternalPlatformAnimations = {
     SLIDE_FROM_LEFT: 'slide_from_left',
     SLIDE_FROM_RIGHT: 'slide_from_right',
     SLIDE_FROM_BOTTOM: 'slide_from_bottom',
@@ -12,7 +12,7 @@ var InternalPlatformAnimations = {
     NONE: 'none',
 };
 exports.InternalPlatformAnimations = InternalPlatformAnimations;
-var Animations = {
+const Animations = {
     SLIDE_FROM_LEFT: 'slide_from_left',
     SLIDE_FROM_RIGHT: 'slide_from_right',
     SLIDE_FROM_BOTTOM: 'slide_from_bottom',

@@ -1,19 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Pressable_1 = require("@components/Pressable");
-var SelectCircle_1 = require("@components/SelectCircle");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-function OptionItem(_a) {
-    var title = _a.title, icon = _a.icon, onPress = _a.onPress, _b = _a.isSelected, isSelected = _b === void 0 ? false : _b, isDisabled = _a.isDisabled, style = _a.style;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Pressable_1 = require("@components/Pressable");
+const SelectCircle_1 = require("@components/SelectCircle");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+function OptionItem({ title, icon, onPress, isSelected = false, isDisabled, style }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     return (<Pressable_1.PressableWithFeedback onPress={onPress} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate(title)} disabled={isDisabled} wrapperStyle={[styles.flex1, style]}>
             <react_native_1.View style={[styles.borderedContentCard, isSelected && styles.borderColorFocus, styles.p5]}>
                 <react_native_1.View>

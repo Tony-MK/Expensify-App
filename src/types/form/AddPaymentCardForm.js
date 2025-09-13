@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     SETUP_COMPLETE: 'setupComplete',
     NAME_ON_CARD: 'nameOnCard',
     CARD_NUMBER: 'cardNumber',

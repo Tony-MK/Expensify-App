@@ -1,32 +1,31 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var http_1 = require("http");
-var config_1 = require("../config");
-var nativeCommands = require("../nativeCommands");
-var Logger = require("../utils/logger");
-var routes_1 = require("./routes");
-var PORT = (_a = process.env.PORT) !== null && _a !== void 0 ? _a : config_1.default.SERVER_PORT;
+const http_1 = require("http");
+const config_1 = require("../config");
+const nativeCommands = require("../nativeCommands");
+const Logger = require("../utils/logger");
+const routes_1 = require("./routes");
+const PORT = process.env.PORT ?? config_1.default.SERVER_PORT;
 // Gets the request data as a string
-var getReqData = function (req) {
-    var data = '';
-    req.on('data', function (chunk) {
+const getReqData = (req) => {
+    let data = '';
+    req.on('data', (chunk) => {
         data += chunk;
     });
-    return new Promise(function (resolve) {
-        req.on('end', function () {
+    return new Promise((resolve) => {
+        req.on('end', () => {
             resolve(data);
         });
     });
 };
 // Expects a POST request with JSON data. Returns parsed JSON data.
-var getPostJSONRequestData = function (req, res) {
+const getPostJSONRequestData = (req, res) => {
     if (req.method !== 'POST') {
         res.statusCode = 400;
         res.end('Unsupported method');
         return;
     }
-    return getReqData(req).then(function (data) {
+    return getReqData(req).then((data) => {
         try {
             return JSON.parse(data);
         }
@@ -37,18 +36,18 @@ var getPostJSONRequestData = function (req, res) {
         }
     });
 };
-var createListenerState = function () {
-    var listeners = [];
-    var addListener = function (listener) {
+const createListenerState = () => {
+    const listeners = [];
+    const addListener = (listener) => {
         listeners.push(listener);
-        return function () {
-            var index = listeners.indexOf(listener);
+        return () => {
+            const index = listeners.indexOf(listener);
             if (index !== -1) {
                 listeners.splice(index, 1);
             }
         };
     };
-    var clearAllListeners = function () {
+    const clearAllListeners = () => {
         listeners.splice(0, listeners.length);
     };
     return [listeners, addListener, clearAllListeners];
@@ -63,36 +62,35 @@ var createListenerState = function () {
  *
  *  It returns an instance to which you can add listeners for the test results, and test done events.
  */
-var createServerInstance = function () {
-    var _a = createListenerState(), testStartedListeners = _a[0], addTestStartedListener = _a[1];
-    var _b = createListenerState(), testResultListeners = _b[0], addTestResultListener = _b[1];
-    var _c = createListenerState(), testDoneListeners = _c[0], addTestDoneListener = _c[1], clearAllTestDoneListeners = _c[2];
-    var isReadyToAcceptTestResults = true;
-    var setReadyToAcceptTestResults = function (isReady) {
+const createServerInstance = () => {
+    const [testStartedListeners, addTestStartedListener] = createListenerState();
+    const [testResultListeners, addTestResultListener] = createListenerState();
+    const [testDoneListeners, addTestDoneListener, clearAllTestDoneListeners] = createListenerState();
+    let isReadyToAcceptTestResults = true;
+    const setReadyToAcceptTestResults = (isReady) => {
         isReadyToAcceptTestResults = isReady;
     };
-    var forceTestCompletion = function () {
-        testDoneListeners.forEach(function (listener) {
+    const forceTestCompletion = () => {
+        testDoneListeners.forEach((listener) => {
             listener();
         });
     };
-    var activeTestConfig;
-    var networkCache = {};
-    var setTestConfig = function (testConfig) {
+    let activeTestConfig;
+    const networkCache = {};
+    const setTestConfig = (testConfig) => {
         activeTestConfig = testConfig;
     };
-    var getTestConfig = function () {
+    const getTestConfig = () => {
         if (!activeTestConfig) {
             throw new Error('No test config set');
         }
         return activeTestConfig;
     };
-    var server = (0, http_1.createServer)(function (req, res) {
-        var _a, _b, _c, _d;
+    const server = (0, http_1.createServer)((req, res) => {
         res.statusCode = 200;
         switch (req.url) {
             case routes_1.default.testConfig: {
-                testStartedListeners.forEach(function (listener) { return listener(activeTestConfig); });
+                testStartedListeners.forEach((listener) => listener(activeTestConfig));
                 if (!activeTestConfig) {
                     throw new Error('No test config set');
                 }
@@ -102,12 +100,12 @@ var createServerInstance = function () {
                 if (!isReadyToAcceptTestResults) {
                     return res.end('ok');
                 }
-                (_a = getPostJSONRequestData(req, res)) === null || _a === void 0 ? void 0 : _a.then(function (data) {
+                getPostJSONRequestData(req, res)?.then((data) => {
                     if (!data) {
                         // The getPostJSONRequestData function already handled the response
                         return;
                     }
-                    testResultListeners.forEach(function (listener) {
+                    testResultListeners.forEach((listener) => {
                         listener(data);
                     });
                     res.end('ok');
@@ -119,14 +117,17 @@ var createServerInstance = function () {
                 return res.end('ok');
             }
             case routes_1.default.testNativeCommand: {
-                (_b = getPostJSONRequestData(req, res)) === null || _b === void 0 ? void 0 : _b.then(function (data) { return nativeCommands.executeFromPayload(data === null || data === void 0 ? void 0 : data.actionName, data === null || data === void 0 ? void 0 : data.payload); }).then(function (status) {
+                getPostJSONRequestData(req, res)
+                    ?.then((data) => nativeCommands.executeFromPayload(data?.actionName, data?.payload))
+                    .then((status) => {
                     if (status) {
                         res.end('ok');
                         return;
                     }
                     res.statusCode = 500;
                     res.end('Error executing command');
-                }).catch(function (error) {
+                })
+                    .catch((error) => {
                     Logger.error('Error executing command', error);
                     res.statusCode = 500;
                     res.end('Error executing command');
@@ -134,23 +135,22 @@ var createServerInstance = function () {
                 break;
             }
             case routes_1.default.testGetNetworkCache: {
-                (_c = getPostJSONRequestData(req, res)) === null || _c === void 0 ? void 0 : _c.then(function (data) {
-                    var _a;
-                    var appInstanceId = data === null || data === void 0 ? void 0 : data.appInstanceId;
+                getPostJSONRequestData(req, res)?.then((data) => {
+                    const appInstanceId = data?.appInstanceId;
                     if (!appInstanceId) {
                         res.statusCode = 400;
                         res.end('Invalid request missing appInstanceId');
                         return;
                     }
-                    var cachedData = (_a = networkCache[appInstanceId]) !== null && _a !== void 0 ? _a : {};
+                    const cachedData = networkCache[appInstanceId] ?? {};
                     res.end(JSON.stringify(cachedData));
                 });
                 break;
             }
             case routes_1.default.testUpdateNetworkCache: {
-                (_d = getPostJSONRequestData(req, res)) === null || _d === void 0 ? void 0 : _d.then(function (data) {
-                    var appInstanceId = data === null || data === void 0 ? void 0 : data.appInstanceId;
-                    var cache = data === null || data === void 0 ? void 0 : data.cache;
+                getPostJSONRequestData(req, res)?.then((data) => {
+                    const appInstanceId = data?.appInstanceId;
+                    const cache = data?.cache;
                     if (!appInstanceId || !cache) {
                         res.statusCode = 400;
                         res.end('Invalid request missing appInstanceId or cache');
@@ -167,27 +167,23 @@ var createServerInstance = function () {
         }
     });
     return {
-        setReadyToAcceptTestResults: setReadyToAcceptTestResults,
+        setReadyToAcceptTestResults,
         get isReadyToAcceptTestResults() {
             return isReadyToAcceptTestResults;
         },
-        setTestConfig: setTestConfig,
-        getTestConfig: getTestConfig,
-        addTestStartedListener: addTestStartedListener,
-        addTestResultListener: addTestResultListener,
-        addTestDoneListener: addTestDoneListener,
-        clearAllTestDoneListeners: clearAllTestDoneListeners,
-        forceTestCompletion: forceTestCompletion,
-        start: function () {
-            return new Promise(function (resolve) {
-                server.listen(PORT, resolve);
-            });
-        },
-        stop: function () {
-            return new Promise(function (resolve) {
-                server.close(resolve);
-            });
-        },
+        setTestConfig,
+        getTestConfig,
+        addTestStartedListener,
+        addTestResultListener,
+        addTestDoneListener,
+        clearAllTestDoneListeners,
+        forceTestCompletion,
+        start: () => new Promise((resolve) => {
+            server.listen(PORT, resolve);
+        }),
+        stop: () => new Promise((resolve) => {
+            server.close(resolve);
+        }),
     };
 };
 exports.default = createServerInstance;

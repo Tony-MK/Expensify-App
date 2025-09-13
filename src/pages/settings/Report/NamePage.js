@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var GroupChatNameEditPage_1 = require("@pages/GroupChatNameEditPage");
-var withReportOrNotFound_1 = require("@pages/home/report/withReportOrNotFound");
-var TripChatNameEditPage_1 = require("@pages/TripChatNameEditPage");
-var RoomNamePage_1 = require("./RoomNamePage");
-function NamePage(_a) {
-    var report = _a.report;
+const react_1 = require("react");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const GroupChatNameEditPage_1 = require("@pages/GroupChatNameEditPage");
+const withReportOrNotFound_1 = require("@pages/home/report/withReportOrNotFound");
+const TripChatNameEditPage_1 = require("@pages/TripChatNameEditPage");
+const RoomNamePage_1 = require("./RoomNamePage");
+function NamePage({ report }) {
     if ((0, ReportUtils_1.isTripRoom)(report)) {
         return <TripChatNameEditPage_1.default report={report}/>;
     }

@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var shouldReopenOnfido = true;
+const shouldReopenOnfido = true;
 exports.default = shouldReopenOnfido;

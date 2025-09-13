@@ -1,72 +1,40 @@
 "use strict";
 /* eslint-disable default-case */
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable max-classes-per-file */
-var date_fns_1 = require("date-fns");
-var CONST_1 = require("@src/CONST");
-var ReportActionsUtils_1 = require("./ReportActionsUtils");
-var ReportUtils_1 = require("./ReportUtils");
-var SidebarUtils_1 = require("./SidebarUtils");
-var TransactionUtils_1 = require("./TransactionUtils");
-var NumberError = /** @class */ (function (_super) {
-    __extends(NumberError, _super);
-    function NumberError() {
-        return _super.call(this, 'debug.invalidValue', { cause: { expectedValues: 'number | undefined | ""' } }) || this;
+const date_fns_1 = require("date-fns");
+const CONST_1 = require("@src/CONST");
+const ReportActionsUtils_1 = require("./ReportActionsUtils");
+const ReportUtils_1 = require("./ReportUtils");
+const SidebarUtils_1 = require("./SidebarUtils");
+const TransactionUtils_1 = require("./TransactionUtils");
+class NumberError extends SyntaxError {
+    constructor() {
+        super('debug.invalidValue', { cause: { expectedValues: 'number | undefined | ""' } });
     }
-    return NumberError;
-}(SyntaxError));
-var ArrayError = /** @class */ (function (_super) {
-    __extends(ArrayError, _super);
-    function ArrayError(arrayType) {
-        return _super.call(this, 'debug.invalidValue', {
+}
+class ArrayError extends SyntaxError {
+    constructor(arrayType) {
+        super('debug.invalidValue', {
             cause: {
-                expectedValues: "[".concat(typeof arrayType === 'object' ? stringifyJSON(arrayType) : arrayType, "]"),
+                expectedValues: `[${typeof arrayType === 'object' ? stringifyJSON(arrayType) : arrayType}]`,
             },
-        }) || this;
+        });
     }
-    return ArrayError;
-}(SyntaxError));
-var ObjectError = /** @class */ (function (_super) {
-    __extends(ObjectError, _super);
-    function ObjectError(type) {
-        return _super.call(this, 'debug.invalidValue', {
+}
+class ObjectError extends SyntaxError {
+    constructor(type) {
+        super('debug.invalidValue', {
             cause: {
-                expectedValues: "".concat(stringifyJSON(type), " | undefined | ''"),
+                expectedValues: `${stringifyJSON(type)} | undefined | ''`,
             },
-        }) || this;
+        });
     }
-    return ObjectError;
-}(SyntaxError));
-var OPTIONAL_BOOLEAN_STRINGS = ['true', 'false', 'undefined'];
-var REPORT_REQUIRED_PROPERTIES = ['reportID'];
-var REPORT_ACTION_REQUIRED_PROPERTIES = ['reportActionID', 'created', 'actionName'];
-var REPORT_ACTION_NUMBER_PROPERTIES = [
+}
+const OPTIONAL_BOOLEAN_STRINGS = ['true', 'false', 'undefined'];
+const REPORT_REQUIRED_PROPERTIES = ['reportID'];
+const REPORT_ACTION_REQUIRED_PROPERTIES = ['reportActionID', 'created', 'actionName'];
+const REPORT_ACTION_NUMBER_PROPERTIES = [
     'sequenceNumber',
     'actorAccountID',
     'accountID',
@@ -81,8 +49,8 @@ var REPORT_ACTION_NUMBER_PROPERTIES = [
     'reportActionTimestamp',
     'timestamp',
 ];
-var TRANSACTION_REQUIRED_PROPERTIES = ['transactionID', 'reportID', 'amount', 'created', 'currency', 'merchant'];
-var TRANSACTION_VIOLATION_REQUIRED_PROPERTIES = ['type', 'name'];
+const TRANSACTION_REQUIRED_PROPERTIES = ['transactionID', 'reportID', 'amount', 'created', 'currency', 'merchant'];
+const TRANSACTION_VIOLATION_REQUIRED_PROPERTIES = ['type', 'name'];
 function stringifyJSON(data) {
     return JSON.stringify(data, null, 6);
 }
@@ -116,7 +84,7 @@ function stringToOnyxData(data, type) {
     if (isEmptyValue(data)) {
         return data;
     }
-    var onyxData;
+    let onyxData;
     switch (type) {
         case 'number':
             onyxData = Number(data);
@@ -167,10 +135,7 @@ function getNumberOfLinesFromString(data) {
  * @returns converted data object
  */
 function onyxDataToDraftData(data) {
-    return Object.fromEntries(Object.entries(data !== null && data !== void 0 ? data : {}).map(function (_a) {
-        var key = _a[0], value = _a[1];
-        return [key, onyxDataToString(value)];
-    }));
+    return Object.fromEntries(Object.entries(data ?? {}).map(([key, value]) => [key, onyxDataToString(value)]));
 }
 /**
  * Whether a string representation is an empty value
@@ -219,7 +184,7 @@ function validateDate(value) {
  * Validates if a string is a valid representation of an enum value.
  */
 function validateConstantEnum(value, constEnum) {
-    var enumValues = Object.values(constEnum).flatMap(function (val) {
+    const enumValues = Object.values(constEnum).flatMap((val) => {
         if (val && typeof val === 'object') {
             return Object.values(val).map(String);
         }
@@ -228,7 +193,7 @@ function validateConstantEnum(value, constEnum) {
     if (isEmptyValue(value) || enumValues.includes(value)) {
         return;
     }
-    throw new SyntaxError('debug.invalidValue', { cause: { expectedValues: "".concat(enumValues.join(' | '), " | undefined") } });
+    throw new SyntaxError('debug.invalidValue', { cause: { expectedValues: `${enumValues.join(' | ')} | undefined` } });
 }
 /**
  * Validates if a string is a valid representation of an array.
@@ -237,16 +202,15 @@ function validateArray(value, arrayType) {
     if (isEmptyValue(value)) {
         return;
     }
-    var array = parseJSON(value);
+    const array = parseJSON(value);
     if (typeof array !== 'object' || !Array.isArray(array)) {
         throw new ArrayError(arrayType);
     }
-    array.forEach(function (element) {
+    array.forEach((element) => {
         // Element is an object
         if (element && typeof element === 'object' && typeof arrayType === 'object') {
-            Object.entries(element).forEach(function (_a) {
-                var key = _a[0], val = _a[1];
-                var expectedType = arrayType[key];
+            Object.entries(element).forEach(([key, val]) => {
+                const expectedType = arrayType[key];
                 // Property is a constant enum, so we apply validateConstantEnum
                 if (typeof expectedType === 'object' && !Array.isArray(expectedType)) {
                     return validateConstantEnum(String(val), expectedType);
@@ -284,20 +248,20 @@ function validateArray(value, arrayType) {
  * Validates if a string is a valid representation of an object.
  */
 function validateObject(value, type, collectionIndexType) {
-    var _a;
     if (isEmptyValue(value)) {
         return;
     }
-    var expectedType = collectionIndexType
-        ? (_a = {},
-            _a[collectionIndexType] = type,
-            _a) : type;
-    var object = parseJSON(value);
+    const expectedType = collectionIndexType
+        ? {
+            [collectionIndexType]: type,
+        }
+        : type;
+    const object = parseJSON(value);
     if (typeof object !== 'object' || Array.isArray(object)) {
         throw new ObjectError(expectedType);
     }
     if (collectionIndexType) {
-        Object.keys(object).forEach(function (key) {
+        Object.keys(object).forEach((key) => {
             try {
                 if (collectionIndexType === 'number') {
                     validateNumber(key);
@@ -308,14 +272,13 @@ function validateObject(value, type, collectionIndexType) {
             }
         });
     }
-    var tests = collectionIndexType ? Object.values(object) : [object];
-    tests.forEach(function (test) {
+    const tests = collectionIndexType ? Object.values(object) : [object];
+    tests.forEach((test) => {
         if (typeof test !== 'object' || Array.isArray(test)) {
             throw new ObjectError(expectedType);
         }
-        Object.entries(test).forEach(function (_a) {
-            var key = _a[0], val = _a[1];
-            var expectedValueType = type[key];
+        Object.entries(test).forEach(([key, val]) => {
+            const expectedValueType = type[key];
             // val is a constant enum
             if (typeof expectedValueType === 'object') {
                 return validateConstantEnum(val, expectedValueType);
@@ -334,7 +297,7 @@ function validateString(value) {
         return;
     }
     try {
-        var parsedValue = parseJSON(value);
+        const parsedValue = parseJSON(value);
         if (typeof parsedValue === 'object') {
             throw new SyntaxError('debug.invalidValue', { cause: { expectedValues: 'string | undefined' } });
         }
@@ -712,115 +675,113 @@ function validateReportActionDraftProperty(key, value) {
         case 'whisperedToAccountIDs':
             return validateArray(value, 'number');
         case 'message':
-            return unionValidation(function () {
-                return validateArray(value, {
-                    text: 'string',
-                    html: 'string',
-                    type: 'string',
-                    isDeletedParentAction: 'boolean',
-                    policyID: 'string',
-                    reportID: 'string',
-                    currency: 'string',
-                    amount: 'number',
-                    style: 'string',
-                    target: 'string',
-                    href: 'string',
-                    iconUrl: 'string',
-                    isEdited: 'boolean',
-                    isReversedTransaction: 'boolean',
-                    whisperedTo: 'array',
-                    moderationDecision: 'object',
-                    translationKey: 'string',
-                    taskReportID: 'string',
-                    cancellationReason: 'string',
-                    expenseReportID: 'string',
-                    resolution: __assign(__assign({}, CONST_1.default.REPORT.ACTIONABLE_MENTION_WHISPER_RESOLUTION), CONST_1.default.REPORT.ACTIONABLE_REPORT_MENTION_WHISPER_RESOLUTION),
-                    deleted: 'string',
-                    bankAccountID: 'string',
-                    payAsBusiness: 'string',
-                });
-            }, function () {
-                return validateObject(value, {
-                    html: 'string',
-                    text: 'string',
-                    amount: 'string',
-                    currency: 'string',
-                    type: 'string',
-                    policyID: 'string',
-                    reportID: 'string',
-                    isDeletedParentAction: 'boolean',
-                    target: 'string',
-                    style: 'string',
-                    href: 'string',
-                    iconUrl: 'boolean',
-                    isEdited: 'boolean',
-                    isReversedTransaction: 'boolean',
-                    whisperedTo: 'array',
-                    moderationDecision: 'object',
-                    translationKey: 'string',
-                    taskReportID: 'string',
-                    cancellationReason: 'string',
-                    expenseReportID: 'string',
-                    resolution: __assign(__assign({}, CONST_1.default.REPORT.ACTIONABLE_MENTION_WHISPER_RESOLUTION), CONST_1.default.REPORT.ACTIONABLE_REPORT_MENTION_WHISPER_RESOLUTION),
-                    deleted: 'string',
-                });
-            });
+            return unionValidation(() => validateArray(value, {
+                text: 'string',
+                html: 'string',
+                type: 'string',
+                isDeletedParentAction: 'boolean',
+                policyID: 'string',
+                reportID: 'string',
+                currency: 'string',
+                amount: 'number',
+                style: 'string',
+                target: 'string',
+                href: 'string',
+                iconUrl: 'string',
+                isEdited: 'boolean',
+                isReversedTransaction: 'boolean',
+                whisperedTo: 'array',
+                moderationDecision: 'object',
+                translationKey: 'string',
+                taskReportID: 'string',
+                cancellationReason: 'string',
+                expenseReportID: 'string',
+                resolution: {
+                    ...CONST_1.default.REPORT.ACTIONABLE_MENTION_WHISPER_RESOLUTION,
+                    ...CONST_1.default.REPORT.ACTIONABLE_REPORT_MENTION_WHISPER_RESOLUTION,
+                },
+                deleted: 'string',
+                bankAccountID: 'string',
+                payAsBusiness: 'string',
+            }), () => validateObject(value, {
+                html: 'string',
+                text: 'string',
+                amount: 'string',
+                currency: 'string',
+                type: 'string',
+                policyID: 'string',
+                reportID: 'string',
+                isDeletedParentAction: 'boolean',
+                target: 'string',
+                style: 'string',
+                href: 'string',
+                iconUrl: 'boolean',
+                isEdited: 'boolean',
+                isReversedTransaction: 'boolean',
+                whisperedTo: 'array',
+                moderationDecision: 'object',
+                translationKey: 'string',
+                taskReportID: 'string',
+                cancellationReason: 'string',
+                expenseReportID: 'string',
+                resolution: {
+                    ...CONST_1.default.REPORT.ACTIONABLE_MENTION_WHISPER_RESOLUTION,
+                    ...CONST_1.default.REPORT.ACTIONABLE_REPORT_MENTION_WHISPER_RESOLUTION,
+                },
+                deleted: 'string',
+            }));
         case 'originalMessage':
             return validateObject(value, {});
         case 'previousMessage':
-            return unionValidation(function () {
-                return validateObject(value, {
-                    html: 'string',
-                    text: 'string',
-                    amount: 'string',
-                    currency: 'string',
-                    type: 'string',
-                    policyID: 'string',
-                    reportID: 'string',
-                    style: 'string',
-                    target: 'string',
-                    href: 'string',
-                    iconUrl: 'string',
-                    isEdited: 'boolean',
-                    isDeletedParentAction: 'boolean',
-                    isReversedTransaction: 'boolean',
-                    whisperedTo: 'array',
-                    moderationDecision: 'string',
-                    translationKey: 'string',
-                    taskReportID: 'string',
-                    cancellationReason: 'string',
-                    expenseReportID: 'string',
-                    resolution: 'string',
-                    deleted: 'string',
-                });
-            }, function () {
-                return validateArray(value, {
-                    reportID: 'string',
-                    html: 'string',
-                    text: 'string',
-                    amount: 'string',
-                    currency: 'string',
-                    type: 'string',
-                    policyID: 'string',
-                    style: 'string',
-                    target: 'string',
-                    href: 'string',
-                    iconUrl: 'string',
-                    isEdited: 'string',
-                    isDeletedParentAction: 'string',
-                    isReversedTransaction: 'string',
-                    whisperedTo: 'string',
-                    moderationDecision: 'string',
-                    translationKey: 'string',
-                    taskReportID: 'string',
-                    cancellationReason: 'string',
-                    expenseReportID: 'string',
-                    resolution: 'string',
-                    deleted: 'string',
-                    bankAccountID: 'string',
-                    payAsBusiness: 'string',
-                });
-            });
+            return unionValidation(() => validateObject(value, {
+                html: 'string',
+                text: 'string',
+                amount: 'string',
+                currency: 'string',
+                type: 'string',
+                policyID: 'string',
+                reportID: 'string',
+                style: 'string',
+                target: 'string',
+                href: 'string',
+                iconUrl: 'string',
+                isEdited: 'boolean',
+                isDeletedParentAction: 'boolean',
+                isReversedTransaction: 'boolean',
+                whisperedTo: 'array',
+                moderationDecision: 'string',
+                translationKey: 'string',
+                taskReportID: 'string',
+                cancellationReason: 'string',
+                expenseReportID: 'string',
+                resolution: 'string',
+                deleted: 'string',
+            }), () => validateArray(value, {
+                reportID: 'string',
+                html: 'string',
+                text: 'string',
+                amount: 'string',
+                currency: 'string',
+                type: 'string',
+                policyID: 'string',
+                style: 'string',
+                target: 'string',
+                href: 'string',
+                iconUrl: 'string',
+                isEdited: 'string',
+                isDeletedParentAction: 'string',
+                isReversedTransaction: 'string',
+                whisperedTo: 'string',
+                moderationDecision: 'string',
+                translationKey: 'string',
+                taskReportID: 'string',
+                cancellationReason: 'string',
+                expenseReportID: 'string',
+                resolution: 'string',
+                deleted: 'string',
+                bankAccountID: 'string',
+                payAsBusiness: 'string',
+            }));
     }
 }
 /**
@@ -1173,15 +1134,14 @@ function validateTransactionViolationDraftProperty(key, value) {
  * Validates if the ReportAction JSON that the user provided is of the expected type
  */
 function validateReportActionJSON(json) {
-    var parsedReportAction = parseJSON(json);
-    REPORT_ACTION_REQUIRED_PROPERTIES.forEach(function (key) {
+    const parsedReportAction = parseJSON(json);
+    REPORT_ACTION_REQUIRED_PROPERTIES.forEach((key) => {
         if (parsedReportAction[key] !== undefined) {
             return;
         }
         throw new SyntaxError('debug.missingProperty', { cause: { propertyName: key } });
     });
-    Object.entries(parsedReportAction).forEach(function (_a) {
-        var key = _a[0], val = _a[1];
+    Object.entries(parsedReportAction).forEach(([key, val]) => {
         try {
             if (!isEmptyValue(val) && REPORT_ACTION_NUMBER_PROPERTIES.includes(key) && typeof val !== 'number') {
                 throw new NumberError();
@@ -1189,26 +1149,25 @@ function validateReportActionJSON(json) {
             validateReportActionDraftProperty(key, onyxDataToString(val));
         }
         catch (e) {
-            var cause = e.cause;
+            const { cause } = e;
             throw new SyntaxError('debug.invalidProperty', { cause: { propertyName: key, expectedType: cause.expectedValues } });
         }
     });
 }
 function validateTransactionViolationJSON(json) {
-    var parsedTransactionViolation = parseJSON(json);
-    TRANSACTION_VIOLATION_REQUIRED_PROPERTIES.forEach(function (key) {
+    const parsedTransactionViolation = parseJSON(json);
+    TRANSACTION_VIOLATION_REQUIRED_PROPERTIES.forEach((key) => {
         if (parsedTransactionViolation[key] !== undefined) {
             return;
         }
         throw new SyntaxError('debug.missingProperty', { cause: { propertyName: key } });
     });
-    Object.entries(parsedTransactionViolation).forEach(function (_a) {
-        var key = _a[0], val = _a[1];
+    Object.entries(parsedTransactionViolation).forEach(([key, val]) => {
         try {
             validateTransactionViolationDraftProperty(key, onyxDataToString(val));
         }
         catch (e) {
-            var cause = e.cause;
+            const { cause } = e;
             throw new SyntaxError('debug.invalidProperty', { cause: { propertyName: key, expectedType: cause.expectedValues } });
         }
     });
@@ -1216,94 +1175,89 @@ function validateTransactionViolationJSON(json) {
 /**
  * Gets the reason for showing LHN row
  */
-function getReasonForShowingRowInLHN(_a) {
-    var report = _a.report, chatReport = _a.chatReport, doesReportHaveViolations = _a.doesReportHaveViolations, _b = _a.hasRBR, hasRBR = _b === void 0 ? false : _b, _c = _a.isReportArchived, isReportArchived = _c === void 0 ? false : _c, _d = _a.isInFocusMode, isInFocusMode = _d === void 0 ? false : _d, _e = _a.betas, betas = _e === void 0 ? undefined : _e;
+function getReasonForShowingRowInLHN({ report, chatReport, doesReportHaveViolations, hasRBR = false, isReportArchived = false, isInFocusMode = false, betas = undefined, }) {
     if (!report) {
         return null;
     }
-    var reason = (0, ReportUtils_1.reasonForReportToBeInOptionList)({
-        report: report,
-        chatReport: chatReport,
+    const reason = (0, ReportUtils_1.reasonForReportToBeInOptionList)({
+        report,
+        chatReport,
         // We can't pass report.reportID because it will cause reason to always be isFocused
         currentReportId: '-1',
-        isInFocusMode: isInFocusMode,
-        betas: betas,
+        isInFocusMode,
+        betas,
         excludeEmptyChats: true,
-        doesReportHaveViolations: doesReportHaveViolations,
+        doesReportHaveViolations,
         includeSelfDM: true,
-        isReportArchived: isReportArchived,
+        isReportArchived,
     });
     if (![CONST_1.default.REPORT_IN_LHN_REASONS.HAS_ADD_WORKSPACE_ROOM_ERRORS, CONST_1.default.REPORT_IN_LHN_REASONS.HAS_IOU_VIOLATIONS].includes(reason) && hasRBR) {
-        return "debug.reasonVisibleInLHN.hasRBR";
+        return `debug.reasonVisibleInLHN.hasRBR`;
     }
     // When there's no specific reason, we default to isFocused if the report is only showing because we're viewing it
     // Otherwise we return hasRBR if the report has errors other that failed receipt
     if (reason === null || reason === CONST_1.default.REPORT_IN_LHN_REASONS.DEFAULT) {
         return 'debug.reasonVisibleInLHN.isFocused';
     }
-    return "debug.reasonVisibleInLHN.".concat(reason);
+    return `debug.reasonVisibleInLHN.${reason}`;
 }
 /**
  * Gets the reason and report action that is causing the GBR to show up in LHN row
  */
-function getReasonAndReportActionForGBRInLHNRow(report, isReportArchived) {
-    var _a;
-    if (isReportArchived === void 0) { isReportArchived = false; }
+function getReasonAndReportActionForGBRInLHNRow(report, isReportArchived = false) {
     if (!report) {
         return null;
     }
-    var _b = (_a = (0, ReportUtils_1.getReasonAndReportActionThatRequiresAttention)(report, undefined, isReportArchived)) !== null && _a !== void 0 ? _a : {}, reason = _b.reason, reportAction = _b.reportAction;
+    const { reason, reportAction } = (0, ReportUtils_1.getReasonAndReportActionThatRequiresAttention)(report, undefined, isReportArchived) ?? {};
     if (reason) {
-        return { reason: "debug.reasonGBR.".concat(reason), reportAction: reportAction };
+        return { reason: `debug.reasonGBR.${reason}`, reportAction };
     }
     return null;
 }
 /**
  * Gets the report action that is causing the RBR to show up in LHN
  */
-function getReasonAndReportActionForRBRInLHNRow(report, chatReport, reportActions, transactions, transactionViolations, hasViolations, reportErrors, isArchivedReport) {
-    var _a;
-    if (isArchivedReport === void 0) { isArchivedReport = false; }
-    var _b = (_a = SidebarUtils_1.default.getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportActions, hasViolations, reportErrors, transactions, transactionViolations, isArchivedReport)) !== null && _a !== void 0 ? _a : {}, reason = _b.reason, reportAction = _b.reportAction;
+function getReasonAndReportActionForRBRInLHNRow(report, chatReport, reportActions, transactions, transactionViolations, hasViolations, reportErrors, isArchivedReport = false) {
+    const { reason, reportAction } = SidebarUtils_1.default.getReasonAndReportActionThatHasRedBrickRoad(report, chatReport, reportActions, hasViolations, reportErrors, transactions, transactionViolations, isArchivedReport) ?? {};
     if (reason) {
-        return { reason: "debug.reasonRBR.".concat(reason), reportAction: reportAction };
+        return { reason: `debug.reasonRBR.${reason}`, reportAction };
     }
     return null;
 }
 function getTransactionID(report, reportActions) {
-    var transactionID = (0, TransactionUtils_1.getTransactionID)(report === null || report === void 0 ? void 0 : report.reportID);
+    const transactionID = (0, TransactionUtils_1.getTransactionID)(report?.reportID);
     return Number(transactionID) > 0
         ? transactionID
-        : Object.values(reportActions !== null && reportActions !== void 0 ? reportActions : {})
-            .map(function (reportAction) { return (0, ReportActionsUtils_1.getLinkedTransactionID)(reportAction); })
+        : Object.values(reportActions ?? {})
+            .map((reportAction) => (0, ReportActionsUtils_1.getLinkedTransactionID)(reportAction))
             .find(Boolean);
 }
-var DebugUtils = {
-    stringifyJSON: stringifyJSON,
-    onyxDataToDraftData: onyxDataToDraftData,
-    onyxDataToString: onyxDataToString,
-    stringToOnyxData: stringToOnyxData,
-    compareStringWithOnyxData: compareStringWithOnyxData,
-    getNumberOfLinesFromString: getNumberOfLinesFromString,
-    validateNumber: validateNumber,
-    validateBoolean: validateBoolean,
-    validateDate: validateDate,
-    validateConstantEnum: validateConstantEnum,
-    validateArray: validateArray,
-    validateObject: validateObject,
-    validateString: validateString,
-    validateReportDraftProperty: validateReportDraftProperty,
-    validateReportActionDraftProperty: validateReportActionDraftProperty,
-    validateTransactionDraftProperty: validateTransactionDraftProperty,
-    validateTransactionViolationDraftProperty: validateTransactionViolationDraftProperty,
-    validateReportActionJSON: validateReportActionJSON,
-    validateTransactionViolationJSON: validateTransactionViolationJSON,
-    getReasonForShowingRowInLHN: getReasonForShowingRowInLHN,
-    getReasonAndReportActionForGBRInLHNRow: getReasonAndReportActionForGBRInLHNRow,
-    getReasonAndReportActionForRBRInLHNRow: getReasonAndReportActionForRBRInLHNRow,
-    getTransactionID: getTransactionID,
-    REPORT_ACTION_REQUIRED_PROPERTIES: REPORT_ACTION_REQUIRED_PROPERTIES,
-    REPORT_REQUIRED_PROPERTIES: REPORT_REQUIRED_PROPERTIES,
-    TRANSACTION_REQUIRED_PROPERTIES: TRANSACTION_REQUIRED_PROPERTIES,
+const DebugUtils = {
+    stringifyJSON,
+    onyxDataToDraftData,
+    onyxDataToString,
+    stringToOnyxData,
+    compareStringWithOnyxData,
+    getNumberOfLinesFromString,
+    validateNumber,
+    validateBoolean,
+    validateDate,
+    validateConstantEnum,
+    validateArray,
+    validateObject,
+    validateString,
+    validateReportDraftProperty,
+    validateReportActionDraftProperty,
+    validateTransactionDraftProperty,
+    validateTransactionViolationDraftProperty,
+    validateReportActionJSON,
+    validateTransactionViolationJSON,
+    getReasonForShowingRowInLHN,
+    getReasonAndReportActionForGBRInLHNRow,
+    getReasonAndReportActionForRBRInLHNRow,
+    getTransactionID,
+    REPORT_ACTION_REQUIRED_PROPERTIES,
+    REPORT_REQUIRED_PROPERTIES,
+    TRANSACTION_REQUIRED_PROPERTIES,
 };
 exports.default = DebugUtils;

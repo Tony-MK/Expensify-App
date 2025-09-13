@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * This is a file containing constants for all the top level keys in our store
  */
-var ONYXKEYS = {
+const ONYXKEYS = {
     /** Holds information about the users account that is logging in */
     ACCOUNT: 'account',
     /** Holds the reportID for the report between the user and their account manager */

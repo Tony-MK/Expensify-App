@@ -12,14 +12,14 @@ exports.getPlaceAutocompleteTerms = getPlaceAutocompleteTerms;
  * }]
  */
 function getAddressComponents(addressComponents, fieldsToExtract) {
-    var result = {};
-    Object.keys(fieldsToExtract).forEach(function (key) { return (result[key] = ''); });
-    addressComponents.forEach(function (addressComponent) {
-        addressComponent.types.forEach(function (addressType) {
+    const result = {};
+    Object.keys(fieldsToExtract).forEach((key) => (result[key] = ''));
+    addressComponents.forEach((addressComponent) => {
+        addressComponent.types.forEach((addressType) => {
             if (!(addressType in fieldsToExtract) || !(addressType in result && result[addressType] === '')) {
                 return;
             }
-            var value = addressComponent[fieldsToExtract[addressType]] ? addressComponent[fieldsToExtract[addressType]] : '';
+            const value = addressComponent[fieldsToExtract[addressType]] ? addressComponent[fieldsToExtract[addressType]] : '';
             result[addressType] = value;
         });
     });
@@ -30,12 +30,11 @@ function getAddressComponents(addressComponents, fieldsToExtract) {
  * conform to the following ORDER: <street, city, state, country>
  */
 function getPlaceAutocompleteTerms(addressTerms) {
-    var fieldsToExtract = ['country', 'state', 'city', 'street'];
-    var result = {};
-    fieldsToExtract.forEach(function (fieldToExtract, index) {
-        var _a;
-        var fieldTermIndex = addressTerms.length - (index + 1);
-        result[fieldToExtract] = fieldTermIndex >= 0 ? (_a = addressTerms.at(fieldTermIndex)) === null || _a === void 0 ? void 0 : _a.value : '';
+    const fieldsToExtract = ['country', 'state', 'city', 'street'];
+    const result = {};
+    fieldsToExtract.forEach((fieldToExtract, index) => {
+        const fieldTermIndex = addressTerms.length - (index + 1);
+        result[fieldToExtract] = fieldTermIndex >= 0 ? addressTerms.at(fieldTermIndex)?.value : '';
     });
     return result;
 }

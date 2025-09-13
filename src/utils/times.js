@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function times(n, func) {
-    if (func === void 0) { func = function (i) { return i; }; }
-    return Array.from({ length: n }).map(function (_, i) { return func(i); });
+function times(n, func = (i) => i) {
+    return Array.from({ length: n }).map((_, i) => func(i));
 }
 exports.default = times;

@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KEYS_TO_PRESERVE = exports.updateLastVisitedPath = exports.createWorkspaceWithPolicyDraftAndNavigateToIt = exports.savePolicyDraftByNewWorkspace = exports.finalReconnectAppAfterActivatingReliableUpdates = exports.beginDeepLinkRedirectAfterTransition = exports.beginDeepLinkRedirect = exports.handleRestrictedEvent = exports.confirmReadyToOpenApp = exports.reconnectApp = exports.openApp = exports.redirectThirdPartyDesktopSignIn = exports.setUpPoliciesAndNavigate = exports.setSidebarLoaded = exports.setLocale = exports.mockValues = exports.getMissingOnyxUpdates = void 0;
-var OnyxUpdates = require("@userActions/OnyxUpdates");
-var createProxyForObject_1 = require("@src/utils/createProxyForObject");
+const OnyxUpdates = require("@userActions/OnyxUpdates");
+const createProxyForObject_1 = require("@src/utils/createProxyForObject");
 jest.mock('@libs/actions/OnyxUpdates');
 jest.mock('@libs/actions/OnyxUpdateManager/utils/applyUpdates');
-var AppImplementation = jest.requireActual('@libs/actions/App');
-var setLocale = AppImplementation.setLocale, setSidebarLoaded = AppImplementation.setSidebarLoaded, setUpPoliciesAndNavigate = AppImplementation.setUpPoliciesAndNavigate, redirectThirdPartyDesktopSignIn = AppImplementation.redirectThirdPartyDesktopSignIn, openApp = AppImplementation.openApp, reconnectApp = AppImplementation.reconnectApp, confirmReadyToOpenApp = AppImplementation.confirmReadyToOpenApp, handleRestrictedEvent = AppImplementation.handleRestrictedEvent, beginDeepLinkRedirect = AppImplementation.beginDeepLinkRedirect, beginDeepLinkRedirectAfterTransition = AppImplementation.beginDeepLinkRedirectAfterTransition, finalReconnectAppAfterActivatingReliableUpdates = AppImplementation.finalReconnectAppAfterActivatingReliableUpdates, savePolicyDraftByNewWorkspace = AppImplementation.savePolicyDraftByNewWorkspace, createWorkspaceWithPolicyDraftAndNavigateToIt = AppImplementation.createWorkspaceWithPolicyDraftAndNavigateToIt, updateLastVisitedPath = AppImplementation.updateLastVisitedPath, KEYS_TO_PRESERVE = AppImplementation.KEYS_TO_PRESERVE;
+const AppImplementation = jest.requireActual('@libs/actions/App');
+const { setLocale, setSidebarLoaded, setUpPoliciesAndNavigate, redirectThirdPartyDesktopSignIn, openApp, reconnectApp, confirmReadyToOpenApp, handleRestrictedEvent, beginDeepLinkRedirect, beginDeepLinkRedirectAfterTransition, finalReconnectAppAfterActivatingReliableUpdates, savePolicyDraftByNewWorkspace, createWorkspaceWithPolicyDraftAndNavigateToIt, updateLastVisitedPath, KEYS_TO_PRESERVE, } = AppImplementation;
 exports.setLocale = setLocale;
 exports.setSidebarLoaded = setSidebarLoaded;
 exports.setUpPoliciesAndNavigate = setUpPoliciesAndNavigate;
@@ -22,27 +22,26 @@ exports.savePolicyDraftByNewWorkspace = savePolicyDraftByNewWorkspace;
 exports.createWorkspaceWithPolicyDraftAndNavigateToIt = createWorkspaceWithPolicyDraftAndNavigateToIt;
 exports.updateLastVisitedPath = updateLastVisitedPath;
 exports.KEYS_TO_PRESERVE = KEYS_TO_PRESERVE;
-var mockValues = {
+const mockValues = {
     missingOnyxUpdatesToBeApplied: undefined,
 };
-var mockValuesProxy = (0, createProxyForObject_1.default)(mockValues);
+const mockValuesProxy = (0, createProxyForObject_1.default)(mockValues);
 exports.mockValues = mockValuesProxy;
-var getMissingOnyxUpdates = jest.fn(function (updateIDFrom, updateIDTo) {
-    var _a;
-    var updates = (_a = mockValuesProxy.missingOnyxUpdatesToBeApplied) !== null && _a !== void 0 ? _a : [];
+const getMissingOnyxUpdates = jest.fn((updateIDFrom, updateIDTo) => {
+    const updates = mockValuesProxy.missingOnyxUpdatesToBeApplied ?? [];
     if (updates.length === 0) {
-        for (var i = updateIDFrom + 1; i <= updateIDTo; i++) {
+        for (let i = updateIDFrom + 1; i <= updateIDTo; i++) {
             updates.push({
                 lastUpdateID: i,
                 previousUpdateID: i - 1,
             });
         }
     }
-    var chain = Promise.resolve();
-    updates.forEach(function (update) {
-        chain = chain.then(function () {
+    let chain = Promise.resolve();
+    updates.forEach((update) => {
+        chain = chain.then(() => {
             if (!OnyxUpdates.doesClientNeedToBeUpdated({ previousUpdateID: Number(update.previousUpdateID) })) {
-                return OnyxUpdates.apply(update).then(function () { return undefined; });
+                return OnyxUpdates.apply(update).then(() => undefined);
             }
             OnyxUpdates.saveUpdateInformation(update);
             return Promise.resolve();

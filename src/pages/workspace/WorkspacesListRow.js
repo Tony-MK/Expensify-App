@@ -1,30 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var Avatar_1 = require("@components/Avatar");
-var Badge_1 = require("@components/Badge");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var Text_1 = require("@components/Text");
-var TextWithTooltip_1 = require("@components/TextWithTooltip");
-var ThreeDotsMenu_1 = require("@components/ThreeDotsMenu");
-var Tooltip_1 = require("@components/Tooltip");
-var withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
-var WorkspacesListRowDisplayName_1 = require("@components/WorkspacesListRowDisplayName");
-var useAnimatedHighlightStyle_1 = require("@hooks/useAnimatedHighlightStyle");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var workspaceTypeIcon = function (workspaceType) {
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const Avatar_1 = require("@components/Avatar");
+const Badge_1 = require("@components/Badge");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const Text_1 = require("@components/Text");
+const TextWithTooltip_1 = require("@components/TextWithTooltip");
+const ThreeDotsMenu_1 = require("@components/ThreeDotsMenu");
+const Tooltip_1 = require("@components/Tooltip");
+const withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
+const WorkspacesListRowDisplayName_1 = require("@components/WorkspacesListRowDisplayName");
+const useAnimatedHighlightStyle_1 = require("@hooks/useAnimatedHighlightStyle");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const workspaceTypeIcon = (workspaceType) => {
     switch (workspaceType) {
         case CONST_1.default.POLICY.TYPE.CORPORATE:
             return Illustrations.ShieldYellow;
@@ -34,46 +34,42 @@ var workspaceTypeIcon = function (workspaceType) {
             return Illustrations.Mailbox;
     }
 };
-function BrickRoadIndicatorIcon(_a) {
-    var brickRoadIndicator = _a.brickRoadIndicator;
-    var theme = (0, useTheme_1.default)();
+function BrickRoadIndicatorIcon({ brickRoadIndicator }) {
+    const theme = (0, useTheme_1.default)();
     return brickRoadIndicator ? (<Icon_1.default src={Expensicons.DotIndicator} fill={brickRoadIndicator === CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR ? theme.danger : theme.iconSuccessFill}/>) : null;
 }
-function WorkspacesListRow(_a) {
-    var _b;
-    var title = _a.title, menuItems = _a.menuItems, workspaceIcon = _a.workspaceIcon, fallbackWorkspaceIcon = _a.fallbackWorkspaceIcon, ownerAccountID = _a.ownerAccountID, workspaceType = _a.workspaceType, currentUserPersonalDetails = _a.currentUserPersonalDetails, _c = _a.layoutWidth, layoutWidth = _c === void 0 ? CONST_1.default.LAYOUT_WIDTH.NONE : _c, rowStyles = _a.rowStyles, style = _a.style, brickRoadIndicator = _a.brickRoadIndicator, shouldAnimateInHighlight = _a.shouldAnimateInHighlight, shouldDisableThreeDotsMenu = _a.shouldDisableThreeDotsMenu, isJoinRequestPending = _a.isJoinRequestPending, policyID = _a.policyID, isDefault = _a.isDefault, isLoadingBill = _a.isLoadingBill, resetLoadingSpinnerIconIndex = _a.resetLoadingSpinnerIconIndex;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var theme = (0, useTheme_1.default)();
-    var isNarrow = layoutWidth === CONST_1.default.LAYOUT_WIDTH.NARROW;
-    var ownerDetails = ownerAccountID && (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: [ownerAccountID], currentUserAccountID: currentUserPersonalDetails.accountID }).at(0);
-    var threeDotsMenuRef = (0, react_1.useRef)(null);
-    var animatedHighlightStyle = (0, useAnimatedHighlightStyle_1.default)({
+function WorkspacesListRow({ title, menuItems, workspaceIcon, fallbackWorkspaceIcon, ownerAccountID, workspaceType, currentUserPersonalDetails, layoutWidth = CONST_1.default.LAYOUT_WIDTH.NONE, rowStyles, style, brickRoadIndicator, shouldAnimateInHighlight, shouldDisableThreeDotsMenu, isJoinRequestPending, policyID, isDefault, isLoadingBill, resetLoadingSpinnerIconIndex, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const isNarrow = layoutWidth === CONST_1.default.LAYOUT_WIDTH.NARROW;
+    const ownerDetails = ownerAccountID && (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: [ownerAccountID], currentUserAccountID: currentUserPersonalDetails.accountID }).at(0);
+    const threeDotsMenuRef = (0, react_1.useRef)(null);
+    const animatedHighlightStyle = (0, useAnimatedHighlightStyle_1.default)({
         borderRadius: variables_1.default.componentBorderRadius,
         shouldHighlight: !!shouldAnimateInHighlight,
         highlightColor: theme.messageHighlightBG,
         backgroundColor: theme.transparent,
     });
-    (0, react_1.useEffect)(function () {
-        var _a, _b;
+    (0, react_1.useEffect)(() => {
         if (isLoadingBill) {
             return;
         }
-        resetLoadingSpinnerIconIndex === null || resetLoadingSpinnerIconIndex === void 0 ? void 0 : resetLoadingSpinnerIconIndex();
-        if (!((_a = threeDotsMenuRef.current) === null || _a === void 0 ? void 0 : _a.isPopupMenuVisible)) {
+        resetLoadingSpinnerIconIndex?.();
+        if (!threeDotsMenuRef.current?.isPopupMenuVisible) {
             return;
         }
-        (_b = threeDotsMenuRef === null || threeDotsMenuRef === void 0 ? void 0 : threeDotsMenuRef.current) === null || _b === void 0 ? void 0 : _b.hidePopoverMenu();
+        threeDotsMenuRef?.current?.hidePopoverMenu();
     }, [isLoadingBill, resetLoadingSpinnerIconIndex]);
     if (layoutWidth === CONST_1.default.LAYOUT_WIDTH.NONE) {
         // To prevent layout from jumping or rendering for a split second, when
         // isWide is undefined we don't assume anything and simply return null.
         return null;
     }
-    var isWide = layoutWidth === CONST_1.default.LAYOUT_WIDTH.WIDE;
-    var isDeleted = style && Array.isArray(style) ? style.includes(styles.offlineFeedback.deleted) : false;
-    var ThreeDotMenuOrPendingIcon = (<react_native_1.View style={[styles.flexRow, !shouldUseNarrowLayout && styles.workspaceThreeDotMenu]}>
+    const isWide = layoutWidth === CONST_1.default.LAYOUT_WIDTH.WIDE;
+    const isDeleted = style && Array.isArray(style) ? style.includes(styles.offlineFeedback.deleted) : false;
+    const ThreeDotMenuOrPendingIcon = (<react_native_1.View style={[styles.flexRow, !shouldUseNarrowLayout && styles.workspaceThreeDotMenu]}>
             {!!isJoinRequestPending && (<react_native_1.View style={[styles.flexRow, styles.gap2, styles.alignItemsCenter, styles.justifyContentEnd]}>
                     <Badge_1.default text={translate('workspace.common.requested')} textStyles={styles.textStrong} badgeStyles={[styles.alignSelfCenter, styles.badgeBordered]} icon={Expensicons.Hourglass}/>
                 </react_native_1.View>)}
@@ -105,7 +101,7 @@ function WorkspacesListRow(_a) {
                                 <react_native_1.View style={styles.flex1}>
                                     <WorkspacesListRowDisplayName_1.default isDeleted={isDeleted} ownerName={(0, PersonalDetailsUtils_1.getDisplayNameOrDefault)(ownerDetails)}/>
                                     <Text_1.default numberOfLines={1} style={[styles.textMicro, styles.textSupporting, isDeleted ? styles.offlineFeedback.deleted : {}]}>
-                                        {expensify_common_1.Str.removeSMSDomain((_b = ownerDetails === null || ownerDetails === void 0 ? void 0 : ownerDetails.login) !== null && _b !== void 0 ? _b : '')}
+                                        {expensify_common_1.Str.removeSMSDomain(ownerDetails?.login ?? '')}
                                     </Text_1.default>
                                 </react_native_1.View>
                             </>)}

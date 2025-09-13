@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var tokenizedSearch_1 = require("@libs/tokenizedSearch");
-describe('tokenizedSearch', function () {
-    it('WorkspaceMembersSelectionList & WorkspaceWorkflowsPayerPage & WorkspaceWorkflowsApprovalsApproverPage & WorkspaceWorkflowsApprovalsExpensesFromPage', function () {
-        var tokenizeSearch = 'One Three';
-        var items = [
+const tokenizedSearch_1 = require("@libs/tokenizedSearch");
+describe('tokenizedSearch', () => {
+    it('WorkspaceMembersSelectionList & WorkspaceWorkflowsPayerPage & WorkspaceWorkflowsApprovalsApproverPage & WorkspaceWorkflowsApprovalsExpensesFromPage', () => {
+        const tokenizeSearch = 'One Three';
+        const items = [
             {
                 alternateText: 'example@test.com',
                 icons: [],
@@ -22,7 +22,7 @@ describe('tokenizedSearch', function () {
                 text: 'Example Test',
             },
         ];
-        var searchResultList = [
+        const searchResultList = [
             {
                 alternateText: 'example@test.com',
                 icons: [],
@@ -32,12 +32,12 @@ describe('tokenizedSearch', function () {
                 text: 'One Two Three',
             },
         ];
-        var tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, function (option) { var _a, _b; return [(_a = option.text) !== null && _a !== void 0 ? _a : '', (_b = option.login) !== null && _b !== void 0 ? _b : '']; });
+        const tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, (option) => [option.text ?? '', option.login ?? '']);
         expect(tokenizeSearchResult).toStrictEqual(searchResultList);
     });
-    it('InviteReportParticipantsPage', function () {
-        var tokenizeSearch = 'One Three';
-        var items = [
+    it('InviteReportParticipantsPage', () => {
+        const tokenizeSearch = 'One Three';
+        const items = [
             {
                 alternateText: 'example@test.com',
                 icons: [],
@@ -55,7 +55,7 @@ describe('tokenizedSearch', function () {
                 text: 'Example Test',
             },
         ];
-        var searchResultList = [
+        const searchResultList = [
             {
                 alternateText: 'example@test.com',
                 icons: [],
@@ -65,12 +65,12 @@ describe('tokenizedSearch', function () {
                 text: 'One Two Three',
             },
         ];
-        var tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, function (option) { var _a, _b; return [(_a = option.text) !== null && _a !== void 0 ? _a : '', (_b = option.login) !== null && _b !== void 0 ? _b : '']; });
+        const tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, (option) => [option.text ?? '', option.login ?? '']);
         expect(tokenizeSearchResult).toStrictEqual(searchResultList);
     });
-    it('WorkspaceCompanyCardAccountSelectCardPage', function () {
-        var tokenizeSearch = 'One Three';
-        var items = [
+    it('WorkspaceCompanyCardAccountSelectCardPage', () => {
+        const tokenizeSearch = 'One Three';
+        const items = [
             {
                 brickRoadIndicator: undefined,
                 icons: [],
@@ -92,7 +92,7 @@ describe('tokenizedSearch', function () {
                 text: "Test's Workspace",
             },
         ];
-        var searchResultList = [
+        const searchResultList = [
             {
                 brickRoadIndicator: undefined,
                 icons: [],
@@ -104,12 +104,12 @@ describe('tokenizedSearch', function () {
                 text: "One Two Three's Workspace",
             },
         ];
-        var tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, function (option) { var _a; return [(_a = option.text) !== null && _a !== void 0 ? _a : '']; });
+        const tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, (option) => [option.text ?? '']);
         expect(tokenizeSearchResult).toStrictEqual(searchResultList);
     });
-    it('expensifyCard/issueNew/AssigneeStep', function () {
-        var tokenizeSearch = 'One Three';
-        var items = [
+    it('expensifyCard/issueNew/AssigneeStep', () => {
+        const tokenizeSearch = 'One Three';
+        const items = [
             {
                 alternateText: 'example@test.com',
                 icons: [],
@@ -127,7 +127,7 @@ describe('tokenizedSearch', function () {
                 text: 'Example Test',
             },
         ];
-        var searchResultList = [
+        const searchResultList = [
             {
                 alternateText: 'example@test.com',
                 icons: [],
@@ -137,7 +137,7 @@ describe('tokenizedSearch', function () {
                 text: 'One Two Three',
             },
         ];
-        var tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, function (option) { var _a, _b; return [(_a = option.text) !== null && _a !== void 0 ? _a : '', (_b = option.alternateText) !== null && _b !== void 0 ? _b : '']; });
+        const tokenizeSearchResult = (0, tokenizedSearch_1.default)(items, tokenizeSearch, (option) => [option.text ?? '', option.alternateText ?? '']);
         expect(tokenizeSearchResult).toStrictEqual(searchResultList);
     });
 });

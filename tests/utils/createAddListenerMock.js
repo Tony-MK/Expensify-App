@@ -7,19 +7,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * @returns An object with two functions: triggerTransitionEnd and addListener
  */
-var createAddListenerMock = function () {
-    var transitionEndListeners = [];
-    var triggerTransitionEnd = function () {
-        transitionEndListeners.forEach(function (transitionEndListener) { return transitionEndListener(); });
+const createAddListenerMock = () => {
+    const transitionEndListeners = [];
+    const triggerTransitionEnd = () => {
+        transitionEndListeners.forEach((transitionEndListener) => transitionEndListener());
     };
-    var addListener = jest.fn().mockImplementation(function (listener, callback) {
+    const addListener = jest.fn().mockImplementation((listener, callback) => {
         if (listener === 'transitionEnd') {
             transitionEndListeners.push(callback);
         }
-        return function () {
-            transitionEndListeners.filter(function (cb) { return cb !== callback; });
+        return () => {
+            transitionEndListeners.filter((cb) => cb !== callback);
         };
     });
-    return { triggerTransitionEnd: triggerTransitionEnd, addListener: addListener };
+    return { triggerTransitionEnd, addListener };
 };
 exports.default = createAddListenerMock;

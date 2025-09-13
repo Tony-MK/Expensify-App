@@ -1,38 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var utils_1 = require("@components/Button/utils");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
-var useHover_1 = require("@hooks/useHover");
-var useMouseContext_1 = require("@hooks/useMouseContext");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useSyncFocus_1 = require("@hooks/useSyncFocus");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-function BaseListItem(_a) {
-    var _b;
-    var _c;
-    var item = _a.item, pressableStyle = _a.pressableStyle, wrapperStyle = _a.wrapperStyle, pressableWrapperStyle = _a.pressableWrapperStyle, containerStyle = _a.containerStyle, _d = _a.isDisabled, isDisabled = _d === void 0 ? false : _d, _e = _a.shouldPreventEnterKeySubmit, shouldPreventEnterKeySubmit = _e === void 0 ? false : _e, _f = _a.canSelectMultiple, canSelectMultiple = _f === void 0 ? false : _f, onSelectRow = _a.onSelectRow, _g = _a.onDismissError, onDismissError = _g === void 0 ? function () { } : _g, rightHandSideComponent = _a.rightHandSideComponent, keyForList = _a.keyForList, errors = _a.errors, pendingAction = _a.pendingAction, FooterComponent = _a.FooterComponent, children = _a.children, isFocused = _a.isFocused, _h = _a.shouldSyncFocus, shouldSyncFocus = _h === void 0 ? true : _h, _j = _a.shouldDisplayRBR, shouldDisplayRBR = _j === void 0 ? true : _j, _k = _a.shouldShowBlueBorderOnFocus, shouldShowBlueBorderOnFocus = _k === void 0 ? false : _k, _l = _a.onFocus, onFocus = _l === void 0 ? function () { } : _l, hoverStyle = _a.hoverStyle, onLongPressRow = _a.onLongPressRow, testID = _a.testID, _m = _a.shouldUseDefaultRightHandSideCheckmark, shouldUseDefaultRightHandSideCheckmark = _m === void 0 ? true : _m, forwardedFSClass = _a.forwardedFSClass;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var _o = (0, useHover_1.default)(), hovered = _o.hovered, bind = _o.bind;
-    var _p = (0, useMouseContext_1.useMouseContext)(), isMouseDownOnInput = _p.isMouseDownOnInput, setMouseUp = _p.setMouseUp;
-    var pressableRef = (0, react_1.useRef)(null);
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const utils_1 = require("@components/Button/utils");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
+const useHover_1 = require("@hooks/useHover");
+const useMouseContext_1 = require("@hooks/useMouseContext");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useSyncFocus_1 = require("@hooks/useSyncFocus");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+function BaseListItem({ item, pressableStyle, wrapperStyle, pressableWrapperStyle, containerStyle, isDisabled = false, shouldPreventEnterKeySubmit = false, canSelectMultiple = false, onSelectRow, onDismissError = () => { }, rightHandSideComponent, keyForList, errors, pendingAction, FooterComponent, children, isFocused, shouldSyncFocus = true, shouldDisplayRBR = true, shouldShowBlueBorderOnFocus = false, onFocus = () => { }, hoverStyle, onLongPressRow, testID, shouldUseDefaultRightHandSideCheckmark = true, forwardedFSClass, }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { hovered, bind } = (0, useHover_1.default)();
+    const { isMouseDownOnInput, setMouseUp } = (0, useMouseContext_1.useMouseContext)();
+    const pressableRef = (0, react_1.useRef)(null);
     // Sync focus on an item
     (0, useSyncFocus_1.default)(pressableRef, !!isFocused, shouldSyncFocus);
-    var handleMouseLeave = function (e) {
+    const handleMouseLeave = (e) => {
         bind.onMouseLeave();
         e.stopPropagation();
         setMouseUp();
     };
-    var rightHandSideComponentRender = function () {
+    const rightHandSideComponentRender = () => {
         if (canSelectMultiple || !rightHandSideComponent) {
             return null;
         }
@@ -41,25 +38,25 @@ function BaseListItem(_a) {
         }
         return rightHandSideComponent;
     };
-    return (<OfflineWithFeedback_1.default onClose={function () { return onDismissError(item); }} pendingAction={pendingAction} errors={errors} errorRowStyles={styles.ph5} contentContainerStyle={containerStyle}>
+    return (<OfflineWithFeedback_1.default onClose={() => onDismissError(item)} pendingAction={pendingAction} errors={errors} errorRowStyles={styles.ph5} contentContainerStyle={containerStyle}>
             <PressableWithFeedback_1.default 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...bind} ref={pressableRef} onLongPress={function () {
-            onLongPressRow === null || onLongPressRow === void 0 ? void 0 : onLongPressRow(item);
-        }} onPress={function (e) {
+    {...bind} ref={pressableRef} onLongPress={() => {
+            onLongPressRow?.(item);
+        }} onPress={(e) => {
             if (isMouseDownOnInput) {
-                e === null || e === void 0 ? void 0 : e.stopPropagation(); // Preventing the click action
+                e?.stopPropagation(); // Preventing the click action
                 return;
             }
             if (shouldPreventEnterKeySubmit && e && 'key' in e && e.key === CONST_1.default.KEYBOARD_SHORTCUTS.ENTER.shortcutKey) {
                 return;
             }
             onSelectRow(item);
-        }} disabled={isDisabled && !item.isSelected} interactive={item.isInteractive} accessibilityLabel={(_c = item.text) !== null && _c !== void 0 ? _c : ''} role={(0, utils_1.getButtonRole)(true)} isNested hoverDimmingValue={1} pressDimmingValue={item.isInteractive === false ? 1 : variables_1.default.pressDimValue} hoverStyle={[!item.isDisabled && item.isInteractive !== false && styles.hoveredComponentBG, hoverStyle]} dataSet={_b = {}, _b[CONST_1.default.SELECTION_SCRAPER_HIDDEN_ELEMENT] = true, _b[CONST_1.default.INNER_BOX_SHADOW_ELEMENT] = shouldShowBlueBorderOnFocus, _b} onMouseDown={function (e) { return e.preventDefault(); }} id={keyForList !== null && keyForList !== void 0 ? keyForList : ''} style={[
+        }} disabled={isDisabled && !item.isSelected} interactive={item.isInteractive} accessibilityLabel={item.text ?? ''} role={(0, utils_1.getButtonRole)(true)} isNested hoverDimmingValue={1} pressDimmingValue={item.isInteractive === false ? 1 : variables_1.default.pressDimValue} hoverStyle={[!item.isDisabled && item.isInteractive !== false && styles.hoveredComponentBG, hoverStyle]} dataSet={{ [CONST_1.default.SELECTION_SCRAPER_HIDDEN_ELEMENT]: true, [CONST_1.default.INNER_BOX_SHADOW_ELEMENT]: shouldShowBlueBorderOnFocus }} onMouseDown={(e) => e.preventDefault()} id={keyForList ?? ''} style={[
             pressableStyle,
             isFocused && StyleUtils.getItemBackgroundColorStyle(!!item.isSelected, !!isFocused, !!item.isDisabled, theme.activeComponentBG, theme.hoverComponentBG),
         ]} onFocus={onFocus} onMouseLeave={handleMouseLeave} tabIndex={item.tabIndex} wrapperStyle={pressableWrapperStyle} testID={testID}>
-                <react_native_1.View testID={"".concat(CONST_1.default.BASE_LIST_ITEM_TEST_ID).concat(item.keyForList)} accessibilityState={{ selected: !!isFocused }} style={[
+                <react_native_1.View testID={`${CONST_1.default.BASE_LIST_ITEM_TEST_ID}${item.keyForList}`} accessibilityState={{ selected: !!isFocused }} style={[
             wrapperStyle,
             isFocused && StyleUtils.getItemBackgroundColorStyle(!!item.isSelected, !!isFocused, !!item.isDisabled, theme.activeComponentBG, theme.hoverComponentBG),
         ]} fsClass={forwardedFSClass}>

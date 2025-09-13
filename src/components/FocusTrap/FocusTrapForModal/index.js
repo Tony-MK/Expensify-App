@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function FocusTrapForModal(_a) {
-    var children = _a.children;
+function FocusTrapForModal({ children }) {
     return children;
 }
 FocusTrapForModal.displayName = 'FocusTrapForModal';

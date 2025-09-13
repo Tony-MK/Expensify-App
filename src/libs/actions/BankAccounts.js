@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.acceptWalletTerms = exports.verifyIdentity = exports.answerQuestionsForWallet = exports.openOnfidoFlow = exports.openPlaidBankLogin = exports.openPlaidBankAccountSelector = exports.cancelResetBankAccount = exports.requestResetBankAccount = exports.updateReimbursementAccountDraft = exports.setBankAccountSubStep = exports.hideBankAccountErrors = exports.resetNonUSDBankAccount = exports.resetUSDBankAccount = exports.resetReimbursementAccount = exports.setBankAccountFormValidationErrors = exports.goToWithdrawalAccountSetupStep = void 0;
 exports.acceptACHContractForBankAccount = acceptACHContractForBankAccount;
@@ -59,17 +48,17 @@ exports.clearReimbursementAccount = clearReimbursementAccount;
 exports.clearEnterSignerInformationFormSave = clearEnterSignerInformationFormSave;
 exports.sendReminderForCorpaySignerInformation = sendReminderForCorpaySignerInformation;
 exports.clearReimbursementAccountSendReminderForCorpaySignerInformation = clearReimbursementAccountSendReminderForCorpaySignerInformation;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Localize_1 = require("@libs/Localize");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var ReimbursementAccount_1 = require("./ReimbursementAccount");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Localize_1 = require("@libs/Localize");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const ReimbursementAccount_1 = require("./ReimbursementAccount");
 var ReimbursementAccount_2 = require("./ReimbursementAccount");
 Object.defineProperty(exports, "goToWithdrawalAccountSetupStep", { enumerable: true, get: function () { return ReimbursementAccount_2.goToWithdrawalAccountSetupStep; } });
 Object.defineProperty(exports, "setBankAccountFormValidationErrors", { enumerable: true, get: function () { return ReimbursementAccount_2.setBankAccountFormValidationErrors; } });
@@ -96,11 +85,11 @@ function clearPlaid() {
 }
 function clearInternationalBankAccount() {
     return clearPlaid()
-        .then(function () { return react_native_onyx_1.default.set(ONYXKEYS_1.default.CORPAY_FIELDS, null); })
-        .then(function () { return react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.INTERNATIONAL_BANK_ACCOUNT_FORM_DRAFT, null); });
+        .then(() => react_native_onyx_1.default.set(ONYXKEYS_1.default.CORPAY_FIELDS, null))
+        .then(() => react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.INTERNATIONAL_BANK_ACCOUNT_FORM_DRAFT, null));
 }
 function openPlaidView() {
-    clearPlaid().then(function () { return (0, ReimbursementAccount_1.setBankAccountSubStep)(CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID); });
+    clearPlaid().then(() => (0, ReimbursementAccount_1.setBankAccountSubStep)(CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID));
 }
 function setPlaidEvent(eventName) {
     react_native_onyx_1.default.set(ONYXKEYS_1.default.PLAID_CURRENT_EVENT, eventName);
@@ -108,17 +97,16 @@ function setPlaidEvent(eventName) {
 /**
  * Open the personal bank account setup flow, with an optional exitReportID to redirect to once the flow is finished.
  */
-function openPersonalBankAccountSetupView(_a) {
-    var exitReportID = _a.exitReportID, policyID = _a.policyID, source = _a.source, _b = _a.shouldSetUpUSBankAccount, shouldSetUpUSBankAccount = _b === void 0 ? false : _b, _c = _a.isUserValidated, isUserValidated = _c === void 0 ? true : _c;
-    clearInternationalBankAccount().then(function () {
+function openPersonalBankAccountSetupView({ exitReportID, policyID, source, shouldSetUpUSBankAccount = false, isUserValidated = true }) {
+    clearInternationalBankAccount().then(() => {
         if (exitReportID) {
-            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { exitReportID: exitReportID });
+            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { exitReportID });
         }
         if (policyID) {
-            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { policyID: policyID });
+            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { policyID });
         }
         if (source) {
-            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { source: source });
+            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { source });
         }
         if (!isUserValidated) {
             Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_CONTACT_METHOD_VERIFY_ACCOUNT.getRoute(Navigation_1.default.getActiveRoute(), ROUTES_1.default.SETTINGS_ADD_BANK_ACCOUNT.route));
@@ -135,9 +123,9 @@ function openPersonalBankAccountSetupView(_a) {
  * Open the personal bank account setup flow using Plaid, with an optional exitReportID to redirect to once the flow is finished.
  */
 function openPersonalBankAccountSetupWithPlaid(exitReportID) {
-    clearPlaid().then(function () {
+    clearPlaid().then(() => {
         if (exitReportID) {
-            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { exitReportID: exitReportID });
+            react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { exitReportID });
         }
         react_native_onyx_1.default.merge(ONYXKEYS_1.default.FORMS.PERSONAL_BANK_ACCOUNT_FORM_DRAFT, { setupType: CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID });
     });
@@ -149,7 +137,7 @@ function clearPersonalBankAccountSetupType() {
  * Whether after adding a bank account we should continue with the KYC flow. If so, we must specify the fallback route.
  */
 function setPersonalBankAccountContinueKYCOnSuccess(onSuccessFallbackRoute) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { onSuccessFallbackRoute: onSuccessFallbackRoute });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT, { onSuccessFallbackRoute });
 }
 function clearPersonalBankAccount() {
     clearPlaid();
@@ -167,8 +155,7 @@ function updateAddPersonalBankAccountDraft(bankData) {
 /**
  * Helper method to build the Onyx data required during setup of a Verified Business Bank Account
  */
-function getVBBADataForOnyx(currentStep, shouldShowLoading) {
-    if (shouldShowLoading === void 0) { shouldShowLoading = true; }
+function getVBBADataForOnyx(currentStep, shouldShowLoading = true) {
     return {
         optimisticData: [
             {
@@ -215,10 +202,8 @@ function addBusinessWebsiteForDraft(websiteUrl) {
  * Submit Bank Account step with Plaid data so php can perform some checks.
  */
 function connectBankAccountWithPlaid(bankAccountID, selectedPlaidBankAccount, policyID, lastPaymentMethod) {
-    var _a;
-    var _b, _c;
-    var parameters = {
-        bankAccountID: bankAccountID,
+    const parameters = {
+        bankAccountID,
         routingNumber: selectedPlaidBankAccount.routingNumber,
         accountNumber: selectedPlaidBankAccount.accountNumber,
         bank: selectedPlaidBankAccount.bankName,
@@ -226,24 +211,24 @@ function connectBankAccountWithPlaid(bankAccountID, selectedPlaidBankAccount, po
         plaidAccessToken: selectedPlaidBankAccount.plaidAccessToken,
         plaidMask: selectedPlaidBankAccount.mask,
         isSavings: selectedPlaidBankAccount.isSavings,
-        policyID: policyID,
+        policyID,
     };
-    var onyxData = getVBBADataForOnyx();
-    var lastUsedPaymentMethod = typeof lastPaymentMethod === 'string' ? lastPaymentMethod : (_b = lastPaymentMethod === null || lastPaymentMethod === void 0 ? void 0 : lastPaymentMethod.expense) === null || _b === void 0 ? void 0 : _b.name;
+    const onyxData = getVBBADataForOnyx();
+    const lastUsedPaymentMethod = typeof lastPaymentMethod === 'string' ? lastPaymentMethod : lastPaymentMethod?.expense?.name;
     if (!lastUsedPaymentMethod) {
-        (_c = onyxData.successData) === null || _c === void 0 ? void 0 : _c.push({
+        onyxData.successData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-            value: (_a = {},
-                _a[policyID] = {
+            value: {
+                [policyID]: {
                     expense: {
                         name: CONST_1.default.IOU.PAYMENT_TYPE.VBBA,
                     },
                     lastUsed: {
-                        name: lastUsedPaymentMethod !== null && lastUsedPaymentMethod !== void 0 ? lastUsedPaymentMethod : CONST_1.default.IOU.PAYMENT_TYPE.VBBA,
+                        name: lastUsedPaymentMethod ?? CONST_1.default.IOU.PAYMENT_TYPE.VBBA,
                     },
                 },
-                _a),
+            },
         });
     }
     API.write(types_1.WRITE_COMMANDS.CONNECT_BANK_ACCOUNT_WITH_PLAID, parameters, onyxData);
@@ -254,13 +239,11 @@ function connectBankAccountWithPlaid(bankAccountID, selectedPlaidBankAccount, po
  * TODO: offline pattern for this command will have to be added later once the pattern B design doc is complete
  */
 function addPersonalBankAccount(account, policyID, source, lastPaymentMethod) {
-    var _a, _b, _c;
-    var _d, _e, _f, _g, _h;
-    var parameters = {
-        addressName: (_d = account.addressName) !== null && _d !== void 0 ? _d : '',
+    const parameters = {
+        addressName: account.addressName ?? '',
         routingNumber: account.routingNumber,
         accountNumber: account.accountNumber,
-        isSavings: (_e = account.isSavings) !== null && _e !== void 0 ? _e : false,
+        isSavings: account.isSavings ?? false,
         setupType: 'plaid',
         bank: account.bankName,
         plaidAccountID: account.plaidAccountID,
@@ -272,8 +255,8 @@ function addPersonalBankAccount(account, policyID, source, lastPaymentMethod) {
     if (source) {
         parameters.source = source;
     }
-    var personalPolicy = (0, PolicyUtils_1.getPersonalPolicy)();
-    var onyxData = {
+    const personalPolicy = (0, PolicyUtils_1.getPersonalPolicy)();
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -314,12 +297,12 @@ function addPersonalBankAccount(account, policyID, source, lastPaymentMethod) {
             },
         ],
     };
-    if ((personalPolicy === null || personalPolicy === void 0 ? void 0 : personalPolicy.id) && !lastPaymentMethod) {
-        (_f = onyxData.optimisticData) === null || _f === void 0 ? void 0 : _f.push({
+    if (personalPolicy?.id && !lastPaymentMethod) {
+        onyxData.optimisticData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-            value: (_a = {},
-                _a[personalPolicy === null || personalPolicy === void 0 ? void 0 : personalPolicy.id] = {
+            value: {
+                [personalPolicy?.id]: {
                     iou: {
                         name: CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY,
                     },
@@ -327,13 +310,13 @@ function addPersonalBankAccount(account, policyID, source, lastPaymentMethod) {
                         name: CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY,
                     },
                 },
-                _a),
+            },
         });
-        (_g = onyxData.successData) === null || _g === void 0 ? void 0 : _g.push({
+        onyxData.successData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-            value: (_b = {},
-                _b[personalPolicy === null || personalPolicy === void 0 ? void 0 : personalPolicy.id] = {
+            value: {
+                [personalPolicy?.id]: {
                     iou: {
                         name: CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY,
                     },
@@ -341,29 +324,32 @@ function addPersonalBankAccount(account, policyID, source, lastPaymentMethod) {
                         name: CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY,
                     },
                 },
-                _b),
+            },
         });
-        (_h = onyxData.failureData) === null || _h === void 0 ? void 0 : _h.push({
+        onyxData.failureData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-            value: (_c = {},
-                _c[personalPolicy === null || personalPolicy === void 0 ? void 0 : personalPolicy.id] = null,
-                _c),
+            value: {
+                [personalPolicy?.id]: null,
+            },
         });
     }
     API.write(types_1.WRITE_COMMANDS.ADD_PERSONAL_BANK_ACCOUNT, parameters, onyxData);
 }
 function deletePaymentBankAccount(bankAccountID, lastUsedPaymentMethods, bankAccount) {
-    var _a, _b, _c;
-    var parameters = { bankAccountID: bankAccountID };
-    var bankAccountFailureData = __assign(__assign({}, bankAccount), { errors: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('bankAccount.error.deletePaymentBankAccount'), pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE });
-    var personalPolicy = (0, PolicyUtils_1.getPersonalPolicy)();
-    var onyxData = {
+    const parameters = { bankAccountID };
+    const bankAccountFailureData = {
+        ...bankAccount,
+        errors: (0, ErrorUtils_1.getMicroSecondOnyxErrorWithTranslationKey)('bankAccount.error.deletePaymentBankAccount'),
+        pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE,
+    };
+    const personalPolicy = (0, PolicyUtils_1.getPersonalPolicy)();
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.BANK_ACCOUNT_LIST),
-                value: (_a = {}, _a[bankAccountID] = { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE }, _a),
+                key: `${ONYXKEYS_1.default.BANK_ACCOUNT_LIST}`,
+                value: { [bankAccountID]: { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE } },
             },
         ],
         // Sometimes pusher updates aren't received when we close the App while still offline,
@@ -371,83 +357,87 @@ function deletePaymentBankAccount(bankAccountID, lastUsedPaymentMethods, bankAcc
         successData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.BANK_ACCOUNT_LIST),
-                value: (_b = {}, _b[bankAccountID] = null, _b),
+                key: `${ONYXKEYS_1.default.BANK_ACCOUNT_LIST}`,
+                value: { [bankAccountID]: null },
             },
         ],
         failureData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.BANK_ACCOUNT_LIST),
-                value: (_c = {},
-                    _c[bankAccountID] = bankAccountFailureData,
-                    _c),
+                key: `${ONYXKEYS_1.default.BANK_ACCOUNT_LIST}`,
+                value: {
+                    [bankAccountID]: bankAccountFailureData,
+                },
             },
         ],
     };
-    Object.keys(lastUsedPaymentMethods !== null && lastUsedPaymentMethods !== void 0 ? lastUsedPaymentMethods : {}).forEach(function (paymentMethodID) {
-        var _a, _b, _c, _d;
-        var _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
-        var lastUsedPaymentMethod = lastUsedPaymentMethods === null || lastUsedPaymentMethods === void 0 ? void 0 : lastUsedPaymentMethods[paymentMethodID];
+    Object.keys(lastUsedPaymentMethods ?? {}).forEach((paymentMethodID) => {
+        const lastUsedPaymentMethod = lastUsedPaymentMethods?.[paymentMethodID];
         if (typeof lastUsedPaymentMethod === 'string' || !lastUsedPaymentMethod) {
             return;
         }
-        if ((personalPolicy === null || personalPolicy === void 0 ? void 0 : personalPolicy.id) === paymentMethodID && ((_e = lastUsedPaymentMethod.iou) === null || _e === void 0 ? void 0 : _e.name) === CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY) {
-            var revertedLastUsedPaymentMethod = ((_f = lastUsedPaymentMethod.lastUsed) === null || _f === void 0 ? void 0 : _f.name) !== CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY ? (_g = lastUsedPaymentMethod.lastUsed) === null || _g === void 0 ? void 0 : _g.name : null;
-            (_h = onyxData.successData) === null || _h === void 0 ? void 0 : _h.push({
+        if (personalPolicy?.id === paymentMethodID && lastUsedPaymentMethod.iou?.name === CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY) {
+            const revertedLastUsedPaymentMethod = lastUsedPaymentMethod.lastUsed?.name !== CONST_1.default.IOU.PAYMENT_TYPE.EXPENSIFY ? lastUsedPaymentMethod.lastUsed?.name : null;
+            onyxData.successData?.push({
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-                value: (_a = {},
-                    _a[personalPolicy === null || personalPolicy === void 0 ? void 0 : personalPolicy.id] = __assign({ iou: {
+                value: {
+                    [personalPolicy?.id]: {
+                        iou: {
                             name: revertedLastUsedPaymentMethod,
                             bankAccountID: null,
-                        } }, (!revertedLastUsedPaymentMethod ? { lastUsed: { name: null, bankAccountID: null } } : {})),
-                    _a),
+                        },
+                        ...(!revertedLastUsedPaymentMethod ? { lastUsed: { name: null, bankAccountID: null } } : {}),
+                    },
+                },
             });
-            (_j = onyxData.failureData) === null || _j === void 0 ? void 0 : _j.push({
+            onyxData.failureData?.push({
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-                value: (_b = {},
-                    _b[personalPolicy === null || personalPolicy === void 0 ? void 0 : personalPolicy.id] = {
+                value: {
+                    [personalPolicy?.id]: {
                         expense: {
-                            name: (_k = lastUsedPaymentMethod.iou) === null || _k === void 0 ? void 0 : _k.name,
-                            bankAccountID: (_l = lastUsedPaymentMethod.iou) === null || _l === void 0 ? void 0 : _l.bankAccountID,
+                            name: lastUsedPaymentMethod.iou?.name,
+                            bankAccountID: lastUsedPaymentMethod.iou?.bankAccountID,
                         },
                         lastUsed: {
-                            name: (_m = lastUsedPaymentMethod.lastUsed) === null || _m === void 0 ? void 0 : _m.name,
-                            bankAccountID: (_o = lastUsedPaymentMethod.lastUsed) === null || _o === void 0 ? void 0 : _o.bankAccountID,
+                            name: lastUsedPaymentMethod.lastUsed?.name,
+                            bankAccountID: lastUsedPaymentMethod.lastUsed?.bankAccountID,
                         },
                     },
-                    _b),
+                },
             });
         }
-        if (((_p = lastUsedPaymentMethod === null || lastUsedPaymentMethod === void 0 ? void 0 : lastUsedPaymentMethod.expense) === null || _p === void 0 ? void 0 : _p.name) === CONST_1.default.IOU.PAYMENT_TYPE.VBBA) {
-            var revertedLastUsedPaymentMethod = lastUsedPaymentMethod.lastUsed.name !== CONST_1.default.IOU.PAYMENT_TYPE.VBBA ? lastUsedPaymentMethod.lastUsed.name : null;
-            (_q = onyxData.successData) === null || _q === void 0 ? void 0 : _q.push({
+        if (lastUsedPaymentMethod?.expense?.name === CONST_1.default.IOU.PAYMENT_TYPE.VBBA) {
+            const revertedLastUsedPaymentMethod = lastUsedPaymentMethod.lastUsed.name !== CONST_1.default.IOU.PAYMENT_TYPE.VBBA ? lastUsedPaymentMethod.lastUsed.name : null;
+            onyxData.successData?.push({
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-                value: (_c = {},
-                    _c[paymentMethodID] = __assign({ expense: {
+                value: {
+                    [paymentMethodID]: {
+                        expense: {
                             name: revertedLastUsedPaymentMethod,
                             bankAccountID: null,
-                        } }, (!revertedLastUsedPaymentMethod ? { lastUsed: { name: null, bankAccountID: null } } : {})),
-                    _c),
+                        },
+                        ...(!revertedLastUsedPaymentMethod ? { lastUsed: { name: null, bankAccountID: null } } : {}),
+                    },
+                },
             });
-            (_r = onyxData.failureData) === null || _r === void 0 ? void 0 : _r.push({
+            onyxData.failureData?.push({
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD,
-                value: (_d = {},
-                    _d[paymentMethodID] = {
+                value: {
+                    [paymentMethodID]: {
                         expense: {
-                            name: (_s = lastUsedPaymentMethod.expense) === null || _s === void 0 ? void 0 : _s.name,
-                            bankAccountID: (_t = lastUsedPaymentMethod.expense) === null || _t === void 0 ? void 0 : _t.bankAccountID,
+                            name: lastUsedPaymentMethod.expense?.name,
+                            bankAccountID: lastUsedPaymentMethod.expense?.bankAccountID,
                         },
                         lastUsed: {
-                            name: (_u = lastUsedPaymentMethod.lastUsed) === null || _u === void 0 ? void 0 : _u.name,
-                            bankAccountID: (_v = lastUsedPaymentMethod.lastUsed) === null || _v === void 0 ? void 0 : _v.bankAccountID,
+                            name: lastUsedPaymentMethod.lastUsed?.name,
+                            bankAccountID: lastUsedPaymentMethod.lastUsed?.bankAccountID,
                         },
                     },
-                    _d),
+                },
             });
         }
     });
@@ -466,15 +456,20 @@ function updatePersonalInformationForBankAccount(bankAccountID, params, policyID
     if (!policyID) {
         return;
     }
-    API.write(types_1.WRITE_COMMANDS.UPDATE_PERSONAL_INFORMATION_FOR_BANK_ACCOUNT, __assign(__assign({}, params), { bankAccountID: bankAccountID, policyID: policyID, confirm: isConfirmPage }), getVBBADataForOnyx(CONST_1.default.BANK_ACCOUNT.STEP.REQUESTOR, isConfirmPage));
+    API.write(types_1.WRITE_COMMANDS.UPDATE_PERSONAL_INFORMATION_FOR_BANK_ACCOUNT, {
+        ...params,
+        bankAccountID,
+        policyID,
+        confirm: isConfirmPage,
+    }, getVBBADataForOnyx(CONST_1.default.BANK_ACCOUNT.STEP.REQUESTOR, isConfirmPage));
 }
 function validateBankAccount(bankAccountID, validateCode, policyID) {
-    var parameters = {
-        bankAccountID: bankAccountID,
-        validateCode: validateCode,
-        policyID: policyID,
+    const parameters = {
+        bankAccountID,
+        validateCode,
+        policyID,
     };
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -508,13 +503,13 @@ function validateBankAccount(bankAccountID, validateCode, policyID) {
     API.write(types_1.WRITE_COMMANDS.VALIDATE_BANK_ACCOUNT_WITH_TRANSACTIONS, parameters, onyxData);
 }
 function getCorpayBankAccountFields(country, currency) {
-    var parameters = {
+    const parameters = {
         countryISO: country,
-        currency: currency,
+        currency,
         isWithdrawal: true,
         isBusinessBankAccount: true,
     };
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -549,14 +544,14 @@ function getCorpayBankAccountFields(country, currency) {
     return API.read(types_1.READ_COMMANDS.GET_CORPAY_BANK_ACCOUNT_FIELDS, parameters, onyxData);
 }
 function createCorpayBankAccount(fields, policyID) {
-    var parameters = {
+    const parameters = {
         type: 1,
         isSavings: false,
         isWithdrawal: true,
         inputs: JSON.stringify(fields),
-        policyID: policyID,
+        policyID,
     };
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -597,11 +592,11 @@ function getCorpayOnboardingFields(country) {
     return API.read(types_1.READ_COMMANDS.GET_CORPAY_ONBOARDING_FIELDS, { countryISO: country });
 }
 function saveCorpayOnboardingCompanyDetails(parameters, bankAccountID) {
-    var formattedParams = {
+    const formattedParams = {
         inputs: JSON.stringify(parameters),
-        bankAccountID: bankAccountID,
+        bankAccountID,
     };
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -637,7 +632,7 @@ function saveCorpayOnboardingCompanyDetails(parameters, bankAccountID) {
     return API.write(types_1.WRITE_COMMANDS.SAVE_CORPAY_ONBOARDING_COMPANY_DETAILS, formattedParams, onyxData);
 }
 function saveCorpayOnboardingBeneficialOwners(parameters) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -673,7 +668,7 @@ function saveCorpayOnboardingBeneficialOwners(parameters) {
     return API.write(types_1.WRITE_COMMANDS.SAVE_CORPAY_ONBOARDING_BENEFICIAL_OWNER, parameters, onyxData);
 }
 function saveCorpayOnboardingDirectorInformation(parameters) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -734,7 +729,7 @@ function saveCorpayOnboardingDirectorInformation(parameters) {
     return API.write(types_1.WRITE_COMMANDS.SAVE_CORPAY_ONBOARDING_DIRECTOR_INFORMATION, parameters, onyxData);
 }
 function askForCorpaySignerInformation(parameters) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -773,7 +768,7 @@ function clearReimbursementAccount() {
     react_native_onyx_1.default.set(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, null);
 }
 function finishCorpayBankAccountOnboarding(parameters) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -809,7 +804,7 @@ function finishCorpayBankAccountOnboarding(parameters) {
     return API.write(types_1.WRITE_COMMANDS.FINISH_CORPAY_BANK_ACCOUNT_ONBOARDING, parameters, onyxData);
 }
 function sendReminderForCorpaySignerInformation(parameters) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -845,7 +840,7 @@ function sendReminderForCorpaySignerInformation(parameters) {
     return API.write(types_1.WRITE_COMMANDS.SEND_REMINDER_FOR_CORPAY_SINGER_INFORMATION, parameters, onyxData);
 }
 function enableGlobalReimbursementsForUSDBankAccount(parameters) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -915,7 +910,7 @@ function clearReimbursementAccountSendReminderForCorpaySignerInformation() {
  * @param policyID - policy ID
  */
 function openReimbursementAccountPage(stepToOpen, subStep, localCurrentStep, policyID) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -944,11 +939,11 @@ function openReimbursementAccountPage(stepToOpen, subStep, localCurrentStep, pol
             },
         ],
     };
-    var parameters = {
-        stepToOpen: stepToOpen,
-        subStep: subStep,
-        localCurrentStep: localCurrentStep,
-        policyID: policyID,
+    const parameters = {
+        stepToOpen,
+        subStep,
+        localCurrentStep,
+        policyID,
     };
     return API.read(types_1.READ_COMMANDS.OPEN_REIMBURSEMENT_ACCOUNT_PAGE, parameters, onyxData);
 }
@@ -959,28 +954,41 @@ function openReimbursementAccountPage(stepToOpen, subStep, localCurrentStep, pol
  * @param isConfirmPage - If we're submitting from the confirmation substep, to trigger all external checks
  */
 function updateCompanyInformationForBankAccount(bankAccountID, params, policyID, isConfirmPage) {
-    API.write(types_1.WRITE_COMMANDS.UPDATE_COMPANY_INFORMATION_FOR_BANK_ACCOUNT, __assign(__assign({}, params), { bankAccountID: bankAccountID, policyID: policyID, confirm: isConfirmPage }), getVBBADataForOnyx(CONST_1.default.BANK_ACCOUNT.STEP.COMPANY, isConfirmPage));
+    API.write(types_1.WRITE_COMMANDS.UPDATE_COMPANY_INFORMATION_FOR_BANK_ACCOUNT, {
+        ...params,
+        bankAccountID,
+        policyID,
+        confirm: isConfirmPage,
+    }, getVBBADataForOnyx(CONST_1.default.BANK_ACCOUNT.STEP.COMPANY, isConfirmPage));
 }
 /**
  * Add beneficial owners for the bank account and verify the accuracy of the information provided
  * @param params - Beneficial Owners step form params
  */
 function updateBeneficialOwnersForBankAccount(bankAccountID, params, policyID) {
-    API.write(types_1.WRITE_COMMANDS.UPDATE_BENEFICIAL_OWNERS_FOR_BANK_ACCOUNT, __assign(__assign({}, params), { bankAccountID: bankAccountID, policyID: policyID }), getVBBADataForOnyx());
+    API.write(types_1.WRITE_COMMANDS.UPDATE_BENEFICIAL_OWNERS_FOR_BANK_ACCOUNT, {
+        ...params,
+        bankAccountID,
+        policyID,
+    }, getVBBADataForOnyx());
 }
 /**
  * Accept the ACH terms and conditions and verify the accuracy of the information provided
  * @param params - Verification step form params
  */
 function acceptACHContractForBankAccount(bankAccountID, params, policyID) {
-    API.write(types_1.WRITE_COMMANDS.ACCEPT_ACH_CONTRACT_FOR_BANK_ACCOUNT, __assign(__assign({}, params), { bankAccountID: bankAccountID, policyID: policyID }), getVBBADataForOnyx());
+    API.write(types_1.WRITE_COMMANDS.ACCEPT_ACH_CONTRACT_FOR_BANK_ACCOUNT, {
+        ...params,
+        bankAccountID,
+        policyID,
+    }, getVBBADataForOnyx());
 }
 /**
  * Create the bank account with manually entered data.
  */
 function connectBankAccountManually(bankAccountID, bankAccount, policyID) {
-    var parameters = {
-        bankAccountID: bankAccountID,
+    const parameters = {
+        bankAccountID,
         routingNumber: bankAccount.routingNumber,
         accountNumber: bankAccount.accountNumber,
         bank: bankAccount.bankName,
@@ -988,7 +996,7 @@ function connectBankAccountManually(bankAccountID, bankAccount, policyID) {
         plaidAccessToken: bankAccount.plaidAccessToken,
         plaidMask: bankAccount.mask,
         isSavings: bankAccount.isSavings,
-        policyID: policyID,
+        policyID,
     };
     API.write(types_1.WRITE_COMMANDS.CONNECT_BANK_ACCOUNT_MANUALLY, parameters, getVBBADataForOnyx(CONST_1.default.BANK_ACCOUNT.STEP.BANK_ACCOUNT));
 }
@@ -996,16 +1004,16 @@ function connectBankAccountManually(bankAccountID, bankAccount, policyID) {
  * Verify the user's identity via Onfido
  */
 function verifyIdentityForBankAccount(bankAccountID, onfidoData, policyID) {
-    var parameters = {
-        bankAccountID: bankAccountID,
+    const parameters = {
+        bankAccountID,
         onfidoData: JSON.stringify(onfidoData),
-        policyID: policyID,
+        policyID,
     };
     API.write(types_1.WRITE_COMMANDS.VERIFY_IDENTITY_FOR_BANK_ACCOUNT, parameters, getVBBADataForOnyx());
 }
 function openWorkspaceView(policyID) {
     API.read(types_1.READ_COMMANDS.OPEN_WORKSPACE_VIEW, {
-        policyID: policyID,
+        policyID,
     }, {
         optimisticData: [
             {
@@ -1037,11 +1045,11 @@ function openWorkspaceView(policyID) {
     });
 }
 function handlePlaidError(bankAccountID, error, errorDescription, plaidRequestID) {
-    var parameters = {
-        bankAccountID: bankAccountID,
-        error: error,
-        errorDescription: errorDescription,
-        plaidRequestID: plaidRequestID,
+    const parameters = {
+        bankAccountID,
+        error,
+        errorDescription,
+        plaidRequestID,
     };
     API.write(types_1.WRITE_COMMANDS.BANK_ACCOUNT_HANDLE_PLAID_ERROR, parameters);
 }
@@ -1049,17 +1057,17 @@ function handlePlaidError(bankAccountID, error, errorDescription, plaidRequestID
  * Set the reimbursement account loading so that it happens right away, instead of when the API command is processed.
  */
 function setReimbursementAccountLoading(isLoading) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { isLoading: isLoading });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { isLoading });
 }
 function validatePlaidSelection(values) {
-    var errorFields = {};
+    const errorFields = {};
     if (!values.selectedPlaidAccountID) {
         errorFields.selectedPlaidAccountID = (0, Localize_1.translateLocal)('bankAccount.error.youNeedToSelectAnOption');
     }
     return errorFields;
 }
 function fetchCorpayFields(bankCountry, bankCurrency, isWithdrawal, isBusinessBankAccount) {
-    API.write(types_1.WRITE_COMMANDS.GET_CORPAY_BANK_ACCOUNT_FIELDS, { countryISO: bankCountry, currency: bankCurrency, isWithdrawal: isWithdrawal, isBusinessBankAccount: isBusinessBankAccount }, {
+    API.write(types_1.WRITE_COMMANDS.GET_CORPAY_BANK_ACCOUNT_FIELDS, { countryISO: bankCountry, currency: bankCurrency, isWithdrawal, isBusinessBankAccount }, {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -1072,8 +1080,8 @@ function fetchCorpayFields(bankCountry, bankCurrency, isWithdrawal, isBusinessBa
                 onyxMethod: react_native_onyx_1.default.METHOD.SET,
                 key: ONYXKEYS_1.default.FORMS.INTERNATIONAL_BANK_ACCOUNT_FORM_DRAFT,
                 value: {
-                    bankCountry: bankCountry,
-                    bankCurrency: bankCurrency !== null && bankCurrency !== void 0 ? bankCurrency : null,
+                    bankCountry,
+                    bankCurrency: bankCurrency ?? null,
                 },
             },
         ],
@@ -1089,13 +1097,22 @@ function fetchCorpayFields(bankCountry, bankCurrency, isWithdrawal, isBusinessBa
     });
 }
 function createCorpayBankAccountForWalletFlow(data, classification, destinationCountry, preferredMethod) {
-    var inputData = __assign(__assign({}, data), { classification: classification, destinationCountry: destinationCountry, preferredMethod: preferredMethod, setupType: 'manual', fieldsType: 'international', country: data.bankCountry, currency: data.bankCurrency });
-    var parameters = {
+    const inputData = {
+        ...data,
+        classification,
+        destinationCountry,
+        preferredMethod,
+        setupType: 'manual',
+        fieldsType: 'international',
+        country: data.bankCountry,
+        currency: data.bankCurrency,
+    };
+    const parameters = {
         isWithdrawal: false,
         isSavings: true,
         inputs: JSON.stringify(inputData),
     };
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,

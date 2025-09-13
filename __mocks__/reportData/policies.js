@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.policy420A = void 0;
-var connections_1 = require("./connections");
-var mccGroup = {
+const connections_1 = require("./connections");
+const mccGroup = {
     airlines: {
         category: 'Uncategorized',
         groupID: 'airlines',
@@ -16,7 +16,7 @@ var mccGroup = {
         groupID: 'goods',
     },
 };
-var customUnits = {
+const customUnits = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     '6XD9': {
         attributes: {
@@ -40,7 +40,7 @@ var customUnits = {
         },
     },
 };
-var fieldList = {
+const fieldList = {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     text_title: {
         defaultValue: '{report:type} {report:startdate}',
@@ -57,7 +57,7 @@ var fieldList = {
         values: [],
     },
 };
-var policy420A = {
+const policy420A = {
     isFromFullPolicy: false,
     id: '420A',
     name: 'Workspace with expensify checking card',
@@ -114,18 +114,18 @@ var policy420A = {
     autoReportingFrequency: 'immediate',
     autoReportingOffset: 1,
     connections: connections_1.default,
-    customUnits: customUnits,
+    customUnits,
     defaultBillable: false,
     disabledFields: {
         defaultBillable: true,
         reimbursable: false,
     },
-    fieldList: fieldList,
+    fieldList,
     harvesting: {
         enabled: false,
     },
     hasMultipleTagLists: false,
-    mccGroup: mccGroup,
+    mccGroup,
     preventSelfApproval: false,
     reimbursementChoice: 'reimburseManual',
     requiresCategory: true,

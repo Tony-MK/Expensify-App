@@ -1,27 +1,16 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var CalendarPicker_1 = require("@components/DatePicker/CalendarPicker");
-var MenuItem_1 = require("@components/MenuItem");
-var SingleSelectListItem_1 = require("@components/SelectionList/SingleSelectListItem");
-var SpacerView_1 = require("@components/SpacerView");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const CalendarPicker_1 = require("@components/DatePicker/CalendarPicker");
+const MenuItem_1 = require("@components/MenuItem");
+const SingleSelectListItem_1 = require("@components/SelectionList/SingleSelectListItem");
+const SpacerView_1 = require("@components/SpacerView");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
+const CONST_1 = require("@src/CONST");
 /**
  * SearchDatePresetFilterBase is a partially controlled component:
  * - The selected date modifier is controlled.
@@ -32,79 +21,79 @@ var CONST_1 = require("@src/CONST");
  * - On save: if a date modifier is selected (i.e. user clicked save at the calendar picker) you should `setDateValueOfSelectedDateModifier` otherwise `getDateValues`
  * - On reset: if a date modifier is selected (i.e. user clicked reset at the calendar picker) you should `clearDateValueOfSelectedDateModifier` otherwise `clearDateValues`
  */
-function SearchDatePresetFilterBase(_a) {
-    var defaultDateValues = _a.defaultDateValues, selectedDateModifier = _a.selectedDateModifier, onSelectDateModifier = _a.onSelectDateModifier, presets = _a.presets, ref = _a.ref;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var shouldShowHorizontalRule = !!(presets === null || presets === void 0 ? void 0 : presets.length);
-    var _b = (0, react_1.useState)(defaultDateValues), dateValues = _b[0], setDateValues = _b[1];
-    var setDateValue = (0, react_1.useCallback)(function (dateModifier, value) {
-        setDateValues(function (prevDateValues) {
-            var _a, _b, _c;
+function SearchDatePresetFilterBase({ defaultDateValues, selectedDateModifier, onSelectDateModifier, presets, ref }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const shouldShowHorizontalRule = !!presets?.length;
+    const [dateValues, setDateValues] = (0, react_1.useState)(defaultDateValues);
+    const setDateValue = (0, react_1.useCallback)((dateModifier, value) => {
+        setDateValues((prevDateValues) => {
             if (dateModifier === CONST_1.default.SEARCH.DATE_MODIFIERS.ON && (0, SearchQueryUtils_1.isSearchDatePreset)(value)) {
-                return _a = {},
-                    _a[CONST_1.default.SEARCH.DATE_MODIFIERS.ON] = value,
-                    _a[CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE] = undefined,
-                    _a[CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER] = undefined,
-                    _a;
+                return {
+                    [CONST_1.default.SEARCH.DATE_MODIFIERS.ON]: value,
+                    [CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE]: undefined,
+                    [CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER]: undefined,
+                };
             }
             if (dateModifier !== CONST_1.default.SEARCH.DATE_MODIFIERS.ON && (0, SearchQueryUtils_1.isSearchDatePreset)(prevDateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.ON])) {
-                return __assign(__assign({}, prevDateValues), (_b = {}, _b[dateModifier] = value, _b[CONST_1.default.SEARCH.DATE_MODIFIERS.ON] = undefined, _b));
+                return {
+                    ...prevDateValues,
+                    [dateModifier]: value,
+                    [CONST_1.default.SEARCH.DATE_MODIFIERS.ON]: undefined,
+                };
             }
-            return __assign(__assign({}, prevDateValues), (_c = {}, _c[dateModifier] = value, _c));
+            return { ...prevDateValues, [dateModifier]: value };
         });
     }, []);
-    var dateDisplayValues = (0, react_1.useMemo)(function () {
-        var _a;
-        var dateOn = dateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.ON];
-        var dateAfter = dateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER];
-        var dateBefore = dateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE];
-        return _a = {},
+    const dateDisplayValues = (0, react_1.useMemo)(() => {
+        const dateOn = dateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.ON];
+        const dateAfter = dateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER];
+        const dateBefore = dateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE];
+        return {
             // dateOn could be a preset e.g. Last month which should not be displayed as the On field
-            _a[CONST_1.default.SEARCH.DATE_MODIFIERS.ON] = (0, SearchQueryUtils_1.isSearchDatePreset)(dateOn) ? undefined : dateOn,
-            _a[CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER] = dateAfter,
-            _a[CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE] = dateBefore,
-            _a;
+            [CONST_1.default.SEARCH.DATE_MODIFIERS.ON]: (0, SearchQueryUtils_1.isSearchDatePreset)(dateOn) ? undefined : dateOn,
+            [CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER]: dateAfter,
+            [CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE]: dateBefore,
+        };
     }, [dateValues]);
-    var getInitialEphemeralDateValue = (0, react_1.useCallback)(function (dateModifier) { return (dateModifier ? dateDisplayValues[dateModifier] : undefined); }, [dateDisplayValues]);
-    var _c = (0, react_1.useState)(function () { return getInitialEphemeralDateValue(selectedDateModifier); }), ephemeralDateValue = _c[0], setEphemeralDateValue = _c[1];
-    var resetEphemeralDateValue = (0, react_1.useCallback)(function (dateModifier) { return setEphemeralDateValue(getInitialEphemeralDateValue(dateModifier)); }, [getInitialEphemeralDateValue]);
-    var selectDateModifier = (0, react_1.useCallback)(function (dateModifier) {
+    const getInitialEphemeralDateValue = (0, react_1.useCallback)((dateModifier) => (dateModifier ? dateDisplayValues[dateModifier] : undefined), [dateDisplayValues]);
+    const [ephemeralDateValue, setEphemeralDateValue] = (0, react_1.useState)(() => getInitialEphemeralDateValue(selectedDateModifier));
+    const resetEphemeralDateValue = (0, react_1.useCallback)((dateModifier) => setEphemeralDateValue(getInitialEphemeralDateValue(dateModifier)), [getInitialEphemeralDateValue]);
+    const selectDateModifier = (0, react_1.useCallback)((dateModifier) => {
         resetEphemeralDateValue(dateModifier);
         onSelectDateModifier(dateModifier);
     }, [resetEphemeralDateValue, onSelectDateModifier]);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        getDateValues: function () {
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        getDateValues() {
             return dateValues;
         },
-        clearDateValues: function () {
-            var _a;
-            setDateValues((_a = {}, _a[CONST_1.default.SEARCH.DATE_MODIFIERS.ON] = undefined, _a[CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE] = undefined, _a[CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER] = undefined, _a));
+        clearDateValues() {
+            setDateValues({ [CONST_1.default.SEARCH.DATE_MODIFIERS.ON]: undefined, [CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE]: undefined, [CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER]: undefined });
         },
-        setDateValueOfSelectedDateModifier: function () {
+        setDateValueOfSelectedDateModifier() {
             if (!selectedDateModifier) {
                 return;
             }
             setDateValue(selectedDateModifier, ephemeralDateValue);
         },
-        clearDateValueOfSelectedDateModifier: function () {
+        clearDateValueOfSelectedDateModifier() {
             if (!selectedDateModifier) {
                 return;
             }
             setDateValue(selectedDateModifier, undefined);
         },
-    }); }, [selectedDateModifier, dateValues, ephemeralDateValue, setDateValue]);
+    }), [selectedDateModifier, dateValues, ephemeralDateValue, setDateValue]);
     return !selectedDateModifier ? (<>
-            {presets === null || presets === void 0 ? void 0 : presets.map(function (preset) { return (<SingleSelectListItem_1.default key={preset} showTooltip item={{
-                text: translate("search.filters.date.presets.".concat(preset)),
+            {presets?.map((preset) => (<SingleSelectListItem_1.default key={preset} showTooltip item={{
+                text: translate(`search.filters.date.presets.${preset}`),
                 isSelected: dateValues[CONST_1.default.SEARCH.DATE_MODIFIERS.ON] === preset,
-            }} onSelectRow={function () { return setDateValue(CONST_1.default.SEARCH.DATE_MODIFIERS.ON, preset); }} wrapperStyle={styles.flexReset}/>); })}
+            }} onSelectRow={() => setDateValue(CONST_1.default.SEARCH.DATE_MODIFIERS.ON, preset)} wrapperStyle={styles.flexReset}/>))}
             {shouldShowHorizontalRule && (<SpacerView_1.default shouldShow style={[StyleUtils.getBorderColorStyle(theme.border), styles.mh3]}/>)}
-            <MenuItem_1.default shouldShowRightIcon viewMode={CONST_1.default.OPTION_MODE.COMPACT} title={translate('common.on')} description={dateDisplayValues[CONST_1.default.SEARCH.DATE_MODIFIERS.ON]} onPress={function () { return selectDateModifier(CONST_1.default.SEARCH.DATE_MODIFIERS.ON); }}/>
-            <MenuItem_1.default shouldShowRightIcon viewMode={CONST_1.default.OPTION_MODE.COMPACT} title={translate('common.after')} description={dateDisplayValues[CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER]} onPress={function () { return selectDateModifier(CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER); }}/>
-            <MenuItem_1.default shouldShowRightIcon viewMode={CONST_1.default.OPTION_MODE.COMPACT} title={translate('common.before')} description={dateDisplayValues[CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE]} onPress={function () { return selectDateModifier(CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE); }}/>
+            <MenuItem_1.default shouldShowRightIcon viewMode={CONST_1.default.OPTION_MODE.COMPACT} title={translate('common.on')} description={dateDisplayValues[CONST_1.default.SEARCH.DATE_MODIFIERS.ON]} onPress={() => selectDateModifier(CONST_1.default.SEARCH.DATE_MODIFIERS.ON)}/>
+            <MenuItem_1.default shouldShowRightIcon viewMode={CONST_1.default.OPTION_MODE.COMPACT} title={translate('common.after')} description={dateDisplayValues[CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER]} onPress={() => selectDateModifier(CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER)}/>
+            <MenuItem_1.default shouldShowRightIcon viewMode={CONST_1.default.OPTION_MODE.COMPACT} title={translate('common.before')} description={dateDisplayValues[CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE]} onPress={() => selectDateModifier(CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE)}/>
         </>) : (<CalendarPicker_1.default value={ephemeralDateValue} onSelected={setEphemeralDateValue} minDate={CONST_1.default.CALENDAR_PICKER.MIN_DATE} maxDate={CONST_1.default.CALENDAR_PICKER.MAX_DATE}/>);
 }
 SearchDatePresetFilterBase.displayName = 'SearchDatePresetFilterBase';

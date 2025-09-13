@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ReportUtils_1 = require("@libs/ReportUtils");
-function useIsReportReadyToDisplay(report, reportIDFromRoute, isReportArchived) {
-    if (isReportArchived === void 0) { isReportArchived = false; }
+const react_1 = require("react");
+const ReportUtils_1 = require("@libs/ReportUtils");
+function useIsReportReadyToDisplay(report, reportIDFromRoute, isReportArchived = false) {
     /**
      * When false the report is not ready to be fully displayed
      */
-    var isCurrentReportLoadedFromOnyx = (0, react_1.useMemo)(function () {
+    const isCurrentReportLoadedFromOnyx = (0, react_1.useMemo)(() => {
         // This is necessary so that when we are retrieving the next report data from Onyx the ReportActionsView will remount completely
-        var isTransitioning = report && (report === null || report === void 0 ? void 0 : report.reportID) !== reportIDFromRoute;
-        return reportIDFromRoute !== '' && !!(report === null || report === void 0 ? void 0 : report.reportID) && !isTransitioning;
+        const isTransitioning = report && report?.reportID !== reportIDFromRoute;
+        return reportIDFromRoute !== '' && !!report?.reportID && !isTransitioning;
     }, [report, reportIDFromRoute]);
-    var isEditingDisabled = (0, react_1.useMemo)(function () { return !isCurrentReportLoadedFromOnyx || !(0, ReportUtils_1.canUserPerformWriteAction)(report, isReportArchived); }, [isCurrentReportLoadedFromOnyx, report, isReportArchived]);
+    const isEditingDisabled = (0, react_1.useMemo)(() => !isCurrentReportLoadedFromOnyx || !(0, ReportUtils_1.canUserPerformWriteAction)(report, isReportArchived), [isCurrentReportLoadedFromOnyx, report, isReportArchived]);
     return {
-        isCurrentReportLoadedFromOnyx: isCurrentReportLoadedFromOnyx,
-        isEditingDisabled: isEditingDisabled,
+        isCurrentReportLoadedFromOnyx,
+        isEditingDisabled,
     };
 }
 exports.default = useIsReportReadyToDisplay;

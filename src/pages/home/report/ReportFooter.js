@@ -1,65 +1,52 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var fast_equals_1 = require("fast-equals");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AnonymousReportFooter_1 = require("@components/AnonymousReportFooter");
-var ArchivedReportFooter_1 = require("@components/ArchivedReportFooter");
-var Banner_1 = require("@components/Banner");
-var BlockedReportFooter_1 = require("@components/BlockedReportFooter");
-var Expensicons = require("@components/Icon/Expensicons");
-var OfflineIndicator_1 = require("@components/OfflineIndicator");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var SwipeableView_1 = require("@components/SwipeableView");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useShortMentionsList_1 = require("@hooks/useShortMentionsList");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var Report_1 = require("@libs/actions/Report");
-var Task_1 = require("@libs/actions/Task");
-var Log_1 = require("@libs/Log");
-var LoginUtils_1 = require("@libs/LoginUtils");
-var NetworkStore_1 = require("@libs/Network/NetworkStore");
-var ParsingUtils_1 = require("@libs/ParsingUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var UserUtils_1 = require("@libs/UserUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ReportActionCompose_1 = require("./ReportActionCompose/ReportActionCompose");
-var SystemChatReportFooterMessage_1 = require("./SystemChatReportFooterMessage");
-function ReportFooter(_a) {
-    var _b;
-    var lastReportAction = _a.lastReportAction, pendingAction = _a.pendingAction, _c = _a.report, report = _c === void 0 ? { reportID: '-1' } : _c, reportMetadata = _a.reportMetadata, policy = _a.policy, _d = _a.isComposerFullSize, isComposerFullSize = _d === void 0 ? false : _d, onComposerBlur = _a.onComposerBlur, onComposerFocus = _a.onComposerFocus, reportTransactions = _a.reportTransactions;
-    var styles = (0, useThemeStyles_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var translate = (0, useLocalize_1.default)().translate;
-    var windowWidth = (0, useWindowDimensions_1.default)().windowWidth;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var personalDetail = (0, useCurrentUserPersonalDetails_1.default)();
-    var _e = (0, useOnyx_1.default)(ONYXKEYS_1.default.SHOULD_SHOW_COMPOSE_INPUT, { canBeMissing: true })[0], shouldShowComposeInput = _e === void 0 ? false : _e;
-    var quickAction = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_QUICK_ACTION_GLOBAL_CREATE, { canBeMissing: true })[0];
-    var _f = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: function (session) { return (session === null || session === void 0 ? void 0 : session.authTokenType) === CONST_1.default.AUTH_TOKEN_TYPES.ANONYMOUS; }, canBeMissing: false })[0], isAnonymousUser = _f === void 0 ? false : _f;
-    var isBlockedFromChat = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_BLOCKED_FROM_CHAT, {
-        selector: function (dateString) {
+const expensify_common_1 = require("expensify-common");
+const fast_equals_1 = require("fast-equals");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AnonymousReportFooter_1 = require("@components/AnonymousReportFooter");
+const ArchivedReportFooter_1 = require("@components/ArchivedReportFooter");
+const Banner_1 = require("@components/Banner");
+const BlockedReportFooter_1 = require("@components/BlockedReportFooter");
+const Expensicons = require("@components/Icon/Expensicons");
+const OfflineIndicator_1 = require("@components/OfflineIndicator");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const SwipeableView_1 = require("@components/SwipeableView");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useShortMentionsList_1 = require("@hooks/useShortMentionsList");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const Report_1 = require("@libs/actions/Report");
+const Task_1 = require("@libs/actions/Task");
+const Log_1 = require("@libs/Log");
+const LoginUtils_1 = require("@libs/LoginUtils");
+const NetworkStore_1 = require("@libs/Network/NetworkStore");
+const ParsingUtils_1 = require("@libs/ParsingUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const UserUtils_1 = require("@libs/UserUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ReportActionCompose_1 = require("./ReportActionCompose/ReportActionCompose");
+const SystemChatReportFooterMessage_1 = require("./SystemChatReportFooterMessage");
+function ReportFooter({ lastReportAction, pendingAction, report = { reportID: '-1' }, reportMetadata, policy, isComposerFullSize = false, onComposerBlur, onComposerFocus, reportTransactions, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { windowWidth } = (0, useWindowDimensions_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const personalDetail = (0, useCurrentUserPersonalDetails_1.default)();
+    const [shouldShowComposeInput = false] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SHOULD_SHOW_COMPOSE_INPUT, { canBeMissing: true });
+    const [quickAction] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_QUICK_ACTION_GLOBAL_CREATE, { canBeMissing: true });
+    const [isAnonymousUser = false] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: (session) => session?.authTokenType === CONST_1.default.AUTH_TOKEN_TYPES.ANONYMOUS, canBeMissing: false });
+    const [isBlockedFromChat] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_BLOCKED_FROM_CHAT, {
+        selector: (dateString) => {
             if (!dateString) {
                 return false;
             }
@@ -68,49 +55,48 @@ function ReportFooter(_a) {
             }
             catch (error) {
                 // If the NVP is malformed, we'll assume the user is not blocked from chat. This is not expected, so if it happens we'll log an alert.
-                Log_1.default.alert("[".concat(CONST_1.default.ERROR.ENSURE_BUG_BOT, "] Found malformed ").concat(ONYXKEYS_1.default.NVP_BLOCKED_FROM_CHAT, " nvp"), dateString);
+                Log_1.default.alert(`[${CONST_1.default.ERROR.ENSURE_BUG_BOT}] Found malformed ${ONYXKEYS_1.default.NVP_BLOCKED_FROM_CHAT} nvp`, dateString);
                 return false;
             }
         },
         canBeMissing: true,
-    })[0];
-    var chatFooterStyles = __assign(__assign({}, styles.chatFooter), { minHeight: !isOffline ? CONST_1.default.CHAT_FOOTER_MIN_HEIGHT : 0 });
-    var isReportArchived = (0, useReportIsArchived_1.default)(report === null || report === void 0 ? void 0 : report.reportID);
-    var isArchivedRoom = (0, ReportUtils_1.isArchivedNonExpenseReport)(report, isReportArchived);
-    var isSmallSizeLayout = windowWidth - (shouldUseNarrowLayout ? 0 : variables_1.default.sideBarWithLHBWidth) < variables_1.default.anonymousReportFooterBreakpoint;
+    });
+    const chatFooterStyles = { ...styles.chatFooter, minHeight: !isOffline ? CONST_1.default.CHAT_FOOTER_MIN_HEIGHT : 0 };
+    const isReportArchived = (0, useReportIsArchived_1.default)(report?.reportID);
+    const isArchivedRoom = (0, ReportUtils_1.isArchivedNonExpenseReport)(report, isReportArchived);
+    const isSmallSizeLayout = windowWidth - (shouldUseNarrowLayout ? 0 : variables_1.default.sideBarWithLHBWidth) < variables_1.default.anonymousReportFooterBreakpoint;
     // If a user just signed in and is viewing a public report, optimistically show the composer while loading the report, since they will have write access when the response comes back.
-    var shouldShowComposerOptimistically = !isAnonymousUser && (0, ReportUtils_1.isPublicRoom)(report) && !!(reportMetadata === null || reportMetadata === void 0 ? void 0 : reportMetadata.isLoadingInitialReportActions);
-    var canPerformWriteAction = (_b = (0, ReportUtils_1.canUserPerformWriteAction)(report, isReportArchived)) !== null && _b !== void 0 ? _b : shouldShowComposerOptimistically;
-    var shouldHideComposer = !canPerformWriteAction || isBlockedFromChat;
-    var canWriteInReport = (0, ReportUtils_1.canWriteInReport)(report);
-    var isSystemChat = (0, ReportUtils_1.isSystemChat)(report);
-    var isAdminsOnlyPostingRoom = (0, ReportUtils_1.isAdminsOnlyPostingRoom)(report);
-    var isUserPolicyAdmin = (0, PolicyUtils_1.isPolicyAdmin)(policy);
-    var allPersonalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var availableLoginsList = (0, useShortMentionsList_1.default)().availableLoginsList;
-    var currentUserEmail = (0, NetworkStore_1.getCurrentUserEmail)();
-    var handleCreateTask = (0, react_1.useCallback)(function (text) {
-        var _a, _b, _c;
-        var match = text.match(CONST_1.default.REGEX.TASK_TITLE_WITH_OPTIONAL_SHORT_MENTION);
+    const shouldShowComposerOptimistically = !isAnonymousUser && (0, ReportUtils_1.isPublicRoom)(report) && !!reportMetadata?.isLoadingInitialReportActions;
+    const canPerformWriteAction = (0, ReportUtils_1.canUserPerformWriteAction)(report, isReportArchived) ?? shouldShowComposerOptimistically;
+    const shouldHideComposer = !canPerformWriteAction || isBlockedFromChat;
+    const canWriteInReport = (0, ReportUtils_1.canWriteInReport)(report);
+    const isSystemChat = (0, ReportUtils_1.isSystemChat)(report);
+    const isAdminsOnlyPostingRoom = (0, ReportUtils_1.isAdminsOnlyPostingRoom)(report);
+    const isUserPolicyAdmin = (0, PolicyUtils_1.isPolicyAdmin)(policy);
+    const allPersonalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const { availableLoginsList } = (0, useShortMentionsList_1.default)();
+    const currentUserEmail = (0, NetworkStore_1.getCurrentUserEmail)();
+    const handleCreateTask = (0, react_1.useCallback)((text) => {
+        const match = text.match(CONST_1.default.REGEX.TASK_TITLE_WITH_OPTIONAL_SHORT_MENTION);
         if (!match) {
             return false;
         }
-        var title = match[3] ? match[3].trim().replace(/\n/g, ' ') : undefined;
+        let title = match[3] ? match[3].trim().replace(/\n/g, ' ') : undefined;
         if (!title) {
             return false;
         }
-        var mention = match[1] ? match[1].trim() : '';
-        var currentUserPrivateDomain = (0, LoginUtils_1.isEmailPublicDomain)(currentUserEmail !== null && currentUserEmail !== void 0 ? currentUserEmail : '') ? '' : expensify_common_1.Str.extractEmailDomain(currentUserEmail !== null && currentUserEmail !== void 0 ? currentUserEmail : '');
-        var mentionWithDomain = (_a = (0, ParsingUtils_1.addDomainToShortMention)(mention, availableLoginsList, currentUserPrivateDomain)) !== null && _a !== void 0 ? _a : mention;
-        var isValidMention = expensify_common_1.Str.isValidEmail(mentionWithDomain);
-        var assignee;
-        var assigneeChatReport;
+        const mention = match[1] ? match[1].trim() : '';
+        const currentUserPrivateDomain = (0, LoginUtils_1.isEmailPublicDomain)(currentUserEmail ?? '') ? '' : expensify_common_1.Str.extractEmailDomain(currentUserEmail ?? '');
+        const mentionWithDomain = (0, ParsingUtils_1.addDomainToShortMention)(mention, availableLoginsList, currentUserPrivateDomain) ?? mention;
+        const isValidMention = expensify_common_1.Str.isValidEmail(mentionWithDomain);
+        let assignee;
+        let assigneeChatReport;
         if (mentionWithDomain) {
             if (isValidMention) {
-                assignee = (_b = Object.values(allPersonalDetails !== null && allPersonalDetails !== void 0 ? allPersonalDetails : {}).find(function (value) { return (value === null || value === void 0 ? void 0 : value.login) === mentionWithDomain; })) !== null && _b !== void 0 ? _b : undefined;
-                if (!Object.keys(assignee !== null && assignee !== void 0 ? assignee : {}).length) {
-                    var assigneeAccountID = (0, UserUtils_1.generateAccountID)(mentionWithDomain);
-                    var optimisticDataForNewAssignee = (0, Task_1.setNewOptimisticAssignee)(mentionWithDomain, assigneeAccountID);
+                assignee = Object.values(allPersonalDetails ?? {}).find((value) => value?.login === mentionWithDomain) ?? undefined;
+                if (!Object.keys(assignee ?? {}).length) {
+                    const assigneeAccountID = (0, UserUtils_1.generateAccountID)(mentionWithDomain);
+                    const optimisticDataForNewAssignee = (0, Task_1.setNewOptimisticAssignee)(mentionWithDomain, assigneeAccountID);
                     assignee = optimisticDataForNewAssignee.assignee;
                     assigneeChatReport = optimisticDataForNewAssignee.assigneeReport;
                 }
@@ -118,24 +104,23 @@ function ReportFooter(_a) {
             else {
                 // If the mention is not valid, include it on the title.
                 // The mention could be invalid if it's a short mention and failed to be converted to a full mention.
-                title = "@".concat(mentionWithDomain, " ").concat(title);
+                title = `@${mentionWithDomain} ${title}`;
             }
         }
-        (0, Task_1.createTaskAndNavigate)(report.reportID, title, '', (_c = assignee === null || assignee === void 0 ? void 0 : assignee.login) !== null && _c !== void 0 ? _c : '', assignee === null || assignee === void 0 ? void 0 : assignee.accountID, assigneeChatReport, report.policyID, true, quickAction);
+        (0, Task_1.createTaskAndNavigate)(report.reportID, title, '', assignee?.login ?? '', assignee?.accountID, assigneeChatReport, report.policyID, true, quickAction);
         return true;
     }, [allPersonalDetails, availableLoginsList, currentUserEmail, quickAction, report.policyID, report.reportID]);
-    var onSubmitComment = (0, react_1.useCallback)(function (text) {
-        var _a;
-        var isTaskCreated = handleCreateTask(text);
+    const onSubmitComment = (0, react_1.useCallback)((text) => {
+        const isTaskCreated = handleCreateTask(text);
         if (isTaskCreated) {
             return;
         }
-        (0, Report_1.addComment)(report.reportID, text, (_a = personalDetail.timezone) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_TIME_ZONE, true);
+        (0, Report_1.addComment)(report.reportID, text, personalDetail.timezone ?? CONST_1.default.DEFAULT_TIME_ZONE, true);
     }, 
     // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     [report.reportID, handleCreateTask]);
-    var _g = (0, react_1.useState)(!shouldShowComposeInput), didHideComposerInput = _g[0], setDidHideComposerInput = _g[1];
-    (0, react_1.useEffect)(function () {
+    const [didHideComposerInput, setDidHideComposerInput] = (0, react_1.useState)(!shouldShowComposeInput);
+    (0, react_1.useEffect)(() => {
         if (didHideComposerInput || shouldShowComposeInput) {
             return;
         }
@@ -162,14 +147,11 @@ function ReportFooter(_a) {
         </>);
 }
 ReportFooter.displayName = 'ReportFooter';
-exports.default = (0, react_1.memo)(ReportFooter, function (prevProps, nextProps) {
-    var _a, _b, _c, _d;
-    return (0, fast_equals_1.deepEqual)(prevProps.report, nextProps.report) &&
-        prevProps.pendingAction === nextProps.pendingAction &&
-        prevProps.isComposerFullSize === nextProps.isComposerFullSize &&
-        prevProps.lastReportAction === nextProps.lastReportAction &&
-        (0, fast_equals_1.deepEqual)(prevProps.reportMetadata, nextProps.reportMetadata) &&
-        (0, fast_equals_1.deepEqual)((_a = prevProps.policy) === null || _a === void 0 ? void 0 : _a.employeeList, (_b = nextProps.policy) === null || _b === void 0 ? void 0 : _b.employeeList) &&
-        (0, fast_equals_1.deepEqual)((_c = prevProps.policy) === null || _c === void 0 ? void 0 : _c.role, (_d = nextProps.policy) === null || _d === void 0 ? void 0 : _d.role) &&
-        (0, fast_equals_1.deepEqual)(prevProps.reportTransactions, nextProps.reportTransactions);
-});
+exports.default = (0, react_1.memo)(ReportFooter, (prevProps, nextProps) => (0, fast_equals_1.deepEqual)(prevProps.report, nextProps.report) &&
+    prevProps.pendingAction === nextProps.pendingAction &&
+    prevProps.isComposerFullSize === nextProps.isComposerFullSize &&
+    prevProps.lastReportAction === nextProps.lastReportAction &&
+    (0, fast_equals_1.deepEqual)(prevProps.reportMetadata, nextProps.reportMetadata) &&
+    (0, fast_equals_1.deepEqual)(prevProps.policy?.employeeList, nextProps.policy?.employeeList) &&
+    (0, fast_equals_1.deepEqual)(prevProps.policy?.role, nextProps.policy?.role) &&
+    (0, fast_equals_1.deepEqual)(prevProps.reportTransactions, nextProps.reportTransactions));

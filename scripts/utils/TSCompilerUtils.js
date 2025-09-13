@@ -1,15 +1,6 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var typescript_1 = require("typescript");
+const typescript_1 = require("typescript");
 /**
  * Walk up the AST from a given node and return the nearest ancestor that matches a predicate.
  *
@@ -18,7 +9,7 @@ var typescript_1 = require("typescript");
  * @returns The nearest matching ancestor node, or undefined if none found.
  */
 function findAncestor(node, predicate) {
-    var current = node.parent;
+    let current = node.parent;
     while (current) {
         if (predicate(current)) {
             return current;
@@ -30,18 +21,17 @@ function findAncestor(node, predicate) {
 /**
  * Adds a default import statement to the provided SourceFile.
  */
-function addImport(sourceFile, identifierName, modulePath, isTypeOnly) {
-    if (isTypeOnly === void 0) { isTypeOnly = false; }
-    var newImport = typescript_1.default.factory.createImportDeclaration(undefined, typescript_1.default.factory.createImportClause(isTypeOnly, typescript_1.default.factory.createIdentifier(identifierName), undefined), typescript_1.default.factory.createStringLiteral(modulePath));
+function addImport(sourceFile, identifierName, modulePath, isTypeOnly = false) {
+    const newImport = typescript_1.default.factory.createImportDeclaration(undefined, typescript_1.default.factory.createImportClause(isTypeOnly, typescript_1.default.factory.createIdentifier(identifierName), undefined), typescript_1.default.factory.createStringLiteral(modulePath));
     // Find the index of the last import declaration
-    var lastImportIndex = -1;
-    for (var i = sourceFile.statements.length - 1; i >= 0; i--) {
+    let lastImportIndex = -1;
+    for (let i = sourceFile.statements.length - 1; i >= 0; i--) {
         if (typescript_1.default.isImportDeclaration(sourceFile.statements[i])) {
             lastImportIndex = i;
             break;
         }
     }
-    var updatedStatements = typescript_1.default.factory.createNodeArray(__spreadArray(__spreadArray(__spreadArray([], sourceFile.statements.slice(0, lastImportIndex + 1), true), [newImport], false), sourceFile.statements.slice(lastImportIndex + 1), true));
+    const updatedStatements = typescript_1.default.factory.createNodeArray([...sourceFile.statements.slice(0, lastImportIndex + 1), newImport, ...sourceFile.statements.slice(lastImportIndex + 1)]);
     return typescript_1.default.factory.updateSourceFile(sourceFile, updatedStatements);
 }
 /**
@@ -51,36 +41,32 @@ function addImport(sourceFile, identifierName, modulePath, isTypeOnly) {
  * disclaimer: I don't know how this should/will work for ASTs that don't share a common structure. For now, that's undefined behavior.
  */
 function traverseASTsInParallel(roots, visit) {
-    var _a;
     if (roots.length === 0) {
         return;
     }
-    var nodeMap = {};
-    for (var _i = 0, roots_1 = roots; _i < roots_1.length; _i++) {
-        var _b = roots_1[_i], label = _b.label, node = _b.node;
+    const nodeMap = {};
+    for (const { label, node } of roots) {
         nodeMap[label] = node;
     }
     visit(nodeMap);
     // Collect children per label
-    var childrenByLabel = new Map();
-    var minChildren = Infinity;
-    for (var _c = 0, roots_2 = roots; _c < roots_2.length; _c++) {
-        var _d = roots_2[_c], label = _d.label, node = _d.node;
-        var children = node.getChildren();
+    const childrenByLabel = new Map();
+    let minChildren = Infinity;
+    for (const { label, node } of roots) {
+        const children = node.getChildren();
         childrenByLabel.set(label, children);
         if (children.length < minChildren) {
             minChildren = children.length;
         }
     }
     // Traverse child nodes in parallel, stopping at the shortest list
-    for (var i = 0; i < minChildren; i++) {
-        var nextLevel = [];
-        for (var _e = 0, roots_3 = roots; _e < roots_3.length; _e++) {
-            var label = roots_3[_e].label;
-            var children = (_a = childrenByLabel.get(label)) !== null && _a !== void 0 ? _a : [];
-            var child = children.at(i);
+    for (let i = 0; i < minChildren; i++) {
+        const nextLevel = [];
+        for (const { label } of roots) {
+            const children = childrenByLabel.get(label) ?? [];
+            const child = children.at(i);
             if (child) {
-                nextLevel.push({ label: label, node: child });
+                nextLevel.push({ label, node: child });
             }
         }
         traverseASTsInParallel(nextLevel, visit);
@@ -91,14 +77,12 @@ function traverseASTsInParallel(roots, visit) {
  * Returns null if not found.
  */
 function findDefaultExport(sourceFile) {
-    for (var _i = 0, _a = sourceFile.statements; _i < _a.length; _i++) {
-        var statement = _a[_i];
+    for (const statement of sourceFile.statements) {
         if (typescript_1.default.isExportAssignment(statement) && !statement.isExportEquals) {
             return statement.expression;
         }
         if (typescript_1.default.isExportDeclaration(statement) && statement.exportClause && typescript_1.default.isNamedExports(statement.exportClause)) {
-            for (var _b = 0, _c = statement.exportClause.elements; _b < _c.length; _b++) {
-                var element = _c[_b];
+            for (const element of statement.exportClause.elements) {
                 if (element.name.text === 'default') {
                     return element.name;
                 }
@@ -111,21 +95,18 @@ function findDefaultExport(sourceFile) {
  * Resolves the identifier name to its declaration node within the source file.
  */
 function resolveDeclaration(name, sourceFile) {
-    var _a, _b;
-    for (var _i = 0, _c = sourceFile.statements; _i < _c.length; _i++) {
-        var statement = _c[_i];
+    for (const statement of sourceFile.statements) {
         if (typescript_1.default.isVariableStatement(statement)) {
-            for (var _d = 0, _e = statement.declarationList.declarations; _d < _e.length; _d++) {
-                var decl = _e[_d];
+            for (const decl of statement.declarationList.declarations) {
                 if (typescript_1.default.isIdentifier(decl.name) && decl.name.text === name) {
                     return decl;
                 }
             }
         }
-        if (typescript_1.default.isFunctionDeclaration(statement) && ((_a = statement.name) === null || _a === void 0 ? void 0 : _a.text) === name) {
+        if (typescript_1.default.isFunctionDeclaration(statement) && statement.name?.text === name) {
             return statement;
         }
-        if (typescript_1.default.isClassDeclaration(statement) && ((_b = statement.name) === null || _b === void 0 ? void 0 : _b.text) === name) {
+        if (typescript_1.default.isClassDeclaration(statement) && statement.name?.text === name) {
             return statement;
         }
     }
@@ -144,7 +125,7 @@ function isExpressionWithType(node) {
  */
 function isSatisfiesExpression(node) {
     // Check if the node text contains 'satisfies' and has the expected structure
-    var nodeText = node.getText();
+    const nodeText = node.getText();
     if (!nodeText.includes(' satisfies ')) {
         return false;
     }
@@ -179,7 +160,7 @@ function extractIdentifierFromExpression(node) {
     }
     // Type assertion: `<SomeType>translations`
     // Check for type assertion by looking for angle bracket syntax and structure
-    var nodeText = node.getText();
+    const nodeText = node.getText();
     if (nodeText.includes('<') && nodeText.includes('>') && 'expression' in node && 'type' in node && node.expression !== undefined && node.type !== undefined) {
         return extractIdentifierFromExpression(node.expression);
     }
@@ -206,4 +187,4 @@ function extractKeyFromPropertyNode(node) {
     }
     return undefined;
 }
-exports.default = { findAncestor: findAncestor, addImport: addImport, traverseASTsInParallel: traverseASTsInParallel, findDefaultExport: findDefaultExport, resolveDeclaration: resolveDeclaration, extractIdentifierFromExpression: extractIdentifierFromExpression, extractKeyFromPropertyNode: extractKeyFromPropertyNode };
+exports.default = { findAncestor, addImport, traverseASTsInParallel, findDefaultExport, resolveDeclaration, extractIdentifierFromExpression, extractKeyFromPropertyNode };

@@ -1,155 +1,142 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AttachmentPicker_1 = require("@components/AttachmentPicker");
-var DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
-var FullScreenLoaderContext_1 = require("@components/FullScreenLoaderContext");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var PopoverMenu_1 = require("@components/PopoverMenu");
-var PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
-var PopoverAnchorTooltip_1 = require("@components/Tooltip/PopoverAnchorTooltip");
-var useEnvironment_1 = require("@hooks/useEnvironment");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var Browser_1 = require("@libs/Browser");
-var getIconForAction_1 = require("@libs/getIconForAction");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
-var IOU_1 = require("@userActions/IOU");
-var Modal_1 = require("@userActions/Modal");
-var Report_1 = require("@userActions/Report");
-var Task_1 = require("@userActions/Task");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AttachmentPicker_1 = require("@components/AttachmentPicker");
+const DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
+const FullScreenLoaderContext_1 = require("@components/FullScreenLoaderContext");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const PopoverMenu_1 = require("@components/PopoverMenu");
+const PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
+const PopoverAnchorTooltip_1 = require("@components/Tooltip/PopoverAnchorTooltip");
+const useEnvironment_1 = require("@hooks/useEnvironment");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const Browser_1 = require("@libs/Browser");
+const getIconForAction_1 = require("@libs/getIconForAction");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
+const IOU_1 = require("@userActions/IOU");
+const Modal_1 = require("@userActions/Modal");
+const Report_1 = require("@userActions/Report");
+const Task_1 = require("@userActions/Task");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
 /**
  * This includes the popover of options you see when pressing the + button in the composer.
  * It also contains the attachment picker, as the menu items need to be able to open it.
  */
-function AttachmentPickerWithMenuItems(_a) {
-    var report = _a.report, currentUserPersonalDetails = _a.currentUserPersonalDetails, reportParticipantIDs = _a.reportParticipantIDs, displayFilesInModal = _a.displayFilesInModal, isFullComposerAvailable = _a.isFullComposerAvailable, isComposerFullSize = _a.isComposerFullSize, reportID = _a.reportID, disabled = _a.disabled, setMenuVisibility = _a.setMenuVisibility, isMenuVisible = _a.isMenuVisible, onTriggerAttachmentPicker = _a.onTriggerAttachmentPicker, onCanceledAttachmentPicker = _a.onCanceledAttachmentPicker, onMenuClosed = _a.onMenuClosed, onAddActionPressed = _a.onAddActionPressed, onItemSelected = _a.onItemSelected, actionButtonRef = _a.actionButtonRef, raiseIsScrollLikelyLayoutTriggered = _a.raiseIsScrollLikelyLayoutTriggered, shouldDisableAttachmentItem = _a.shouldDisableAttachmentItem;
-    var isFocused = (0, native_1.useIsFocused)();
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _b = (0, useWindowDimensions_1.default)(), windowHeight = _b.windowHeight, windowWidth = _b.windowWidth;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var _c = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext), isDelegateAccessRestricted = _c.isDelegateAccessRestricted, showDelegateNoAccessModal = _c.showDelegateNoAccessModal;
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(report === null || report === void 0 ? void 0 : report.policyID), { canBeMissing: true })[0];
-    var lastDistanceExpenseType = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_DISTANCE_EXPENSE_TYPE, { canBeMissing: true })[0];
-    var isProduction = (0, useEnvironment_1.default)().isProduction;
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var setIsLoaderVisible = (0, FullScreenLoaderContext_1.useFullScreenLoader)().setIsLoaderVisible;
-    var isReportArchived = (0, useReportIsArchived_1.default)(report === null || report === void 0 ? void 0 : report.reportID);
-    var isManualDistanceTrackingEnabled = isBetaEnabled(CONST_1.default.BETAS.MANUAL_DISTANCE);
-    var selectOption = (0, react_1.useCallback)(function (onSelected, shouldRestrictAction) {
+function AttachmentPickerWithMenuItems({ report, currentUserPersonalDetails, reportParticipantIDs, displayFilesInModal, isFullComposerAvailable, isComposerFullSize, reportID, disabled, setMenuVisibility, isMenuVisible, onTriggerAttachmentPicker, onCanceledAttachmentPicker, onMenuClosed, onAddActionPressed, onItemSelected, actionButtonRef, raiseIsScrollLikelyLayoutTriggered, shouldDisableAttachmentItem, }) {
+    const isFocused = (0, native_1.useIsFocused)();
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { windowHeight, windowWidth } = (0, useWindowDimensions_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const { isDelegateAccessRestricted, showDelegateNoAccessModal } = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext);
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${report?.policyID}`, { canBeMissing: true });
+    const [lastDistanceExpenseType] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_DISTANCE_EXPENSE_TYPE, { canBeMissing: true });
+    const { isProduction } = (0, useEnvironment_1.default)();
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const { setIsLoaderVisible } = (0, FullScreenLoaderContext_1.useFullScreenLoader)();
+    const isReportArchived = (0, useReportIsArchived_1.default)(report?.reportID);
+    const isManualDistanceTrackingEnabled = isBetaEnabled(CONST_1.default.BETAS.MANUAL_DISTANCE);
+    const selectOption = (0, react_1.useCallback)((onSelected, shouldRestrictAction) => {
         if (shouldRestrictAction && policy && (0, SubscriptionUtils_1.shouldRestrictUserBillableActions)(policy.id)) {
             Navigation_1.default.navigate(ROUTES_1.default.RESTRICTED_ACTION.getRoute(policy.id));
             return;
         }
         onSelected();
     }, [policy]);
-    var teacherUnitePolicyID = isProduction ? CONST_1.default.TEACHERS_UNITE.PROD_POLICY_ID : CONST_1.default.TEACHERS_UNITE.TEST_POLICY_ID;
-    var isTeachersUniteReport = (report === null || report === void 0 ? void 0 : report.policyID) === teacherUnitePolicyID;
+    const teacherUnitePolicyID = isProduction ? CONST_1.default.TEACHERS_UNITE.PROD_POLICY_ID : CONST_1.default.TEACHERS_UNITE.TEST_POLICY_ID;
+    const isTeachersUniteReport = report?.policyID === teacherUnitePolicyID;
     /**
      * Returns the list of IOU Options
      */
-    var moneyRequestOptions = (0, react_1.useMemo)(function () {
-        var _a;
-        var options = (_a = {},
-            _a[CONST_1.default.IOU.TYPE.SPLIT] = [
+    const moneyRequestOptions = (0, react_1.useMemo)(() => {
+        const options = {
+            [CONST_1.default.IOU.TYPE.SPLIT]: [
                 {
                     icon: Expensicons.Transfer,
                     text: translate('iou.splitExpense'),
                     shouldCallAfterModalHide: shouldUseNarrowLayout,
-                    onSelected: function () { return selectOption(function () { var _a; return (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.SPLIT, (_a = report === null || report === void 0 ? void 0 : report.reportID) !== null && _a !== void 0 ? _a : String(CONST_1.default.DEFAULT_NUMBER_ID)); }, true); },
+                    onSelected: () => selectOption(() => (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.SPLIT, report?.reportID ?? String(CONST_1.default.DEFAULT_NUMBER_ID)), true),
                 },
             ],
-            _a[CONST_1.default.IOU.TYPE.SUBMIT] = __spreadArray([
+            [CONST_1.default.IOU.TYPE.SUBMIT]: [
                 {
                     icon: (0, getIconForAction_1.default)(CONST_1.default.IOU.TYPE.CREATE),
                     text: translate('iou.createExpense'),
                     shouldCallAfterModalHide: shouldUseNarrowLayout,
-                    onSelected: function () { return selectOption(function () { var _a; return (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.SUBMIT, (_a = report === null || report === void 0 ? void 0 : report.reportID) !== null && _a !== void 0 ? _a : String(CONST_1.default.DEFAULT_NUMBER_ID)); }, true); },
-                }
-            ], (isManualDistanceTrackingEnabled
-                ? [
-                    {
-                        icon: Expensicons.Location,
-                        text: translate('quickAction.recordDistance'),
-                        shouldCallAfterModalHide: shouldUseNarrowLayout,
-                        onSelected: function () {
-                            return selectOption(function () { var _a; return (0, IOU_1.startDistanceRequest)(CONST_1.default.IOU.TYPE.SUBMIT, (_a = report === null || report === void 0 ? void 0 : report.reportID) !== null && _a !== void 0 ? _a : String(CONST_1.default.DEFAULT_NUMBER_ID), lastDistanceExpenseType); }, true);
+                    onSelected: () => selectOption(() => (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.SUBMIT, report?.reportID ?? String(CONST_1.default.DEFAULT_NUMBER_ID)), true),
+                },
+                ...(isManualDistanceTrackingEnabled
+                    ? [
+                        {
+                            icon: Expensicons.Location,
+                            text: translate('quickAction.recordDistance'),
+                            shouldCallAfterModalHide: shouldUseNarrowLayout,
+                            onSelected: () => selectOption(() => (0, IOU_1.startDistanceRequest)(CONST_1.default.IOU.TYPE.SUBMIT, report?.reportID ?? String(CONST_1.default.DEFAULT_NUMBER_ID), lastDistanceExpenseType), true),
                         },
-                    },
-                ]
-                : []), true),
-            _a[CONST_1.default.IOU.TYPE.PAY] = [
+                    ]
+                    : []),
+            ],
+            [CONST_1.default.IOU.TYPE.PAY]: [
                 {
                     icon: (0, getIconForAction_1.default)(CONST_1.default.IOU.TYPE.SEND),
                     text: translate('iou.paySomeone', { name: (0, ReportUtils_1.getPayeeName)(report) }),
                     shouldCallAfterModalHide: shouldUseNarrowLayout,
-                    onSelected: function () {
+                    onSelected: () => {
                         if (isDelegateAccessRestricted) {
-                            (0, Modal_1.close)(function () {
+                            (0, Modal_1.close)(() => {
                                 showDelegateNoAccessModal();
                             });
                             return;
                         }
-                        selectOption(function () { var _a; return (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.PAY, (_a = report === null || report === void 0 ? void 0 : report.reportID) !== null && _a !== void 0 ? _a : String(CONST_1.default.DEFAULT_NUMBER_ID)); }, false);
+                        selectOption(() => (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.PAY, report?.reportID ?? String(CONST_1.default.DEFAULT_NUMBER_ID)), false);
                     },
                 },
             ],
-            _a[CONST_1.default.IOU.TYPE.TRACK] = __spreadArray([
+            [CONST_1.default.IOU.TYPE.TRACK]: [
                 {
                     icon: (0, getIconForAction_1.default)(CONST_1.default.IOU.TYPE.CREATE),
                     text: translate('iou.createExpense'),
                     shouldCallAfterModalHide: shouldUseNarrowLayout,
-                    onSelected: function () { return selectOption(function () { var _a; return (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.TRACK, (_a = report === null || report === void 0 ? void 0 : report.reportID) !== null && _a !== void 0 ? _a : String(CONST_1.default.DEFAULT_NUMBER_ID)); }, true); },
-                }
-            ], (isManualDistanceTrackingEnabled
-                ? [
-                    {
-                        icon: Expensicons.Location,
-                        text: translate('iou.trackDistance'),
-                        shouldCallAfterModalHide: shouldUseNarrowLayout,
-                        onSelected: function () {
-                            return selectOption(function () { var _a; return (0, IOU_1.startDistanceRequest)(CONST_1.default.IOU.TYPE.TRACK, (_a = report === null || report === void 0 ? void 0 : report.reportID) !== null && _a !== void 0 ? _a : String(CONST_1.default.DEFAULT_NUMBER_ID), lastDistanceExpenseType); }, true);
+                    onSelected: () => selectOption(() => (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.TRACK, report?.reportID ?? String(CONST_1.default.DEFAULT_NUMBER_ID)), true),
+                },
+                ...(isManualDistanceTrackingEnabled
+                    ? [
+                        {
+                            icon: Expensicons.Location,
+                            text: translate('iou.trackDistance'),
+                            shouldCallAfterModalHide: shouldUseNarrowLayout,
+                            onSelected: () => selectOption(() => (0, IOU_1.startDistanceRequest)(CONST_1.default.IOU.TYPE.TRACK, report?.reportID ?? String(CONST_1.default.DEFAULT_NUMBER_ID), lastDistanceExpenseType), true),
                         },
-                    },
-                ]
-                : []), true),
-            _a[CONST_1.default.IOU.TYPE.INVOICE] = [
+                    ]
+                    : []),
+            ],
+            [CONST_1.default.IOU.TYPE.INVOICE]: [
                 {
                     icon: Expensicons.InvoiceGeneric,
                     text: translate('workspace.invoices.sendInvoice'),
                     shouldCallAfterModalHide: shouldUseNarrowLayout,
-                    onSelected: function () { return selectOption(function () { var _a; return (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.INVOICE, (_a = report === null || report === void 0 ? void 0 : report.reportID) !== null && _a !== void 0 ? _a : String(CONST_1.default.DEFAULT_NUMBER_ID)); }, false); },
+                    onSelected: () => selectOption(() => (0, IOU_1.startMoneyRequest)(CONST_1.default.IOU.TYPE.INVOICE, report?.reportID ?? String(CONST_1.default.DEFAULT_NUMBER_ID)), false),
                 },
             ],
-            _a);
-        var moneyRequestOptionsList = (0, ReportUtils_1.temporary_getMoneyRequestOptions)(report, policy, reportParticipantIDs !== null && reportParticipantIDs !== void 0 ? reportParticipantIDs : []).map(function (option) { return options[option]; }, isReportArchived);
-        return moneyRequestOptionsList.flat().filter(function (item, index, self) { return index === self.findIndex(function (t) { return t.text === item.text; }); });
+        };
+        const moneyRequestOptionsList = (0, ReportUtils_1.temporary_getMoneyRequestOptions)(report, policy, reportParticipantIDs ?? []).map((option) => options[option], isReportArchived);
+        return moneyRequestOptionsList.flat().filter((item, index, self) => index === self.findIndex((t) => t.text === item.text));
     }, [
         translate,
         shouldUseNarrowLayout,
@@ -163,7 +150,7 @@ function AttachmentPickerWithMenuItems(_a) {
         isReportArchived,
         lastDistanceExpenseType,
     ]);
-    var createReportOption = (0, react_1.useMemo)(function () {
+    const createReportOption = (0, react_1.useMemo)(() => {
         if (!(0, ReportUtils_1.isPolicyExpenseChat)(report) || !(0, ReportUtils_1.isPaidGroupPolicy)(report) || !(0, ReportUtils_1.isReportOwner)(report)) {
             return [];
         }
@@ -171,14 +158,14 @@ function AttachmentPickerWithMenuItems(_a) {
             {
                 icon: Expensicons.Document,
                 text: translate('report.newReport.createReport'),
-                onSelected: function () { return selectOption(function () { return (0, Report_1.createNewReport)(currentUserPersonalDetails, report === null || report === void 0 ? void 0 : report.policyID, true); }, true); },
+                onSelected: () => selectOption(() => (0, Report_1.createNewReport)(currentUserPersonalDetails, report?.policyID, true), true),
             },
         ];
     }, [currentUserPersonalDetails, report, selectOption, translate]);
     /**
      * Determines if we can show the task option
      */
-    var taskOption = (0, react_1.useMemo)(function () {
+    const taskOption = (0, react_1.useMemo)(() => {
         if (!(0, ReportUtils_1.canCreateTaskInReport)(report)) {
             return [];
         }
@@ -187,34 +174,34 @@ function AttachmentPickerWithMenuItems(_a) {
                 icon: Expensicons.Task,
                 text: translate('newTaskPage.assignTask'),
                 shouldCallAfterModalHide: shouldUseNarrowLayout,
-                onSelected: function () { return (0, Task_1.clearOutTaskInfoAndNavigate)(reportID, report); },
+                onSelected: () => (0, Task_1.clearOutTaskInfoAndNavigate)(reportID, report),
             },
         ];
     }, [report, reportID, translate, shouldUseNarrowLayout]);
-    var onPopoverMenuClose = function () {
+    const onPopoverMenuClose = () => {
         setMenuVisibility(false);
-        onMenuClosed === null || onMenuClosed === void 0 ? void 0 : onMenuClosed();
+        onMenuClosed?.();
     };
-    var prevIsFocused = (0, usePrevious_1.default)(isFocused);
+    const prevIsFocused = (0, usePrevious_1.default)(isFocused);
     /**
      * Check if current screen is inactive and previous screen is active.
      * Used to close already opened popover menu when any other page is opened over current page.
      *
      * @return {Boolean}
      */
-    var didScreenBecomeInactive = (0, react_1.useCallback)(function () { return !isFocused && prevIsFocused; }, [isFocused, prevIsFocused]);
+    const didScreenBecomeInactive = (0, react_1.useCallback)(() => !isFocused && prevIsFocused, [isFocused, prevIsFocused]);
     // When the navigation is focused, we want to close the popover menu.
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!didScreenBecomeInactive() || !isMenuVisible) {
             return;
         }
         setMenuVisibility(false);
     }, [didScreenBecomeInactive, isMenuVisible, setMenuVisibility]);
     // 1. Limit the container width to a single column.
-    var outerContainerStyles = [{ flexBasis: styles.composerSizeButton.width + styles.composerSizeButton.marginHorizontal * 2 }, styles.flexGrow0, styles.flexShrink0];
+    const outerContainerStyles = [{ flexBasis: styles.composerSizeButton.width + styles.composerSizeButton.marginHorizontal * 2 }, styles.flexGrow0, styles.flexShrink0];
     // 2. If there isn't enough height for two buttons, the Expand/Collapse button wraps to the next column so that it's intentionally hidden,
     //    and the Create button is centered vertically.
-    var innerContainerStyles = [
+    const innerContainerStyles = [
         styles.dFlex,
         styles.flexColumnReverse,
         styles.flexWrap,
@@ -226,44 +213,45 @@ function AttachmentPickerWithMenuItems(_a) {
         { paddingVertical: styles.composerSizeButton.marginHorizontal },
     ];
     // 3. If there is enough height for two buttons, the Expand/Collapse button is at the top.
-    var expandCollapseButtonContainerStyles = [styles.flexGrow1, styles.flexShrink0];
+    const expandCollapseButtonContainerStyles = [styles.flexGrow1, styles.flexShrink0];
     // 4. And the Create button is at the bottom.
-    var createButtonContainerStyles = [styles.flexGrow0, styles.flexShrink0];
-    return (<AttachmentPicker_1.default allowMultiple onOpenPicker={function () { return setIsLoaderVisible(true); }} fileLimit={CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_FILE_LIMIT} shouldValidateImage={false}>
-            {function (_a) {
-            var openPicker = _a.openPicker;
-            var triggerAttachmentPicker = function () {
+    const createButtonContainerStyles = [styles.flexGrow0, styles.flexShrink0];
+    return (<AttachmentPicker_1.default allowMultiple onOpenPicker={() => setIsLoaderVisible(true)} fileLimit={CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_FILE_LIMIT} shouldValidateImage={false}>
+            {({ openPicker }) => {
+            const triggerAttachmentPicker = () => {
                 onTriggerAttachmentPicker();
                 openPicker({
-                    onPicked: function (data) { return displayFilesInModal(data); },
-                    onCanceled: function () {
-                        onCanceledAttachmentPicker === null || onCanceledAttachmentPicker === void 0 ? void 0 : onCanceledAttachmentPicker();
+                    onPicked: (data) => displayFilesInModal(data),
+                    onCanceled: () => {
+                        onCanceledAttachmentPicker?.();
                         setIsLoaderVisible(false);
                     },
-                    onClosed: function () { return setIsLoaderVisible(false); },
+                    onClosed: () => setIsLoaderVisible(false),
                 });
             };
-            var menuItems = __spreadArray(__spreadArray(__spreadArray(__spreadArray([], moneyRequestOptions, true), (!isTeachersUniteReport ? createReportOption : []), true), taskOption, true), [
+            const menuItems = [
+                ...moneyRequestOptions,
+                ...(!isTeachersUniteReport ? createReportOption : []),
+                ...taskOption,
                 {
                     icon: Expensicons.Paperclip,
                     text: translate('reportActionCompose.addAttachment'),
                     disabled: shouldDisableAttachmentItem,
                 },
-            ], false);
+            ];
             return (<>
                         <react_native_1.View style={outerContainerStyles}>
                             <react_native_1.View style={innerContainerStyles}>
                                 <react_native_1.View style={createButtonContainerStyles}>
                                     <PopoverAnchorTooltip_1.default text={translate('common.create')}>
-                                        <PressableWithFeedback_1.default ref={actionButtonRef} onPress={function (e) {
-                    var _a;
-                    e === null || e === void 0 ? void 0 : e.preventDefault();
+                                        <PressableWithFeedback_1.default ref={actionButtonRef} onPress={(e) => {
+                    e?.preventDefault();
                     if (!isFocused) {
                         return;
                     }
                     onAddActionPressed();
                     // Drop focus to avoid blue focus ring.
-                    (_a = actionButtonRef.current) === null || _a === void 0 ? void 0 : _a.blur();
+                    actionButtonRef.current?.blur();
                     setMenuVisibility(!isMenuVisible);
                 }} style={styles.composerSizeButton} disabled={disabled} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('common.create')}>
                                             <Icon_1.default fill={theme.icon} src={Expensicons.Plus}/>
@@ -272,23 +260,23 @@ function AttachmentPickerWithMenuItems(_a) {
                                 </react_native_1.View>
                                 {(isFullComposerAvailable || isComposerFullSize) && (<react_native_1.View style={expandCollapseButtonContainerStyles}>
                                         {isComposerFullSize ? (<PopoverAnchorTooltip_1.default text={translate('reportActionCompose.collapse')} key="composer-collapse">
-                                                <PressableWithFeedback_1.default onPress={function (e) {
-                            e === null || e === void 0 ? void 0 : e.preventDefault();
+                                                <PressableWithFeedback_1.default onPress={(e) => {
+                            e?.preventDefault();
                             raiseIsScrollLikelyLayoutTriggered();
                             (0, Report_1.setIsComposerFullSize)(reportID, false);
                         }} 
                     // Keep focus on the composer when Collapse button is clicked.
-                    onMouseDown={function (e) { return e.preventDefault(); }} style={styles.composerSizeButton} disabled={disabled} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('reportActionCompose.collapse')}>
+                    onMouseDown={(e) => e.preventDefault()} style={styles.composerSizeButton} disabled={disabled} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('reportActionCompose.collapse')}>
                                                     <Icon_1.default fill={theme.icon} src={Expensicons.Collapse}/>
                                                 </PressableWithFeedback_1.default>
                                             </PopoverAnchorTooltip_1.default>) : (<PopoverAnchorTooltip_1.default text={translate('reportActionCompose.expand')} key="composer-expand">
-                                                <PressableWithFeedback_1.default onPress={function (e) {
-                            e === null || e === void 0 ? void 0 : e.preventDefault();
+                                                <PressableWithFeedback_1.default onPress={(e) => {
+                            e?.preventDefault();
                             raiseIsScrollLikelyLayoutTriggered();
                             (0, Report_1.setIsComposerFullSize)(reportID, true);
                         }} 
                     // Keep focus on the composer when Expand button is clicked.
-                    onMouseDown={function (e) { return e.preventDefault(); }} style={styles.composerSizeButton} disabled={disabled} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('reportActionCompose.expand')}>
+                    onMouseDown={(e) => e.preventDefault()} style={styles.composerSizeButton} disabled={disabled} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('reportActionCompose.expand')}>
                                                     <Icon_1.default fill={theme.icon} src={Expensicons.Expand}/>
                                                 </PressableWithFeedback_1.default>
                                             </PopoverAnchorTooltip_1.default>)}
@@ -297,7 +285,7 @@ function AttachmentPickerWithMenuItems(_a) {
                         </react_native_1.View>
                         <PopoverMenu_1.default animationInTiming={menuItems.length * 50} 
             // The menu should close 2/3 of the time it took to open
-            animationOutTiming={menuItems.length * 50 * 0.66} isVisible={isMenuVisible && isFocused} onClose={onPopoverMenuClose} onItemSelected={function (item, index) {
+            animationOutTiming={menuItems.length * 50 * 0.66} isVisible={isMenuVisible && isFocused} onClose={onPopoverMenuClose} onItemSelected={(item, index) => {
                     setMenuVisibility(false);
                     onItemSelected();
                     // In order for the file picker to open dynamically, the click
@@ -308,7 +296,7 @@ function AttachmentPickerWithMenuItems(_a) {
                             triggerAttachmentPicker();
                             return;
                         }
-                        (0, Modal_1.close)(function () {
+                        (0, Modal_1.close)(() => {
                             triggerAttachmentPicker();
                         });
                     }

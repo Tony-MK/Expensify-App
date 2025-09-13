@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var shouldIgnoreSelectionWhenUpdatedManually = true;
+const shouldIgnoreSelectionWhenUpdatedManually = true;
 exports.default = shouldIgnoreSelectionWhenUpdatedManually;

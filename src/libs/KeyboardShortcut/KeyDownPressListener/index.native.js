@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeKeyDownPressListener = exports.addKeyDownPressListener = void 0;
-var addKeyDownPressListener = function () { };
+const addKeyDownPressListener = () => { };
 exports.addKeyDownPressListener = addKeyDownPressListener;
-var removeKeyDownPressListener = function () { };
+const removeKeyDownPressListener = () => { };
 exports.removeKeyDownPressListener = removeKeyDownPressListener;

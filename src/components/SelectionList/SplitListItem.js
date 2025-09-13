@@ -1,32 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var Expensicons = require("@components/Icon/Expensicons");
-var MoneyRequestAmountInput_1 = require("@components/MoneyRequestAmountInput");
-var Text_1 = require("@components/Text");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var variables_1 = require("@styles/variables");
-var BaseListItem_1 = require("./BaseListItem");
-function SplitListItem(_a) {
-    var _b, _c, _d, _e, _f;
-    var item = _a.item, isFocused = _a.isFocused, showTooltip = _a.showTooltip, isDisabled = _a.isDisabled, onSelectRow = _a.onSelectRow, shouldPreventEnterKeySubmit = _a.shouldPreventEnterKeySubmit, rightHandSideComponent = _a.rightHandSideComponent, onFocus = _a.onFocus, index = _a.index, onInputFocus = _a.onInputFocus, onInputBlur = _a.onInputBlur;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var splitItem = item;
-    var formattedOriginalAmount = (0, CurrencyUtils_1.convertToDisplayStringWithoutCurrency)(splitItem.originalAmount, splitItem.currency);
-    var onSplitExpenseAmountChange = function (amount) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const Expensicons = require("@components/Icon/Expensicons");
+const MoneyRequestAmountInput_1 = require("@components/MoneyRequestAmountInput");
+const Text_1 = require("@components/Text");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const variables_1 = require("@styles/variables");
+const BaseListItem_1 = require("./BaseListItem");
+function SplitListItem({ item, isFocused, showTooltip, isDisabled, onSelectRow, shouldPreventEnterKeySubmit, rightHandSideComponent, onFocus, index, onInputFocus, onInputBlur, }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const splitItem = item;
+    const formattedOriginalAmount = (0, CurrencyUtils_1.convertToDisplayStringWithoutCurrency)(splitItem.originalAmount, splitItem.currency);
+    const onSplitExpenseAmountChange = (amount) => {
         splitItem.onSplitExpenseAmountChange(splitItem.transactionID, Number(amount));
     };
-    var isBottomVisible = !!splitItem.category || !!((_b = splitItem.tags) === null || _b === void 0 ? void 0 : _b.at(0));
-    var focusHandler = (0, react_1.useCallback)(function () {
+    const isBottomVisible = !!splitItem.category || !!splitItem.tags?.at(0);
+    const focusHandler = (0, react_1.useCallback)(() => {
         if (!onInputFocus) {
             return;
         }
@@ -59,16 +57,16 @@ function SplitListItem(_a) {
                         </react_native_1.View>
                     </react_native_1.View>
                     {isBottomVisible && (<react_native_1.View style={[styles.splitItemBottomContent]}>
-                            {!!splitItem.category && (<react_native_1.View style={[styles.flexRow, styles.alignItemsCenter, styles.gap1, styles.pr1, styles.flexShrink1, !!((_c = splitItem.tags) === null || _c === void 0 ? void 0 : _c.at(0)) && styles.mw50]}>
+                            {!!splitItem.category && (<react_native_1.View style={[styles.flexRow, styles.alignItemsCenter, styles.gap1, styles.pr1, styles.flexShrink1, !!splitItem.tags?.at(0) && styles.mw50]}>
                                     <Icon_1.default src={Expensicons_1.Folder} height={variables_1.default.iconSizeExtraSmall} width={variables_1.default.iconSizeExtraSmall} fill={theme.icon}/>
                                     <Text_1.default numberOfLines={1} style={[styles.textMicroSupporting, styles.pre, styles.flexShrink1]}>
                                         {splitItem.category}
                                     </Text_1.default>
                                 </react_native_1.View>)}
-                            {!!((_d = splitItem.tags) === null || _d === void 0 ? void 0 : _d.at(0)) && (<react_native_1.View style={[styles.flex1, styles.flexRow, styles.alignItemsCenter, styles.gap1, styles.pl1, !!splitItem.category && styles.mw50]}>
+                            {!!splitItem.tags?.at(0) && (<react_native_1.View style={[styles.flex1, styles.flexRow, styles.alignItemsCenter, styles.gap1, styles.pl1, !!splitItem.category && styles.mw50]}>
                                     <Icon_1.default src={Expensicons_1.Tag} height={variables_1.default.iconSizeExtraSmall} width={variables_1.default.iconSizeExtraSmall} fill={theme.icon}/>
                                     <Text_1.default numberOfLines={1} style={[styles.textMicroSupporting, styles.pre, styles.flexShrink1]}>
-                                        {(0, PolicyUtils_1.getCommaSeparatedTagNameWithSanitizedColons)((_f = (_e = splitItem.tags) === null || _e === void 0 ? void 0 : _e.at(0)) !== null && _f !== void 0 ? _f : '')}
+                                        {(0, PolicyUtils_1.getCommaSeparatedTagNameWithSanitizedColons)(splitItem.tags?.at(0) ?? '')}
                                     </Text_1.default>
                                 </react_native_1.View>)}
                         </react_native_1.View>)}

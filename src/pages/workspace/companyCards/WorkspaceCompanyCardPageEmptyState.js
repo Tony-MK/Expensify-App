@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
-var FeatureList_1 = require("@components/FeatureList");
-var Illustrations_1 = require("@components/Icon/Illustrations");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CardUtils_1 = require("@libs/CardUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
-var colors_1 = require("@styles/theme/colors");
-var CompanyCards_1 = require("@userActions/CompanyCards");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var WorkspaceCompanyCardExpensifyCardPromotionBanner_1 = require("./WorkspaceCompanyCardExpensifyCardPromotionBanner");
-var companyCardFeatures = [
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
+const FeatureList_1 = require("@components/FeatureList");
+const Illustrations_1 = require("@components/Icon/Illustrations");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CardUtils_1 = require("@libs/CardUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
+const colors_1 = require("@styles/theme/colors");
+const CompanyCards_1 = require("@userActions/CompanyCards");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const WorkspaceCompanyCardExpensifyCardPromotionBanner_1 = require("./WorkspaceCompanyCardExpensifyCardPromotionBanner");
+const companyCardFeatures = [
     {
         icon: Illustrations_1.CreditCardsNew,
         translationKey: 'workspace.moreFeatures.companyCards.feed.features.support',
@@ -33,18 +33,16 @@ var companyCardFeatures = [
         translationKey: 'workspace.moreFeatures.companyCards.feed.features.automaticImport',
     },
 ];
-function WorkspaceCompanyCardPageEmptyState(_a) {
-    var _b, _c;
-    var policy = _a.policy, shouldShowGBDisclaimer = _a.shouldShowGBDisclaimer;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var _d = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext), isActingAsDelegate = _d.isActingAsDelegate, showDelegateNoAccessModal = _d.showDelegateNoAccessModal;
-    var allWorkspaceCards = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: true })[0];
-    var shouldShowExpensifyCardPromotionBanner = !(0, CardUtils_1.hasIssuedExpensifyCard)((_b = policy === null || policy === void 0 ? void 0 : policy.workspaceAccountID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID, allWorkspaceCards);
-    var workspaceAccountID = (_c = policy === null || policy === void 0 ? void 0 : policy.workspaceAccountID) !== null && _c !== void 0 ? _c : CONST_1.default.DEFAULT_NUMBER_ID;
-    var handleCtaPress = (0, react_1.useCallback)(function () {
-        if (!(policy === null || policy === void 0 ? void 0 : policy.id)) {
+function WorkspaceCompanyCardPageEmptyState({ policy, shouldShowGBDisclaimer }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const { isActingAsDelegate, showDelegateNoAccessModal } = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext);
+    const [allWorkspaceCards] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: true });
+    const shouldShowExpensifyCardPromotionBanner = !(0, CardUtils_1.hasIssuedExpensifyCard)(policy?.workspaceAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID, allWorkspaceCards);
+    const workspaceAccountID = policy?.workspaceAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const handleCtaPress = (0, react_1.useCallback)(() => {
+        if (!policy?.id) {
             return;
         }
         if (isActingAsDelegate) {

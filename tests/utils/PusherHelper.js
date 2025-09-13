@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Pusher_1 = require("@libs/Pusher");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
-var PusherConnectionManager_1 = require("@src/libs/PusherConnectionManager");
-var CHANNEL_NAME = "".concat(CONST_1.default.PUSHER.PRIVATE_USER_CHANNEL_PREFIX, "1").concat(CONFIG_1.default.PUSHER.SUFFIX);
+const Pusher_1 = require("@libs/Pusher");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
+const PusherConnectionManager_1 = require("@src/libs/PusherConnectionManager");
+const CHANNEL_NAME = `${CONST_1.default.PUSHER.PRIVATE_USER_CHANNEL_PREFIX}1${CONFIG_1.default.PUSHER.SUFFIX}`;
 function setup() {
-    var _a;
     // When using the Pusher mock the act of calling Pusher.isSubscribed will create a
     // channel already in a subscribed state. These methods are normally used to prevent
     // duplicated subscriptions, but we don't need them for this test so forcing them to
@@ -18,11 +17,11 @@ function setup() {
     Pusher_1.default.init({
         appKey: CONFIG_1.default.PUSHER.APP_KEY,
         cluster: CONFIG_1.default.PUSHER.CLUSTER,
-        authEndpoint: "".concat(CONFIG_1.default.EXPENSIFY.DEFAULT_API_ROOT, "api/AuthenticatePusher?"),
+        authEndpoint: `${CONFIG_1.default.EXPENSIFY.DEFAULT_API_ROOT}api/AuthenticatePusher?`,
     });
-    var pusher = window.getPusherInstance();
+    const pusher = window.getPusherInstance();
     if (pusher && 'connection' in pusher) {
-        (_a = pusher.connection) === null || _a === void 0 ? void 0 : _a.emit('connected');
+        pusher.connection?.emit('connected');
     }
 }
 function emitOnyxUpdate(args) {
@@ -44,7 +43,7 @@ function teardown() {
     Pusher_1.default.unsubscribe(CHANNEL_NAME);
 }
 exports.default = {
-    setup: setup,
-    emitOnyxUpdate: emitOnyxUpdate,
-    teardown: teardown,
+    setup,
+    emitOnyxUpdate,
+    teardown,
 };

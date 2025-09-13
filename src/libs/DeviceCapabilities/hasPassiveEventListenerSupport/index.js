@@ -5,16 +5,16 @@ exports.default = hasPassiveEventListenerSupport;
  * Allows us to identify whether the browser supports passive event listener.
  */
 function hasPassiveEventListenerSupport() {
-    var supportsPassive = false;
+    let supportsPassive = false;
     try {
-        var opts = Object.defineProperty({}, 'passive', {
+        const opts = Object.defineProperty({}, 'passive', {
             // eslint-disable-next-line getter-return
-            get: function () {
+            get() {
                 supportsPassive = true;
             },
         });
-        window.addEventListener('testPassive', function () { }, opts);
-        window.removeEventListener('testPassive', function () { }, opts);
+        window.addEventListener('testPassive', () => { }, opts);
+        window.removeEventListener('testPassive', () => { }, opts);
         // eslint-disable-next-line no-empty
     }
     catch (e) { }

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var flash_list_1 = require("@shopify/flash-list");
-var react_1 = require("react");
+const flash_list_1 = require("@shopify/flash-list");
+const react_1 = require("react");
 function OptionRowRendererComponent(props, ref) {
     return (<flash_list_1.CellContainer 
     // eslint-disable-next-line react/jsx-props-no-spreading

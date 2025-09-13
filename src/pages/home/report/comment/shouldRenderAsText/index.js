@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = shouldRenderAsText;
-var expensify_common_1 = require("expensify-common");
+const expensify_common_1 = require("expensify-common");
 /**
  * Whether to render the report action as text
  */

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var getEmptyArray_1 = require("@src/types/utils/getEmptyArray");
-var useOnyx_1 = require("./useOnyx");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const getEmptyArray_1 = require("@src/types/utils/getEmptyArray");
+const useOnyx_1 = require("./useOnyx");
 /**
  * Hook to fetch transactions associated with a specific `tripRoom` report.
  *
@@ -14,21 +14,19 @@ var useOnyx_1 = require("./useOnyx");
  * @returns Transactions linked to the specified trip room.
  */
 function useTripTransactions(reportID) {
-    var _a = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, {
-        selector: function (reports) {
-            return Object.values(reports !== null && reports !== void 0 ? reports : {})
-                .filter(function (report) { return report && report.chatReportID === reportID; })
-                .map(function (report) { return report === null || report === void 0 ? void 0 : report.reportID; });
-        },
-    })[0], tripTransactionReportIDs = _a === void 0 ? (0, getEmptyArray_1.default)() : _a;
-    var _b = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
-        selector: function (transactions) {
+    const [tripTransactionReportIDs = (0, getEmptyArray_1.default)()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, {
+        selector: (reports) => Object.values(reports ?? {})
+            .filter((report) => report && report.chatReportID === reportID)
+            .map((report) => report?.reportID),
+    });
+    const [tripTransactions = (0, getEmptyArray_1.default)()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
+        selector: (transactions) => {
             if (!tripTransactionReportIDs.length) {
                 return [];
             }
-            return Object.values(transactions !== null && transactions !== void 0 ? transactions : {}).filter(function (transaction) { return !!transaction && tripTransactionReportIDs.includes(transaction.reportID); });
+            return Object.values(transactions ?? {}).filter((transaction) => !!transaction && tripTransactionReportIDs.includes(transaction.reportID));
         },
-    }, [tripTransactionReportIDs])[0], tripTransactions = _b === void 0 ? (0, getEmptyArray_1.default)() : _b;
+    }, [tripTransactionReportIDs]);
     return tripTransactions;
 }
 exports.default = useTripTransactions;

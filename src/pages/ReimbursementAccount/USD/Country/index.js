@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var CountryFullStep_1 = require("@components/SubStepForms/CountryFullStep");
-var ReimbursementAccount_1 = require("@userActions/ReimbursementAccount");
-var CONST_1 = require("@src/CONST");
-function Country(_a) {
-    var onBackButtonPress = _a.onBackButtonPress, stepNames = _a.stepNames, setUSDBankAccountStep = _a.setUSDBankAccountStep, policyID = _a.policyID;
-    var submit = function () {
+const react_1 = require("react");
+const CountryFullStep_1 = require("@components/SubStepForms/CountryFullStep");
+const ReimbursementAccount_1 = require("@userActions/ReimbursementAccount");
+const CONST_1 = require("@src/CONST");
+function Country({ onBackButtonPress, stepNames, setUSDBankAccountStep, policyID }) {
+    const submit = () => {
         if (!setUSDBankAccountStep) {
             return;
         }

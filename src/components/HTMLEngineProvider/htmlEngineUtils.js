@@ -11,8 +11,8 @@ exports.getFontSizeOfRBRChild = getFontSizeOfRBRChild;
 exports.isChildOfMutedTextLabel = isChildOfMutedTextLabel;
 exports.isChildOfMutedTextXS = isChildOfMutedTextXS;
 exports.isChildOfMutedTextMicro = isChildOfMutedTextMicro;
-var variables_1 = require("@styles/variables");
-var MAX_IMG_DIMENSIONS = 512;
+const variables_1 = require("@styles/variables");
+const MAX_IMG_DIMENSIONS = 512;
 /**
  * Compute embedded maximum width from the available screen width. This function
  * is used by the HTML component in the default renderer for img tags to scale
@@ -40,7 +40,7 @@ function isCommentTag(tagName) {
  * Check if there is an ancestor node for which the predicate returns true.
  */
 function isChildOfNode(tnode, predicate) {
-    var currentNode = tnode.parent;
+    let currentNode = tnode.parent;
     while (currentNode) {
         if (predicate(currentNode)) {
             return true;
@@ -54,24 +54,23 @@ function isChildOfNode(tnode, predicate) {
  * Finding node with name 'comment' flags that we are rendering a comment.
  */
 function isChildOfComment(tnode) {
-    return isChildOfNode(tnode, function (node) { var _a; return ((_a = node.domNode) === null || _a === void 0 ? void 0 : _a.name) !== undefined && isCommentTag(node.domNode.name); });
+    return isChildOfNode(tnode, (node) => node.domNode?.name !== undefined && isCommentTag(node.domNode.name));
 }
 /**
  * Check if there is an ancestor node with the name 'h1'.
  * Finding a node with the name 'h1' flags that we are rendering inside an h1 element.
  */
 function isChildOfH1(tnode) {
-    return isChildOfNode(tnode, function (node) { var _a; return ((_a = node.domNode) === null || _a === void 0 ? void 0 : _a.name) !== undefined && node.domNode.name.toLowerCase() === 'h1'; });
+    return isChildOfNode(tnode, (node) => node.domNode?.name !== undefined && node.domNode.name.toLowerCase() === 'h1');
 }
 function isChildOfTaskTitle(tnode) {
-    return isChildOfNode(tnode, function (node) { var _a; return ((_a = node.domNode) === null || _a === void 0 ? void 0 : _a.name) !== undefined && node.domNode.name.toLowerCase() === 'task-title'; });
+    return isChildOfNode(tnode, (node) => node.domNode?.name !== undefined && node.domNode.name.toLowerCase() === 'task-title');
 }
 /**
  * Check if the parent node has deleted style.
  */
 function isDeletedNode(tnode) {
-    var _a, _b, _c;
-    var parentStyle = (_c = (_b = (_a = tnode.parent) === null || _a === void 0 ? void 0 : _a.styles) === null || _b === void 0 ? void 0 : _b.nativeTextRet) !== null && _c !== void 0 ? _c : {};
+    const parentStyle = tnode.parent?.styles?.nativeTextRet ?? {};
     return 'textDecorationLine' in parentStyle && parentStyle.textDecorationLine === 'line-through';
 }
 /**
@@ -87,14 +86,13 @@ function isChildOfRBR(tnode) {
     return isChildOfRBR(tnode.parent);
 }
 function getFontSizeOfRBRChild(tnode) {
-    var _a, _b;
     if (!tnode.parent) {
         return 0;
     }
-    if (tnode.parent.tagName === 'rbr' && ((_a = tnode.parent.attributes) === null || _a === void 0 ? void 0 : _a.issmall) !== undefined) {
+    if (tnode.parent.tagName === 'rbr' && tnode.parent.attributes?.issmall !== undefined) {
         return variables_1.default.fontSizeSmall;
     }
-    if (tnode.parent.tagName === 'rbr' && ((_b = tnode.parent.attributes) === null || _b === void 0 ? void 0 : _b.issmall) === undefined) {
+    if (tnode.parent.tagName === 'rbr' && tnode.parent.attributes?.issmall === undefined) {
         return variables_1.default.fontSizeLabel;
     }
     return 0;

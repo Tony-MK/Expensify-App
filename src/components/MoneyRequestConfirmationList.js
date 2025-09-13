@@ -1,141 +1,116 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var fast_equals_1 = require("fast-equals");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useMouseContext_1 = require("@hooks/useMouseContext");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var blurActiveElement_1 = require("@libs/Accessibility/blurActiveElement");
-var IOU_1 = require("@libs/actions/IOU");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var DistanceRequestUtils_1 = require("@libs/DistanceRequestUtils");
-var IOUUtils_1 = require("@libs/IOUUtils");
-var Log_1 = require("@libs/Log");
-var MoneyRequestUtils_1 = require("@libs/MoneyRequestUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var Policy_1 = require("@userActions/Policy/Policy");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var Button_1 = require("./Button");
-var ButtonWithDropdownMenu_1 = require("./ButtonWithDropdownMenu");
-var DelegateNoAccessModalProvider_1 = require("./DelegateNoAccessModalProvider");
-var FormHelpMessage_1 = require("./FormHelpMessage");
-var MoneyRequestAmountInput_1 = require("./MoneyRequestAmountInput");
-var MoneyRequestConfirmationListFooter_1 = require("./MoneyRequestConfirmationListFooter");
-var Pressable_1 = require("./Pressable");
-var ProductTrainingContext_1 = require("./ProductTrainingContext");
-var SelectionList_1 = require("./SelectionList");
-var UserListItem_1 = require("./SelectionList/UserListItem");
-var SettlementButton_1 = require("./SettlementButton");
-var Text_1 = require("./Text");
-var EducationalTooltip_1 = require("./Tooltip/EducationalTooltip");
-function MoneyRequestConfirmationList(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    var transaction = _a.transaction, onSendMoney = _a.onSendMoney, onConfirm = _a.onConfirm, _l = _a.iouType, iouType = _l === void 0 ? CONST_1.default.IOU.TYPE.SUBMIT : _l, iouAmount = _a.iouAmount, isDistanceRequest = _a.isDistanceRequest, isManualDistanceRequest = _a.isManualDistanceRequest, _m = _a.isPerDiemRequest, isPerDiemRequest = _m === void 0 ? false : _m, _o = _a.isPolicyExpenseChat, isPolicyExpenseChat = _o === void 0 ? false : _o, _p = _a.iouCategory, iouCategory = _p === void 0 ? '' : _p, _q = _a.shouldShowSmartScanFields, shouldShowSmartScanFields = _q === void 0 ? true : _q, isEditingSplitBill = _a.isEditingSplitBill, iouCurrencyCode = _a.iouCurrencyCode, isReceiptEditable = _a.isReceiptEditable, iouMerchant = _a.iouMerchant, selectedParticipantsProp = _a.selectedParticipants, payeePersonalDetailsProp = _a.payeePersonalDetails, _r = _a.isReadOnly, isReadOnly = _r === void 0 ? false : _r, policyID = _a.policyID, _s = _a.reportID, reportID = _s === void 0 ? '' : _s, _t = _a.receiptPath, receiptPath = _t === void 0 ? '' : _t, iouAttendees = _a.iouAttendees, iouComment = _a.iouComment, _u = _a.receiptFilename, receiptFilename = _u === void 0 ? '' : _u, iouCreated = _a.iouCreated, _v = _a.iouIsBillable, iouIsBillable = _v === void 0 ? false : _v, onToggleBillable = _a.onToggleBillable, hasSmartScanFailed = _a.hasSmartScanFailed, reportActionID = _a.reportActionID, _w = _a.action, action = _w === void 0 ? CONST_1.default.IOU.ACTION.CREATE : _w, _x = _a.shouldDisplayReceipt, shouldDisplayReceipt = _x === void 0 ? false : _x, _y = _a.expensesNumber, expensesNumber = _y === void 0 ? 0 : _y, isConfirmed = _a.isConfirmed, isConfirming = _a.isConfirming, onPDFLoadError = _a.onPDFLoadError, onPDFPassword = _a.onPDFPassword, _z = _a.iouIsReimbursable, iouIsReimbursable = _z === void 0 ? true : _z, onToggleReimbursable = _a.onToggleReimbursable, showRemoveExpenseConfirmModal = _a.showRemoveExpenseConfirmModal;
-    var policyCategoriesReal = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES).concat(policyID), { canBeMissing: true })[0];
-    var policyTags = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_TAGS).concat(policyID), { canBeMissing: true })[0];
-    var policyReal = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { canBeMissing: true })[0];
-    var policyDraft = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_DRAFTS).concat(policyID), { canBeMissing: true })[0];
-    var defaultMileageRate = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_DRAFTS).concat(policyID), {
-        selector: function (selectedPolicy) { return DistanceRequestUtils_1.default.getDefaultMileageRate(selectedPolicy); },
+const native_1 = require("@react-navigation/native");
+const fast_equals_1 = require("fast-equals");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useMouseContext_1 = require("@hooks/useMouseContext");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const blurActiveElement_1 = require("@libs/Accessibility/blurActiveElement");
+const IOU_1 = require("@libs/actions/IOU");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const DistanceRequestUtils_1 = require("@libs/DistanceRequestUtils");
+const IOUUtils_1 = require("@libs/IOUUtils");
+const Log_1 = require("@libs/Log");
+const MoneyRequestUtils_1 = require("@libs/MoneyRequestUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const Policy_1 = require("@userActions/Policy/Policy");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const Button_1 = require("./Button");
+const ButtonWithDropdownMenu_1 = require("./ButtonWithDropdownMenu");
+const DelegateNoAccessModalProvider_1 = require("./DelegateNoAccessModalProvider");
+const FormHelpMessage_1 = require("./FormHelpMessage");
+const MoneyRequestAmountInput_1 = require("./MoneyRequestAmountInput");
+const MoneyRequestConfirmationListFooter_1 = require("./MoneyRequestConfirmationListFooter");
+const Pressable_1 = require("./Pressable");
+const ProductTrainingContext_1 = require("./ProductTrainingContext");
+const SelectionList_1 = require("./SelectionList");
+const UserListItem_1 = require("./SelectionList/UserListItem");
+const SettlementButton_1 = require("./SettlementButton");
+const Text_1 = require("./Text");
+const EducationalTooltip_1 = require("./Tooltip/EducationalTooltip");
+function MoneyRequestConfirmationList({ transaction, onSendMoney, onConfirm, iouType = CONST_1.default.IOU.TYPE.SUBMIT, iouAmount, isDistanceRequest, isManualDistanceRequest, isPerDiemRequest = false, isPolicyExpenseChat = false, iouCategory = '', shouldShowSmartScanFields = true, isEditingSplitBill, iouCurrencyCode, isReceiptEditable, iouMerchant, selectedParticipants: selectedParticipantsProp, payeePersonalDetails: payeePersonalDetailsProp, isReadOnly = false, policyID, reportID = '', receiptPath = '', iouAttendees, iouComment, receiptFilename = '', iouCreated, iouIsBillable = false, onToggleBillable, hasSmartScanFailed, reportActionID, action = CONST_1.default.IOU.ACTION.CREATE, shouldDisplayReceipt = false, expensesNumber = 0, isConfirmed, isConfirming, onPDFLoadError, onPDFPassword, iouIsReimbursable = true, onToggleReimbursable, showRemoveExpenseConfirmModal, }) {
+    const [policyCategoriesReal] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES}${policyID}`, { canBeMissing: true });
+    const [policyTags] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_TAGS}${policyID}`, { canBeMissing: true });
+    const [policyReal] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { canBeMissing: true });
+    const [policyDraft] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_DRAFTS}${policyID}`, { canBeMissing: true });
+    const [defaultMileageRate] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_DRAFTS}${policyID}`, {
+        selector: (selectedPolicy) => DistanceRequestUtils_1.default.getDefaultMileageRate(selectedPolicy),
         canBeMissing: true,
-    })[0];
-    var policyCategoriesDraft = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES_DRAFT).concat(policyID), { canBeMissing: true })[0];
-    var lastSelectedDistanceRates = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_SELECTED_DISTANCE_RATES, { canBeMissing: true })[0];
-    var currencyList = (0, useOnyx_1.default)(ONYXKEYS_1.default.CURRENCY_LIST, { canBeMissing: false })[0];
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var _0 = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext), isDelegateAccessRestricted = _0.isDelegateAccessRestricted, showDelegateNoAccessModal = _0.showDelegateNoAccessModal;
-    var isTestReceipt = (0, react_1.useMemo)(function () {
-        var _a, _b;
-        return (_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _a === void 0 ? void 0 : _a.isTestReceipt) !== null && _b !== void 0 ? _b : false;
-    }, [(_b = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _b === void 0 ? void 0 : _b.isTestReceipt]);
-    var isTestDriveReceipt = (0, react_1.useMemo)(function () {
-        var _a, _b;
-        return (_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _a === void 0 ? void 0 : _a.isTestDriveReceipt) !== null && _b !== void 0 ? _b : false;
-    }, [(_c = transaction === null || transaction === void 0 ? void 0 : transaction.receipt) === null || _c === void 0 ? void 0 : _c.isTestDriveReceipt]);
-    var isManagerMcTestReceipt = (0, react_1.useMemo)(function () {
-        return isBetaEnabled(CONST_1.default.BETAS.NEWDOT_MANAGER_MCTEST) && selectedParticipantsProp.some(function (participant) { return (0, ReportUtils_1.isSelectedManagerMcTest)(participant.login); });
+    });
+    const [policyCategoriesDraft] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES_DRAFT}${policyID}`, { canBeMissing: true });
+    const [lastSelectedDistanceRates] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_SELECTED_DISTANCE_RATES, { canBeMissing: true });
+    const [currencyList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CURRENCY_LIST, { canBeMissing: false });
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const { isDelegateAccessRestricted, showDelegateNoAccessModal } = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext);
+    const isTestReceipt = (0, react_1.useMemo)(() => {
+        return transaction?.receipt?.isTestReceipt ?? false;
+    }, [transaction?.receipt?.isTestReceipt]);
+    const isTestDriveReceipt = (0, react_1.useMemo)(() => {
+        return transaction?.receipt?.isTestDriveReceipt ?? false;
+    }, [transaction?.receipt?.isTestDriveReceipt]);
+    const isManagerMcTestReceipt = (0, react_1.useMemo)(() => {
+        return isBetaEnabled(CONST_1.default.BETAS.NEWDOT_MANAGER_MCTEST) && selectedParticipantsProp.some((participant) => (0, ReportUtils_1.isSelectedManagerMcTest)(participant.login));
     }, [isBetaEnabled, selectedParticipantsProp]);
-    var _1 = (0, ProductTrainingContext_1.useProductTrainingContext)(isTestDriveReceipt ? CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.SCAN_TEST_DRIVE_CONFIRMATION : CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.SCAN_TEST_CONFIRMATION, isTestDriveReceipt || isManagerMcTestReceipt), shouldShowProductTrainingTooltip = _1.shouldShowProductTrainingTooltip, renderProductTrainingTooltip = _1.renderProductTrainingTooltip;
-    var policy = policyReal !== null && policyReal !== void 0 ? policyReal : policyDraft;
-    var policyCategories = policyCategoriesReal !== null && policyCategoriesReal !== void 0 ? policyCategoriesReal : policyCategoriesDraft;
-    var styles = (0, useThemeStyles_1.default)();
-    var _2 = (0, useLocalize_1.default)(), translate = _2.translate, toLocaleDigit = _2.toLocaleDigit;
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var isTypeRequest = iouType === CONST_1.default.IOU.TYPE.SUBMIT;
-    var isTypeSplit = iouType === CONST_1.default.IOU.TYPE.SPLIT;
-    var isTypeSend = iouType === CONST_1.default.IOU.TYPE.PAY;
-    var isTypeTrackExpense = iouType === CONST_1.default.IOU.TYPE.TRACK;
-    var isTypeInvoice = iouType === CONST_1.default.IOU.TYPE.INVOICE;
-    var isScanRequest = (0, react_1.useMemo)(function () { return (0, TransactionUtils_1.isScanRequest)(transaction); }, [transaction]);
-    var isCreateExpenseFlow = !!(transaction === null || transaction === void 0 ? void 0 : transaction.isFromGlobalCreate) && !isPerDiemRequest;
-    var isCustomUnitRateIDForP2P = (0, TransactionUtils_1.isCustomUnitRateIDForP2P)(transaction);
-    var transactionID = transaction === null || transaction === void 0 ? void 0 : transaction.transactionID;
-    var customUnitRateID = (0, TransactionUtils_1.getRateID)(transaction);
-    var subRates = (_f = (_e = (_d = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _d === void 0 ? void 0 : _d.customUnit) === null || _e === void 0 ? void 0 : _e.subRates) !== null && _f !== void 0 ? _f : [];
-    (0, react_1.useEffect)(function () {
-        var _a;
-        if (customUnitRateID !== '-1' || !isDistanceRequest || !transactionID || !(policy === null || policy === void 0 ? void 0 : policy.id)) {
+    const { shouldShowProductTrainingTooltip, renderProductTrainingTooltip } = (0, ProductTrainingContext_1.useProductTrainingContext)(isTestDriveReceipt ? CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.SCAN_TEST_DRIVE_CONFIRMATION : CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.SCAN_TEST_CONFIRMATION, isTestDriveReceipt || isManagerMcTestReceipt);
+    const policy = policyReal ?? policyDraft;
+    const policyCategories = policyCategoriesReal ?? policyCategoriesDraft;
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate, toLocaleDigit } = (0, useLocalize_1.default)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const isTypeRequest = iouType === CONST_1.default.IOU.TYPE.SUBMIT;
+    const isTypeSplit = iouType === CONST_1.default.IOU.TYPE.SPLIT;
+    const isTypeSend = iouType === CONST_1.default.IOU.TYPE.PAY;
+    const isTypeTrackExpense = iouType === CONST_1.default.IOU.TYPE.TRACK;
+    const isTypeInvoice = iouType === CONST_1.default.IOU.TYPE.INVOICE;
+    const isScanRequest = (0, react_1.useMemo)(() => (0, TransactionUtils_1.isScanRequest)(transaction), [transaction]);
+    const isCreateExpenseFlow = !!transaction?.isFromGlobalCreate && !isPerDiemRequest;
+    const isCustomUnitRateIDForP2P = (0, TransactionUtils_1.isCustomUnitRateIDForP2P)(transaction);
+    const transactionID = transaction?.transactionID;
+    const customUnitRateID = (0, TransactionUtils_1.getRateID)(transaction);
+    const subRates = transaction?.comment?.customUnit?.subRates ?? [];
+    (0, react_1.useEffect)(() => {
+        if (customUnitRateID !== '-1' || !isDistanceRequest || !transactionID || !policy?.id) {
             return;
         }
-        var defaultRate = defaultMileageRate === null || defaultMileageRate === void 0 ? void 0 : defaultMileageRate.customUnitRateID;
-        var lastSelectedRate = (_a = lastSelectedDistanceRates === null || lastSelectedDistanceRates === void 0 ? void 0 : lastSelectedDistanceRates[policy.id]) !== null && _a !== void 0 ? _a : defaultRate;
-        var rateID = lastSelectedRate;
+        const defaultRate = defaultMileageRate?.customUnitRateID;
+        const lastSelectedRate = lastSelectedDistanceRates?.[policy.id] ?? defaultRate;
+        const rateID = lastSelectedRate;
         if (!rateID) {
             return;
         }
         (0, IOU_1.setCustomUnitRateID)(transactionID, rateID);
-    }, [defaultMileageRate, customUnitRateID, lastSelectedDistanceRates, policy === null || policy === void 0 ? void 0 : policy.id, transactionID, isDistanceRequest]);
-    var mileageRate = DistanceRequestUtils_1.default.getRate({ transaction: transaction, policy: policy, policyDraft: policyDraft });
-    var rate = mileageRate.rate;
-    var prevRate = (0, usePrevious_1.default)(rate);
-    var unit = mileageRate.unit;
-    var prevUnit = (0, usePrevious_1.default)(unit);
-    var currency = (_g = mileageRate.currency) !== null && _g !== void 0 ? _g : CONST_1.default.CURRENCY.USD;
-    var prevCurrency = (0, usePrevious_1.default)(currency);
-    var prevSubRates = (0, usePrevious_1.default)(subRates);
+    }, [defaultMileageRate, customUnitRateID, lastSelectedDistanceRates, policy?.id, transactionID, isDistanceRequest]);
+    const mileageRate = DistanceRequestUtils_1.default.getRate({ transaction, policy, policyDraft });
+    const rate = mileageRate.rate;
+    const prevRate = (0, usePrevious_1.default)(rate);
+    const unit = mileageRate.unit;
+    const prevUnit = (0, usePrevious_1.default)(unit);
+    const currency = mileageRate.currency ?? CONST_1.default.CURRENCY.USD;
+    const prevCurrency = (0, usePrevious_1.default)(currency);
+    const prevSubRates = (0, usePrevious_1.default)(subRates);
     // A flag for showing the categories field
-    var shouldShowCategories = (isPolicyExpenseChat || isTypeInvoice) && (!!iouCategory || (0, OptionsListUtils_1.hasEnabledOptions)(Object.values(policyCategories !== null && policyCategories !== void 0 ? policyCategories : {})));
-    var shouldShowMerchant = shouldShowSmartScanFields && !isDistanceRequest && !isTypeSend && !isPerDiemRequest;
-    var policyTagLists = (0, react_1.useMemo)(function () { return (0, PolicyUtils_1.getTagLists)(policyTags); }, [policyTags]);
-    var shouldShowTax = (0, PolicyUtils_1.isTaxTrackingEnabled)(isPolicyExpenseChat, policy, isDistanceRequest, isPerDiemRequest);
-    var previousTransactionAmount = (0, usePrevious_1.default)(transaction === null || transaction === void 0 ? void 0 : transaction.amount);
-    var previousTransactionCurrency = (0, usePrevious_1.default)(transaction === null || transaction === void 0 ? void 0 : transaction.currency);
-    var previousTransactionModifiedCurrency = (0, usePrevious_1.default)(transaction === null || transaction === void 0 ? void 0 : transaction.modifiedCurrency);
-    var previousCustomUnitRateID = (0, usePrevious_1.default)(customUnitRateID);
-    (0, react_1.useEffect)(function () {
+    const shouldShowCategories = (isPolicyExpenseChat || isTypeInvoice) && (!!iouCategory || (0, OptionsListUtils_1.hasEnabledOptions)(Object.values(policyCategories ?? {})));
+    const shouldShowMerchant = shouldShowSmartScanFields && !isDistanceRequest && !isTypeSend && !isPerDiemRequest;
+    const policyTagLists = (0, react_1.useMemo)(() => (0, PolicyUtils_1.getTagLists)(policyTags), [policyTags]);
+    const shouldShowTax = (0, PolicyUtils_1.isTaxTrackingEnabled)(isPolicyExpenseChat, policy, isDistanceRequest, isPerDiemRequest);
+    const previousTransactionAmount = (0, usePrevious_1.default)(transaction?.amount);
+    const previousTransactionCurrency = (0, usePrevious_1.default)(transaction?.currency);
+    const previousTransactionModifiedCurrency = (0, usePrevious_1.default)(transaction?.modifiedCurrency);
+    const previousCustomUnitRateID = (0, usePrevious_1.default)(customUnitRateID);
+    (0, react_1.useEffect)(() => {
         // previousTransaction is in the condition because if it is falsy, it means this is the first time the useEffect is triggered after we load it, so we should calculate the default
         // tax even if the other parameters are the same against their previous values.
         if (!shouldShowTax ||
@@ -147,50 +122,50 @@ function MoneyRequestConfirmationList(_a) {
                 previousCustomUnitRateID === customUnitRateID)) {
             return;
         }
-        var defaultTaxCode = (0, TransactionUtils_1.getDefaultTaxCode)(policy, transaction);
-        (0, IOU_1.setMoneyRequestTaxRate)(transactionID, defaultTaxCode !== null && defaultTaxCode !== void 0 ? defaultTaxCode : '');
+        const defaultTaxCode = (0, TransactionUtils_1.getDefaultTaxCode)(policy, transaction);
+        (0, IOU_1.setMoneyRequestTaxRate)(transactionID, defaultTaxCode ?? '');
     }, [customUnitRateID, policy, previousCustomUnitRateID, previousTransactionCurrency, previousTransactionModifiedCurrency, shouldShowTax, transaction, transactionID]);
-    var isMovingTransactionFromTrackExpense = (0, IOUUtils_1.isMovingTransactionFromTrackExpense)(action);
-    var distance = (0, TransactionUtils_1.getDistanceInMeters)(transaction, unit);
-    var prevDistance = (0, usePrevious_1.default)(distance);
-    var shouldCalculateDistanceAmount = isDistanceRequest && (iouAmount === 0 || prevRate !== rate || prevDistance !== distance || prevCurrency !== currency || prevUnit !== unit);
-    var shouldCalculatePerDiemAmount = isPerDiemRequest && (iouAmount === 0 || JSON.stringify(prevSubRates) !== JSON.stringify(subRates) || prevCurrency !== currency);
-    var hasRoute = (0, TransactionUtils_1.hasRoute)(transaction, isDistanceRequest);
-    var isDistanceRequestWithPendingRoute = isDistanceRequest && (!hasRoute || !rate) && !isMovingTransactionFromTrackExpense;
-    var distanceRequestAmount = DistanceRequestUtils_1.default.getDistanceRequestAmount(distance, unit !== null && unit !== void 0 ? unit : CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES, rate !== null && rate !== void 0 ? rate : 0);
-    var amountToBeUsed = iouAmount;
+    const isMovingTransactionFromTrackExpense = (0, IOUUtils_1.isMovingTransactionFromTrackExpense)(action);
+    const distance = (0, TransactionUtils_1.getDistanceInMeters)(transaction, unit);
+    const prevDistance = (0, usePrevious_1.default)(distance);
+    const shouldCalculateDistanceAmount = isDistanceRequest && (iouAmount === 0 || prevRate !== rate || prevDistance !== distance || prevCurrency !== currency || prevUnit !== unit);
+    const shouldCalculatePerDiemAmount = isPerDiemRequest && (iouAmount === 0 || JSON.stringify(prevSubRates) !== JSON.stringify(subRates) || prevCurrency !== currency);
+    const hasRoute = (0, TransactionUtils_1.hasRoute)(transaction, isDistanceRequest);
+    const isDistanceRequestWithPendingRoute = isDistanceRequest && (!hasRoute || !rate) && !isMovingTransactionFromTrackExpense;
+    const distanceRequestAmount = DistanceRequestUtils_1.default.getDistanceRequestAmount(distance, unit ?? CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES, rate ?? 0);
+    let amountToBeUsed = iouAmount;
     if (shouldCalculateDistanceAmount) {
         amountToBeUsed = distanceRequestAmount;
     }
     else if (shouldCalculatePerDiemAmount) {
-        var perDiemRequestAmount = (0, IOU_1.computePerDiemExpenseAmount)({ subRates: subRates });
+        const perDiemRequestAmount = (0, IOU_1.computePerDiemExpenseAmount)({ subRates });
         amountToBeUsed = perDiemRequestAmount;
     }
-    var formattedAmount = isDistanceRequestWithPendingRoute ? '' : (0, CurrencyUtils_1.convertToDisplayString)(amountToBeUsed, isDistanceRequest ? currency : iouCurrencyCode);
-    var formattedAmountPerAttendee = isDistanceRequestWithPendingRoute || isScanRequest
+    const formattedAmount = isDistanceRequestWithPendingRoute ? '' : (0, CurrencyUtils_1.convertToDisplayString)(amountToBeUsed, isDistanceRequest ? currency : iouCurrencyCode);
+    const formattedAmountPerAttendee = isDistanceRequestWithPendingRoute || isScanRequest
         ? ''
-        : (0, CurrencyUtils_1.convertToDisplayString)(amountToBeUsed / ((iouAttendees === null || iouAttendees === void 0 ? void 0 : iouAttendees.length) && iouAttendees.length > 0 ? iouAttendees.length : 1), isDistanceRequest ? currency : iouCurrencyCode);
-    var isFocused = (0, native_1.useIsFocused)();
-    var _3 = (0, useDebouncedState_1.default)(''), formError = _3[0], debouncedFormError = _3[1], setFormError = _3[2];
-    var _4 = (0, react_1.useState)(isConfirmed), didConfirm = _4[0], setDidConfirm = _4[1];
-    var _5 = (0, react_1.useState)(false), didConfirmSplit = _5[0], setDidConfirmSplit = _5[1];
+        : (0, CurrencyUtils_1.convertToDisplayString)(amountToBeUsed / (iouAttendees?.length && iouAttendees.length > 0 ? iouAttendees.length : 1), isDistanceRequest ? currency : iouCurrencyCode);
+    const isFocused = (0, native_1.useIsFocused)();
+    const [formError, debouncedFormError, setFormError] = (0, useDebouncedState_1.default)('');
+    const [didConfirm, setDidConfirm] = (0, react_1.useState)(isConfirmed);
+    const [didConfirmSplit, setDidConfirmSplit] = (0, react_1.useState)(false);
     // Clear the form error if it's set to one among the list passed as an argument
-    var clearFormErrors = (0, react_1.useCallback)(function (errors) {
+    const clearFormErrors = (0, react_1.useCallback)((errors) => {
         if (!errors.includes(formError)) {
             return;
         }
         setFormError('');
     }, [formError, setFormError]);
-    var shouldDisplayFieldError = (0, react_1.useMemo)(function () {
+    const shouldDisplayFieldError = (0, react_1.useMemo)(() => {
         if (!isEditingSplitBill) {
             return false;
         }
         return (!!hasSmartScanFailed && (0, TransactionUtils_1.hasMissingSmartscanFields)(transaction)) || (didConfirmSplit && (0, TransactionUtils_1.areRequiredFieldsEmpty)(transaction));
     }, [isEditingSplitBill, hasSmartScanFailed, transaction, didConfirmSplit]);
-    var isMerchantEmpty = (0, react_1.useMemo)(function () { return !iouMerchant || (0, TransactionUtils_1.isMerchantMissing)(transaction); }, [transaction, iouMerchant]);
-    var isMerchantRequired = isPolicyExpenseChat && (!isScanRequest || isEditingSplitBill) && shouldShowMerchant;
-    var isCategoryRequired = !!(policy === null || policy === void 0 ? void 0 : policy.requiresCategory) && !isTypeInvoice;
-    (0, react_1.useEffect)(function () {
+    const isMerchantEmpty = (0, react_1.useMemo)(() => !iouMerchant || (0, TransactionUtils_1.isMerchantMissing)(transaction), [transaction, iouMerchant]);
+    const isMerchantRequired = isPolicyExpenseChat && (!isScanRequest || isEditingSplitBill) && shouldShowMerchant;
+    const isCategoryRequired = !!policy?.requiresCategory && !isTypeInvoice;
+    (0, react_1.useEffect)(() => {
         if (shouldDisplayFieldError && didConfirmSplit) {
             setFormError('iou.error.genericSmartscanFailureMessage');
             return;
@@ -203,27 +178,27 @@ function MoneyRequestConfirmationList(_a) {
         setFormError('');
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- we don't want this effect to run if it's just setFormError that changes
     }, [isFocused, transaction, shouldDisplayFieldError, hasSmartScanFailed, didConfirmSplit]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // We want this effect to run only when the transaction is moving from Self DM to a expense chat
         if (!transactionID || !isDistanceRequest || !isMovingTransactionFromTrackExpense || !isPolicyExpenseChat) {
             return;
         }
-        var errorKey = 'iou.error.invalidRate';
-        var policyRates = DistanceRequestUtils_1.default.getMileageRates(policy);
+        const errorKey = 'iou.error.invalidRate';
+        const policyRates = DistanceRequestUtils_1.default.getMileageRates(policy);
         // If the selected rate belongs to the policy, clear the error
         if (customUnitRateID && Object.keys(policyRates).includes(customUnitRateID)) {
             clearFormErrors([errorKey]);
             return;
         }
         // If there is a distance rate in the policy that matches the rate and unit of the currently selected mileage rate, select it automatically
-        var matchingRate = Object.values(policyRates).find(function (policyRate) { return policyRate.rate === mileageRate.rate && policyRate.unit === mileageRate.unit; });
-        if (matchingRate === null || matchingRate === void 0 ? void 0 : matchingRate.customUnitRateID) {
+        const matchingRate = Object.values(policyRates).find((policyRate) => policyRate.rate === mileageRate.rate && policyRate.unit === mileageRate.unit);
+        if (matchingRate?.customUnitRateID) {
             (0, IOU_1.setCustomUnitRateID)(transactionID, matchingRate.customUnitRateID);
             return;
         }
         if (isCustomUnitRateIDForP2P && DistanceRequestUtils_1.default.getDefaultMileageRate(policy)) {
-            var defaultMileageRatePolicy = DistanceRequestUtils_1.default.getDefaultMileageRate(policy);
-            (0, IOU_1.setCustomUnitRateID)(transactionID, defaultMileageRatePolicy === null || defaultMileageRatePolicy === void 0 ? void 0 : defaultMileageRatePolicy.customUnitRateID);
+            const defaultMileageRatePolicy = DistanceRequestUtils_1.default.getDefaultMileageRate(policy);
+            (0, IOU_1.setCustomUnitRateID)(transactionID, defaultMileageRatePolicy?.customUnitRateID);
             return;
         }
         // If none of the above conditions are met, display the rate error
@@ -240,9 +215,9 @@ function MoneyRequestConfirmationList(_a) {
         clearFormErrors,
         isCustomUnitRateIDForP2P,
     ]);
-    var routeError = Object.values((_j = (_h = transaction === null || transaction === void 0 ? void 0 : transaction.errorFields) === null || _h === void 0 ? void 0 : _h.route) !== null && _j !== void 0 ? _j : {}).at(0);
-    var isFirstUpdatedDistanceAmount = (0, react_1.useRef)(false);
-    (0, react_1.useEffect)(function () {
+    const routeError = Object.values(transaction?.errorFields?.route ?? {}).at(0);
+    const isFirstUpdatedDistanceAmount = (0, react_1.useRef)(false);
+    (0, react_1.useEffect)(() => {
         if (isFirstUpdatedDistanceAmount.current) {
             return;
         }
@@ -252,26 +227,25 @@ function MoneyRequestConfirmationList(_a) {
         if (isReadOnly) {
             return;
         }
-        var amount = DistanceRequestUtils_1.default.getDistanceRequestAmount(distance, unit !== null && unit !== void 0 ? unit : CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES, rate !== null && rate !== void 0 ? rate : 0);
-        (0, IOU_1.setMoneyRequestAmount)(transactionID, amount, currency !== null && currency !== void 0 ? currency : '');
+        const amount = DistanceRequestUtils_1.default.getDistanceRequestAmount(distance, unit ?? CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES, rate ?? 0);
+        (0, IOU_1.setMoneyRequestAmount)(transactionID, amount, currency ?? '');
         isFirstUpdatedDistanceAmount.current = true;
     }, [distance, rate, isReadOnly, unit, transactionID, currency, isDistanceRequest]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!shouldCalculateDistanceAmount || !transactionID || isReadOnly) {
             return;
         }
-        var amount = distanceRequestAmount;
-        (0, IOU_1.setMoneyRequestAmount)(transactionID, amount, currency !== null && currency !== void 0 ? currency : '');
+        const amount = distanceRequestAmount;
+        (0, IOU_1.setMoneyRequestAmount)(transactionID, amount, currency ?? '');
         // If it's a split request among individuals, set the split shares
-        var participantAccountIDs = selectedParticipantsProp.map(function (participant) { var _a; return (_a = participant.accountID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID; });
-        if (isTypeSplit && !isPolicyExpenseChat && amount && (transaction === null || transaction === void 0 ? void 0 : transaction.currency)) {
+        const participantAccountIDs = selectedParticipantsProp.map((participant) => participant.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID);
+        if (isTypeSplit && !isPolicyExpenseChat && amount && transaction?.currency) {
             (0, IOU_1.setSplitShares)(transaction, amount, currency, participantAccountIDs);
         }
     }, [shouldCalculateDistanceAmount, isReadOnly, distanceRequestAmount, transactionID, currency, isTypeSplit, isPolicyExpenseChat, selectedParticipantsProp, transaction]);
-    var previousTaxCode = (0, usePrevious_1.default)(transaction === null || transaction === void 0 ? void 0 : transaction.taxCode);
+    const previousTaxCode = (0, usePrevious_1.default)(transaction?.taxCode);
     // Calculate and set tax amount in transaction draft
-    (0, react_1.useEffect)(function () {
-        var _a, _b, _c, _d, _e;
+    (0, react_1.useEffect)(() => {
         if (!shouldShowTax ||
             !transaction ||
             (transaction.taxAmount !== undefined &&
@@ -281,23 +255,23 @@ function MoneyRequestConfirmationList(_a) {
                 previousTaxCode === transaction.taxCode)) {
             return;
         }
-        var taxableAmount;
-        var taxCode;
+        let taxableAmount;
+        let taxCode;
         if (isDistanceRequest) {
             if (customUnitRateID) {
-                var customUnitRate = (0, PolicyUtils_1.getDistanceRateCustomUnitRate)(policy, customUnitRateID);
-                taxCode = (_a = customUnitRate === null || customUnitRate === void 0 ? void 0 : customUnitRate.attributes) === null || _a === void 0 ? void 0 : _a.taxRateExternalID;
+                const customUnitRate = (0, PolicyUtils_1.getDistanceRateCustomUnitRate)(policy, customUnitRateID);
+                taxCode = customUnitRate?.attributes?.taxRateExternalID;
                 taxableAmount = DistanceRequestUtils_1.default.getTaxableAmount(policy, customUnitRateID, distance);
             }
         }
         else {
-            taxableAmount = (_b = transaction.amount) !== null && _b !== void 0 ? _b : 0;
-            taxCode = (_d = (_c = transaction.taxCode) !== null && _c !== void 0 ? _c : (0, TransactionUtils_1.getDefaultTaxCode)(policy, transaction)) !== null && _d !== void 0 ? _d : '';
+            taxableAmount = transaction.amount ?? 0;
+            taxCode = transaction.taxCode ?? (0, TransactionUtils_1.getDefaultTaxCode)(policy, transaction) ?? '';
         }
         if (taxCode && taxableAmount) {
-            var taxPercentage = (_e = (0, TransactionUtils_1.getTaxValue)(policy, transaction, taxCode)) !== null && _e !== void 0 ? _e : '';
-            var taxAmount = (0, TransactionUtils_1.calculateTaxAmount)(taxPercentage, taxableAmount, transaction.currency);
-            var taxAmountInSmallestCurrencyUnits = (0, CurrencyUtils_1.convertToBackendAmount)(Number.parseFloat(taxAmount.toString()));
+            const taxPercentage = (0, TransactionUtils_1.getTaxValue)(policy, transaction, taxCode) ?? '';
+            const taxAmount = (0, TransactionUtils_1.calculateTaxAmount)(taxPercentage, taxableAmount, transaction.currency);
+            const taxAmountInSmallestCurrencyUnits = (0, CurrencyUtils_1.convertToBackendAmount)(Number.parseFloat(taxAmount.toString()));
             (0, IOU_1.setMoneyRequestTaxAmount)(transaction.transactionID, taxAmountInSmallestCurrencyUnits);
         }
     }, [
@@ -316,13 +290,13 @@ function MoneyRequestConfirmationList(_a) {
     if (isEditingSplitBill && didConfirm) {
         setDidConfirm(false);
     }
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         setDidConfirm(isConfirmed);
     }, [isConfirmed]);
-    var splitOrRequestOptions = (0, react_1.useMemo)(function () {
-        var text;
+    const splitOrRequestOptions = (0, react_1.useMemo)(() => {
+        let text;
         if (expensesNumber > 1) {
-            text = translate('iou.createExpenses', { expensesNumber: expensesNumber });
+            text = translate('iou.createExpenses', { expensesNumber });
         }
         else if (isTypeInvoice) {
             if ((0, Policy_1.hasInvoicingDetails)(policy)) {
@@ -348,7 +322,7 @@ function MoneyRequestConfirmationList(_a) {
             }
         }
         else {
-            var translationKey = isTypeSplit ? 'iou.splitAmount' : 'iou.createExpenseWithAmount';
+            const translationKey = isTypeSplit ? 'iou.splitAmount' : 'iou.createExpenseWithAmount';
             text = translate(translationKey, { amount: formattedAmount });
         }
         return [
@@ -372,75 +346,81 @@ function MoneyRequestConfirmationList(_a) {
         translate,
         formattedAmount,
     ]);
-    var onSplitShareChange = (0, react_1.useCallback)(function (accountID, value) {
-        if (!(transaction === null || transaction === void 0 ? void 0 : transaction.transactionID)) {
+    const onSplitShareChange = (0, react_1.useCallback)((accountID, value) => {
+        if (!transaction?.transactionID) {
             return;
         }
-        var amountInCents = (0, CurrencyUtils_1.convertToBackendAmount)(value);
-        (0, IOU_1.setIndividualShare)(transaction === null || transaction === void 0 ? void 0 : transaction.transactionID, accountID, amountInCents);
+        const amountInCents = (0, CurrencyUtils_1.convertToBackendAmount)(value);
+        (0, IOU_1.setIndividualShare)(transaction?.transactionID, accountID, amountInCents);
     }, [transaction]);
-    (0, react_1.useEffect)(function () {
-        var _a, _b, _c;
-        if (!isTypeSplit || !(transaction === null || transaction === void 0 ? void 0 : transaction.splitShares)) {
+    (0, react_1.useEffect)(() => {
+        if (!isTypeSplit || !transaction?.splitShares) {
             return;
         }
-        var splitSharesMap = transaction.splitShares;
-        var shares = Object.values(splitSharesMap).map(function (splitShare) { var _a; return (_a = splitShare === null || splitShare === void 0 ? void 0 : splitShare.amount) !== null && _a !== void 0 ? _a : 0; });
-        var sumOfShares = shares === null || shares === void 0 ? void 0 : shares.reduce(function (prev, current) { return prev + current; }, 0);
+        const splitSharesMap = transaction.splitShares;
+        const shares = Object.values(splitSharesMap).map((splitShare) => splitShare?.amount ?? 0);
+        const sumOfShares = shares?.reduce((prev, current) => prev + current, 0);
         if (sumOfShares !== iouAmount) {
             setFormError('iou.error.invalidSplit');
             return;
         }
-        var participantsWithAmount = Object.keys((_a = transaction === null || transaction === void 0 ? void 0 : transaction.splitShares) !== null && _a !== void 0 ? _a : {})
-            .filter(function (accountID) { var _a, _b, _c; return ((_c = (_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.splitShares) === null || _a === void 0 ? void 0 : _a[Number(accountID)]) === null || _b === void 0 ? void 0 : _b.amount) !== null && _c !== void 0 ? _c : 0) > 0; })
-            .map(function (accountID) { return Number(accountID); });
+        const participantsWithAmount = Object.keys(transaction?.splitShares ?? {})
+            .filter((accountID) => (transaction?.splitShares?.[Number(accountID)]?.amount ?? 0) > 0)
+            .map((accountID) => Number(accountID));
         // A split must have at least two participants with amounts bigger than 0
         if (participantsWithAmount.length === 1) {
             setFormError('iou.error.invalidSplitParticipants');
             return;
         }
         // Amounts should be bigger than 0 for the split bill creator (yourself)
-        if ((transaction === null || transaction === void 0 ? void 0 : transaction.splitShares[currentUserPersonalDetails.accountID]) && ((_c = (_b = transaction.splitShares[currentUserPersonalDetails.accountID]) === null || _b === void 0 ? void 0 : _b.amount) !== null && _c !== void 0 ? _c : 0) === 0) {
+        if (transaction?.splitShares[currentUserPersonalDetails.accountID] && (transaction.splitShares[currentUserPersonalDetails.accountID]?.amount ?? 0) === 0) {
             setFormError('iou.error.invalidSplitYourself');
             return;
         }
         setFormError('');
-    }, [isFocused, transaction, isTypeSplit, transaction === null || transaction === void 0 ? void 0 : transaction.splitShares, currentUserPersonalDetails.accountID, iouAmount, iouCurrencyCode, setFormError, translate]);
-    (0, react_1.useEffect)(function () {
-        if (!isTypeSplit || !(transaction === null || transaction === void 0 ? void 0 : transaction.splitShares)) {
+    }, [isFocused, transaction, isTypeSplit, transaction?.splitShares, currentUserPersonalDetails.accountID, iouAmount, iouCurrencyCode, setFormError, translate]);
+    (0, react_1.useEffect)(() => {
+        if (!isTypeSplit || !transaction?.splitShares) {
             return;
         }
         (0, IOU_1.adjustRemainingSplitShares)(transaction);
     }, [isTypeSplit, transaction]);
-    var selectedParticipants = (0, react_1.useMemo)(function () { return selectedParticipantsProp.filter(function (participant) { return participant.selected; }); }, [selectedParticipantsProp]);
-    var payeePersonalDetails = (0, react_1.useMemo)(function () { return payeePersonalDetailsProp !== null && payeePersonalDetailsProp !== void 0 ? payeePersonalDetailsProp : currentUserPersonalDetails; }, [payeePersonalDetailsProp, currentUserPersonalDetails]);
-    var shouldShowReadOnlySplits = (0, react_1.useMemo)(function () { return isPolicyExpenseChat || isReadOnly || isScanRequest; }, [isPolicyExpenseChat, isReadOnly, isScanRequest]);
-    var splitParticipants = (0, react_1.useMemo)(function () {
-        var _a, _b;
+    const selectedParticipants = (0, react_1.useMemo)(() => selectedParticipantsProp.filter((participant) => participant.selected), [selectedParticipantsProp]);
+    const payeePersonalDetails = (0, react_1.useMemo)(() => payeePersonalDetailsProp ?? currentUserPersonalDetails, [payeePersonalDetailsProp, currentUserPersonalDetails]);
+    const shouldShowReadOnlySplits = (0, react_1.useMemo)(() => isPolicyExpenseChat || isReadOnly || isScanRequest, [isPolicyExpenseChat, isReadOnly, isScanRequest]);
+    const splitParticipants = (0, react_1.useMemo)(() => {
         if (!isTypeSplit) {
             return [];
         }
-        var payeeOption = (0, OptionsListUtils_1.getIOUConfirmationOptionsFromPayeePersonalDetail)(payeePersonalDetails);
+        const payeeOption = (0, OptionsListUtils_1.getIOUConfirmationOptionsFromPayeePersonalDetail)(payeePersonalDetails);
         if (shouldShowReadOnlySplits) {
-            return __spreadArray([payeeOption], selectedParticipants, true).map(function (participantOption) {
-                var _a, _b, _c, _d;
-                var isPayer = participantOption.accountID === payeeOption.accountID;
-                var amount = 0;
+            return [payeeOption, ...selectedParticipants].map((participantOption) => {
+                const isPayer = participantOption.accountID === payeeOption.accountID;
+                let amount = 0;
                 if (iouAmount > 0) {
                     amount =
-                        (_d = (_c = (_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _a === void 0 ? void 0 : _a.splits) === null || _b === void 0 ? void 0 : _b.find(function (split) { return split.accountID === participantOption.accountID; })) === null || _c === void 0 ? void 0 : _c.amount) !== null && _d !== void 0 ? _d : (0, IOUUtils_1.calculateAmount)(selectedParticipants.length, iouAmount, iouCurrencyCode !== null && iouCurrencyCode !== void 0 ? iouCurrencyCode : '', isPayer);
+                        transaction?.comment?.splits?.find((split) => split.accountID === participantOption.accountID)?.amount ??
+                            (0, IOUUtils_1.calculateAmount)(selectedParticipants.length, iouAmount, iouCurrencyCode ?? '', isPayer);
                 }
-                return __assign(__assign({}, participantOption), { isSelected: false, isInteractive: false, rightElement: (<react_native_1.View style={[styles.flexWrap, styles.pl2]}>
+                return {
+                    ...participantOption,
+                    isSelected: false,
+                    isInteractive: false,
+                    rightElement: (<react_native_1.View style={[styles.flexWrap, styles.pl2]}>
                             <Text_1.default style={[styles.textLabel]}>{amount ? (0, CurrencyUtils_1.convertToDisplayString)(amount, iouCurrencyCode) : ''}</Text_1.default>
-                        </react_native_1.View>) });
+                        </react_native_1.View>),
+                };
             });
         }
-        var currencySymbol = (_b = (_a = currencyList === null || currencyList === void 0 ? void 0 : currencyList[iouCurrencyCode !== null && iouCurrencyCode !== void 0 ? iouCurrencyCode : '']) === null || _a === void 0 ? void 0 : _a.symbol) !== null && _b !== void 0 ? _b : iouCurrencyCode;
-        var formattedTotalAmount = (0, CurrencyUtils_1.convertToDisplayStringWithoutCurrency)(iouAmount, iouCurrencyCode);
-        return __spreadArray([payeeOption], selectedParticipants, true).map(function (participantOption) {
-            var _a, _b, _c;
-            return (__assign(__assign({}, participantOption), { tabIndex: -1, isSelected: false, isInteractive: false, rightElement: (<MoneyRequestAmountInput_1.default autoGrow={false} amount={(_c = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.splitShares) === null || _a === void 0 ? void 0 : _a[(_b = participantOption.accountID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID]) === null || _c === void 0 ? void 0 : _c.amount} currency={iouCurrencyCode} prefixCharacter={currencySymbol} disableKeyboard={false} isCurrencyPressable={false} hideFocusedState={false} hideCurrencySymbol formatAmountOnBlur prefixContainerStyle={[styles.pv0, styles.h100]} prefixStyle={styles.lineHeightUndefined} inputStyle={[styles.optionRowAmountInput, styles.lineHeightUndefined]} containerStyle={[styles.textInputContainer, styles.pl2, styles.pr1]} touchableInputWrapperStyle={[styles.ml3]} onFormatAmount={CurrencyUtils_1.convertToDisplayStringWithoutCurrency} onAmountChange={function (value) { var _a; return onSplitShareChange((_a = participantOption.accountID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID, Number(value)); }} maxLength={formattedTotalAmount.length + 1} contentWidth={(formattedTotalAmount.length + 1) * 8} shouldApplyPaddingToContainer shouldUseDefaultLineHeightForPrefix={false} shouldWrapInputInContainer={false}/>) }));
-        });
+        const currencySymbol = currencyList?.[iouCurrencyCode ?? '']?.symbol ?? iouCurrencyCode;
+        const formattedTotalAmount = (0, CurrencyUtils_1.convertToDisplayStringWithoutCurrency)(iouAmount, iouCurrencyCode);
+        return [payeeOption, ...selectedParticipants].map((participantOption) => ({
+            ...participantOption,
+            tabIndex: -1,
+            isSelected: false,
+            isInteractive: false,
+            rightElement: (<MoneyRequestAmountInput_1.default autoGrow={false} amount={transaction?.splitShares?.[participantOption.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID]?.amount} currency={iouCurrencyCode} prefixCharacter={currencySymbol} disableKeyboard={false} isCurrencyPressable={false} hideFocusedState={false} hideCurrencySymbol formatAmountOnBlur prefixContainerStyle={[styles.pv0, styles.h100]} prefixStyle={styles.lineHeightUndefined} inputStyle={[styles.optionRowAmountInput, styles.lineHeightUndefined]} containerStyle={[styles.textInputContainer, styles.pl2, styles.pr1]} touchableInputWrapperStyle={[styles.ml3]} onFormatAmount={CurrencyUtils_1.convertToDisplayStringWithoutCurrency} onAmountChange={(value) => onSplitShareChange(participantOption.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID, Number(value))} maxLength={formattedTotalAmount.length + 1} contentWidth={(formattedTotalAmount.length + 1) * 8} shouldApplyPaddingToContainer shouldUseDefaultLineHeightForPrefix={false} shouldWrapInputInContainer={false}/>),
+        }));
     }, [
         isTypeSplit,
         payeePersonalDetails,
@@ -459,24 +439,24 @@ function MoneyRequestConfirmationList(_a) {
         styles.optionRowAmountInput,
         styles.textInputContainer,
         styles.ml3,
-        (_k = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _k === void 0 ? void 0 : _k.splits,
-        transaction === null || transaction === void 0 ? void 0 : transaction.splitShares,
+        transaction?.comment?.splits,
+        transaction?.splitShares,
         onSplitShareChange,
     ]);
-    var isSplitModified = (0, react_1.useMemo)(function () {
-        if (!(transaction === null || transaction === void 0 ? void 0 : transaction.splitShares)) {
+    const isSplitModified = (0, react_1.useMemo)(() => {
+        if (!transaction?.splitShares) {
             return;
         }
-        return Object.keys(transaction.splitShares).some(function (key) { var _a, _b, _c; return (_c = (_a = transaction.splitShares) === null || _a === void 0 ? void 0 : _a[(_b = Number(key)) !== null && _b !== void 0 ? _b : -1]) === null || _c === void 0 ? void 0 : _c.isModified; });
-    }, [transaction === null || transaction === void 0 ? void 0 : transaction.splitShares]);
-    var getSplitSectionHeader = (0, react_1.useCallback)(function () { return (<react_native_1.View style={[styles.mt2, styles.mb1, styles.flexRow, styles.justifyContentBetween]}>
+        return Object.keys(transaction.splitShares).some((key) => transaction.splitShares?.[Number(key) ?? -1]?.isModified);
+    }, [transaction?.splitShares]);
+    const getSplitSectionHeader = (0, react_1.useCallback)(() => (<react_native_1.View style={[styles.mt2, styles.mb1, styles.flexRow, styles.justifyContentBetween]}>
                 <Text_1.default style={[styles.ph5, styles.textLabelSupporting]}>{translate('iou.participants')}</Text_1.default>
-                {!shouldShowReadOnlySplits && !!isSplitModified && (<Pressable_1.PressableWithFeedback onPress={function () {
+                {!shouldShowReadOnlySplits && !!isSplitModified && (<Pressable_1.PressableWithFeedback onPress={() => {
                 (0, IOU_1.resetSplitShares)(transaction);
             }} accessibilityLabel={CONST_1.default.ROLE.BUTTON} role={CONST_1.default.ROLE.BUTTON} shouldUseAutoHitSlop>
                         <Text_1.default style={[styles.pr5, styles.textLabelSupporting, styles.link]}>{translate('common.reset')}</Text_1.default>
                     </Pressable_1.PressableWithFeedback>)}
-            </react_native_1.View>); }, [
+            </react_native_1.View>), [
         isSplitModified,
         shouldShowReadOnlySplits,
         styles.flexRow,
@@ -490,10 +470,10 @@ function MoneyRequestConfirmationList(_a) {
         transaction,
         translate,
     ]);
-    var sections = (0, react_1.useMemo)(function () {
-        var options = [];
+    const sections = (0, react_1.useMemo)(() => {
+        const options = [];
         if (isTypeSplit) {
-            options.push.apply(options, [
+            options.push(...[
                 {
                     title: translate('moneyRequestConfirmationList.paidBy'),
                     data: [(0, OptionsListUtils_1.getIOUConfirmationOptionsFromPayeePersonalDetail)(payeePersonalDetails)],
@@ -508,7 +488,12 @@ function MoneyRequestConfirmationList(_a) {
             options.push();
         }
         else {
-            var formattedSelectedParticipants = selectedParticipants.map(function (participant) { return (__assign(__assign({}, participant), { isSelected: false, isInteractive: isCreateExpenseFlow && !isTestReceipt, shouldShowRightIcon: isCreateExpenseFlow && !isTestReceipt })); });
+            const formattedSelectedParticipants = selectedParticipants.map((participant) => ({
+                ...participant,
+                isSelected: false,
+                isInteractive: isCreateExpenseFlow && !isTestReceipt,
+                shouldShowRightIcon: isCreateExpenseFlow && !isTestReceipt,
+            }));
             options.push({
                 title: translate('common.to'),
                 data: formattedSelectedParticipants,
@@ -517,7 +502,7 @@ function MoneyRequestConfirmationList(_a) {
         }
         return options;
     }, [isTypeSplit, translate, payeePersonalDetails, getSplitSectionHeader, splitParticipants, selectedParticipants, isCreateExpenseFlow, isTestReceipt]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isDistanceRequest || (isMovingTransactionFromTrackExpense && !isPolicyExpenseChat) || !transactionID || isReadOnly) {
             // We don't want to recalculate the distance merchant when moving a transaction from Track Expense to a 1:1 chat, because the distance rate will be the same default P2P rate.
             // When moving to a policy chat (e.g. sharing with an accountant), we should recalculate the distance merchant with the policy's rate.
@@ -529,7 +514,7 @@ function MoneyRequestConfirmationList(_a) {
          In this scenario, the route will be fetched from the server, and the waypoints will no longer be pending.
         */
         (0, IOU_1.setMoneyRequestPendingFields)(transactionID, { waypoints: isDistanceRequestWithPendingRoute ? CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD : null });
-        var distanceMerchant = DistanceRequestUtils_1.default.getDistanceMerchant(hasRoute, distance, unit, rate !== null && rate !== void 0 ? rate : 0, currency !== null && currency !== void 0 ? currency : CONST_1.default.CURRENCY.USD, translate, toLocaleDigit);
+        const distanceMerchant = DistanceRequestUtils_1.default.getDistanceMerchant(hasRoute, distance, unit, rate ?? 0, currency ?? CONST_1.default.CURRENCY.USD, translate, toLocaleDigit);
         (0, IOU_1.setMoneyRequestMerchant)(transactionID, distanceMerchant, true);
     }, [
         isDistanceRequestWithPendingRoute,
@@ -549,33 +534,31 @@ function MoneyRequestConfirmationList(_a) {
         isMovingTransactionFromTrackExpense,
     ]);
     // Auto select the category if there is only one enabled category and it is required
-    (0, react_1.useEffect)(function () {
-        var _a, _b;
-        var enabledCategories = Object.values(policyCategories !== null && policyCategories !== void 0 ? policyCategories : {}).filter(function (category) { return category.enabled; });
+    (0, react_1.useEffect)(() => {
+        const enabledCategories = Object.values(policyCategories ?? {}).filter((category) => category.enabled);
         if (!transactionID || iouCategory || !shouldShowCategories || enabledCategories.length !== 1 || !isCategoryRequired) {
             return;
         }
-        (0, IOU_1.setMoneyRequestCategory)(transactionID, (_b = (_a = enabledCategories.at(0)) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : '', policy === null || policy === void 0 ? void 0 : policy.id);
+        (0, IOU_1.setMoneyRequestCategory)(transactionID, enabledCategories.at(0)?.name ?? '', policy?.id);
         // Keep 'transaction' out to ensure that we auto select the option only once
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
-    }, [shouldShowCategories, policyCategories, isCategoryRequired, policy === null || policy === void 0 ? void 0 : policy.id]);
+    }, [shouldShowCategories, policyCategories, isCategoryRequired, policy?.id]);
     // Auto select the tag if there is only one enabled tag and it is required
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!transactionID) {
             return;
         }
-        var updatedTagsString = (0, TransactionUtils_1.getTag)(transaction);
-        policyTagLists.forEach(function (tagList, index) {
-            var _a, _b, _c, _d;
-            var isTagListRequired = (_a = tagList.required) !== null && _a !== void 0 ? _a : false;
+        let updatedTagsString = (0, TransactionUtils_1.getTag)(transaction);
+        policyTagLists.forEach((tagList, index) => {
+            const isTagListRequired = tagList.required ?? false;
             if (!isTagListRequired) {
                 return;
             }
-            var enabledTags = Object.values(tagList.tags).filter(function (tag) { return tag.enabled; });
+            const enabledTags = Object.values(tagList.tags).filter((tag) => tag.enabled);
             if (enabledTags.length !== 1 || (0, TransactionUtils_1.getTag)(transaction, index)) {
                 return;
             }
-            updatedTagsString = (0, IOUUtils_1.insertTagIntoTransactionTagsString)(updatedTagsString, (_c = (_b = enabledTags.at(0)) === null || _b === void 0 ? void 0 : _b.name) !== null && _c !== void 0 ? _c : '', index, (_d = policy === null || policy === void 0 ? void 0 : policy.hasMultipleTagLists) !== null && _d !== void 0 ? _d : false);
+            updatedTagsString = (0, IOUUtils_1.insertTagIntoTransactionTagsString)(updatedTagsString, enabledTags.at(0)?.name ?? '', index, policy?.hasMultipleTagLists ?? false);
         });
         if (updatedTagsString !== (0, TransactionUtils_1.getTag)(transaction) && updatedTagsString) {
             (0, IOU_1.setMoneyRequestTag)(transactionID, updatedTagsString);
@@ -586,18 +569,17 @@ function MoneyRequestConfirmationList(_a) {
     /**
      * Navigate to the participant step
      */
-    var navigateToParticipantPage = function () {
+    const navigateToParticipantPage = () => {
         if (!isCreateExpenseFlow) {
             return;
         }
-        var newIOUType = iouType === CONST_1.default.IOU.TYPE.SUBMIT || iouType === CONST_1.default.IOU.TYPE.TRACK ? CONST_1.default.IOU.TYPE.CREATE : iouType;
+        const newIOUType = iouType === CONST_1.default.IOU.TYPE.SUBMIT || iouType === CONST_1.default.IOU.TYPE.TRACK ? CONST_1.default.IOU.TYPE.CREATE : iouType;
         Navigation_1.default.navigate(ROUTES_1.default.MONEY_REQUEST_STEP_PARTICIPANTS.getRoute(newIOUType, transactionID, transaction.reportID, Navigation_1.default.getActiveRoute()));
     };
     /**
      * @param {String} paymentMethod
      */
-    var confirm = (0, react_1.useCallback)(function (paymentMethod) {
-        var _a, _b, _c;
+    const confirm = (0, react_1.useCallback)((paymentMethod) => {
         if (!!routeError || !transactionID) {
             return;
         }
@@ -621,13 +603,13 @@ function MoneyRequestConfirmationList(_a) {
             setFormError('iou.error.invalidTagLength');
             return;
         }
-        if (isPerDiemRequest && ((_c = (_b = (_a = transaction.comment) === null || _a === void 0 ? void 0 : _a.customUnit) === null || _b === void 0 ? void 0 : _b.subRates) !== null && _c !== void 0 ? _c : []).length === 0) {
+        if (isPerDiemRequest && (transaction.comment?.customUnit?.subRates ?? []).length === 0) {
             setFormError('iou.error.invalidSubrateLength');
             return;
         }
         if (iouType !== CONST_1.default.IOU.TYPE.PAY) {
             // validate the amount for distance expenses
-            var decimals = (0, CurrencyUtils_1.getCurrencyDecimals)(iouCurrencyCode);
+            const decimals = (0, CurrencyUtils_1.getCurrencyDecimals)(iouCurrencyCode);
             if (isDistanceRequest && !isDistanceRequestWithPendingRoute && !(0, MoneyRequestUtils_1.validateAmount)(String(iouAmount), decimals, CONST_1.default.IOU.DISTANCE_REQUEST_AMOUNT_MAX_LENGTH)) {
                 setFormError('common.error.invalidAmount');
                 return;
@@ -640,7 +622,7 @@ function MoneyRequestConfirmationList(_a) {
             if (formError) {
                 return;
             }
-            onConfirm === null || onConfirm === void 0 ? void 0 : onConfirm(selectedParticipants);
+            onConfirm?.(selectedParticipants);
         }
         else {
             if (!paymentMethod) {
@@ -653,8 +635,8 @@ function MoneyRequestConfirmationList(_a) {
             if (formError) {
                 return;
             }
-            Log_1.default.info("[IOU] Sending money via: ".concat(paymentMethod));
-            onSendMoney === null || onSendMoney === void 0 ? void 0 : onSendMoney(paymentMethod);
+            Log_1.default.info(`[IOU] Sending money via: ${paymentMethod}`);
+            onSendMoney?.(paymentMethod);
         }
     }, [
         selectedParticipants,
@@ -681,16 +663,16 @@ function MoneyRequestConfirmationList(_a) {
         isDelegateAccessRestricted,
         showDelegateNoAccessModal,
     ]);
-    var focusTimeoutRef = (0, react_1.useRef)(null);
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
-        focusTimeoutRef.current = setTimeout(function () {
-            react_native_1.InteractionManager.runAfterInteractions(function () {
+    const focusTimeoutRef = (0, react_1.useRef)(null);
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
+        focusTimeoutRef.current = setTimeout(() => {
+            react_native_1.InteractionManager.runAfterInteractions(() => {
                 (0, blurActiveElement_1.default)();
             });
         }, CONST_1.default.ANIMATED_TRANSITION);
-        return function () { return focusTimeoutRef.current && clearTimeout(focusTimeoutRef.current); };
+        return () => focusTimeoutRef.current && clearTimeout(focusTimeoutRef.current);
     }, []));
-    var errorMessage = (0, react_1.useMemo)(function () {
+    const errorMessage = (0, react_1.useMemo)(() => {
         if (routeError) {
             return routeError;
         }
@@ -699,12 +681,12 @@ function MoneyRequestConfirmationList(_a) {
         }
         return formError && translate(formError);
     }, [routeError, isTypeSplit, shouldShowReadOnlySplits, debouncedFormError, formError, translate]);
-    var footerContent = (0, react_1.useMemo)(function () {
+    const footerContent = (0, react_1.useMemo)(() => {
         if (isReadOnly) {
             return;
         }
-        var shouldShowSettlementButton = iouType === CONST_1.default.IOU.TYPE.PAY;
-        var button = shouldShowSettlementButton ? (<SettlementButton_1.default pressOnEnter onPress={confirm} enablePaymentsRoute={ROUTES_1.default.IOU_SEND_ENABLE_PAYMENTS} chatReportID={reportID} shouldShowPersonalBankAccountOption currency={iouCurrencyCode} policyID={policyID} buttonSize={CONST_1.default.DROPDOWN_BUTTON_SIZE.LARGE} kycWallAnchorAlignment={{
+        const shouldShowSettlementButton = iouType === CONST_1.default.IOU.TYPE.PAY;
+        const button = shouldShowSettlementButton ? (<SettlementButton_1.default pressOnEnter onPress={confirm} enablePaymentsRoute={ROUTES_1.default.IOU_SEND_ENABLE_PAYMENTS} chatReportID={reportID} shouldShowPersonalBankAccountOption currency={iouCurrencyCode} policyID={policyID} buttonSize={CONST_1.default.DROPDOWN_BUTTON_SIZE.LARGE} kycWallAnchorAlignment={{
                 horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.LEFT,
                 vertical: CONST_1.default.MODAL.ANCHOR_ORIGIN_VERTICAL.BOTTOM,
             }} paymentMethodDropdownAnchorAlignment={{
@@ -714,7 +696,7 @@ function MoneyRequestConfirmationList(_a) {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         isLoading={isConfirmed || isConfirming}/>) : (<>
                 {expensesNumber > 1 && (<Button_1.default large text={translate('iou.removeThisExpense')} onPress={showRemoveExpenseConfirmModal} style={styles.mb3}/>)}
-                <ButtonWithDropdownMenu_1.default pressOnEnter onPress={function (event, value) { return confirm(value); }} options={splitOrRequestOptions} buttonSize={CONST_1.default.DROPDOWN_BUTTON_SIZE.LARGE} enterKeyEventListenerPriority={1} useKeyboardShortcuts 
+                <ButtonWithDropdownMenu_1.default pressOnEnter onPress={(event, value) => confirm(value)} options={splitOrRequestOptions} buttonSize={CONST_1.default.DROPDOWN_BUTTON_SIZE.LARGE} enterKeyEventListenerPriority={1} useKeyboardShortcuts 
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         isLoading={isConfirmed || isConfirming}/>
             </>);
@@ -749,40 +731,38 @@ function MoneyRequestConfirmationList(_a) {
         isConfirming,
         reportID,
     ]);
-    var listFooterContent = (<MoneyRequestConfirmationListFooter_1.default action={action} currency={currency} didConfirm={!!didConfirm} distance={distance} formattedAmount={formattedAmount} formattedAmountPerAttendee={formattedAmountPerAttendee} formError={formError} hasRoute={hasRoute} iouAttendees={iouAttendees} iouCategory={iouCategory} iouComment={iouComment} iouCreated={iouCreated} iouCurrencyCode={iouCurrencyCode} iouIsBillable={iouIsBillable} iouMerchant={iouMerchant} iouType={iouType} isCategoryRequired={isCategoryRequired} isDistanceRequest={isDistanceRequest} isManualDistanceRequest={isManualDistanceRequest} isPerDiemRequest={isPerDiemRequest} isMerchantEmpty={isMerchantEmpty} isMerchantRequired={isMerchantRequired} isPolicyExpenseChat={isPolicyExpenseChat} isReadOnly={isReadOnly} isTypeInvoice={isTypeInvoice} onToggleBillable={onToggleBillable} policy={policy} policyTags={policyTags} policyTagLists={policyTagLists} rate={rate} receiptFilename={receiptFilename} receiptPath={receiptPath} reportActionID={reportActionID} reportID={reportID} selectedParticipants={selectedParticipantsProp} shouldDisplayFieldError={shouldDisplayFieldError} shouldDisplayReceipt={shouldDisplayReceipt} shouldShowCategories={shouldShowCategories} shouldShowMerchant={shouldShowMerchant} shouldShowSmartScanFields={shouldShowSmartScanFields} shouldShowAmountField={!isPerDiemRequest} shouldShowTax={shouldShowTax} transaction={transaction} transactionID={transactionID} unit={unit} onPDFLoadError={onPDFLoadError} onPDFPassword={onPDFPassword} iouIsReimbursable={iouIsReimbursable} onToggleReimbursable={onToggleReimbursable} isReceiptEditable={isReceiptEditable}/>);
+    const listFooterContent = (<MoneyRequestConfirmationListFooter_1.default action={action} currency={currency} didConfirm={!!didConfirm} distance={distance} formattedAmount={formattedAmount} formattedAmountPerAttendee={formattedAmountPerAttendee} formError={formError} hasRoute={hasRoute} iouAttendees={iouAttendees} iouCategory={iouCategory} iouComment={iouComment} iouCreated={iouCreated} iouCurrencyCode={iouCurrencyCode} iouIsBillable={iouIsBillable} iouMerchant={iouMerchant} iouType={iouType} isCategoryRequired={isCategoryRequired} isDistanceRequest={isDistanceRequest} isManualDistanceRequest={isManualDistanceRequest} isPerDiemRequest={isPerDiemRequest} isMerchantEmpty={isMerchantEmpty} isMerchantRequired={isMerchantRequired} isPolicyExpenseChat={isPolicyExpenseChat} isReadOnly={isReadOnly} isTypeInvoice={isTypeInvoice} onToggleBillable={onToggleBillable} policy={policy} policyTags={policyTags} policyTagLists={policyTagLists} rate={rate} receiptFilename={receiptFilename} receiptPath={receiptPath} reportActionID={reportActionID} reportID={reportID} selectedParticipants={selectedParticipantsProp} shouldDisplayFieldError={shouldDisplayFieldError} shouldDisplayReceipt={shouldDisplayReceipt} shouldShowCategories={shouldShowCategories} shouldShowMerchant={shouldShowMerchant} shouldShowSmartScanFields={shouldShowSmartScanFields} shouldShowAmountField={!isPerDiemRequest} shouldShowTax={shouldShowTax} transaction={transaction} transactionID={transactionID} unit={unit} onPDFLoadError={onPDFLoadError} onPDFPassword={onPDFPassword} iouIsReimbursable={iouIsReimbursable} onToggleReimbursable={onToggleReimbursable} isReceiptEditable={isReceiptEditable}/>);
     return (<useMouseContext_1.MouseProvider>
             <SelectionList_1.default sections={sections} ListItem={UserListItem_1.default} onSelectRow={navigateToParticipantPage} shouldSingleExecuteRowSelect canSelectMultiple={false} shouldPreventDefaultFocusOnSelectRow shouldShowListEmptyContent={false} footerContent={footerContent} listFooterContent={listFooterContent} containerStyle={[styles.flexBasisAuto]} removeClippedSubviews={false} disableKeyboardShortcuts/>
         </useMouseContext_1.MouseProvider>);
 }
 MoneyRequestConfirmationList.displayName = 'MoneyRequestConfirmationList';
-exports.default = (0, react_1.memo)(MoneyRequestConfirmationList, function (prevProps, nextProps) {
-    return (0, fast_equals_1.deepEqual)(prevProps.transaction, nextProps.transaction) &&
-        prevProps.onSendMoney === nextProps.onSendMoney &&
-        prevProps.onConfirm === nextProps.onConfirm &&
-        prevProps.iouType === nextProps.iouType &&
-        prevProps.iouAmount === nextProps.iouAmount &&
-        prevProps.isDistanceRequest === nextProps.isDistanceRequest &&
-        prevProps.isPolicyExpenseChat === nextProps.isPolicyExpenseChat &&
-        prevProps.expensesNumber === nextProps.expensesNumber &&
-        prevProps.iouCategory === nextProps.iouCategory &&
-        prevProps.shouldShowSmartScanFields === nextProps.shouldShowSmartScanFields &&
-        prevProps.isEditingSplitBill === nextProps.isEditingSplitBill &&
-        prevProps.iouCurrencyCode === nextProps.iouCurrencyCode &&
-        prevProps.iouMerchant === nextProps.iouMerchant &&
-        (0, fast_equals_1.deepEqual)(prevProps.selectedParticipants, nextProps.selectedParticipants) &&
-        (0, fast_equals_1.deepEqual)(prevProps.payeePersonalDetails, nextProps.payeePersonalDetails) &&
-        prevProps.isReadOnly === nextProps.isReadOnly &&
-        prevProps.policyID === nextProps.policyID &&
-        prevProps.reportID === nextProps.reportID &&
-        prevProps.receiptPath === nextProps.receiptPath &&
-        prevProps.iouAttendees === nextProps.iouAttendees &&
-        prevProps.iouComment === nextProps.iouComment &&
-        prevProps.receiptFilename === nextProps.receiptFilename &&
-        prevProps.iouCreated === nextProps.iouCreated &&
-        prevProps.iouIsBillable === nextProps.iouIsBillable &&
-        prevProps.onToggleBillable === nextProps.onToggleBillable &&
-        prevProps.hasSmartScanFailed === nextProps.hasSmartScanFailed &&
-        prevProps.reportActionID === nextProps.reportActionID &&
-        (0, fast_equals_1.deepEqual)(prevProps.action, nextProps.action) &&
-        prevProps.shouldDisplayReceipt === nextProps.shouldDisplayReceipt;
-});
+exports.default = (0, react_1.memo)(MoneyRequestConfirmationList, (prevProps, nextProps) => (0, fast_equals_1.deepEqual)(prevProps.transaction, nextProps.transaction) &&
+    prevProps.onSendMoney === nextProps.onSendMoney &&
+    prevProps.onConfirm === nextProps.onConfirm &&
+    prevProps.iouType === nextProps.iouType &&
+    prevProps.iouAmount === nextProps.iouAmount &&
+    prevProps.isDistanceRequest === nextProps.isDistanceRequest &&
+    prevProps.isPolicyExpenseChat === nextProps.isPolicyExpenseChat &&
+    prevProps.expensesNumber === nextProps.expensesNumber &&
+    prevProps.iouCategory === nextProps.iouCategory &&
+    prevProps.shouldShowSmartScanFields === nextProps.shouldShowSmartScanFields &&
+    prevProps.isEditingSplitBill === nextProps.isEditingSplitBill &&
+    prevProps.iouCurrencyCode === nextProps.iouCurrencyCode &&
+    prevProps.iouMerchant === nextProps.iouMerchant &&
+    (0, fast_equals_1.deepEqual)(prevProps.selectedParticipants, nextProps.selectedParticipants) &&
+    (0, fast_equals_1.deepEqual)(prevProps.payeePersonalDetails, nextProps.payeePersonalDetails) &&
+    prevProps.isReadOnly === nextProps.isReadOnly &&
+    prevProps.policyID === nextProps.policyID &&
+    prevProps.reportID === nextProps.reportID &&
+    prevProps.receiptPath === nextProps.receiptPath &&
+    prevProps.iouAttendees === nextProps.iouAttendees &&
+    prevProps.iouComment === nextProps.iouComment &&
+    prevProps.receiptFilename === nextProps.receiptFilename &&
+    prevProps.iouCreated === nextProps.iouCreated &&
+    prevProps.iouIsBillable === nextProps.iouIsBillable &&
+    prevProps.onToggleBillable === nextProps.onToggleBillable &&
+    prevProps.hasSmartScanFailed === nextProps.hasSmartScanFailed &&
+    prevProps.reportActionID === nextProps.reportActionID &&
+    (0, fast_equals_1.deepEqual)(prevProps.action, nextProps.action) &&
+    prevProps.shouldDisplayReceipt === nextProps.shouldDisplayReceipt);

@@ -1,36 +1,26 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormHelpMessage_1 = require("@components/FormHelpMessage");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Icon_1 = require("@components/Icon");
-var Illustrations = require("@components/Icon/Illustrations");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SelectionList_1 = require("@components/SelectionList");
-var RadioListItem_1 = require("@components/SelectionList/RadioListItem");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CardUtils_1 = require("@libs/CardUtils");
-var variables_1 = require("@styles/variables");
-var CompanyCards_1 = require("@userActions/CompanyCards");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function getAvailableCompanyCardTypes(_a) {
-    var translate = _a.translate, typeSelected = _a.typeSelected, styles = _a.styles, canUsePlaidCompanyCards = _a.canUsePlaidCompanyCards;
-    var defaultCards = [
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormHelpMessage_1 = require("@components/FormHelpMessage");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Icon_1 = require("@components/Icon");
+const Illustrations = require("@components/Icon/Illustrations");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SelectionList_1 = require("@components/SelectionList");
+const RadioListItem_1 = require("@components/SelectionList/RadioListItem");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CardUtils_1 = require("@libs/CardUtils");
+const variables_1 = require("@styles/variables");
+const CompanyCards_1 = require("@userActions/CompanyCards");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function getAvailableCompanyCardTypes({ translate, typeSelected, styles, canUsePlaidCompanyCards }) {
+    const defaultCards = [
         {
             value: CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD,
             text: translate('workspace.companyCards.addNewCard.cardProviders.cdf'),
@@ -49,30 +39,30 @@ function getAvailableCompanyCardTypes(_a) {
     if (!canUsePlaidCompanyCards) {
         return defaultCards;
     }
-    return __spreadArray([
+    return [
         {
             value: CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX,
             text: translate('workspace.companyCards.addNewCard.cardProviders.gl1025'),
             keyForList: CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX,
             isSelected: typeSelected === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX,
             leftElement: (<Icon_1.default src={Illustrations.AmexCardCompanyCardDetail} height={variables_1.default.iconSizeExtraLarge} width={variables_1.default.iconSizeExtraLarge} additionalStyles={styles}/>),
-        }
-    ], defaultCards, true);
+        },
+        ...defaultCards,
+    ];
 }
 function CardTypeStep() {
-    var _a;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var addNewCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true })[0];
-    var _b = (0, react_1.useState)(), typeSelected = _b[0], setTypeSelected = _b[1];
-    var _c = (0, react_1.useState)(false), isError = _c[0], setIsError = _c[1];
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var data = getAvailableCompanyCardTypes({ translate: translate, typeSelected: typeSelected, styles: styles.mr3, canUsePlaidCompanyCards: isBetaEnabled(CONST_1.default.BETAS.PLAID_COMPANY_CARDS) });
-    var _d = (_a = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) !== null && _a !== void 0 ? _a : {}, bankName = _d.bankName, selectedBank = _d.selectedBank, feedType = _d.feedType;
-    var isOtherBankSelected = selectedBank === CONST_1.default.COMPANY_CARDS.BANKS.OTHER;
-    var isNewCardTypeSelected = typeSelected !== feedType;
-    var doesCountrySupportPlaid = (0, CardUtils_1.isPlaidSupportedCountry)(addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.selectedCountry);
-    var submit = function () {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [addNewCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true });
+    const [typeSelected, setTypeSelected] = (0, react_1.useState)();
+    const [isError, setIsError] = (0, react_1.useState)(false);
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const data = getAvailableCompanyCardTypes({ translate, typeSelected, styles: styles.mr3, canUsePlaidCompanyCards: isBetaEnabled(CONST_1.default.BETAS.PLAID_COMPANY_CARDS) });
+    const { bankName, selectedBank, feedType } = addNewCard?.data ?? {};
+    const isOtherBankSelected = selectedBank === CONST_1.default.COMPANY_CARDS.BANKS.OTHER;
+    const isNewCardTypeSelected = typeSelected !== feedType;
+    const doesCountrySupportPlaid = (0, CardUtils_1.isPlaidSupportedCountry)(addNewCard?.data.selectedCountry);
+    const submit = () => {
         if (!typeSelected) {
             setIsError(true);
         }
@@ -87,10 +77,10 @@ function CardTypeStep() {
             });
         }
     };
-    (0, react_1.useEffect)(function () {
-        setTypeSelected(addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedType);
-    }, [addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedType]);
-    var handleBackButtonPress = function () {
+    (0, react_1.useEffect)(() => {
+        setTypeSelected(addNewCard?.data.feedType);
+    }, [addNewCard?.data.feedType]);
+    const handleBackButtonPress = () => {
         if (isOtherBankSelected) {
             (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({ step: CONST_1.default.COMPANY_CARDS.STEP.SELECT_BANK });
             return;
@@ -105,11 +95,10 @@ function CardTypeStep() {
             <HeaderWithBackButton_1.default title={translate('workspace.companyCards.addCards')} onBackButtonPress={handleBackButtonPress}/>
 
             <Text_1.default style={[styles.textHeadlineLineHeightXXL, styles.ph5, styles.mv3]}>{translate('workspace.companyCards.addNewCard.yourCardProvider')}</Text_1.default>
-            <SelectionList_1.default ListItem={RadioListItem_1.default} onSelectRow={function (_a) {
-            var value = _a.value;
+            <SelectionList_1.default ListItem={RadioListItem_1.default} onSelectRow={({ value }) => {
             setTypeSelected(value);
             setIsError(false);
-        }} sections={[{ data: data }]} shouldSingleExecuteRowSelect initiallyFocusedOptionKey={addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedType} shouldUpdateFocusedIndex showConfirmButton confirmButtonText={translate('common.next')} onConfirm={submit} addBottomSafeAreaPadding>
+        }} sections={[{ data }]} shouldSingleExecuteRowSelect initiallyFocusedOptionKey={addNewCard?.data.feedType} shouldUpdateFocusedIndex showConfirmButton confirmButtonText={translate('common.next')} onConfirm={submit} addBottomSafeAreaPadding>
                 {isError && (<react_native_1.View style={[styles.ph5, styles.mb3]}>
                         <FormHelpMessage_1.default isError={isError} message={translate('workspace.companyCards.addNewCard.error.pleaseSelectProvider')}/>
                     </react_native_1.View>)}

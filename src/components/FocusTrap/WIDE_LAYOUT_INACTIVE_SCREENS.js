@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var SCREENS_1 = require("@src/SCREENS");
+const SCREENS_1 = require("@src/SCREENS");
 /**
  * Screens displayed in the NavigationTab and CentralPane displayed side by side that should not have active
  * focus trap when rendered on a wide screen to allow navigation between them using the keyboard
  */
-var WIDE_LAYOUT_INACTIVE_SCREENS = [
+const WIDE_LAYOUT_INACTIVE_SCREENS = [
     SCREENS_1.default.HOME,
     SCREENS_1.default.SETTINGS.ROOT,
     SCREENS_1.default.REPORT,

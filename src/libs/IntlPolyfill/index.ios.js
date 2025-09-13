@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var polyfillListFormat_1 = require("./polyfillListFormat");
-var polyfillNumberFormat_1 = require("./polyfillNumberFormat");
+const polyfillListFormat_1 = require("./polyfillListFormat");
+const polyfillNumberFormat_1 = require("./polyfillNumberFormat");
 /**
  * Polyfill the Intl API, always performed for native devices.
  */
-var intlPolyfill = function () {
+const intlPolyfill = () => {
     // Native devices require extra polyfills which are
     // not yet implemented in hermes.
     // see support: https://hermesengine.dev/docs/intl/

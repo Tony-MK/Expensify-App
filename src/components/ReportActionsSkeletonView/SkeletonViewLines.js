@@ -1,15 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_svg_1 = require("react-native-svg");
-var SkeletonViewContentLoader_1 = require("@components/SkeletonViewContentLoader");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-function SkeletonViewLines(_a) {
-    var numberOfRows = _a.numberOfRows, _b = _a.shouldAnimate, shouldAnimate = _b === void 0 ? true : _b;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
+const react_1 = require("react");
+const react_native_svg_1 = require("react-native-svg");
+const SkeletonViewContentLoader_1 = require("@components/SkeletonViewContentLoader");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+function SkeletonViewLines({ numberOfRows, shouldAnimate = true }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
     return (<SkeletonViewContentLoader_1.default animate={shouldAnimate} height={CONST_1.default.CHAT_SKELETON_VIEW.HEIGHT_FOR_ROW_COUNT[numberOfRows]} backgroundColor={theme.skeletonLHNIn} foregroundColor={theme.skeletonLHNOut} speed={CONST_1.default.TIMING.SKELETON_ANIMATION_SPEED} style={styles.mr5}>
             <react_native_svg_1.Circle cx="40" cy="26" r="20"/>
             <react_native_svg_1.Rect x="72" y="11" width="20%" height="8"/>

@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var overflowXHidden = {};
+const overflowXHidden = {};
 exports.default = overflowXHidden;

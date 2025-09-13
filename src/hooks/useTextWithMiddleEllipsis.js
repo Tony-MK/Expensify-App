@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var debounce_1 = require("lodash/debounce");
-var react_1 = require("react");
-var ELLIPSIS = '...';
+const debounce_1 = require("lodash/debounce");
+const react_1 = require("react");
+const ELLIPSIS = '...';
 /**
  * Hook for intelligently truncating text with an ellipsis in the middle.
  *
@@ -16,20 +16,20 @@ var ELLIPSIS = '...';
  * @returns Truncated text with ellipsis in the middle if needed, or original text
  */
 function useTextWithMiddleEllipsis(props) {
-    var text = props.text, ref = props.ref;
-    var _a = (0, react_1.useState)(0), targetWidth = _a[0], setTargetWidth = _a[1];
-    var _b = (0, react_1.useState)(false), shouldTruncate = _b[0], setShouldTruncate = _b[1];
-    var _c = (0, react_1.useState)(text), displayText = _c[0], setDisplayText = _c[1];
-    var _d = (0, react_1.useState)(null), elementStyle = _d[0], setElementStyle = _d[1];
-    var measureDivRef = (0, react_1.useRef)(null);
+    const { text, ref } = props;
+    const [targetWidth, setTargetWidth] = (0, react_1.useState)(0);
+    const [shouldTruncate, setShouldTruncate] = (0, react_1.useState)(false);
+    const [displayText, setDisplayText] = (0, react_1.useState)(text);
+    const [elementStyle, setElementStyle] = (0, react_1.useState)(null);
+    const measureDivRef = (0, react_1.useRef)(null);
     /**
      * Creates or retrieves the measurement div element
      */
-    var getMeasureDiv = (0, react_1.useCallback)(function () {
+    const getMeasureDiv = (0, react_1.useCallback)(() => {
         if (measureDivRef.current) {
             return measureDivRef.current;
         }
-        var div = document.createElement('div');
+        const div = document.createElement('div');
         div.style.position = 'fixed';
         div.style.visibility = 'hidden';
         div.style.top = '0';
@@ -41,8 +41,8 @@ function useTextWithMiddleEllipsis(props) {
         return div;
     }, []);
     // Remove measurement div when component unmounts
-    (0, react_1.useEffect)(function () {
-        return function () {
+    (0, react_1.useEffect)(() => {
+        return () => {
             if (!measureDivRef.current) {
                 return;
             }
@@ -53,8 +53,8 @@ function useTextWithMiddleEllipsis(props) {
     /**
      * Efficiently measures text width by reusing a single div element
      */
-    var measureText = (0, react_1.useCallback)(function (textToMeasure, style) {
-        var div = getMeasureDiv();
+    const measureText = (0, react_1.useCallback)((textToMeasure, style) => {
+        const div = getMeasureDiv();
         div.textContent = textToMeasure;
         div.style.fontWeight = style.fontWeight;
         div.style.fontStyle = style.fontStyle;
@@ -66,38 +66,38 @@ function useTextWithMiddleEllipsis(props) {
     /**
      * Calculates the target width and determines if truncation is needed
      */
-    var calcTargetWidth = (0, react_1.useCallback)(function () {
-        var element = ref.current;
+    const calcTargetWidth = (0, react_1.useCallback)(() => {
+        const element = ref.current;
         if (!element) {
             return;
         }
-        var style = window.getComputedStyle(element);
+        const style = window.getComputedStyle(element);
         setElementStyle(style);
-        var rect = element.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
         setTargetWidth(rect.width);
         if (style && text) {
-            var measureWidth = measureText(text, style);
+            const measureWidth = measureText(text, style);
             setShouldTruncate(measureWidth > rect.width);
         }
     }, [text, ref, measureText]);
     // Calculate target width on mount and when text changes
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         calcTargetWidth();
     }, [calcTargetWidth]);
     // Handle resize with requestAnimationFrame for better layout timing
-    var resetAndMeasure = (0, react_1.useCallback)(function () {
+    const resetAndMeasure = (0, react_1.useCallback)(() => {
         setDisplayText(text);
-        requestAnimationFrame(function () {
+        requestAnimationFrame(() => {
             calcTargetWidth();
         });
     }, [text, calcTargetWidth]);
     // Set up resize listener with debounce
-    (0, react_1.useEffect)(function () {
-        var handleResize = (0, debounce_1.default)(function () {
+    (0, react_1.useEffect)(() => {
+        const handleResize = (0, debounce_1.default)(() => {
             resetAndMeasure();
         }, 250);
         window.addEventListener('resize', handleResize);
-        return function () {
+        return () => {
             window.removeEventListener('resize', resetAndMeasure);
             handleResize.cancel();
         };
@@ -105,21 +105,21 @@ function useTextWithMiddleEllipsis(props) {
     /**
      * Performs the middle truncation algorithm when text needs truncation
      */
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!shouldTruncate || !elementStyle) {
             setDisplayText(text);
             return;
         }
         // Splitting text in half to start
-        var len = text.length;
-        var headChars = Math.floor(len / 2);
-        var tailChars = len - headChars;
-        var head = text.slice(0, headChars);
-        var tail = text.slice(len - tailChars);
+        const len = text.length;
+        let headChars = Math.floor(len / 2);
+        let tailChars = len - headChars;
+        let head = text.slice(0, headChars);
+        let tail = text.slice(len - tailChars);
         // Binary search to find optimal split point
         while (headChars > 0 && tailChars > 0) {
-            var combined = head + ELLIPSIS + tail;
-            var combinedWidth = measureText(combined, elementStyle);
+            const combined = head + ELLIPSIS + tail;
+            const combinedWidth = measureText(combined, elementStyle);
             if (combinedWidth <= targetWidth) {
                 setDisplayText(combined);
                 return;
@@ -138,7 +138,7 @@ function useTextWithMiddleEllipsis(props) {
             }
         }
         // Fallback for extreme truncation
-        var minTruncated = text.slice(0, 1) + ELLIPSIS + text.slice(len - 1);
+        const minTruncated = text.slice(0, 1) + ELLIPSIS + text.slice(len - 1);
         setDisplayText(minTruncated);
     }, [elementStyle, shouldTruncate, targetWidth, text, measureText]);
     return displayText;

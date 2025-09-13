@@ -1,104 +1,101 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnboardingMessages_1 = require("@hooks/useOnboardingMessages");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var navigateAfterOnboarding_1 = require("@libs/navigateAfterOnboarding");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var UserUtils_1 = require("@libs/UserUtils");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var Onboarding_1 = require("@userActions/Onboarding");
-var PersonalDetails_1 = require("@userActions/PersonalDetails");
-var Report_1 = require("@userActions/Report");
-var Welcome_1 = require("@userActions/Welcome");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var DisplayNameForm_1 = require("@src/types/form/DisplayNameForm");
-function BaseOnboardingPersonalDetails(_a) {
-    var _b;
-    var currentUserPersonalDetails = _a.currentUserPersonalDetails, shouldUseNativeStyles = _a.shouldUseNativeStyles, route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var _c = (0, useLocalize_1.default)(), translate = _c.translate, formatPhoneNumber = _c.formatPhoneNumber;
-    var onboardingPurposeSelected = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true })[0];
-    var onboardingPolicyID = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_POLICY_ID, { canBeMissing: true })[0];
-    var onboardingAdminsChatReportID = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ADMINS_CHAT_REPORT_ID, { canBeMissing: true })[0];
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var loginList = (0, useOnyx_1.default)(ONYXKEYS_1.default.LOGIN_LIST, { canBeMissing: true })[0];
-    var onboardingValues = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true })[0];
-    var conciergeChatReportID = (0, useOnyx_1.default)(ONYXKEYS_1.default.CONCIERGE_REPORT_ID, { canBeMissing: true })[0];
-    var onboardingMessages = (0, useOnboardingMessages_1.default)().onboardingMessages;
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true })[0];
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnboardingMessages_1 = require("@hooks/useOnboardingMessages");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const navigateAfterOnboarding_1 = require("@libs/navigateAfterOnboarding");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const UserUtils_1 = require("@libs/UserUtils");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const Onboarding_1 = require("@userActions/Onboarding");
+const PersonalDetails_1 = require("@userActions/PersonalDetails");
+const Report_1 = require("@userActions/Report");
+const Welcome_1 = require("@userActions/Welcome");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const DisplayNameForm_1 = require("@src/types/form/DisplayNameForm");
+function BaseOnboardingPersonalDetails({ currentUserPersonalDetails, shouldUseNativeStyles, route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate, formatPhoneNumber } = (0, useLocalize_1.default)();
+    const [onboardingPurposeSelected] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true });
+    const [onboardingPolicyID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_POLICY_ID, { canBeMissing: true });
+    const [onboardingAdminsChatReportID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ADMINS_CHAT_REPORT_ID, { canBeMissing: true });
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [loginList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.LOGIN_LIST, { canBeMissing: true });
+    const [onboardingValues] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, { canBeMissing: true });
+    const [conciergeChatReportID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CONCIERGE_REPORT_ID, { canBeMissing: true });
+    const { onboardingMessages } = (0, useOnboardingMessages_1.default)();
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true });
     // When we merge public email with work email, we now want to navigate to the
     // concierge chat report of the new work email and not the last accessed report.
-    var mergedAccountConciergeReportID = !(onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.shouldRedirectToClassicAfterMerge) && (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.shouldValidate) ? conciergeChatReportID : undefined;
+    const mergedAccountConciergeReportID = !onboardingValues?.shouldRedirectToClassicAfterMerge && onboardingValues?.shouldValidate ? conciergeChatReportID : undefined;
     // We need to use isSmallScreenWidth, see navigateAfterOnboarding function comment
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var _d = (0, useResponsiveLayout_1.default)(), onboardingIsMediumOrLargerScreenWidth = _d.onboardingIsMediumOrLargerScreenWidth, isSmallScreenWidth = _d.isSmallScreenWidth;
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var _e = (0, react_1.useState)(false), shouldValidateOnChange = _e[0], setShouldValidateOnChange = _e[1];
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var isPrivateDomainAndHasAccessiblePolicies = !(account === null || account === void 0 ? void 0 : account.isFromPublicDomain) && !!(account === null || account === void 0 ? void 0 : account.hasAccessibleDomainPolicies);
-    var isValidated = (0, UserUtils_1.isCurrentUserValidated)(loginList, session === null || session === void 0 ? void 0 : session.email);
-    var isVsb = (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.signupQualifier) === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
-    var isSmb = (onboardingValues === null || onboardingValues === void 0 ? void 0 : onboardingValues.signupQualifier) === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
-    (0, react_1.useEffect)(function () {
+    const { onboardingIsMediumOrLargerScreenWidth, isSmallScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const [shouldValidateOnChange, setShouldValidateOnChange] = (0, react_1.useState)(false);
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const isPrivateDomainAndHasAccessiblePolicies = !account?.isFromPublicDomain && !!account?.hasAccessibleDomainPolicies;
+    const isValidated = (0, UserUtils_1.isCurrentUserValidated)(loginList, session?.email);
+    const isVsb = onboardingValues?.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.VSB;
+    const isSmb = onboardingValues?.signupQualifier === CONST_1.default.ONBOARDING_SIGNUP_QUALIFIERS.SMB;
+    (0, react_1.useEffect)(() => {
         (0, Welcome_1.setOnboardingErrorMessage)('');
     }, []);
-    var completeOnboarding = (0, react_1.useCallback)(function (firstName, lastName) {
+    const completeOnboarding = (0, react_1.useCallback)((firstName, lastName) => {
         if (!onboardingPurposeSelected) {
             return;
         }
         (0, Report_1.completeOnboarding)({
             engagementChoice: onboardingPurposeSelected,
             onboardingMessage: onboardingMessages[onboardingPurposeSelected],
-            firstName: firstName,
-            lastName: lastName,
+            firstName,
+            lastName,
             adminsChatReportID: onboardingAdminsChatReportID,
-            onboardingPolicyID: onboardingPolicyID,
+            onboardingPolicyID,
         });
         (0, Welcome_1.setOnboardingAdminsChatReportID)();
         (0, Welcome_1.setOnboardingPolicyID)();
         (0, navigateAfterOnboarding_1.navigateAfterOnboardingWithMicrotaskQueue)(isSmallScreenWidth, isBetaEnabled(CONST_1.default.BETAS.DEFAULT_ROOMS), onboardingPolicyID, mergedAccountConciergeReportID);
     }, [onboardingPurposeSelected, onboardingAdminsChatReportID, onboardingMessages, onboardingPolicyID, isBetaEnabled, isSmallScreenWidth, mergedAccountConciergeReportID]);
-    var handleSubmit = (0, react_1.useCallback)(function (values) {
-        var _a, _b;
-        var firstName = values.firstName.trim();
-        var lastName = values.lastName.trim();
+    const handleSubmit = (0, react_1.useCallback)((values) => {
+        const firstName = values.firstName.trim();
+        const lastName = values.lastName.trim();
         (0, PersonalDetails_1.setDisplayName)(firstName, lastName, formatPhoneNumber);
         (0, Onboarding_1.clearPersonalDetailsDraft)();
         (0, Onboarding_1.setPersonalDetails)(firstName, lastName);
         if (isPrivateDomainAndHasAccessiblePolicies && (!onboardingPurposeSelected || isVsb || isSmb)) {
-            var nextRoute = isValidated ? ROUTES_1.default.ONBOARDING_WORKSPACES : ROUTES_1.default.ONBOARDING_PRIVATE_DOMAIN;
-            Navigation_1.default.navigate(nextRoute.getRoute((_a = route.params) === null || _a === void 0 ? void 0 : _a.backTo));
+            const nextRoute = isValidated ? ROUTES_1.default.ONBOARDING_WORKSPACES : ROUTES_1.default.ONBOARDING_PRIVATE_DOMAIN;
+            Navigation_1.default.navigate(nextRoute.getRoute(route.params?.backTo));
             return;
         }
         if (onboardingPurposeSelected === CONST_1.default.ONBOARDING_CHOICES.PERSONAL_SPEND || onboardingPurposeSelected === CONST_1.default.ONBOARDING_CHOICES.TRACK_WORKSPACE) {
             (0, PersonalDetails_1.updateDisplayName)(firstName, lastName, formatPhoneNumber);
-            Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_WORKSPACE.getRoute((_b = route.params) === null || _b === void 0 ? void 0 : _b.backTo));
+            Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_WORKSPACE.getRoute(route.params?.backTo));
             return;
         }
         completeOnboarding(firstName, lastName);
-    }, [isPrivateDomainAndHasAccessiblePolicies, onboardingPurposeSelected, isValidated, (_b = route.params) === null || _b === void 0 ? void 0 : _b.backTo, completeOnboarding, isVsb, isSmb, formatPhoneNumber]);
-    var validate = function (values) {
+    }, [isPrivateDomainAndHasAccessiblePolicies, onboardingPurposeSelected, isValidated, route.params?.backTo, completeOnboarding, isVsb, isSmb, formatPhoneNumber]);
+    const validate = (values) => {
         if (!shouldValidateOnChange) {
             setShouldValidateOnChange(true);
         }
-        var errors = {};
+        const errors = {};
         // First we validate the first name field
         if (values.firstName.replace(CONST_1.default.REGEX.ANY_SPACE, '').length === 0) {
             (0, ErrorUtils_1.addErrorMessage)(errors, 'firstName', translate('onboarding.error.requiredFirstName'));
@@ -133,12 +130,12 @@ function BaseOnboardingPersonalDetails(_a) {
                 <react_native_1.View style={styles.mb4}>
                     <InputWrapper_1.default InputComponent={TextInput_1.default} ref={inputCallbackRef} inputID={DisplayNameForm_1.default.FIRST_NAME} name="fname" label={translate('common.firstName')} aria-label={translate('common.firstName')} role={CONST_1.default.ROLE.PRESENTATION} 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...((currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.firstName) && { defaultValue: currentUserPersonalDetails.firstName })} shouldSaveDraft spellCheck={false}/>
+    {...(currentUserPersonalDetails?.firstName && { defaultValue: currentUserPersonalDetails.firstName })} shouldSaveDraft spellCheck={false}/>
                 </react_native_1.View>
                 <react_native_1.View>
                     <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={DisplayNameForm_1.default.LAST_NAME} name="lname" label={translate('common.lastName')} aria-label={translate('common.lastName')} role={CONST_1.default.ROLE.PRESENTATION} 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...((currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.lastName) && { defaultValue: currentUserPersonalDetails.lastName })} shouldSaveDraft spellCheck={false}/>
+    {...(currentUserPersonalDetails?.lastName && { defaultValue: currentUserPersonalDetails.lastName })} shouldSaveDraft spellCheck={false}/>
                 </react_native_1.View>
             </FormProvider_1.default>
         </ScreenWrapper_1.default>);

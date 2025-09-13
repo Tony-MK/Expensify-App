@@ -1,72 +1,70 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Avatar_1 = require("@components/Avatar");
-var Button_1 = require("@components/Button");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Expensicons = require("@components/Icon/Expensicons");
-var MenuItem_1 = require("@components/MenuItem");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePolicy_1 = require("@hooks/usePolicy");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Report = require("@libs/actions/Report");
-var PersonalDetailsUtils = require("@libs/PersonalDetailsUtils");
-var PolicyUtils = require("@libs/PolicyUtils");
-var ReportUtils = require("@libs/ReportUtils");
-var Navigation_1 = require("@navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var NotFoundPage_1 = require("./ErrorPage/NotFoundPage");
-var withReportOrNotFound_1 = require("./home/report/withReportOrNotFound");
-function RoomMemberDetailsPage(_a) {
-    var _b, _c, _d, _e, _f;
-    var report = _a.report, route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var _g = (0, useLocalize_1.default)(), formatPhoneNumber = _g.formatPhoneNumber, translate = _g.translate;
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var personalDetails = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST)[0];
-    var policy = (0, usePolicy_1.default)(report === null || report === void 0 ? void 0 : report.policyID);
-    var _h = react_1.default.useState(false), isRemoveMemberConfirmModalVisible = _h[0], setIsRemoveMemberConfirmModalVisible = _h[1];
-    var accountID = Number(route.params.accountID);
-    var backTo = ROUTES_1.default.ROOM_MEMBERS.getRoute((_b = report === null || report === void 0 ? void 0 : report.reportID) !== null && _b !== void 0 ? _b : '-1', route.params.backTo);
-    var member = (_c = report === null || report === void 0 ? void 0 : report.participants) === null || _c === void 0 ? void 0 : _c[accountID];
-    var details = (_d = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[accountID]) !== null && _d !== void 0 ? _d : {};
-    var fallbackIcon = (_e = details.fallbackIcon) !== null && _e !== void 0 ? _e : '';
-    var displayName = formatPhoneNumber(PersonalDetailsUtils.getDisplayNameOrDefault(details));
-    var isSelectedMemberCurrentUser = accountID === (currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.accountID);
-    var isSelectedMemberOwner = accountID === report.ownerAccountID;
-    var shouldDisableRemoveUser = (ReportUtils.isPolicyExpenseChat(report) && PolicyUtils.isUserPolicyAdmin(policy, details.login)) || isSelectedMemberCurrentUser || isSelectedMemberOwner;
-    var removeUser = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Avatar_1 = require("@components/Avatar");
+const Button_1 = require("@components/Button");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Expensicons = require("@components/Icon/Expensicons");
+const MenuItem_1 = require("@components/MenuItem");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePolicy_1 = require("@hooks/usePolicy");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Report = require("@libs/actions/Report");
+const PersonalDetailsUtils = require("@libs/PersonalDetailsUtils");
+const PolicyUtils = require("@libs/PolicyUtils");
+const ReportUtils = require("@libs/ReportUtils");
+const Navigation_1 = require("@navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const NotFoundPage_1 = require("./ErrorPage/NotFoundPage");
+const withReportOrNotFound_1 = require("./home/report/withReportOrNotFound");
+function RoomMemberDetailsPage({ report, route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { formatPhoneNumber, translate } = (0, useLocalize_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const [personalDetails] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST);
+    const policy = (0, usePolicy_1.default)(report?.policyID);
+    const [isRemoveMemberConfirmModalVisible, setIsRemoveMemberConfirmModalVisible] = react_1.default.useState(false);
+    const accountID = Number(route.params.accountID);
+    const backTo = ROUTES_1.default.ROOM_MEMBERS.getRoute(report?.reportID ?? '-1', route.params.backTo);
+    const member = report?.participants?.[accountID];
+    const details = personalDetails?.[accountID] ?? {};
+    const fallbackIcon = details.fallbackIcon ?? '';
+    const displayName = formatPhoneNumber(PersonalDetailsUtils.getDisplayNameOrDefault(details));
+    const isSelectedMemberCurrentUser = accountID === currentUserPersonalDetails?.accountID;
+    const isSelectedMemberOwner = accountID === report.ownerAccountID;
+    const shouldDisableRemoveUser = (ReportUtils.isPolicyExpenseChat(report) && PolicyUtils.isUserPolicyAdmin(policy, details.login)) || isSelectedMemberCurrentUser || isSelectedMemberOwner;
+    const removeUser = (0, react_1.useCallback)(() => {
         setIsRemoveMemberConfirmModalVisible(false);
-        Report.removeFromRoom(report === null || report === void 0 ? void 0 : report.reportID, [accountID]);
+        Report.removeFromRoom(report?.reportID, [accountID]);
         Navigation_1.default.goBack(backTo);
     }, [backTo, report, accountID]);
-    var navigateToProfile = (0, react_1.useCallback)(function () {
+    const navigateToProfile = (0, react_1.useCallback)(() => {
         Navigation_1.default.navigate(ROUTES_1.default.PROFILE.getRoute(accountID, Navigation_1.default.getActiveRoute()));
     }, [accountID]);
     if (!member) {
         return <NotFoundPage_1.default />;
     }
     return (<ScreenWrapper_1.default testID={RoomMemberDetailsPage.displayName}>
-            <HeaderWithBackButton_1.default title={displayName} onBackButtonPress={function () { return Navigation_1.default.goBack(backTo); }}/>
+            <HeaderWithBackButton_1.default title={displayName} onBackButtonPress={() => Navigation_1.default.goBack(backTo)}/>
             <react_native_1.View style={[styles.containerWithSpaceBetween, styles.pointerEventsBoxNone, styles.justifyContentStart]}>
                 <react_native_1.View style={[styles.avatarSectionWrapper, styles.pb0]}>
                     <Avatar_1.default containerStyles={[styles.avatarXLarge, styles.mv5, styles.noOutline]} imageStyles={[styles.avatarXLarge]} source={details.avatar} avatarID={accountID} type={CONST_1.default.ICON_TYPE_AVATAR} size={CONST_1.default.AVATAR_SIZE.X_LARGE} fallbackIcon={fallbackIcon}/>
-                    {!!((_f = details.displayName) !== null && _f !== void 0 ? _f : '') && (<Text_1.default style={[styles.textHeadline, styles.pre, styles.mb6, styles.w100, styles.textAlignCenter]} numberOfLines={1}>
+                    {!!(details.displayName ?? '') && (<Text_1.default style={[styles.textHeadline, styles.pre, styles.mb6, styles.w100, styles.textAlignCenter]} numberOfLines={1}>
                             {displayName}
                         </Text_1.default>)}
                     <>
-                        <Button_1.default text={translate('workspace.people.removeRoomMemberButtonTitle')} onPress={function () { return setIsRemoveMemberConfirmModalVisible(true); }} isDisabled={shouldDisableRemoveUser} icon={Expensicons.RemoveMembers} iconStyles={StyleUtils.getTransformScaleStyle(0.8)} style={styles.mv5}/>
-                        <ConfirmModal_1.default danger title={translate('workspace.people.removeRoomMemberButtonTitle')} isVisible={isRemoveMemberConfirmModalVisible} onConfirm={removeUser} onCancel={function () { return setIsRemoveMemberConfirmModalVisible(false); }} prompt={translate('workspace.people.removeMemberPrompt', { memberName: displayName })} confirmText={translate('common.remove')} cancelText={translate('common.cancel')}/>
+                        <Button_1.default text={translate('workspace.people.removeRoomMemberButtonTitle')} onPress={() => setIsRemoveMemberConfirmModalVisible(true)} isDisabled={shouldDisableRemoveUser} icon={Expensicons.RemoveMembers} iconStyles={StyleUtils.getTransformScaleStyle(0.8)} style={styles.mv5}/>
+                        <ConfirmModal_1.default danger title={translate('workspace.people.removeRoomMemberButtonTitle')} isVisible={isRemoveMemberConfirmModalVisible} onConfirm={removeUser} onCancel={() => setIsRemoveMemberConfirmModalVisible(false)} prompt={translate('workspace.people.removeMemberPrompt', { memberName: displayName })} confirmText={translate('common.remove')} cancelText={translate('common.cancel')}/>
                     </>
                 </react_native_1.View>
                 <react_native_1.View style={styles.w100}>

@@ -1,102 +1,94 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var truncate_1 = require("lodash/truncate");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var Icon_1 = require("@components/Icon");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var ReportActionAvatars_1 = require("@components/ReportActionAvatars");
-var ReportActionItemImages_1 = require("@components/ReportActionItem/ReportActionItemImages");
-var UserInfoCellsWithArrow_1 = require("@components/SelectionList/Search/UserInfoCellsWithArrow");
-var Text_1 = require("@components/Text");
-var TransactionPreviewSkeletonView_1 = require("@components/TransactionPreviewSkeletonView");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var IOUUtils_1 = require("@libs/IOUUtils");
-var Parser_1 = require("@libs/Parser");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReceiptUtils_1 = require("@libs/ReceiptUtils");
-var ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var StringUtils_1 = require("@libs/StringUtils");
-var TransactionPreviewUtils_1 = require("@libs/TransactionPreviewUtils");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var ViolationsUtils_1 = require("@libs/Violations/ViolationsUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function TransactionPreviewContent(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
-    var action = _a.action, isWhisper = _a.isWhisper, isHovered = _a.isHovered, chatReport = _a.chatReport, personalDetails = _a.personalDetails, report = _a.report, transaction = _a.transaction, violations = _a.violations, transactionRawAmount = _a.transactionRawAmount, offlineWithFeedbackOnClose = _a.offlineWithFeedbackOnClose, containerStyles = _a.containerStyles, transactionPreviewWidth = _a.transactionPreviewWidth, isBillSplit = _a.isBillSplit, areThereDuplicates = _a.areThereDuplicates, sessionAccountID = _a.sessionAccountID, walletTermsErrors = _a.walletTermsErrors, reportPreviewAction = _a.reportPreviewAction, _p = _a.shouldHideOnDelete, shouldHideOnDelete = _p === void 0 ? true : _p, shouldShowPayerAndReceiver = _a.shouldShowPayerAndReceiver, navigateToReviewFields = _a.navigateToReviewFields, _q = _a.isReviewDuplicateTransactionPage, isReviewDuplicateTransactionPage = _q === void 0 ? false : _q;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(report === null || report === void 0 ? void 0 : report.policyID), { canBeMissing: true })[0];
-    var transactionDetails = (0, react_1.useMemo)(function () { var _a; return (_a = (0, ReportUtils_1.getTransactionDetails)(transaction, undefined, policy)) !== null && _a !== void 0 ? _a : {}; }, [transaction, policy]);
-    var amount = transactionDetails.amount, requestComment = transactionDetails.comment, merchant = transactionDetails.merchant, tag = transactionDetails.tag, category = transactionDetails.category, requestCurrency = transactionDetails.currency;
-    var managerID = (_c = (_b = report === null || report === void 0 ? void 0 : report.managerID) !== null && _b !== void 0 ? _b : reportPreviewAction === null || reportPreviewAction === void 0 ? void 0 : reportPreviewAction.childManagerAccountID) !== null && _c !== void 0 ? _c : CONST_1.default.DEFAULT_NUMBER_ID;
-    var ownerAccountID = (_e = (_d = report === null || report === void 0 ? void 0 : report.ownerAccountID) !== null && _d !== void 0 ? _d : reportPreviewAction === null || reportPreviewAction === void 0 ? void 0 : reportPreviewAction.childOwnerAccountID) !== null && _e !== void 0 ? _e : CONST_1.default.DEFAULT_NUMBER_ID;
-    var isReportAPolicyExpenseChat = (0, ReportUtils_1.isPolicyExpenseChat)(chatReport);
-    var reportActions = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat((0, getNonEmptyStringOnyxID_1.default)(report === null || report === void 0 ? void 0 : report.reportID)), { canBeMissing: true })[0];
-    var transactionPreviewCommonArguments = (0, react_1.useMemo)(function () { return ({
+const truncate_1 = require("lodash/truncate");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const Icon_1 = require("@components/Icon");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const ReportActionAvatars_1 = require("@components/ReportActionAvatars");
+const ReportActionItemImages_1 = require("@components/ReportActionItem/ReportActionItemImages");
+const UserInfoCellsWithArrow_1 = require("@components/SelectionList/Search/UserInfoCellsWithArrow");
+const Text_1 = require("@components/Text");
+const TransactionPreviewSkeletonView_1 = require("@components/TransactionPreviewSkeletonView");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const IOUUtils_1 = require("@libs/IOUUtils");
+const Parser_1 = require("@libs/Parser");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReceiptUtils_1 = require("@libs/ReceiptUtils");
+const ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const StringUtils_1 = require("@libs/StringUtils");
+const TransactionPreviewUtils_1 = require("@libs/TransactionPreviewUtils");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const ViolationsUtils_1 = require("@libs/Violations/ViolationsUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function TransactionPreviewContent({ action, isWhisper, isHovered, chatReport, personalDetails, report, transaction, violations, transactionRawAmount, offlineWithFeedbackOnClose, containerStyles, transactionPreviewWidth, isBillSplit, areThereDuplicates, sessionAccountID, walletTermsErrors, reportPreviewAction, shouldHideOnDelete = true, shouldShowPayerAndReceiver, navigateToReviewFields, isReviewDuplicateTransactionPage = false, }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${report?.policyID}`, { canBeMissing: true });
+    const transactionDetails = (0, react_1.useMemo)(() => (0, ReportUtils_1.getTransactionDetails)(transaction, undefined, policy) ?? {}, [transaction, policy]);
+    const { amount, comment: requestComment, merchant, tag, category, currency: requestCurrency } = transactionDetails;
+    const managerID = report?.managerID ?? reportPreviewAction?.childManagerAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const ownerAccountID = report?.ownerAccountID ?? reportPreviewAction?.childOwnerAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const isReportAPolicyExpenseChat = (0, ReportUtils_1.isPolicyExpenseChat)(chatReport);
+    const [reportActions] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${(0, getNonEmptyStringOnyxID_1.default)(report?.reportID)}`, { canBeMissing: true });
+    const transactionPreviewCommonArguments = (0, react_1.useMemo)(() => ({
         iouReport: report,
-        transaction: transaction,
-        action: action,
-        isBillSplit: isBillSplit,
-        violations: violations,
-        transactionDetails: transactionDetails,
-    }); }, [action, report, isBillSplit, transaction, transactionDetails, violations]);
-    var conditionals = (0, react_1.useMemo)(function () {
-        return (0, TransactionPreviewUtils_1.createTransactionPreviewConditionals)(__assign(__assign({}, transactionPreviewCommonArguments), { areThereDuplicates: areThereDuplicates, isReportAPolicyExpenseChat: isReportAPolicyExpenseChat }));
-    }, [areThereDuplicates, transactionPreviewCommonArguments, isReportAPolicyExpenseChat]);
-    var shouldShowRBR = conditionals.shouldShowRBR, shouldShowMerchant = conditionals.shouldShowMerchant, shouldShowSplitShare = conditionals.shouldShowSplitShare, shouldShowTag = conditionals.shouldShowTag, shouldShowCategory = conditionals.shouldShowCategory, shouldShowSkeleton = conditionals.shouldShowSkeleton, shouldShowDescription = conditionals.shouldShowDescription;
-    var firstViolation = violations.at(0);
-    var isIOUActionType = (0, ReportActionsUtils_1.isMoneyRequestAction)(action);
-    var canEdit = isIOUActionType && (0, ReportUtils_1.canEditMoneyRequest)(action, transaction);
-    var violationMessage = firstViolation ? ViolationsUtils_1.default.getViolationTranslation(firstViolation, translate, canEdit) : undefined;
-    var previewText = (0, react_1.useMemo)(function () {
-        return (0, TransactionPreviewUtils_1.getTransactionPreviewTextAndTranslationPaths)(__assign(__assign({}, transactionPreviewCommonArguments), { shouldShowRBR: shouldShowRBR, violationMessage: violationMessage, reportActions: reportActions }));
-    }, [transactionPreviewCommonArguments, shouldShowRBR, violationMessage, reportActions]);
-    var getTranslatedText = function (item) { var _a; return (item.translationPath ? translate(item.translationPath) : ((_a = item.text) !== null && _a !== void 0 ? _a : '')); };
-    var previewHeaderText = previewText.previewHeaderText.reduce(function (text, currentKey) {
-        return "".concat(text).concat(getTranslatedText(currentKey));
+        transaction,
+        action,
+        isBillSplit,
+        violations,
+        transactionDetails,
+    }), [action, report, isBillSplit, transaction, transactionDetails, violations]);
+    const conditionals = (0, react_1.useMemo)(() => (0, TransactionPreviewUtils_1.createTransactionPreviewConditionals)({
+        ...transactionPreviewCommonArguments,
+        areThereDuplicates,
+        isReportAPolicyExpenseChat,
+    }), [areThereDuplicates, transactionPreviewCommonArguments, isReportAPolicyExpenseChat]);
+    const { shouldShowRBR, shouldShowMerchant, shouldShowSplitShare, shouldShowTag, shouldShowCategory, shouldShowSkeleton, shouldShowDescription } = conditionals;
+    const firstViolation = violations.at(0);
+    const isIOUActionType = (0, ReportActionsUtils_1.isMoneyRequestAction)(action);
+    const canEdit = isIOUActionType && (0, ReportUtils_1.canEditMoneyRequest)(action, transaction);
+    const violationMessage = firstViolation ? ViolationsUtils_1.default.getViolationTranslation(firstViolation, translate, canEdit) : undefined;
+    const previewText = (0, react_1.useMemo)(() => (0, TransactionPreviewUtils_1.getTransactionPreviewTextAndTranslationPaths)({
+        ...transactionPreviewCommonArguments,
+        shouldShowRBR,
+        violationMessage,
+        reportActions,
+    }), [transactionPreviewCommonArguments, shouldShowRBR, violationMessage, reportActions]);
+    const getTranslatedText = (item) => (item.translationPath ? translate(item.translationPath) : (item.text ?? ''));
+    const previewHeaderText = previewText.previewHeaderText.reduce((text, currentKey) => {
+        return `${text}${getTranslatedText(currentKey)}`;
     }, '');
-    var RBRMessage = getTranslatedText(previewText.RBRMessage);
-    var displayAmountText = getTranslatedText(previewText.displayAmountText);
-    var displayDeleteAmountText = getTranslatedText(previewText.displayDeleteAmountText);
-    var isDeleted = (action === null || action === void 0 ? void 0 : action.pendingAction) === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE || (transaction === null || transaction === void 0 ? void 0 : transaction.pendingAction) === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
-    var shouldShowCategoryOrTag = shouldShowCategory || shouldShowTag;
-    var shouldShowMerchantOrDescription = shouldShowDescription || shouldShowMerchant;
-    var description = (0, truncate_1.default)(StringUtils_1.default.lineBreaksToSpaces(Parser_1.default.htmlToText(requestComment !== null && requestComment !== void 0 ? requestComment : '')), { length: CONST_1.default.REQUEST_PREVIEW.MAX_LENGTH });
-    var requestMerchant = (0, truncate_1.default)(merchant, { length: CONST_1.default.REQUEST_PREVIEW.MAX_LENGTH });
-    var isApproved = (0, ReportUtils_1.isReportApproved)({ report: report });
-    var isIOUSettled = (0, ReportUtils_1.isSettled)(report === null || report === void 0 ? void 0 : report.reportID);
-    var isSettlementOrApprovalPartial = !!((_f = report === null || report === void 0 ? void 0 : report.pendingFields) === null || _f === void 0 ? void 0 : _f.partial);
-    var isTransactionScanning = (0, TransactionUtils_1.isScanning)(transaction);
-    var displayAmount = isDeleted ? displayDeleteAmountText : displayAmountText;
-    var receiptImages = [__assign(__assign({}, (0, ReceiptUtils_1.getThumbnailAndImageURIs)(transaction)), { transaction: transaction })];
-    var merchantOrDescription = shouldShowMerchant ? requestMerchant : description || '';
-    var participantAccountIDs = (0, ReportActionsUtils_1.isMoneyRequestAction)(action) && isBillSplit ? ((_h = (_g = (0, ReportActionsUtils_1.getOriginalMessage)(action)) === null || _g === void 0 ? void 0 : _g.participantAccountIDs) !== null && _h !== void 0 ? _h : []) : [managerID, ownerAccountID];
-    var isCardTransaction = (0, TransactionUtils_1.isCardTransaction)(transaction);
+    const RBRMessage = getTranslatedText(previewText.RBRMessage);
+    const displayAmountText = getTranslatedText(previewText.displayAmountText);
+    const displayDeleteAmountText = getTranslatedText(previewText.displayDeleteAmountText);
+    const isDeleted = action?.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE || transaction?.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
+    const shouldShowCategoryOrTag = shouldShowCategory || shouldShowTag;
+    const shouldShowMerchantOrDescription = shouldShowDescription || shouldShowMerchant;
+    const description = (0, truncate_1.default)(StringUtils_1.default.lineBreaksToSpaces(Parser_1.default.htmlToText(requestComment ?? '')), { length: CONST_1.default.REQUEST_PREVIEW.MAX_LENGTH });
+    const requestMerchant = (0, truncate_1.default)(merchant, { length: CONST_1.default.REQUEST_PREVIEW.MAX_LENGTH });
+    const isApproved = (0, ReportUtils_1.isReportApproved)({ report });
+    const isIOUSettled = (0, ReportUtils_1.isSettled)(report?.reportID);
+    const isSettlementOrApprovalPartial = !!report?.pendingFields?.partial;
+    const isTransactionScanning = (0, TransactionUtils_1.isScanning)(transaction);
+    const displayAmount = isDeleted ? displayDeleteAmountText : displayAmountText;
+    const receiptImages = [{ ...(0, ReceiptUtils_1.getThumbnailAndImageURIs)(transaction), transaction }];
+    const merchantOrDescription = shouldShowMerchant ? requestMerchant : description || '';
+    const participantAccountIDs = (0, ReportActionsUtils_1.isMoneyRequestAction)(action) && isBillSplit ? ((0, ReportActionsUtils_1.getOriginalMessage)(action)?.participantAccountIDs ?? []) : [managerID, ownerAccountID];
+    const isCardTransaction = (0, TransactionUtils_1.isCardTransaction)(transaction);
     // Compute the from/to data only for IOU reports
-    var _r = (0, react_1.useMemo)(function () {
+    const { from, to } = (0, react_1.useMemo)(() => {
         if (!shouldShowPayerAndReceiver) {
             return {
                 from: undefined,
@@ -104,41 +96,40 @@ function TransactionPreviewContent(_a) {
             };
         }
         // For IOU or Split, we want the unprocessed amount because it is important whether the amount was positive or negative
-        var payerAndReceiver = (0, TransactionPreviewUtils_1.getIOUPayerAndReceiver)(managerID, ownerAccountID, personalDetails, transactionRawAmount);
+        const payerAndReceiver = (0, TransactionPreviewUtils_1.getIOUPayerAndReceiver)(managerID, ownerAccountID, personalDetails, transactionRawAmount);
         return {
             from: payerAndReceiver.from,
             to: payerAndReceiver.to,
         };
-    }, [managerID, ownerAccountID, personalDetails, shouldShowPayerAndReceiver, transactionRawAmount]), from = _r.from, to = _r.to;
-    var shouldShowIOUHeader = !!from && !!to;
+    }, [managerID, ownerAccountID, personalDetails, shouldShowPayerAndReceiver, transactionRawAmount]);
+    const shouldShowIOUHeader = !!from && !!to;
     // If available, retrieve the split share from the splits object of the transaction, if not, display an even share.
-    var actorAccountID = action === null || action === void 0 ? void 0 : action.actorAccountID;
-    var splitShare = (0, react_1.useMemo)(function () {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+    const actorAccountID = action?.actorAccountID;
+    const splitShare = (0, react_1.useMemo)(() => {
         if (!shouldShowSplitShare) {
             return 0;
         }
-        var splitAmount = (_c = (_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _a === void 0 ? void 0 : _a.splits) === null || _b === void 0 ? void 0 : _b.find(function (split) { return split.accountID === sessionAccountID; })) === null || _c === void 0 ? void 0 : _c.amount;
+        const splitAmount = transaction?.comment?.splits?.find((split) => split.accountID === sessionAccountID)?.amount;
         if (splitAmount !== undefined) {
             return splitAmount;
         }
-        var originalParticipantCount = participantAccountIDs.length;
+        let originalParticipantCount = participantAccountIDs.length;
         if (isBillSplit) {
             // Try to get the participant count from transaction splits data
-            var transactionSplitsCount = (_e = (_d = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _d === void 0 ? void 0 : _d.splits) === null || _e === void 0 ? void 0 : _e.length;
+            const transactionSplitsCount = transaction?.comment?.splits?.length;
             if (transactionSplitsCount && transactionSplitsCount > 0) {
                 originalParticipantCount = transactionSplitsCount;
             }
             else if ((0, ReportActionsUtils_1.isMoneyRequestAction)(action)) {
-                originalParticipantCount = (_h = (_g = (_f = (0, ReportActionsUtils_1.getOriginalMessage)(action)) === null || _f === void 0 ? void 0 : _f.participantAccountIDs) === null || _g === void 0 ? void 0 : _g.length) !== null && _h !== void 0 ? _h : participantAccountIDs.length;
+                originalParticipantCount = (0, ReportActionsUtils_1.getOriginalMessage)(action)?.participantAccountIDs?.length ?? participantAccountIDs.length;
             }
         }
-        return (0, IOUUtils_1.calculateAmount)(isReportAPolicyExpenseChat ? 1 : originalParticipantCount - 1, amount !== null && amount !== void 0 ? amount : 0, requestCurrency !== null && requestCurrency !== void 0 ? requestCurrency : '', actorAccountID === sessionAccountID);
+        return (0, IOUUtils_1.calculateAmount)(isReportAPolicyExpenseChat ? 1 : originalParticipantCount - 1, amount ?? 0, requestCurrency ?? '', actorAccountID === sessionAccountID);
     }, [
         shouldShowSplitShare,
         isReportAPolicyExpenseChat,
         participantAccountIDs.length,
-        (_j = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _j === void 0 ? void 0 : _j.splits,
+        transaction?.comment?.splits,
         amount,
         requestCurrency,
         sessionAccountID,
@@ -146,19 +137,19 @@ function TransactionPreviewContent(_a) {
         action,
         actorAccountID,
     ]);
-    var shouldWrapDisplayAmount = !(isBillSplit || shouldShowMerchantOrDescription || isTransactionScanning);
-    var previewTextViewGap = (shouldShowCategoryOrTag || !shouldWrapDisplayAmount) && styles.gap2;
-    var previewTextMargin = shouldShowIOUHeader && shouldShowMerchantOrDescription && !isBillSplit && !shouldShowCategoryOrTag && styles.mbn1;
-    var transactionWrapperStyles = [styles.border, styles.moneyRequestPreviewBox, (isIOUSettled || isApproved) && isSettlementOrApprovalPartial && styles.offlineFeedback.pending];
+    const shouldWrapDisplayAmount = !(isBillSplit || shouldShowMerchantOrDescription || isTransactionScanning);
+    const previewTextViewGap = (shouldShowCategoryOrTag || !shouldWrapDisplayAmount) && styles.gap2;
+    const previewTextMargin = shouldShowIOUHeader && shouldShowMerchantOrDescription && !isBillSplit && !shouldShowCategoryOrTag && styles.mbn1;
+    const transactionWrapperStyles = [styles.border, styles.moneyRequestPreviewBox, (isIOUSettled || isApproved) && isSettlementOrApprovalPartial && styles.offlineFeedback.pending];
     return (<react_native_1.View style={[transactionWrapperStyles, containerStyles]}>
-            <OfflineWithFeedback_1.default errors={walletTermsErrors} onClose={function () { return offlineWithFeedbackOnClose; }} errorRowStyles={[styles.mbn1]} needsOffscreenAlphaCompositing pendingAction={action === null || action === void 0 ? void 0 : action.pendingAction} shouldDisableStrikeThrough={isDeleted} shouldDisableOpacity={isDeleted} shouldHideOnDelete={shouldHideOnDelete}>
+            <OfflineWithFeedback_1.default errors={walletTermsErrors} onClose={() => offlineWithFeedbackOnClose} errorRowStyles={[styles.mbn1]} needsOffscreenAlphaCompositing pendingAction={action?.pendingAction} shouldDisableStrikeThrough={isDeleted} shouldDisableOpacity={isDeleted} shouldHideOnDelete={shouldHideOnDelete}>
                 <react_native_1.View style={[(isTransactionScanning || isWhisper) && [styles.reportPreviewBoxHoverBorder, styles.reportContainerBorderRadius]]}>
                     <ReportActionItemImages_1.default images={receiptImages} 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     isHovered={isHovered || isTransactionScanning} size={1} shouldUseAspectRatio/>
                     {shouldShowSkeleton ? (<TransactionPreviewSkeletonView_1.default transactionPreviewWidth={transactionPreviewWidth}/>) : (<react_native_1.View style={[styles.expenseAndReportPreviewBoxBody, styles.mtn1]}>
                             <react_native_1.View style={styles.gap3}>
-                                {shouldShowIOUHeader && (<UserInfoCellsWithArrow_1.default shouldShowToRecipient participantFrom={from} participantFromDisplayName={(_l = (_k = from.displayName) !== null && _k !== void 0 ? _k : from.login) !== null && _l !== void 0 ? _l : translate('common.hidden')} participantToDisplayName={(_o = (_m = to.displayName) !== null && _m !== void 0 ? _m : to.login) !== null && _o !== void 0 ? _o : translate('common.hidden')} participantTo={to} avatarSize="mid-subscript" infoCellsTextStyle={__assign(__assign({}, styles.textMicroBold), { lineHeight: 14 })} infoCellsAvatarStyle={styles.pr1} style={[styles.flex1, styles.dFlex, styles.alignItemsCenter, styles.gap2, styles.flexRow]}/>)}
+                                {shouldShowIOUHeader && (<UserInfoCellsWithArrow_1.default shouldShowToRecipient participantFrom={from} participantFromDisplayName={from.displayName ?? from.login ?? translate('common.hidden')} participantToDisplayName={to.displayName ?? to.login ?? translate('common.hidden')} participantTo={to} avatarSize="mid-subscript" infoCellsTextStyle={{ ...styles.textMicroBold, lineHeight: 14 }} infoCellsAvatarStyle={styles.pr1} style={[styles.flex1, styles.dFlex, styles.alignItemsCenter, styles.gap2, styles.flexRow]}/>)}
                                 <react_native_1.View style={previewTextViewGap}>
                                     <react_native_1.View style={[styles.flexRow, styles.alignItemsCenter]}>
                                         <Text_1.default style={[isDeleted && styles.lineThrough, styles.textLabelSupporting, styles.flex1, styles.lh16, previewTextMargin]}>{previewHeaderText}</Text_1.default>

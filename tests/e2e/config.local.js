@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var config = {
+const config = {
     MAIN_APP_PACKAGE: 'com.expensify.chat.e2e',
     DELTA_APP_PACKAGE: 'com.expensify.chat.e2edelta',
     MAIN_APP_PATH: './android/app/build/outputs/apk/e2e/release/app-e2e-release.apk',

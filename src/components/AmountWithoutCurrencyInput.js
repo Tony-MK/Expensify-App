@@ -1,54 +1,40 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useLocalize_1 = require("@hooks/useLocalize");
-var getAmountInputKeyboard_1 = require("@libs/getAmountInputKeyboard");
-var MoneyRequestUtils_1 = require("@libs/MoneyRequestUtils");
-var TextInput_1 = require("./TextInput");
-function AmountWithoutCurrencyInput(_a, ref) {
-    var amount = _a.value, _b = _a.shouldAllowNegative, shouldAllowNegative = _b === void 0 ? false : _b, inputID = _a.inputID, name = _a.name, defaultValue = _a.defaultValue, accessibilityLabel = _a.accessibilityLabel, role = _a.role, label = _a.label, onInputChange = _a.onInputChange, rest = __rest(_a, ["value", "shouldAllowNegative", "inputID", "name", "defaultValue", "accessibilityLabel", "role", "label", "onInputChange"]);
-    var toLocaleDigit = (0, useLocalize_1.default)().toLocaleDigit;
-    var separator = (0, react_1.useMemo)(function () {
-        return (0, MoneyRequestUtils_1.replaceAllDigits)('1.1', toLocaleDigit)
-            .split('')
-            .filter(function (char) { return char !== '1'; })
-            .join('');
-    }, [toLocaleDigit]);
+const react_1 = require("react");
+const useLocalize_1 = require("@hooks/useLocalize");
+const getAmountInputKeyboard_1 = require("@libs/getAmountInputKeyboard");
+const MoneyRequestUtils_1 = require("@libs/MoneyRequestUtils");
+const TextInput_1 = require("./TextInput");
+function AmountWithoutCurrencyInput({ value: amount, shouldAllowNegative = false, inputID, name, defaultValue, accessibilityLabel, role, label, onInputChange, ...rest }, ref) {
+    const { toLocaleDigit } = (0, useLocalize_1.default)();
+    const separator = (0, react_1.useMemo)(() => (0, MoneyRequestUtils_1.replaceAllDigits)('1.1', toLocaleDigit)
+        .split('')
+        .filter((char) => char !== '1')
+        .join(''), [toLocaleDigit]);
     /**
      * Sets the selection and the amount accordingly to the value passed to the input
      * @param newAmount - Changed amount from user input
      */
-    var setNewAmount = (0, react_1.useCallback)(function (newAmount) {
+    const setNewAmount = (0, react_1.useCallback)((newAmount) => {
         // Remove spaces from the newAmount value because Safari on iOS adds spaces when pasting a copied value
         // More info: https://github.com/Expensify/App/issues/16974
-        var newAmountWithoutSpaces = (0, MoneyRequestUtils_1.stripSpacesFromAmount)(newAmount);
-        var replacedCommasAmount = (0, MoneyRequestUtils_1.replaceCommasWithPeriod)(newAmountWithoutSpaces);
-        onInputChange === null || onInputChange === void 0 ? void 0 : onInputChange(replacedCommasAmount);
+        const newAmountWithoutSpaces = (0, MoneyRequestUtils_1.stripSpacesFromAmount)(newAmount);
+        const replacedCommasAmount = (0, MoneyRequestUtils_1.replaceCommasWithPeriod)(newAmountWithoutSpaces);
+        onInputChange?.(replacedCommasAmount);
     }, [onInputChange]);
     // Add custom notation for using '-' character in the mask.
     // If we only use '-' for characterSet instead of '0123456789.-'
     // then the first character has to be '-' optionally, but we also want to allow a digit in first position if the value is positive.
     // More info: https://github.com/IvanIhnatsiuk/react-native-advanced-input-mask?tab=readme-ov-file#custom-notations
-    var customMask = [
+    const customMask = [
         {
             character: '~',
             characterSet: '0123456789.-',
             isOptional: true,
         },
     ];
-    var _c = (0, getAmountInputKeyboard_1.default)(shouldAllowNegative), keyboardType = _c.keyboardType, inputMode = _c.inputMode;
-    return (<TextInput_1.default inputID={inputID} name={name} label={label} onChangeText={setNewAmount} defaultValue={defaultValue} accessibilityLabel={accessibilityLabel} role={role} ref={ref} keyboardType={keyboardType} inputMode={inputMode} type="mask" mask={shouldAllowNegative ? "[~][99999999]".concat(separator, "[09]") : "[09999999]".concat(separator, "[09]")} customNotations={customMask} allowedKeys="0123456789.,-" validationRegex={'^-?(?!.*[.,].*[.,])\\d{0,8}(?:[.,]\\d{0,2})?$'} 
+    const { keyboardType, inputMode } = (0, getAmountInputKeyboard_1.default)(shouldAllowNegative);
+    return (<TextInput_1.default inputID={inputID} name={name} label={label} onChangeText={setNewAmount} defaultValue={defaultValue} accessibilityLabel={accessibilityLabel} role={role} ref={ref} keyboardType={keyboardType} inputMode={inputMode} type="mask" mask={shouldAllowNegative ? `[~][99999999]${separator}[09]` : `[09999999]${separator}[09]`} customNotations={customMask} allowedKeys="0123456789.,-" validationRegex={'^-?(?!.*[.,].*[.,])\\d{0,8}(?:[.,]\\d{0,2})?$'} 
     // On android autoCapitalize="words" is necessary when keyboardType="decimal-pad" or inputMode="decimal" to prevent input lag.
     // See https://github.com/Expensify/App/issues/51868 for more information
     autoCapitalize="words" 

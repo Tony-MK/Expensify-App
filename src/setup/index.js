@@ -1,18 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
-var react_native_1 = require("react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var IntlPolyfill_1 = require("@libs/IntlPolyfill");
-var Device_1 = require("@userActions/Device");
-var OnyxDerived_1 = require("@userActions/OnyxDerived");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var addUtilsToWindow_1 = require("./addUtilsToWindow");
-var platformSetup_1 = require("./platformSetup");
-var telemetry_1 = require("./telemetry");
+const react_native_1 = require("react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const IntlPolyfill_1 = require("@libs/IntlPolyfill");
+const Device_1 = require("@userActions/Device");
+const OnyxDerived_1 = require("@userActions/OnyxDerived");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const addUtilsToWindow_1 = require("./addUtilsToWindow");
+const platformSetup_1 = require("./platformSetup");
+const telemetry_1 = require("./telemetry");
 function default_1() {
-    var _a;
     (0, telemetry_1.default)();
     /*
      * Initialize the Onyx store when the app loads for the first time.
@@ -38,18 +37,18 @@ function default_1() {
             ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS_PAGES,
             ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS_REACTIONS,
         ],
-        initialKeyStates: (_a = {},
+        initialKeyStates: {
             // Clear any loading and error messages so they do not appear on app startup
-            _a[ONYXKEYS_1.default.SESSION] = { loading: false },
-            _a[ONYXKEYS_1.default.ACCOUNT] = CONST_1.default.DEFAULT_ACCOUNT_DATA,
-            _a[ONYXKEYS_1.default.NETWORK] = CONST_1.default.DEFAULT_NETWORK_DATA,
-            _a[ONYXKEYS_1.default.IS_SIDEBAR_LOADED] = false,
-            _a[ONYXKEYS_1.default.SHOULD_SHOW_COMPOSE_INPUT] = true,
-            _a[ONYXKEYS_1.default.MODAL] = {
+            [ONYXKEYS_1.default.SESSION]: { loading: false },
+            [ONYXKEYS_1.default.ACCOUNT]: CONST_1.default.DEFAULT_ACCOUNT_DATA,
+            [ONYXKEYS_1.default.NETWORK]: CONST_1.default.DEFAULT_NETWORK_DATA,
+            [ONYXKEYS_1.default.IS_SIDEBAR_LOADED]: false,
+            [ONYXKEYS_1.default.SHOULD_SHOW_COMPOSE_INPUT]: true,
+            [ONYXKEYS_1.default.MODAL]: {
                 isVisible: false,
                 willAlertModalBecomeVisible: false,
             },
-            _a),
+        },
         skippableCollectionMemberIDs: CONST_1.default.SKIPPABLE_COLLECTION_MEMBER_IDS,
     });
     (0, OnyxDerived_1.default)();

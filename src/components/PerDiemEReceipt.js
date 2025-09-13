@@ -1,65 +1,61 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EReceiptThumbnail_1 = require("./EReceiptThumbnail");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var Text_1 = require("./Text");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EReceiptThumbnail_1 = require("./EReceiptThumbnail");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const Text_1 = require("./Text");
 function computeDefaultPerDiemExpenseRates(customUnit, currency) {
-    var _a;
-    var subRates = (_a = customUnit.subRates) !== null && _a !== void 0 ? _a : [];
-    var subRateComments = subRates.map(function (subRate) {
-        var _a, _b, _c;
-        var rate = (_a = subRate.rate) !== null && _a !== void 0 ? _a : 0;
-        var rateComment = (_b = subRate.name) !== null && _b !== void 0 ? _b : '';
-        var quantity = (_c = subRate.quantity) !== null && _c !== void 0 ? _c : 0;
-        return "".concat(quantity, "x ").concat(rateComment, " @ ").concat((0, CurrencyUtils_1.convertAmountToDisplayString)(rate, currency));
+    const subRates = customUnit.subRates ?? [];
+    const subRateComments = subRates.map((subRate) => {
+        const rate = subRate.rate ?? 0;
+        const rateComment = subRate.name ?? '';
+        const quantity = subRate.quantity ?? 0;
+        return `${quantity}x ${rateComment} @ ${(0, CurrencyUtils_1.convertAmountToDisplayString)(rate, currency)}`;
     });
     return subRateComments.join(', ');
 }
 function getPerDiemDestination(merchant) {
-    var merchantParts = merchant.split(', ');
+    const merchantParts = merchant.split(', ');
     if (merchantParts.length < 3) {
         return '';
     }
     return merchantParts.slice(0, merchantParts.length - 3).join(', ');
 }
 function getPerDiemDates(merchant) {
-    var merchantParts = merchant.split(', ');
+    const merchantParts = merchant.split(', ');
     if (merchantParts.length < 3) {
         return merchant;
     }
     return merchantParts.slice(-3).join(', ');
 }
-function PerDiemEReceipt(_a) {
-    var _b, _c, _d, _e;
-    var transactionID = _a.transactionID;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var transaction = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), {
+function PerDiemEReceipt({ transactionID }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [transaction] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, {
         canBeMissing: true,
-    })[0];
+    });
     // Get receipt colorway, or default to Yellow.
-    var _f = (_b = StyleUtils.getEReceiptColorStyles(StyleUtils.getEReceiptColorCode(transaction))) !== null && _b !== void 0 ? _b : {}, primaryColor = _f.backgroundColor, secondaryColor = _f.color;
-    var _g = (_c = (0, ReportUtils_1.getTransactionDetails)(transaction, CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT)) !== null && _c !== void 0 ? _c : {}, transactionAmount = _g.amount, transactionCurrency = _g.currency, transactionMerchant = _g.merchant;
-    var ratesDescription = computeDefaultPerDiemExpenseRates((_e = (_d = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _d === void 0 ? void 0 : _d.customUnit) !== null && _e !== void 0 ? _e : {}, transactionCurrency !== null && transactionCurrency !== void 0 ? transactionCurrency : '');
-    var datesDescription = getPerDiemDates(transactionMerchant !== null && transactionMerchant !== void 0 ? transactionMerchant : '');
-    var destination = getPerDiemDestination(transactionMerchant !== null && transactionMerchant !== void 0 ? transactionMerchant : '');
-    var formattedAmount = (0, CurrencyUtils_1.convertToDisplayStringWithoutCurrency)(transactionAmount !== null && transactionAmount !== void 0 ? transactionAmount : 0, transactionCurrency);
-    var currency = (0, CurrencyUtils_1.getCurrencySymbol)(transactionCurrency !== null && transactionCurrency !== void 0 ? transactionCurrency : '');
-    var secondaryTextColorStyle = secondaryColor ? StyleUtils.getColorStyle(secondaryColor) : undefined;
+    const { backgroundColor: primaryColor, color: secondaryColor } = StyleUtils.getEReceiptColorStyles(StyleUtils.getEReceiptColorCode(transaction)) ?? {};
+    const { amount: transactionAmount, currency: transactionCurrency, merchant: transactionMerchant } = (0, ReportUtils_1.getTransactionDetails)(transaction, CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT) ?? {};
+    const ratesDescription = computeDefaultPerDiemExpenseRates(transaction?.comment?.customUnit ?? {}, transactionCurrency ?? '');
+    const datesDescription = getPerDiemDates(transactionMerchant ?? '');
+    const destination = getPerDiemDestination(transactionMerchant ?? '');
+    const formattedAmount = (0, CurrencyUtils_1.convertToDisplayStringWithoutCurrency)(transactionAmount ?? 0, transactionCurrency);
+    const currency = (0, CurrencyUtils_1.getCurrencySymbol)(transactionCurrency ?? '');
+    const secondaryTextColorStyle = secondaryColor ? StyleUtils.getColorStyle(secondaryColor) : undefined;
     return (<react_native_1.View style={[styles.eReceiptContainer, primaryColor ? StyleUtils.getBackgroundColorStyle(primaryColor) : undefined]}>
             <react_native_1.View style={styles.fullScreen}>
                 <EReceiptThumbnail_1.default transactionID={transactionID} centerIconV={false}/>
@@ -77,7 +73,7 @@ function PerDiemEReceipt(_a) {
                             {formattedAmount}
                         </Text_1.default>
                     </react_native_1.View>
-                    <Text_1.default style={[styles.eReceiptMerchant, styles.breakWord, styles.textAlignCenter]}>{"".concat(destination, " ").concat(translate('common.perDiem').toLowerCase())}</Text_1.default>
+                    <Text_1.default style={[styles.eReceiptMerchant, styles.breakWord, styles.textAlignCenter]}>{`${destination} ${translate('common.perDiem').toLowerCase()}`}</Text_1.default>
                 </react_native_1.View>
                 <react_native_1.View style={[styles.alignSelfStretch, styles.flexColumn, styles.mb8, styles.gap4]}>
                     <react_native_1.View style={[styles.flexColumn, styles.gap1]}>

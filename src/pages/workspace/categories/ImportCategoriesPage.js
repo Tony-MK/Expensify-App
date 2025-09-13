@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ImportSpreadsheet_1 = require("@components/ImportSpreadsheet");
-var usePolicy_1 = require("@hooks/usePolicy");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-var SCREENS_1 = require("@src/SCREENS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function ImportCategoriesPage(_a) {
-    var route = _a.route;
-    var policyID = route.params.policyID;
-    var backTo = route.params.backTo;
-    var policy = (0, usePolicy_1.default)(policyID);
-    var hasAccountingConnections = (0, PolicyUtils_1.hasAccountingConnections)(policy);
-    var isQuickSettingsFlow = route.name === SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_IMPORT;
+const react_1 = require("react");
+const ImportSpreadsheet_1 = require("@components/ImportSpreadsheet");
+const usePolicy_1 = require("@hooks/usePolicy");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+const SCREENS_1 = require("@src/SCREENS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function ImportCategoriesPage({ route }) {
+    const policyID = route.params.policyID;
+    const backTo = route.params.backTo;
+    const policy = (0, usePolicy_1.default)(policyID);
+    const hasAccountingConnections = (0, PolicyUtils_1.hasAccountingConnections)(policy);
+    const isQuickSettingsFlow = route.name === SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_IMPORT;
     if (hasAccountingConnections) {
         return <NotFoundPage_1.default />;
     }

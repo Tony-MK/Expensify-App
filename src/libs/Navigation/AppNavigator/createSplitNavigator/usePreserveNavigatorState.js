@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cleanPreservedNavigatorStates = exports.getPreservedNavigatorState = void 0;
-var react_1 = require("react");
-var preservedNavigatorStates = {};
-var cleanPreservedNavigatorStates = function (state) {
-    var currentSplitNavigatorKeys = state.routes.map(function (route) { return route.key; });
-    for (var _i = 0, _a = Object.keys(preservedNavigatorStates); _i < _a.length; _i++) {
-        var key = _a[_i];
+const react_1 = require("react");
+const preservedNavigatorStates = {};
+const cleanPreservedNavigatorStates = (state) => {
+    const currentSplitNavigatorKeys = state.routes.map((route) => route.key);
+    for (const key of Object.keys(preservedNavigatorStates)) {
         if (!currentSplitNavigatorKeys.includes(key)) {
             delete preservedNavigatorStates[key];
         }
     }
 };
 exports.cleanPreservedNavigatorStates = cleanPreservedNavigatorStates;
-var getPreservedNavigatorState = function (key) { return preservedNavigatorStates[key]; };
+const getPreservedNavigatorState = (key) => preservedNavigatorStates[key];
 exports.getPreservedNavigatorState = getPreservedNavigatorState;
 function usePreserveNavigatorState(state, route) {
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!route) {
             return;
         }

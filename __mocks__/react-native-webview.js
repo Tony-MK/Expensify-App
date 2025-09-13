@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-jest.mock('react-native-webview', function () {
-    var View = require('react-native').View;
+jest.mock('react-native-webview', () => {
+    const { View } = require('react-native');
     return {
-        WebView: function () { return View; },
+        WebView: () => View,
     };
 });

@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var Log_1 = require("@libs/Log");
-var asyncOpenURL = function (promise, url) {
+const react_native_1 = require("react-native");
+const Log_1 = require("@libs/Log");
+const asyncOpenURL = (promise, url) => {
     if (!url) {
         return;
     }
     promise
-        .then(function (params) {
+        .then((params) => {
         react_native_1.Linking.openURL(typeof url === 'string' ? url : url(params));
     })
-        .catch(function () {
-        Log_1.default.warn('[asyncOpenURL] error occurred while opening URL', { url: url });
+        .catch(() => {
+        Log_1.default.warn('[asyncOpenURL] error occurred while opening URL', { url });
     });
 };
 exports.default = asyncOpenURL;

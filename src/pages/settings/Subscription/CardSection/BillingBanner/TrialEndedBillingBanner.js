@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Illustrations = require("@components/Icon/Illustrations");
-var useLocalize_1 = require("@hooks/useLocalize");
-var SubscriptionUtils = require("@libs/SubscriptionUtils");
-var BillingBanner_1 = require("./BillingBanner");
+const react_1 = require("react");
+const Illustrations = require("@components/Icon/Illustrations");
+const useLocalize_1 = require("@hooks/useLocalize");
+const SubscriptionUtils = require("@libs/SubscriptionUtils");
+const BillingBanner_1 = require("./BillingBanner");
 function TrialEndedBillingBanner() {
-    var translate = (0, useLocalize_1.default)().translate;
+    const { translate } = (0, useLocalize_1.default)();
     if (SubscriptionUtils.doesUserHavePaymentCardAdded()) {
         return null;
     }

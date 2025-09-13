@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.REIMBURSEMENT_ACCOUNT_ROUTE_NAMES = void 0;
 exports.getRouteForCurrentStep = getRouteForCurrentStep;
-var CONST_1 = require("@src/CONST");
-var REIMBURSEMENT_ACCOUNT_ROUTE_NAMES = {
+const CONST_1 = require("@src/CONST");
+const REIMBURSEMENT_ACCOUNT_ROUTE_NAMES = {
     COMPANY: 'company',
     PERSONAL_INFORMATION: 'personal-information',
     BENEFICIAL_OWNERS: 'beneficial-owners',

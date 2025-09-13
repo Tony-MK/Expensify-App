@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     SIGNER_FULL_NAME: 'signerFullName',
     SIGNER_DATE_OF_BIRTH: 'signerDateOfBirth',
     SIGNER_JOB_TITLE: 'signerJobTitle',

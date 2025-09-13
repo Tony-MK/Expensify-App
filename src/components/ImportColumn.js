@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ImportSpreadsheet_1 = require("@libs/actions/ImportSpreadsheet");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ButtonWithDropdownMenu_1 = require("./ButtonWithDropdownMenu");
-var Text_1 = require("./Text");
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ImportSpreadsheet_1 = require("@libs/actions/ImportSpreadsheet");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ButtonWithDropdownMenu_1 = require("./ButtonWithDropdownMenu");
+const Text_1 = require("./Text");
 // cspell:disable
 function findColumnName(header) {
-    var attribute = '';
-    var formattedHeader = expensify_common_1.Str.removeSpaces(String(header).toLowerCase().trim());
+    let attribute = '';
+    const formattedHeader = expensify_common_1.Str.removeSpaces(String(header).toLowerCase().trim());
     switch (formattedHeader) {
         case 'email':
         case 'emailaddress':
@@ -99,34 +99,29 @@ function findColumnName(header) {
     }
     return attribute;
 }
-function ImportColumn(_a) {
-    var _b;
-    var column = _a.column, columnName = _a.columnName, columnRoles = _a.columnRoles, columnIndex = _a.columnIndex, _c = _a.shouldShowDropdownMenu, shouldShowDropdownMenu = _c === void 0 ? true : _c;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var spreadsheet = (0, useOnyx_1.default)(ONYXKEYS_1.default.IMPORTED_SPREADSHEET, { canBeMissing: true })[0];
-    var _d = (spreadsheet !== null && spreadsheet !== void 0 ? spreadsheet : {}).containsHeader, containsHeader = _d === void 0 ? true : _d;
-    var options = (columnRoles !== null && columnRoles !== void 0 ? columnRoles : []).map(function (item) {
-        var _a, _b;
-        return ({
-            text: item.text,
-            value: item.value,
-            description: (_a = item.description) !== null && _a !== void 0 ? _a : (item.isRequired ? translate('common.required') : undefined),
-            isSelected: ((_b = spreadsheet === null || spreadsheet === void 0 ? void 0 : spreadsheet.columns) === null || _b === void 0 ? void 0 : _b[columnIndex]) === item.value,
-        });
-    });
-    var columnValuesString = column.slice(containsHeader ? 1 : 0).join(', ');
-    var colName = findColumnName((_b = column.at(0)) !== null && _b !== void 0 ? _b : '');
-    var defaultSelectedIndex = columnRoles === null || columnRoles === void 0 ? void 0 : columnRoles.findIndex(function (item) { return item.value === colName; });
-    var finalIndex = defaultSelectedIndex !== -1 ? defaultSelectedIndex : 0;
-    (0, react_1.useEffect)(function () {
+function ImportColumn({ column, columnName, columnRoles, columnIndex, shouldShowDropdownMenu = true }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [spreadsheet] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IMPORTED_SPREADSHEET, { canBeMissing: true });
+    const { containsHeader = true } = spreadsheet ?? {};
+    const options = (columnRoles ?? []).map((item) => ({
+        text: item.text,
+        value: item.value,
+        description: item.description ?? (item.isRequired ? translate('common.required') : undefined),
+        isSelected: spreadsheet?.columns?.[columnIndex] === item.value,
+    }));
+    const columnValuesString = column.slice(containsHeader ? 1 : 0).join(', ');
+    const colName = findColumnName(column.at(0) ?? '');
+    const defaultSelectedIndex = columnRoles?.findIndex((item) => item.value === colName);
+    const finalIndex = defaultSelectedIndex !== -1 ? defaultSelectedIndex : 0;
+    (0, react_1.useEffect)(() => {
         if (defaultSelectedIndex === -1) {
             return;
         }
         (0, ImportSpreadsheet_1.setColumnName)(columnIndex, colName);
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- we don't want this effect to run again
     }, []);
-    var columnHeader = containsHeader ? column.at(0) : translate('spreadsheet.column', { name: columnName });
+    const columnHeader = containsHeader ? column.at(0) : translate('spreadsheet.column', { name: columnName });
     return (<react_native_1.View style={[styles.importColumnCard, styles.mt4]}>
             <Text_1.default numberOfLines={1} style={[styles.textSupporting, styles.mw100]}>
                 {columnHeader}
@@ -137,7 +132,7 @@ function ImportColumn(_a) {
                 </Text_1.default>
 
                 {shouldShowDropdownMenu && (<react_native_1.View style={styles.ml2}>
-                        <ButtonWithDropdownMenu_1.default onPress={function () { }} buttonSize={CONST_1.default.DROPDOWN_BUTTON_SIZE.SMALL} shouldShowSelectedItemCheck menuHeaderText={columnHeader} isSplitButton={false} onOptionSelected={function (option) {
+                        <ButtonWithDropdownMenu_1.default onPress={() => { }} buttonSize={CONST_1.default.DROPDOWN_BUTTON_SIZE.SMALL} shouldShowSelectedItemCheck menuHeaderText={columnHeader} isSplitButton={false} onOptionSelected={(option) => {
                 (0, ImportSpreadsheet_1.setColumnName)(columnIndex, option.value);
             }} defaultSelectedIndex={finalIndex} options={options} success={false}/>
                     </react_native_1.View>)}

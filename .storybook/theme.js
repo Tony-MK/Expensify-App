@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var create_1 = require("@storybook/theming/create");
+const create_1 = require("@storybook/theming/create");
 // eslint-disable-next-line @dword-design/import-alias/prefer-alias
-var colors_1 = require("../src/styles/theme/colors");
-var theme = (0, create_1.create)({
+const colors_1 = require("../src/styles/theme/colors");
+const theme = (0, create_1.create)({
     brandTitle: 'New Expensify UI Docs',
     brandImage: 'logomark.svg',
     fontBase: 'Expensify Neue',

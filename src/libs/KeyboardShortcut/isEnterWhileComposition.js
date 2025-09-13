@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Browser = require("@libs/Browser");
-var CONST_1 = require("@src/CONST");
+const Browser = require("@libs/Browser");
+const CONST_1 = require("@src/CONST");
 /**
  * Check if the Enter key was pressed during IME confirmation (i.e. while the text is being composed).
  * See {@link https://en.wikipedia.org/wiki/Input_method}
  */
-var isEnterWhileComposition = function (event) {
-    var _a;
+const isEnterWhileComposition = (event) => {
     // if on mobile chrome, the enter key event is never fired when the enter key is pressed while composition.
     if (Browser.isMobileChrome()) {
         return false;
@@ -17,6 +16,6 @@ var isEnterWhileComposition = function (event) {
     if (CONST_1.default.BROWSER.SAFARI === Browser.getBrowser()) {
         return event.keyCode === 229;
     }
-    return event.key === CONST_1.default.KEYBOARD_SHORTCUTS.ENTER.shortcutKey && ((_a = event === null || event === void 0 ? void 0 : event.nativeEvent) === null || _a === void 0 ? void 0 : _a.isComposing);
+    return event.key === CONST_1.default.KEYBOARD_SHORTCUTS.ENTER.shortcutKey && event?.nativeEvent?.isComposing;
 };
 exports.default = isEnterWhileComposition;

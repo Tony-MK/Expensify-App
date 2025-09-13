@@ -1,47 +1,45 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var performance_1 = require("@firebase/performance");
-var Environment = require("@libs/Environment/Environment");
-var firebaseWebConfig_1 = require("./firebaseWebConfig");
-var utils_1 = require("./utils");
-var traceMap = {};
-var startTrace = function (customEventName) {
-    var start = global.performance.now();
+const performance_1 = require("@firebase/performance");
+const Environment = require("@libs/Environment/Environment");
+const firebaseWebConfig_1 = require("./firebaseWebConfig");
+const utils_1 = require("./utils");
+const traceMap = {};
+const startTrace = (customEventName) => {
+    const start = global.performance.now();
     if (Environment.isDevelopment()) {
         return;
     }
     if (traceMap[customEventName]) {
         return;
     }
-    var perfTrace = (0, performance_1.trace)(firebaseWebConfig_1.firebasePerfWeb, customEventName);
-    var attributes = utils_1.default.getAttributes(['accountId', 'personalDetailsLength', 'reportActionsLength', 'reportsLength', 'policiesLength']);
-    Object.entries(attributes).forEach(function (_a) {
-        var name = _a[0], value = _a[1];
+    const perfTrace = (0, performance_1.trace)(firebaseWebConfig_1.firebasePerfWeb, customEventName);
+    const attributes = utils_1.default.getAttributes(['accountId', 'personalDetailsLength', 'reportActionsLength', 'reportsLength', 'policiesLength']);
+    Object.entries(attributes).forEach(([name, value]) => {
         perfTrace.putAttribute(name, value);
     });
     traceMap[customEventName] = {
         trace: perfTrace,
-        start: start,
+        start,
     };
     perfTrace.start();
 };
-var stopTrace = function (customEventName) {
-    var _a;
+const stopTrace = (customEventName) => {
     if (Environment.isDevelopment()) {
         return;
     }
-    var perfTrace = (_a = traceMap[customEventName]) === null || _a === void 0 ? void 0 : _a.trace;
+    const perfTrace = traceMap[customEventName]?.trace;
     if (!perfTrace) {
         return;
     }
     perfTrace.stop();
     delete traceMap[customEventName];
 };
-var log = function () {
+const log = () => {
     // crashlytics is not supported on WEB
 };
 exports.default = {
-    startTrace: startTrace,
-    stopTrace: stopTrace,
-    log: log,
+    startTrace,
+    stopTrace,
+    log,
 };

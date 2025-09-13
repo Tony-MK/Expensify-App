@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var google_signin_1 = require("@react-native-google-signin/google-signin");
-var react_1 = require("react");
-var IconButton_1 = require("@components/SignInButtons/IconButton");
-var getPlatform_1 = require("@libs/getPlatform");
-var Log_1 = require("@libs/Log");
-var Session_1 = require("@userActions/Session");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
+const google_signin_1 = require("@react-native-google-signin/google-signin");
+const react_1 = require("react");
+const IconButton_1 = require("@components/SignInButtons/IconButton");
+const getPlatform_1 = require("@libs/getPlatform");
+const Log_1 = require("@libs/Log");
+const Session_1 = require("@userActions/Session");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
 /**
  * Helper function returning webClientId based on a platform used
  */
@@ -31,12 +31,12 @@ function googleSignInRequest() {
     // before signing in to ensure the user is prompted.
     google_signin_1.GoogleSignin.signOut();
     google_signin_1.GoogleSignin.signIn()
-        .then(function (response) { return response.idToken; })
-        .then(function (token) { return (0, Session_1.beginGoogleSignIn)(token); })
-        .catch(function (error) {
+        .then((response) => response.idToken)
+        .then((token) => (0, Session_1.beginGoogleSignIn)(token))
+        .catch((error) => {
         // Handle unexpected error shape
-        if ((error === null || error === void 0 ? void 0 : error.code) === undefined) {
-            Log_1.default.alert("[Google Sign In] Google sign in failed: ".concat(JSON.stringify(error)));
+        if (error?.code === undefined) {
+            Log_1.default.alert(`[Google Sign In] Google sign in failed: ${JSON.stringify(error)}`);
             return;
         }
         /** The logged code is useful for debugging any new errors that are not specifically handled. To decode, see:
@@ -47,16 +47,15 @@ function googleSignInRequest() {
             Log_1.default.info('[Google Sign In] Google Sign In cancelled');
         }
         else {
-            Log_1.default.alert("[Google Sign In] Error Code: ".concat(error.code, ". ").concat(error.message), {}, false);
+            Log_1.default.alert(`[Google Sign In] Error Code: ${error.code}. ${error.message}`, {}, false);
         }
     });
 }
 /**
  * Google Sign In button for iOS.
  */
-function GoogleSignIn(_a) {
-    var _b = _a.onPress, onPress = _b === void 0 ? function () { } : _b;
-    return (<IconButton_1.default onPress={function () {
+function GoogleSignIn({ onPress = () => { } }) {
+    return (<IconButton_1.default onPress={() => {
             onPress();
             googleSignInRequest();
         }} provider={CONST_1.default.SIGN_IN_METHOD.GOOGLE}/>);

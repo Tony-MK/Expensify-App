@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Expensicons = require("@components/Icon/Expensicons");
-var CONST_1 = require("@src/CONST");
-var getIconForAction = function (actionType) {
+const Expensicons = require("@components/Icon/Expensicons");
+const CONST_1 = require("@src/CONST");
+const getIconForAction = (actionType) => {
     switch (actionType) {
         case CONST_1.default.IOU.TYPE.TRACK:
             return Expensicons.Coins;

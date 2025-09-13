@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ALL_NAICS = exports.NAICS_MAPPING_WITH_ID = exports.NAICS = void 0;
-var NAICS = [
+const NAICS = [
     {
         id: 11,
         value: 'Agriculture, Forestry, Fishing and Hunting',
@@ -12123,22 +12123,22 @@ var NAICS = [
     },
 ];
 exports.NAICS = NAICS;
-var NAICS_MAPPING_WITH_ID = {};
+const NAICS_MAPPING_WITH_ID = {};
 exports.NAICS_MAPPING_WITH_ID = NAICS_MAPPING_WITH_ID;
-var ALL_NAICS = [];
+const ALL_NAICS = [];
 exports.ALL_NAICS = ALL_NAICS;
 function getNAICSMappingWithId(item) {
     ALL_NAICS.push({
         id: item.id,
         value: item.value,
     });
-    NAICS_MAPPING_WITH_ID[item.id] = item.options.map(function (option) {
+    NAICS_MAPPING_WITH_ID[item.id] = item.options.map((option) => {
         return {
             id: option.id,
             value: option.value,
         };
     });
-    item.options.forEach(function (option) {
+    item.options.forEach((option) => {
         if (option.options.length === 0) {
             return;
         }
@@ -12146,7 +12146,7 @@ function getNAICSMappingWithId(item) {
     });
 }
 function buildNAICS() {
-    NAICS.forEach(function (item) {
+    NAICS.forEach((item) => {
         getNAICSMappingWithId(item);
     });
 }

@@ -1,19 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var stack_1 = require("@react-navigation/stack");
-var react_1 = require("react");
+const stack_1 = require("@react-navigation/stack");
+const react_1 = require("react");
 // eslint-disable-next-line no-restricted-imports
-var react_native_1 = require("react-native");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-function BaseOverlay(_a) {
-    var onPress = _a.onPress, _b = _a.hasMarginRight, hasMarginRight = _b === void 0 ? false : _b, progress = _a.progress, _c = _a.hasMarginLeft, hasMarginLeft = _c === void 0 ? false : _c;
-    var styles = (0, useThemeStyles_1.default)();
-    var current = (0, stack_1.useCardAnimation)().current;
-    var translate = (0, useLocalize_1.default)().translate;
-    return (<react_native_1.Animated.View id="BaseOverlay" style={styles.overlayStyles({ progress: progress !== null && progress !== void 0 ? progress : current.progress, hasMarginRight: hasMarginRight, hasMarginLeft: hasMarginLeft })}>
+const react_native_1 = require("react-native");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+function BaseOverlay({ onPress, hasMarginRight = false, progress, hasMarginLeft = false }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { current } = (0, stack_1.useCardAnimation)();
+    const { translate } = (0, useLocalize_1.default)();
+    return (<react_native_1.Animated.View id="BaseOverlay" style={styles.overlayStyles({ progress: progress ?? current.progress, hasMarginRight, hasMarginLeft })}>
             <react_native_1.View style={[styles.flex1, styles.flexColumn]}>
                 {/* In the latest Electron version buttons can't be both clickable and draggable.
      That's why we added this workaround. Because of two Pressable components on the desktop app

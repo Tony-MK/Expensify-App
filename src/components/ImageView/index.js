@@ -1,62 +1,50 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AttachmentOfflineIndicator_1 = require("@components/AttachmentOfflineIndicator");
-var AttachmentCarouselPagerContext_1 = require("@components/Attachments/AttachmentCarousel/Pager/AttachmentCarouselPagerContext");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var Image_1 = require("@components/Image");
-var resizeModes_1 = require("@components/Image/resizeModes");
-var Lightbox_1 = require("@components/Lightbox");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var FileUtils_1 = require("@libs/fileDownload/FileUtils");
-var CONST_1 = require("@src/CONST");
-var viewRef_1 = require("@src/types/utils/viewRef");
-function ImageView(_a) {
-    var _b = _a.isAuthTokenRequired, isAuthTokenRequired = _b === void 0 ? false : _b, url = _a.url, fileName = _a.fileName, onError = _a.onError;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var _c = (0, react_1.useState)(true), isLoading = _c[0], setIsLoading = _c[1];
-    var _d = (0, react_1.useState)(0), containerHeight = _d[0], setContainerHeight = _d[1];
-    var _e = (0, react_1.useState)(0), containerWidth = _e[0], setContainerWidth = _e[1];
-    var _f = (0, react_1.useState)(false), isZoomed = _f[0], setIsZoomed = _f[1];
-    var _g = (0, react_1.useState)(false), isDragging = _g[0], setIsDragging = _g[1];
-    var _h = (0, react_1.useState)(false), isMouseDown = _h[0], setIsMouseDown = _h[1];
-    var _j = (0, react_1.useState)(0), initialScrollLeft = _j[0], setInitialScrollLeft = _j[1];
-    var _k = (0, react_1.useState)(0), initialScrollTop = _k[0], setInitialScrollTop = _k[1];
-    var _l = (0, react_1.useState)(0), initialX = _l[0], setInitialX = _l[1];
-    var _m = (0, react_1.useState)(0), initialY = _m[0], setInitialY = _m[1];
-    var _o = (0, react_1.useState)(0), imgWidth = _o[0], setImgWidth = _o[1];
-    var _p = (0, react_1.useState)(0), imgHeight = _p[0], setImgHeight = _p[1];
-    var _q = (0, react_1.useState)(0), zoomScale = _q[0], setZoomScale = _q[1];
-    var _r = (0, react_1.useState)(), zoomDelta = _r[0], setZoomDelta = _r[1];
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var scrollableRef = (0, react_1.useRef)(null);
-    var canUseTouchScreen = (0, DeviceCapabilities_1.canUseTouchScreen)();
-    var setScale = function (newContainerWidth, newContainerHeight, newImageWidth, newImageHeight) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AttachmentOfflineIndicator_1 = require("@components/AttachmentOfflineIndicator");
+const AttachmentCarouselPagerContext_1 = require("@components/Attachments/AttachmentCarousel/Pager/AttachmentCarouselPagerContext");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const Image_1 = require("@components/Image");
+const resizeModes_1 = require("@components/Image/resizeModes");
+const Lightbox_1 = require("@components/Lightbox");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const FileUtils_1 = require("@libs/fileDownload/FileUtils");
+const CONST_1 = require("@src/CONST");
+const viewRef_1 = require("@src/types/utils/viewRef");
+function ImageView({ isAuthTokenRequired = false, url, fileName, onError }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const [isLoading, setIsLoading] = (0, react_1.useState)(true);
+    const [containerHeight, setContainerHeight] = (0, react_1.useState)(0);
+    const [containerWidth, setContainerWidth] = (0, react_1.useState)(0);
+    const [isZoomed, setIsZoomed] = (0, react_1.useState)(false);
+    const [isDragging, setIsDragging] = (0, react_1.useState)(false);
+    const [isMouseDown, setIsMouseDown] = (0, react_1.useState)(false);
+    const [initialScrollLeft, setInitialScrollLeft] = (0, react_1.useState)(0);
+    const [initialScrollTop, setInitialScrollTop] = (0, react_1.useState)(0);
+    const [initialX, setInitialX] = (0, react_1.useState)(0);
+    const [initialY, setInitialY] = (0, react_1.useState)(0);
+    const [imgWidth, setImgWidth] = (0, react_1.useState)(0);
+    const [imgHeight, setImgHeight] = (0, react_1.useState)(0);
+    const [zoomScale, setZoomScale] = (0, react_1.useState)(0);
+    const [zoomDelta, setZoomDelta] = (0, react_1.useState)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const scrollableRef = (0, react_1.useRef)(null);
+    const canUseTouchScreen = (0, DeviceCapabilities_1.canUseTouchScreen)();
+    const setScale = (newContainerWidth, newContainerHeight, newImageWidth, newImageHeight) => {
         if (!newContainerWidth || !newImageWidth || !newContainerHeight || !newImageHeight) {
             return;
         }
-        var newZoomScale = Math.min(newContainerWidth / newImageWidth, newContainerHeight / newImageHeight);
+        const newZoomScale = Math.min(newContainerWidth / newImageWidth, newContainerHeight / newImageHeight);
         setZoomScale(newZoomScale);
     };
-    var onContainerLayoutChanged = function (e) {
-        var _a = e.nativeEvent.layout, width = _a.width, height = _a.height;
+    const onContainerLayoutChanged = (e) => {
+        const { width, height } = e.nativeEvent.layout;
         setScale(width, height, imgWidth, imgHeight);
         setContainerHeight(height);
         setContainerWidth(width);
@@ -64,7 +52,7 @@ function ImageView(_a) {
     /**
      * When open image, set image width, height.
      */
-    var setImageRegion = function (imageWidth, imageHeight) {
+    const setImageRegion = (imageWidth, imageHeight) => {
         if (imageHeight <= 0) {
             return;
         }
@@ -72,7 +60,7 @@ function ImageView(_a) {
         setImgWidth(imageWidth);
         setImgHeight(imageHeight);
     };
-    var imageLoadingStart = function () {
+    const imageLoadingStart = () => {
         if (!isLoading) {
             return;
         }
@@ -80,22 +68,20 @@ function ImageView(_a) {
         setZoomScale(0);
         setIsZoomed(false);
     };
-    var attachmentCarouselPagerContext = (0, react_1.useContext)(AttachmentCarouselPagerContext_1.default);
-    var onAttachmentLoaded = (attachmentCarouselPagerContext !== null && attachmentCarouselPagerContext !== void 0 ? attachmentCarouselPagerContext : {}).onAttachmentLoaded;
-    var imageLoad = function (_a) {
-        var nativeEvent = _a.nativeEvent;
+    const attachmentCarouselPagerContext = (0, react_1.useContext)(AttachmentCarouselPagerContext_1.default);
+    const { onAttachmentLoaded } = attachmentCarouselPagerContext ?? {};
+    const imageLoad = ({ nativeEvent }) => {
         setImageRegion(nativeEvent.width, nativeEvent.height);
         setIsLoading(false);
-        onAttachmentLoaded === null || onAttachmentLoaded === void 0 ? void 0 : onAttachmentLoaded(url, true);
+        onAttachmentLoaded?.(url, true);
     };
-    var onContainerPressIn = function (e) {
-        var _a, _b, _c, _d;
-        var _e = e.nativeEvent, pageX = _e.pageX, pageY = _e.pageY;
+    const onContainerPressIn = (e) => {
+        const { pageX, pageY } = e.nativeEvent;
         setIsMouseDown(true);
         setInitialX(pageX);
         setInitialY(pageY);
-        setInitialScrollLeft((_b = (_a = scrollableRef.current) === null || _a === void 0 ? void 0 : _a.scrollLeft) !== null && _b !== void 0 ? _b : 0);
-        setInitialScrollTop((_d = (_c = scrollableRef.current) === null || _c === void 0 ? void 0 : _c.scrollTop) !== null && _d !== void 0 ? _d : 0);
+        setInitialScrollLeft(scrollableRef.current?.scrollLeft ?? 0);
+        setInitialScrollTop(scrollableRef.current?.scrollTop ?? 0);
     };
     /**
      * Convert touch point to zoomed point
@@ -103,9 +89,9 @@ function ImageView(_a) {
      * @param y point when click zoom
      * @returns converted touch point
      */
-    var getScrollOffset = function (x, y) {
-        var offsetX = 0;
-        var offsetY = 0;
+    const getScrollOffset = (x, y) => {
+        let offsetX = 0;
+        let offsetY = 0;
         // Container size bigger than clicked position offset
         if (x <= containerWidth / 2) {
             offsetX = 0;
@@ -121,15 +107,15 @@ function ImageView(_a) {
             // Minus half of container size because we want to be center clicked position
             offsetY = y - containerHeight / 2;
         }
-        return { offsetX: offsetX, offsetY: offsetY };
+        return { offsetX, offsetY };
     };
-    var onContainerPress = function (e) {
+    const onContainerPress = (e) => {
         if (!isZoomed && !isDragging) {
             if (e && 'nativeEvent' in e && e.nativeEvent instanceof PointerEvent) {
-                var _a = e.nativeEvent, offsetX = _a.offsetX, offsetY = _a.offsetY;
+                const { offsetX, offsetY } = e.nativeEvent;
                 // Dividing clicked positions by the zoom scale to get coordinates
                 // so that once we zoom we will scroll to the clicked location.
-                var delta = getScrollOffset(offsetX / zoomScale, offsetY / zoomScale);
+                const delta = getScrollOffset(offsetX / zoomScale, offsetY / zoomScale);
                 setZoomDelta(delta);
             }
             else {
@@ -146,61 +132,65 @@ function ImageView(_a) {
             setIsMouseDown(false);
         }
     };
-    var trackPointerPosition = (0, react_1.useCallback)(function (event) {
-        var _a;
+    const trackPointerPosition = (0, react_1.useCallback)((event) => {
         // Whether the pointer is released inside the ImageView
-        var isInsideImageView = (_a = scrollableRef.current) === null || _a === void 0 ? void 0 : _a.contains(event.target);
+        const isInsideImageView = scrollableRef.current?.contains(event.target);
         if (!isInsideImageView && isZoomed && isDragging && isMouseDown) {
             setIsDragging(false);
             setIsMouseDown(false);
         }
     }, [isDragging, isMouseDown, isZoomed]);
-    var trackMovement = (0, react_1.useCallback)(function (event) {
+    const trackMovement = (0, react_1.useCallback)((event) => {
         if (!isZoomed) {
             return;
         }
         if (isDragging && isMouseDown && scrollableRef.current) {
-            var x = event.x;
-            var y = event.y;
-            var moveX = initialX - x;
-            var moveY = initialY - y;
+            const x = event.x;
+            const y = event.y;
+            const moveX = initialX - x;
+            const moveY = initialY - y;
             scrollableRef.current.scrollLeft = initialScrollLeft + moveX;
             scrollableRef.current.scrollTop = initialScrollTop + moveY;
         }
         setIsDragging(isMouseDown);
     }, [initialScrollLeft, initialScrollTop, initialX, initialY, isDragging, isMouseDown, isZoomed]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isZoomed || !zoomDelta || !scrollableRef.current) {
             return;
         }
         scrollableRef.current.scrollLeft = zoomDelta.offsetX;
         scrollableRef.current.scrollTop = zoomDelta.offsetY;
     }, [zoomDelta, isZoomed]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (canUseTouchScreen) {
             return;
         }
         document.addEventListener('mousemove', trackMovement);
         document.addEventListener('mouseup', trackPointerPosition);
-        return function () {
+        return () => {
             document.removeEventListener('mousemove', trackMovement);
             document.removeEventListener('mouseup', trackPointerPosition);
         };
     }, [canUseTouchScreen, trackMovement, trackPointerPosition]);
     // isLocalToUserDeviceFile means the file is located on the user device,
     // not loaded on the server yet (the user is offline when loading this file in fact)
-    var isLocalToUserDeviceFile = (0, FileUtils_1.isLocalFile)(url);
+    let isLocalToUserDeviceFile = (0, FileUtils_1.isLocalFile)(url);
     if (isLocalToUserDeviceFile && typeof url === 'string' && url.startsWith('/chat-attachments')) {
         isLocalToUserDeviceFile = false;
     }
     if (canUseTouchScreen) {
-        return (<Lightbox_1.default uri={url} isAuthTokenRequired={isAuthTokenRequired} onError={onError} onLoad={function () { return onAttachmentLoaded === null || onAttachmentLoaded === void 0 ? void 0 : onAttachmentLoaded(url, true); }}/>);
+        return (<Lightbox_1.default uri={url} isAuthTokenRequired={isAuthTokenRequired} onError={onError} onLoad={() => onAttachmentLoaded?.(url, true)}/>);
     }
     return (<react_native_1.View 
     // eslint-disable-next-line react-compiler/react-compiler
     ref={(0, viewRef_1.default)(scrollableRef)} onLayout={onContainerLayoutChanged} style={[styles.imageViewContainer, styles.overflowAuto, styles.pRelative]}>
-            <PressableWithoutFeedback_1.default style={__assign(__assign(__assign(__assign({}, StyleUtils.getZoomSizingStyle(isZoomed, imgWidth, imgHeight, zoomScale, containerHeight, containerWidth, isLoading)), StyleUtils.getZoomCursorStyle(isZoomed, isDragging)), (isZoomed && zoomScale >= 1 ? styles.pRelative : styles.pAbsolute)), styles.flex1)} onPressIn={onContainerPressIn} onPress={onContainerPress} role={CONST_1.default.ROLE.IMG} accessibilityLabel={fileName}>
-                <Image_1.default source={{ uri: url }} isAuthTokenRequired={isAuthTokenRequired} style={[styles.h100, styles.w100]} resizeMode={resizeModes_1.default.contain} onLoadStart={imageLoadingStart} onLoad={imageLoad} waitForSession={function () {
+            <PressableWithoutFeedback_1.default style={{
+            ...StyleUtils.getZoomSizingStyle(isZoomed, imgWidth, imgHeight, zoomScale, containerHeight, containerWidth, isLoading),
+            ...StyleUtils.getZoomCursorStyle(isZoomed, isDragging),
+            ...(isZoomed && zoomScale >= 1 ? styles.pRelative : styles.pAbsolute),
+            ...styles.flex1,
+        }} onPressIn={onContainerPressIn} onPress={onContainerPress} role={CONST_1.default.ROLE.IMG} accessibilityLabel={fileName}>
+                <Image_1.default source={{ uri: url }} isAuthTokenRequired={isAuthTokenRequired} style={[styles.h100, styles.w100]} resizeMode={resizeModes_1.default.contain} onLoadStart={imageLoadingStart} onLoad={imageLoad} waitForSession={() => {
             setIsLoading(true);
             setZoomScale(0);
             setIsZoomed(false);

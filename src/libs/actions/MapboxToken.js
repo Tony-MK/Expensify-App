@@ -1,55 +1,55 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.stop = exports.init = void 0;
-var date_fns_1 = require("date-fns");
-var react_native_1 = require("react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var ActiveClientManager = require("@libs/ActiveClientManager");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var authToken;
+const date_fns_1 = require("date-fns");
+const react_native_1 = require("react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const ActiveClientManager = require("@libs/ActiveClientManager");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+let authToken;
 // Use connectWithoutView since this is only for auth token and don't affect to any UI
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (value) {
-        authToken = value === null || value === void 0 ? void 0 : value.authToken;
+    callback: (value) => {
+        authToken = value?.authToken;
     },
 });
-var tokenConnection;
-var networkConnection;
-var appStateSubscription;
-var currentToken;
-var refreshTimeoutID;
-var isCurrentlyFetchingToken = false;
-var REFRESH_INTERVAL = 1000 * 60 * 25;
-var setExpirationTimer = function () {
+let tokenConnection;
+let networkConnection;
+let appStateSubscription;
+let currentToken;
+let refreshTimeoutID;
+let isCurrentlyFetchingToken = false;
+const REFRESH_INTERVAL = 1000 * 60 * 25;
+const setExpirationTimer = () => {
     console.debug('[MapboxToken] refreshing token on an interval', REFRESH_INTERVAL, 'ms');
     // Cancel any previous timeouts so that there is only one request to get a token at a time.
     clearTimeout(refreshTimeoutID);
     // Refresh the token every 25 minutes
-    refreshTimeoutID = setTimeout(function () {
+    refreshTimeoutID = setTimeout(() => {
         // If the user has logged out while the timer was running, skip doing anything when this callback runs
         if (!authToken) {
             console.debug('[MapboxToken] Skipping the fetch of a new token because user signed out');
             return;
         }
-        console.debug("[MapboxToken] Fetching a new token after waiting ".concat(REFRESH_INTERVAL / 1000 / 60, " minutes"));
+        console.debug(`[MapboxToken] Fetching a new token after waiting ${REFRESH_INTERVAL / 1000 / 60} minutes`);
         API.read(types_1.READ_COMMANDS.GET_MAPBOX_ACCESS_TOKEN, null, {});
     }, REFRESH_INTERVAL);
 };
-var hasTokenExpired = function () { var _a; return (0, date_fns_1.isAfter)(new Date(), new Date((_a = currentToken === null || currentToken === void 0 ? void 0 : currentToken.expiration) !== null && _a !== void 0 ? _a : '')); };
-var clearToken = function () {
+const hasTokenExpired = () => (0, date_fns_1.isAfter)(new Date(), new Date(currentToken?.expiration ?? ''));
+const clearToken = () => {
     console.debug('[MapboxToken] Deleting the token stored in Onyx');
     // Use Onyx.set() to delete the key from Onyx, which will trigger a new token to be retrieved from the API.
     react_native_onyx_1.default.set(ONYXKEYS_1.default.MAPBOX_ACCESS_TOKEN, null);
 };
-var fetchToken = function () {
+const fetchToken = () => {
     API.read(types_1.READ_COMMANDS.GET_MAPBOX_ACCESS_TOKEN, null, {});
     isCurrentlyFetchingToken = true;
 };
-var init = function () {
+const init = () => {
     if (tokenConnection) {
         console.debug('[MapboxToken] init() is already listening to Onyx so returning early');
         return;
@@ -58,7 +58,7 @@ var init = function () {
     // Use connectWithoutView since this is only for mapbox token and don't affect to any UI
     tokenConnection = react_native_onyx_1.default.connectWithoutView({
         key: ONYXKEYS_1.default.MAPBOX_ACCESS_TOKEN,
-        callback: function (token) {
+        callback: (token) => {
             // Only the leader should be in charge of the mapbox token, or else when you have multiple tabs open, the Onyx connection fires multiple times
             // and it sets up duplicate refresh timers. This would be a big waste of tokens.
             if (!ActiveClientManager.isClientTheLeader()) {
@@ -72,7 +72,7 @@ var init = function () {
             }
             // If the token is falsy or an empty object, the token needs to be retrieved from the API.
             // The API sets a token in Onyx with a 30 minute expiration.
-            if (Object.keys(token !== null && token !== void 0 ? token : {}).length === 0) {
+            if (Object.keys(token ?? {}).length === 0) {
                 fetchToken();
                 return;
             }
@@ -89,7 +89,7 @@ var init = function () {
         },
     });
     if (!appStateSubscription) {
-        appStateSubscription = react_native_1.AppState.addEventListener('change', function (nextAppState) {
+        appStateSubscription = react_native_1.AppState.addEventListener('change', (nextAppState) => {
             // Skip getting a new token if:
             // - The app state is not changing to active
             // - There is no current token (which means it's not been fetch yet for the first time)
@@ -103,15 +103,15 @@ var init = function () {
         });
     }
     if (!networkConnection) {
-        var network_1;
+        let network;
         // Use connectWithoutView since the network state and don't affect to any UI
         networkConnection = react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.NETWORK,
-            callback: function (value) {
+            callback: (value) => {
                 // When the network reconnects, check if the token has expired. If it has, then clearing the token will
                 // trigger the fetch of a new one
-                if (network_1 && network_1.isOffline && value && !value.isOffline) {
-                    if (Object.keys(currentToken !== null && currentToken !== void 0 ? currentToken : {}).length === 0) {
+                if (network && network.isOffline && value && !value.isOffline) {
+                    if (Object.keys(currentToken ?? {}).length === 0) {
                         fetchToken();
                     }
                     else if (!isCurrentlyFetchingToken && hasTokenExpired()) {
@@ -119,13 +119,13 @@ var init = function () {
                         clearToken();
                     }
                 }
-                network_1 = value;
+                network = value;
             },
         });
     }
 };
 exports.init = init;
-var stop = function () {
+const stop = () => {
     console.debug('[MapboxToken] Stopping all listeners and timers');
     if (tokenConnection) {
         react_native_onyx_1.default.disconnect(tokenConnection);

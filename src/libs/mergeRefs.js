@@ -5,13 +5,9 @@ exports.default = mergeRefs;
  * Assigns element reference to multiple refs.
  * @param refs The ref object or function arguments.
  */
-function mergeRefs() {
-    var refs = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        refs[_i] = arguments[_i];
-    }
-    return function (value) {
-        refs.forEach(function (ref) {
+function mergeRefs(...refs) {
+    return (value) => {
+        refs.forEach((ref) => {
             if (typeof ref === 'function') {
                 ref(value);
             }

@@ -1,141 +1,111 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var OptionListContextProvider_1 = require("@components/OptionListContextProvider");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SelectionList_1 = require("@components/SelectionList");
-var InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
-var withNavigationTransitionEnd_1 = require("@components/withNavigationTransitionEnd");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Report_1 = require("@libs/actions/Report");
-var RoomMembersUserSearchPhrase_1 = require("@libs/actions/RoomMembersUserSearchPhrase");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var LoginUtils_1 = require("@libs/LoginUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
-var PhoneNumber_1 = require("@libs/PhoneNumber");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var tokenizedSearch_1 = require("@libs/tokenizedSearch");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var withReportOrNotFound_1 = require("./home/report/withReportOrNotFound");
-function InviteReportParticipantsPage(_a) {
-    var betas = _a.betas, report = _a.report, didScreenTransitionEnd = _a.didScreenTransitionEnd;
-    var route = (0, native_1.useRoute)();
-    var _b = (0, OptionListContextProvider_1.useOptionsList)({
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const OptionListContextProvider_1 = require("@components/OptionListContextProvider");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SelectionList_1 = require("@components/SelectionList");
+const InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
+const withNavigationTransitionEnd_1 = require("@components/withNavigationTransitionEnd");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Report_1 = require("@libs/actions/Report");
+const RoomMembersUserSearchPhrase_1 = require("@libs/actions/RoomMembersUserSearchPhrase");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const LoginUtils_1 = require("@libs/LoginUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
+const PhoneNumber_1 = require("@libs/PhoneNumber");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const tokenizedSearch_1 = require("@libs/tokenizedSearch");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const withReportOrNotFound_1 = require("./home/report/withReportOrNotFound");
+function InviteReportParticipantsPage({ betas, report, didScreenTransitionEnd }) {
+    const route = (0, native_1.useRoute)();
+    const { options, areOptionsInitialized } = (0, OptionListContextProvider_1.useOptionsList)({
         shouldInitialize: didScreenTransitionEnd,
-    }), options = _b.options, areOptionsInitialized = _b.areOptionsInitialized;
-    var styles = (0, useThemeStyles_1.default)();
-    var _c = (0, useLocalize_1.default)(), translate = _c.translate, formatPhoneNumber = _c.formatPhoneNumber;
-    var personalDetails = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { canBeMissing: false })[0];
-    var countryCode = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false })[0];
-    var userSearchPhrase = (0, useOnyx_1.default)(ONYXKEYS_1.default.ROOM_MEMBERS_USER_SEARCH_PHRASE, { canBeMissing: true })[0];
-    var _d = (0, useDebouncedState_1.default)(userSearchPhrase !== null && userSearchPhrase !== void 0 ? userSearchPhrase : ''), searchValue = _d[0], debouncedSearchTerm = _d[1], setSearchValue = _d[2];
-    var _e = (0, react_1.useState)([]), selectedOptions = _e[0], setSelectedOptions = _e[1];
-    (0, react_1.useEffect)(function () {
+    });
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate, formatPhoneNumber } = (0, useLocalize_1.default)();
+    const [personalDetails] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST, { canBeMissing: false });
+    const [countryCode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false });
+    const [userSearchPhrase] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ROOM_MEMBERS_USER_SEARCH_PHRASE, { canBeMissing: true });
+    const [searchValue, debouncedSearchTerm, setSearchValue] = (0, useDebouncedState_1.default)(userSearchPhrase ?? '');
+    const [selectedOptions, setSelectedOptions] = (0, react_1.useState)([]);
+    (0, react_1.useEffect)(() => {
         (0, RoomMembersUserSearchPhrase_1.updateUserSearchPhrase)(debouncedSearchTerm);
         (0, Report_1.searchInServer)(debouncedSearchTerm);
     }, [debouncedSearchTerm]);
     // Any existing participants and Expensify emails should not be eligible for invitation
-    var excludedUsers = (0, react_1.useMemo)(function () {
-        var res = __assign({}, CONST_1.default.EXPENSIFY_EMAILS_OBJECT);
-        var participantsAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, false, true);
-        var loginsByAccountIDs = (0, PersonalDetailsUtils_1.getLoginsByAccountIDs)(participantsAccountIDs);
-        for (var _i = 0, loginsByAccountIDs_1 = loginsByAccountIDs; _i < loginsByAccountIDs_1.length; _i++) {
-            var login = loginsByAccountIDs_1[_i];
+    const excludedUsers = (0, react_1.useMemo)(() => {
+        const res = {
+            ...CONST_1.default.EXPENSIFY_EMAILS_OBJECT,
+        };
+        const participantsAccountIDs = (0, ReportUtils_1.getParticipantsAccountIDsForDisplay)(report, false, true);
+        const loginsByAccountIDs = (0, PersonalDetailsUtils_1.getLoginsByAccountIDs)(participantsAccountIDs);
+        for (const login of loginsByAccountIDs) {
             res[login] = true;
         }
         return res;
     }, [report]);
-    var defaultOptions = (0, react_1.useMemo)(function () {
+    const defaultOptions = (0, react_1.useMemo)(() => {
         if (!areOptionsInitialized) {
             return (0, OptionsListUtils_1.getEmptyOptions)();
         }
-        return (0, OptionsListUtils_1.getMemberInviteOptions)(options.personalDetails, betas !== null && betas !== void 0 ? betas : [], excludedUsers, false, options.reports, true);
+        return (0, OptionsListUtils_1.getMemberInviteOptions)(options.personalDetails, betas ?? [], excludedUsers, false, options.reports, true);
     }, [areOptionsInitialized, betas, excludedUsers, options.personalDetails, options.reports]);
-    var inviteOptions = (0, react_1.useMemo)(function () { return (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchTerm, countryCode, { excludeLogins: excludedUsers }); }, [debouncedSearchTerm, defaultOptions, excludedUsers, countryCode]);
-    (0, react_1.useEffect)(function () {
+    const inviteOptions = (0, react_1.useMemo)(() => (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchTerm, countryCode, { excludeLogins: excludedUsers }), [debouncedSearchTerm, defaultOptions, excludedUsers, countryCode]);
+    (0, react_1.useEffect)(() => {
         // Update selectedOptions with the latest personalDetails information
-        var detailsMap = {};
-        inviteOptions.personalDetails.forEach(function (detail) {
+        const detailsMap = {};
+        inviteOptions.personalDetails.forEach((detail) => {
             if (!detail.login) {
                 return;
             }
             detailsMap[detail.login] = (0, OptionsListUtils_1.formatMemberForList)(detail);
         });
-        var newSelectedOptions = [];
-        selectedOptions.forEach(function (option) {
-            newSelectedOptions.push(option.login && option.login in detailsMap ? __assign(__assign({}, detailsMap[option.login]), { isSelected: true }) : option);
+        const newSelectedOptions = [];
+        selectedOptions.forEach((option) => {
+            newSelectedOptions.push(option.login && option.login in detailsMap ? { ...detailsMap[option.login], isSelected: true } : option);
         });
         setSelectedOptions(newSelectedOptions);
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- we don't want to recalculate when selectedOptions change
     }, [personalDetails, betas, debouncedSearchTerm, excludedUsers, options]);
-    var sections = (0, react_1.useMemo)(function () {
-        var sectionsArr = [];
+    const sections = (0, react_1.useMemo)(() => {
+        const sectionsArr = [];
         if (!areOptionsInitialized) {
             return [];
         }
         // Filter all options that is a part of the search term or in the personal details
-        var filterSelectedOptions = selectedOptions;
+        let filterSelectedOptions = selectedOptions;
         if (debouncedSearchTerm !== '') {
-            var processedSearchValue_1 = (0, OptionsListUtils_1.getSearchValueForPhoneOrEmail)(debouncedSearchTerm, countryCode);
-            filterSelectedOptions = (0, tokenizedSearch_1.default)(selectedOptions, processedSearchValue_1, function (option) { var _a, _b; return [(_a = option.text) !== null && _a !== void 0 ? _a : '', (_b = option.login) !== null && _b !== void 0 ? _b : '']; }).filter(function (option) {
-                var _a, _b;
-                var accountID = option === null || option === void 0 ? void 0 : option.accountID;
-                var isOptionInPersonalDetails = inviteOptions.personalDetails.some(function (personalDetail) { return accountID && (personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.accountID) === accountID; });
-                var isPartOfSearchTerm = !!((_a = option.text) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(processedSearchValue_1)) || !!((_b = option.login) === null || _b === void 0 ? void 0 : _b.toLowerCase().includes(processedSearchValue_1));
+            const processedSearchValue = (0, OptionsListUtils_1.getSearchValueForPhoneOrEmail)(debouncedSearchTerm, countryCode);
+            filterSelectedOptions = (0, tokenizedSearch_1.default)(selectedOptions, processedSearchValue, (option) => [option.text ?? '', option.login ?? '']).filter((option) => {
+                const accountID = option?.accountID;
+                const isOptionInPersonalDetails = inviteOptions.personalDetails.some((personalDetail) => accountID && personalDetail?.accountID === accountID);
+                const isPartOfSearchTerm = !!option.text?.toLowerCase().includes(processedSearchValue) || !!option.login?.toLowerCase().includes(processedSearchValue);
                 return isPartOfSearchTerm || isOptionInPersonalDetails;
             });
         }
-        var filterSelectedOptionsFormatted = filterSelectedOptions.map(function (selectedOption) { return (0, OptionsListUtils_1.formatMemberForList)(selectedOption); });
+        const filterSelectedOptionsFormatted = filterSelectedOptions.map((selectedOption) => (0, OptionsListUtils_1.formatMemberForList)(selectedOption));
         sectionsArr.push({
             title: undefined,
             data: filterSelectedOptionsFormatted,
         });
         // Filtering out selected users from the search results
-        var selectedLogins = selectedOptions.map(function (_a) {
-            var login = _a.login;
-            return login;
-        });
-        var recentReportsWithoutSelected = inviteOptions.recentReports.filter(function (_a) {
-            var login = _a.login;
-            return !selectedLogins.includes(login);
-        });
-        var recentReportsFormatted = recentReportsWithoutSelected.map(function (reportOption) { return (0, OptionsListUtils_1.formatMemberForList)(reportOption); });
-        var personalDetailsWithoutSelected = inviteOptions.personalDetails.filter(function (_a) {
-            var login = _a.login;
-            return !selectedLogins.includes(login);
-        });
-        var personalDetailsFormatted = personalDetailsWithoutSelected.map(function (personalDetail) { return (0, OptionsListUtils_1.formatMemberForList)(personalDetail); });
-        var hasUnselectedUserToInvite = inviteOptions.userToInvite && !selectedLogins.includes(inviteOptions.userToInvite.login);
+        const selectedLogins = selectedOptions.map(({ login }) => login);
+        const recentReportsWithoutSelected = inviteOptions.recentReports.filter(({ login }) => !selectedLogins.includes(login));
+        const recentReportsFormatted = recentReportsWithoutSelected.map((reportOption) => (0, OptionsListUtils_1.formatMemberForList)(reportOption));
+        const personalDetailsWithoutSelected = inviteOptions.personalDetails.filter(({ login }) => !selectedLogins.includes(login));
+        const personalDetailsFormatted = personalDetailsWithoutSelected.map((personalDetail) => (0, OptionsListUtils_1.formatMemberForList)(personalDetail));
+        const hasUnselectedUserToInvite = inviteOptions.userToInvite && !selectedLogins.includes(inviteOptions.userToInvite.login);
         sectionsArr.push({
             title: translate('common.recents'),
             data: recentReportsFormatted,
@@ -152,32 +122,31 @@ function InviteReportParticipantsPage(_a) {
         }
         return sectionsArr;
     }, [areOptionsInitialized, selectedOptions, debouncedSearchTerm, inviteOptions.recentReports, inviteOptions.personalDetails, inviteOptions.userToInvite, translate, countryCode]);
-    var toggleOption = (0, react_1.useCallback)(function (option) {
-        var isOptionInList = selectedOptions.some(function (selectedOption) { return selectedOption.login === option.login; });
-        var newSelectedOptions;
+    const toggleOption = (0, react_1.useCallback)((option) => {
+        const isOptionInList = selectedOptions.some((selectedOption) => selectedOption.login === option.login);
+        let newSelectedOptions;
         if (isOptionInList) {
-            newSelectedOptions = selectedOptions.filter(function (selectedOption) { return selectedOption.login !== option.login; });
+            newSelectedOptions = selectedOptions.filter((selectedOption) => selectedOption.login !== option.login);
         }
         else {
-            newSelectedOptions = __spreadArray(__spreadArray([], selectedOptions, true), [__assign(__assign({}, option), { isSelected: true })], false);
+            newSelectedOptions = [...selectedOptions, { ...option, isSelected: true }];
         }
         setSelectedOptions(newSelectedOptions);
     }, [selectedOptions]);
-    var validate = (0, react_1.useCallback)(function () { return selectedOptions.length > 0; }, [selectedOptions]);
-    var reportID = report.reportID;
-    var reportName = (0, react_1.useMemo)(function () { return (0, ReportUtils_1.getGroupChatName)(undefined, true, report); }, [report]);
-    var goBack = (0, react_1.useCallback)(function () {
+    const validate = (0, react_1.useCallback)(() => selectedOptions.length > 0, [selectedOptions]);
+    const reportID = report.reportID;
+    const reportName = (0, react_1.useMemo)(() => (0, ReportUtils_1.getGroupChatName)(undefined, true, report), [report]);
+    const goBack = (0, react_1.useCallback)(() => {
         Navigation_1.default.goBack(ROUTES_1.default.REPORT_PARTICIPANTS.getRoute(reportID, route.params.backTo));
     }, [reportID, route.params.backTo]);
-    var inviteUsers = (0, react_1.useCallback)(function () {
+    const inviteUsers = (0, react_1.useCallback)(() => {
         if (!validate()) {
             return;
         }
-        var invitedEmailsToAccountIDs = {};
-        selectedOptions.forEach(function (option) {
-            var _a;
-            var login = (_a = option.login) !== null && _a !== void 0 ? _a : '';
-            var accountID = option.accountID;
+        const invitedEmailsToAccountIDs = {};
+        selectedOptions.forEach((option) => {
+            const login = option.login ?? '';
+            const accountID = option.accountID;
             if (!login.toLowerCase().trim() || !accountID) {
                 return;
             }
@@ -186,26 +155,26 @@ function InviteReportParticipantsPage(_a) {
         (0, Report_1.inviteToGroupChat)(reportID, invitedEmailsToAccountIDs, formatPhoneNumber);
         goBack();
     }, [selectedOptions, goBack, reportID, validate, formatPhoneNumber]);
-    var headerMessage = (0, react_1.useMemo)(function () {
-        var processedLogin = debouncedSearchTerm.trim().toLowerCase();
-        var expensifyEmails = CONST_1.default.EXPENSIFY_EMAILS;
+    const headerMessage = (0, react_1.useMemo)(() => {
+        const processedLogin = debouncedSearchTerm.trim().toLowerCase();
+        const expensifyEmails = CONST_1.default.EXPENSIFY_EMAILS;
         if (!inviteOptions.userToInvite && expensifyEmails.includes(processedLogin)) {
             return translate('messages.errorMessageInvalidEmail');
         }
         if (!inviteOptions.userToInvite &&
             excludedUsers[(0, PhoneNumber_1.parsePhoneNumber)((0, LoginUtils_1.appendCountryCode)(processedLogin)).possible ? (0, PhoneNumber_1.addSMSDomainIfPhoneNumber)((0, LoginUtils_1.appendCountryCode)(processedLogin)) : processedLogin]) {
-            return translate('messages.userIsAlreadyMember', { login: processedLogin, name: reportName !== null && reportName !== void 0 ? reportName : '' });
+            return translate('messages.userIsAlreadyMember', { login: processedLogin, name: reportName ?? '' });
         }
         return (0, OptionsListUtils_1.getHeaderMessage)(inviteOptions.recentReports.length + inviteOptions.personalDetails.length !== 0, !!inviteOptions.userToInvite, processedLogin);
     }, [debouncedSearchTerm, inviteOptions.userToInvite, inviteOptions.recentReports.length, inviteOptions.personalDetails.length, excludedUsers, translate, reportName]);
-    var footerContent = (0, react_1.useMemo)(function () { return (<FormAlertWithSubmitButton_1.default isDisabled={!selectedOptions.length} buttonText={translate('common.invite')} onSubmit={function () {
+    const footerContent = (0, react_1.useMemo)(() => (<FormAlertWithSubmitButton_1.default isDisabled={!selectedOptions.length} buttonText={translate('common.invite')} onSubmit={() => {
             (0, RoomMembersUserSearchPhrase_1.clearUserSearchPhrase)();
             inviteUsers();
-        }} containerStyles={[styles.flexReset, styles.flexGrow0, styles.flexShrink0, styles.flexBasisAuto]} enabledWhenOffline/>); }, [selectedOptions.length, inviteUsers, translate, styles]);
+        }} containerStyles={[styles.flexReset, styles.flexGrow0, styles.flexShrink0, styles.flexBasisAuto]} enabledWhenOffline/>), [selectedOptions.length, inviteUsers, translate, styles]);
     return (<ScreenWrapper_1.default shouldEnableMaxHeight testID={InviteReportParticipantsPage.displayName}>
             <HeaderWithBackButton_1.default title={translate('workspace.invite.members')} subtitle={reportName} onBackButtonPress={goBack}/>
 
-            <SelectionList_1.default canSelectMultiple sections={sections} ListItem={InviteMemberListItem_1.default} textInputLabel={translate('selectionList.nameEmailOrPhoneNumber')} textInputValue={searchValue} onChangeText={function (value) {
+            <SelectionList_1.default canSelectMultiple sections={sections} ListItem={InviteMemberListItem_1.default} textInputLabel={translate('selectionList.nameEmailOrPhoneNumber')} textInputValue={searchValue} onChangeText={(value) => {
             setSearchValue(value);
         }} headerMessage={headerMessage} onSelectRow={toggleOption} onConfirm={inviteUsers} showScrollIndicator shouldPreventDefaultFocusOnSelectRow={!(0, DeviceCapabilities_1.canUseTouchScreen)()} showLoadingPlaceholder={!didScreenTransitionEnd || !(0, OptionsListUtils_1.isPersonalDetailsReady)(personalDetails)} footerContent={footerContent}/>
         </ScreenWrapper_1.default>);

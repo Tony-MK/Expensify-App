@@ -1,37 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var WorkspaceReportFieldUtils_1 = require("@libs/WorkspaceReportFieldUtils");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
-var ReportField_1 = require("@userActions/Policy/ReportField");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var WorkspaceReportFieldForm_1 = require("@src/types/form/WorkspaceReportFieldForm");
-function ReportFieldsEditValuePage(_a) {
-    var _b, _c;
-    var policy = _a.policy, _d = _a.route.params, policyID = _d.policyID, valueIndex = _d.valueIndex;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var formDraft = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.WORKSPACE_REPORT_FIELDS_FORM_DRAFT, { canBeMissing: true })[0];
-    var currentValueName = (_c = (_b = formDraft === null || formDraft === void 0 ? void 0 : formDraft.listValues) === null || _b === void 0 ? void 0 : _b[valueIndex]) !== null && _c !== void 0 ? _c : '';
-    var validate = (0, react_1.useCallback)(function (values) { var _a; return (0, WorkspaceReportFieldUtils_1.validateReportFieldListValueName)(values[WorkspaceReportFieldForm_1.default.NEW_VALUE_NAME].trim(), currentValueName, (_a = formDraft === null || formDraft === void 0 ? void 0 : formDraft[WorkspaceReportFieldForm_1.default.LIST_VALUES]) !== null && _a !== void 0 ? _a : [], WorkspaceReportFieldForm_1.default.NEW_VALUE_NAME); }, [currentValueName, formDraft]);
-    var editValue = (0, react_1.useCallback)(function (values) {
-        var _a;
-        var valueName = (_a = values[WorkspaceReportFieldForm_1.default.NEW_VALUE_NAME]) === null || _a === void 0 ? void 0 : _a.trim();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const WorkspaceReportFieldUtils_1 = require("@libs/WorkspaceReportFieldUtils");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
+const ReportField_1 = require("@userActions/Policy/ReportField");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const WorkspaceReportFieldForm_1 = require("@src/types/form/WorkspaceReportFieldForm");
+function ReportFieldsEditValuePage({ policy, route: { params: { policyID, valueIndex }, }, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const [formDraft] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.WORKSPACE_REPORT_FIELDS_FORM_DRAFT, { canBeMissing: true });
+    const currentValueName = formDraft?.listValues?.[valueIndex] ?? '';
+    const validate = (0, react_1.useCallback)((values) => (0, WorkspaceReportFieldUtils_1.validateReportFieldListValueName)(values[WorkspaceReportFieldForm_1.default.NEW_VALUE_NAME].trim(), currentValueName, formDraft?.[WorkspaceReportFieldForm_1.default.LIST_VALUES] ?? [], WorkspaceReportFieldForm_1.default.NEW_VALUE_NAME), [currentValueName, formDraft]);
+    const editValue = (0, react_1.useCallback)((values) => {
+        const valueName = values[WorkspaceReportFieldForm_1.default.NEW_VALUE_NAME]?.trim();
         if (currentValueName !== valueName) {
             (0, ReportField_1.renameReportFieldsListValue)(valueIndex, valueName);
         }

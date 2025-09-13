@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var testCrash = function () { };
+const testCrash = () => { };
 exports.default = testCrash;

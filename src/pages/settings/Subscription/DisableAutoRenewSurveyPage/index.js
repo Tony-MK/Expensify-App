@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FeedbackSurvey_1 = require("@components/FeedbackSurvey");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Subscription = require("@userActions/Subscription");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_1 = require("react");
+const FeedbackSurvey_1 = require("@components/FeedbackSurvey");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Subscription = require("@userActions/Subscription");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function DisableAutoRenewSurveyPage() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var handleSubmit = function (key, additionalNote) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const handleSubmit = (key, additionalNote) => {
         Subscription.updateSubscriptionAutoRenew(false, key, additionalNote);
         Navigation_1.default.goBack();
     };

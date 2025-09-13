@@ -1,35 +1,22 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var CurrencyUtils_1 = require("./CurrencyUtils");
-var PolicyUtils_1 = require("./PolicyUtils");
-var TransactionUtils_1 = require("./TransactionUtils");
-var METERS_TO_KM = 0.001; // 1 kilometer is 1000 meters
-var METERS_TO_MILES = 0.000621371; // There are approximately 0.000621371 miles in a meter
-function getMileageRates(policy, includeDisabledRates, selectedRateID) {
-    if (includeDisabledRates === void 0) { includeDisabledRates = false; }
-    var mileageRates = {};
-    if (!(policy === null || policy === void 0 ? void 0 : policy.customUnits)) {
+const CONST_1 = require("@src/CONST");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const CurrencyUtils_1 = require("./CurrencyUtils");
+const PolicyUtils_1 = require("./PolicyUtils");
+const TransactionUtils_1 = require("./TransactionUtils");
+const METERS_TO_KM = 0.001; // 1 kilometer is 1000 meters
+const METERS_TO_MILES = 0.000621371; // There are approximately 0.000621371 miles in a meter
+function getMileageRates(policy, includeDisabledRates = false, selectedRateID) {
+    const mileageRates = {};
+    if (!policy?.customUnits) {
         return mileageRates;
     }
-    var distanceUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
-    if (!(distanceUnit === null || distanceUnit === void 0 ? void 0 : distanceUnit.rates)) {
+    const distanceUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
+    if (!distanceUnit?.rates) {
         return mileageRates;
     }
-    Object.entries(distanceUnit.rates).forEach(function (_a) {
-        var rateID = _a[0], rate = _a[1];
+    Object.entries(distanceUnit.rates).forEach(([rateID, rate]) => {
         if (!includeDisabledRates && rate.enabled === false && (!selectedRateID || rateID !== selectedRateID)) {
             return;
         }
@@ -60,16 +47,15 @@ function getMileageRates(policy, includeDisabledRates, selectedRateID) {
  * @returns [unit] - The unit of measurement for the distance.
  */
 function getDefaultMileageRate(policy) {
-    var _a;
-    if ((0, EmptyObject_1.isEmptyObject)(policy) || !(policy === null || policy === void 0 ? void 0 : policy.customUnits)) {
+    if ((0, EmptyObject_1.isEmptyObject)(policy) || !policy?.customUnits) {
         return undefined;
     }
-    var distanceUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
-    if (!(distanceUnit === null || distanceUnit === void 0 ? void 0 : distanceUnit.rates) || !distanceUnit.attributes) {
+    const distanceUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
+    if (!distanceUnit?.rates || !distanceUnit.attributes) {
         return;
     }
-    var mileageRates = Object.values(getMileageRates(policy));
-    var distanceRate = (_a = mileageRates.at(0)) !== null && _a !== void 0 ? _a : {};
+    const mileageRates = Object.values(getMileageRates(policy));
+    const distanceRate = mileageRates.at(0) ?? {};
     return {
         customUnitRateID: distanceRate.customUnitRateID,
         rate: distanceRate.rate,
@@ -102,7 +88,7 @@ function convertDistanceUnit(distanceInMeters, unit) {
  * @returns The distance in requested units, rounded to 2 decimals
  */
 function getRoundedDistanceInUnits(distanceInMeters, unit) {
-    var convertedDistance = convertDistanceUnit(distanceInMeters, unit);
+    const convertedDistance = convertDistanceUnit(distanceInMeters, unit);
     return convertedDistance.toFixed(CONST_1.default.DISTANCE_DECIMAL_PLACES);
 }
 /**
@@ -121,11 +107,11 @@ function getRateForDisplay(unit, rate, currency, translate, toLocaleDigit, isOff
     if (!rate || !currency || !unit) {
         return translate('iou.fieldPending');
     }
-    var singularDistanceUnit = unit === CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES ? translate('common.mile') : translate('common.kilometer');
-    var formattedRate = (0, PolicyUtils_1.getUnitRateValue)(toLocaleDigit, { rate: rate }, useShortFormUnit);
+    const singularDistanceUnit = unit === CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES ? translate('common.mile') : translate('common.kilometer');
+    const formattedRate = (0, PolicyUtils_1.getUnitRateValue)(toLocaleDigit, { rate }, useShortFormUnit);
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var currencySymbol = (0, CurrencyUtils_1.getCurrencySymbol)(currency) || "".concat(currency, " ");
-    return "".concat(currencySymbol).concat(formattedRate, " / ").concat(useShortFormUnit ? unit : singularDistanceUnit);
+    const currencySymbol = (0, CurrencyUtils_1.getCurrencySymbol)(currency) || `${currency} `;
+    return `${currencySymbol}${formattedRate} / ${useShortFormUnit ? unit : singularDistanceUnit}`;
 }
 /**
  * @param hasRoute Whether the route exists for the distance expense
@@ -140,18 +126,18 @@ function getDistanceForDisplay(hasRoute, distanceInMeters, unit, rate, translate
     if (!hasRoute || !unit || !distanceInMeters) {
         return translate('iou.fieldPending');
     }
-    var distanceInUnits = getRoundedDistanceInUnits(distanceInMeters, unit);
+    const distanceInUnits = getRoundedDistanceInUnits(distanceInMeters, unit);
     if (useShortFormUnit) {
-        return "".concat(distanceInUnits, " ").concat(unit);
+        return `${distanceInUnits} ${unit}`;
     }
-    var distanceUnit = unit === CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES ? translate('common.miles') : translate('common.kilometers');
-    var singularDistanceUnit = unit === CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES ? translate('common.mile') : translate('common.kilometer');
-    var unitString = distanceInUnits === '1' ? singularDistanceUnit : distanceUnit;
-    return "".concat(distanceInUnits, " ").concat(unitString);
+    const distanceUnit = unit === CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES ? translate('common.miles') : translate('common.kilometers');
+    const singularDistanceUnit = unit === CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES ? translate('common.mile') : translate('common.kilometer');
+    const unitString = distanceInUnits === '1' ? singularDistanceUnit : distanceUnit;
+    return `${distanceInUnits} ${unitString}`;
 }
 function getDistanceForDisplayLabel(distanceInMeters, unit) {
-    var distanceInUnits = getRoundedDistanceInUnits(distanceInMeters, unit);
-    return "".concat(distanceInUnits, " ").concat(unit);
+    const distanceInUnits = getRoundedDistanceInUnits(distanceInMeters, unit);
+    return `${distanceInUnits} ${unit}`;
 }
 /**
  * @param hasRoute Whether the route exists for the distance expense
@@ -167,9 +153,9 @@ function getDistanceMerchant(hasRoute, distanceInMeters, unit, rate, currency, t
     if (!hasRoute || !rate) {
         return translate('iou.fieldPending');
     }
-    var distanceInUnits = getDistanceForDisplay(hasRoute, distanceInMeters, unit, rate, translate, true);
-    var ratePerUnit = getRateForDisplay(unit, rate, currency, translate, toLocaleDigit, undefined, true);
-    return "".concat(distanceInUnits, " @ ").concat(ratePerUnit);
+    const distanceInUnits = getDistanceForDisplay(hasRoute, distanceInMeters, unit, rate, translate, true);
+    const ratePerUnit = getRateForDisplay(unit, rate, currency, translate, toLocaleDigit, undefined, true);
+    return `${distanceInUnits} @ ${ratePerUnit}`;
 }
 function ensureRateDefined(rate) {
     if (rate !== undefined) {
@@ -186,13 +172,16 @@ function ensureRateDefined(rate) {
  * @returns The rate and unit in MileageRate object.
  */
 function getRateForP2P(currency, transaction) {
-    var _a, _b, _c;
-    var currencyWithExistingRate = CONST_1.default.CURRENCY_TO_DEFAULT_MILEAGE_RATE[currency] ? currency : CONST_1.default.CURRENCY.USD;
-    var mileageRate = CONST_1.default.CURRENCY_TO_DEFAULT_MILEAGE_RATE[currencyWithExistingRate];
+    const currencyWithExistingRate = CONST_1.default.CURRENCY_TO_DEFAULT_MILEAGE_RATE[currency] ? currency : CONST_1.default.CURRENCY.USD;
+    const mileageRate = CONST_1.default.CURRENCY_TO_DEFAULT_MILEAGE_RATE[currencyWithExistingRate];
     ensureRateDefined(mileageRate.rate);
     // Ensure the rate is updated when the currency changes, otherwise use the stored rate
-    var rate = (0, TransactionUtils_1.getCurrency)(transaction) === currency ? ((_c = (_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _a === void 0 ? void 0 : _a.customUnit) === null || _b === void 0 ? void 0 : _b.defaultP2PRate) !== null && _c !== void 0 ? _c : mileageRate.rate) : mileageRate.rate;
-    return __assign(__assign({}, mileageRate), { currency: currencyWithExistingRate, rate: rate });
+    const rate = (0, TransactionUtils_1.getCurrency)(transaction) === currency ? (transaction?.comment?.customUnit?.defaultP2PRate ?? mileageRate.rate) : mileageRate.rate;
+    return {
+        ...mileageRate,
+        currency: currencyWithExistingRate,
+        rate,
+    };
 }
 /**
  * Calculates the expense amount based on distance, unit, and rate.
@@ -203,8 +192,8 @@ function getRateForP2P(currency, transaction) {
  * @returns The computed expense amount (rounded) in "cents".
  */
 function getDistanceRequestAmount(distance, unit, rate) {
-    var convertedDistance = convertDistanceUnit(distance, unit);
-    var roundedDistance = parseFloat(convertedDistance.toFixed(2));
+    const convertedDistance = convertDistanceUnit(distance, unit);
+    const roundedDistance = parseFloat(convertedDistance.toFixed(2));
     return Math.round(roundedDistance * rate);
 }
 /**
@@ -223,10 +212,8 @@ function convertToDistanceInMeters(distance, unit) {
 /**
  * Returns custom unit rate ID for the distance transaction
  */
-function getCustomUnitRateID(_a) {
-    var _b;
-    var reportID = _a.reportID, isPolicyExpenseChat = _a.isPolicyExpenseChat, policy = _a.policy, lastSelectedDistanceRates = _a.lastSelectedDistanceRates;
-    var customUnitRateID = CONST_1.default.CUSTOM_UNITS.FAKE_P2P_ID;
+function getCustomUnitRateID({ reportID, isPolicyExpenseChat, policy, lastSelectedDistanceRates, }) {
+    let customUnitRateID = CONST_1.default.CUSTOM_UNITS.FAKE_P2P_ID;
     if (!reportID) {
         return customUnitRateID;
     }
@@ -234,15 +221,15 @@ function getCustomUnitRateID(_a) {
         return customUnitRateID;
     }
     if (isPolicyExpenseChat) {
-        var distanceUnit = Object.values((_b = policy.customUnits) !== null && _b !== void 0 ? _b : {}).find(function (unit) { return unit.name === CONST_1.default.CUSTOM_UNITS.NAME_DISTANCE; });
-        var lastSelectedDistanceRateID = lastSelectedDistanceRates === null || lastSelectedDistanceRates === void 0 ? void 0 : lastSelectedDistanceRates[policy.id];
-        var lastSelectedDistanceRate = lastSelectedDistanceRateID ? distanceUnit === null || distanceUnit === void 0 ? void 0 : distanceUnit.rates[lastSelectedDistanceRateID] : undefined;
-        if ((lastSelectedDistanceRate === null || lastSelectedDistanceRate === void 0 ? void 0 : lastSelectedDistanceRate.enabled) && lastSelectedDistanceRateID) {
+        const distanceUnit = Object.values(policy.customUnits ?? {}).find((unit) => unit.name === CONST_1.default.CUSTOM_UNITS.NAME_DISTANCE);
+        const lastSelectedDistanceRateID = lastSelectedDistanceRates?.[policy.id];
+        const lastSelectedDistanceRate = lastSelectedDistanceRateID ? distanceUnit?.rates[lastSelectedDistanceRateID] : undefined;
+        if (lastSelectedDistanceRate?.enabled && lastSelectedDistanceRateID) {
             customUnitRateID = lastSelectedDistanceRateID;
         }
         else {
-            var defaultMileageRate = getDefaultMileageRate(policy);
-            if (!(defaultMileageRate === null || defaultMileageRate === void 0 ? void 0 : defaultMileageRate.customUnitRateID)) {
+            const defaultMileageRate = getDefaultMileageRate(policy);
+            if (!defaultMileageRate?.customUnitRateID) {
                 return customUnitRateID;
             }
             customUnitRateID = defaultMileageRate.customUnitRateID;
@@ -254,21 +241,19 @@ function getCustomUnitRateID(_a) {
  * Get taxable amount from a specific distance rate, taking into consideration the tax claimable amount configured for the distance rate
  */
 function getTaxableAmount(policy, customUnitRateID, distance) {
-    var _a, _b, _c, _d, _e;
-    var distanceUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
-    var customUnitRate = (0, PolicyUtils_1.getDistanceRateCustomUnitRate)(policy, customUnitRateID);
-    if (!(distanceUnit === null || distanceUnit === void 0 ? void 0 : distanceUnit.customUnitID) || !customUnitRate) {
+    const distanceUnit = (0, PolicyUtils_1.getDistanceRateCustomUnit)(policy);
+    const customUnitRate = (0, PolicyUtils_1.getDistanceRateCustomUnitRate)(policy, customUnitRateID);
+    if (!distanceUnit?.customUnitID || !customUnitRate) {
         return 0;
     }
-    var unit = (_b = (_a = distanceUnit === null || distanceUnit === void 0 ? void 0 : distanceUnit.attributes) === null || _a === void 0 ? void 0 : _a.unit) !== null && _b !== void 0 ? _b : CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES;
-    var rate = (_c = customUnitRate === null || customUnitRate === void 0 ? void 0 : customUnitRate.rate) !== null && _c !== void 0 ? _c : CONST_1.default.DEFAULT_NUMBER_ID;
-    var amount = getDistanceRequestAmount(distance, unit, rate);
-    var taxClaimablePercentage = (_e = (_d = customUnitRate.attributes) === null || _d === void 0 ? void 0 : _d.taxClaimablePercentage) !== null && _e !== void 0 ? _e : CONST_1.default.DEFAULT_NUMBER_ID;
+    const unit = distanceUnit?.attributes?.unit ?? CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES;
+    const rate = customUnitRate?.rate ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const amount = getDistanceRequestAmount(distance, unit, rate);
+    const taxClaimablePercentage = customUnitRate.attributes?.taxClaimablePercentage ?? CONST_1.default.DEFAULT_NUMBER_ID;
     return amount * taxClaimablePercentage;
 }
 function getDistanceUnit(transaction, mileageRate) {
-    var _a, _b, _c, _d;
-    return (_d = (_c = (_b = (_a = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _a === void 0 ? void 0 : _a.customUnit) === null || _b === void 0 ? void 0 : _b.distanceUnit) !== null && _c !== void 0 ? _c : mileageRate === null || mileageRate === void 0 ? void 0 : mileageRate.unit) !== null && _d !== void 0 ? _d : CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES;
+    return transaction?.comment?.customUnit?.distanceUnit ?? mileageRate?.unit ?? CONST_1.default.CUSTOM_UNITS.DISTANCE_UNIT_MILES;
 }
 /**
  * Get the selected rate for a transaction, from the policy or P2P default rate.
@@ -276,21 +261,23 @@ function getDistanceUnit(transaction, mileageRate) {
  *
  * Let's ensure this logic is consistent with the logic in the backend (Auth), since we're using the same method to calculate the rate value in distance requests created via Concierge.
  */
-function getRate(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j;
-    var transaction = _a.transaction, policy = _a.policy, policyDraft = _a.policyDraft, _k = _a.useTransactionDistanceUnit, useTransactionDistanceUnit = _k === void 0 ? true : _k;
-    var mileageRates = getMileageRates(policy, true, (_c = (_b = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _b === void 0 ? void 0 : _b.customUnit) === null || _c === void 0 ? void 0 : _c.customUnitRateID);
+function getRate({ transaction, policy, policyDraft, useTransactionDistanceUnit = true, }) {
+    let mileageRates = getMileageRates(policy, true, transaction?.comment?.customUnit?.customUnitRateID);
     if ((0, EmptyObject_1.isEmptyObject)(mileageRates) && policyDraft) {
-        mileageRates = getMileageRates(policyDraft, true, (_e = (_d = transaction === null || transaction === void 0 ? void 0 : transaction.comment) === null || _d === void 0 ? void 0 : _d.customUnit) === null || _e === void 0 ? void 0 : _e.customUnitRateID);
+        mileageRates = getMileageRates(policyDraft, true, transaction?.comment?.customUnit?.customUnitRateID);
     }
-    var policyCurrency = (_h = (_f = policy === null || policy === void 0 ? void 0 : policy.outputCurrency) !== null && _f !== void 0 ? _f : (_g = (0, PolicyUtils_1.getPersonalPolicy)()) === null || _g === void 0 ? void 0 : _g.outputCurrency) !== null && _h !== void 0 ? _h : CONST_1.default.CURRENCY.USD;
-    var defaultMileageRate = getDefaultMileageRate(policy);
-    var customUnitRateID = (0, TransactionUtils_1.getRateID)(transaction);
+    const policyCurrency = policy?.outputCurrency ?? (0, PolicyUtils_1.getPersonalPolicy)()?.outputCurrency ?? CONST_1.default.CURRENCY.USD;
+    const defaultMileageRate = getDefaultMileageRate(policy);
+    const customUnitRateID = (0, TransactionUtils_1.getRateID)(transaction);
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var customMileageRate = (customUnitRateID && (mileageRates === null || mileageRates === void 0 ? void 0 : mileageRates[customUnitRateID])) || defaultMileageRate;
-    var mileageRate = (0, TransactionUtils_1.isCustomUnitRateIDForP2P)(transaction) ? getRateForP2P(policyCurrency, transaction) : customMileageRate;
-    var unit = getDistanceUnit(useTransactionDistanceUnit ? transaction : undefined, mileageRate);
-    return __assign(__assign({}, mileageRate), { unit: unit, currency: (_j = mileageRate === null || mileageRate === void 0 ? void 0 : mileageRate.currency) !== null && _j !== void 0 ? _j : policyCurrency });
+    const customMileageRate = (customUnitRateID && mileageRates?.[customUnitRateID]) || defaultMileageRate;
+    const mileageRate = (0, TransactionUtils_1.isCustomUnitRateIDForP2P)(transaction) ? getRateForP2P(policyCurrency, transaction) : customMileageRate;
+    const unit = getDistanceUnit(useTransactionDistanceUnit ? transaction : undefined, mileageRate);
+    return {
+        ...mileageRate,
+        unit,
+        currency: mileageRate?.currency ?? policyCurrency,
+    };
 }
 /**
  * Get the updated distance unit from the selected rate instead of the distanceUnit stored on the transaction.
@@ -299,34 +286,32 @@ function getRate(_a) {
  * For example, if an expense is '10 mi @ $1.00 / mi' and the rate is updated to '$1.00 / km',
  * then the updated distance unit should be 'km' from the updated rate, not 'mi' from the currently stored transaction distance unit.
  */
-function getUpdatedDistanceUnit(_a) {
-    var transaction = _a.transaction, policy = _a.policy, policyDraft = _a.policyDraft;
-    return getRate({ transaction: transaction, policy: policy, policyDraft: policyDraft, useTransactionDistanceUnit: false }).unit;
+function getUpdatedDistanceUnit({ transaction, policy, policyDraft }) {
+    return getRate({ transaction, policy, policyDraft, useTransactionDistanceUnit: false }).unit;
 }
 /**
  * Get the mileage rate by its ID in the form it's configured for the policy.
  * If not found, return undefined.
  */
-function getRateByCustomUnitRateID(_a) {
-    var customUnitRateID = _a.customUnitRateID, policy = _a.policy;
+function getRateByCustomUnitRateID({ customUnitRateID, policy }) {
     return getMileageRates(policy, true, customUnitRateID)[customUnitRateID];
 }
 exports.default = {
-    getDefaultMileageRate: getDefaultMileageRate,
-    getDistanceMerchant: getDistanceMerchant,
-    getDistanceRequestAmount: getDistanceRequestAmount,
-    getRateForDisplay: getRateForDisplay,
-    getMileageRates: getMileageRates,
-    getDistanceForDisplay: getDistanceForDisplay,
-    getRoundedDistanceInUnits: getRoundedDistanceInUnits,
-    getRateForP2P: getRateForP2P,
-    getCustomUnitRateID: getCustomUnitRateID,
-    convertToDistanceInMeters: convertToDistanceInMeters,
-    getTaxableAmount: getTaxableAmount,
-    getDistanceUnit: getDistanceUnit,
-    getUpdatedDistanceUnit: getUpdatedDistanceUnit,
-    getRate: getRate,
-    getRateByCustomUnitRateID: getRateByCustomUnitRateID,
-    getDistanceForDisplayLabel: getDistanceForDisplayLabel,
-    convertDistanceUnit: convertDistanceUnit,
+    getDefaultMileageRate,
+    getDistanceMerchant,
+    getDistanceRequestAmount,
+    getRateForDisplay,
+    getMileageRates,
+    getDistanceForDisplay,
+    getRoundedDistanceInUnits,
+    getRateForP2P,
+    getCustomUnitRateID,
+    convertToDistanceInMeters,
+    getTaxableAmount,
+    getDistanceUnit,
+    getUpdatedDistanceUnit,
+    getRate,
+    getRateByCustomUnitRateID,
+    getDistanceForDisplayLabel,
+    convertDistanceUnit,
 };

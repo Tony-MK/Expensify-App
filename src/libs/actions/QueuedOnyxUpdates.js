@@ -1,28 +1,19 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.queueOnyxUpdates = queueOnyxUpdates;
 exports.flushQueue = flushQueue;
 exports.isEmpty = isEmpty;
-var react_native_onyx_1 = require("react-native-onyx");
-var CONFIG_1 = require("@src/CONFIG");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const CONFIG_1 = require("@src/CONFIG");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 // In this file we manage a queue of Onyx updates while the SequentialQueue is processing. There are functions to get the updates and clear the queue after saving the updates in Onyx.
-var queuedOnyxUpdates = [];
-var currentAccountID;
+let queuedOnyxUpdates = [];
+let currentAccountID;
 // We use `connectWithoutView` because it is not connected to any UI component.
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (session) {
-        currentAccountID = session === null || session === void 0 ? void 0 : session.accountID;
+    callback: (session) => {
+        currentAccountID = session?.accountID;
     },
 });
 /**
@@ -33,11 +24,11 @@ function queueOnyxUpdates(updates) {
     return Promise.resolve();
 }
 function flushQueue() {
-    var copyUpdates = __spreadArray([], queuedOnyxUpdates, true);
+    let copyUpdates = [...queuedOnyxUpdates];
     // Clear queue immediately to prevent race conditions with new updates during Onyx processing
     queuedOnyxUpdates = [];
     if (!currentAccountID && !CONFIG_1.default.IS_TEST_ENV && !CONFIG_1.default.E2E_TESTING) {
-        var preservedKeys_1 = [
+        const preservedKeys = [
             ONYXKEYS_1.default.NVP_TRY_NEW_DOT,
             ONYXKEYS_1.default.NVP_TRY_FOCUS_MODE,
             ONYXKEYS_1.default.PREFERRED_THEME,
@@ -55,7 +46,7 @@ function flushQueue() {
             ONYXKEYS_1.default.SHOULD_SHOW_COMPOSE_INPUT,
             ONYXKEYS_1.default.PRESERVED_USER_SESSION,
         ];
-        copyUpdates = copyUpdates.filter(function (update) { return preservedKeys_1.includes(update.key); });
+        copyUpdates = copyUpdates.filter((update) => preservedKeys.includes(update.key));
     }
     return react_native_onyx_1.default.update(copyUpdates);
 }

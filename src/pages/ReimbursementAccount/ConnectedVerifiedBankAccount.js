@@ -1,37 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var BankIcons_1 = require("@components/Icon/BankIcons");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var Illustrations_1 = require("@components/Icon/Illustrations");
-var MenuItem_1 = require("@components/MenuItem");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Section_1 = require("@components/Section");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var WorkspaceResetBankAccountModal_1 = require("@pages/workspace/WorkspaceResetBankAccountModal");
-var ReimbursementAccount_1 = require("@userActions/ReimbursementAccount");
-var CONST_1 = require("@src/CONST");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function ConnectedVerifiedBankAccount(_a) {
-    var _b, _c, _d, _e, _f, _g;
-    var reimbursementAccount = _a.reimbursementAccount, onBackButtonPress = _a.onBackButtonPress, setShouldShowConnectedVerifiedBankAccount = _a.setShouldShowConnectedVerifiedBankAccount, setUSDBankAccountStep = _a.setUSDBankAccountStep, setNonUSDBankAccountStep = _a.setNonUSDBankAccountStep, isNonUSDWorkspace = _a.isNonUSDWorkspace;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var _h = (0, BankIcons_1.default)({ bankName: (_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.bankName, styles: styles }), icon = _h.icon, iconSize = _h.iconSize, iconStyles = _h.iconStyles;
-    var formattedBankAccountNumber = ((_c = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _c === void 0 ? void 0 : _c.accountNumber)
-        ? "".concat(translate('bankAccount.accountEnding'), " ").concat((_d = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _d === void 0 ? void 0 : _d.accountNumber.slice(-4))
+const react_1 = require("react");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const BankIcons_1 = require("@components/Icon/BankIcons");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const Illustrations_1 = require("@components/Icon/Illustrations");
+const MenuItem_1 = require("@components/MenuItem");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Section_1 = require("@components/Section");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const WorkspaceResetBankAccountModal_1 = require("@pages/workspace/WorkspaceResetBankAccountModal");
+const ReimbursementAccount_1 = require("@userActions/ReimbursementAccount");
+const CONST_1 = require("@src/CONST");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function ConnectedVerifiedBankAccount({ reimbursementAccount, onBackButtonPress, setShouldShowConnectedVerifiedBankAccount, setUSDBankAccountStep, setNonUSDBankAccountStep, isNonUSDWorkspace, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const { icon, iconSize, iconStyles } = (0, BankIcons_1.default)({ bankName: reimbursementAccount?.achData?.bankName, styles });
+    const formattedBankAccountNumber = reimbursementAccount?.achData?.accountNumber
+        ? `${translate('bankAccount.accountEnding')} ${reimbursementAccount?.achData?.accountNumber.slice(-4)}`
         : '';
-    var bankAccountOwnerName = (_e = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _e === void 0 ? void 0 : _e.addressName;
-    var errors = (_f = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.errors) !== null && _f !== void 0 ? _f : {};
-    var pendingAction = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.pendingAction;
-    var shouldShowResetModal = (_g = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.shouldShowResetModal) !== null && _g !== void 0 ? _g : false;
+    const bankAccountOwnerName = reimbursementAccount?.achData?.addressName;
+    const errors = reimbursementAccount?.errors ?? {};
+    const pendingAction = reimbursementAccount?.pendingAction;
+    const shouldShowResetModal = reimbursementAccount?.shouldShowResetModal ?? false;
     return (<ScreenWrapper_1.default testID={ConnectedVerifiedBankAccount.displayName} includeSafeAreaPaddingBottom={false} shouldEnablePickerAvoiding={false} shouldEnableMaxHeight style={[styles.flex1, styles.justifyContentBetween, styles.mh2]} forwardedFSClass={CONST_1.default.FULLSTORY.CLASS.MASK}>
             <HeaderWithBackButton_1.default title={translate('bankAccount.addBankAccount')} onBackButtonPress={onBackButtonPress}/>
             <ScrollView_1.default style={[styles.flex1]}>

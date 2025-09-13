@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var Illustrations = require("./Icon/Illustrations");
-var Text_1 = require("./Text");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const Illustrations = require("./Icon/Illustrations");
+const Text_1 = require("./Text");
 function SAMLLoadingIndicator() {
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     return (<react_native_1.View style={[react_native_1.StyleSheet.absoluteFillObject, styles.deeplinkWrapperContainer]}>
             <react_native_1.View style={styles.deeplinkWrapperMessage}>
                 <react_native_1.View style={styles.mb2}>

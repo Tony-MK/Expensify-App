@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var CONST_1 = require("@src/CONST");
+const react_native_1 = require("react-native");
+const CONST_1 = require("@src/CONST");
 /**
  * Reads the current operating system for native platforms.
  */
-var getOperatingSystem = function () {
+const getOperatingSystem = () => {
     switch (react_native_1.Platform.OS) {
         case 'ios':
             return CONST_1.default.OS.IOS;

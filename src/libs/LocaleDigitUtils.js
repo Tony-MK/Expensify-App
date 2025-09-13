@@ -1,30 +1,21 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toLocaleDigit = toLocaleDigit;
 exports.toLocaleOrdinal = toLocaleOrdinal;
 exports.fromLocaleDigit = fromLocaleDigit;
-var Localize_1 = require("./Localize");
-var memoize_1 = require("./memoize");
-var NumberFormatUtils_1 = require("./NumberFormatUtils");
-var STANDARD_DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', ','];
-var INDEX_DECIMAL = 10;
-var INDEX_MINUS_SIGN = 11;
-var INDEX_GROUP = 12;
-var getLocaleDigits = (0, memoize_1.default)(function (locale) {
-    var localeDigits = __spreadArray([], STANDARD_DIGITS, true);
-    for (var i = 0; i <= 9; i++) {
+const Localize_1 = require("./Localize");
+const memoize_1 = require("./memoize");
+const NumberFormatUtils_1 = require("./NumberFormatUtils");
+const STANDARD_DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', ','];
+const INDEX_DECIMAL = 10;
+const INDEX_MINUS_SIGN = 11;
+const INDEX_GROUP = 12;
+const getLocaleDigits = (0, memoize_1.default)((locale) => {
+    const localeDigits = [...STANDARD_DIGITS];
+    for (let i = 0; i <= 9; i++) {
         localeDigits[i] = (0, NumberFormatUtils_1.format)(locale, i);
     }
-    (0, NumberFormatUtils_1.formatToParts)(locale, 1000000.5).forEach(function (part) {
+    (0, NumberFormatUtils_1.formatToParts)(locale, 1000000.5).forEach((part) => {
         switch (part.type) {
             case 'decimal':
                 localeDigits[INDEX_DECIMAL] = part.value;
@@ -50,12 +41,11 @@ var getLocaleDigits = (0, memoize_1.default)(function (locale) {
  * @throws If `digit` is not a valid standard digit.
  */
 function toLocaleDigit(locale, digit) {
-    var _a;
-    var index = STANDARD_DIGITS.indexOf(digit);
+    const index = STANDARD_DIGITS.indexOf(digit);
     if (index < 0) {
-        throw new Error("\"".concat(digit, "\" must be in ").concat(JSON.stringify(STANDARD_DIGITS)));
+        throw new Error(`"${digit}" must be in ${JSON.stringify(STANDARD_DIGITS)}`);
     }
-    return (_a = getLocaleDigits(locale).at(index)) !== null && _a !== void 0 ? _a : '';
+    return getLocaleDigits(locale).at(index) ?? '';
 }
 /**
  * Gets the standard digit corresponding to a locale digit.
@@ -66,12 +56,11 @@ function toLocaleDigit(locale, digit) {
  * @throws If `localeDigit` is not a valid locale digit.
  */
 function fromLocaleDigit(locale, localeDigit) {
-    var _a;
-    var index = getLocaleDigits(locale).indexOf(localeDigit);
+    const index = getLocaleDigits(locale).indexOf(localeDigit);
     if (index < 0) {
-        throw new Error("\"".concat(localeDigit, "\" must be in ").concat(JSON.stringify(getLocaleDigits(locale))));
+        throw new Error(`"${localeDigit}" must be in ${JSON.stringify(getLocaleDigits(locale))}`);
     }
-    return (_a = STANDARD_DIGITS.at(index)) !== null && _a !== void 0 ? _a : '';
+    return STANDARD_DIGITS.at(index) ?? '';
 }
 /**
  * Formats a number into its localized ordinal representation i.e 1st, 2nd etc
@@ -79,16 +68,15 @@ function fromLocaleDigit(locale, localeDigit) {
  * @param number - The number to format
  * @param writtenOrdinals - If true, returns the written ordinal (e.g. "first", "second") for numbers 1-10
  */
-function toLocaleOrdinal(locale, number, writtenOrdinals) {
-    if (writtenOrdinals === void 0) { writtenOrdinals = false; }
+function toLocaleOrdinal(locale, number, writtenOrdinals = false) {
     // Defaults to "other" suffix or "th" in English
-    var suffixKey = 'workflowsPage.frequencies.ordinals.other';
+    let suffixKey = 'workflowsPage.frequencies.ordinals.other';
     // Calculate last digit of the number to determine basic ordinality
-    var lastDigit = number % 10;
+    const lastDigit = number % 10;
     // Calculate last two digits to handle exceptions in the 11-13 range
-    var lastTwoDigits = number % 100;
+    const lastTwoDigits = number % 100;
     if (writtenOrdinals && number >= 1 && number <= 10) {
-        return (0, Localize_1.translate)(locale, "workflowsPage.frequencies.ordinals.".concat(number));
+        return (0, Localize_1.translate)(locale, `workflowsPage.frequencies.ordinals.${number}`);
     }
     if (lastDigit === 1 && lastTwoDigits !== 11) {
         suffixKey = 'workflowsPage.frequencies.ordinals.one';
@@ -99,6 +87,6 @@ function toLocaleOrdinal(locale, number, writtenOrdinals) {
     else if (lastDigit === 3 && lastTwoDigits !== 13) {
         suffixKey = 'workflowsPage.frequencies.ordinals.few';
     }
-    var suffix = (0, Localize_1.translate)(locale, suffixKey);
-    return "".concat(number).concat(suffix);
+    const suffix = (0, Localize_1.translate)(locale, suffixKey);
+    return `${number}${suffix}`;
 }

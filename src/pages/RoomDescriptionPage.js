@@ -1,55 +1,53 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var RenderHTML_1 = require("@components/RenderHTML");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Parser_1 = require("@libs/Parser");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var updateMultilineInputRange_1 = require("@libs/updateMultilineInputRange");
-var variables_1 = require("@styles/variables");
-var Report_1 = require("@userActions/Report");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var ReportDescriptionForm_1 = require("@src/types/form/ReportDescriptionForm");
-function RoomDescriptionPage(_a) {
-    var report = _a.report, policy = _a.policy;
-    var route = (0, native_1.useRoute)();
-    var backTo = route.params.backTo;
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = (0, react_1.useState)(function () { return Parser_1.default.htmlToMarkdown((0, ReportUtils_1.getReportDescription)(report)); }), description = _b[0], setDescription = _b[1];
-    var reportDescriptionInputRef = (0, react_1.useRef)(null);
-    var focusTimeoutRef = (0, react_1.useRef)(null);
-    var translate = (0, useLocalize_1.default)().translate;
-    var reportIsArchived = (0, useReportIsArchived_1.default)(report === null || report === void 0 ? void 0 : report.reportID);
-    var handleReportDescriptionChange = (0, react_1.useCallback)(function (value) {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const RenderHTML_1 = require("@components/RenderHTML");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Parser_1 = require("@libs/Parser");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const updateMultilineInputRange_1 = require("@libs/updateMultilineInputRange");
+const variables_1 = require("@styles/variables");
+const Report_1 = require("@userActions/Report");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const ReportDescriptionForm_1 = require("@src/types/form/ReportDescriptionForm");
+function RoomDescriptionPage({ report, policy }) {
+    const route = (0, native_1.useRoute)();
+    const backTo = route.params.backTo;
+    const styles = (0, useThemeStyles_1.default)();
+    const [description, setDescription] = (0, react_1.useState)(() => Parser_1.default.htmlToMarkdown((0, ReportUtils_1.getReportDescription)(report)));
+    const reportDescriptionInputRef = (0, react_1.useRef)(null);
+    const focusTimeoutRef = (0, react_1.useRef)(null);
+    const { translate } = (0, useLocalize_1.default)();
+    const reportIsArchived = (0, useReportIsArchived_1.default)(report?.reportID);
+    const handleReportDescriptionChange = (0, react_1.useCallback)((value) => {
         setDescription(value);
     }, []);
-    var goBack = (0, react_1.useCallback)(function () {
-        Navigation_1.default.setNavigationActionToMicrotaskQueue(function () { return Navigation_1.default.goBack(backTo !== null && backTo !== void 0 ? backTo : ROUTES_1.default.REPORT_WITH_ID_DETAILS.getRoute(report.reportID)); });
+    const goBack = (0, react_1.useCallback)(() => {
+        Navigation_1.default.setNavigationActionToMicrotaskQueue(() => Navigation_1.default.goBack(backTo ?? ROUTES_1.default.REPORT_WITH_ID_DETAILS.getRoute(report.reportID)));
     }, [report.reportID, backTo]);
-    var submitForm = (0, react_1.useCallback)(function () {
-        var _a;
-        var previousValue = (_a = report === null || report === void 0 ? void 0 : report.description) !== null && _a !== void 0 ? _a : '';
-        var newValue = description.trim();
+    const submitForm = (0, react_1.useCallback)(() => {
+        const previousValue = report?.description ?? '';
+        const newValue = description.trim();
         (0, Report_1.updateDescription)(report.reportID, previousValue, newValue);
         goBack();
     }, [report.reportID, report.description, description, goBack]);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = {};
-        var descriptionLength = values[ReportDescriptionForm_1.default.REPORT_DESCRIPTION].trim().length;
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = {};
+        const descriptionLength = values[ReportDescriptionForm_1.default.REPORT_DESCRIPTION].trim().length;
         if (descriptionLength > CONST_1.default.REPORT_DESCRIPTION.MAX_LENGTH) {
             errors.reportDescription = translate('common.error.characterLimitExceedCounter', {
                 length: descriptionLength,
@@ -58,11 +56,10 @@ function RoomDescriptionPage(_a) {
         }
         return errors;
     }, [translate]);
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
-        focusTimeoutRef.current = setTimeout(function () {
-            var _a;
-            (_a = reportDescriptionInputRef.current) === null || _a === void 0 ? void 0 : _a.focus();
-            return function () {
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
+        focusTimeoutRef.current = setTimeout(() => {
+            reportDescriptionInputRef.current?.focus();
+            return () => {
                 if (!focusTimeoutRef.current) {
                     return;
                 }
@@ -70,13 +67,13 @@ function RoomDescriptionPage(_a) {
             };
         }, CONST_1.default.ANIMATED_TRANSITION);
     }, []));
-    var canEdit = (0, ReportUtils_1.canEditReportDescription)(report, policy, reportIsArchived);
+    const canEdit = (0, ReportUtils_1.canEditReportDescription)(report, policy, reportIsArchived);
     return (<ScreenWrapper_1.default shouldEnableMaxHeight includeSafeAreaPaddingBottom testID={RoomDescriptionPage.displayName}>
             <HeaderWithBackButton_1.default title={translate('reportDescriptionPage.roomDescription')} onBackButtonPress={goBack}/>
             {canEdit && (<FormProvider_1.default style={[styles.flexGrow1, styles.ph5]} formID={ONYXKEYS_1.default.FORMS.REPORT_DESCRIPTION_FORM} onSubmit={submitForm} validate={validate} submitButtonText={translate('common.save')} enabledWhenOffline shouldHideFixErrorsAlert>
                     <Text_1.default style={[styles.mb5]}>{translate('reportDescriptionPage.explainerText')}</Text_1.default>
                     <react_native_1.View style={[styles.mb6]}>
-                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={ReportDescriptionForm_1.default.REPORT_DESCRIPTION} label={translate('reportDescriptionPage.roomDescription')} accessibilityLabel={translate('reportDescriptionPage.roomDescription')} role={CONST_1.default.ROLE.PRESENTATION} autoGrowHeight maxAutoGrowHeight={variables_1.default.textInputAutoGrowMaxHeight} ref={function (el) {
+                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={ReportDescriptionForm_1.default.REPORT_DESCRIPTION} label={translate('reportDescriptionPage.roomDescription')} accessibilityLabel={translate('reportDescriptionPage.roomDescription')} role={CONST_1.default.ROLE.PRESENTATION} autoGrowHeight maxAutoGrowHeight={variables_1.default.textInputAutoGrowMaxHeight} ref={(el) => {
                 if (!el) {
                     return;
                 }

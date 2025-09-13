@@ -1,88 +1,74 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var OptionListContextProvider_1 = require("@components/OptionListContextProvider");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SelectionList_1 = require("@components/SelectionList");
-var UserListItem_1 = require("@components/SelectionList/UserListItem");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Report_1 = require("@libs/actions/Report");
-var types_1 = require("@libs/API/types");
-var HttpUtils_1 = require("@libs/HttpUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var Task_1 = require("@userActions/Task");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var selectReportHandler = function (option) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const OptionListContextProvider_1 = require("@components/OptionListContextProvider");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SelectionList_1 = require("@components/SelectionList");
+const UserListItem_1 = require("@components/SelectionList/UserListItem");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Report_1 = require("@libs/actions/Report");
+const types_1 = require("@libs/API/types");
+const HttpUtils_1 = require("@libs/HttpUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const Task_1 = require("@userActions/Task");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const selectReportHandler = (option) => {
     HttpUtils_1.default.cancelPendingRequests(types_1.READ_COMMANDS.SEARCH_FOR_REPORTS);
-    var optionItem = option;
-    if (!optionItem || !(optionItem === null || optionItem === void 0 ? void 0 : optionItem.reportID)) {
+    const optionItem = option;
+    if (!optionItem || !optionItem?.reportID) {
         return;
     }
-    (0, Task_1.setShareDestinationValue)(optionItem === null || optionItem === void 0 ? void 0 : optionItem.reportID);
+    (0, Task_1.setShareDestinationValue)(optionItem?.reportID);
     Navigation_1.default.goBack(ROUTES_1.default.NEW_TASK.getRoute());
 };
-var reportFilter = function (reportOptions, archivedReportsIDList) {
-    return (reportOptions !== null && reportOptions !== void 0 ? reportOptions : []).reduce(function (filtered, option) {
-        var report = option.item;
-        var isReportArchived = archivedReportsIDList.has(report === null || report === void 0 ? void 0 : report.reportID);
-        if ((0, ReportUtils_1.canUserPerformWriteAction)(report, isReportArchived) && (0, ReportUtils_1.canCreateTaskInReport)(report) && !(0, ReportUtils_1.isCanceledTaskReport)(report)) {
-            filtered.push(option);
-        }
-        return filtered;
-    }, []);
-};
+const reportFilter = (reportOptions, archivedReportsIDList) => (reportOptions ?? []).reduce((filtered, option) => {
+    const report = option.item;
+    const isReportArchived = archivedReportsIDList.has(report?.reportID);
+    if ((0, ReportUtils_1.canUserPerformWriteAction)(report, isReportArchived) && (0, ReportUtils_1.canCreateTaskInReport)(report) && !(0, ReportUtils_1.isCanceledTaskReport)(report)) {
+        filtered.push(option);
+    }
+    return filtered;
+}, []);
 function TaskShareDestinationSelectorModal() {
-    var _a = (0, react_1.useState)(false), didScreenTransitionEnd = _a[0], setDidScreenTransitionEnd = _a[1];
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = (0, useDebouncedState_1.default)(''), searchValue = _b[0], debouncedSearchValue = _b[1], setSearchValue = _b[2];
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var countryCode = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false })[0];
-    var isSearchingForReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true })[0];
-    var _c = (0, OptionListContextProvider_1.useOptionsList)({
+    const [didScreenTransitionEnd, setDidScreenTransitionEnd] = (0, react_1.useState)(false);
+    const styles = (0, useThemeStyles_1.default)();
+    const [searchValue, debouncedSearchValue, setSearchValue] = (0, useDebouncedState_1.default)('');
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [countryCode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false });
+    const [isSearchingForReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true });
+    const { options: optionList, areOptionsInitialized } = (0, OptionListContextProvider_1.useOptionsList)({
         shouldInitialize: didScreenTransitionEnd,
-    }), optionList = _c.options, areOptionsInitialized = _c.areOptionsInitialized;
-    var _d = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS, {
+    });
+    const [archivedReportsIdSet = new Set()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS, {
         canBeMissing: true,
-        selector: function (all) {
-            var ids = new Set();
+        selector: (all) => {
+            const ids = new Set();
             if (!all) {
                 return ids;
             }
-            var prefixLength = ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS.length;
-            for (var _i = 0, _a = Object.entries(all); _i < _a.length; _i++) {
-                var _b = _a[_i], key = _b[0], value = _b[1];
+            const prefixLength = ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS.length;
+            for (const [key, value] of Object.entries(all)) {
                 if ((0, ReportUtils_1.isArchivedReport)(value)) {
-                    var reportID = key.slice(prefixLength);
+                    const reportID = key.slice(prefixLength);
                     ids.add(reportID);
                 }
             }
             return ids;
         },
-    })[0], archivedReportsIdSet = _d === void 0 ? new Set() : _d;
-    var textInputHint = (0, react_1.useMemo)(function () { return (isOffline ? "".concat(translate('common.youAppearToBeOffline'), " ").concat(translate('search.resultsAreLimited')) : ''); }, [isOffline, translate]);
-    var defaultOptions = (0, react_1.useMemo)(function () {
+    });
+    const textInputHint = (0, react_1.useMemo)(() => (isOffline ? `${translate('common.youAppearToBeOffline')} ${translate('search.resultsAreLimited')}` : ''), [isOffline, translate]);
+    const defaultOptions = (0, react_1.useMemo)(() => {
         if (!areOptionsInitialized) {
             return {
                 recentReports: [],
@@ -92,47 +78,50 @@ function TaskShareDestinationSelectorModal() {
                 header: '',
             };
         }
-        var filteredReports = reportFilter(optionList.reports, archivedReportsIdSet);
-        var recentReports = (0, OptionsListUtils_1.getShareDestinationOptions)(filteredReports, optionList.personalDetails, [], [], {}, true).recentReports;
-        var header = (0, OptionsListUtils_1.getHeaderMessage)(recentReports && recentReports.length !== 0, false, '');
+        const filteredReports = reportFilter(optionList.reports, archivedReportsIdSet);
+        const { recentReports } = (0, OptionsListUtils_1.getShareDestinationOptions)(filteredReports, optionList.personalDetails, [], [], {}, true);
+        const header = (0, OptionsListUtils_1.getHeaderMessage)(recentReports && recentReports.length !== 0, false, '');
         return {
-            recentReports: recentReports,
+            recentReports,
             personalDetails: [],
             userToInvite: null,
             currentUserOption: null,
-            header: header,
+            header,
         };
     }, [areOptionsInitialized, optionList.personalDetails, optionList.reports, archivedReportsIdSet]);
-    var options = (0, react_1.useMemo)(function () {
+    const options = (0, react_1.useMemo)(() => {
         if (debouncedSearchValue.trim() === '') {
             return defaultOptions;
         }
-        var filteredReports = (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchValue.trim(), countryCode, {
+        const filteredReports = (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchValue.trim(), countryCode, {
             excludeLogins: CONST_1.default.EXPENSIFY_EMAILS_OBJECT,
             canInviteUser: false,
         });
-        var header = (0, OptionsListUtils_1.getHeaderMessage)(filteredReports.recentReports && filteredReports.recentReports.length !== 0, false, debouncedSearchValue);
-        return __assign(__assign({}, filteredReports), { header: header });
+        const header = (0, OptionsListUtils_1.getHeaderMessage)(filteredReports.recentReports && filteredReports.recentReports.length !== 0, false, debouncedSearchValue);
+        return { ...filteredReports, header };
     }, [debouncedSearchValue, defaultOptions, countryCode]);
-    var sections = (0, react_1.useMemo)(function () {
-        return options.recentReports && options.recentReports.length > 0
-            ? [
-                {
-                    data: options.recentReports.map(function (option) {
-                        var _a, _b, _c, _d, _e, _f;
-                        return (__assign(__assign({}, option), { text: (_a = option.text) !== null && _a !== void 0 ? _a : '', alternateText: (_b = option.alternateText) !== null && _b !== void 0 ? _b : undefined, keyForList: (_c = option.keyForList) !== null && _c !== void 0 ? _c : '', isDisabled: (_d = option.isDisabled) !== null && _d !== void 0 ? _d : undefined, login: (_e = option.login) !== null && _e !== void 0 ? _e : undefined, shouldShowSubscript: (_f = option.shouldShowSubscript) !== null && _f !== void 0 ? _f : undefined }));
-                    }),
-                    shouldShow: true,
-                },
-            ]
-            : [];
-    }, [options.recentReports]);
-    (0, react_1.useEffect)(function () {
+    const sections = (0, react_1.useMemo)(() => options.recentReports && options.recentReports.length > 0
+        ? [
+            {
+                data: options.recentReports.map((option) => ({
+                    ...option,
+                    text: option.text ?? '',
+                    alternateText: option.alternateText ?? undefined,
+                    keyForList: option.keyForList ?? '',
+                    isDisabled: option.isDisabled ?? undefined,
+                    login: option.login ?? undefined,
+                    shouldShowSubscript: option.shouldShowSubscript ?? undefined,
+                })),
+                shouldShow: true,
+            },
+        ]
+        : [], [options.recentReports]);
+    (0, react_1.useEffect)(() => {
         (0, Report_1.searchInServer)(debouncedSearchValue);
     }, [debouncedSearchValue]);
-    return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom={false} testID="TaskShareDestinationSelectorModal" onEntryTransitionEnd={function () { return setDidScreenTransitionEnd(true); }}>
+    return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom={false} testID="TaskShareDestinationSelectorModal" onEntryTransitionEnd={() => setDidScreenTransitionEnd(true)}>
             <>
-                <HeaderWithBackButton_1.default title={translate('common.share')} onBackButtonPress={function () { return Navigation_1.default.goBack(ROUTES_1.default.NEW_TASK.getRoute()); }}/>
+                <HeaderWithBackButton_1.default title={translate('common.share')} onBackButtonPress={() => Navigation_1.default.goBack(ROUTES_1.default.NEW_TASK.getRoute())}/>
                 <react_native_1.View style={[styles.flex1, styles.w100, styles.pRelative]}>
                     <SelectionList_1.default ListItem={UserListItem_1.default} sections={areOptionsInitialized ? sections : []} onSelectRow={selectReportHandler} shouldSingleExecuteRowSelect onChangeText={setSearchValue} textInputValue={searchValue} headerMessage={options.header} textInputLabel={translate('selectionList.nameEmailOrPhoneNumber')} showLoadingPlaceholder={areOptionsInitialized && debouncedSearchValue.trim() === '' ? sections.length === 0 : !didScreenTransitionEnd} isLoadingNewOptions={!!isSearchingForReports} textInputHint={textInputHint}/>
                 </react_native_1.View>

@@ -1,53 +1,51 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FixedFooter_1 = require("@components/FixedFooter");
-var FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
-var FormHelpMessage_1 = require("@components/FormHelpMessage");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var SingleSelectListItem_1 = require("@components/SelectionList/SingleSelectListItem");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var CustomCloseDateSelectionList_1 = require("./CustomCloseDateSelectionList");
-function WorkspaceCompanyCardStatementCloseDateSelectionList(_a) {
-    var _b;
-    var confirmText = _a.confirmText, onSubmit = _a.onSubmit, onBackButtonPress = _a.onBackButtonPress, enabledWhenOffline = _a.enabledWhenOffline, defaultStatementPeriodEnd = _a.defaultStatementPeriodEnd, defaultStatementPeriodEndDay = _a.defaultStatementPeriodEndDay, pendingAction = _a.pendingAction, errors = _a.errors, onCloseError = _a.onCloseError;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var _c = (0, react_1.useState)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FixedFooter_1 = require("@components/FixedFooter");
+const FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
+const FormHelpMessage_1 = require("@components/FormHelpMessage");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const SingleSelectListItem_1 = require("@components/SelectionList/SingleSelectListItem");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const CustomCloseDateSelectionList_1 = require("./CustomCloseDateSelectionList");
+function WorkspaceCompanyCardStatementCloseDateSelectionList({ confirmText, onSubmit, onBackButtonPress, enabledWhenOffline, defaultStatementPeriodEnd, defaultStatementPeriodEndDay, pendingAction, errors, onCloseError, }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [selectedDate, setSelectedDate] = (0, react_1.useState)(() => {
         if (defaultStatementPeriodEndDay) {
             return CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH;
         }
         return defaultStatementPeriodEnd;
-    }), selectedDate = _c[0], setSelectedDate = _c[1];
-    var _d = (0, react_1.useState)(defaultStatementPeriodEndDay), selectedCustomDate = _d[0], setSelectedCustomDate = _d[1];
-    var _e = (0, react_1.useState)(false), isChoosingCustomDate = _e[0], setIsChoosingCustomDate = _e[1];
-    var _f = (0, react_1.useState)(undefined), error = _f[0], setError = _f[1];
-    var title = (0, react_1.useMemo)(function () { return (isChoosingCustomDate ? translate('workspace.companyCards.customCloseDate') : translate('workspace.moreFeatures.companyCards.statementCloseDateTitle')); }, [translate, isChoosingCustomDate]);
-    var goBack = (0, react_1.useCallback)(function () {
+    });
+    const [selectedCustomDate, setSelectedCustomDate] = (0, react_1.useState)(defaultStatementPeriodEndDay);
+    const [isChoosingCustomDate, setIsChoosingCustomDate] = (0, react_1.useState)(false);
+    const [error, setError] = (0, react_1.useState)(undefined);
+    const title = (0, react_1.useMemo)(() => (isChoosingCustomDate ? translate('workspace.companyCards.customCloseDate') : translate('workspace.moreFeatures.companyCards.statementCloseDateTitle')), [translate, isChoosingCustomDate]);
+    const goBack = (0, react_1.useCallback)(() => {
         if (isChoosingCustomDate) {
             setIsChoosingCustomDate(false);
             return;
         }
         onBackButtonPress();
     }, [isChoosingCustomDate, onBackButtonPress]);
-    var selectDateAndClearError = (0, react_1.useCallback)(function (item) {
+    const selectDateAndClearError = (0, react_1.useCallback)((item) => {
         setSelectedDate(item.value);
         setError(undefined);
     }, []);
-    var selectCustomDateAndClearError = (0, react_1.useCallback)(function (day) {
+    const selectCustomDateAndClearError = (0, react_1.useCallback)((day) => {
         setSelectedCustomDate(day);
         setError(undefined);
         goBack();
     }, [goBack]);
-    var submit = (0, react_1.useCallback)(function () {
+    const submit = (0, react_1.useCallback)(() => {
         if (!selectedDate) {
             setError(translate('workspace.moreFeatures.companyCards.error.statementCloseDateRequired'));
             return;
@@ -69,12 +67,12 @@ function WorkspaceCompanyCardStatementCloseDateSelectionList(_a) {
                         <Text_1.default style={[styles.ph5]}>{translate('workspace.moreFeatures.companyCards.statementCloseDateDescription')}</Text_1.default>
                         <OfflineWithFeedback_1.default errors={errors} errorRowStyles={[styles.mt2, styles.pl5, styles.pr3]} onClose={onCloseError} pendingAction={pendingAction}>
                             <react_native_1.View>
-                                {(_b = Object.values(CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE)) === null || _b === void 0 ? void 0 : _b.map(function (option) { return (<SingleSelectListItem_1.default wrapperStyle={[styles.flexReset]} key={option} showTooltip item={{
+                                {Object.values(CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE)?.map((option) => (<SingleSelectListItem_1.default wrapperStyle={[styles.flexReset]} key={option} showTooltip item={{
                     value: option,
-                    text: translate("workspace.companyCards.statementCloseDate.".concat(option)),
+                    text: translate(`workspace.companyCards.statementCloseDate.${option}`),
                     isSelected: selectedDate === option,
-                }} onSelectRow={selectDateAndClearError}/>); })}
-                                {selectedDate === CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH && (<MenuItemWithTopDescription_1.default shouldShowRightIcon brickRoadIndicator={error ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : undefined} title={selectedCustomDate === null || selectedCustomDate === void 0 ? void 0 : selectedCustomDate.toString()} description={translate('workspace.companyCards.customCloseDate')} onPress={function () { return setIsChoosingCustomDate(true); }} viewMode={CONST_1.default.OPTION_MODE.COMPACT}/>)}
+                }} onSelectRow={selectDateAndClearError}/>))}
+                                {selectedDate === CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH && (<MenuItemWithTopDescription_1.default shouldShowRightIcon brickRoadIndicator={error ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR : undefined} title={selectedCustomDate?.toString()} description={translate('workspace.companyCards.customCloseDate')} onPress={() => setIsChoosingCustomDate(true)} viewMode={CONST_1.default.OPTION_MODE.COMPACT}/>)}
                             </react_native_1.View>
                         </OfflineWithFeedback_1.default>
                     </ScrollView_1.default>

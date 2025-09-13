@@ -2,17 +2,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable no-console */
-var child_process_1 = require("child_process");
-var fs_1 = require("fs");
-var parseCommandLineArguments_1 = require("./utils/parseCommandLineArguments");
+const child_process_1 = require("child_process");
+const fs_1 = require("fs");
+const parseCommandLineArguments_1 = require("./utils/parseCommandLineArguments");
 // Function to find .cpuprofile files in the current directory
 function findCpuProfileFiles() {
-    var files = fs_1.default.readdirSync(process.cwd());
-    return files.filter(function (file) { return file.endsWith('.cpuprofile'); });
+    const files = fs_1.default.readdirSync(process.cwd());
+    return files.filter((file) => file.endsWith('.cpuprofile'));
 }
-var argsMap = (0, parseCommandLineArguments_1.default)();
+const argsMap = (0, parseCommandLineArguments_1.default)();
 // Determine sourcemapPath based on the platform flag passed
-var sourcemapPath;
+let sourcemapPath;
 if (argsMap.platform === 'ios') {
     sourcemapPath = 'main.jsbundle.map';
 }
@@ -27,7 +27,7 @@ else {
     process.exit(1);
 }
 // Attempt to find .cpuprofile files
-var cpuProfiles = findCpuProfileFiles();
+const cpuProfiles = findCpuProfileFiles();
 if (cpuProfiles.length === 0) {
     console.error('No .cpuprofile files found in the root directory.');
     process.exit(1);
@@ -38,17 +38,17 @@ else if (cpuProfiles.length > 1) {
 }
 else {
     // Construct the command
-    var cpuprofileName = cpuProfiles.at(0);
-    var command = "npx react-native-release-profiler --local \"".concat(cpuprofileName, "\" --sourcemap-path \"").concat(sourcemapPath, "\"");
-    console.log("Executing: ".concat(command));
+    const cpuprofileName = cpuProfiles.at(0);
+    const command = `npx react-native-release-profiler --local "${cpuprofileName}" --sourcemap-path "${sourcemapPath}"`;
+    console.log(`Executing: ${command}`);
     // Execute the command
     try {
-        var output = (0, child_process_1.execSync)(command, { stdio: 'inherit' });
+        const output = (0, child_process_1.execSync)(command, { stdio: 'inherit' });
         console.log(output.toString());
     }
     catch (error) {
         if (error instanceof Error) {
-            console.error("Error executing command: ".concat(error.toString()));
+            console.error(`Error executing command: ${error.toString()}`);
         }
         process.exit(1);
     }

@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable react-compiler/react-compiler */
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var mergeRefs_1 = require("@libs/mergeRefs");
-var ValueUtils_1 = require("@libs/ValueUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function ActiveHoverable(_a) {
-    var onHoverIn = _a.onHoverIn, onHoverOut = _a.onHoverOut, shouldHandleScroll = _a.shouldHandleScroll, shouldFreezeCapture = _a.shouldFreezeCapture, children = _a.children, ref = _a.ref;
-    var _b = (0, react_1.useState)(false), isHovered = _b[0], setIsHovered = _b[1];
-    var elementRef = (0, react_1.useRef)(null);
-    var isScrollingRef = (0, react_1.useRef)(false);
-    var isHoveredRef = (0, react_1.useRef)(false);
-    var isVisibilityHidden = (0, react_1.useRef)(false);
-    var updateIsHovered = (0, react_1.useCallback)(function (hovered) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const mergeRefs_1 = require("@libs/mergeRefs");
+const ValueUtils_1 = require("@libs/ValueUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function ActiveHoverable({ onHoverIn, onHoverOut, shouldHandleScroll, shouldFreezeCapture, children, ref }) {
+    const [isHovered, setIsHovered] = (0, react_1.useState)(false);
+    const elementRef = (0, react_1.useRef)(null);
+    const isScrollingRef = (0, react_1.useRef)(false);
+    const isHoveredRef = (0, react_1.useRef)(false);
+    const isVisibilityHidden = (0, react_1.useRef)(false);
+    const updateIsHovered = (0, react_1.useCallback)((hovered) => {
         if (shouldFreezeCapture) {
             return;
         }
@@ -27,32 +26,31 @@ function ActiveHoverable(_a) {
         }
         setIsHovered(hovered);
         if (hovered) {
-            onHoverIn === null || onHoverIn === void 0 ? void 0 : onHoverIn();
+            onHoverIn?.();
         }
         else {
-            onHoverOut === null || onHoverOut === void 0 ? void 0 : onHoverOut();
+            onHoverOut?.();
         }
     }, [shouldHandleScroll, shouldFreezeCapture, onHoverIn, onHoverOut]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!shouldHandleScroll) {
             return;
         }
-        var scrollingListener = react_native_1.DeviceEventEmitter.addListener(CONST_1.default.EVENTS.SCROLLING, function (scrolling) {
-            var _a;
+        const scrollingListener = react_native_1.DeviceEventEmitter.addListener(CONST_1.default.EVENTS.SCROLLING, (scrolling) => {
             isScrollingRef.current = scrolling;
             if (scrolling && isHovered) {
                 setIsHovered(false);
-                onHoverOut === null || onHoverOut === void 0 ? void 0 : onHoverOut();
+                onHoverOut?.();
             }
-            else if (!scrolling && ((_a = elementRef.current) === null || _a === void 0 ? void 0 : _a.matches(':hover'))) {
+            else if (!scrolling && elementRef.current?.matches(':hover')) {
                 setIsHovered(true);
-                onHoverIn === null || onHoverIn === void 0 ? void 0 : onHoverIn();
+                onHoverIn?.();
             }
         });
-        return function () { return scrollingListener.remove(); };
+        return () => scrollingListener.remove();
     }, [shouldHandleScroll, isHovered, onHoverIn, onHoverOut]);
-    (0, react_1.useEffect)(function () {
-        var handleVisibilityChange = function () {
+    (0, react_1.useEffect)(() => {
+        const handleVisibilityChange = () => {
             if (document.visibilityState === 'hidden') {
                 isVisibilityHidden.current = true;
                 setIsHovered(false);
@@ -62,37 +60,37 @@ function ActiveHoverable(_a) {
             }
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
-        return function () { return document.removeEventListener('visibilitychange', handleVisibilityChange); };
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
     }, []);
-    var modal = (0, useOnyx_1.default)(ONYXKEYS_1.default.MODAL, { canBeMissing: true })[0];
-    var isModalVisible = modal === null || modal === void 0 ? void 0 : modal.isVisible;
-    var prevIsModalVisible = (0, usePrevious_1.default)(isModalVisible);
-    (0, react_1.useEffect)(function () {
+    const [modal] = (0, useOnyx_1.default)(ONYXKEYS_1.default.MODAL, { canBeMissing: true });
+    const isModalVisible = modal?.isVisible;
+    const prevIsModalVisible = (0, usePrevious_1.default)(isModalVisible);
+    (0, react_1.useEffect)(() => {
         if (!isModalVisible || prevIsModalVisible) {
             return;
         }
         setIsHovered(false);
     }, [isModalVisible, prevIsModalVisible]);
-    var handleMouseEvents = (0, react_1.useCallback)(function (type) { return function () {
+    const handleMouseEvents = (0, react_1.useCallback)((type) => () => {
         if (shouldFreezeCapture) {
             return;
         }
-        var newHoverState = type === 'enter';
+        const newHoverState = type === 'enter';
         isHoveredRef.current = newHoverState;
         isVisibilityHidden.current = false;
         updateIsHovered(newHoverState);
-    }; }, [shouldFreezeCapture, updateIsHovered]);
-    var child = (0, react_1.useMemo)(function () { return (0, ValueUtils_1.getReturnValue)(children, isHovered); }, [children, isHovered]);
-    var _c = child.props, onMouseEnter = _c.onMouseEnter, onMouseLeave = _c.onMouseLeave;
+    }, [shouldFreezeCapture, updateIsHovered]);
+    const child = (0, react_1.useMemo)(() => (0, ValueUtils_1.getReturnValue)(children, isHovered), [children, isHovered]);
+    const { onMouseEnter, onMouseLeave } = child.props;
     return (0, react_1.cloneElement)(child, {
         ref: (0, mergeRefs_1.default)(elementRef, ref, child.props.ref),
-        onMouseEnter: function (e) {
+        onMouseEnter: (e) => {
             handleMouseEvents('enter')();
-            onMouseEnter === null || onMouseEnter === void 0 ? void 0 : onMouseEnter(e);
+            onMouseEnter?.(e);
         },
-        onMouseLeave: function (e) {
+        onMouseLeave: (e) => {
             handleMouseEvents('leave')();
-            onMouseLeave === null || onMouseLeave === void 0 ? void 0 : onMouseLeave(e);
+            onMouseLeave?.(e);
         },
     });
 }

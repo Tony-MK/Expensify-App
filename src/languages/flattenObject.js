@@ -8,8 +8,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Output: { "common.yes": "Yes", "common.no": "No" }
  */
 function flattenObject(obj) {
-    var result = {};
-    var recursive = function (data, key) {
+    const result = {};
+    const recursive = (data, key) => {
         // If the data is a function or not a object (eg. a string or array),
         // it's the final value for the key being built and there is no need
         // for more recursion
@@ -17,15 +17,15 @@ function flattenObject(obj) {
             result[key] = data;
         }
         else {
-            var isEmpty_1 = true;
+            let isEmpty = true;
             // Recursive call to the keys and connect to the respective data
-            Object.keys(data).forEach(function (k) {
-                isEmpty_1 = false;
-                recursive(data[k], key ? "".concat(key, ".").concat(k) : k);
+            Object.keys(data).forEach((k) => {
+                isEmpty = false;
+                recursive(data[k], key ? `${key}.${k}` : k);
             });
             // Check for when the object is empty but a key exists, so that
             // it defaults to an empty object
-            if (isEmpty_1 && key) {
+            if (isEmpty && key) {
                 result[key] = '';
             }
         }

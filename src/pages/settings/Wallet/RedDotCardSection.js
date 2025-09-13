@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Text_1 = require("@components/Text");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function RedDotCardSection(_a) {
-    var title = _a.title, description = _a.description;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Text_1 = require("@components/Text");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function RedDotCardSection({ title, description }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
     return (<react_native_1.View style={[styles.p5, styles.flexRow, styles.alignItemsStart]}>
             <react_native_1.View style={styles.offlineFeedback.errorDot}>
                 <Icon_1.default src={Expensicons.DotIndicator} fill={theme.danger}/>

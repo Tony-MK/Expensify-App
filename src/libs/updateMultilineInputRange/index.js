@@ -9,15 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * scroll behaviour works on all platforms except iOS native.
  * See https://github.com/Expensify/App/issues/20836 for more details.
  */
-var updateMultilineInputRange = function (input, shouldAutoFocus) {
-    if (shouldAutoFocus === void 0) { shouldAutoFocus = true; }
+const updateMultilineInputRange = (input, shouldAutoFocus = true) => {
     if (!input) {
         return;
     }
     if ('value' in input && typeof input.value === 'string' && input.setSelectionRange) {
-        var length_1 = input.value.length;
+        const length = input.value.length;
         if (shouldAutoFocus) {
-            input.setSelectionRange(length_1, length_1);
+            input.setSelectionRange(length, length);
         }
         // eslint-disable-next-line no-param-reassign
         input.scrollTop = input.scrollHeight;

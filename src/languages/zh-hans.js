@@ -1,5 +1,4 @@
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21;
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *   _____                      __         __
@@ -12,11 +11,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * - Improve the prompts in prompts/translation, or
  * - Improve context annotations in src/languages/en.ts
  */
-var expensify_common_1 = require("expensify-common");
-var startCase_1 = require("lodash/startCase");
-var CONST_1 = require("@src/CONST");
+const expensify_common_1 = require("expensify-common");
+const startCase_1 = require("lodash/startCase");
+const CONST_1 = require("@src/CONST");
 /* eslint-disable max-len */
-var translations = {
+const translations = {
     common: {
         count: '计数',
         cancel: '取消',
@@ -70,7 +69,7 @@ var translations = {
         wallet: '钱包',
         preferences: '偏好设置',
         view: '查看',
-        review: function (reviewParams) { return "Review".concat((reviewParams === null || reviewParams === void 0 ? void 0 : reviewParams.amount) ? " ".concat(reviewParams === null || reviewParams === void 0 ? void 0 : reviewParams.amount) : ''); },
+        review: (reviewParams) => `Review${reviewParams?.amount ? ` ${reviewParams?.amount}` : ''}`,
         not: '不',
         signIn: '登录',
         signInWithGoogle: '使用 Google 登录',
@@ -117,10 +116,7 @@ var translations = {
         currentMonth: '当前月份',
         ssnLast4: 'SSN的最后四位数字',
         ssnFull9: '完整的9位数社会安全号码',
-        addressLine: function (_a) {
-            var lineNumber = _a.lineNumber;
-            return "\u5730\u5740\u884C ".concat(lineNumber);
-        },
+        addressLine: ({ lineNumber }) => `地址行 ${lineNumber}`,
         personalAddress: '个人地址',
         companyAddress: '公司地址',
         noPO: '请不要使用邮政信箱或邮件投递地址。',
@@ -140,10 +136,7 @@ var translations = {
         send: '发送',
         na: 'N/A',
         noResultsFound: '未找到结果',
-        noResultsFoundMatching: function (_a) {
-            var searchString = _a.searchString;
-            return "\u672A\u627E\u5230\u4E0E\u201C".concat(searchString, "\u201D\u5339\u914D\u7684\u7ED3\u679C");
-        },
+        noResultsFoundMatching: ({ searchString }) => `未找到与“${searchString}”匹配的结果`,
         recentDestinations: '最近的目的地',
         timePrefix: '它是',
         conjunctionFor: '为',
@@ -157,13 +150,10 @@ var translations = {
         error: {
             invalidAmount: '无效金额',
             acceptTerms: '您必须接受服务条款才能继续',
-            phoneNumber: "\u8BF7\u8F93\u5165\u6709\u6548\u7684\u7535\u8BDD\u53F7\u7801\uFF0C\u5E76\u5305\u542B\u56FD\u5BB6\u4EE3\u7801\uFF08\u4F8B\u5982 ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, "\uFF09"),
+            phoneNumber: `请输入有效的电话号码，并包含国家代码（例如 ${CONST_1.default.EXAMPLE_PHONE_NUMBER}）`,
             fieldRequired: '此字段为必填项',
             requestModified: '此请求正在被另一位成员修改中',
-            characterLimitExceedCounter: function (_a) {
-                var length = _a.length, limit = _a.limit;
-                return "\u5B57\u7B26\u6570\u8D85\u51FA\u9650\u5236 (".concat(length, "/").concat(limit, ")");
-            },
+            characterLimitExceedCounter: ({ length, limit }) => `字符数超出限制 (${length}/${limit})`,
             dateInvalid: '请选择一个有效日期',
             invalidDateShouldBeFuture: '请选择今天或将来的日期',
             invalidTimeShouldBeFuture: '请选择一个至少提前一分钟的时间',
@@ -219,10 +209,7 @@ var translations = {
         verify: '验证',
         yesContinue: '是的，继续',
         websiteExample: 'e.g. https://www.expensify.com',
-        zipCodeExampleFormat: function (_a) {
-            var zipSampleFormat = _a.zipSampleFormat;
-            return (zipSampleFormat ? "e.g. ".concat(zipSampleFormat) : '');
-        },
+        zipCodeExampleFormat: ({ zipSampleFormat }) => (zipSampleFormat ? `e.g. ${zipSampleFormat}` : ''),
         description: '描述',
         title: '标题',
         assignee: '受让人',
@@ -237,8 +224,8 @@ var translations = {
         someone: '某人',
         total: '总计',
         edit: '编辑',
-        letsDoThis: "\u6765\u5427\uFF01",
-        letsStart: "\u5F00\u59CB\u5427",
+        letsDoThis: `来吧！`,
+        letsStart: `开始吧`,
         showMore: '显示更多',
         merchant: '商家',
         category: '类别',
@@ -330,10 +317,7 @@ var translations = {
         hourAbbreviation: 'h',
         minuteAbbreviation: 'm',
         skip: 'Skip',
-        chatWithAccountManager: function (_a) {
-            var accountManagerDisplayName = _a.accountManagerDisplayName;
-            return "\u9700\u8981\u7279\u5B9A\u5E2E\u52A9\uFF1F\u8BF7\u4E0E\u60A8\u7684\u5BA2\u6237\u7ECF\u7406".concat(accountManagerDisplayName, "\u804A\u5929\u3002");
-        },
+        chatWithAccountManager: ({ accountManagerDisplayName }) => `需要特定帮助？请与您的客户经理${accountManagerDisplayName}聊天。`,
         chatNow: '立即聊天',
         workEmail: '工作邮箱',
         destination: '目的地',
@@ -413,10 +397,7 @@ var translations = {
         chooseDocument: '选择文件',
         attachmentTooLarge: '附件太大了',
         sizeExceeded: '附件大小超过24 MB限制',
-        sizeExceededWithLimit: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u9644\u4EF6\u5927\u5C0F\u8D85\u8FC7 ".concat(maxUploadSizeInMB, " MB \u7684\u9650\u5236");
-        },
+        sizeExceededWithLimit: ({ maxUploadSizeInMB }) => `附件大小超过 ${maxUploadSizeInMB} MB 的限制`,
         attachmentTooSmall: '附件太小了',
         sizeNotMet: '附件大小必须大于240字节',
         wrongFileType: '无效的文件类型',
@@ -425,24 +406,12 @@ var translations = {
         protectedPDFNotSupported: '不支持受密码保护的PDF',
         attachmentImageResized: '此图像已调整大小以供预览。下载以获取完整分辨率。',
         attachmentImageTooLarge: '此图像太大，无法在上传前预览。',
-        tooManyFiles: function (_a) {
-            var fileLimit = _a.fileLimit;
-            return "\u60A8\u4E00\u6B21\u6700\u591A\u53EA\u80FD\u4E0A\u4F20 ".concat(fileLimit, " \u4E2A\u6587\u4EF6\u3002");
-        },
-        sizeExceededWithValue: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u6587\u4EF6\u8D85\u8FC7 ".concat(maxUploadSizeInMB, " MB\u3002\u8BF7\u91CD\u8BD5\u3002");
-        },
+        tooManyFiles: ({ fileLimit }) => `您一次最多只能上传 ${fileLimit} 个文件。`,
+        sizeExceededWithValue: ({ maxUploadSizeInMB }) => `文件超过 ${maxUploadSizeInMB} MB。请重试。`,
         someFilesCantBeUploaded: '有些文件无法上传',
-        sizeLimitExceeded: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u6587\u4EF6\u5FC5\u987B\u5C0F\u4E8E".concat(maxUploadSizeInMB, " MB\u3002\u8F83\u5927\u7684\u6587\u4EF6\u5C06\u4E0D\u4F1A\u88AB\u4E0A\u4F20\u3002");
-        },
+        sizeLimitExceeded: ({ maxUploadSizeInMB }) => `文件必须小于${maxUploadSizeInMB} MB。较大的文件将不会被上传。`,
         maxFileLimitExceeded: '您一次最多可上传30张收据。额外的将不会被上传。',
-        unsupportedFileType: function (_a) {
-            var fileType = _a.fileType;
-            return "".concat(fileType, " \u6587\u4EF6\u4E0D\u53D7\u652F\u6301\u3002\u53EA\u6709\u53D7\u652F\u6301\u7684\u6587\u4EF6\u7C7B\u578B\u624D\u4F1A\u88AB\u4E0A\u4F20\u3002");
-        },
+        unsupportedFileType: ({ fileType }) => `${fileType} 文件不受支持。只有受支持的文件类型才会被上传。`,
         learnMoreAboutSupportedFiles: '了解更多关于支持的格式。',
         passwordProtected: '不支持密码保护的PDF。只有受支持的文件才会被上传。',
     },
@@ -467,14 +436,8 @@ var translations = {
     composer: {
         noExtensionFoundForMimeType: '未找到与 MIME 类型对应的扩展名',
         problemGettingImageYouPasted: '获取您粘贴的图片时出现问题。',
-        commentExceededMaxLength: function (_a) {
-            var formattedMaxLength = _a.formattedMaxLength;
-            return "\u6700\u5927\u8BC4\u8BBA\u957F\u5EA6\u4E3A".concat(formattedMaxLength, "\u4E2A\u5B57\u7B26\u3002");
-        },
-        taskTitleExceededMaxLength: function (_a) {
-            var formattedMaxLength = _a.formattedMaxLength;
-            return "\u4EFB\u52A1\u6807\u9898\u7684\u6700\u5927\u957F\u5EA6\u4E3A".concat(formattedMaxLength, "\u4E2A\u5B57\u7B26\u3002");
-        },
+        commentExceededMaxLength: ({ formattedMaxLength }) => `最大评论长度为${formattedMaxLength}个字符。`,
+        taskTitleExceededMaxLength: ({ formattedMaxLength }) => `任务标题的最大长度为${formattedMaxLength}个字符。`,
     },
     baseUpdateAppModal: {
         updateApp: '更新应用程序',
@@ -487,10 +450,7 @@ var translations = {
         redirectedToDesktopApp: '我们已将您重定向到桌面应用程序。',
         youCanAlso: '您也可以',
         openLinkInBrowser: '在浏览器中打开此链接',
-        loggedInAs: function (_a) {
-            var email = _a.email;
-            return "\u60A8\u5DF2\u767B\u5F55\u4E3A".concat(email, "\u3002\u5728\u63D0\u793A\u4E2D\u70B9\u51FB\u201C\u6253\u5F00\u94FE\u63A5\u201D\u4EE5\u4F7F\u7528\u6B64\u8D26\u6237\u767B\u5F55\u684C\u9762\u5E94\u7528\u7A0B\u5E8F\u3002");
-        },
+        loggedInAs: ({ email }) => `您已登录为${email}。在提示中点击“打开链接”以使用此账户登录桌面应用程序。`,
         doNotSeePrompt: '看不到提示？',
         tryAgain: '再试一次',
         or: '，或',
@@ -520,12 +480,12 @@ var translations = {
         findMember: '查找成员',
         searchForSomeone: '搜索某人',
     },
-    emptyList: (_a = {},
-        _a[CONST_1.default.IOU.TYPE.CREATE] = {
+    emptyList: {
+        [CONST_1.default.IOU.TYPE.CREATE]: {
             title: '提交报销，推荐给您的老板',
             subtitleText: '想让你的老板也使用Expensify吗？只需向他们提交一笔费用，其余的交给我们。',
         },
-        _a),
+    },
     videoChatButtonAndMenu: {
         tooltip: '预约电话',
     },
@@ -540,14 +500,8 @@ var translations = {
         phrase2: '金钱会说话。现在聊天和支付合二为一，这也变得简单了。',
         phrase3: '只要你能表达清楚，你的付款就能快速到达。',
         enterPassword: '请输入您的密码',
-        welcomeNewFace: function (_a) {
-            var login = _a.login;
-            return "".concat(login, "\uFF0C\u5728\u8FD9\u91CC\u770B\u5230\u65B0\u9762\u5B54\u603B\u662F\u5F88\u9AD8\u5174\uFF01");
-        },
-        welcomeEnterMagicCode: function (_a) {
-            var login = _a.login;
-            return "\u8BF7\u8F93\u5165\u53D1\u9001\u5230".concat(login, "\u7684\u9B54\u6CD5\u4EE3\u7801\u3002\u5B83\u5E94\u8BE5\u4F1A\u5728\u4E00\u4E24\u5206\u949F\u5185\u5230\u8FBE\u3002");
-        },
+        welcomeNewFace: ({ login }) => `${login}，在这里看到新面孔总是很高兴！`,
+        welcomeEnterMagicCode: ({ login }) => `请输入发送到${login}的魔法代码。它应该会在一两分钟内到达。`,
     },
     login: {
         hero: {
@@ -556,14 +510,8 @@ var translations = {
         },
     },
     thirdPartySignIn: {
-        alreadySignedIn: function (_a) {
-            var email = _a.email;
-            return "\u60A8\u5DF2\u4F7F\u7528 ".concat(email, " \u767B\u5F55\u3002");
-        },
-        goBackMessage: function (_a) {
-            var provider = _a.provider;
-            return "\u4E0D\u60F3\u4F7F\u7528".concat(provider, "\u767B\u5F55\uFF1F");
-        },
+        alreadySignedIn: ({ email }) => `您已使用 ${email} 登录。`,
+        goBackMessage: ({ provider }) => `不想使用${provider}登录？`,
         continueWithMyCurrentSession: '继续我的当前会话',
         redirectToDesktopMessage: '完成登录后，我们会将您重定向到桌面应用程序。',
     },
@@ -582,10 +530,7 @@ var translations = {
         writeSomething: '写点什么...',
         blockedFromConcierge: '通信被禁止',
         fileUploadFailed: '上传失败。文件不受支持。',
-        localTime: function (_a) {
-            var user = _a.user, time = _a.time;
-            return "\u73B0\u5728\u662F".concat(time, "\uFF0C\u9002\u5408").concat(user);
-        },
+        localTime: ({ user, time }) => `现在是${time}，适合${user}`,
         edited: '(已编辑)',
         emoji: 'Emoji',
         collapse: '折叠',
@@ -599,18 +544,9 @@ var translations = {
         copyEmailToClipboard: '复制电子邮件到剪贴板',
         markAsUnread: '标记为未读',
         markAsRead: '标记为已读',
-        editAction: function (_a) {
-            var action = _a.action;
-            return "Edit ".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '费用' : '评论');
-        },
-        deleteAction: function (_a) {
-            var action = _a.action;
-            return "\u5220\u9664 ".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '费用' : '评论');
-        },
-        deleteConfirmation: function (_a) {
-            var action = _a.action;
-            return "\u60A8\u786E\u5B9A\u8981\u5220\u9664\u6B64".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '费用' : '评论', "\u5417\uFF1F");
-        },
+        editAction: ({ action }) => `Edit ${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '费用' : '评论'}`,
+        deleteAction: ({ action }) => `删除 ${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '费用' : '评论'}`,
+        deleteConfirmation: ({ action }) => `您确定要删除此${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '费用' : '评论'}吗？`,
         onlyVisible: '仅对...可见',
         replyInThread: '在线程中回复',
         joinThread: '加入线程',
@@ -624,48 +560,21 @@ var translations = {
         reactedWith: '做出了反应',
     },
     reportActionsView: {
-        beginningOfArchivedRoom: function (_a) {
-            var reportName = _a.reportName, reportDetailsLink = _a.reportDetailsLink;
-            return "\u4F60\u9519\u8FC7\u4E86 <strong><a class=\"no-style-link\" href=\"".concat(reportDetailsLink, "\">").concat(reportName, "</a></strong> \u7684\u6D3E\u5BF9\uFF0C\u8FD9\u91CC\u6CA1\u4EC0\u4E48\u597D\u770B\u7684\u3002");
-        },
-        beginningOfChatHistoryDomainRoom: function (_a) {
-            var domainRoom = _a.domainRoom;
-            return "\u6B64\u804A\u5929\u662F\u4E0E <strong>".concat(domainRoom, "</strong> \u57DF\u540D\u4E0A\u7684\u6240\u6709 Expensify \u4F1A\u5458\u8FDB\u884C\u7684\u3002\u4F7F\u7528\u5B83\u4E0E\u540C\u4E8B\u804A\u5929\u3001\u5206\u4EAB\u6280\u5DE7\u548C\u63D0\u95EE\u3002");
-        },
-        beginningOfChatHistoryAdminRoom: function (_a) {
-            var workspaceName = _a.workspaceName;
-            return "\u6B64\u804A\u5929\u662F\u4E0E <strong>".concat(workspaceName, "</strong> \u7BA1\u7406\u5458\u8FDB\u884C\u7684\u3002\u60A8\u53EF\u4EE5\u7528\u5B83\u6765\u804A\u5929\uFF0C\u8BA8\u8BBA\u5DE5\u4F5C\u7A7A\u95F4\u8BBE\u7F6E\u7B49\u95EE\u9898\u3002");
-        },
-        beginningOfChatHistoryAnnounceRoom: function (_a) {
-            var workspaceName = _a.workspaceName;
-            return "\u6B64\u804A\u5929\u5BA4\u9762\u5411 <strong>".concat(workspaceName, "</strong> \u7684\u6240\u6709\u4EBA\u3002\u6700\u91CD\u8981\u7684\u516C\u544A\u8BF7\u4F7F\u7528\u6B64\u804A\u5929\u5BA4\u3002");
-        },
-        beginningOfChatHistoryUserRoom: function (_a) {
-            var reportName = _a.reportName, reportDetailsLink = _a.reportDetailsLink;
-            return "\u672C\u804A\u5929\u5BA4\u7528\u4E8E\u4E0E <strong><a class=\"no-style-link\" href=\"".concat(reportDetailsLink, "\">").concat(reportName, "</a></strong> \u6709\u5173\u7684\u4EFB\u4F55\u5185\u5BB9\u3002");
-        },
-        beginningOfChatHistoryInvoiceRoom: function (_a) {
-            var invoicePayer = _a.invoicePayer, invoiceReceiver = _a.invoiceReceiver;
-            return "\u8BE5\u804A\u5929\u7528\u4E8E <strong>".concat(invoicePayer, "</strong> \u548C <strong>").concat(invoiceReceiver, "</strong> \u4E4B\u95F4\u7684\u53D1\u7968\u3002\u4F7F\u7528 <emoji>").concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "</emoji> \u6309\u94AE\u53D1\u9001\u53D1\u7968\u3002");
-        },
+        beginningOfArchivedRoom: ({ reportName, reportDetailsLink }) => `你错过了 <strong><a class="no-style-link" href="${reportDetailsLink}">${reportName}</a></strong> 的派对，这里没什么好看的。`,
+        beginningOfChatHistoryDomainRoom: ({ domainRoom }) => `此聊天是与 <strong>${domainRoom}</strong> 域名上的所有 Expensify 会员进行的。使用它与同事聊天、分享技巧和提问。`,
+        beginningOfChatHistoryAdminRoom: ({ workspaceName }) => `此聊天是与 <strong>${workspaceName}</strong> 管理员进行的。您可以用它来聊天，讨论工作空间设置等问题。`,
+        beginningOfChatHistoryAnnounceRoom: ({ workspaceName }) => `此聊天室面向 <strong>${workspaceName}</strong> 的所有人。最重要的公告请使用此聊天室。`,
+        beginningOfChatHistoryUserRoom: ({ reportName, reportDetailsLink }) => `本聊天室用于与 <strong><a class="no-style-link" href="${reportDetailsLink}">${reportName}</a></strong> 有关的任何内容。`,
+        beginningOfChatHistoryInvoiceRoom: ({ invoicePayer, invoiceReceiver }) => `该聊天用于 <strong>${invoicePayer}</strong> 和 <strong>${invoiceReceiver}</strong> 之间的发票。使用 <emoji>${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}</emoji> 按钮发送发票。`,
         beginningOfChatHistory: '此聊天是与',
-        beginningOfChatHistoryPolicyExpenseChat: function (_a) {
-            var workspaceName = _a.workspaceName, submitterDisplayName = _a.submitterDisplayName;
-            return "\u8FD9\u662F<strong>".concat(submitterDisplayName, "</strong> \u5411<strong>").concat(workspaceName, "</strong> \u63D0\u4EA4\u8D39\u7528\u7684\u5730\u65B9\u3002\u4F7F\u7528 <emoji>").concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "</emoji> \u6309\u94AE\u5373\u53EF\u3002");
-        },
+        beginningOfChatHistoryPolicyExpenseChat: ({ workspaceName, submitterDisplayName }) => `这是<strong>${submitterDisplayName}</strong> 向<strong>${workspaceName}</strong> 提交费用的地方。使用 <emoji>${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}</emoji> 按钮即可。`,
         beginningOfChatHistorySelfDM: '这是您的个人空间。用于记录笔记、任务、草稿和提醒。',
         beginningOfChatHistorySystemDM: '欢迎！让我们为您进行设置。',
         chatWithAccountManager: '在这里与您的客户经理聊天',
         sayHello: '说你好！',
         yourSpace: '您的空间',
-        welcomeToRoom: function (_a) {
-            var roomName = _a.roomName;
-            return "\u6B22\u8FCE\u6765\u5230".concat(roomName, "\uFF01");
-        },
-        usePlusButton: function (_a) {
-            var additionalText = _a.additionalText;
-            return " \u4F7F\u7528 ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, " \u6309\u94AE").concat(additionalText, "\u4E00\u7B14\u8D39\u7528\u3002");
-        },
+        welcomeToRoom: ({ roomName }) => `欢迎来到${roomName}！`,
+        usePlusButton: ({ additionalText }) => ` 使用 ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE} 按钮${additionalText}一笔费用。`,
         askConcierge: '随时提问并获得全天候实时支持。',
         conciergeSupport: '24/7 支持',
         create: '创建',
@@ -692,30 +601,15 @@ var translations = {
         areTyping: '正在输入...',
         multipleMembers: '多个成员',
     },
-    reportArchiveReasons: (_b = {},
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.DEFAULT] = '此聊天室已被存档。',
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_CLOSED] = function (_a) {
-            var displayName = _a.displayName;
-            return "\u7531\u4E8E".concat(displayName, "\u5173\u95ED\u4E86\u4ED6\u4EEC\u7684\u8D26\u6237\uFF0C\u6B64\u804A\u5929\u4E0D\u518D\u6D3B\u8DC3\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_MERGED] = function (_a) {
-            var displayName = _a.displayName, oldDisplayName = _a.oldDisplayName;
-            return "\u6B64\u804A\u5929\u4E0D\u518D\u6D3B\u8DC3\uFF0C\u56E0\u4E3A".concat(oldDisplayName, "\u5DF2\u5C06\u5176\u5E10\u6237\u4E0E").concat(displayName, "\u5408\u5E76\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.REMOVED_FROM_POLICY] = function (_a) {
-            var displayName = _a.displayName, policyName = _a.policyName, _b = _a.shouldUseYou, shouldUseYou = _b === void 0 ? false : _b;
-            return shouldUseYou ? "\u6B64\u804A\u5929\u4E0D\u518D\u6D3B\u8DC3\uFF0C\u56E0\u4E3A<strong>\u60A8</strong>\u5DF2\u4E0D\u518D\u662F".concat(policyName, "\u5DE5\u4F5C\u533A\u7684\u6210\u5458\u3002") : "\u6B64\u804A\u5929\u4E0D\u518D\u6D3B\u8DC3\uFF0C\u56E0\u4E3A".concat(displayName, "\u4E0D\u518D\u662F").concat(policyName, "\u5DE5\u4F5C\u533A\u7684\u6210\u5458\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.POLICY_DELETED] = function (_a) {
-            var policyName = _a.policyName;
-            return "\u6B64\u804A\u5929\u4E0D\u518D\u6D3B\u8DC3\uFF0C\u56E0\u4E3A".concat(policyName, "\u4E0D\u518D\u662F\u4E00\u4E2A\u6D3B\u8DC3\u7684\u5DE5\u4F5C\u533A\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.INVOICE_RECEIVER_POLICY_DELETED] = function (_a) {
-            var policyName = _a.policyName;
-            return "\u6B64\u804A\u5929\u4E0D\u518D\u6D3B\u8DC3\uFF0C\u56E0\u4E3A".concat(policyName, "\u4E0D\u518D\u662F\u4E00\u4E2A\u6D3B\u8DC3\u7684\u5DE5\u4F5C\u533A\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.BOOKING_END_DATE_HAS_PASSED] = '此预订已归档。',
-        _b),
+    reportArchiveReasons: {
+        [CONST_1.default.REPORT.ARCHIVE_REASON.DEFAULT]: '此聊天室已被存档。',
+        [CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_CLOSED]: ({ displayName }) => `由于${displayName}关闭了他们的账户，此聊天不再活跃。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_MERGED]: ({ displayName, oldDisplayName }) => `此聊天不再活跃，因为${oldDisplayName}已将其帐户与${displayName}合并。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.REMOVED_FROM_POLICY]: ({ displayName, policyName, shouldUseYou = false }) => shouldUseYou ? `此聊天不再活跃，因为<strong>您</strong>已不再是${policyName}工作区的成员。` : `此聊天不再活跃，因为${displayName}不再是${policyName}工作区的成员。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.POLICY_DELETED]: ({ policyName }) => `此聊天不再活跃，因为${policyName}不再是一个活跃的工作区。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.INVOICE_RECEIVER_POLICY_DELETED]: ({ policyName }) => `此聊天不再活跃，因为${policyName}不再是一个活跃的工作区。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.BOOKING_END_DATE_HAS_PASSED]: '此预订已归档。',
+    },
     writeCapabilityPage: {
         label: '谁可以发布',
         writeCapability: {
@@ -755,53 +649,31 @@ var translations = {
         upload: '上传电子表格',
         import: '导入电子表格',
         dragAndDrop: '<muted-link>将您的电子表格拖放到此处，或在下方选择一个文件。支持的格式：.csv、.txt、.xls 和 .xlsx。</muted-link>',
-        dragAndDropMultiLevelTag: "<muted-link>\u5C06\u60A8\u7684\u7535\u5B50\u8868\u683C\u62D6\u653E\u5230\u6B64\u5904\uFF0C\u6216\u5728\u4E0B\u65B9\u9009\u62E9\u4E00\u4E2A\u6587\u4EF6\u3002 <a href=\"".concat(CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK, "\">\u4E86\u89E3\u66F4\u591A</a> \u652F\u6301\u7684\u6587\u4EF6\u683C\u5F0F\u3002</muted-link>"),
+        dragAndDropMultiLevelTag: `<muted-link>将您的电子表格拖放到此处，或在下方选择一个文件。 <a href="${CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK}">了解更多</a> 支持的文件格式。</muted-link>`,
         chooseSpreadsheet: '<muted-link>选择要导入的电子表格文件。支持的格式：.csv、.txt、.xls 和 .xlsx。</muted-link>',
-        chooseSpreadsheetMultiLevelTag: "<muted-link>\u9009\u62E9\u8981\u5BFC\u5165\u7684\u7535\u5B50\u8868\u683C\u6587\u4EF6\u3002 <a href=\"".concat(CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK, "\">\u4E86\u89E3\u66F4\u591A</a> \u652F\u6301\u7684\u6587\u4EF6\u683C\u5F0F\u3002</muted-link>"),
+        chooseSpreadsheetMultiLevelTag: `<muted-link>选择要导入的电子表格文件。 <a href="${CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK}">了解更多</a> 支持的文件格式。</muted-link>`,
         fileContainsHeader: '文件包含列标题',
-        column: function (_a) {
-            var name = _a.name;
-            return "\u5217 ".concat(name);
-        },
-        fieldNotMapped: function (_a) {
-            var fieldName = _a.fieldName;
-            return "\u54CE\u5440\uFF01\u4E00\u4E2A\u5FC5\u586B\u5B57\u6BB5\uFF08\u201C".concat(fieldName, "\u201D\uFF09\u5C1A\u672A\u6620\u5C04\u3002\u8BF7\u68C0\u67E5\u5E76\u91CD\u8BD5\u3002");
-        },
-        singleFieldMultipleColumns: function (_a) {
-            var fieldName = _a.fieldName;
-            return "\u7CDF\u7CD5\uFF01\u60A8\u5DF2\u5C06\u5355\u4E2A\u5B57\u6BB5\uFF08\"".concat(fieldName, "\"\uFF09\u6620\u5C04\u5230\u591A\u4E2A\u5217\u3002\u8BF7\u68C0\u67E5\u5E76\u91CD\u8BD5\u3002");
-        },
-        emptyMappedField: function (_a) {
-            var fieldName = _a.fieldName;
-            return "\u7CDF\u7CD5\uFF01\u5B57\u6BB5\uFF08\u201C".concat(fieldName, "\u201D\uFF09\u5305\u542B\u4E00\u4E2A\u6216\u591A\u4E2A\u7A7A\u503C\u3002\u8BF7\u68C0\u67E5\u5E76\u91CD\u8BD5\u3002");
-        },
+        column: ({ name }) => `列 ${name}`,
+        fieldNotMapped: ({ fieldName }) => `哎呀！一个必填字段（“${fieldName}”）尚未映射。请检查并重试。`,
+        singleFieldMultipleColumns: ({ fieldName }) => `糟糕！您已将单个字段（"${fieldName}"）映射到多个列。请检查并重试。`,
+        emptyMappedField: ({ fieldName }) => `糟糕！字段（“${fieldName}”）包含一个或多个空值。请检查并重试。`,
         importSuccessfulTitle: '导入成功',
-        importCategoriesSuccessfulDescription: function (_a) {
-            var categories = _a.categories;
-            return (categories > 1 ? "\u5DF2\u6DFB\u52A0".concat(categories, "\u4E2A\u7C7B\u522B\u3002") : '已添加1个类别。');
-        },
-        importMembersSuccessfulDescription: function (_a) {
-            var added = _a.added, updated = _a.updated;
+        importCategoriesSuccessfulDescription: ({ categories }) => (categories > 1 ? `已添加${categories}个类别。` : '已添加1个类别。'),
+        importMembersSuccessfulDescription: ({ added, updated }) => {
             if (!added && !updated) {
                 return '没有成员被添加或更新。';
             }
             if (added && updated) {
-                return "".concat(added, " \u540D\u6210\u5458").concat(added > 1 ? 's' : '', "\u5DF2\u6DFB\u52A0\uFF0C").concat(updated, " \u540D\u6210\u5458").concat(updated > 1 ? 's' : '', "\u5DF2\u66F4\u65B0\u3002");
+                return `${added} 名成员${added > 1 ? 's' : ''}已添加，${updated} 名成员${updated > 1 ? 's' : ''}已更新。`;
             }
             if (updated) {
-                return updated > 1 ? "".concat(updated, " \u540D\u6210\u5458\u5DF2\u66F4\u65B0\u3002") : '1 名成员已更新。';
+                return updated > 1 ? `${updated} 名成员已更新。` : '1 名成员已更新。';
             }
-            return added > 1 ? "\u5DF2\u6DFB\u52A0 ".concat(added, " \u540D\u6210\u5458\u3002") : '1 名成员已被添加。';
+            return added > 1 ? `已添加 ${added} 名成员。` : '1 名成员已被添加。';
         },
-        importTagsSuccessfulDescription: function (_a) {
-            var tags = _a.tags;
-            return (tags > 1 ? "\u5DF2\u6DFB\u52A0".concat(tags, "\u4E2A\u6807\u7B7E\u3002") : '已添加1个标签。');
-        },
+        importTagsSuccessfulDescription: ({ tags }) => (tags > 1 ? `已添加${tags}个标签。` : '已添加1个标签。'),
         importMultiLevelTagsSuccessfulDescription: '已添加多级标签。',
-        importPerDiemRatesSuccessfulDescription: function (_a) {
-            var rates = _a.rates;
-            return (rates > 1 ? "\u5DF2\u6DFB\u52A0".concat(rates, "\u4E2A\u6BCF\u65E5\u6D25\u8D34\u8D39\u7387\u3002") : '1个每日津贴费率已添加。');
-        },
+        importPerDiemRatesSuccessfulDescription: ({ rates }) => (rates > 1 ? `已添加${rates}个每日津贴费率。` : '1个每日津贴费率已添加。'),
         importFailedTitle: '导入失败',
         importFailedDescription: '请确保所有字段均已正确填写，然后重试。如果问题仍然存在，请联系Concierge。',
         importDescription: '通过点击每个导入列旁边的下拉菜单，选择要从电子表格中映射的字段。',
@@ -810,10 +682,10 @@ var translations = {
         importSpreadsheetLibraryError: '加载电子表格模块失败。请检查您的互联网连接并重试。',
         importSpreadsheet: '导入电子表格',
         downloadCSV: '下载 CSV',
-        importMemberConfirmation: function () { return ({
-            one: "\u8BF7\u786E\u8BA4\u4EE5\u4E0B\u4FE1\u606F\uFF0C\u4EE5\u6DFB\u52A0\u6B64\u6B21\u4E0A\u4F20\u4E2D\u7684\u4E00\u4F4D\u65B0\u5DE5\u4F5C\u533A\u6210\u5458\u3002\u73B0\u6709\u6210\u5458\u4E0D\u4F1A\u6536\u5230\u89D2\u8272\u66F4\u65B0\u6216\u9080\u8BF7\u6D88\u606F\u3002",
-            other: function (count) { return "\u8BF7\u786E\u8BA4\u4EE5\u4E0B\u4FE1\u606F\uFF0C\u4EE5\u6DFB\u52A0\u6B64\u6B21\u4E0A\u4F20\u4E2D\u7684 ".concat(count, " \u4F4D\u65B0\u5DE5\u4F5C\u533A\u6210\u5458\u3002\u73B0\u6709\u6210\u5458\u4E0D\u4F1A\u6536\u5230\u89D2\u8272\u66F4\u65B0\u6216\u9080\u8BF7\u6D88\u606F\u3002"); },
-        }); },
+        importMemberConfirmation: () => ({
+            one: `请确认以下信息，以添加此次上传中的一位新工作区成员。现有成员不会收到角色更新或邀请消息。`,
+            other: (count) => `请确认以下信息，以添加此次上传中的 ${count} 位新工作区成员。现有成员不会收到角色更新或邀请消息。`,
+        }),
     },
     receipt: {
         upload: '上传收据',
@@ -834,7 +706,7 @@ var translations = {
         locationAccessMessage: '位置访问帮助我们在您旅行时保持时区和货币的准确性。',
         locationErrorTitle: '允许位置访问',
         locationErrorMessage: '位置访问帮助我们在您旅行时保持时区和货币的准确性。',
-        allowLocationFromSetting: "\u4F4D\u7F6E\u8BBF\u95EE\u5E2E\u52A9\u6211\u4EEC\u5728\u60A8\u51FA\u884C\u65F6\u4FDD\u6301\u65F6\u533A\u548C\u8D27\u5E01\u7684\u51C6\u786E\u6027\u3002\u8BF7\u5728\u8BBE\u5907\u7684\u6743\u9650\u8BBE\u7F6E\u4E2D\u5141\u8BB8\u4F4D\u7F6E\u8BBF\u95EE\u3002",
+        allowLocationFromSetting: `位置访问帮助我们在您出行时保持时区和货币的准确性。请在设备的权限设置中允许位置访问。`,
         dropTitle: 'Let it go',
         dropMessage: '在此处拖放您的文件',
         flash: '闪光灯',
@@ -854,10 +726,7 @@ var translations = {
         splitBill: '拆分费用',
         splitScan: '拆分收据',
         splitDistance: '分割距离',
-        paySomeone: function (_a) {
-            var _b = _a === void 0 ? {} : _a, name = _b.name;
-            return "\u652F\u4ED8".concat(name !== null && name !== void 0 ? name : '某人');
-        },
+        paySomeone: ({ name } = {}) => `支付${name ?? '某人'}`,
         assignTask: '分配任务',
         header: '快速操作',
         noLongerHaveReportAccess: '您不再拥有之前快速操作目的地的访问权限。请在下面选择一个新的。',
@@ -868,58 +737,34 @@ var translations = {
         amount: '金额',
         taxAmount: '税额',
         taxRate: '税率',
-        approve: function (_a) {
-            var _b = _a === void 0 ? {} : _a, formattedAmount = _b.formattedAmount;
-            return (formattedAmount ? "\u6279\u51C6 ".concat(formattedAmount) : '批准');
-        },
+        approve: ({ formattedAmount, } = {}) => (formattedAmount ? `批准 ${formattedAmount}` : '批准'),
         approved: '批准',
         cash: '现金',
         card: '卡片',
         original: 'Original',
         split: '拆分',
         splitExpense: '拆分费用',
-        splitExpenseSubtitle: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "\u6765\u81EA".concat(merchant, "\u7684").concat(amount);
-        },
+        splitExpenseSubtitle: ({ amount, merchant }) => `来自${merchant}的${amount}`,
         addSplit: '添加分账',
-        totalAmountGreaterThanOriginal: function (_a) {
-            var amount = _a.amount;
-            return "\u603B\u91D1\u989D\u6BD4\u539F\u59CB\u8D39\u7528\u591A".concat(amount, "\u3002");
-        },
-        totalAmountLessThanOriginal: function (_a) {
-            var amount = _a.amount;
-            return "\u603B\u91D1\u989D\u6BD4\u539F\u59CB\u8D39\u7528\u5C11 ".concat(amount, "\u3002");
-        },
+        totalAmountGreaterThanOriginal: ({ amount }) => `总金额比原始费用多${amount}。`,
+        totalAmountLessThanOriginal: ({ amount }) => `总金额比原始费用少 ${amount}。`,
         splitExpenseZeroAmount: '请在继续之前输入有效金额。',
-        splitExpenseEditTitle: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "\u4E3A".concat(merchant, "\u7F16\u8F91").concat(amount);
-        },
+        splitExpenseEditTitle: ({ amount, merchant }) => `为${merchant}编辑${amount}`,
         removeSplit: '移除拆分',
-        paySomeone: function (_a) {
-            var _b = _a === void 0 ? {} : _a, name = _b.name;
-            return "\u652F\u4ED8".concat(name !== null && name !== void 0 ? name : '某人');
-        },
+        paySomeone: ({ name } = {}) => `支付${name ?? '某人'}`,
         expense: '费用',
         categorize: '分类',
         share: '分享',
         participants: '参与者',
         createExpense: '创建报销单',
         trackDistance: '跟踪距离',
-        createExpenses: function (_a) {
-            var expensesNumber = _a.expensesNumber;
-            return "\u521B\u5EFA".concat(expensesNumber, "\u7B14\u8D39\u7528");
-        },
+        createExpenses: ({ expensesNumber }) => `创建${expensesNumber}笔费用`,
         removeExpense: '删除费用',
         removeThisExpense: '删除此费用',
         removeExpenseConfirmation: '您确定要删除这张收据吗？此操作不可撤销。',
         addExpense: '添加费用',
         chooseRecipient: '选择收件人',
-        createExpenseWithAmount: function (_a) {
-            var amount = _a.amount;
-            return "\u521B\u5EFA ".concat(amount, " \u62A5\u9500\u5355");
-        },
+        createExpenseWithAmount: ({ amount }) => `创建 ${amount} 报销单`,
         confirmDetails: '确认详情',
         pay: '支付',
         cancelPayment: '取消付款',
@@ -929,52 +774,36 @@ var translations = {
         canceled: '已取消',
         posted: '已发布',
         deleteReceipt: '删除收据',
-        deletedTransaction: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "\u5220\u9664\u4E86\u4E00\u7B14\u8D39\u7528 (".concat(merchant, " \u7684 ").concat(amount, ")");
-        },
-        movedFromReport: function (_a) {
-            var reportName = _a.reportName;
-            return "\u79FB\u52A8\u4E86\u4E00\u7B14\u8D39\u7528".concat(reportName ? "\u6765\u81EA".concat(reportName) : '');
-        },
-        movedTransaction: function (_a) {
-            var reportUrl = _a.reportUrl, reportName = _a.reportName;
-            return "\u79FB\u52A8\u4E86\u6B64\u8D39\u7528".concat(reportName ? "\u81F3 <a href=\"".concat(reportUrl, "\">").concat(reportName, "</a>") : '');
-        },
-        unreportedTransaction: function (_a) {
-            var reportUrl = _a.reportUrl;
-            return "\u5DF2\u5C06\u6B64\u8D39\u7528\u79FB\u52A8\u5230\u60A8\u7684<a href=\"".concat(reportUrl, "\">\u4E2A\u4EBA\u7A7A\u95F4</a>");
-        },
-        movedAction: function (_a) {
-            var shouldHideMovedReportUrl = _a.shouldHideMovedReportUrl, movedReportUrl = _a.movedReportUrl, newParentReportUrl = _a.newParentReportUrl, toPolicyName = _a.toPolicyName;
+        deletedTransaction: ({ amount, merchant }) => `删除了一笔费用 (${merchant} 的 ${amount})`,
+        movedFromReport: ({ reportName }) => `移动了一笔费用${reportName ? `来自${reportName}` : ''}`,
+        movedTransaction: ({ reportUrl, reportName }) => `移动了此费用${reportName ? `至 <a href="${reportUrl}">${reportName}</a>` : ''}`,
+        unreportedTransaction: ({ reportUrl }) => `已将此费用移动到您的<a href="${reportUrl}">个人空间</a>`,
+        movedAction: ({ shouldHideMovedReportUrl, movedReportUrl, newParentReportUrl, toPolicyName }) => {
             if (shouldHideMovedReportUrl) {
-                return "\u5DF2\u5C06\u6B64\u62A5\u544A\u79FB\u52A8\u5230 <a href=\"".concat(newParentReportUrl, "\">").concat(toPolicyName, "</a> \u5DE5\u4F5C\u533A");
+                return `已将此报告移动到 <a href="${newParentReportUrl}">${toPolicyName}</a> 工作区`;
             }
-            return "\u5DF2\u5C06\u6B64 <a href=\"".concat(movedReportUrl, "\">\u62A5\u544A</a> \u79FB\u52A8\u5230 <a href=\"").concat(newParentReportUrl, "\">").concat(toPolicyName, "</a> \u5DE5\u4F5C\u533A");
+            return `已将此 <a href="${movedReportUrl}">报告</a> 移动到 <a href="${newParentReportUrl}">${toPolicyName}</a> 工作区`;
         },
         pendingMatchWithCreditCard: '收据待与卡交易匹配',
         pendingMatch: '待匹配',
         pendingMatchWithCreditCardDescription: '收据待与卡交易匹配。标记为现金以取消。',
         markAsCash: '标记为现金',
         routePending: '路由处理中...',
-        receiptScanning: function () { return ({
+        receiptScanning: () => ({
             one: '收据扫描中...',
             other: '正在扫描收据...',
-        }); },
+        }),
         scanMultipleReceipts: '扫描多张收据',
         scanMultipleReceiptsDescription: '一次拍摄所有收据的照片，然后自行确认详细信息或让SmartScan处理。',
         receiptScanInProgress: '正在扫描收据',
         receiptScanInProgressDescription: '收据扫描中。稍后查看或立即输入详细信息。',
         removeFromReport: '不在此报告中',
         moveToPersonalSpace: '移动费用到个人空间',
-        duplicateTransaction: function (_a) {
-            var isSubmitted = _a.isSubmitted;
-            return (!isSubmitted ? '发现潜在的重复费用。请查看重复项以启用提交。' : '发现潜在的重复费用。请审查重复项以启用批准。');
-        },
-        receiptIssuesFound: function () { return ({
+        duplicateTransaction: ({ isSubmitted }) => (!isSubmitted ? '发现潜在的重复费用。请查看重复项以启用提交。' : '发现潜在的重复费用。请审查重复项以启用批准。'),
+        receiptIssuesFound: () => ({
             one: '发现问题',
             other: '发现的问题',
-        }); },
+        }),
         fieldPending: '待处理...',
         defaultRate: '默认费率',
         receiptMissingDetails: '收据缺少详细信息',
@@ -992,34 +821,33 @@ var translations = {
         invalidDomainError: '您输入了无效的域名。要继续，请输入有效的域名。',
         publicDomainError: '您已进入公共域。要继续，请输入私人域。',
         // TODO: This key should be deprecated. More details: https://github.com/Expensify/App/pull/59653#discussion_r2028653252
-        expenseCountWithStatus: function (_a) {
-            var _b = _a.scanningReceipts, scanningReceipts = _b === void 0 ? 0 : _b, _c = _a.pendingReceipts, pendingReceipts = _c === void 0 ? 0 : _c;
-            var statusText = [];
+        expenseCountWithStatus: ({ scanningReceipts = 0, pendingReceipts = 0 }) => {
+            const statusText = [];
             if (scanningReceipts > 0) {
-                statusText.push("".concat(scanningReceipts, " \u626B\u63CF\u4E2D"));
+                statusText.push(`${scanningReceipts} 扫描中`);
             }
             if (pendingReceipts > 0) {
-                statusText.push("".concat(pendingReceipts, " \u4E2A\u5F85\u5904\u7406"));
+                statusText.push(`${pendingReceipts} 个待处理`);
             }
             return {
-                one: statusText.length > 0 ? "1 \u7B14\u8D39\u7528 (".concat(statusText.join(', '), ")") : "1 \u7B14\u62A5\u9500",
-                other: function (count) { return (statusText.length > 0 ? "".concat(count, " \u7B14\u8D39\u7528 (").concat(statusText.join(', '), ")") : "".concat(count, " \u7B14\u8D39\u7528")); },
+                one: statusText.length > 0 ? `1 笔费用 (${statusText.join(', ')})` : `1 笔报销`,
+                other: (count) => (statusText.length > 0 ? `${count} 笔费用 (${statusText.join(', ')})` : `${count} 笔费用`),
             };
         },
-        expenseCount: function () {
+        expenseCount: () => {
             return {
                 one: '1 笔报销',
-                other: function (count) { return "".concat(count, " \u7B14\u8D39\u7528"); },
+                other: (count) => `${count} 笔费用`,
             };
         },
-        deleteExpense: function () { return ({
+        deleteExpense: () => ({
             one: '删除报销',
             other: '删除费用',
-        }); },
-        deleteConfirmation: function () { return ({
+        }),
+        deleteConfirmation: () => ({
             one: '您确定要删除此费用吗？',
             other: '您确定要删除这些费用吗？',
-        }); },
+        }),
         deleteReport: '删除报告',
         deleteReportConfirmation: '您确定要删除此报告吗？',
         settledExpensify: '已支付',
@@ -1027,210 +855,66 @@ var translations = {
         settledElsewhere: '在其他地方支付',
         individual: '个人',
         business: '商务',
-        settleExpensify: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "\u4F7F\u7528 Expensify \u652F\u4ED8 ".concat(formattedAmount) : "\u4F7F\u7528Expensify\u652F\u4ED8");
-        },
-        settlePersonal: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "\u4EE5\u4E2A\u4EBA\u8EAB\u4EFD\u652F\u4ED8".concat(formattedAmount) : "\u7528\u4E2A\u4EBA\u8D26\u6237\u652F\u4ED8");
-        },
-        settleWallet: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "\u7528\u94B1\u5305\u652F\u4ED8".concat(formattedAmount) : "\u7528\u94B1\u5305\u652F\u4ED8");
-        },
-        settlePayment: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return "\u652F\u4ED8 ".concat(formattedAmount);
-        },
-        settleBusiness: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "\u4EE5\u4F01\u4E1A\u8EAB\u4EFD\u652F\u4ED8".concat(formattedAmount) : "\u7528\u4F01\u4E1A\u8D26\u6237\u652F\u4ED8");
-        },
-        payElsewhere: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "\u6807\u8BB0".concat(formattedAmount, "\u4E3A\u5DF2\u652F\u4ED8") : "\u6807\u8BB0\u4E3A\u5DF2\u652F\u4ED8");
-        },
-        settleInvoicePersonal: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return (amount ? "\u5DF2\u7528\u4E2A\u4EBA\u8D26\u6237".concat(last4Digits, "\u652F\u4ED8").concat(amount) : "\u5DF2\u7528\u4E2A\u4EBA\u8D26\u6237\u652F\u4ED8");
-        },
-        settleInvoiceBusiness: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return (amount ? "\u5DF2\u7528\u4F01\u4E1A\u8D26\u6237".concat(last4Digits, "\u652F\u4ED8").concat(amount) : "\u5DF2\u7528\u4F01\u4E1A\u8D26\u6237\u652F\u4ED8");
-        },
-        payWithPolicy: function (_a) {
-            var formattedAmount = _a.formattedAmount, policyName = _a.policyName;
-            return formattedAmount ? "\u901A\u8FC7".concat(policyName, "\u652F\u4ED8").concat(formattedAmount) : "\u901A\u8FC7".concat(policyName, "\u652F\u4ED8");
-        },
-        businessBankAccount: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return (amount ? "\u5DF2\u7528\u94F6\u884C\u8D26\u6237".concat(last4Digits, "\u652F\u4ED8").concat(amount, " ") : "\u5DF2\u7528\u94F6\u884C\u8D26\u6237".concat(last4Digits, "\u652F\u4ED8 "));
-        },
-        automaticallyPaidWithBusinessBankAccount: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return "\u5DF2\u4F7F\u7528\u5C3E\u53F7\u4E3A".concat(last4Digits, "\u7684\u94F6\u884C\u8D26\u6237\u652F\u4ED8").concat(amount, " \u901A\u8FC7<a href=\"").concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u5DE5\u4F5C\u533A\u89C4\u5219</a>");
-        },
-        invoicePersonalBank: function (_a) {
-            var lastFour = _a.lastFour;
-            return "\u4E2A\u4EBA\u8D26\u6237 \u2022 ".concat(lastFour);
-        },
-        invoiceBusinessBank: function (_a) {
-            var lastFour = _a.lastFour;
-            return "\u4F01\u4E1A\u8D26\u6237 \u2022 ".concat(lastFour);
-        },
+        settleExpensify: ({ formattedAmount }) => (formattedAmount ? `使用 Expensify 支付 ${formattedAmount}` : `使用Expensify支付`),
+        settlePersonal: ({ formattedAmount }) => (formattedAmount ? `以个人身份支付${formattedAmount}` : `用个人账户支付`),
+        settleWallet: ({ formattedAmount }) => (formattedAmount ? `用钱包支付${formattedAmount}` : `用钱包支付`),
+        settlePayment: ({ formattedAmount }) => `支付 ${formattedAmount}`,
+        settleBusiness: ({ formattedAmount }) => (formattedAmount ? `以企业身份支付${formattedAmount}` : `用企业账户支付`),
+        payElsewhere: ({ formattedAmount }) => (formattedAmount ? `标记${formattedAmount}为已支付` : `标记为已支付`),
+        settleInvoicePersonal: ({ amount, last4Digits }) => (amount ? `已用个人账户${last4Digits}支付${amount}` : `已用个人账户支付`),
+        settleInvoiceBusiness: ({ amount, last4Digits }) => (amount ? `已用企业账户${last4Digits}支付${amount}` : `已用企业账户支付`),
+        payWithPolicy: ({ formattedAmount, policyName }) => formattedAmount ? `通过${policyName}支付${formattedAmount}` : `通过${policyName}支付`,
+        businessBankAccount: ({ amount, last4Digits }) => (amount ? `已用银行账户${last4Digits}支付${amount} ` : `已用银行账户${last4Digits}支付 `),
+        automaticallyPaidWithBusinessBankAccount: ({ amount, last4Digits }) => `已使用尾号为${last4Digits}的银行账户支付${amount} 通过<a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">工作区规则</a>`,
+        invoicePersonalBank: ({ lastFour }) => `个人账户 • ${lastFour}`,
+        invoiceBusinessBank: ({ lastFour }) => `企业账户 • ${lastFour}`,
         nextStep: '下一步',
         finished: '完成',
-        sendInvoice: function (_a) {
-            var amount = _a.amount;
-            return "\u53D1\u9001 ".concat(amount, " \u53D1\u7968");
-        },
-        submitAmount: function (_a) {
-            var amount = _a.amount;
-            return "\u63D0\u4EA4 ".concat(amount);
-        },
-        expenseAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount).concat(comment ? "\u5BF9\u4E8E".concat(comment) : '');
-        },
-        submitted: function (_a) {
-            var memo = _a.memo;
-            return "\u5DF2\u63D0\u4EA4".concat(memo ? ", \u5907\u6CE8 ".concat(memo) : '');
-        },
-        automaticallySubmitted: "\u901A\u8FC7<a href=\"".concat(CONST_1.default.SELECT_WORKFLOWS_HELP_URL, "\">\u5EF6\u8FDF\u63D0\u4EA4</a>\u63D0\u4EA4"),
-        trackedAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "\u8DDF\u8E2A ".concat(formattedAmount).concat(comment ? "\u5BF9\u4E8E".concat(comment) : '');
-        },
-        splitAmount: function (_a) {
-            var amount = _a.amount;
-            return "\u62C6\u5206 ".concat(amount);
-        },
-        didSplitAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "split ".concat(formattedAmount).concat(comment ? "\u5BF9\u4E8E".concat(comment) : '');
-        },
-        yourSplit: function (_a) {
-            var amount = _a.amount;
-            return "\u60A8\u5206\u644A\u7684\u91D1\u989D ".concat(amount);
-        },
-        payerOwesAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount, comment = _a.comment;
-            return "".concat(payer, " \u6B20 ").concat(amount).concat(comment ? "\u5BF9\u4E8E".concat(comment) : '');
-        },
-        payerOwes: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " \u6B20\uFF1A");
-        },
-        payerPaidAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u652F\u4ED8\u4E86").concat(amount);
-        },
-        payerPaid: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " \u652F\u4ED8\u4E86:");
-        },
-        payerSpentAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount;
-            return "".concat(payer, " \u82B1\u8D39\u4E86 ").concat(amount);
-        },
-        payerSpent: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " \u82B1\u8D39\uFF1A");
-        },
-        managerApproved: function (_a) {
-            var manager = _a.manager;
-            return "".concat(manager, " \u5DF2\u6279\u51C6\uFF1A");
-        },
-        managerApprovedAmount: function (_a) {
-            var manager = _a.manager, amount = _a.amount;
-            return "".concat(manager, " \u6279\u51C6\u4E86 ").concat(amount);
-        },
-        payerSettled: function (_a) {
-            var amount = _a.amount;
-            return "\u652F\u4ED8\u4E86".concat(amount);
-        },
-        payerSettledWithMissingBankAccount: function (_a) {
-            var amount = _a.amount;
-            return "\u5DF2\u652F\u4ED8".concat(amount, "\u3002\u6DFB\u52A0\u4E00\u4E2A\u94F6\u884C\u8D26\u6237\u4EE5\u63A5\u6536\u60A8\u7684\u4ED8\u6B3E\u3002");
-        },
-        automaticallyApproved: "\u901A\u8FC7<a href=\"".concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u5DE5\u4F5C\u533A\u89C4\u5219</a>\u6279\u51C6"),
-        approvedAmount: function (_a) {
-            var amount = _a.amount;
-            return "\u6279\u51C6 ".concat(amount);
-        },
-        approvedMessage: "\u6279\u51C6",
-        unapproved: "\u672A\u6279\u51C6",
-        automaticallyForwarded: "\u901A\u8FC7<a href=\"".concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u5DE5\u4F5C\u533A\u89C4\u5219</a>\u6279\u51C6"),
-        forwarded: "\u6279\u51C6",
+        sendInvoice: ({ amount }) => `发送 ${amount} 发票`,
+        submitAmount: ({ amount }) => `提交 ${amount}`,
+        expenseAmount: ({ formattedAmount, comment }) => `${formattedAmount}${comment ? `对于${comment}` : ''}`,
+        submitted: ({ memo }) => `已提交${memo ? `, 备注 ${memo}` : ''}`,
+        automaticallySubmitted: `通过<a href="${CONST_1.default.SELECT_WORKFLOWS_HELP_URL}">延迟提交</a>提交`,
+        trackedAmount: ({ formattedAmount, comment }) => `跟踪 ${formattedAmount}${comment ? `对于${comment}` : ''}`,
+        splitAmount: ({ amount }) => `拆分 ${amount}`,
+        didSplitAmount: ({ formattedAmount, comment }) => `split ${formattedAmount}${comment ? `对于${comment}` : ''}`,
+        yourSplit: ({ amount }) => `您分摊的金额 ${amount}`,
+        payerOwesAmount: ({ payer, amount, comment }) => `${payer} 欠 ${amount}${comment ? `对于${comment}` : ''}`,
+        payerOwes: ({ payer }) => `${payer} 欠：`,
+        payerPaidAmount: ({ payer, amount }) => `${payer ? `${payer} ` : ''}支付了${amount}`,
+        payerPaid: ({ payer }) => `${payer} 支付了:`,
+        payerSpentAmount: ({ payer, amount }) => `${payer} 花费了 ${amount}`,
+        payerSpent: ({ payer }) => `${payer} 花费：`,
+        managerApproved: ({ manager }) => `${manager} 已批准：`,
+        managerApprovedAmount: ({ manager, amount }) => `${manager} 批准了 ${amount}`,
+        payerSettled: ({ amount }) => `支付了${amount}`,
+        payerSettledWithMissingBankAccount: ({ amount }) => `已支付${amount}。添加一个银行账户以接收您的付款。`,
+        automaticallyApproved: `通过<a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">工作区规则</a>批准`,
+        approvedAmount: ({ amount }) => `批准 ${amount}`,
+        approvedMessage: `批准`,
+        unapproved: `未批准`,
+        automaticallyForwarded: `通过<a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">工作区规则</a>批准`,
+        forwarded: `批准`,
         rejectedThisReport: '拒绝了此报告',
-        waitingOnBankAccount: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName;
-            return "\u5DF2\u5F00\u59CB\u4ED8\u6B3E\uFF0C\u4F46\u6B63\u5728\u7B49\u5F85".concat(submitterDisplayName, "\u6DFB\u52A0\u94F6\u884C\u8D26\u6237\u3002");
-        },
-        adminCanceledRequest: function (_a) {
-            var manager = _a.manager;
-            return "".concat(manager ? "".concat(manager, ": ") : '', "\u53D6\u6D88\u4E86\u4ED8\u6B3E");
-        },
-        canceledRequest: function (_a) {
-            var amount = _a.amount, submitterDisplayName = _a.submitterDisplayName;
-            return "\u53D6\u6D88\u4E86".concat(amount, "\u4ED8\u6B3E\uFF0C\u56E0\u4E3A").concat(submitterDisplayName, "\u572830\u5929\u5185\u672A\u542F\u7528\u4ED6\u4EEC\u7684Expensify Wallet\u3002");
-        },
-        settledAfterAddedBankAccount: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName, amount = _a.amount;
-            return "".concat(submitterDisplayName, " \u6DFB\u52A0\u4E86\u4E00\u4E2A\u94F6\u884C\u8D26\u6237\u3002").concat(amount, " \u4ED8\u6B3E\u5DF2\u5B8C\u6210\u3002");
-        },
-        paidElsewhere: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u5DF2\u6807\u8BB0\u4E3A\u5DF2\u652F\u4ED8");
-        },
-        paidWithExpensify: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u5DF2\u7528\u94B1\u5305\u652F\u4ED8");
-        },
-        automaticallyPaidWithExpensify: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u901A\u8FC7<a href=\"").concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u5DE5\u4F5C\u533A\u89C4\u5219</a>\u4F7F\u7528Expensify\u652F\u4ED8");
-        },
+        waitingOnBankAccount: ({ submitterDisplayName }) => `已开始付款，但正在等待${submitterDisplayName}添加银行账户。`,
+        adminCanceledRequest: ({ manager }) => `${manager ? `${manager}: ` : ''}取消了付款`,
+        canceledRequest: ({ amount, submitterDisplayName }) => `取消了${amount}付款，因为${submitterDisplayName}在30天内未启用他们的Expensify Wallet。`,
+        settledAfterAddedBankAccount: ({ submitterDisplayName, amount }) => `${submitterDisplayName} 添加了一个银行账户。${amount} 付款已完成。`,
+        paidElsewhere: ({ payer } = {}) => `${payer ? `${payer} ` : ''}已标记为已支付`,
+        paidWithExpensify: ({ payer } = {}) => `${payer ? `${payer} ` : ''}已用钱包支付`,
+        automaticallyPaidWithExpensify: ({ payer } = {}) => `${payer ? `${payer} ` : ''}通过<a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">工作区规则</a>使用Expensify支付`,
         noReimbursableExpenses: '此报告的金额无效',
         pendingConversionMessage: '您重新联网后，总计将更新',
         changedTheExpense: '更改了费用',
-        setTheRequest: function (_a) {
-            var valueName = _a.valueName, newValueToDisplay = _a.newValueToDisplay;
-            return "\u5C06".concat(valueName, "\u66F4\u6539\u4E3A").concat(newValueToDisplay);
-        },
-        setTheDistanceMerchant: function (_a) {
-            var translatedChangedField = _a.translatedChangedField, newMerchant = _a.newMerchant, newAmountToDisplay = _a.newAmountToDisplay;
-            return "\u5C06".concat(translatedChangedField, "\u8BBE\u7F6E\u4E3A").concat(newMerchant, "\uFF0C\u8FD9\u5C06\u91D1\u989D\u8BBE\u7F6E\u4E3A").concat(newAmountToDisplay);
-        },
-        removedTheRequest: function (_a) {
-            var valueName = _a.valueName, oldValueToDisplay = _a.oldValueToDisplay;
-            return "".concat(valueName, "\uFF08\u4E4B\u524D\u4E3A").concat(oldValueToDisplay, "\uFF09");
-        },
-        updatedTheRequest: function (_a) {
-            var valueName = _a.valueName, newValueToDisplay = _a.newValueToDisplay, oldValueToDisplay = _a.oldValueToDisplay;
-            return "".concat(valueName, " \u6539\u4E3A ").concat(newValueToDisplay, "\uFF08\u4E4B\u524D\u4E3A ").concat(oldValueToDisplay, "\uFF09");
-        },
-        updatedTheDistanceMerchant: function (_a) {
-            var translatedChangedField = _a.translatedChangedField, newMerchant = _a.newMerchant, oldMerchant = _a.oldMerchant, newAmountToDisplay = _a.newAmountToDisplay, oldAmountToDisplay = _a.oldAmountToDisplay;
-            return "\u5C06".concat(translatedChangedField, "\u66F4\u6539\u4E3A").concat(newMerchant, "\uFF08\u4E4B\u524D\u4E3A").concat(oldMerchant, "\uFF09\uFF0C\u8FD9\u66F4\u65B0\u4E86\u91D1\u989D\u4E3A").concat(newAmountToDisplay, "\uFF08\u4E4B\u524D\u4E3A").concat(oldAmountToDisplay, "\uFF09");
-        },
-        threadExpenseReportName: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount, " ").concat(comment ? "\u4E3A".concat(comment) : '费用');
-        },
-        invoiceReportName: function (_a) {
-            var linkedReportID = _a.linkedReportID;
-            return "\u53D1\u7968\u62A5\u544A #".concat(linkedReportID);
-        },
-        threadPaySomeoneReportName: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount, " \u5DF2\u53D1\u9001").concat(comment ? "\u5BF9\u4E8E".concat(comment) : '');
-        },
-        movedFromPersonalSpace: function (_a) {
-            var workspaceName = _a.workspaceName, reportName = _a.reportName;
-            return "\u5C06\u8D39\u7528\u4ECE\u4E2A\u4EBA\u7A7A\u95F4\u79FB\u52A8\u5230".concat(workspaceName !== null && workspaceName !== void 0 ? workspaceName : "\u4E0E".concat(reportName, "\u804A\u5929"));
-        },
+        setTheRequest: ({ valueName, newValueToDisplay }) => `将${valueName}更改为${newValueToDisplay}`,
+        setTheDistanceMerchant: ({ translatedChangedField, newMerchant, newAmountToDisplay }) => `将${translatedChangedField}设置为${newMerchant}，这将金额设置为${newAmountToDisplay}`,
+        removedTheRequest: ({ valueName, oldValueToDisplay }) => `${valueName}（之前为${oldValueToDisplay}）`,
+        updatedTheRequest: ({ valueName, newValueToDisplay, oldValueToDisplay }) => `${valueName} 改为 ${newValueToDisplay}（之前为 ${oldValueToDisplay}）`,
+        updatedTheDistanceMerchant: ({ translatedChangedField, newMerchant, oldMerchant, newAmountToDisplay, oldAmountToDisplay }) => `将${translatedChangedField}更改为${newMerchant}（之前为${oldMerchant}），这更新了金额为${newAmountToDisplay}（之前为${oldAmountToDisplay}）`,
+        threadExpenseReportName: ({ formattedAmount, comment }) => `${formattedAmount} ${comment ? `为${comment}` : '费用'}`,
+        invoiceReportName: ({ linkedReportID }) => `发票报告 #${linkedReportID}`,
+        threadPaySomeoneReportName: ({ formattedAmount, comment }) => `${formattedAmount} 已发送${comment ? `对于${comment}` : ''}`,
+        movedFromPersonalSpace: ({ workspaceName, reportName }) => `将费用从个人空间移动到${workspaceName ?? `与${reportName}聊天`}`,
         movedToPersonalSpace: '将费用移至个人空间',
         tagSelection: '选择一个标签以更好地组织您的支出。',
         categorySelection: '选择一个类别以更好地组织您的支出。',
@@ -1240,10 +924,7 @@ var translations = {
             invalidAmount: '请在继续之前输入有效金额',
             invalidDistance: '请在继续之前输入有效的距离',
             invalidIntegerAmount: '请在继续之前输入一个完整的美元金额',
-            invalidTaxAmount: function (_a) {
-                var amount = _a.amount;
-                return "\u6700\u5927\u7A0E\u989D\u4E3A".concat(amount);
-            },
+            invalidTaxAmount: ({ amount }) => `最大税额为${amount}`,
             invalidSplit: '拆分的总和必须等于总金额',
             invalidSplitParticipants: '请输入一个大于零的金额，至少适用于两个参与者。',
             invalidSplitYourself: '请输入一个非零金额进行拆分',
@@ -1274,10 +955,7 @@ var translations = {
         },
         dismissReceiptError: '忽略错误',
         dismissReceiptErrorConfirmation: '注意！忽略此错误将完全删除您上传的收据。您确定吗？',
-        waitingOnEnabledWallet: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName;
-            return "\u5F00\u59CB\u7ED3\u7B97\u3002\u5728".concat(submitterDisplayName, "\u542F\u7528\u4ED6\u4EEC\u7684\u94B1\u5305\u4E4B\u524D\uFF0C\u4ED8\u6B3E\u5C06\u88AB\u6682\u505C\u3002");
-        },
+        waitingOnEnabledWallet: ({ submitterDisplayName }) => `开始结算。在${submitterDisplayName}启用他们的钱包之前，付款将被暂停。`,
         enableWallet: '启用钱包',
         hold: '保持',
         unhold: '移除保留',
@@ -1296,10 +974,7 @@ var translations = {
         retract: '撤回',
         reopened: '重新打开',
         reopenReport: '重新打开报告',
-        reopenExportedReportConfirmation: function (_a) {
-            var connectionName = _a.connectionName;
-            return "\u6B64\u62A5\u544A\u5DF2\u5BFC\u51FA\u5230".concat(connectionName, "\u3002\u66F4\u6539\u5B83\u53EF\u80FD\u4F1A\u5BFC\u81F4\u6570\u636E\u4E0D\u4E00\u81F4\u3002\u60A8\u786E\u5B9A\u8981\u91CD\u65B0\u6253\u5F00\u6B64\u62A5\u544A\u5417\uFF1F");
-        },
+        reopenExportedReportConfirmation: ({ connectionName }) => `此报告已导出到${connectionName}。更改它可能会导致数据不一致。您确定要重新打开此报告吗？`,
         reason: '原因',
         holdReasonRequired: '暂停时需要提供原因。',
         expenseWasPutOnHold: '费用已被搁置',
@@ -1311,16 +986,16 @@ var translations = {
         keepAll: '保留全部',
         confirmApprove: '确认批准金额',
         confirmApprovalAmount: '仅批准合规的费用，或批准整个报告。',
-        confirmApprovalAllHoldAmount: function () { return ({
+        confirmApprovalAllHoldAmount: () => ({
             one: '此费用已暂停。您仍然想要批准吗？',
             other: '这些费用已被搁置。您仍然想要批准吗？',
-        }); },
+        }),
         confirmPay: '确认付款金额',
         confirmPayAmount: '支付未冻结的部分，或支付整个报告。',
-        confirmPayAllHoldAmount: function () { return ({
+        confirmPayAllHoldAmount: () => ({
             one: '此费用已被搁置。您仍然想要支付吗？',
             other: '这些费用已被搁置。您还要继续支付吗？',
-        }); },
+        }),
         payOnly: '仅支付',
         approveOnly: '仅批准',
         holdEducationalTitle: '此请求正在处理中',
@@ -1343,10 +1018,7 @@ var translations = {
         unapprove: '取消批准',
         unapproveReport: '取消批准报告',
         headsUp: '注意！',
-        unapproveWithIntegrationWarning: function (_a) {
-            var accountingIntegration = _a.accountingIntegration;
-            return "\u6B64\u62A5\u544A\u5DF2\u5BFC\u51FA\u5230".concat(accountingIntegration, "\u3002\u66F4\u6539\u5B83\u53EF\u80FD\u4F1A\u5BFC\u81F4\u6570\u636E\u4E0D\u4E00\u81F4\u3002\u60A8\u786E\u5B9A\u8981\u53D6\u6D88\u6279\u51C6\u6B64\u62A5\u544A\u5417\uFF1F");
-        },
+        unapproveWithIntegrationWarning: ({ accountingIntegration }) => `此报告已导出到${accountingIntegration}。更改它可能会导致数据不一致。您确定要取消批准此报告吗？`,
         reimbursable: '可报销的',
         nonReimbursable: '不可报销',
         bookingPending: '此预订正在等待处理中',
@@ -1366,25 +1038,22 @@ var translations = {
         quantity: '数量',
         subrateSelection: '选择一个子费率并输入数量。',
         qty: '数量',
-        firstDayText: function () { return ({
-            one: "\u7B2C\u4E00\u5929\uFF1A1\u5C0F\u65F6",
-            other: function (count) { return "\u7B2C\u4E00\u5929\uFF1A".concat(count.toFixed(2), " \u5C0F\u65F6"); },
-        }); },
-        lastDayText: function () { return ({
-            one: "\u6700\u540E\u4E00\u5929\uFF1A1\u5C0F\u65F6",
-            other: function (count) { return "\u6700\u540E\u4E00\u5929\uFF1A".concat(count.toFixed(2), " \u5C0F\u65F6"); },
-        }); },
-        tripLengthText: function () { return ({
-            one: "\u884C\u7A0B\uFF1A1\u6574\u5929",
-            other: function (count) { return "\u884C\u7A0B\uFF1A".concat(count, "\u6574\u5929"); },
-        }); },
+        firstDayText: () => ({
+            one: `第一天：1小时`,
+            other: (count) => `第一天：${count.toFixed(2)} 小时`,
+        }),
+        lastDayText: () => ({
+            one: `最后一天：1小时`,
+            other: (count) => `最后一天：${count.toFixed(2)} 小时`,
+        }),
+        tripLengthText: () => ({
+            one: `行程：1整天`,
+            other: (count) => `行程：${count}整天`,
+        }),
         dates: '日期',
         rates: '费率',
-        submitsTo: function (_a) {
-            var name = _a.name;
-            return "\u63D0\u4EA4\u7ED9".concat(name);
-        },
-        moveExpenses: function () { return ({ one: '移动费用', other: '移动费用' }); },
+        submitsTo: ({ name }) => `提交给${name}`,
+        moveExpenses: () => ({ one: '移动费用', other: '移动费用' }),
         reject: {
             educationalTitle: '应该保留还是拒绝？',
             educationalText: '如果你还没准备好批准或支付一笔报销，可以选择保留或拒绝。',
@@ -1405,14 +1074,8 @@ var translations = {
         changeApprover: {
             title: '更改审批人',
             subtitle: '选择一个选项来更改此报告的审批人。',
-            description: function (_a) {
-                var workflowSettingLink = _a.workflowSettingLink;
-                return "<a href=\"".concat(workflowSettingLink, "\">\u60A8\u4E5F\u53EF\u4EE5\u5728[\u5DE5\u4F5C\u6D41\u8BBE\u7F6E</a>\u4E2D\u6C38\u4E45\u66F4\u6539\u6240\u6709\u62A5\u544A\u7684\u5BA1\u6279\u4EBA\u3002");
-            },
-            changedApproverMessage: function (_a) {
-                var managerID = _a.managerID;
-                return "\u5C06\u5BA1\u6279\u4EBA\u66F4\u6539\u4E3A <mention-user accountID=\"".concat(managerID, "\"/>");
-            },
+            description: ({ workflowSettingLink }) => `<a href="${workflowSettingLink}">您也可以在[工作流设置</a>中永久更改所有报告的审批人。`,
+            changedApproverMessage: ({ managerID }) => `将审批人更改为 <mention-user accountID="${managerID}"/>`,
             actions: {
                 addApprover: '添加审批人',
                 addApproverSubtitle: '为现有工作流添加一个额外的审批人。',
@@ -1428,11 +1091,8 @@ var translations = {
         listPage: {
             header: '合并费用',
             noEligibleExpenseFound: '未找到可合并的费用',
-            noEligibleExpenseFoundSubtitle: "<muted-text><centered-text>\u60A8\u6CA1\u6709\u53EF\u4E0E\u6B64\u5408\u5E76\u7684\u8D39\u7528\u3002<a href=\"".concat(CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES, "\">\u4E86\u89E3\u66F4\u591A</a>\u5173\u4E8E\u53EF\u5408\u5E76\u8D39\u7528\u7684\u4FE1\u606F\u3002</centered-text></muted-text>"),
-            selectTransactionToMerge: function (_a) {
-                var reportName = _a.reportName;
-                return "\u9009\u62E9\u4E00\u4E2A<a href=\"".concat(CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES, "\">\u53EF\u5408\u5E76\u7684\u8D39\u7528</a> <strong>").concat(reportName, "</strong>.");
-            },
+            noEligibleExpenseFoundSubtitle: `<muted-text><centered-text>您没有可与此合并的费用。<a href="${CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES}">了解更多</a>关于可合并费用的信息。</centered-text></muted-text>`,
+            selectTransactionToMerge: ({ reportName }) => `选择一个<a href="${CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES}">可合并的费用</a> <strong>${reportName}</strong>.`,
         },
         receiptPage: {
             header: '选择收据',
@@ -1442,10 +1102,7 @@ var translations = {
             header: '选择详情',
             pageTitle: '选择您想保留的详情：',
             noDifferences: '发现交易无差异',
-            pleaseSelectError: function (_a) {
-                var field = _a.field;
-                return "\u8BF7\u9009\u62E9\u4E00\u4E2A".concat(field);
-            },
+            pleaseSelectError: ({ field }) => `请选择一个${field}`,
             selectAllDetailsError: '继续前请选取所有详情。',
         },
         confirmationPage: {
@@ -1479,18 +1136,9 @@ var translations = {
         viewPhoto: '查看照片',
         imageUploadFailed: '图片上传失败',
         deleteWorkspaceError: '抱歉，删除您的工作区头像时出现了意外问题。',
-        sizeExceeded: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u6240\u9009\u56FE\u50CF\u8D85\u8FC7\u4E86\u6700\u5927\u4E0A\u4F20\u5927\u5C0F ".concat(maxUploadSizeInMB, " MB\u3002");
-        },
-        resolutionConstraints: function (_a) {
-            var minHeightInPx = _a.minHeightInPx, minWidthInPx = _a.minWidthInPx, maxHeightInPx = _a.maxHeightInPx, maxWidthInPx = _a.maxWidthInPx;
-            return "\u8BF7\u4E0A\u4F20\u5927\u4E8E".concat(minHeightInPx, "x").concat(minWidthInPx, "\u50CF\u7D20\u4E14\u5C0F\u4E8E").concat(maxHeightInPx, "x").concat(maxWidthInPx, "\u50CF\u7D20\u7684\u56FE\u7247\u3002");
-        },
-        notAllowedExtension: function (_a) {
-            var allowedExtensions = _a.allowedExtensions;
-            return "\u5934\u50CF\u5FC5\u987B\u662F\u4EE5\u4E0B\u7C7B\u578B\u4E4B\u4E00\uFF1A".concat(allowedExtensions.join(', '), "\u3002");
-        },
+        sizeExceeded: ({ maxUploadSizeInMB }) => `所选图像超过了最大上传大小 ${maxUploadSizeInMB} MB。`,
+        resolutionConstraints: ({ minHeightInPx, minWidthInPx, maxHeightInPx, maxWidthInPx }) => `请上传大于${minHeightInPx}x${minWidthInPx}像素且小于${maxHeightInPx}x${maxWidthInPx}像素的图片。`,
+        notAllowedExtension: ({ allowedExtensions }) => `头像必须是以下类型之一：${allowedExtensions.join(', ')}。`,
     },
     modal: {
         backdropLabel: '模态背景',
@@ -1541,10 +1189,7 @@ var translations = {
         helpTextAfterEmail: '从多个电子邮件地址。',
         pleaseVerify: '请验证此联系方式',
         getInTouch: '每当我们需要联系您时，我们将使用此联系方式。',
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "\u8BF7\u8F93\u5165\u53D1\u9001\u5230".concat(contactMethod, "\u7684\u9A8C\u8BC1\u7801\u3002\u9A8C\u8BC1\u7801\u5C06\u5728\u4E00\u5206\u949F\u5185\u5230\u8FBE\u3002");
-        },
+        enterMagicCode: ({ contactMethod }) => `请输入发送到${contactMethod}的验证码。验证码将在一分钟内到达。`,
         setAsDefault: '设为默认',
         yourDefaultContactMethod: '这是您当前的默认联系方式。在删除它之前，您需要选择另一种联系方式并点击“设为默认”。',
         removeContactMethod: '移除联系方式',
@@ -1668,10 +1313,7 @@ var translations = {
             enterCommand: '输入命令',
             execute: '执行',
             noLogsAvailable: '没有可用日志',
-            logSizeTooLarge: function (_a) {
-                var size = _a.size;
-                return "\u65E5\u5FD7\u5927\u5C0F\u8D85\u8FC7 ".concat(size, " MB\u3002\u8BF7\u4F7F\u7528\u201C\u4FDD\u5B58\u65E5\u5FD7\u201D\u6765\u4E0B\u8F7D\u65E5\u5FD7\u6587\u4EF6\u3002");
-            },
+            logSizeTooLarge: ({ size }) => `日志大小超过 ${size} MB。请使用“保存日志”来下载日志文件。`,
             logs: '日志',
             viewConsole: '查看控制台',
         },
@@ -1680,7 +1322,7 @@ var translations = {
         restoreStashed: '恢复暂存的登录信息',
         signOutConfirmationText: '如果您退出登录，任何离线更改都将丢失。',
         versionLetter: 'v',
-        readTheTermsAndPrivacy: "<muted-text-micro>\u9605\u8BFB<a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">\u670D\u52A1\u6761\u6B3E</a>\u548C<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">\u9690\u79C1\u6761\u6B3E</a>\u3002</muted-text-micro>"),
+        readTheTermsAndPrivacy: `<muted-text-micro>阅读<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">服务条款</a>和<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">隐私条款</a>。</muted-text-micro>`,
         help: '帮助',
         whatIsNew: '新内容',
         accountSettings: '账户设置',
@@ -1706,8 +1348,8 @@ var translations = {
         },
         accountValidate: {
             confirmMerge: '您确定要合并账户吗？',
-            lossOfUnsubmittedData: "\u5408\u5E76\u60A8\u7684\u8D26\u6237\u662F\u4E0D\u53EF\u9006\u7684\uFF0C\u5E76\u4E14\u5C06\u5BFC\u81F4\u4EFB\u4F55\u672A\u63D0\u4EA4\u8D39\u7528\u7684\u4E22\u5931",
-            enterMagicCode: "\u8981\u7EE7\u7EED\uFF0C\u8BF7\u8F93\u5165\u53D1\u9001\u5230\u7684\u9A8C\u8BC1\u7801",
+            lossOfUnsubmittedData: `合并您的账户是不可逆的，并且将导致任何未提交费用的丢失`,
+            enterMagicCode: `要继续，请输入发送到的验证码`,
             errors: {
                 incorrectMagicCode: '魔法代码不正确或无效。请重试或请求新代码。',
                 fallback: '出现问题。请稍后再试。',
@@ -1715,10 +1357,7 @@ var translations = {
         },
         mergeSuccess: {
             accountsMerged: '账户已合并！',
-            description: function (_a) {
-                var from = _a.from, to = _a.to;
-                return "<muted-text><centered-text>\u60A8\u5DF2\u6210\u529F\u5C06 <strong>".concat(from, "</strong> \u4E2D\u7684\u6240\u6709\u6570\u636E\u5408\u5E76\u5230 <strong>").concat(to, "</strong>\u3002\u4ECA\u540E\uFF0C\u60A8\u53EF\u4EE5\u4F7F\u7528\u8BE5\u8D26\u6237\u7684\u4EFB\u610F\u4E00\u4E2A\u767B\u5F55\u540D\u3002</centered-text></muted-text>");
-            },
+            description: ({ from, to }) => `<muted-text><centered-text>您已成功将 <strong>${from}</strong> 中的所有数据合并到 <strong>${to}</strong>。今后，您可以使用该账户的任意一个登录名。</centered-text></muted-text>`,
         },
         mergePendingSAML: {
             weAreWorkingOnIt: '我们正在处理此事',
@@ -1726,38 +1365,16 @@ var translations = {
             reachOutForHelp: '<muted-text><centered-text>如有任何疑问，请随时<concierge-link>联系Concierge</concierge-link>！</centered-text></muted-text>',
             goToExpensifyClassic: '前往 Expensify Classic',
         },
-        mergeFailureSAMLDomainControlDescription: function (_a) {
-            var _b;
-            var email = _a.email;
-            return "<muted-text><centered-text>\u60A8\u65E0\u6CD5\u5408\u5E76 <strong>".concat(email, "</strong>\uFF0C\u56E0\u4E3A\u5B83\u53D7 <strong>").concat((_b = email.split('@').at(1)) !== null && _b !== void 0 ? _b : '', "</strong> \u63A7\u5236\u3002\u8BF7<concierge-link>\u8054\u7CFBConcierge</concierge-link>\u5BFB\u6C42\u5E2E\u52A9\u3002</centered-text></muted-text>");
-        },
-        mergeFailureSAMLAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>\u60A8\u4E0D\u80FD\u5C06 <strong>".concat(email, "</strong> \u5E76\u5165\u5176\u4ED6\u8D26\u6237\uFF0C\u56E0\u4E3A\u60A8\u7684\u57DF\u540D\u7BA1\u7406\u5458\u5DF2\u5C06\u5176\u8BBE\u7F6E\u4E3A\u60A8\u7684\u4E3B\u767B\u5F55\u540D\u3002\u8BF7\u5C06\u5176\u4ED6\u8D26\u6237\u5408\u5E76\u5230\u8BE5\u8D26\u6237\u4E2D\u3002</centered-text></muted-text>");
-        },
+        mergeFailureSAMLDomainControlDescription: ({ email }) => `<muted-text><centered-text>您无法合并 <strong>${email}</strong>，因为它受 <strong>${email.split('@').at(1) ?? ''}</strong> 控制。请<concierge-link>联系Concierge</concierge-link>寻求帮助。</centered-text></muted-text>`,
+        mergeFailureSAMLAccountDescription: ({ email }) => `<muted-text><centered-text>您不能将 <strong>${email}</strong> 并入其他账户，因为您的域名管理员已将其设置为您的主登录名。请将其他账户合并到该账户中。</centered-text></muted-text>`,
         mergeFailure2FA: {
-            description: function (_a) {
-                var email = _a.email;
-                return "<muted-text><centered-text>\u60A8\u65E0\u6CD5\u5408\u5E76\u8D26\u6237\uFF0C\u56E0\u4E3A <strong>".concat(email, "</strong> \u542F\u7528\u4E86\u53CC\u56E0\u7D20\u8EAB\u4EFD\u9A8C\u8BC1 (2FA)\u3002\u8BF7\u7981\u7528 <strong>").concat(email, "</strong> \u7684 2FA\uFF0C\u7136\u540E\u91CD\u8BD5\u3002</centered-text></muted-text>");
-            },
+            description: ({ email }) => `<muted-text><centered-text>您无法合并账户，因为 <strong>${email}</strong> 启用了双因素身份验证 (2FA)。请禁用 <strong>${email}</strong> 的 2FA，然后重试。</centered-text></muted-text>`,
             learnMore: '了解更多关于合并账户的信息。',
         },
-        mergeFailureAccountLockedDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>\u60A8\u65E0\u6CD5\u5408\u5E76 <strong>".concat(email, "</strong>\uFF0C\u56E0\u4E3A\u5B83\u5DF2\u88AB\u9501\u5B9A\u3002\u8BF7<concierge-link>\u8054\u7CFBConcierge</concierge-link>\u5BFB\u6C42\u5E2E\u52A9\u3002</centered-text></muted-text>");
-        },
-        mergeFailureUncreatedAccountDescription: function (_a) {
-            var email = _a.email, contactMethodLink = _a.contactMethodLink;
-            return "<muted-text><centered-text>\u60A8\u65E0\u6CD5\u5408\u5E76\u8D26\u6237\uFF0C\u56E0\u4E3A <strong>".concat(email, "</strong> \u6CA1\u6709 Expensify \u8D26\u6237\u3002\u8BF7\u5C06<a href=\"").concat(contactMethodLink, "\">\u5176\u6DFB\u52A0\u4E3A\u8054\u7CFB\u65B9\u5F0F</a>\u3002</centered-text></muted-text>");
-        },
-        mergeFailureSmartScannerAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>\u60A8\u4E0D\u80FD\u5C06 <strong>".concat(email, "</strong> \u5E76\u5165\u5176\u4ED6\u8D26\u6237\u3002\u8BF7\u5C06\u5176\u4ED6\u8D26\u6237\u5408\u5E76\u5230\u5176\u4E2D\u3002</centered-text></muted-text>");
-        },
-        mergeFailureInvoicedAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>\u60A8\u4E0D\u80FD\u5C06\u8D26\u6237\u5408\u5E76\u5230 <strong>".concat(email, "</strong>\uFF0C\u56E0\u4E3A\u8BE5\u8D26\u6237\u62E5\u6709\u53D1\u7968\u8D26\u5355\u5173\u7CFB\u3002</centered-text></muted-text>");
-        },
+        mergeFailureAccountLockedDescription: ({ email }) => `<muted-text><centered-text>您无法合并 <strong>${email}</strong>，因为它已被锁定。请<concierge-link>联系Concierge</concierge-link>寻求帮助。</centered-text></muted-text>`,
+        mergeFailureUncreatedAccountDescription: ({ email, contactMethodLink }) => `<muted-text><centered-text>您无法合并账户，因为 <strong>${email}</strong> 没有 Expensify 账户。请将<a href="${contactMethodLink}">其添加为联系方式</a>。</centered-text></muted-text>`,
+        mergeFailureSmartScannerAccountDescription: ({ email }) => `<muted-text><centered-text>您不能将 <strong>${email}</strong> 并入其他账户。请将其他账户合并到其中。</centered-text></muted-text>`,
+        mergeFailureInvoicedAccountDescription: ({ email }) => `<muted-text><centered-text>您不能将账户合并到 <strong>${email}</strong>，因为该账户拥有发票账单关系。</centered-text></muted-text>`,
         mergeFailureTooManyAttempts: {
             heading: '请稍后再试',
             description: '尝试合并账户的次数过多。请稍后再试。',
@@ -1781,7 +1398,7 @@ var translations = {
     },
     failedToLockAccountPage: {
         failedToLockAccount: '无法锁定账户',
-        failedToLockAccountDescription: "\u6211\u4EEC\u65E0\u6CD5\u9501\u5B9A\u60A8\u7684\u8D26\u6237\u3002\u8BF7\u4E0EConcierge\u804A\u5929\u4EE5\u89E3\u51B3\u6B64\u95EE\u9898\u3002",
+        failedToLockAccountDescription: `我们无法锁定您的账户。请与Concierge聊天以解决此问题。`,
         chatWithConcierge: '与Concierge聊天',
     },
     unlockAccountPage: {
@@ -1866,7 +1483,7 @@ var translations = {
         changePaymentCurrency: '更改支付货币',
         paymentCurrency: '付款货币',
         paymentCurrencyDescription: '选择一个标准化货币，将所有个人费用转换为该货币。',
-        note: "\u6CE8\u610F\uFF1A\u66F4\u6539\u652F\u4ED8\u8D27\u5E01\u4F1A\u5F71\u54CD\u60A8\u4E3A Expensify \u652F\u4ED8\u7684\u8D39\u7528\u3002\u8BF7\u53C2\u9605\u6211\u4EEC\u7684<a href=\"".concat(CONST_1.default.PRICING, "\">\u5B9A\u4EF7\u9875\u9762</a>\u4E86\u89E3\u8BE6\u60C5\u3002"),
+        note: `注意：更改支付货币会影响您为 Expensify 支付的费用。请参阅我们的<a href="${CONST_1.default.PRICING}">定价页面</a>了解详情。`,
     },
     addDebitCardPage: {
         addADebitCard: '添加借记卡',
@@ -1957,24 +1574,15 @@ var translations = {
         availableSpend: '剩余额度',
         smartLimit: {
             name: '智能限制',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "\u60A8\u53EF\u4EE5\u5728\u6B64\u5361\u4E0A\u6D88\u8D39\u6700\u591A ".concat(formattedLimit, "\uFF0C\u5E76\u4E14\u968F\u7740\u60A8\u63D0\u4EA4\u7684\u8D39\u7528\u88AB\u6279\u51C6\uFF0C\u9650\u989D\u5C06\u91CD\u7F6E\u3002");
-            },
+            title: ({ formattedLimit }) => `您可以在此卡上消费最多 ${formattedLimit}，并且随着您提交的费用被批准，限额将重置。`,
         },
         fixedLimit: {
             name: '固定限额',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "\u60A8\u53EF\u4EE5\u5728\u8FD9\u5F20\u5361\u4E0A\u6D88\u8D39\u6700\u591A".concat(formattedLimit, "\uFF0C\u7136\u540E\u5B83\u5C06\u505C\u7528\u3002");
-            },
+            title: ({ formattedLimit }) => `您可以在这张卡上消费最多${formattedLimit}，然后它将停用。`,
         },
         monthlyLimit: {
             name: '每月限额',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "\u60A8\u6BCF\u6708\u6700\u591A\u53EF\u4EE5\u5728\u6B64\u5361\u4E0A\u82B1\u8D39".concat(formattedLimit, "\u3002\u9650\u989D\u5C06\u5728\u6BCF\u4E2A\u65E5\u5386\u6708\u7684\u7B2C\u4E00\u5929\u91CD\u7F6E\u3002");
-            },
+            title: ({ formattedLimit }) => `您每月最多可以在此卡上花费${formattedLimit}。限额将在每个日历月的第一天重置。`,
         },
         virtualCardNumber: '虚拟卡号',
         travelCardCvv: '旅行卡 CVV',
@@ -1997,16 +1605,10 @@ var translations = {
             copyCardNumber: '复制卡号',
             updateAddress: '更新地址',
         },
-        cardAddedToWallet: function (_a) {
-            var platform = _a.platform;
-            return "\u5DF2\u6DFB\u52A0\u5230".concat(platform, "\u94B1\u5305");
-        },
+        cardAddedToWallet: ({ platform }) => `已添加到${platform}钱包`,
         cardDetailsLoadingFailure: '加载卡片详情时发生错误。请检查您的互联网连接并重试。',
         validateCardTitle: '让我们确认一下身份',
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "\u8BF7\u8F93\u5165\u53D1\u9001\u5230".concat(contactMethod, "\u7684\u9A8C\u8BC1\u7801\u4EE5\u67E5\u770B\u60A8\u7684\u5361\u8BE6\u7EC6\u4FE1\u606F\u3002\u9A8C\u8BC1\u7801\u5E94\u5728\u4E00\u4E24\u5206\u949F\u5185\u5230\u8FBE\u3002");
-        },
+        enterMagicCode: ({ contactMethod }) => `请输入发送到${contactMethod}的验证码以查看您的卡详细信息。验证码应在一两分钟内到达。`,
     },
     workflowsPage: {
         workflowTitle: '花费',
@@ -2056,10 +1658,7 @@ var translations = {
             },
         },
         approverInMultipleWorkflows: '该成员已属于另一个审批流程。此处的任何更新也会反映在那里。',
-        approverCircularReference: function (_a) {
-            var name1 = _a.name1, name2 = _a.name2;
-            return "<strong>".concat(name1, "</strong> \u5DF2\u7ECF\u6279\u51C6\u62A5\u544A\u7ED9 <strong>").concat(name2, "</strong>\u3002\u8BF7\u9009\u62E9\u4E0D\u540C\u7684\u5BA1\u6279\u4EBA\u4EE5\u907F\u514D\u5FAA\u73AF\u5DE5\u4F5C\u6D41\u3002");
-        },
+        approverCircularReference: ({ name1, name2 }) => `<strong>${name1}</strong> 已经批准报告给 <strong>${name2}</strong>。请选择不同的审批人以避免循环工作流。`,
         emptyContent: {
             title: '没有成员可显示',
             expensesFromSubtitle: '所有工作区成员已属于现有的审批工作流程。',
@@ -2139,15 +1738,9 @@ var translations = {
         shipCard: '运送卡片',
     },
     transferAmountPage: {
-        transfer: function (_a) {
-            var amount = _a.amount;
-            return "Transfer".concat(amount ? " ".concat(amount) : '');
-        },
+        transfer: ({ amount }) => `Transfer${amount ? ` ${amount}` : ''}`,
         instant: '即时（借记卡）',
-        instantSummary: function (_a) {
-            var rate = _a.rate, minAmount = _a.minAmount;
-            return "".concat(rate, "% \u8D39\u7528\uFF08\u6700\u4F4E ").concat(minAmount, "\uFF09");
-        },
+        instantSummary: ({ rate, minAmount }) => `${rate}% 费用（最低 ${minAmount}）`,
         ach: '1-3 个工作日（银行账户）',
         achSummary: '无费用',
         whichAccount: '哪个账户？',
@@ -2170,10 +1763,7 @@ var translations = {
         cardLastFour: '卡号末尾为',
         addFirstPaymentMethod: '添加支付方式以便直接在应用中发送和接收付款。',
         defaultPaymentMethod: '默认',
-        bankAccountLastFour: function (_a) {
-            var lastFour = _a.lastFour;
-            return "\u94F6\u884C\u8D26\u6237 \u2022 ".concat(lastFour);
-        },
+        bankAccountLastFour: ({ lastFour }) => `银行账户 • ${lastFour}`,
     },
     preferencesPage: {
         appSection: {
@@ -2201,10 +1791,7 @@ var translations = {
         },
     },
     reportDetailsPage: {
-        inWorkspace: function (_a) {
-            var policyName = _a.policyName;
-            return "\u5728".concat(policyName, "\u4E2D");
-        },
+        inWorkspace: ({ policyName }) => `在${policyName}中`,
         generatingPDF: '生成PDF',
         waitForPDF: '请稍候，我们正在生成 PDF。',
         errorPDF: '生成PDF时出现错误。',
@@ -2218,10 +1805,7 @@ var translations = {
     groupChat: {
         lastMemberTitle: '注意！',
         lastMemberWarning: '由于您是这里的最后一个人，离开将使所有成员无法访问此聊天。您确定要离开吗？',
-        defaultReportName: function (_a) {
-            var displayName = _a.displayName;
-            return "".concat(displayName, "\u7684\u7FA4\u804A");
-        },
+        defaultReportName: ({ displayName }) => `${displayName}的群聊`,
     },
     languagePage: {
         language: '语言',
@@ -2243,8 +1827,8 @@ var translations = {
         chooseThemeBelowOrSync: '选择下面的主题，或与您的设备设置同步。',
     },
     termsOfUse: {
-        terms: "<muted-text-xs>\u767B\u5F55\u540E\uFF0C\u5373\u8868\u793A\u60A8\u540C\u610F<a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">\u670D\u52A1\u6761\u6B3E</a>\u548C<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">\u9690\u79C1\u6761\u6B3E</a>\u3002</muted-text-xs>"),
-        license: "<muted-text-xs>".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS, " (NMLS ID:2017010) \u6839\u636E\u5176<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.LICENSES_URL, "\">\u8BB8\u53EF</a>\u8BC1\u63D0\u4F9B\u6C47\u6B3E\u670D\u52A1\u3002</muted-text-xs>"),
+        terms: `<muted-text-xs>登录后，即表示您同意<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">服务条款</a>和<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">隐私条款</a>。</muted-text-xs>`,
+        license: `<muted-text-xs>${CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS} (NMLS ID:2017010) 根据其<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.LICENSES_URL}">许可</a>证提供汇款服务。</muted-text-xs>`,
     },
     validateCodeForm: {
         magicCodeNotReceived: '没有收到魔法代码？',
@@ -2285,10 +1869,7 @@ var translations = {
         },
         cannotGetAccountDetails: '无法检索账户详细信息。请尝试重新登录。',
         loginForm: '登录表单',
-        notYou: function (_a) {
-            var user = _a.user;
-            return "\u4E0D\u662F".concat(user, "\uFF1F");
-        },
+        notYou: ({ user }) => `不是${user}？`,
     },
     onboarding: {
         welcome: '欢迎！',
@@ -2302,38 +1883,30 @@ var translations = {
         getStarted: '开始使用',
         whatsYourName: '你叫什么名字？',
         peopleYouMayKnow: '您可能认识的人已经在这里了！验证您的电子邮件以加入他们。',
-        workspaceYouMayJoin: function (_a) {
-            var domain = _a.domain, email = _a.email;
-            return "\u6765\u81EA".concat(domain, "\u7684\u67D0\u4EBA\u5DF2\u7ECF\u521B\u5EFA\u4E86\u4E00\u4E2A\u5DE5\u4F5C\u533A\u3002\u8BF7\u8F93\u5165\u53D1\u9001\u5230").concat(email, "\u7684\u9B54\u6CD5\u4EE3\u7801\u3002");
-        },
+        workspaceYouMayJoin: ({ domain, email }) => `来自${domain}的某人已经创建了一个工作区。请输入发送到${email}的魔法代码。`,
         joinAWorkspace: '加入工作区',
         listOfWorkspaces: '这是您可以加入的工作区列表。别担心，如果您愿意，您可以稍后再加入。',
-        workspaceMemberList: function (_a) {
-            var employeeCount = _a.employeeCount, policyOwner = _a.policyOwner;
-            return "".concat(employeeCount, " \u540D\u6210\u5458").concat(employeeCount > 1 ? 's' : '', " \u2022 ").concat(policyOwner);
-        },
+        workspaceMemberList: ({ employeeCount, policyOwner }) => `${employeeCount} 名成员${employeeCount > 1 ? 's' : ''} • ${policyOwner}`,
         whereYouWork: '你在哪里工作？',
         errorSelection: '选择一个选项继续',
-        purpose: (_c = {
-                title: '你今天想做什么？',
-                errorContinue: '请按继续进行设置',
-                errorBackButton: '请完成设置问题以开始使用该应用程序'
-            },
-            _c[CONST_1.default.ONBOARDING_CHOICES.EMPLOYER] = '由我的雇主报销',
-            _c[CONST_1.default.ONBOARDING_CHOICES.MANAGE_TEAM] = '管理我团队的费用',
-            _c[CONST_1.default.ONBOARDING_CHOICES.PERSONAL_SPEND] = '跟踪和预算费用',
-            _c[CONST_1.default.ONBOARDING_CHOICES.CHAT_SPLIT] = '与朋友聊天并分摊费用',
-            _c[CONST_1.default.ONBOARDING_CHOICES.LOOKING_AROUND] = '其他内容',
-            _c),
-        employees: (_d = {
-                title: '你有多少员工？'
-            },
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO] = '1-10 名员工',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL] = '11-50名员工',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM_SMALL] = '51-100名员工',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM] = '101-1,000名员工',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.LARGE] = '超过1,000名员工',
-            _d),
+        purpose: {
+            title: '你今天想做什么？',
+            errorContinue: '请按继续进行设置',
+            errorBackButton: '请完成设置问题以开始使用该应用程序',
+            [CONST_1.default.ONBOARDING_CHOICES.EMPLOYER]: '由我的雇主报销',
+            [CONST_1.default.ONBOARDING_CHOICES.MANAGE_TEAM]: '管理我团队的费用',
+            [CONST_1.default.ONBOARDING_CHOICES.PERSONAL_SPEND]: '跟踪和预算费用',
+            [CONST_1.default.ONBOARDING_CHOICES.CHAT_SPLIT]: '与朋友聊天并分摊费用',
+            [CONST_1.default.ONBOARDING_CHOICES.LOOKING_AROUND]: '其他内容',
+        },
+        employees: {
+            title: '你有多少员工？',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO]: '1-10 名员工',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL]: '11-50名员工',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM_SMALL]: '51-100名员工',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM]: '101-1,000名员工',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.LARGE]: '超过1,000名员工',
+        },
         accounting: {
             title: '您是否使用任何会计软件？',
             none: 'None',
@@ -2358,10 +1931,7 @@ var translations = {
         },
         workEmailValidation: {
             title: '验证您的工作邮箱',
-            magicCodeSent: function (_a) {
-                var workEmail = _a.workEmail;
-                return "\u8BF7\u8F93\u5165\u53D1\u9001\u5230".concat(workEmail, "\u7684\u9A8C\u8BC1\u7801\u3002\u5B83\u5C06\u5728\u4E00\u4E24\u5206\u949F\u5185\u5230\u8FBE\u3002");
-            },
+            magicCodeSent: ({ workEmail }) => `请输入发送到${workEmail}的验证码。它将在一两分钟内到达。`,
         },
         workEmailValidationError: {
             publicEmail: '请输入有效的私人域名工作邮箱，例如 mitch@company.com',
@@ -2369,68 +1939,38 @@ var translations = {
         },
         mergeBlockScreen: {
             title: '无法添加工作邮箱',
-            subtitle: function (_a) {
-                var workEmail = _a.workEmail;
-                return "\u6211\u4EEC\u65E0\u6CD5\u6DFB\u52A0".concat(workEmail, "\u3002\u8BF7\u7A0D\u540E\u5728\u8BBE\u7F6E\u4E2D\u91CD\u8BD5\uFF0C\u6216\u4E0EConcierge\u804A\u5929\u4EE5\u83B7\u53D6\u6307\u5BFC\u3002");
-            },
+            subtitle: ({ workEmail }) => `我们无法添加${workEmail}。请稍后在设置中重试，或与Concierge聊天以获取指导。`,
         },
         tasks: {
             testDriveAdminTask: {
-                title: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "\u8FDB\u884C[\u8BD5\u9A7E](".concat(testDriveURL, ")");
-                },
-                description: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "[\u5FEB\u901F\u4EA7\u54C1\u6F14\u793A](".concat(testDriveURL, ")\u4EE5\u4E86\u89E3 Expensify \u4E3A\u4F55\u662F\u6700\u5FEB\u7684\u62A5\u9500\u65B9\u5F0F\u3002");
-                },
+                title: ({ testDriveURL }) => `\u8fdb\u884c[\u8bd5\u9a7e](${testDriveURL})`,
+                description: ({ testDriveURL }) => `[\u5feb\u901f\u4ea7\u54c1\u6f14\u793a](${testDriveURL})\u4ee5\u4e86\u89e3 Expensify \u4e3a\u4f55\u662f\u6700\u5feb\u7684\u62a5\u9500\u65b9\u5f0f\u3002`,
             },
             testDriveEmployeeTask: {
-                title: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "\u8FDB\u884C[\u8BD5\u9A7E](".concat(testDriveURL, ")");
-                },
-                description: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "\u8FDB\u884C[\u8BD5\u9A7E](".concat(testDriveURL, ")\u5373\u53EF\u83B7\u5F97\u56E2\u961F *3 \u4E2A\u6708\u7684 Expensify \u514D\u8D39\u4F7F\u7528\u6743\uFF01*");
-                },
+                title: ({ testDriveURL }) => `\u8fdb\u884c[\u8bd5\u9a7e](${testDriveURL})`,
+                description: ({ testDriveURL }) => `\u8fdb\u884c[\u8bd5\u9a7e](${testDriveURL})\u5373\u53ef\u83b7\u5f97\u56e2\u961f *3 \u4e2a\u6708\u7684 Expensify \u514d\u8d39\u4f7f\u7528\u6743\uff01*`,
             },
             createTestDriveAdminWorkspaceTask: {
-                title: function (_a) {
-                    var workspaceConfirmationLink = _a.workspaceConfirmationLink;
-                    return "[\u521B\u5EFA](".concat(workspaceConfirmationLink, ")\u4E00\u4E2A\u5DE5\u4F5C\u533A");
-                },
+                title: ({ workspaceConfirmationLink }) => `[\u521b\u5efa](${workspaceConfirmationLink})\u4e00\u4e2a\u5de5\u4f5c\u533a`,
                 description: '\u521b\u5efa\u4e00\u4e2a\u5de5\u4f5c\u533a\uff0c\u5e76\u5728\u60a8\u7684\u8bbe\u7f6e\u4e13\u5bb6\u7684\u5e2e\u52a9\u4e0b\u914d\u7f6e\u5404\u9879\u8bbe\u7f6e\uff01',
             },
             createWorkspaceTask: {
-                title: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return "\u521B\u5EFA\u4E00\u4E2A[\u5DE5\u4F5C\u533A](".concat(workspaceSettingsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return "*\u521B\u5EFA\u4E00\u4E2A\u5DE5\u4F5C\u533A*\u4EE5\u8DDF\u8E2A\u652F\u6301\u3001\u626B\u63CF\u6536\u636E\u3001\u804A\u5929\u7B49\u3002\n\n1. \u70B9\u51FB *\u5DE5\u4F5C\u533A* > *\u65B0\u5EFA\u5DE5\u4F5C\u533A*\u3002\n\n*\u60A8\u7684\u65B0\u5DE5\u4F5C\u533A\u5DF2\u51C6\u5907\u5C31\u7EEA\uFF01* [\u67E5\u770B](".concat(workspaceSettingsLink, ")\u3002");
-                },
+                title: ({ workspaceSettingsLink }) => `\u521b\u5efa\u4e00\u4e2a[\u5de5\u4f5c\u533a](${workspaceSettingsLink})`,
+                description: ({ workspaceSettingsLink }) => `*\u521b\u5efa\u4e00\u4e2a\u5de5\u4f5c\u533a*\u4ee5\u8ddf\u8e2a\u652f\u6301\u3001\u626b\u63cf\u6536\u636e\u3001\u804a\u5929\u7b49\u3002\n\n1. \u70b9\u51fb *\u5de5\u4f5c\u533a* > *\u65b0\u5efa\u5de5\u4f5c\u533a*\u3002\n\n*\u60a8\u7684\u65b0\u5de5\u4f5c\u533a\u5df2\u51c6\u5907\u5c31\u7eea\uff01* [\u67e5\u770b](${workspaceSettingsLink})\u3002`,
             },
             setupCategoriesTask: {
-                title: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink;
-                    return "\u8BBE\u7F6E[\u5206\u7C7B](".concat(workspaceCategoriesLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink;
-                    return '*\u8bbe\u7f6e\u5206\u7c7b*\uff0c\u4ee5\u4fbf\u60a8\u7684\u56e2\u961f\u53ef\u4ee5\u5bf9\u652f\u51fa\u8fdb\u884c\u7f16\u7801\uff0c\u4ee5\u4fbf\u4e8e\u62a5\u544a\u3002\n' +
-                        '\n' +
-                        '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
-                        '3. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
-                        '4. \u70b9\u51fb *\u5206\u7c7b*\u3002\n' +
-                        '5. \u7981\u7528\u6240\u6709\u4e0d\u9700\u8981\u7684\u5206\u7c7b\u3002\n' +
-                        '6. \u5728\u53f3\u4e0a\u89d2\u6dfb\u52a0\u81ea\u5df1\u7684\u5206\u7c7b\u3002\n' +
-                        '\n' +
-                        "[\u5E26\u6211\u5230\u5DE5\u4F5C\u533A\u5206\u7C7B\u8BBE\u7F6E](".concat(workspaceCategoriesLink, ")\u3002\n") +
-                        '\n' +
-                        "![Set up categories](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-categories-v2.mp4)");
-                },
+                title: ({ workspaceCategoriesLink }) => `\u8bbe\u7f6e[\u5206\u7c7b](${workspaceCategoriesLink})`,
+                description: ({ workspaceCategoriesLink }) => '*\u8bbe\u7f6e\u5206\u7c7b*\uff0c\u4ee5\u4fbf\u60a8\u7684\u56e2\u961f\u53ef\u4ee5\u5bf9\u652f\u51fa\u8fdb\u884c\u7f16\u7801\uff0c\u4ee5\u4fbf\u4e8e\u62a5\u544a\u3002\n' +
+                    '\n' +
+                    '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
+                    '3. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
+                    '4. \u70b9\u51fb *\u5206\u7c7b*\u3002\n' +
+                    '5. \u7981\u7528\u6240\u6709\u4e0d\u9700\u8981\u7684\u5206\u7c7b\u3002\n' +
+                    '6. \u5728\u53f3\u4e0a\u89d2\u6dfb\u52a0\u81ea\u5df1\u7684\u5206\u7c7b\u3002\n' +
+                    '\n' +
+                    `[\u5e26\u6211\u5230\u5de5\u4f5c\u533a\u5206\u7c7b\u8bbe\u7f6e](${workspaceCategoriesLink})\u3002\n` +
+                    '\n' +
+                    `![Set up categories](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-categories-v2.mp4)`,
             },
             combinedTrackSubmitExpenseTask: {
                 title: '\u63d0\u4ea4\u4e00\u7b14\u652f\u51fa',
@@ -2439,7 +1979,7 @@ var translations = {
                     '1. \u70b9\u51fb\u7eff\u8272\u7684 *+* \u6309\u94ae\u3002\n' +
                     '2. \u9009\u62e9 *\u521b\u5efa\u652f\u51fa*\u3002\n' +
                     '3. \u8f93\u5165\u91d1\u989d\u6216\u626b\u63cf\u6536\u636e\u3002\n' +
-                    "4. \u6DFB\u52A0\u60A8\u4E0A\u53F8\u7684\u7535\u5B50\u90AE\u4EF6\u6216\u7535\u8BDD\u53F7\u7801\u3002\n" +
+                    `4. \u6dfb\u52a0\u60a8\u4e0a\u53f8\u7684\u7535\u5b50\u90ae\u4ef6\u6216\u7535\u8bdd\u53f7\u7801\u3002\n` +
                     '5. \u70b9\u51fb *\u521b\u5efa*\u3002\n' +
                     '\n' +
                     '\u60a8\u5df2\u7ecf\u5b8c\u6210\uff01',
@@ -2454,7 +1994,7 @@ var translations = {
                     '4. \u786e\u8ba4\u8be6\u60c5\u3002\n' +
                     '5. \u70b9\u51fb *\u521b\u5efa*\u3002\n' +
                     '\n' +
-                    "\u60A8\u5DF2\u7ECF\u5B8C\u6210\uFF01",
+                    `\u60a8\u5df2\u7ecf\u5b8c\u6210\uff01`,
             },
             trackExpenseTask: {
                 title: '\u8ddf\u8e2a\u4e00\u7b14\u652f\u51fa',
@@ -2469,113 +2009,77 @@ var translations = {
                     '\u60a8\u5df2\u7ecf\u5b8c\u6210\uff01\u662f\u7684\uff0c\u5c31\u8fd9\u4e48\u7b80\u5355\u3002',
             },
             addAccountingIntegrationTask: {
-                title: function (_a) {
-                    var integrationName = _a.integrationName, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "\u8FDE\u63A5".concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '' : '\u5230', "[").concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u60A8\u7684' : '', " ").concat(integrationName, "](").concat(workspaceAccountingLink, ")");
-                },
-                description: function (_a) {
-                    var integrationName = _a.integrationName, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "\u8FDE\u63A5".concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u60A8\u7684' : '\u5230', " ").concat(integrationName, "\uFF0C\u5B9E\u73B0\u81EA\u52A8\u8D39\u7528\u7F16\u7801\u548C\u540C\u6B65\uFF0C\u8BA9\u6708\u672B\u7ED3\u8D26\u53D8\u5F97\u8F7B\u800C\u6613\u4E3E\u3002\n") +
-                        '\n' +
-                        '1. \u70B9\u51FB *\u8BBE\u7F6E*。\n' +
-                        '2. \u524D\u5F80 *\u5DE5\u4F5C\u533A*。\n' +
-                        '3. \u9009\u62E9\u60A8\u7684\u5DE5\u4F5C\u533A\u3002\n' +
-                        '4. \u70B9\u51FB *\u4F1A\u8BA1*。\n' +
-                        "5. \u627E\u5230 ".concat(integrationName, "\u3002\n") +
-                        '6. \u70B9\u51FB *\u8FDE\u63A5*。\n' +
-                        '\n' +
-                        "".concat(integrationName && CONST_1.default.connectionsVideoPaths[integrationName]
-                            ? "[\u5E26\u6211\u5230\u4F1A\u8BA1\u9875\u9762](".concat(workspaceAccountingLink, ")\u3002\n\n![\u8FDE\u63A5\u5230 ").concat(integrationName, "](").concat(CONST_1.default.CLOUDFRONT_URL, "/").concat(CONST_1.default.connectionsVideoPaths[integrationName], ")")
-                            : "[\u5E26\u6211\u5230\u4F1A\u8BA1\u9875\u9762](".concat(workspaceAccountingLink, ")\u3002"));
-                },
+                title: ({ integrationName, workspaceAccountingLink }) => `\u8FDE\u63A5${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '' : '\u5230'}[${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u60A8\u7684' : ''} ${integrationName}](${workspaceAccountingLink})`,
+                description: ({ integrationName, workspaceAccountingLink }) => `\u8FDE\u63A5${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u60A8\u7684' : '\u5230'} ${integrationName}\uFF0C\u5B9E\u73B0\u81EA\u52A8\u8D39\u7528\u7F16\u7801\u548C\u540C\u6B65\uFF0C\u8BA9\u6708\u672B\u7ED3\u8D26\u53D8\u5F97\u8F7B\u800C\u6613\u4E3E\u3002\n` +
+                    '\n' +
+                    '1. \u70B9\u51FB *\u8BBE\u7F6E*。\n' +
+                    '2. \u524D\u5F80 *\u5DE5\u4F5C\u533A*。\n' +
+                    '3. \u9009\u62E9\u60A8\u7684\u5DE5\u4F5C\u533A\u3002\n' +
+                    '4. \u70B9\u51FB *\u4F1A\u8BA1*。\n' +
+                    `5. \u627E\u5230 ${integrationName}\u3002\n` +
+                    '6. \u70B9\u51FB *\u8FDE\u63A5*。\n' +
+                    '\n' +
+                    `${integrationName && CONST_1.default.connectionsVideoPaths[integrationName]
+                        ? `[\u5E26\u6211\u5230\u4F1A\u8BA1\u9875\u9762](${workspaceAccountingLink})\u3002\n\n![\u8FDE\u63A5\u5230 ${integrationName}](${CONST_1.default.CLOUDFRONT_URL}/${CONST_1.default.connectionsVideoPaths[integrationName]})`
+                        : `[\u5E26\u6211\u5230\u4F1A\u8BA1\u9875\u9762](${workspaceAccountingLink})\u3002`}`,
             },
             connectCorporateCardTask: {
-                title: function (_a) {
-                    var corporateCardLink = _a.corporateCardLink;
-                    return "\u8FDE\u63A5[\u60A8\u7684\u516C\u53F8\u5361](".concat(corporateCardLink, ")");
-                },
-                description: function (_a) {
-                    var corporateCardLink = _a.corporateCardLink;
-                    return "\u8FDE\u63A5\u60A8\u7684\u516C\u53F8\u5361\u4EE5\u81EA\u52A8\u5BFC\u5165\u548C\u7F16\u7801\u652F\u51FA\u3002\n" +
-                        '\n' +
-                        '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
-                        '2. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
-                        '3. \u70b9\u51fb *\u516c\u53f8\u5361*\u3002\n' +
-                        '4. \u6309\u7167\u63d0\u793a\u8fde\u63a5\u60a8\u7684\u5361\u3002\n' +
-                        '\n' +
-                        "[\u5E26\u6211\u53BB\u8FDE\u63A5\u6211\u7684\u516C\u53F8\u5361](".concat(corporateCardLink, ")\u3002");
-                },
+                title: ({ corporateCardLink }) => `\u8fde\u63a5[\u60a8\u7684\u516c\u53f8\u5361](${corporateCardLink})`,
+                description: ({ corporateCardLink }) => `\u8fde\u63a5\u60a8\u7684\u516c\u53f8\u5361\u4ee5\u81ea\u52a8\u5bfc\u5165\u548c\u7f16\u7801\u652f\u51fa\u3002\n` +
+                    '\n' +
+                    '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
+                    '2. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
+                    '3. \u70b9\u51fb *\u516c\u53f8\u5361*\u3002\n' +
+                    '4. \u6309\u7167\u63d0\u793a\u8fde\u63a5\u60a8\u7684\u5361\u3002\n' +
+                    '\n' +
+                    `[\u5e26\u6211\u53bb\u8fde\u63a5\u6211\u7684\u516c\u53f8\u5361](${corporateCardLink})\u3002`,
             },
             inviteTeamTask: {
-                title: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return "\u9080\u8BF7[\u60A8\u7684\u56E2\u961F](".concat(workspaceMembersLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return '*\u9080\u8bf7\u60a8\u7684\u56e2\u961f*\u5230 Expensify\uff0c\u4f7f\u4ed6\u4eec\u53ef\u4ee5\u4ece\u4eca\u5929\u5f00\u59cb\u8ddf\u8e2a\u652f\u51fa\u3002\n' +
-                        '\n' +
-                        '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
-                        '3. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
-                        '4. \u70b9\u51fb *\u6210\u5458* > *\u9080\u8bf7\u6210\u5458*\u3002\n' +
-                        '5. \u8f93\u5165\u7535\u5b50\u90ae\u4ef6\u6216\u7535\u8bdd\u53f7\u7801\u3002 \n' +
-                        '6. \u5982\u6709\u9700\u8981\uff0c\u53ef\u6dfb\u52a0\u81ea\u5b9a\u4e49\u9080\u8bf7\u4fe1\u606f\uff01\n' +
-                        '\n' +
-                        "[\u5E26\u6211\u5230\u5DE5\u4F5C\u533A\u6210\u5458](".concat(workspaceMembersLink, ")\u3002\n") +
-                        '\n' +
-                        "![Invite your team](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-invite_members-v2.mp4)");
-                },
+                title: ({ workspaceMembersLink }) => `\u9080\u8bf7[\u60a8\u7684\u56e2\u961f](${workspaceMembersLink})`,
+                description: ({ workspaceMembersLink }) => '*\u9080\u8bf7\u60a8\u7684\u56e2\u961f*\u5230 Expensify\uff0c\u4f7f\u4ed6\u4eec\u53ef\u4ee5\u4ece\u4eca\u5929\u5f00\u59cb\u8ddf\u8e2a\u652f\u51fa\u3002\n' +
+                    '\n' +
+                    '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
+                    '3. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
+                    '4. \u70b9\u51fb *\u6210\u5458* > *\u9080\u8bf7\u6210\u5458*\u3002\n' +
+                    '5. \u8f93\u5165\u7535\u5b50\u90ae\u4ef6\u6216\u7535\u8bdd\u53f7\u7801\u3002 \n' +
+                    '6. \u5982\u6709\u9700\u8981\uff0c\u53ef\u6dfb\u52a0\u81ea\u5b9a\u4e49\u9080\u8bf7\u4fe1\u606f\uff01\n' +
+                    '\n' +
+                    `[\u5e26\u6211\u5230\u5de5\u4f5c\u533a\u6210\u5458](${workspaceMembersLink})\u3002\n` +
+                    '\n' +
+                    `![Invite your team](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-invite_members-v2.mp4)`,
             },
             setupCategoriesAndTags: {
-                title: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink, workspaceTagsLink = _a.workspaceTagsLink;
-                    return "\u8BBE\u7F6E[\u5206\u7C7B](".concat(workspaceCategoriesLink, ")\u548C[\u6807\u7B7E](").concat(workspaceTagsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return '*\u8bbe\u7f6e\u5206\u7c7b\u548c\u6807\u7b7e*\uff0c\u4ee5\u4fbf\u60a8\u7684\u56e2\u961f\u53ef\u4ee5\u5bf9\u652f\u51fa\u8fdb\u884c\u7f16\u7801\uff0c\u4ee5\u4fbf\u4e8e\u62a5\u544a\u3002\n' +
-                        '\n' +
-                        "\u901A\u8FC7[\u8FDE\u63A5\u60A8\u7684\u4F1A\u8BA1\u8F6F\u4EF6](".concat(workspaceAccountingLink, ")\u81EA\u52A8\u5BFC\u5165\u5B83\u4EEC\uFF0C\u6216\u5728\u60A8\u7684[\u5DE5\u4F5C\u533A\u8BBE\u7F6E](").concat(workspaceCategoriesLink, ")\u4E2D\u624B\u52A8\u8BBE\u7F6E\u3002");
-                },
+                title: ({ workspaceCategoriesLink, workspaceTagsLink }) => `\u8bbe\u7f6e[\u5206\u7c7b](${workspaceCategoriesLink})\u548c[\u6807\u7b7e](${workspaceTagsLink})`,
+                description: ({ workspaceCategoriesLink, workspaceAccountingLink }) => '*\u8bbe\u7f6e\u5206\u7c7b\u548c\u6807\u7b7e*\uff0c\u4ee5\u4fbf\u60a8\u7684\u56e2\u961f\u53ef\u4ee5\u5bf9\u652f\u51fa\u8fdb\u884c\u7f16\u7801\uff0c\u4ee5\u4fbf\u4e8e\u62a5\u544a\u3002\n' +
+                    '\n' +
+                    `\u901a\u8fc7[\u8fde\u63a5\u60a8\u7684\u4f1a\u8ba1\u8f6f\u4ef6](${workspaceAccountingLink})\u81ea\u52a8\u5bfc\u5165\u5b83\u4eec\uff0c\u6216\u5728\u60a8\u7684[\u5de5\u4f5c\u533a\u8bbe\u7f6e](${workspaceCategoriesLink})\u4e2d\u624b\u52a8\u8bbe\u7f6e\u3002`,
             },
             setupTagsTask: {
-                title: function (_a) {
-                    var workspaceTagsLink = _a.workspaceTagsLink;
-                    return "\u8BBE\u7F6E[\u6807\u7B7E](".concat(workspaceTagsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceMoreFeaturesLink = _a.workspaceMoreFeaturesLink;
-                    return '\u4f7f\u7528\u6807\u7b7e\u6dfb\u52a0\u989d\u5916\u7684\u652f\u51fa\u8be6\u60c5\uff0c\u4f8b\u5982\u9879\u76ee\u3001\u5ba2\u6237\u3001\u5730\u70b9\u548c\u90e8\u95e8\u3002\u5982\u679c\u60a8\u9700\u8981\u591a\u7ea7\u6807\u7b7e\uff0c\u53ef\u4ee5\u5347\u7ea7\u5230 Control \u8ba1\u5212\u3002\n' +
-                        '\n' +
-                        '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
-                        '3. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
-                        '4. \u70b9\u51fb *\u66f4\u591a\u529f\u80fd*\u3002\n' +
-                        '5. \u542f\u7528 *\u6807\u7b7e*\u3002\n' +
-                        '6. \u5bfc\u822a\u5230\u5de5\u4f5c\u533a\u7f16\u8f91\u5668\u4e2d\u7684 *\u6807\u7b7e*\u3002\n' +
-                        '7. \u70b9\u51fb *+\u6dfb\u52a0\u6807\u7b7e*\u4ee5\u521b\u5efa\u81ea\u5df1\u7684\u6807\u7b7e\u3002\n' +
-                        '\n' +
-                        "[\u5E26\u6211\u5230\u66F4\u591A\u529F\u80FD](".concat(workspaceMoreFeaturesLink, ")\u3002\n") +
-                        '\n' +
-                        "![Set up tags](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-tags-v2.mp4)");
-                },
+                title: ({ workspaceTagsLink }) => `\u8bbe\u7f6e[\u6807\u7b7e](${workspaceTagsLink})`,
+                description: ({ workspaceMoreFeaturesLink }) => '\u4f7f\u7528\u6807\u7b7e\u6dfb\u52a0\u989d\u5916\u7684\u652f\u51fa\u8be6\u60c5\uff0c\u4f8b\u5982\u9879\u76ee\u3001\u5ba2\u6237\u3001\u5730\u70b9\u548c\u90e8\u95e8\u3002\u5982\u679c\u60a8\u9700\u8981\u591a\u7ea7\u6807\u7b7e\uff0c\u53ef\u4ee5\u5347\u7ea7\u5230 Control \u8ba1\u5212\u3002\n' +
+                    '\n' +
+                    '1. \u70b9\u51fb *\u5de5\u4f5c\u533a*\u3002\n' +
+                    '3. \u9009\u62e9\u60a8\u7684\u5de5\u4f5c\u533a\u3002\n' +
+                    '4. \u70b9\u51fb *\u66f4\u591a\u529f\u80fd*\u3002\n' +
+                    '5. \u542f\u7528 *\u6807\u7b7e*\u3002\n' +
+                    '6. \u5bfc\u822a\u5230\u5de5\u4f5c\u533a\u7f16\u8f91\u5668\u4e2d\u7684 *\u6807\u7b7e*\u3002\n' +
+                    '7. \u70b9\u51fb *+\u6dfb\u52a0\u6807\u7b7e*\u4ee5\u521b\u5efa\u81ea\u5df1\u7684\u6807\u7b7e\u3002\n' +
+                    '\n' +
+                    `[\u5e26\u6211\u5230\u66f4\u591a\u529f\u80fd](${workspaceMoreFeaturesLink})\u3002\n` +
+                    '\n' +
+                    `![Set up tags](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-tags-v2.mp4)`,
             },
             inviteAccountantTask: {
-                title: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return "\u9080\u8BF7\u60A8\u7684[\u4F1A\u8BA1](".concat(workspaceMembersLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return '*\u9080\u8BF7\u60A8\u7684\u4F1A\u8BA1* \u4E0E\u60A8\u540C\u6B65\u5408\u4F5C\uFF0C\u5E76\u7BA1\u7406\u60A8\u7684\u5546\u52A1\u652F\u51FA\u3002\n' +
-                        '\n' +
-                        '1. \u70B9\u51FB *\u5DE5\u4F5C\u533A*。\n' +
-                        '2. \u9009\u62E9\u60A8\u7684\u5DE5\u4F5C\u533A\u3002\n' +
-                        '3. \u70B9\u51FB *\u6210\u5458*。\n' +
-                        '4. \u70B9\u51FB *\u9080\u8BF7\u6210\u5458*。\n' +
-                        '5. \u8F93\u5165\u60A8\u4F1A\u8BA1\u7684\u90AE\u7BB1\u5730\u5740\u3002\n' +
-                        '\n' +
-                        "[\u7ACB\u5373\u9080\u8BF7\u60A8\u7684\u4F1A\u8BA1](".concat(workspaceMembersLink, ")\u3002");
-                },
+                title: ({ workspaceMembersLink }) => `\u9080\u8BF7\u60A8\u7684[\u4F1A\u8BA1](${workspaceMembersLink})`,
+                description: ({ workspaceMembersLink }) => '*\u9080\u8BF7\u60A8\u7684\u4F1A\u8BA1* \u4E0E\u60A8\u540C\u6B65\u5408\u4F5C\uFF0C\u5E76\u7BA1\u7406\u60A8\u7684\u5546\u52A1\u652F\u51FA\u3002\n' +
+                    '\n' +
+                    '1. \u70B9\u51FB *\u5DE5\u4F5C\u533A*。\n' +
+                    '2. \u9009\u62E9\u60A8\u7684\u5DE5\u4F5C\u533A\u3002\n' +
+                    '3. \u70B9\u51FB *\u6210\u5458*。\n' +
+                    '4. \u70B9\u51FB *\u9080\u8BF7\u6210\u5458*。\n' +
+                    '5. \u8F93\u5165\u60A8\u4F1A\u8BA1\u7684\u90AE\u7BB1\u5730\u5740\u3002\n' +
+                    '\n' +
+                    `[\u7ACB\u5373\u9080\u8BF7\u60A8\u7684\u4F1A\u8BA1](${workspaceMembersLink})\u3002`,
             },
             startChatTask: {
                 title: '\u5f00\u59cb\u804a\u5929',
@@ -2602,17 +2106,11 @@ var translations = {
                     '\u5982\u6709\u9700\u8981\uff0c\u968f\u610f\u6dfb\u52a0\u66f4\u591a\u8be6\u60c5\uff0c\u6216\u76f4\u63a5\u53d1\u9001\u3002\u8ba9\u6211\u4eec\u8ba9\u60a8\u83b7\u5f97\u62a5\u9500\uff01',
             },
             reviewWorkspaceSettingsTask: {
-                title: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return "\u67E5\u770B\u60A8\u7684[\u5DE5\u4F5C\u533A\u8BBE\u7F6E](".concat(workspaceSettingsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return '\u4ee5\u4e0b\u662f\u67e5\u770b\u548c\u66f4\u65b0\u60a8\u5de5\u4f5c\u533a\u8bbe\u7f6e\u7684\u65b9\u6cd5\uff1a\n' +
-                        '1. \u70b9\u51fb\u8bbe\u7f6e\u9009\u9879\u5361\u3002\n' +
-                        '2. \u70b9\u51fb *\u5de5\u4f5c\u533a* > [\u60a8\u7684\u5de5\u4f5c\u533a]\u3002\n' +
-                        "[\u524D\u5F80\u60A8\u7684\u5DE5\u4F5C\u533A](".concat(workspaceSettingsLink, ")\u3002\u6211\u4EEC\u5C06\u5728 #admins \u804A\u5929\u5BA4\u4E2D\u8DDF\u8E2A\u5B83\u4EEC\u3002");
-                },
+                title: ({ workspaceSettingsLink }) => `\u67e5\u770b\u60a8\u7684[\u5de5\u4f5c\u533a\u8bbe\u7f6e](${workspaceSettingsLink})`,
+                description: ({ workspaceSettingsLink }) => '\u4ee5\u4e0b\u662f\u67e5\u770b\u548c\u66f4\u65b0\u60a8\u5de5\u4f5c\u533a\u8bbe\u7f6e\u7684\u65b9\u6cd5\uff1a\n' +
+                    '1. \u70b9\u51fb\u8bbe\u7f6e\u9009\u9879\u5361\u3002\n' +
+                    '2. \u70b9\u51fb *\u5de5\u4f5c\u533a* > [\u60a8\u7684\u5de5\u4f5c\u533a]\u3002\n' +
+                    `[\u524d\u5f80\u60a8\u7684\u5de5\u4f5c\u533a](${workspaceSettingsLink})\u3002\u6211\u4eec\u5c06\u5728 #admins \u804a\u5929\u5ba4\u4e2d\u8ddf\u8e2a\u5b83\u4eec\u3002`,
             },
             createReportTask: {
                 title: '\u521b\u5efa\u60a8\u7684\u7b2c\u4e00\u4efd\u62a5\u544a',
@@ -2627,10 +2125,7 @@ var translations = {
             },
         },
         testDrive: {
-            name: function (_a) {
-                var testDriveURL = _a.testDriveURL;
-                return (testDriveURL ? "\u8FDB\u884C[\u8BD5\u9A7E](".concat(testDriveURL, ")") : '\u8fdb\u884c\u8bd5\u9a7e');
-            },
+            name: ({ testDriveURL }) => (testDriveURL ? `\u8fdb\u884c[\u8bd5\u9a7e](${testDriveURL})` : '\u8fdb\u884c\u8bd5\u9a7e'),
             embeddedDemoIframeTitle: '\u8bd5\u9a7e',
             employeeFakeReceipt: {
                 description: '\u6211\u7684\u8bd5\u9a7e\u6536\u636e\uff01',
@@ -2639,12 +2134,9 @@ var translations = {
         messages: {
             onboardingEmployerOrSubmitMessage: '\u62a5\u9500\u5c31\u50cf\u53d1\u9001\u6d88\u606f\u4e00\u6837\u7b80\u5355\u3002\u8ba9\u6211\u4eec\u6765\u770b\u770b\u57fa\u672c\u77e5\u8bc6\u3002',
             onboardingPersonalSpendMessage: '\u4ee5\u4e0b\u662f\u5982\u4f55\u5728\u51e0\u6b21\u70b9\u51fb\u4e2d\u8ddf\u8e2a\u60a8\u7684\u652f\u51fa\u3002',
-            onboardingManageTeamMessage: function (_a) {
-                var hasIntroSelected = _a.hasIntroSelected;
-                return hasIntroSelected
-                    ? '\u0023 \u60a8\u7684\u514d\u8d39\u8bd5\u7528\u5df2\u7ecf\u5f00\u59cb\uff01\u8ba9\u6211\u4eec\u5e2e\u60a8\u5b8c\u6210\u8bbe\u7f6e\u3002\n\ud83d\udc4b \u60a8\u597d\uff0c\u6211\u662f\u60a8\u7684 Expensify \u8bbe\u7f6e\u4e13\u5458\u3002\u73b0\u5728\u60a8\u5df2\u7ecf\u521b\u5efa\u4e86\u4e00\u4e2a\u5de5\u4f5c\u533a\uff0c\u8bf7\u5145\u5206\u5229\u7528 30 \u5929\u514d\u8d39\u8bd5\u7528\uff0c\u5e76\u6309\u7167\u4e0b\u9762\u7684\u6b65\u9aa4\u64cd\u4f5c\uff01'
-                    : '\u0023 \u60a8\u7684\u514d\u8d39\u8bd5\u7528\u5df2\u7ecf\u5f00\u59cb\uff01\u8ba9\u6211\u4eec\u5e2e\u60a8\u5b8c\u6210\u8bbe\u7f6e\u3002\n\ud83d\udc4b \u60a8\u597d\uff0c\u6211\u662f\u60a8\u7684 Expensify \u8bbe\u7ece\u4e13\u5458\u3002\u6211\u5df2\u7ecf\u521b\u5efa\u4e86\u4e00\u4e2a\u5de5\u4f5c\u533a\uff0c\u7528\u4e8e\u5e2e\u52a9\u7ba1\u7406\u60a8\u56e2\u961f\u7684\u6536\u636e\u548c\u8d39\u7528\u3002\u4e3a\u4e86\u5145\u5206\u5229\u7528 30 \u5929\u514d\u8d39\u8bd5\u7528\uff0c\u8bf7\u6309\u7167\u4e0b\u9762\u7684\u5269\u4f59\u6b65\u9aa4\u64cd\u4f5c\uff01';
-            },
+            onboardingManageTeamMessage: ({ hasIntroSelected }) => hasIntroSelected
+                ? '\u0023 \u60a8\u7684\u514d\u8d39\u8bd5\u7528\u5df2\u7ecf\u5f00\u59cb\uff01\u8ba9\u6211\u4eec\u5e2e\u60a8\u5b8c\u6210\u8bbe\u7f6e\u3002\n\ud83d\udc4b \u60a8\u597d\uff0c\u6211\u662f\u60a8\u7684 Expensify \u8bbe\u7f6e\u4e13\u5458\u3002\u73b0\u5728\u60a8\u5df2\u7ecf\u521b\u5efa\u4e86\u4e00\u4e2a\u5de5\u4f5c\u533a\uff0c\u8bf7\u5145\u5206\u5229\u7528 30 \u5929\u514d\u8d39\u8bd5\u7528\uff0c\u5e76\u6309\u7167\u4e0b\u9762\u7684\u6b65\u9aa4\u64cd\u4f5c\uff01'
+                : '\u0023 \u60a8\u7684\u514d\u8d39\u8bd5\u7528\u5df2\u7ecf\u5f00\u59cb\uff01\u8ba9\u6211\u4eec\u5e2e\u60a8\u5b8c\u6210\u8bbe\u7f6e\u3002\n\ud83d\udc4b \u60a8\u597d\uff0c\u6211\u662f\u60a8\u7684 Expensify \u8bbe\u7ece\u4e13\u5458\u3002\u6211\u5df2\u7ecf\u521b\u5efa\u4e86\u4e00\u4e2a\u5de5\u4f5c\u533a\uff0c\u7528\u4e8e\u5e2e\u52a9\u7ba1\u7406\u60a8\u56e2\u961f\u7684\u6536\u636e\u548c\u8d39\u7528\u3002\u4e3a\u4e86\u5145\u5206\u5229\u7528 30 \u5929\u514d\u8d39\u8bd5\u7528\uff0c\u8bf7\u6309\u7167\u4e0b\u9762\u7684\u5269\u4f59\u6b65\u9aa4\u64cd\u4f5c\uff01',
             onboardingTrackWorkspaceMessage: '# \u8ba9\u6211\u4eec\u6765\u8bbe\u7f6e\u60a8\u7684\u5e10\u6237\n\u00f0\u009f\u0091\u008b \u6211\u6765\u5e2e\u5fd9\u4e86\uff01\u4e3a\u4e86\u5e2e\u52a9\u60a8\u5f00\u59cb\uff0c\u6211\u5df2\u4e3a\u4e2a\u4f53\u7ecf\u8425\u8005\u548c\u7c7b\u4f3c\u4f01\u4e1a\u91cf\u8eab\u5b9a\u5236\u4e86\u60a8\u7684\u5de5\u4f5c\u533a\u8bbe\u7f6e\u3002\u60a8\u53ef\u4ee5\u901a\u8fc7\u70b9\u51fb\u4e0b\u9762\u7684\u94fe\u63a5\u6765\u8c03\u6574\u60a8\u7684\u5de5\u4f5c\u533a\uff01\n\n\u4ee5\u4e0b\u662f\u5982\u4f55\u5728\u51e0\u6b21\u70b9\u51fb\u4e2d\u8ddf\u8e2a\u60a8\u7684\u652f\u51fa\uff1a',
             onboardingChatSplitMessage: '\u4e0e\u670b\u53cb\u5206\u644a\u8d26\u5355\u5c31\u50cf\u53d1\u9001\u6d88\u606f\u4e00\u6837\u7b80\u5355\u3002\u4ee5\u4e0b\u662f\u65b9\u6cd5\u3002',
             onboardingAdminMessage: '\u4e86\u89e3\u5982\u4f55\u4f5c\u4e3a\u7ba1\u7406\u5458\u7ba1\u7406\u56e2\u961f\u7684\u5de5\u4f5c\u533a\u5e76\u63d0\u4ea4\u81ea\u5df1\u7684\u652f\u51fa\u3002',
@@ -2693,52 +2185,28 @@ var translations = {
         legalLastName: '法定姓氏',
         address: '地址',
         error: {
-            dateShouldBeBefore: function (_a) {
-                var dateString = _a.dateString;
-                return "\u65E5\u671F\u5E94\u65E9\u4E8E".concat(dateString);
-            },
-            dateShouldBeAfter: function (_a) {
-                var dateString = _a.dateString;
-                return "\u65E5\u671F\u5E94\u5728".concat(dateString, "\u4E4B\u540E");
-            },
+            dateShouldBeBefore: ({ dateString }) => `日期应早于${dateString}`,
+            dateShouldBeAfter: ({ dateString }) => `日期应在${dateString}之后`,
             hasInvalidCharacter: '名称只能包含拉丁字符',
-            incorrectZipFormat: function (_a) {
-                var _b = _a === void 0 ? {} : _a, zipFormat = _b.zipFormat;
-                return "\u90AE\u653F\u7F16\u7801\u683C\u5F0F\u4E0D\u6B63\u786E".concat(zipFormat ? "\u53EF\u63A5\u53D7\u7684\u683C\u5F0F\uFF1A".concat(zipFormat) : '');
-            },
-            invalidPhoneNumber: "\u8BF7\u786E\u4FDD\u7535\u8BDD\u53F7\u7801\u6709\u6548\uFF08\u4F8B\u5982 ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, "\uFF09"),
+            incorrectZipFormat: ({ zipFormat } = {}) => `邮政编码格式不正确${zipFormat ? `可接受的格式：${zipFormat}` : ''}`,
+            invalidPhoneNumber: `请确保电话号码有效（例如 ${CONST_1.default.EXAMPLE_PHONE_NUMBER}）`,
         },
     },
     resendValidationForm: {
         linkHasBeenResent: '链接已重新发送',
-        weSentYouMagicSignInLink: function (_a) {
-            var login = _a.login, loginType = _a.loginType;
-            return "\u6211\u5DF2\u53D1\u9001\u4E00\u4E2A\u9B54\u6CD5\u767B\u5F55\u94FE\u63A5\u5230".concat(login, "\u3002\u8BF7\u68C0\u67E5\u60A8\u7684").concat(loginType, "\u4EE5\u767B\u5F55\u3002");
-        },
+        weSentYouMagicSignInLink: ({ login, loginType }) => `我已发送一个魔法登录链接到${login}。请检查您的${loginType}以登录。`,
         resendLink: '重新发送链接',
     },
     unlinkLoginForm: {
-        toValidateLogin: function (_a) {
-            var primaryLogin = _a.primaryLogin, secondaryLogin = _a.secondaryLogin;
-            return "\u8981\u9A8C\u8BC1".concat(secondaryLogin, "\uFF0C\u8BF7\u4ECE").concat(primaryLogin, "\u7684\u8D26\u6237\u8BBE\u7F6E\u4E2D\u91CD\u65B0\u53D1\u9001\u9B54\u6CD5\u4EE3\u7801\u3002");
-        },
-        noLongerHaveAccess: function (_a) {
-            var primaryLogin = _a.primaryLogin;
-            return "\u5982\u679C\u60A8\u4E0D\u518D\u80FD\u8BBF\u95EE".concat(primaryLogin, "\uFF0C\u8BF7\u53D6\u6D88\u94FE\u63A5\u60A8\u7684\u8D26\u6237\u3002");
-        },
+        toValidateLogin: ({ primaryLogin, secondaryLogin }) => `要验证${secondaryLogin}，请从${primaryLogin}的账户设置中重新发送魔法代码。`,
+        noLongerHaveAccess: ({ primaryLogin }) => `如果您不再能访问${primaryLogin}，请取消链接您的账户。`,
         unlink: '取消链接',
         linkSent: '链接已发送！',
         successfullyUnlinkedLogin: '辅助登录已成功取消关联！',
     },
     emailDeliveryFailurePage: {
-        ourEmailProvider: function (_a) {
-            var login = _a.login;
-            return "\u7531\u4E8E\u53D1\u9001\u95EE\u9898\uFF0C\u6211\u4EEC\u7684\u7535\u5B50\u90AE\u4EF6\u63D0\u4F9B\u5546\u5DF2\u6682\u65F6\u6682\u505C\u5411".concat(login, "\u53D1\u9001\u7535\u5B50\u90AE\u4EF6\u3002\u8981\u89E3\u9664\u5BF9\u60A8\u767B\u5F55\u7684\u963B\u6B62\uFF0C\u8BF7\u6309\u7167\u4EE5\u4E0B\u6B65\u9AA4\u64CD\u4F5C\uFF1A");
-        },
-        confirmThat: function (_a) {
-            var login = _a.login;
-            return "\u786E\u8BA4".concat(login, "\u7684\u62FC\u5199\u6B63\u786E\uFF0C\u5E76\u4E14\u662F\u4E00\u4E2A\u771F\u5B9E\u53EF\u6295\u9012\u7684\u7535\u5B50\u90AE\u4EF6\u5730\u5740\u3002");
-        },
+        ourEmailProvider: ({ login }) => `由于发送问题，我们的电子邮件提供商已暂时暂停向${login}发送电子邮件。要解除对您登录的阻止，请按照以下步骤操作：`,
+        confirmThat: ({ login }) => `确认${login}的拼写正确，并且是一个真实可投递的电子邮件地址。`,
         emailAliases: '像“expenses@domain.com”这样的电子邮件别名必须能够访问其自己的电子邮件收件箱，才能成为有效的Expensify登录。',
         ensureYourEmailClient: '确保您的电子邮件客户端允许接收来自expensify.com的电子邮件。',
         youCanFindDirections: '您可以找到有关如何完成此步骤的说明',
@@ -2747,38 +2215,33 @@ var translations = {
         toUnblock: '以解除您的登录阻止。',
     },
     smsDeliveryFailurePage: {
-        smsDeliveryFailureMessage: function (_a) {
-            var login = _a.login;
-            return "\u6211\u4EEC\u65E0\u6CD5\u5411".concat(login, "\u53D1\u9001\u77ED\u4FE1\uFF0C\u56E0\u6B64\u5DF2\u6682\u65F6\u6682\u505C\u3002\u8BF7\u5C1D\u8BD5\u9A8C\u8BC1\u60A8\u7684\u53F7\u7801\uFF1A");
-        },
+        smsDeliveryFailureMessage: ({ login }) => `我们无法向${login}发送短信，因此已暂时暂停。请尝试验证您的号码：`,
         validationSuccess: '您的号码已验证！点击下方发送新的魔法登录代码。',
-        validationFailed: function (_a) {
-            var _b;
-            var timeData = _a.timeData;
+        validationFailed: ({ timeData, }) => {
             if (!timeData) {
                 return '请稍等片刻再试。';
             }
-            var timeParts = [];
+            const timeParts = [];
             if (timeData.days) {
-                timeParts.push("".concat(timeData.days, " ").concat(timeData.days === 1 ? '天' : '天'));
+                timeParts.push(`${timeData.days} ${timeData.days === 1 ? '天' : '天'}`);
             }
             if (timeData.hours) {
-                timeParts.push("".concat(timeData.hours, " ").concat(timeData.hours === 1 ? '小时' : '小时'));
+                timeParts.push(`${timeData.hours} ${timeData.hours === 1 ? '小时' : '小时'}`);
             }
             if (timeData.minutes) {
-                timeParts.push("".concat(timeData.minutes, " ").concat(timeData.minutes === 1 ? '分钟' : '分钟'));
+                timeParts.push(`${timeData.minutes} ${timeData.minutes === 1 ? '分钟' : '分钟'}`);
             }
-            var timeText = '';
+            let timeText = '';
             if (timeParts.length === 1) {
-                timeText = (_b = timeParts.at(0)) !== null && _b !== void 0 ? _b : '';
+                timeText = timeParts.at(0) ?? '';
             }
             else if (timeParts.length === 2) {
-                timeText = "".concat(timeParts.at(0), " and ").concat(timeParts.at(1));
+                timeText = `${timeParts.at(0)} and ${timeParts.at(1)}`;
             }
             else if (timeParts.length === 3) {
-                timeText = "".concat(timeParts.at(0), ", ").concat(timeParts.at(1), ", and ").concat(timeParts.at(2));
+                timeText = `${timeParts.at(0)}, ${timeParts.at(1)}, and ${timeParts.at(2)}`;
             }
-            return "\u8BF7\u7A0D\u7B49\uFF01\u60A8\u9700\u8981\u7B49\u5F85".concat(timeText, "\u540E\u624D\u80FD\u518D\u6B21\u5C1D\u8BD5\u9A8C\u8BC1\u60A8\u7684\u53F7\u7801\u3002");
+            return `请稍等！您需要等待${timeText}后才能再次尝试验证您的号码。`;
         },
     },
     welcomeSignUpForm: {
@@ -2813,10 +2276,7 @@ var translations = {
         goToChatInstead: '请前往聊天界面。',
     },
     errorPage: {
-        title: function (_a) {
-            var isBreakLine = _a.isBreakLine;
-            return "\u62B1\u6B49... ".concat(isBreakLine ? '\n' : '', "\u51FA\u73B0\u4E86\u95EE\u9898");
-        },
+        title: ({ isBreakLine }) => `抱歉... ${isBreakLine ? '\n' : ''}出现了问题`,
         subtitle: '您的请求无法完成。请稍后再试。',
     },
     setPasswordPage: {
@@ -2844,10 +2304,7 @@ var translations = {
             custom: '自定义',
         },
         untilTomorrow: '直到明天',
-        untilTime: function (_a) {
-            var time = _a.time;
-            return "\u76F4\u5230".concat(time);
-        },
+        untilTime: ({ time }) => `直到${time}`,
         date: '日期',
         time: '时间',
         clearAfter: '清除后',
@@ -2855,27 +2312,17 @@ var translations = {
         vacationDelegate: '\u4F11\u5047\u4EE3\u7406\u4EBA',
         setVacationDelegate: '\u8BBE\u7F6E\u4E00\u4F4D\u4F11\u5047\u4EE3\u7406\u4EBA\uFF0C\u5728\u60A8\u5916\u51FA\u65F6\u4EE3\u60A8\u6279\u51C6\u62A5\u544A\u3002',
         vacationDelegateError: '\u66F4\u65B0\u4F11\u5047\u4EE3\u7406\u4EBA\u65F6\u51FA\u9519\u3002',
-        asVacationDelegate: function (_a) {
-            var managerName = _a.nameOrEmail;
-            return "\u4F5C\u4E3A ".concat(managerName, " \u7684\u4F11\u5047\u4EE3\u7406\u4EBA");
-        },
-        toAsVacationDelegate: function (_a) {
-            var submittedToName = _a.submittedToName, vacationDelegateName = _a.vacationDelegateName;
-            return "\u53D1\u9001\u7ED9 ".concat(submittedToName, "\uFF0C\u4F5C\u4E3A ").concat(vacationDelegateName, " \u7684\u4F11\u5047\u4EE3\u7406\u4EBA");
-        },
-        vacationDelegateWarning: function (_a) {
-            var nameOrEmail = _a.nameOrEmail;
-            return "\u60A8\u6B63\u5728\u6307\u5B9A ".concat(nameOrEmail, " \u4F5C\u4E3A\u60A8\u7684\u4F11\u5047\u4EE3\u7406\u4EBA\u3002\u4ED6/\u5979\u8FD8\u672A\u52A0\u5165\u60A8\u7684\u6240\u6709\u5DE5\u4F5C\u7A7A\u95F4\u3002\u5982\u679C\u60A8\u9009\u62E9\u7EE7\u7EED\uFF0C\u5C06\u5411\u6240\u6709\u5DE5\u4F5C\u7A7A\u95F4\u7BA1\u7406\u5458\u53D1\u9001\u90AE\u4EF6\uFF0C\u901A\u77E5\u4ED6\u4EEC\u6DFB\u52A0\u8BE5\u4EBA\u3002");
-        },
+        asVacationDelegate: ({ nameOrEmail: managerName }) => `\u4F5C\u4E3A ${managerName} \u7684\u4F11\u5047\u4EE3\u7406\u4EBA`,
+        toAsVacationDelegate: ({ submittedToName, vacationDelegateName }) => `\u53D1\u9001\u7ED9 ${submittedToName}\uFF0C\u4F5C\u4E3A ${vacationDelegateName} \u7684\u4F11\u5047\u4EE3\u7406\u4EBA`,
+        vacationDelegateWarning: ({ nameOrEmail }) => `\u60A8\u6B63\u5728\u6307\u5B9A ${nameOrEmail} \u4F5C\u4E3A\u60A8\u7684\u4F11\u5047\u4EE3\u7406\u4EBA\u3002\u4ED6/\u5979\u8FD8\u672A\u52A0\u5165\u60A8\u7684\u6240\u6709\u5DE5\u4F5C\u7A7A\u95F4\u3002\u5982\u679C\u60A8\u9009\u62E9\u7EE7\u7EED\uFF0C\u5C06\u5411\u6240\u6709\u5DE5\u4F5C\u7A7A\u95F4\u7BA1\u7406\u5458\u53D1\u9001\u90AE\u4EF6\uFF0C\u901A\u77E5\u4ED6\u4EEC\u6DFB\u52A0\u8BE5\u4EBA\u3002`,
     },
-    stepCounter: function (_a) {
-        var step = _a.step, total = _a.total, text = _a.text;
-        var result = "\u6B65\u9AA4 ".concat(step);
+    stepCounter: ({ step, total, text }) => {
+        let result = `步骤 ${step}`;
         if (total) {
-            result = "".concat(result, " of ").concat(total);
+            result = `${result} of ${total}`;
         }
         if (text) {
-            result = "".concat(result, ": ").concat(text);
+            result = `${result}: ${text}`;
         }
         return result;
     },
@@ -2898,22 +2345,16 @@ var translations = {
         toGetStarted: '添加一个银行账户以报销费用、发行Expensify卡、收取发票付款并从一个地方支付账单。',
         plaidBodyCopy: '为您的员工提供一种更简单的方式来支付公司费用并获得报销。',
         checkHelpLine: '您的银行路由号码和账户号码可以在该账户的支票上找到。',
-        hasPhoneLoginError: function (_a) {
-            var contactMethodRoute = _a.contactMethodRoute;
-            return "\u8981\u8FDE\u63A5\u94F6\u884C\u8D26\u6237\uFF0C\u8BF7 <a href=\"".concat(contactMethodRoute, "\">\u6DFB\u52A0\u4E00\u4E2A\u7535\u5B50\u90AE\u4EF6\u4F5C\u4E3A\u60A8\u7684\u4E3B\u8981\u767B\u5F55\u65B9\u5F0F</a> \u5E76\u91CD\u8BD5\u3002\u60A8\u53EF\u4EE5\u6DFB\u52A0\u7535\u8BDD\u53F7\u7801\u4F5C\u4E3A\u8F85\u52A9\u767B\u5F55\u3002");
-        },
+        hasPhoneLoginError: ({ contactMethodRoute }) => `要连接银行账户，请 <a href="${contactMethodRoute}">添加一个电子邮件作为您的主要登录方式</a> 并重试。您可以添加电话号码作为辅助登录。`,
         hasBeenThrottledError: '添加您的银行账户时发生错误。请稍等几分钟后重试。',
-        hasCurrencyError: function (_a) {
-            var workspaceRoute = _a.workspaceRoute;
-            return "\u54CE\u5440\uFF01\u60A8\u7684\u5DE5\u4F5C\u533A\u8D27\u5E01\u4F3C\u4E4E\u8BBE\u7F6E\u4E3A\u4E0D\u540C\u4E8E USD \u7684\u8D27\u5E01\u3002\u8981\u7EE7\u7EED\uFF0C\u8BF7\u524D\u5F80 <a href=\"".concat(workspaceRoute, "\">\u60A8\u7684\u5DE5\u4F5C\u533A\u8BBE\u7F6E</a> \u5C06\u5176\u8BBE\u7F6E\u4E3A\u7F8E\u5143\uFF0C\u7136\u540E\u91CD\u8BD5\u3002");
-        },
+        hasCurrencyError: ({ workspaceRoute }) => `哎呀！您的工作区货币似乎设置为不同于 USD 的货币。要继续，请前往 <a href="${workspaceRoute}">您的工作区设置</a> 将其设置为美元，然后重试。`,
         error: {
             youNeedToSelectAnOption: '请选择一个选项继续',
             noBankAccountAvailable: '抱歉，没有可用的银行账户。',
             noBankAccountSelected: '请选择一个账户',
             taxID: '请输入有效的税号',
             website: '请输入一个有效的网站',
-            zipCode: "\u8BF7\u8F93\u5165\u6709\u6548\u7684\u90AE\u653F\u7F16\u7801\uFF0C\u683C\u5F0F\u4E3A\uFF1A".concat(CONST_1.default.COUNTRY_ZIP_REGEX_DATA.US.samples),
+            zipCode: `请输入有效的邮政编码，格式为：${CONST_1.default.COUNTRY_ZIP_REGEX_DATA.US.samples}`,
             phoneNumber: '请输入有效的电话号码',
             email: '请输入有效的电子邮件地址',
             companyName: '请输入有效的企业名称',
@@ -2977,12 +2418,9 @@ var translations = {
         retry: '重试',
     },
     messages: {
-        errorMessageInvalidPhone: "\u8BF7\u8F93\u5165\u4E00\u4E2A\u6709\u6548\u7684\u7535\u8BDD\u53F7\u7801\uFF0C\u4E0D\u8981\u4F7F\u7528\u62EC\u53F7\u6216\u7834\u6298\u53F7\u3002\u5982\u679C\u60A8\u5728\u7F8E\u56FD\u4EE5\u5916\uFF0C\u8BF7\u5305\u62EC\u60A8\u7684\u56FD\u5BB6\u4EE3\u7801\uFF08\u4F8B\u5982 ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, "\uFF09\u3002"),
+        errorMessageInvalidPhone: `请输入一个有效的电话号码，不要使用括号或破折号。如果您在美国以外，请包括您的国家代码（例如 ${CONST_1.default.EXAMPLE_PHONE_NUMBER}）。`,
         errorMessageInvalidEmail: '无效的电子邮件',
-        userIsAlreadyMember: function (_a) {
-            var login = _a.login, name = _a.name;
-            return "".concat(login, " \u5DF2\u7ECF\u662F ").concat(name, " \u7684\u6210\u5458");
-        },
+        userIsAlreadyMember: ({ login, name }) => `${login} 已经是 ${name} 的成员`,
     },
     onfidoStep: {
         acceptTerms: '通过继续请求激活您的Expensify钱包，您确认您已阅读、理解并接受',
@@ -2990,7 +2428,7 @@ var translations = {
         tryAgain: '再试一次',
         verifyIdentity: '验证身份',
         letsVerifyIdentity: '让我们验证您的身份',
-        butFirst: "\u4F46\u9996\u5148\uFF0C\u662F\u4E00\u4E9B\u65E0\u804A\u7684\u5185\u5BB9\u3002\u5728\u4E0B\u4E00\u6B65\u9605\u8BFB\u6CD5\u5F8B\u6761\u6B3E\uFF0C\u51C6\u5907\u597D\u540E\u70B9\u51FB\u201C\u63A5\u53D7\u201D\u3002",
+        butFirst: `但首先，是一些无聊的内容。在下一步阅读法律条款，准备好后点击“接受”。`,
         genericError: '处理此步骤时发生错误。请重试。',
         cameraPermissionsNotGranted: '启用相机访问权限',
         cameraRequestMessage: '我们需要访问您的相机以完成银行账户验证。请通过设置 > New Expensify 启用。',
@@ -3036,10 +2474,7 @@ var translations = {
         checkTheBoxes: '请勾选下面的框。',
         agreeToTerms: '同意条款后，您就可以开始了！',
         shortTermsForm: {
-            expensifyPaymentsAccount: function (_a) {
-                var walletProgram = _a.walletProgram;
-                return "Expensify Wallet\u7531".concat(walletProgram, "\u53D1\u884C\u3002");
-            },
+            expensifyPaymentsAccount: ({ walletProgram }) => `Expensify Wallet由${walletProgram}发行。`,
             perPurchase: '每次购买',
             atmWithdrawal: 'ATM取款',
             cashReload: '现金充值',
@@ -3056,10 +2491,7 @@ var translations = {
             conditionsDetails: '有关所有费用和服务的详细信息和条件，请访问',
             conditionsPhone: '或拨打 +1 833-400-0904。',
             instant: '(instant)',
-            electronicFundsInstantFeeMin: function (_a) {
-                var amount = _a.amount;
-                return "(min ".concat(amount, ")");
-            },
+            electronicFundsInstantFeeMin: ({ amount }) => `(min ${amount})`,
         },
         longTermsForm: {
             listOfAllFees: '所有Expensify Wallet费用的列表',
@@ -3077,21 +2509,15 @@ var translations = {
             electronicFundsStandardDetails: "There's no fee to transfer funds from your Expensify Wallet " +
                 'to your bank account using the standard option. This transfer usually completes within 1-3 business' +
                 ' days.',
-            electronicFundsInstantDetails: function (_a) {
-                var percentage = _a.percentage, amount = _a.amount;
-                return "There's a fee to transfer funds from your Expensify Wallet to " +
-                    'your linked debit card using the instant transfer option. This transfer usually completes within ' +
-                    "several minutes. The fee is ".concat(percentage, "% of the transfer amount (with a minimum fee of ").concat(amount, ").");
-            },
-            fdicInsuranceBancorp: function (_a) {
-                var amount = _a.amount;
-                return 'Your funds are eligible for FDIC insurance. Your funds will be held at or ' +
-                    "transferred to ".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK, ", an FDIC-insured institution. Once there, your funds are insured up ") +
-                    "to ".concat(amount, " by the FDIC in the event ").concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK, " fails, if specific deposit insurance requirements ") +
-                    "are met and your card is registered. See";
-            },
+            electronicFundsInstantDetails: ({ percentage, amount }) => "There's a fee to transfer funds from your Expensify Wallet to " +
+                'your linked debit card using the instant transfer option. This transfer usually completes within ' +
+                `several minutes. The fee is ${percentage}% of the transfer amount (with a minimum fee of ${amount}).`,
+            fdicInsuranceBancorp: ({ amount }) => 'Your funds are eligible for FDIC insurance. Your funds will be held at or ' +
+                `transferred to ${CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK}, an FDIC-insured institution. Once there, your funds are insured up ` +
+                `to ${amount} by the FDIC in the event ${CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK} fails, if specific deposit insurance requirements ` +
+                `are met and your card is registered. See`,
             fdicInsuranceBancorp2: '详情。',
-            contactExpensifyPayments: "\u901A\u8FC7\u62E8\u6253 +1 833-400-0904 \u6216\u53D1\u9001\u7535\u5B50\u90AE\u4EF6\u8054\u7CFB ".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS),
+            contactExpensifyPayments: `通过拨打 +1 833-400-0904 或发送电子邮件联系 ${CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS}`,
             contactExpensifyPayments2: '或登录在',
             generalInformation: '有关预付账户的一般信息，请访问',
             generalInformation2: '如果您对预付账户有投诉，请致电消费者金融保护局 1-855-411-2372 或访问',
@@ -3099,10 +2525,7 @@ var translations = {
             automated: '自动化的',
             liveAgent: '实时客服代理',
             instant: '即时',
-            electronicFundsInstantFeeMin: function (_a) {
-                var amount = _a.amount;
-                return "\u6700\u4F4E ".concat(amount);
-            },
+            electronicFundsInstantFeeMin: ({ amount }) => `最低 ${amount}`,
         },
     },
     activateStep: {
@@ -3201,8 +2624,7 @@ var translations = {
         whatsTheBusinessName: '企业名称是什么？',
         whatsTheBusinessAddress: '公司的地址是什么？',
         whatsTheBusinessContactInformation: '商业联系信息是什么？',
-        whatsTheBusinessRegistrationNumber: function (_a) {
-            var country = _a.country;
+        whatsTheBusinessRegistrationNumber: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.GB:
                     return '公司注册号（CRN）是多少？';
@@ -3210,8 +2632,7 @@ var translations = {
                     return '营业登记号码是多少？';
             }
         },
-        whatsTheBusinessTaxIDEIN: function (_a) {
-            var country = _a.country;
+        whatsTheBusinessTaxIDEIN: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.US:
                     return '什么是雇主识别号（EIN）？';
@@ -3231,8 +2652,7 @@ var translations = {
         whatsTheBusinessAnnualPayment: '企业的年度支付总额是多少？',
         whatsYourExpectedAverageReimbursements: '您的预期平均报销金额是多少？',
         registrationNumber: '注册号码',
-        taxIDEIN: function (_a) {
-            var country = _a.country;
+        taxIDEIN: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.US:
                     return 'EIN';
@@ -3253,15 +2673,9 @@ var translations = {
         incorporationTypeName: '公司类型',
         businessCategory: '业务类别',
         annualPaymentVolume: '年度支付总额',
-        annualPaymentVolumeInCurrency: function (_a) {
-            var currencyCode = _a.currencyCode;
-            return "\u5E74\u5EA6\u652F\u4ED8\u91CF\uFF08".concat(currencyCode, "\uFF09");
-        },
+        annualPaymentVolumeInCurrency: ({ currencyCode }) => `年度支付量（${currencyCode}）`,
         averageReimbursementAmount: '平均报销金额',
-        averageReimbursementAmountInCurrency: function (_a) {
-            var currencyCode = _a.currencyCode;
-            return "\u5E73\u5747\u62A5\u9500\u91D1\u989D\uFF08".concat(currencyCode, "\uFF09");
-        },
+        averageReimbursementAmountInCurrency: ({ currencyCode }) => `平均报销金额（${currencyCode}）`,
         selectIncorporationType: '选择公司类型',
         selectBusinessCategory: '选择业务类别',
         selectAnnualPaymentVolume: '选择年度支付金额',
@@ -3275,8 +2689,7 @@ var translations = {
         findAverageReimbursement: '查找平均报销金额',
         error: {
             registrationNumber: '请提供有效的注册号码',
-            taxIDEIN: function (_a) {
-                var country = _a.country;
+            taxIDEIN: ({ country }) => {
                 switch (country) {
                     case CONST_1.default.COUNTRY.US:
                         return '请输入有效的雇主识别号（EIN）';
@@ -3293,18 +2706,9 @@ var translations = {
         },
     },
     beneficialOwnerInfoStep: {
-        doYouOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "\u60A8\u662F\u5426\u62E5\u6709".concat(companyName, "\u768425%\u6216\u66F4\u591A\u80A1\u4EFD\uFF1F");
-        },
-        doAnyIndividualOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "\u662F\u5426\u6709\u4EFB\u4F55\u4E2A\u4EBA\u62E5\u6709".concat(companyName, "\u768425%\u6216\u4EE5\u4E0A\u80A1\u4EFD\uFF1F");
-        },
-        areThereMoreIndividualsWhoOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "\u8FD8\u6709\u5176\u4ED6\u4E2A\u4EBA\u6301\u6709".concat(companyName, " 25%\u6216\u4EE5\u4E0A\u7684\u80A1\u4EFD\u5417\uFF1F");
-        },
+        doYouOwn25percent: ({ companyName }) => `您是否拥有${companyName}的25%或更多股份？`,
+        doAnyIndividualOwn25percent: ({ companyName }) => `是否有任何个人拥有${companyName}的25%或以上股份？`,
+        areThereMoreIndividualsWhoOwn25percent: ({ companyName }) => `还有其他个人持有${companyName} 25%或以上的股份吗？`,
         regulationRequiresUsToVerifyTheIdentity: '法规要求我们核实任何拥有超过25%业务的个人的身份。',
         companyOwner: '企业主',
         enterLegalFirstAndLastName: '所有者的法定姓名是什么？',
@@ -3325,14 +2729,8 @@ var translations = {
         ownerInfo: '所有者信息',
         businessOwner: '企业主',
         signerInfo: '签署人信息',
-        doYouOwn: function (_a) {
-            var companyName = _a.companyName;
-            return "\u60A8\u662F\u5426\u62E5\u6709".concat(companyName, "\u768425%\u6216\u66F4\u591A\u80A1\u4EFD\uFF1F");
-        },
-        doesAnyoneOwn: function (_a) {
-            var companyName = _a.companyName;
-            return "\u662F\u5426\u6709\u4EFB\u4F55\u4E2A\u4EBA\u62E5\u6709".concat(companyName, "\u768425%\u6216\u4EE5\u4E0A\u80A1\u4EFD\uFF1F");
-        },
+        doYouOwn: ({ companyName }) => `您是否拥有${companyName}的25%或更多股份？`,
+        doesAnyoneOwn: ({ companyName }) => `是否有任何个人拥有${companyName}的25%或以上股份？`,
         regulationsRequire: '法规要求我们核实任何拥有超过25%业务的个人的身份。',
         legalFirstName: '法定名字',
         legalLastName: '法定姓氏',
@@ -3353,10 +2751,7 @@ var translations = {
         letsDoubleCheck: '让我们仔细检查一下，确保一切正常。',
         legalName: '法定名称',
         ownershipPercentage: '所有权百分比',
-        areThereOther: function (_a) {
-            var companyName = _a.companyName;
-            return "\u662F\u5426\u6709\u5176\u4ED6\u4EBA\u62E5\u6709".concat(companyName, "\u768425%\u6216\u66F4\u591A\u80A1\u4EFD\uFF1F");
-        },
+        areThereOther: ({ companyName }) => `是否有其他人拥有${companyName}的25%或更多股份？`,
         owners: '所有者',
         addCertified: '添加一份认证的组织结构图，显示受益所有者。',
         regulationRequiresChart: '根据规定，我们需要收集一份经过认证的所有权图副本，该图显示了拥有公司25%或以上股份的每个个人或实体。',
@@ -3383,7 +2778,7 @@ var translations = {
         headerTitle: '验证银行账户',
         buttonText: '完成设置',
         maxAttemptsReached: '由于多次尝试错误，此银行账户的验证已被禁用。',
-        description: "\u57281-2\u4E2A\u5DE5\u4F5C\u65E5\u5185\uFF0C\u6211\u4EEC\u4F1A\u4ECE\u7C7B\u4F3C\u201CExpensify, Inc. Validation\u201D\u7684\u540D\u79F0\u5411\u60A8\u7684\u94F6\u884C\u8D26\u6237\u53D1\u9001\u4E09\uFF083\uFF09\u7B14\u5C0F\u989D\u4EA4\u6613\u3002",
+        description: `在1-2个工作日内，我们会从类似“Expensify, Inc. Validation”的名称向您的银行账户发送三（3）笔小额交易。`,
         descriptionCTA: '请在下面的字段中输入每笔交易金额。示例：1.51。',
         reviewingInfo: '谢谢！我们正在审核您的信息，很快会与您联系。请查看您与Concierge的聊天。',
         forNextStep: '接下来的步骤以完成您的银行账户设置。',
@@ -3409,7 +2804,7 @@ var translations = {
         validateButtonText: '验证',
         validationInputLabel: '交易',
         maxAttemptsReached: '由于多次尝试错误，此银行账户的验证已被禁用。',
-        description: "\u57281-2\u4E2A\u5DE5\u4F5C\u65E5\u5185\uFF0C\u6211\u4EEC\u4F1A\u4ECE\u7C7B\u4F3C\u201CExpensify, Inc. Validation\u201D\u7684\u540D\u79F0\u5411\u60A8\u7684\u94F6\u884C\u8D26\u6237\u53D1\u9001\u4E09\uFF083\uFF09\u7B14\u5C0F\u989D\u4EA4\u6613\u3002",
+        description: `在1-2个工作日内，我们会从类似“Expensify, Inc. Validation”的名称向您的银行账户发送三（3）笔小额交易。`,
         descriptionCTA: '请在下面的字段中输入每笔交易金额。示例：1.51。',
         reviewingInfo: '谢谢！我们正在审核您的信息，并会很快与您联系。请查看您与Concierge的聊天。',
         forNextSteps: '接下来的步骤以完成您的银行账户设置。',
@@ -3437,10 +2832,7 @@ var translations = {
     },
     signerInfoStep: {
         signerInfo: '签署人信息',
-        areYouDirector: function (_a) {
-            var companyName = _a.companyName;
-            return "\u60A8\u662F".concat(companyName, "\u7684\u8463\u4E8B\u6216\u9AD8\u7EA7\u7BA1\u7406\u4EBA\u5458\u5417\uFF1F");
-        },
+        areYouDirector: ({ companyName }) => `您是${companyName}的董事或高级管理人员吗？`,
         regulationRequiresUs: '法规要求我们核实签署人是否有权代表企业采取此行动。',
         whatsYourName: '您的法定姓名是什么',
         fullName: '法定全名',
@@ -3452,16 +2844,10 @@ var translations = {
         letsDoubleCheck: '让我们仔细检查一下，确保一切正常。',
         legalName: '法定名称',
         proofOf: '个人地址证明',
-        enterOneEmail: function (_a) {
-            var companyName = _a.companyName;
-            return "\u8F93\u5165".concat(companyName, "\u7684\u8463\u4E8B\u6216\u9AD8\u7EA7\u804C\u5458\u7684\u7535\u5B50\u90AE\u4EF6\u5730\u5740");
-        },
+        enterOneEmail: ({ companyName }) => `输入${companyName}的董事或高级职员的电子邮件地址`,
         regulationRequiresOneMoreDirector: '法规要求至少有一位以上的董事或高级管理人员作为签署人。',
         hangTight: '请稍等...',
-        enterTwoEmails: function (_a) {
-            var companyName = _a.companyName;
-            return "\u8F93\u5165".concat(companyName, "\u7684\u4E24\u4F4D\u8463\u4E8B\u6216\u9AD8\u7EA7\u7BA1\u7406\u4EBA\u5458\u7684\u7535\u5B50\u90AE\u4EF6\u5730\u5740");
-        },
+        enterTwoEmails: ({ companyName }) => `输入${companyName}的两位董事或高级管理人员的电子邮件地址`,
         sendReminder: '发送提醒',
         chooseFile: '选择文件',
         weAreWaiting: '我们正在等待其他人验证他们作为公司董事或高级管理人员的身份。',
@@ -3475,10 +2861,7 @@ var translations = {
         pleaseUpload: '请在下方上传其他文件，以帮助我们验证您作为企业实体的董事或高级管理人员的身份。',
         enterSignerInfo: '输入签署人信息',
         thisStep: '此步骤已完成',
-        isConnecting: function (_a) {
-            var bankAccountLastFour = _a.bankAccountLastFour, currency = _a.currency;
-            return "\u6B63\u5728\u5C06\u4EE5 ".concat(bankAccountLastFour, " \u7ED3\u5C3E\u7684 ").concat(currency, " \u516C\u53F8\u94F6\u884C\u8D26\u6237\u8FDE\u63A5\u5230 Expensify\uFF0C\u4EE5\u4FBF\u7528 ").concat(currency, " \u5411\u5458\u5DE5\u4ED8\u6B3E\u3002\u4E0B\u4E00\u6B65\u9700\u8981\u8463\u4E8B\u6216\u9AD8\u7EA7\u7BA1\u7406\u4EBA\u5458\u7684\u7B7E\u7F72\u4EBA\u4FE1\u606F\u3002");
-        },
+        isConnecting: ({ bankAccountLastFour, currency }) => `正在将以 ${bankAccountLastFour} 结尾的 ${currency} 公司银行账户连接到 Expensify，以便用 ${currency} 向员工付款。下一步需要董事或高级管理人员的签署人信息。`,
     },
     agreementsStep: {
         agreements: '协议',
@@ -3486,7 +2869,7 @@ var translations = {
         regulationRequiresUs: '法规要求我们核实任何拥有超过25%业务的个人的身份。',
         iAmAuthorized: '我被授权使用公司银行账户进行业务支出。',
         iCertify: '我证明所提供的信息是真实准确的。',
-        iAcceptTheTermsAndConditions: "\u6211\u63A5\u53D7<a href=\"https://cross-border.corpay.com/tc/\">\u6761\u6B3E\u548C\u6761\u4EF6</a>\u3002",
+        iAcceptTheTermsAndConditions: `我接受<a href="https://cross-border.corpay.com/tc/">条款和条件</a>。`,
         iAcceptTheTermsAndConditionsAccessibility: '我接受条款和条件。',
         accept: '接受并添加银行账户',
         iConsentToThePrivacyNotice: '我同意<a href="https://payments.corpay.com/compliance">隐私声明</a>。',
@@ -3538,17 +2921,14 @@ var translations = {
             header: '在我们继续之前...',
             title: '条款和条件',
             label: '我同意条款和条件',
-            subtitle: "\u8BF7\u540C\u610F Expensify Travel <a href=\"".concat(CONST_1.default.TRAVEL_TERMS_URL, "\">\u6761\u6B3E\u548C\u6761\u4EF6</a>\u3002"),
+            subtitle: `请同意 Expensify Travel <a href="${CONST_1.default.TRAVEL_TERMS_URL}">条款和条件</a>。`,
             error: '您必须同意Expensify Travel的条款和条件才能继续',
             defaultWorkspaceError: '您需要设置一个默认工作区以启用Expensify Travel。请前往设置 > 工作区 > 点击工作区旁边的三个竖点 > 设为默认工作区，然后重试！',
         },
         flight: '航班',
         flightDetails: {
             passenger: '乘客',
-            layover: function (_a) {
-                var layover = _a.layover;
-                return "<muted-text-label>\u5728\u6B64\u822A\u73ED\u4E4B\u524D\uFF0C\u60A8\u6709<strong>".concat(layover, "\u5C0F\u65F6\u7684\u4E2D\u8F6C</strong></muted-text-label>");
-            },
+            layover: ({ layover }) => `<muted-text-label>在此航班之前，您有<strong>${layover}小时的中转</strong></muted-text-label>`,
             takeOff: '起飞',
             landing: '着陆',
             seat: '座位',
@@ -3610,10 +2990,7 @@ var translations = {
         tripSummary: '行程总结',
         departs: '出发',
         errorMessage: '出现问题。请稍后再试。',
-        phoneError: function (_a) {
-            var phoneErrorMethodsRoute = _a.phoneErrorMethodsRoute;
-            return "<rbr>\u8BF7\u5C06<a href=\"".concat(phoneErrorMethodsRoute, "\">\u5DE5\u4F5C\u90AE\u7BB1\u6DFB\u52A0\u4E3A</a>\u9884\u8BA2\u65C5\u884C\u7684\u4E3B\u8981\u767B\u5F55\u90AE\u7BB1\u3002</rbr>");
-        },
+        phoneError: ({ phoneErrorMethodsRoute }) => `<rbr>请将<a href="${phoneErrorMethodsRoute}">工作邮箱添加为</a>预订旅行的主要登录邮箱。</rbr>`,
         domainSelector: {
             title: '域名',
             subtitle: '为 Expensify Travel 设置选择一个域名。',
@@ -3621,102 +2998,42 @@ var translations = {
         },
         domainPermissionInfo: {
             title: '域名',
-            restriction: function (_a) {
-                var domain = _a.domain;
-                return "\u60A8\u6CA1\u6709\u4E3A\u57DF\u540D <strong>".concat(domain, "</strong> \u542F\u7528 Expensify \u65C5\u884C\u7684\u6743\u9650\u3002\u60A8\u9700\u8981\u8BA9\u8BE5\u57DF\u7684\u5176\u4ED6\u4EBA\u4EE3\u66FF\u60A8\u542F\u7528\u65C5\u884C\u529F\u80FD\u3002");
-            },
-            accountantInvitation: "\u5982\u679C\u60A8\u662F\u4F1A\u8BA1\u5E08\uFF0C\u5EFA\u8BAE\u60A8\u52A0\u5165<a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.EXPENSIFY_APPROVED_PROGRAM_URL, "\">ExpensifyApproved!\u4F1A\u8BA1\u5E08\u8BA1\u5212</a>\uFF0C\u4EE5\u4FBF\u4E3A\u8BE5\u9886\u57DF\u542F\u7528\u5DEE\u65C5\u529F\u80FD\u3002"),
+            restriction: ({ domain }) => `您没有为域名 <strong>${domain}</strong> 启用 Expensify 旅行的权限。您需要让该域的其他人代替您启用旅行功能。`,
+            accountantInvitation: `如果您是会计师，建议您加入<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.EXPENSIFY_APPROVED_PROGRAM_URL}">ExpensifyApproved!会计师计划</a>，以便为该领域启用差旅功能。`,
         },
         publicDomainError: {
             title: '开始使用 Expensify Travel',
-            message: "\u60A8\u9700\u8981\u5728Expensify Travel\u4E2D\u4F7F\u7528\u60A8\u7684\u5DE5\u4F5C\u90AE\u7BB1\uFF08\u4F8B\u5982\uFF0Cname@company.com\uFF09\uFF0C\u800C\u4E0D\u662F\u60A8\u7684\u4E2A\u4EBA\u90AE\u7BB1\uFF08\u4F8B\u5982\uFF0Cname@gmail.com\uFF09\u3002",
+            message: `您需要在Expensify Travel中使用您的工作邮箱（例如，name@company.com），而不是您的个人邮箱（例如，name@gmail.com）。`,
         },
         blockedFeatureModal: {
             title: 'Expensify Travel 已被禁用',
-            message: "\u60A8\u7684\u7BA1\u7406\u5458\u5DF2\u5173\u95EDExpensify Travel\u3002\u8BF7\u9075\u5FAA\u60A8\u516C\u53F8\u7684\u9884\u8BA2\u653F\u7B56\u8FDB\u884C\u5DEE\u65C5\u5B89\u6392\u3002",
+            message: `您的管理员已关闭Expensify Travel。请遵循您公司的预订政策进行差旅安排。`,
         },
         verifyCompany: {
             title: '立即开始旅行吧！',
-            message: "\u8BF7\u8054\u7CFB\u60A8\u7684\u5BA2\u6237\u7ECF\u7406\u6216\u53D1\u9001\u7535\u5B50\u90AE\u4EF6\u81F3 salesteam@expensify.com \u4EE5\u83B7\u53D6\u65C5\u884C\u6F14\u793A\u5E76\u4E3A\u60A8\u7684\u516C\u53F8\u542F\u7528\u8BE5\u529F\u80FD\u3002",
+            message: `请联系您的客户经理或发送电子邮件至 salesteam@expensify.com 以获取旅行演示并为您的公司启用该功能。`,
         },
         updates: {
-            bookingTicketed: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate, _b = _a.confirmationID, confirmationID = _b === void 0 ? '' : _b;
-                return "\u60A8\u5DF2\u9884\u8BA2\u822A\u73ED ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ")\uFF0C\u51FA\u53D1\u65E5\u671F\u4E3A ").concat(startDate, "\u3002\u786E\u8BA4\u7801\uFF1A").concat(confirmationID);
-            },
-            ticketVoided: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u60A8".concat(startDate, "\u7684\u822A\u73ED").concat(airlineCode, "\uFF08").concat(origin, " \u2192 ").concat(destination, "\uFF09\u7684\u673A\u7968\u5DF2\u88AB\u4F5C\u5E9F\u3002");
-            },
-            ticketRefunded: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u60A8".concat(startDate, "\u4ECE").concat(origin, "\u98DE\u5F80").concat(destination, "\u7684").concat(airlineCode, "\u822A\u73ED\u673A\u7968\u5DF2\u88AB\u9000\u6B3E\u6216\u66F4\u6362\u3002");
-            },
-            flightCancelled: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u60A8\u7684\u822A\u73ED ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") \u4E8E ").concat(startDate, " \u5DF2\u88AB\u822A\u7A7A\u516C\u53F8\u53D6\u6D88\u3002");
-            },
-            flightScheduleChangePending: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u822A\u7A7A\u516C\u53F8\u5DF2\u63D0\u8BAE\u66F4\u6539\u822A\u73ED ".concat(airlineCode, " \u7684\u65F6\u95F4\u8868\uFF1B\u6211\u4EEC\u6B63\u5728\u7B49\u5F85\u786E\u8BA4\u3002");
-            },
-            flightScheduleChangeClosed: function (_a) {
-                var airlineCode = _a.airlineCode, startDate = _a.startDate;
-                return "\u822A\u73ED\u53D8\u66F4\u5DF2\u786E\u8BA4\uFF1A\u822A\u73ED ".concat(airlineCode, " \u73B0\u5728\u7684\u8D77\u98DE\u65F6\u95F4\u4E3A ").concat(startDate, "\u3002");
-            },
-            flightUpdated: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u60A8\u5728".concat(startDate, "\u7684\u822A\u73ED").concat(airlineCode, "\uFF08").concat(origin, " \u2192 ").concat(destination, "\uFF09\u5DF2\u66F4\u65B0\u3002");
-            },
-            flightCabinChanged: function (_a) {
-                var airlineCode = _a.airlineCode, cabinClass = _a.cabinClass;
-                return "\u60A8\u7684\u8231\u4F4D\u7B49\u7EA7\u5DF2\u5728\u822A\u73ED ".concat(airlineCode, " \u4E0A\u66F4\u65B0\u4E3A ").concat(cabinClass, "\u3002");
-            },
-            flightSeatConfirmed: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u60A8\u5728\u822A\u73ED ".concat(airlineCode, " \u4E0A\u7684\u5EA7\u4F4D\u5DF2\u786E\u8BA4\u3002");
-            },
-            flightSeatChanged: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u60A8\u5728\u822A\u73ED ".concat(airlineCode, " \u4E0A\u7684\u5EA7\u4F4D\u5DF2\u88AB\u66F4\u6539\u3002");
-            },
-            flightSeatCancelled: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u60A8\u5728\u822A\u73ED ".concat(airlineCode, " \u4E0A\u7684\u5EA7\u4F4D\u5206\u914D\u5DF2\u88AB\u53D6\u6D88\u3002");
-            },
+            bookingTicketed: ({ airlineCode, origin, destination, startDate, confirmationID = '' }) => `您已预订航班 ${airlineCode} (${origin} → ${destination})，出发日期为 ${startDate}。确认码：${confirmationID}`,
+            ticketVoided: ({ airlineCode, origin, destination, startDate }) => `您${startDate}的航班${airlineCode}（${origin} → ${destination}）的机票已被作废。`,
+            ticketRefunded: ({ airlineCode, origin, destination, startDate }) => `您${startDate}从${origin}飞往${destination}的${airlineCode}航班机票已被退款或更换。`,
+            flightCancelled: ({ airlineCode, origin, destination, startDate }) => `您的航班 ${airlineCode} (${origin} → ${destination}) 于 ${startDate} 已被航空公司取消。`,
+            flightScheduleChangePending: ({ airlineCode }) => `航空公司已提议更改航班 ${airlineCode} 的时间表；我们正在等待确认。`,
+            flightScheduleChangeClosed: ({ airlineCode, startDate }) => `航班变更已确认：航班 ${airlineCode} 现在的起飞时间为 ${startDate}。`,
+            flightUpdated: ({ airlineCode, origin, destination, startDate }) => `您在${startDate}的航班${airlineCode}（${origin} → ${destination}）已更新。`,
+            flightCabinChanged: ({ airlineCode, cabinClass }) => `您的舱位等级已在航班 ${airlineCode} 上更新为 ${cabinClass}。`,
+            flightSeatConfirmed: ({ airlineCode }) => `您在航班 ${airlineCode} 上的座位已确认。`,
+            flightSeatChanged: ({ airlineCode }) => `您在航班 ${airlineCode} 上的座位已被更改。`,
+            flightSeatCancelled: ({ airlineCode }) => `您在航班 ${airlineCode} 上的座位分配已被取消。`,
             paymentDeclined: '您的机票预订付款失败。请重试。',
-            bookingCancelledByTraveler: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "\u60A8\u5DF2\u53D6\u6D88\u60A8\u7684".concat(type, "\u9884\u8BA2").concat(id, "\u3002");
-            },
-            bookingCancelledByVendor: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "\u4F9B\u5E94\u5546\u53D6\u6D88\u4E86\u60A8\u7684".concat(type, "\u9884\u8BA2").concat(id, "\u3002");
-            },
-            bookingRebooked: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "\u60A8\u7684".concat(type, "\u9884\u8BA2\u5DF2\u91CD\u65B0\u9884\u8BA2\u3002\u65B0\u7684\u786E\u8BA4\u53F7\uFF1A").concat(id, "\u3002");
-            },
-            bookingUpdated: function (_a) {
-                var type = _a.type;
-                return "\u60A8\u7684".concat(type, "\u9884\u8BA2\u5DF2\u66F4\u65B0\u3002\u8BF7\u67E5\u770B\u884C\u7A0B\u4E2D\u7684\u65B0\u8BE6\u60C5\u3002");
-            },
-            railTicketRefund: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u60A8\u4ECE".concat(origin, "\u5230").concat(destination, "\u7684\u706B\u8F66\u7968\u5DF2\u4E8E").concat(startDate, "\u9000\u7968\u3002\u9000\u6B3E\u5C06\u88AB\u5904\u7406\u3002");
-            },
-            railTicketExchange: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u60A8\u4ECE ".concat(origin, " \u5230 ").concat(destination, " \u7684\u706B\u8F66\u7968\u5DF2\u4E8E ").concat(startDate, " \u66F4\u6362\u3002");
-            },
-            railTicketUpdate: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u60A8\u4ECE".concat(origin, "\u5230").concat(destination, "\u7684\u706B\u8F66\u7968\u5DF2\u5728").concat(startDate, "\u66F4\u65B0\u3002");
-            },
-            defaultUpdate: function (_a) {
-                var type = _a.type;
-                return "\u60A8\u7684".concat(type, "\u9884\u8BA2\u5DF2\u66F4\u65B0\u3002");
-            },
+            bookingCancelledByTraveler: ({ type, id = '' }) => `您已取消您的${type}预订${id}。`,
+            bookingCancelledByVendor: ({ type, id = '' }) => `供应商取消了您的${type}预订${id}。`,
+            bookingRebooked: ({ type, id = '' }) => `您的${type}预订已重新预订。新的确认号：${id}。`,
+            bookingUpdated: ({ type }) => `您的${type}预订已更新。请查看行程中的新详情。`,
+            railTicketRefund: ({ origin, destination, startDate }) => `您从${origin}到${destination}的火车票已于${startDate}退票。退款将被处理。`,
+            railTicketExchange: ({ origin, destination, startDate }) => `您从 ${origin} 到 ${destination} 的火车票已于 ${startDate} 更换。`,
+            railTicketUpdate: ({ origin, destination, startDate }) => `您从${origin}到${destination}的火车票已在${startDate}更新。`,
+            defaultUpdate: ({ type }) => `您的${type}预订已更新。`,
         },
         flightTo: '飞往',
         trainTo: '火车前往',
@@ -3765,18 +3082,18 @@ var translations = {
             issueAndManageCards: '发行和管理卡片',
             reconcileCards: '对账卡片',
             selectAll: '全选',
-            selected: function () { return ({
+            selected: () => ({
                 one: '1 已选择',
-                other: function (count) { return "\u5DF2\u9009\u62E9".concat(count, "\u4E2A"); },
-            }); },
+                other: (count) => `已选择${count}个`,
+            }),
             settlementFrequency: '结算频率',
             setAsDefault: '设为默认工作区',
-            defaultNote: "\u53D1\u9001\u5230".concat(CONST_1.default.EMAIL.RECEIPTS, "\u7684\u6536\u636E\u5C06\u663E\u793A\u5728\u6B64\u5DE5\u4F5C\u533A\u4E2D\u3002"),
+            defaultNote: `发送到${CONST_1.default.EMAIL.RECEIPTS}的收据将显示在此工作区中。`,
             deleteConfirmation: '您确定要删除此工作区吗？',
             deleteWithCardsConfirmation: '您确定要删除此工作区吗？这将删除所有卡片源和已分配的卡片。',
             unavailable: '工作区不可用',
             memberNotFound: '未找到成员。要邀请新成员加入工作区，请使用上面的邀请按钮。',
-            notAuthorized: "\u60A8\u65E0\u6743\u8BBF\u95EE\u6B64\u9875\u9762\u3002\u5982\u679C\u60A8\u6B63\u5728\u5C1D\u8BD5\u52A0\u5165\u6B64\u5DE5\u4F5C\u533A\uFF0C\u8BF7\u8BF7\u6C42\u5DE5\u4F5C\u533A\u6240\u6709\u8005\u5C06\u60A8\u6DFB\u52A0\u4E3A\u6210\u5458\u3002\u8FD8\u6709\u5176\u4ED6\u95EE\u9898\uFF1F\u8BF7\u8054\u7CFB".concat(CONST_1.default.EMAIL.CONCIERGE, "\u3002"),
+            notAuthorized: `您无权访问此页面。如果您正在尝试加入此工作区，请请求工作区所有者将您添加为成员。还有其他问题？请联系${CONST_1.default.EMAIL.CONCIERGE}。`,
             goToWorkspace: '前往工作区',
             duplicateWorkspace: '重复工作区',
             duplicateWorkspacePrefix: '复制',
@@ -3796,10 +3113,7 @@ var translations = {
             subscription: '订阅',
             markAsEntered: '标记为手动输入',
             markAsExported: '标记为已出口',
-            exportIntegrationSelected: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u5BFC\u51FA\u5230".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]);
-            },
+            exportIntegrationSelected: ({ connectionName }) => `导出到${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
             letsDoubleCheck: '让我们仔细检查一下，确保一切都正确。',
             lineItemLevel: '逐项级别',
             reportLevel: '报告级别',
@@ -3807,36 +3121,20 @@ var translations = {
             appliedOnExport: '未导入Expensify，已在导出时应用',
             shareNote: {
                 header: '与其他成员共享您的工作区',
-                content: function (_a) {
-                    var adminsRoomLink = _a.adminsRoomLink;
-                    return "\u5206\u4EAB\u6B64\u4E8C\u7EF4\u7801\u6216\u590D\u5236\u4E0B\u9762\u7684\u94FE\u63A5\uFF0C\u65B9\u4FBF\u6210\u5458\u7533\u8BF7\u52A0\u5165\u60A8\u7684\u5DE5\u4F5C\u533A\u3002\u6240\u6709\u52A0\u5165\u5DE5\u4F5C\u533A\u7684\u8BF7\u6C42\u90FD\u5C06\u663E\u793A\u5728 <a href=\"".concat(adminsRoomLink, "\">").concat(CONST_1.default.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS, "</a> room \u4E2D\u4F9B\u60A8\u67E5\u770B\u3002");
-                },
+                content: ({ adminsRoomLink }) => `分享此二维码或复制下面的链接，方便成员申请加入您的工作区。所有加入工作区的请求都将显示在 <a href="${adminsRoomLink}">${CONST_1.default.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS}</a> room 中供您查看。`,
             },
-            connectTo: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u8FDE\u63A5\u5230".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]);
-            },
+            connectTo: ({ connectionName }) => `连接到${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
             createNewConnection: '创建新连接',
             reuseExistingConnection: '重用现有连接',
             existingConnections: '现有连接',
-            existingConnectionsDescription: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u7531\u4E8E\u60A8\u4E4B\u524D\u5DF2\u8FDE\u63A5\u5230".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\uFF0C\u60A8\u53EF\u4EE5\u9009\u62E9\u91CD\u7528\u73B0\u6709\u8FDE\u63A5\u6216\u521B\u5EFA\u65B0\u8FDE\u63A5\u3002");
-            },
-            lastSyncDate: function (_a) {
-                var connectionName = _a.connectionName, formattedDate = _a.formattedDate;
-                return "".concat(connectionName, " - \u4E0A\u6B21\u540C\u6B65\u65F6\u95F4 ").concat(formattedDate);
-            },
-            authenticationError: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u7531\u4E8E\u8EAB\u4EFD\u9A8C\u8BC1\u9519\u8BEF\uFF0C\u65E0\u6CD5\u8FDE\u63A5\u5230".concat(connectionName, "\u3002");
-            },
+            existingConnectionsDescription: ({ connectionName }) => `由于您之前已连接到${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}，您可以选择重用现有连接或创建新连接。`,
+            lastSyncDate: ({ connectionName, formattedDate }) => `${connectionName} - 上次同步时间 ${formattedDate}`,
+            authenticationError: ({ connectionName }) => `由于身份验证错误，无法连接到${connectionName}。`,
             learnMore: '了解更多',
             memberAlternateText: '成员可以提交和批准报告。',
             adminAlternateText: '管理员对所有报告和工作区设置拥有完全编辑权限。',
             auditorAlternateText: '审计员可以查看和评论报告。',
-            roleName: function (_a) {
-                var _b = _a === void 0 ? {} : _a, role = _b.role;
+            roleName: ({ role } = {}) => {
                 switch (role) {
                     case CONST_1.default.POLICY.ROLE.ADMIN:
                         return '管理员';
@@ -3861,11 +3159,8 @@ var translations = {
             submitExpense: '在下方提交您的费用：',
             defaultCategory: '默认类别',
             viewTransactions: '查看交易记录',
-            policyExpenseChatName: function (_a) {
-                var displayName = _a.displayName;
-                return "".concat(displayName, "\u7684\u8D39\u7528");
-            },
-            deepDiveExpensifyCard: "<muted-text-label>Expensify \u5361\u4EA4\u6613\u5C06\u81EA\u52A8\u5BFC\u51FA\u5230\u4E0E<a href=\"".concat(CONST_1.default.DEEP_DIVE_EXPENSIFY_CARD, "\">\u6211\u4EEC\u96C6\u6210</a>\u521B\u5EFA\u7684 \u201CExpensify \u5361\u8D23\u4EFB\u8D26\u6237\u201D\u3002</muted-text-label>"),
+            policyExpenseChatName: ({ displayName }) => `${displayName}的费用`,
+            deepDiveExpensifyCard: `<muted-text-label>Expensify 卡交易将自动导出到与<a href="${CONST_1.default.DEEP_DIVE_EXPENSIFY_CARD}">我们集成</a>创建的 “Expensify 卡责任账户”。</muted-text-label>`,
         },
         receiptPartners: {
             connect: '立即连接',
@@ -3882,14 +3177,13 @@ var translations = {
                 all: '全部',
                 linked: '已关联',
                 outstanding: '待处理',
-                status: (_e = {
-                        resend: '重新发送',
-                        invite: '邀请'
-                    },
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED] = '已关联',
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED_PENDING_APPROVAL] = '待处理',
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.SUSPENDED] = '已暂停',
-                    _e),
+                status: {
+                    resend: '重新发送',
+                    invite: '邀请',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED]: '已关联',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED_PENDING_APPROVAL]: '待处理',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.SUSPENDED]: '已暂停',
+                },
                 invitationFailure: '邀请成员加入Uber for Business失败',
                 autoRemove: '邀请新工作区成员加入 Uber for Business',
                 autoInvite: '停用已从 Uber for Business 移除的工作区成员',
@@ -3904,37 +3198,28 @@ var translations = {
         perDiem: {
             subtitle: '设置每日津贴标准以控制员工的日常支出。',
             amount: '金额',
-            deleteRates: function () { return ({
+            deleteRates: () => ({
                 one: '删除费率',
                 other: '删除费率',
-            }); },
+            }),
             deletePerDiemRate: '删除每日津贴标准',
             findPerDiemRate: '查找每日津贴费率',
-            areYouSureDelete: function () { return ({
+            areYouSureDelete: () => ({
                 one: '您确定要删除此费率吗？',
                 other: '您确定要删除这些费率吗？',
-            }); },
+            }),
             emptyList: {
                 title: '每日津贴',
                 subtitle: '设置每日津贴标准以控制员工的每日支出。从电子表格导入费率以开始。',
             },
             errors: {
-                existingRateError: function (_a) {
-                    var rate = _a.rate;
-                    return "\u503C\u4E3A".concat(rate, "\u7684\u8D39\u7387\u5DF2\u5B58\u5728");
-                },
+                existingRateError: ({ rate }) => `值为${rate}的费率已存在`,
             },
             importPerDiemRates: '导入每日津贴标准',
             editPerDiemRate: '编辑每日津贴费率',
             editPerDiemRates: '编辑每日津贴标准',
-            editDestinationSubtitle: function (_a) {
-                var destination = _a.destination;
-                return "\u66F4\u65B0\u6B64\u76EE\u7684\u5730\u5C06\u66F4\u6539\u6240\u6709".concat(destination, "\u7684\u6BCF\u65E5\u6D25\u8D34\u5B50\u8D39\u7387\u3002");
-            },
-            editCurrencySubtitle: function (_a) {
-                var destination = _a.destination;
-                return "\u66F4\u65B0\u6B64\u8D27\u5E01\u5C06\u66F4\u6539\u6240\u6709".concat(destination, "\u7684\u6BCF\u65E5\u6D25\u8D34\u5B50\u8D39\u7387\u3002");
-            },
+            editDestinationSubtitle: ({ destination }) => `更新此目的地将更改所有${destination}的每日津贴子费率。`,
+            editCurrencySubtitle: ({ destination }) => `更新此货币将更改所有${destination}的每日津贴子费率。`,
         },
         qbd: {
             exportOutOfPocketExpensesDescription: '设置自付费用如何导出到QuickBooks Desktop。',
@@ -3954,41 +3239,41 @@ var translations = {
             exportDate: {
                 label: '导出日期',
                 description: '导出报告到QuickBooks Desktop时使用此日期。',
-                values: (_f = {},
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最后报销日期',
                         description: '报告中最近费用的日期。',
                     },
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: '导出日期',
                         description: '报告导出到QuickBooks Desktop的日期。',
                     },
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: '提交日期',
                         description: '报告提交审批的日期。',
                     },
-                    _f),
+                },
             },
             exportCheckDescription: '我们将为每个Expensify报告创建一张分项支票，并从以下银行账户发送。',
             exportJournalEntryDescription: '我们将为每个Expensify报告创建一项分项日记账分录，并将其发布到以下账户。',
             exportVendorBillDescription: '我们将为每个Expensify报告创建一张分项供应商账单，并将其添加到以下账户中。如果此期间已关闭，我们将发布到下一个开放期间的第一天。',
             outOfPocketTaxEnabledDescription: 'QuickBooks Desktop 不支持日记账分录导出的税款。由于您在工作区启用了税款，此导出选项不可用。',
             outOfPocketTaxEnabledError: '启用税收时，日记分录不可用。请选择其他导出选项。',
-            accounts: (_g = {},
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD] = '信用卡',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = '供应商账单',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '日记条目',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = '检查',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CHECK, "Description")] = '我们将为每个Expensify报告创建一张分项支票，并从以下银行账户发送。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "Description")] = '我们会自动将信用卡交易中的商家名称与QuickBooks中的任何对应供应商匹配。如果没有供应商存在，我们将创建一个“信用卡杂项”供应商进行关联。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Description")] = '我们将为每个Expensify报告创建一份逐项列出的供应商账单，其中包含最后一笔费用的日期，并将其添加到下面的账户中。如果该期间已关闭，我们将发布到下一个开放期间的第一天。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "AccountDescription")] = '选择导出信用卡交易的目的地。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "AccountDescription")] = '选择一个供应商以应用于所有信用卡交易。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "AccountDescription")] = '选择从哪里发送支票。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Error")] = '启用位置时，供应商账单不可用。请选择其他导出选项。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "Error")] = '启用位置时无法使用支票。请选择其他导出选项。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY, "Error")] = '启用税收时，日记分录不可用。请选择其他导出选项。',
-                _g),
+            accounts: {
+                [CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD]: '信用卡',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: '供应商账单',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '日记条目',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: '检查',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CHECK}Description`]: '我们将为每个Expensify报告创建一张分项支票，并从以下银行账户发送。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}Description`]: '我们会自动将信用卡交易中的商家名称与QuickBooks中的任何对应供应商匹配。如果没有供应商存在，我们将创建一个“信用卡杂项”供应商进行关联。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Description`]: '我们将为每个Expensify报告创建一份逐项列出的供应商账单，其中包含最后一笔费用的日期，并将其添加到下面的账户中。如果该期间已关闭，我们将发布到下一个开放期间的第一天。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}AccountDescription`]: '选择导出信用卡交易的目的地。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}AccountDescription`]: '选择一个供应商以应用于所有信用卡交易。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK}AccountDescription`]: '选择从哪里发送支票。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Error`]: '启用位置时，供应商账单不可用。请选择其他导出选项。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK}Error`]: '启用位置时无法使用支票。请选择其他导出选项。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY}Error`]: '启用税收时，日记分录不可用。请选择其他导出选项。',
+            },
             noAccountsFound: '未找到账户',
             noAccountsFoundDescription: '在 QuickBooks Desktop 中添加账户并再次同步连接',
             qbdSetup: 'QuickBooks Desktop 设置',
@@ -4001,10 +3286,7 @@ var translations = {
                 title: '打开此链接进行连接',
                 body: '要完成设置，请在运行QuickBooks Desktop的计算机上打开以下链接。',
                 setupErrorTitle: '出现错误',
-                setupErrorBody: function (_a) {
-                    var conciergeLink = _a.conciergeLink;
-                    return "<muted-text><centered-text>QuickBooks Desktop \u8FDE\u63A5\u6682\u65F6\u65E0\u6CD5\u6B63\u5E38\u5DE5\u4F5C\u3002\u8BF7\u7A0D\u540E\u518D\u8BD5\uFF0C\u5982\u679C\u95EE\u9898\u4ECD\u7136\u5B58\u5728\uFF0C<a href=\"".concat(conciergeLink, "\">\u8BF7\u8054\u7CFBConcierge</a>\u3002</centered-text></muted-text>");
-                },
+                setupErrorBody: ({ conciergeLink }) => `<muted-text><centered-text>QuickBooks Desktop 连接暂时无法正常工作。请稍后再试，如果问题仍然存在，<a href="${conciergeLink}">请联系Concierge</a>。</centered-text></muted-text>`,
             },
             importDescription: '选择从 QuickBooks Desktop 导入到 Expensify 的编码配置。',
             classes: '类',
@@ -4048,20 +3330,20 @@ var translations = {
             exportDate: {
                 label: '导出日期',
                 description: '在导出报告到QuickBooks Online时使用此日期。',
-                values: (_h = {},
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最后报销日期',
                         description: '报告中最近费用的日期。',
                     },
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: '导出日期',
                         description: '报告导出到QuickBooks Online的日期。',
                     },
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: '提交日期',
                         description: '报告提交审批的日期。',
                     },
-                    _h),
+                },
             },
             receivable: '应收账款', // This is an account name that will come directly from QBO, so I don't know why we need a translation for it. It should take whatever the name of the account is in QBO. Leaving this note for CS.
             archive: '应收账款存档', // This is an account name that will come directly from QBO, so I don't know why we need a translation for it. It should take whatever the name of the account is in QBO. Leaving this note for CS.
@@ -4096,45 +3378,45 @@ var translations = {
                 accountSelectDescription: '选择从哪里支付账单，我们将在 QuickBooks Online 中创建付款。',
                 invoiceAccountSelectorDescription: '选择接收发票付款的地方，我们将在QuickBooks Online中创建付款。',
             },
-            accounts: (_j = {},
-                _j[CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD] = '借记卡',
-                _j[CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD] = '信用卡',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = '供应商账单',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '日记条目',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = '检查',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD, "Description")] = '我们会自动将借记卡交易中的商户名称与QuickBooks中的任何相应供应商匹配。如果不存在供应商，我们将创建一个“借记卡杂项”供应商进行关联。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "Description")] = '我们会自动将信用卡交易中的商家名称与QuickBooks中的任何对应供应商匹配。如果没有供应商存在，我们将创建一个“信用卡杂项”供应商进行关联。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Description")] = '我们将为每个Expensify报告创建一份逐项列出的供应商账单，其中包含最后一笔费用的日期，并将其添加到下面的账户中。如果该期间已关闭，我们将发布到下一个开放期间的第一天。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD, "AccountDescription")] = '选择导出借记卡交易的位置。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "AccountDescription")] = '选择导出信用卡交易的目的地。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "AccountDescription")] = '选择一个供应商以应用于所有信用卡交易。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Error")] = '启用位置时，供应商账单不可用。请选择其他导出选项。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "Error")] = '启用位置时无法使用支票。请选择其他导出选项。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY, "Error")] = '启用税收时，日记分录不可用。请选择其他导出选项。',
-                _j),
-            exportDestinationAccountsMisconfigurationError: (_k = {},
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = '选择一个有效的账户进行供应商账单导出',
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '选择一个有效的账户进行日记账导出',
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = '选择一个有效的账户进行支票导出',
-                _k),
-            exportDestinationSetupAccountsInfo: (_l = {},
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = '要使用供应商账单导出，请在QuickBooks Online中设置应付账款账户。',
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '要使用分录导出，请在QuickBooks Online中设置一个分录账户。',
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = '要使用支票导出，请在QuickBooks Online中设置一个银行账户。',
-                _l),
+            accounts: {
+                [CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD]: '借记卡',
+                [CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD]: '信用卡',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: '供应商账单',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '日记条目',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: '检查',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD}Description`]: '我们会自动将借记卡交易中的商户名称与QuickBooks中的任何相应供应商匹配。如果不存在供应商，我们将创建一个“借记卡杂项”供应商进行关联。',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}Description`]: '我们会自动将信用卡交易中的商家名称与QuickBooks中的任何对应供应商匹配。如果没有供应商存在，我们将创建一个“信用卡杂项”供应商进行关联。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Description`]: '我们将为每个Expensify报告创建一份逐项列出的供应商账单，其中包含最后一笔费用的日期，并将其添加到下面的账户中。如果该期间已关闭，我们将发布到下一个开放期间的第一天。',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD}AccountDescription`]: '选择导出借记卡交易的位置。',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}AccountDescription`]: '选择导出信用卡交易的目的地。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}AccountDescription`]: '选择一个供应商以应用于所有信用卡交易。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Error`]: '启用位置时，供应商账单不可用。请选择其他导出选项。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK}Error`]: '启用位置时无法使用支票。请选择其他导出选项。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY}Error`]: '启用税收时，日记分录不可用。请选择其他导出选项。',
+            },
+            exportDestinationAccountsMisconfigurationError: {
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: '选择一个有效的账户进行供应商账单导出',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '选择一个有效的账户进行日记账导出',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: '选择一个有效的账户进行支票导出',
+            },
+            exportDestinationSetupAccountsInfo: {
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: '要使用供应商账单导出，请在QuickBooks Online中设置应付账款账户。',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '要使用分录导出，请在QuickBooks Online中设置一个分录账户。',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: '要使用支票导出，请在QuickBooks Online中设置一个银行账户。',
+            },
             noAccountsFound: '未找到账户',
             noAccountsFoundDescription: '在 QuickBooks Online 中添加账户并再次同步连接。',
             accountingMethods: {
                 label: '何时导出',
                 description: '选择何时导出费用：',
-                values: (_m = {},
-                    _m[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '应计',
-                    _m[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '现金',
-                    _m),
-                alternateText: (_o = {},
-                    _o[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自付费用将在最终批准时导出',
-                    _o[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自付费用将在支付时导出',
-                    _o),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '应计',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '现金',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自付费用将在最终批准时导出',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自付费用将在支付时导出',
+                },
             },
         },
         workspaceList: {
@@ -4150,24 +3432,18 @@ var translations = {
             accountsSwitchDescription: '启用的类别将在成员创建费用时可供选择。',
             trackingCategories: '跟踪类别',
             trackingCategoriesDescription: '选择如何在Expensify中处理Xero跟踪类别。',
-            mapTrackingCategoryTo: function (_a) {
-                var categoryName = _a.categoryName;
-                return "\u5C06 Xero ".concat(categoryName, " \u6620\u5C04\u5230");
-            },
-            mapTrackingCategoryToDescription: function (_a) {
-                var categoryName = _a.categoryName;
-                return "\u9009\u62E9\u5C06 ".concat(categoryName, " \u6620\u5C04\u5230 Xero \u7684\u4F4D\u7F6E\u3002");
-            },
+            mapTrackingCategoryTo: ({ categoryName }) => `将 Xero ${categoryName} 映射到`,
+            mapTrackingCategoryToDescription: ({ categoryName }) => `选择将 ${categoryName} 映射到 Xero 的位置。`,
             customers: '重新向客户开账单',
             customersDescription: '选择是否在Expensify中重新向客户开账单。您的Xero客户联系人可以被标记到费用中，并将作为销售发票导出到Xero。',
             taxesDescription: '选择如何在Expensify中处理Xero税款。',
             notImported: '未导入',
             notConfigured: '未配置',
-            trackingCategoriesOptions: (_p = {},
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.DEFAULT] = 'Xero 联系人默认值',
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.TAG] = '标签',
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.REPORT_FIELD] = '报告字段',
-                _p),
+            trackingCategoriesOptions: {
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.DEFAULT]: 'Xero 联系人默认值',
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.TAG]: '标签',
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.REPORT_FIELD]: '报告字段',
+            },
             exportDescription: '配置如何将Expensify数据导出到Xero。',
             purchaseBill: '采购账单',
             exportDeepDiveCompanyCard: '导出的费用将作为银行交易发布到下面的Xero银行账户，交易日期将与您的银行对账单上的日期相匹配。',
@@ -4191,43 +3467,43 @@ var translations = {
             exportDate: {
                 label: '购买账单日期',
                 description: '导出报告到Xero时使用此日期。',
-                values: (_q = {},
-                    _q[CONST_1.default.XERO_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.XERO_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最后报销日期',
                         description: '报告中最近费用的日期。',
                     },
-                    _q[CONST_1.default.XERO_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.XERO_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: '导出日期',
                         description: '报告导出到Xero的日期。',
                     },
-                    _q[CONST_1.default.XERO_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.XERO_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: '提交日期',
                         description: '报告提交审批的日期。',
                     },
-                    _q),
+                },
             },
             invoiceStatus: {
                 label: '购买账单状态',
                 description: '将此状态用于导出采购账单到Xero。',
-                values: (_r = {},
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.DRAFT] = '草稿',
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_APPROVAL] = '等待批准',
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_PAYMENT] = '等待付款',
-                    _r),
+                values: {
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.DRAFT]: '草稿',
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_APPROVAL]: '等待批准',
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_PAYMENT]: '等待付款',
+                },
             },
             noAccountsFound: '未找到账户',
             noAccountsFoundDescription: '请在Xero中添加账户并再次同步连接',
             accountingMethods: {
                 label: '何时导出',
                 description: '选择何时导出费用：',
-                values: (_s = {},
-                    _s[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '应计',
-                    _s[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '现金',
-                    _s),
-                alternateText: (_t = {},
-                    _t[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自付费用将在最终批准时导出',
-                    _t[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自付费用将在支付时导出',
-                    _t),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '应计',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '现金',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自付费用将在最终批准时导出',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自付费用将在支付时导出',
+                },
             },
         },
         sageIntacct: {
@@ -4237,46 +3513,43 @@ var translations = {
             exportDate: {
                 label: '导出日期',
                 description: '导出报告到 Sage Intacct 时使用此日期。',
-                values: (_u = {},
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最后报销日期',
                         description: '报告中最近费用的日期。',
                     },
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.EXPORTED] = {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.EXPORTED]: {
                         label: '导出日期',
                         description: '报告导出到 Sage Intacct 的日期。',
                     },
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.SUBMITTED] = {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.SUBMITTED]: {
                         label: '提交日期',
                         description: '报告提交审批的日期。',
                     },
-                    _u),
+                },
             },
             reimbursableExpenses: {
                 description: '设置自付费用如何导出到 Sage Intacct。',
-                values: (_v = {},
-                    _v[CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.EXPENSE_REPORT] = '费用报告',
-                    _v[CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL] = '供应商账单',
-                    _v),
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.EXPENSE_REPORT]: '费用报告',
+                    [CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL]: '供应商账单',
+                },
             },
             nonReimbursableExpenses: {
                 description: '设置公司卡购买如何导出到 Sage Intacct。',
-                values: (_w = {},
-                    _w[CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.CREDIT_CARD_CHARGE] = '信用卡',
-                    _w[CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL] = '供应商账单',
-                    _w),
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.CREDIT_CARD_CHARGE]: '信用卡',
+                    [CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL]: '供应商账单',
+                },
             },
             creditCardAccount: '信用卡账户',
             defaultVendor: '默认供应商',
-            defaultVendorDescription: function (_a) {
-                var isReimbursable = _a.isReimbursable;
-                return "\u8BBE\u7F6E\u4E00\u4E2A\u9ED8\u8BA4\u4F9B\u5E94\u5546\uFF0C\u5C06\u9002\u7528\u4E8E\u5728 Sage Intacct \u4E2D\u6CA1\u6709\u5339\u914D\u4F9B\u5E94\u5546\u7684".concat(isReimbursable ? '' : 'non-', "\u53EF\u62A5\u9500\u8D39\u7528\u3002");
-            },
+            defaultVendorDescription: ({ isReimbursable }) => `设置一个默认供应商，将适用于在 Sage Intacct 中没有匹配供应商的${isReimbursable ? '' : 'non-'}可报销费用。`,
             exportDescription: '配置如何将Expensify数据导出到Sage Intacct。',
             exportPreferredExporterNote: '首选导出者可以是任何工作区管理员，但如果您在域设置中为单个公司卡设置不同的导出账户，则必须也是域管理员。',
             exportPreferredExporterSubNote: '一旦设置，首选导出者将在其账户中看到可导出的报告。',
             noAccountsFound: '未找到账户',
-            noAccountsFoundDescription: "\u8BF7\u5728 Sage Intacct \u4E2D\u6DFB\u52A0\u8D26\u6237\u5E76\u518D\u6B21\u540C\u6B65\u8FDE\u63A5\u3002",
+            noAccountsFoundDescription: `请在 Sage Intacct 中添加账户并再次同步连接。`,
             autoSync: '自动同步',
             autoSyncDescription: 'Expensify将每天自动与Sage Intacct同步。',
             inviteEmployees: '邀请员工',
@@ -4287,14 +3560,14 @@ var translations = {
             accountingMethods: {
                 label: '何时导出',
                 description: '选择何时导出费用：',
-                values: (_x = {},
-                    _x[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '应计',
-                    _x[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '现金',
-                    _x),
-                alternateText: (_y = {},
-                    _y[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自付费用将在最终批准时导出',
-                    _y[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自付费用将在支付时导出',
-                    _y),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '应计',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '现金',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自付费用将在最终批准时导出',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自付费用将在支付时导出',
+                },
             },
         },
         netsuite: {
@@ -4310,50 +3583,50 @@ var translations = {
             reimbursableJournalPostingAccount: '可报销的日记账过账账户',
             journalPostingPreference: {
                 label: '过账偏好设置',
-                values: (_z = {},
-                    _z[CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_INDIVIDUAL_LINE] = '每个报告的单项明细条目',
-                    _z[CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_TOTAL_LINE] = '每笔费用的单项录入',
-                    _z),
+                values: {
+                    [CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_INDIVIDUAL_LINE]: '每个报告的单项明细条目',
+                    [CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_TOTAL_LINE]: '每笔费用的单项录入',
+                },
             },
             invoiceItem: {
                 label: '发票项目',
-                values: (_0 = {},
-                    _0[CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.CREATE] = {
+                values: {
+                    [CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.CREATE]: {
                         label: '为我创建一个',
                         description: '在导出时，我们会为您创建一个“Expensify 发票项目”（如果尚不存在）。',
                     },
-                    _0[CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.SELECT] = {
+                    [CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.SELECT]: {
                         label: '选择现有的',
                         description: '我们会将Expensify的发票与下面选择的项目关联。',
                     },
-                    _0),
+                },
             },
             exportDate: {
                 label: '导出日期',
                 description: '将此日期用于导出报告到NetSuite。',
-                values: (_1 = {},
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最后报销日期',
                         description: '报告中最近费用的日期。',
                     },
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.EXPORTED] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.EXPORTED]: {
                         label: '导出日期',
                         description: '报告导出到NetSuite的日期。',
                     },
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.SUBMITTED] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.SUBMITTED]: {
                         label: '提交日期',
                         description: '报告提交审批的日期。',
                     },
-                    _1),
+                },
             },
             exportDestination: {
-                values: (_2 = {},
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.EXPENSE_REPORT] = {
+                values: {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.EXPENSE_REPORT]: {
                         label: '费用报告',
                         reimbursableDescription: '自付费用将作为费用报告导出到NetSuite。',
                         nonReimbursableDescription: '公司卡费用将作为费用报告导出到NetSuite。',
                     },
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.VENDOR_BILL] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.VENDOR_BILL]: {
                         label: '供应商账单',
                         reimbursableDescription: 'Out-of-pocket expenses will export as bills payable to the NetSuite vendor specified below.\n' +
                             '\n' +
@@ -4362,7 +3635,7 @@ var translations = {
                             '\n' +
                             'If you’d like to set a specific vendor for each card, go to *Settings > Domains > Company Cards*.',
                     },
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.JOURNAL_ENTRY] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.JOURNAL_ENTRY]: {
                         label: '日记条目',
                         reimbursableDescription: 'Out-of-pocket expenses will export as journal entries to the NetSuite account specified below.\n' +
                             '\n' +
@@ -4371,7 +3644,7 @@ var translations = {
                             '\n' +
                             'If you’d like to set a specific vendor for each card, go to *Settings > Domains > Company Cards*.',
                     },
-                    _2),
+                },
             },
             advancedConfig: {
                 autoSyncDescription: 'Expensify将每天自动与NetSuite同步。',
@@ -4394,42 +3667,42 @@ var translations = {
                 exportReportsTo: {
                     label: '费用报告审批级别',
                     description: '一旦在Expensify中批准了费用报告并导出到NetSuite，您可以在NetSuite中设置额外的审批级别，然后再进行发布。',
-                    values: (_3 = {},
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_NONE] = 'NetSuite 默认偏好设置',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_SUPERVISOR_APPROVED] = '仅限主管批准',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_ACCOUNTING_APPROVED] = '仅会计批准',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_BOTH] = '主管和会计已批准',
-                        _3),
+                    values: {
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_NONE]: 'NetSuite 默认偏好设置',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_SUPERVISOR_APPROVED]: '仅限主管批准',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_ACCOUNTING_APPROVED]: '仅会计批准',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_BOTH]: '主管和会计已批准',
+                    },
                 },
                 accountingMethods: {
                     label: '何时导出',
                     description: '选择何时导出费用：',
-                    values: (_4 = {},
-                        _4[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '应计',
-                        _4[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '现金',
-                        _4),
-                    alternateText: (_5 = {},
-                        _5[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自付费用将在最终批准时导出',
-                        _5[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自付费用将在支付时导出',
-                        _5),
+                    values: {
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '应计',
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '现金',
+                    },
+                    alternateText: {
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自付费用将在最终批准时导出',
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自付费用将在支付时导出',
+                    },
                 },
                 exportVendorBillsTo: {
                     label: '供应商账单审批级别',
                     description: '一旦供应商账单在Expensify中获得批准并导出到NetSuite，您可以在NetSuite中设置额外的审批级别，然后再进行过账。',
-                    values: (_6 = {},
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED_NONE] = 'NetSuite 默认偏好设置',
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVAL_PENDING] = '待批准',
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED] = '批准发布',
-                        _6),
+                    values: {
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED_NONE]: 'NetSuite 默认偏好设置',
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVAL_PENDING]: '待批准',
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED]: '批准发布',
+                    },
                 },
                 exportJournalsTo: {
                     label: '日记分录审批级别',
                     description: '一旦在Expensify中批准了日记账分录并导出到NetSuite，您可以在NetSuite中设置额外的审批级别，然后再进行过账。',
-                    values: (_7 = {},
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED_NONE] = 'NetSuite 默认偏好设置',
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVAL_PENDING] = '待批准',
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED] = '批准发布',
-                        _7),
+                    values: {
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED_NONE]: 'NetSuite 默认偏好设置',
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVAL_PENDING]: '待批准',
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED]: '批准发布',
+                    },
                 },
                 error: {
                     customFormID: '请输入有效的数字自定义表单ID',
@@ -4498,22 +3771,13 @@ var translations = {
                     importJobs: '导入项目',
                     customers: '客户',
                     jobs: '项目',
-                    label: function (_a) {
-                        var importFields = _a.importFields, importType = _a.importType;
-                        return "".concat(importFields.join('和'), ", ").concat(importType);
-                    },
+                    label: ({ importFields, importType }) => `${importFields.join('和')}, ${importType}`,
                 },
                 importTaxDescription: '从 NetSuite 导入税务组。',
                 importCustomFields: {
                     chooseOptionBelow: '选择以下选项：',
-                    label: function (_a) {
-                        var importedTypes = _a.importedTypes;
-                        return "Imported as ".concat(importedTypes.join('和'));
-                    },
-                    requiredFieldError: function (_a) {
-                        var fieldName = _a.fieldName;
-                        return "\u8BF7\u8F93\u5165".concat(fieldName);
-                    },
+                    label: ({ importedTypes }) => `Imported as ${importedTypes.join('和')}`,
+                    requiredFieldError: ({ fieldName }) => `请输入${fieldName}`,
                     customSegments: {
                         title: '自定义段/记录',
                         addText: '添加自定义段/记录',
@@ -4541,23 +3805,20 @@ var translations = {
                             segmentRecordType: '您想添加自定义段还是自定义记录？',
                             customSegmentNameTitle: '自定义分段名称是什么？',
                             customRecordNameTitle: '自定义记录名称是什么？',
-                            customSegmentNameFooter: "\u60A8\u53EF\u4EE5\u5728 NetSuite \u7684 *Customizations > Links, Records & Fields > Custom Segments* \u9875\u9762\u4E0B\u627E\u5230\u81EA\u5B9A\u4E49\u6BB5\u540D\u79F0\u3002\n\n_\u6709\u5173\u66F4\u8BE6\u7EC6\u7684\u8BF4\u660E\uFF0C\u8BF7[\u8BBF\u95EE\u6211\u4EEC\u7684\u5E2E\u52A9\u7F51\u7AD9](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_\u3002"),
-                            customRecordNameFooter: "\u60A8\u53EF\u4EE5\u901A\u8FC7\u5728\u5168\u5C40\u641C\u7D22\u4E2D\u8F93\u5165\u201CTransaction Column Field\u201D\u6765\u67E5\u627ENetSuite\u4E2D\u7684\u81EA\u5B9A\u4E49\u8BB0\u5F55\u540D\u79F0\u3002\n\n_\u6709\u5173\u66F4\u8BE6\u7EC6\u7684\u8BF4\u660E\uFF0C\u8BF7[\u8BBF\u95EE\u6211\u4EEC\u7684\u5E2E\u52A9\u7F51\u7AD9](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_\u3002"),
+                            customSegmentNameFooter: `您可以在 NetSuite 的 *Customizations > Links, Records & Fields > Custom Segments* 页面下找到自定义段名称。\n\n_有关更详细的说明，请[访问我们的帮助网站](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_。`,
+                            customRecordNameFooter: `您可以通过在全局搜索中输入“Transaction Column Field”来查找NetSuite中的自定义记录名称。\n\n_有关更详细的说明，请[访问我们的帮助网站](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_。`,
                             customSegmentInternalIDTitle: '内部ID是什么？',
-                            customSegmentInternalIDFooter: "\u9996\u5148\uFF0C\u8BF7\u786E\u4FDD\u60A8\u5728 NetSuite \u4E2D\u542F\u7528\u4E86\u5185\u90E8 ID\uFF0C\u8DEF\u5F84\u4E3A *Home > Set Preferences > Show Internal ID*\u3002\n\n\u60A8\u53EF\u4EE5\u5728 NetSuite \u4E2D\u627E\u5230\u81EA\u5B9A\u4E49\u6BB5\u7684\u5185\u90E8 ID\uFF0C\u8DEF\u5F84\u4E3A\uFF1A\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*\u3002\n2. \u70B9\u51FB\u8FDB\u5165\u4E00\u4E2A\u81EA\u5B9A\u4E49\u6BB5\u3002\n3. \u70B9\u51FB *Custom Record Type* \u65C1\u8FB9\u7684\u8D85\u94FE\u63A5\u3002\n4. \u5728\u5E95\u90E8\u7684\u8868\u683C\u4E2D\u627E\u5230\u5185\u90E8 ID\u3002\n\n_\u6709\u5173\u66F4\u8BE6\u7EC6\u7684\u8BF4\u660E\uFF0C\u8BF7[\u8BBF\u95EE\u6211\u4EEC\u7684\u5E2E\u52A9\u7F51\u7AD9](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")_\u3002"),
-                            customRecordInternalIDFooter: "\u60A8\u53EF\u4EE5\u901A\u8FC7\u4EE5\u4E0B\u6B65\u9AA4\u5728 NetSuite \u4E2D\u627E\u5230\u81EA\u5B9A\u4E49\u8BB0\u5F55\u7684\u5185\u90E8 ID\uFF1A\n\n1. \u5728\u5168\u5C40\u641C\u7D22\u4E2D\u8F93\u5165\u201CTransaction Line Fields\u201D\u3002\n2. \u70B9\u51FB\u8FDB\u5165\u4E00\u4E2A\u81EA\u5B9A\u4E49\u8BB0\u5F55\u3002\n3. \u5728\u5DE6\u4FA7\u627E\u5230\u5185\u90E8 ID\u3002\n\n_\u6709\u5173\u66F4\u8BE6\u7EC6\u7684\u8BF4\u660E\uFF0C\u8BF7[\u8BBF\u95EE\u6211\u4EEC\u7684\u5E2E\u52A9\u7F51\u7AD9](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_\u3002"),
+                            customSegmentInternalIDFooter: `首先，请确保您在 NetSuite 中启用了内部 ID，路径为 *Home > Set Preferences > Show Internal ID*。\n\n您可以在 NetSuite 中找到自定义段的内部 ID，路径为：\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*。\n2. 点击进入一个自定义段。\n3. 点击 *Custom Record Type* 旁边的超链接。\n4. 在底部的表格中找到内部 ID。\n\n_有关更详细的说明，请[访问我们的帮助网站](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})_。`,
+                            customRecordInternalIDFooter: `您可以通过以下步骤在 NetSuite 中找到自定义记录的内部 ID：\n\n1. 在全局搜索中输入“Transaction Line Fields”。\n2. 点击进入一个自定义记录。\n3. 在左侧找到内部 ID。\n\n_有关更详细的说明，请[访问我们的帮助网站](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_。`,
                             customSegmentScriptIDTitle: '脚本ID是什么？',
-                            customSegmentScriptIDFooter: "\u60A8\u53EF\u4EE5\u5728 NetSuite \u4E2D\u627E\u5230\u81EA\u5B9A\u4E49\u6BB5\u811A\u672C ID\uFF0C\u8DEF\u5F84\u4E3A\uFF1A\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*\u3002\n2. \u70B9\u51FB\u8FDB\u5165\u4E00\u4E2A\u81EA\u5B9A\u4E49\u6BB5\u3002\n3. \u70B9\u51FB\u9760\u8FD1\u5E95\u90E8\u7684 *Application and Sourcing* \u6807\u7B7E\u9875\uFF0C\u7136\u540E\uFF1A\n    a. \u5982\u679C\u60A8\u60F3\u5728 Expensify \u4E2D\u5C06\u81EA\u5B9A\u4E49\u6BB5\u663E\u793A\u4E3A *\u6807\u7B7E*\uFF08\u5728\u5355\u9879\u7EA7\u522B\uFF09\uFF0C\u8BF7\u70B9\u51FB *Transaction Columns* \u5B50\u6807\u7B7E\u9875\u5E76\u4F7F\u7528 *Field ID*\u3002\n    b. \u5982\u679C\u60A8\u60F3\u5728 Expensify \u4E2D\u5C06\u81EA\u5B9A\u4E49\u6BB5\u663E\u793A\u4E3A *\u62A5\u544A\u5B57\u6BB5*\uFF08\u5728\u62A5\u544A\u7EA7\u522B\uFF09\uFF0C\u8BF7\u70B9\u51FB *Transactions* \u5B50\u6807\u7B7E\u9875\u5E76\u4F7F\u7528 *Field ID*\u3002\n\n_\u6709\u5173\u66F4\u8BE6\u7EC6\u7684\u8BF4\u660E\uFF0C\u8BF7[\u8BBF\u95EE\u6211\u4EEC\u7684\u5E2E\u52A9\u7F51\u7AD9](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")_\u3002"),
+                            customSegmentScriptIDFooter: `您可以在 NetSuite 中找到自定义段脚本 ID，路径为：\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*。\n2. 点击进入一个自定义段。\n3. 点击靠近底部的 *Application and Sourcing* 标签页，然后：\n    a. 如果您想在 Expensify 中将自定义段显示为 *标签*（在单项级别），请点击 *Transaction Columns* 子标签页并使用 *Field ID*。\n    b. 如果您想在 Expensify 中将自定义段显示为 *报告字段*（在报告级别），请点击 *Transactions* 子标签页并使用 *Field ID*。\n\n_有关更详细的说明，请[访问我们的帮助网站](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})_。`,
                             customRecordScriptIDTitle: '交易列ID是什么？',
-                            customRecordScriptIDFooter: "\u60A8\u53EF\u4EE5\u5728 NetSuite \u4E2D\u627E\u5230\u81EA\u5B9A\u4E49\u8BB0\u5F55\u811A\u672C ID\uFF0C\u6B65\u9AA4\u5982\u4E0B\uFF1A\n\n1. \u5728\u5168\u5C40\u641C\u7D22\u4E2D\u8F93\u5165\u201CTransaction Line Fields\u201D\u3002\n2. \u70B9\u51FB\u8FDB\u5165\u4E00\u4E2A\u81EA\u5B9A\u4E49\u8BB0\u5F55\u3002\n3. \u5728\u5DE6\u4FA7\u627E\u5230\u811A\u672C ID\u3002\n\n_\u6709\u5173\u66F4\u8BE6\u7EC6\u7684\u8BF4\u660E\uFF0C\u8BF7[\u8BBF\u95EE\u6211\u4EEC\u7684\u5E2E\u52A9\u7F51\u7AD9](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_\u3002"),
+                            customRecordScriptIDFooter: `您可以在 NetSuite 中找到自定义记录脚本 ID，步骤如下：\n\n1. 在全局搜索中输入“Transaction Line Fields”。\n2. 点击进入一个自定义记录。\n3. 在左侧找到脚本 ID。\n\n_有关更详细的说明，请[访问我们的帮助网站](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_。`,
                             customSegmentMappingTitle: '如何在Expensify中显示此自定义段？',
                             customRecordMappingTitle: '在Expensify中，这个自定义记录应该如何显示？',
                         },
                         errors: {
-                            uniqueFieldError: function (_a) {
-                                var fieldName = _a.fieldName;
-                                return "\u5177\u6709\u6B64 ".concat(fieldName === null || fieldName === void 0 ? void 0 : fieldName.toLowerCase(), " \u7684\u81EA\u5B9A\u4E49\u6BB5/\u8BB0\u5F55\u5DF2\u5B58\u5728");
-                            },
+                            uniqueFieldError: ({ fieldName }) => `具有此 ${fieldName?.toLowerCase()} 的自定义段/记录已存在`,
                         },
                     },
                     customLists: {
@@ -4579,40 +3840,31 @@ var translations = {
                         addForm: {
                             listNameTitle: '选择自定义列表',
                             transactionFieldIDTitle: '交易字段ID是什么？',
-                            transactionFieldIDFooter: "\u60A8\u53EF\u4EE5\u901A\u8FC7\u4EE5\u4E0B\u6B65\u9AA4\u5728 NetSuite \u4E2D\u627E\u5230\u4EA4\u6613\u5B57\u6BB5 ID\uFF1A\n\n1. \u5728\u5168\u5C40\u641C\u7D22\u4E2D\u8F93\u5165\u201CTransaction Line Fields\u201D\u3002\n2. \u70B9\u51FB\u8FDB\u5165\u81EA\u5B9A\u4E49\u5217\u8868\u3002\n3. \u5728\u5DE6\u4FA7\u627E\u5230\u4EA4\u6613\u5B57\u6BB5 ID\u3002\n\n_\u6709\u5173\u66F4\u8BE6\u7EC6\u7684\u8BF4\u660E\uFF0C\u8BF7[\u8BBF\u95EE\u6211\u4EEC\u7684\u5E2E\u52A9\u7F51\u7AD9](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")_\u3002"),
+                            transactionFieldIDFooter: `您可以通过以下步骤在 NetSuite 中找到交易字段 ID：\n\n1. 在全局搜索中输入“Transaction Line Fields”。\n2. 点击进入自定义列表。\n3. 在左侧找到交易字段 ID。\n\n_有关更详细的说明，请[访问我们的帮助网站](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})_。`,
                             mappingTitle: '在Expensify中，这个自定义列表应该如何显示？',
                         },
                         errors: {
-                            uniqueTransactionFieldIDError: "\u5DF2\u5B58\u5728\u5177\u6709\u6B64\u4EA4\u6613\u5B57\u6BB5ID\u7684\u81EA\u5B9A\u4E49\u5217\u8868",
+                            uniqueTransactionFieldIDError: `已存在具有此交易字段ID的自定义列表`,
                         },
                     },
                 },
-                importTypes: (_8 = {},
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT] = {
+                importTypes: {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT]: {
                         label: 'NetSuite 员工默认值',
                         description: '未导入Expensify，已在导出时应用',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "\u5982\u679C\u60A8\u5728NetSuite\u4E2D\u4F7F\u7528".concat(importField, "\uFF0C\u6211\u4EEC\u5C06\u5728\u5BFC\u51FA\u5230\u8D39\u7528\u62A5\u544A\u6216\u65E5\u8BB0\u8D26\u5206\u5F55\u65F6\u5E94\u7528\u5458\u5DE5\u8BB0\u5F55\u4E0A\u8BBE\u7F6E\u7684\u9ED8\u8BA4\u503C\u3002");
-                        },
+                        footerContent: ({ importField }) => `如果您在NetSuite中使用${importField}，我们将在导出到费用报告或日记账分录时应用员工记录上设置的默认值。`,
                     },
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG] = {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG]: {
                         label: '标签',
                         description: '逐项级别',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "".concat((0, startCase_1.default)(importField), " \u5C06\u53EF\u7528\u4E8E\u5458\u5DE5\u62A5\u544A\u4E2D\u7684\u6BCF\u4E00\u7B14\u8D39\u7528\u3002");
-                        },
+                        footerContent: ({ importField }) => `${(0, startCase_1.default)(importField)} 将可用于员工报告中的每一笔费用。`,
                     },
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD] = {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD]: {
                         label: '报告字段',
                         description: '报告级别',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "".concat((0, startCase_1.default)(importField), " \u9009\u62E9\u5C06\u9002\u7528\u4E8E\u5458\u5DE5\u62A5\u544A\u4E2D\u7684\u6240\u6709\u8D39\u7528\u3002");
-                        },
+                        footerContent: ({ importField }) => `${(0, startCase_1.default)(importField)} 选择将适用于员工报告中的所有费用。`,
                     },
-                    _8),
+                },
             },
         },
         intacct: {
@@ -4642,12 +3894,11 @@ var translations = {
             addAUserDefinedDimension: '添加用户定义的维度',
             detailedInstructionsLink: '查看详细说明',
             detailedInstructionsRestOfSentence: '关于添加用户定义的维度。',
-            userDimensionsAdded: function () { return ({
+            userDimensionsAdded: () => ({
                 one: '1 UDD 已添加',
-                other: function (count) { return "\u6DFB\u52A0\u4E86".concat(count, "\u4E2AUDD"); },
-            }); },
-            mappingTitle: function (_a) {
-                var mappingName = _a.mappingName;
+                other: (count) => `添加了${count}个UDD`,
+            }),
+            mappingTitle: ({ mappingName }) => {
                 switch (mappingName) {
                     case CONST_1.default.SAGE_INTACCT_CONFIG.MAPPINGS.DEPARTMENTS:
                         return '部门';
@@ -4680,7 +3931,7 @@ var translations = {
                     vcf: 'Visa 商业卡',
                     stripe: 'Stripe Cards',
                 },
-                yourCardProvider: "\u60A8\u7684\u94F6\u884C\u5361\u63D0\u4F9B\u5546\u662F\u8C01\uFF1F",
+                yourCardProvider: `您的银行卡提供商是谁？`,
                 whoIsYourBankAccount: '您的银行是哪家？',
                 whereIsYourBankLocated: '您的银行在哪里？',
                 howDoYouWantToConnect: '您想如何连接到您的银行？',
@@ -4689,20 +3940,17 @@ var translations = {
                     linkText: '选项。',
                 },
                 commercialFeedDetails: '需要与您的银行进行设置。这通常由较大的公司使用，并且如果您符合条件，这通常是最佳选择。',
-                commercialFeedPlaidDetails: "\u9700\u8981\u4E0E\u60A8\u7684\u94F6\u884C\u8FDB\u884C\u8BBE\u7F6E\uFF0C\u4F46\u6211\u4EEC\u4F1A\u6307\u5BFC\u60A8\u3002\u901A\u5E38\u8FD9\u4EC5\u9650\u4E8E\u8F83\u5927\u7684\u516C\u53F8\u3002",
+                commercialFeedPlaidDetails: `需要与您的银行进行设置，但我们会指导您。通常这仅限于较大的公司。`,
                 directFeedDetails: '最简单的方法。使用您的主账户凭证立即连接。这是最常见的方法。',
                 enableFeed: {
-                    title: function (_a) {
-                        var provider = _a.provider;
-                        return "\u542F\u7528\u60A8\u7684".concat(provider, "\u63D0\u8981");
-                    },
+                    title: ({ provider }) => `启用您的${provider}提要`,
                     heading: '我们与您的发卡机构有直接集成，可以快速准确地将您的交易数据导入Expensify。\n\n要开始，请简单地：',
                     visa: '我们与Visa有全球集成，但资格因银行和卡计划而异。\n\n要开始，请简单地：',
                     mastercard: '我们与万事达卡有全球集成，但资格因银行和卡片计划而异。\n\n要开始，只需：',
-                    vcf: "1. \u8BF7\u8BBF\u95EE[\u6B64\u5E2E\u52A9\u6587\u7AE0](".concat(CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP, ")\uFF0C\u83B7\u53D6\u6709\u5173\u5982\u4F55\u8BBE\u7F6E\u60A8\u7684Visa Commercial Cards\u7684\u8BE6\u7EC6\u8BF4\u660E\u3002\n\n2. [\u8054\u7CFB\u60A8\u7684\u94F6\u884C](").concat(CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP, ")\u4EE5\u786E\u8BA4\u4ED6\u4EEC\u662F\u5426\u652F\u6301\u60A8\u7684\u9879\u76EE\u7684\u5546\u4E1A\u6570\u636E\u6D41\uFF0C\u5E76\u8981\u6C42\u4ED6\u4EEC\u542F\u7528\u5B83\u3002\n\n3. *\u4E00\u65E6\u6570\u636E\u6D41\u542F\u7528\u5E76\u4E14\u60A8\u62E5\u6709\u5176\u8BE6\u7EC6\u4FE1\u606F\uFF0C\u8BF7\u7EE7\u7EED\u5230\u4E0B\u4E00\u4E2A\u5C4F\u5E55\u3002*"),
-                    gl1025: "1. \u8BF7\u8BBF\u95EE[\u6B64\u5E2E\u52A9\u6587\u7AE0](".concat(CONST_1.default.COMPANY_CARDS_AMEX_COMMERCIAL_CARD_HELP, ")\uFF0C\u4E86\u89E3American Express\u662F\u5426\u53EF\u4EE5\u4E3A\u60A8\u7684\u9879\u76EE\u542F\u7528\u5546\u4E1A\u6570\u636E\u6D41\u3002\n\n2. \u6570\u636E\u6D41\u542F\u7528\u540E\uFF0CAmex\u5C06\u5411\u60A8\u53D1\u9001\u751F\u4EA7\u4FE1\u51FD\u3002\n\n3. *\u4E00\u65E6\u60A8\u62E5\u6709\u6570\u636E\u6D41\u4FE1\u606F\uFF0C\u8BF7\u7EE7\u7EED\u5230\u4E0B\u4E00\u4E2A\u5C4F\u5E55\u3002*"),
-                    cdf: "1. \u8BF7\u8BBF\u95EE[\u6B64\u5E2E\u52A9\u6587\u7AE0](".concat(CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS, ")\uFF0C\u83B7\u53D6\u6709\u5173\u5982\u4F55\u8BBE\u7F6E\u60A8\u7684Mastercard Commercial Cards\u7684\u8BE6\u7EC6\u8BF4\u660E\u3002\n\n2. [\u8054\u7CFB\u60A8\u7684\u94F6\u884C](").concat(CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS, ")\u4EE5\u786E\u8BA4\u4ED6\u4EEC\u662F\u5426\u652F\u6301\u60A8\u8BA1\u5212\u7684\u5546\u4E1A\u6570\u636E\u6D41\uFF0C\u5E76\u8981\u6C42\u4ED6\u4EEC\u542F\u7528\u5B83\u3002\n\n3. *\u4E00\u65E6\u6570\u636E\u6D41\u542F\u7528\u5E76\u83B7\u5F97\u5176\u8BE6\u7EC6\u4FE1\u606F\u540E\uFF0C\u7EE7\u7EED\u5230\u4E0B\u4E00\u4E2A\u5C4F\u5E55\u3002*"),
-                    stripe: "1. \u8BBF\u95EE Stripe \u7684\u4EEA\u8868\u677F\uFF0C\u7136\u540E\u8F6C\u5230[\u8BBE\u7F6E](".concat(CONST_1.default.COMPANY_CARDS_STRIPE_HELP, ")\u3002\n\n2. \u5728\u4EA7\u54C1\u96C6\u6210\u4E0B\uFF0C\u70B9\u51FB Expensify \u65C1\u8FB9\u7684\u542F\u7528\u3002\n\n3. \u4E00\u65E6\u542F\u7528\u8BE5\u63D0\u8981\uFF0C\u70B9\u51FB\u4E0B\u9762\u7684\u63D0\u4EA4\uFF0C\u6211\u4EEC\u5C06\u5F00\u59CB\u6DFB\u52A0\u5B83\u3002"),
+                    vcf: `1. 请访问[此帮助文章](${CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP})，获取有关如何设置您的Visa Commercial Cards的详细说明。\n\n2. [联系您的银行](${CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP})以确认他们是否支持您的项目的商业数据流，并要求他们启用它。\n\n3. *一旦数据流启用并且您拥有其详细信息，请继续到下一个屏幕。*`,
+                    gl1025: `1. 请访问[此帮助文章](${CONST_1.default.COMPANY_CARDS_AMEX_COMMERCIAL_CARD_HELP})，了解American Express是否可以为您的项目启用商业数据流。\n\n2. 数据流启用后，Amex将向您发送生产信函。\n\n3. *一旦您拥有数据流信息，请继续到下一个屏幕。*`,
+                    cdf: `1. 请访问[此帮助文章](${CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS})，获取有关如何设置您的Mastercard Commercial Cards的详细说明。\n\n2. [联系您的银行](${CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS})以确认他们是否支持您计划的商业数据流，并要求他们启用它。\n\n3. *一旦数据流启用并获得其详细信息后，继续到下一个屏幕。*`,
+                    stripe: `1. 访问 Stripe 的仪表板，然后转到[设置](${CONST_1.default.COMPANY_CARDS_STRIPE_HELP})。\n\n2. 在产品集成下，点击 Expensify 旁边的启用。\n\n3. 一旦启用该提要，点击下面的提交，我们将开始添加它。`,
                 },
                 whatBankIssuesCard: '这些卡是由哪家银行发行的？',
                 enterNameOfBank: '输入银行名称',
@@ -4715,12 +3963,12 @@ var translations = {
                         helpLabel: '我在哪里可以找到这些ID？',
                     },
                     gl1025: {
-                        title: "Amex\u4EA4\u4ED8\u6587\u4EF6\u7684\u540D\u79F0\u662F\u4EC0\u4E48\uFF1F",
+                        title: `Amex交付文件的名称是什么？`,
                         fileNameLabel: '交付文件名',
                         helpLabel: '我在哪里可以找到交付文件的名称？',
                     },
                     cdf: {
-                        title: "Mastercard \u5206\u53D1 ID \u662F\u4EC0\u4E48\uFF1F",
+                        title: `Mastercard 分发 ID 是什么？`,
                         distributionLabel: '分发 ID',
                         helpLabel: '我在哪里可以找到分发 ID？',
                     },
@@ -4736,26 +3984,20 @@ var translations = {
                     pleaseSelectFeedType: '请在继续之前选择一个订阅类型',
                 },
             },
-            statementCloseDate: (_9 = {},
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_DAY_OF_MONTH] = '本月最后一天',
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_BUSINESS_DAY_OF_MONTH] = '本月最后一个工作日',
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH] = '本月自定义日期',
-                _9),
+            statementCloseDate: {
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_DAY_OF_MONTH]: '本月最后一天',
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_BUSINESS_DAY_OF_MONTH]: '本月最后一个工作日',
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH]: '本月自定义日期',
+            },
             assignCard: '分配卡片',
             findCard: '查找卡片',
             cardNumber: '卡号',
             commercialFeed: '商业信息流',
-            feedName: function (_a) {
-                var feedName = _a.feedName;
-                return "".concat(feedName, " \u5361\u7247");
-            },
+            feedName: ({ feedName }) => `${feedName} 卡片`,
             directFeed: '直接馈送',
             whoNeedsCardAssigned: '谁需要分配卡片？',
             chooseCard: '选择一张卡片',
-            chooseCardFor: function (_a) {
-                var assignee = _a.assignee, feed = _a.feed;
-                return "\u4ECE".concat(feed, "\u5361\u7247\u6E90\u4E2D\u4E3A").concat(assignee, "\u9009\u62E9\u4E00\u5F20\u5361\u7247\u3002");
-            },
+            chooseCardFor: ({ assignee, feed }) => `从${feed}卡片源中为${assignee}选择一张卡片。`,
             noActiveCards: '此信息流中没有活跃的卡片',
             somethingMightBeBroken: '<muted-text><centered-text>或者有什么东西坏了。无论如何，如果您有任何问题，请<concierge-link>联系 Concierge</concierge-link>。</centered-text></muted-text>',
             chooseTransactionStartDate: '选择交易开始日期',
@@ -4768,13 +4010,10 @@ var translations = {
             cardholder: '持卡人',
             card: '卡片',
             cardName: '卡片名称',
-            brokenConnectionErrorFirstPart: "\u5361\u7247\u4FE1\u606F\u6D41\u8FDE\u63A5\u5DF2\u65AD\u5F00\u3002\u8BF7",
+            brokenConnectionErrorFirstPart: `卡片信息流连接已断开。请`,
             brokenConnectionErrorLink: '登录您的银行账户',
             brokenConnectionErrorSecondPart: '以便我们可以重新建立连接。',
-            assignedCard: function (_a) {
-                var assignee = _a.assignee, link = _a.link;
-                return "\u5DF2\u5206\u914D".concat(assignee, "\u4E00\u4E2A").concat(link, "\uFF01\u5BFC\u5165\u7684\u4EA4\u6613\u5C06\u663E\u793A\u5728\u6B64\u804A\u5929\u4E2D\u3002");
-            },
+            assignedCard: ({ assignee, link }) => `已分配${assignee}一个${link}！导入的交易将显示在此聊天中。`,
             companyCard: '公司卡',
             chooseCardFeed: '选择卡片信息流',
             ukRegulation: 'Expensify, Inc. 是 Plaid Financial Ltd. 的代理商，Plaid Financial Ltd. 是一家授权支付机构，受金融行为监管局根据2017年支付服务条例的监管（公司参考编号：804718）。Plaid 通过 Expensify Limited 作为其代理商为您提供受监管的账户信息服务。',
@@ -4794,10 +4033,7 @@ var translations = {
             limit: '限制',
             currentBalance: '当前余额',
             currentBalanceDescription: '当前余额是自上次结算日期以来发生的所有已发布Expensify卡交易的总和。',
-            balanceWillBeSettledOn: function (_a) {
-                var settlementDate = _a.settlementDate;
-                return "\u4F59\u989D\u5C06\u5728".concat(settlementDate, "\u7ED3\u6E05");
-            },
+            balanceWillBeSettledOn: ({ settlementDate }) => `余额将在${settlementDate}结清`,
             settleBalance: '结算余额',
             cardLimit: '卡片限额',
             remainingLimit: '剩余额度',
@@ -4813,10 +4049,7 @@ var translations = {
             addNewBankAccount: '添加新的银行账户',
             settlementAccount: '结算账户',
             settlementAccountDescription: '选择一个账户来支付您的Expensify卡余额。',
-            settlementAccountInfo: function (_a) {
-                var reconciliationAccountSettingsLink = _a.reconciliationAccountSettingsLink, accountNumber = _a.accountNumber;
-                return "\u786E\u4FDD\u8BE5\u8D26\u6237\u4E0E<a href=\"".concat(reconciliationAccountSettingsLink, "\">\u5BF9\u8D26\u8D26\u6237</a> (").concat(accountNumber, ") \u4E00\u81F4\uFF0C\u4EE5\u4FBF\u8FDE\u7EED\u5BF9\u8D26\u6B63\u5E38\u5DE5\u4F5C\u3002");
-            },
+            settlementAccountInfo: ({ reconciliationAccountSettingsLink, accountNumber }) => `确保该账户与<a href="${reconciliationAccountSettingsLink}">对账账户</a> (${accountNumber}) 一致，以便连续对账正常工作。`,
             settlementFrequency: '结算频率',
             settlementFrequencyDescription: '选择您支付 Expensify Card 余额的频率。',
             settlementFrequencyInfo: '如果您想切换到每月结算，您需要通过Plaid连接您的银行账户，并拥有90天的正余额历史记录。',
@@ -4830,45 +4063,18 @@ var translations = {
             deactivate: '停用卡片',
             changeCardLimit: '更改卡片限额',
             changeLimit: '更改限制',
-            smartLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u5982\u679C\u60A8\u5C06\u6B64\u5361\u7684\u9650\u989D\u66F4\u6539\u4E3A".concat(limit, "\uFF0C\u65B0\u7684\u4EA4\u6613\u5C06\u88AB\u62D2\u7EDD\uFF0C\u76F4\u5230\u60A8\u6279\u51C6\u5361\u4E0A\u7684\u66F4\u591A\u8D39\u7528\u3002");
-            },
-            monthlyLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u5982\u679C\u60A8\u5C06\u6B64\u5361\u7684\u9650\u989D\u66F4\u6539\u4E3A".concat(limit, "\uFF0C\u65B0\u7684\u4EA4\u6613\u5C06\u88AB\u62D2\u7EDD\uFF0C\u76F4\u5230\u4E0B\u4E2A\u6708\u3002");
-            },
-            fixedLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u5982\u679C\u60A8\u5C06\u6B64\u5361\u7684\u9650\u989D\u66F4\u6539\u4E3A".concat(limit, "\uFF0C\u65B0\u7684\u4EA4\u6613\u5C06\u88AB\u62D2\u7EDD\u3002");
-            },
+            smartLimitWarning: ({ limit }) => `如果您将此卡的限额更改为${limit}，新的交易将被拒绝，直到您批准卡上的更多费用。`,
+            monthlyLimitWarning: ({ limit }) => `如果您将此卡的限额更改为${limit}，新的交易将被拒绝，直到下个月。`,
+            fixedLimitWarning: ({ limit }) => `如果您将此卡的限额更改为${limit}，新的交易将被拒绝。`,
             changeCardLimitType: '更改卡片限额类型',
             changeLimitType: '更改限制类型',
-            changeCardSmartLimitTypeWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u5982\u679C\u60A8\u5C06\u6B64\u5361\u7684\u9650\u989D\u7C7B\u578B\u66F4\u6539\u4E3A\u667A\u80FD\u9650\u989D\uFF0C\u65B0\u4EA4\u6613\u5C06\u88AB\u62D2\u7EDD\uFF0C\u56E0\u4E3A\u672A\u6279\u51C6\u7684\u9650\u989D".concat(limit, "\u5DF2\u8FBE\u5230\u3002");
-            },
-            changeCardMonthlyLimitTypeWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u5982\u679C\u60A8\u5C06\u6B64\u5361\u7684\u9650\u989D\u7C7B\u578B\u66F4\u6539\u4E3A\u6BCF\u6708\uFF0C\u7531\u4E8E\u5DF2\u8FBE\u5230".concat(limit, "\u7684\u6BCF\u6708\u9650\u989D\uFF0C\u65B0\u4EA4\u6613\u5C06\u88AB\u62D2\u7EDD\u3002");
-            },
+            changeCardSmartLimitTypeWarning: ({ limit }) => `如果您将此卡的限额类型更改为智能限额，新交易将被拒绝，因为未批准的限额${limit}已达到。`,
+            changeCardMonthlyLimitTypeWarning: ({ limit }) => `如果您将此卡的限额类型更改为每月，由于已达到${limit}的每月限额，新交易将被拒绝。`,
             addShippingDetails: '添加运输详情',
-            issuedCard: function (_a) {
-                var assignee = _a.assignee;
-                return "\u5DF2\u4E3A".concat(assignee, "\u53D1\u653E\u4E86\u4E00\u5F20Expensify\u5361\uFF01\u8BE5\u5361\u5C06\u57282-3\u4E2A\u5DE5\u4F5C\u65E5\u5185\u9001\u8FBE\u3002");
-            },
-            issuedCardNoShippingDetails: function (_a) {
-                var assignee = _a.assignee;
-                return "\u5DF2\u4E3A".concat(assignee, "\u53D1\u653E\u4E86\u4E00\u5F20Expensify\u5361\uFF01\u4E00\u65E6\u6DFB\u52A0\u4E86\u8FD0\u9001\u8BE6\u60C5\uFF0C\u5361\u7247\u5C06\u88AB\u5BC4\u51FA\u3002");
-            },
-            issuedCardVirtual: function (_a) {
-                var assignee = _a.assignee, link = _a.link;
-                return "\u5DF2\u5411".concat(assignee, "\u53D1\u653E\u4E86\u4E00\u5F20\u865A\u62DF").concat(link, "\uFF01\u8BE5\u5361\u53EF\u4EE5\u7ACB\u5373\u4F7F\u7528\u3002");
-            },
-            addedShippingDetails: function (_a) {
-                var assignee = _a.assignee;
-                return "".concat(assignee, " \u6DFB\u52A0\u4E86\u9001\u8D27\u8BE6\u60C5\u3002Expensify Card \u5C06\u57282-3\u4E2A\u5DE5\u4F5C\u65E5\u5185\u9001\u8FBE\u3002");
-            },
+            issuedCard: ({ assignee }) => `已为${assignee}发放了一张Expensify卡！该卡将在2-3个工作日内送达。`,
+            issuedCardNoShippingDetails: ({ assignee }) => `已为${assignee}发放了一张Expensify卡！一旦添加了运送详情，卡片将被寄出。`,
+            issuedCardVirtual: ({ assignee, link }) => `已向${assignee}发放了一张虚拟${link}！该卡可以立即使用。`,
+            addedShippingDetails: ({ assignee }) => `${assignee} 添加了送货详情。Expensify Card 将在2-3个工作日内送达。`,
             verifyingHeader: '验证中',
             bankAccountVerifiedHeader: '银行账户已验证',
             verifyingBankAccount: '正在验证银行账户...',
@@ -4894,18 +4100,12 @@ var translations = {
             deleteFailureMessage: '删除类别时发生错误，请重试。',
             categoryName: '类别名称',
             requiresCategory: '成员必须对所有费用进行分类',
-            needCategoryForExportToIntegration: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u6240\u6709\u8D39\u7528\u5FC5\u987B\u5206\u7C7B\u624D\u80FD\u5BFC\u51FA\u5230".concat(connectionName, "\u3002");
-            },
+            needCategoryForExportToIntegration: ({ connectionName }) => `所有费用必须分类才能导出到${connectionName}。`,
             subtitle: '更好地了解资金的支出情况。使用我们的默认类别或添加您自己的类别。',
             emptyCategories: {
                 title: '您尚未创建任何类别',
                 subtitle: '添加一个类别来组织您的支出。',
-                subtitleWithAccounting: function (_a) {
-                    var accountingPageURL = _a.accountingPageURL;
-                    return "<muted-text><centered-text>\u60A8\u7684\u7C7B\u522B\u76EE\u524D\u662F\u4ECE\u4F1A\u8BA1\u8FDE\u63A5\u5BFC\u5165\u7684\u3002\u8BF7\u524D\u5F80<a href=\"".concat(accountingPageURL, "\">\u4F1A\u8BA1</a>\u90E8\u95E8\u8FDB\u884C\u66F4\u6539\u3002</centered-text></muted-text>");
-                },
+                subtitleWithAccounting: ({ accountingPageURL }) => `<muted-text><centered-text>您的类别目前是从会计连接导入的。请前往<a href="${accountingPageURL}">会计</a>部门进行更改。</centered-text></muted-text>`,
             },
             updateFailureMessage: '更新类别时发生错误，请重试。',
             createFailureMessage: '创建类别时发生错误，请重试。',
@@ -4924,7 +4124,7 @@ var translations = {
             importCategories: '导入类别',
             cannotDeleteOrDisableAllCategories: {
                 title: '无法删除或禁用所有类别',
-                description: "\u7531\u4E8E\u60A8\u7684\u5DE5\u4F5C\u533A\u9700\u8981\u7C7B\u522B\uFF0C\u81F3\u5C11\u5FC5\u987B\u542F\u7528\u4E00\u4E2A\u7C7B\u522B\u3002",
+                description: `由于您的工作区需要类别，至少必须启用一个类别。`,
             },
         },
         moreFeatures: {
@@ -4992,18 +4192,9 @@ var translations = {
                 cardNumber: '卡号',
                 cardholder: '持卡人',
                 cardName: '卡片名称',
-                integrationExport: function (_a) {
-                    var integration = _a.integration, type = _a.type;
-                    return (integration && type ? "".concat(integration, " ").concat(type.toLowerCase(), " \u5BFC\u51FA") : "".concat(integration, " \u5BFC\u51FA"));
-                },
-                integrationExportTitleXero: function (_a) {
-                    var integration = _a.integration;
-                    return "\u9009\u62E9\u5E94\u5BFC\u51FA\u4EA4\u6613\u7684".concat(integration, "\u8D26\u6237\u3002");
-                },
-                integrationExportTitle: function (_a) {
-                    var integration = _a.integration, exportPageLink = _a.exportPageLink;
-                    return "\u9009\u62E9\u5E94\u5BFC\u51FA\u4EA4\u6613\u7684".concat(integration, "\u8D26\u6237\u3002\u9009\u62E9\u4E0D\u540C\u7684<a href=\"").concat(exportPageLink, "\">\u5BFC\u51FA\u9009\u9879</a>\uFF0C\u66F4\u6539\u53EF\u7528\u8D26\u6237\u3002");
-                },
+                integrationExport: ({ integration, type }) => (integration && type ? `${integration} ${type.toLowerCase()} 导出` : `${integration} 导出`),
+                integrationExportTitleXero: ({ integration }) => `选择应导出交易的${integration}账户。`,
+                integrationExportTitle: ({ integration, exportPageLink }) => `选择应导出交易的${integration}账户。选择不同的<a href="${exportPageLink}">导出选项</a>，更改可用账户。`,
                 lastUpdated: '最后更新',
                 transactionStartDate: '交易开始日期',
                 updateCard: '更新卡片',
@@ -5018,10 +4209,7 @@ var translations = {
                 cardFeedRestrictDeletingTransaction: '限制删除交易',
                 cardFeedAllowDeletingTransaction: '允许删除交易',
                 removeCardFeed: '移除卡片信息流',
-                removeCardFeedTitle: function (_a) {
-                    var feedName = _a.feedName;
-                    return "\u5220\u9664 ".concat(feedName, " \u63D0\u8981");
-                },
+                removeCardFeedTitle: ({ feedName }) => `删除 ${feedName} 提要`,
                 removeCardFeedDescription: '您确定要移除此卡片源吗？这将取消分配所有卡片。',
                 error: {
                     feedNameRequired: '卡片摘要名称是必需的',
@@ -5033,26 +4221,20 @@ var translations = {
                 setTransactionLiabilityDescription: '启用后，持卡人可以删除卡交易。新交易将遵循此规则。',
                 emptyAddedFeedTitle: '分配公司卡',
                 emptyAddedFeedDescription: '开始为成员分配您的第一张卡。',
-                pendingFeedTitle: "\u6211\u4EEC\u6B63\u5728\u5BA1\u6838\u60A8\u7684\u8BF7\u6C42...",
-                pendingFeedDescription: "\u6211\u4EEC\u6B63\u5728\u5BA1\u6838\u60A8\u7684\u63D0\u8981\u8BE6\u60C5\u3002\u5B8C\u6210\u540E\uFF0C\u6211\u4EEC\u4F1A\u901A\u8FC7\u4EE5\u4E0B\u65B9\u5F0F\u4E0E\u60A8\u8054\u7CFB",
+                pendingFeedTitle: `我们正在审核您的请求...`,
+                pendingFeedDescription: `我们正在审核您的提要详情。完成后，我们会通过以下方式与您联系`,
                 pendingBankTitle: '检查您的浏览器窗口',
-                pendingBankDescription: function (_a) {
-                    var bankName = _a.bankName;
-                    return "\u8BF7\u901A\u8FC7\u521A\u521A\u6253\u5F00\u7684\u6D4F\u89C8\u5668\u7A97\u53E3\u8FDE\u63A5\u5230".concat(bankName, "\u3002\u5982\u679C\u6CA1\u6709\u6253\u5F00\uFF0C");
-                },
+                pendingBankDescription: ({ bankName }) => `请通过刚刚打开的浏览器窗口连接到${bankName}。如果没有打开，`,
                 pendingBankLink: '请点击这里',
                 giveItNameInstruction: '给这张卡片起一个与众不同的名字。',
                 updating: '正在更新...',
                 noAccountsFound: '未找到账户',
                 defaultCard: '默认卡片',
-                downgradeTitle: "\u65E0\u6CD5\u964D\u7EA7\u5DE5\u4F5C\u533A",
-                downgradeSubTitleFirstPart: "\u7531\u4E8E\u8FDE\u63A5\u4E86\u591A\u4E2A\u5361\u7247\u9988\u9001\uFF08\u4E0D\u5305\u62ECExpensify\u5361\uFF09\uFF0C\u6B64\u5DE5\u4F5C\u533A\u65E0\u6CD5\u964D\u7EA7\u3002\u8BF7",
-                downgradeSubTitleMiddlePart: "\u4EC5\u4FDD\u7559\u4E00\u4E2A\u5361\u7247\u4FE1\u606F\u6D41",
+                downgradeTitle: `无法降级工作区`,
+                downgradeSubTitleFirstPart: `由于连接了多个卡片馈送（不包括Expensify卡），此工作区无法降级。请`,
+                downgradeSubTitleMiddlePart: `仅保留一个卡片信息流`,
                 downgradeSubTitleLastPart: '继续。',
-                noAccountsFoundDescription: function (_a) {
-                    var connection = _a.connection;
-                    return "\u8BF7\u5728".concat(connection, "\u4E2D\u6DFB\u52A0\u8D26\u6237\u5E76\u518D\u6B21\u540C\u6B65\u8FDE\u63A5\u3002");
-                },
+                noAccountsFoundDescription: ({ connection }) => `请在${connection}中添加账户并再次同步连接。`,
                 expensifyCardBannerTitle: '获取Expensify卡',
                 expensifyCardBannerSubtitle: '享受每笔美国消费的现金返还，Expensify账单最高可享50%折扣，无限虚拟卡等更多优惠。',
                 expensifyCardBannerLearnMoreButton: '了解更多',
@@ -5116,9 +4298,9 @@ var translations = {
         },
         reports: {
             reportsCustomTitleExamples: '示例：',
-            customReportNamesSubtitle: "<muted-text>\u4F7F\u7528\u6211\u4EEC<a href=\"".concat(CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL, "\">\u4E30\u5BCC\u7684\u516C\u5F0F</a>\u81EA\u5B9A\u4E49\u62A5\u544A\u6807\u9898\u3002</muted-text>"),
+            customReportNamesSubtitle: `<muted-text>使用我们<a href="${CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL}">丰富的公式</a>自定义报告标题。</muted-text>`,
             customNameTitle: '默认报告标题',
-            customNameDescription: "\u4F7F\u7528\u6211\u4EEC\u7684<a href=\"".concat(CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL, "\">\u4E30\u5BCC\u516C\u5F0F</a>\uFF0C\u4E3A\u8D39\u7528\u62A5\u544A\u9009\u62E9\u81EA\u5B9A\u4E49\u540D\u79F0\u3002"),
+            customNameDescription: `使用我们的<a href="${CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL}">丰富公式</a>，为费用报告选择自定义名称。`,
             customNameInputLabel: '名称',
             customNameEmailPhoneExample: '成员的电子邮件或电话：{report:submit:from}',
             customNameStartDateExample: '报告开始日期：{report:startdate}',
@@ -5193,19 +4375,13 @@ var translations = {
             editTags: '编辑标签',
             findTag: '查找标签',
             subtitle: '标签提供了更详细的方法来分类费用。',
-            dependentMultiLevelTagsSubtitle: function (_a) {
-                var importSpreadsheetLink = _a.importSpreadsheetLink;
-                return "<muted-text>\u60A8\u4F7F\u7528\u7684\u662F<a href=\"".concat(CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL_DEPENDENT_TAGS, "\">\u4ECE\u5C5E\u6807\u8BB0</a>\u3002\u60A8\u53EF\u4EE5<a href=\"").concat(importSpreadsheetLink, "\">\u91CD\u65B0\u5BFC\u5165\u7535\u5B50\u8868\u683C</a>\u6765\u66F4\u65B0\u6807\u7B7E\u3002</muted-text>");
-            },
+            dependentMultiLevelTagsSubtitle: ({ importSpreadsheetLink }) => `<muted-text>您使用的是<a href="${CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL_DEPENDENT_TAGS}">从属标记</a>。您可以<a href="${importSpreadsheetLink}">重新导入电子表格</a>来更新标签。</muted-text>`,
             emptyTags: {
                 title: '您尚未创建任何标签',
                 //  We need to remove the subtitle and use the below one when we remove the canUseMultiLevelTags beta
                 subtitle: '添加标签以跟踪项目、地点、部门等。',
-                subtitleHTML: "<muted-text><centered-text>\u5BFC\u5165\u7535\u5B50\u8868\u683C\uFF0C\u4E3A\u8DDF\u8E2A\u9879\u76EE\u3001\u5730\u70B9\u3001\u90E8\u95E8\u7B49\u6DFB\u52A0\u6807\u7B7E\u3002<a href=\"".concat(CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL, "\">\u4E86\u89E3\u6709\u5173</a>\u6807\u7B7E\u6587\u4EF6\u683C\u5F0F\u7684\u66F4\u591A\u4FE1\u606F\u3002</centered-text></muted-text>"),
-                subtitleWithAccounting: function (_a) {
-                    var accountingPageURL = _a.accountingPageURL;
-                    return "<muted-text><centered-text>\u60A8\u7684\u6807\u7B7E\u76EE\u524D\u662F\u4ECE\u4F1A\u8BA1\u8FDE\u63A5\u5BFC\u5165\u7684\u3002\u8BF7\u524D\u5F80<a href=\"".concat(accountingPageURL, "\">\u4F1A\u8BA1</a>\u90E8\u95E8\u8FDB\u884C\u66F4\u6539\u3002</centered-text></muted-text>");
-                },
+                subtitleHTML: `<muted-text><centered-text>导入电子表格，为跟踪项目、地点、部门等添加标签。<a href="${CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL}">了解有关</a>标签文件格式的更多信息。</centered-text></muted-text>`,
+                subtitleWithAccounting: ({ accountingPageURL }) => `<muted-text><centered-text>您的标签目前是从会计连接导入的。请前往<a href="${accountingPageURL}">会计</a>部门进行更改。</centered-text></muted-text>`,
             },
             deleteTag: '删除标签',
             deleteTags: '删除标签',
@@ -5224,7 +4400,7 @@ var translations = {
             importTags: '导入标签',
             importTagsSupportingText: '使用一种或多种标签对您的费用进行编码。',
             configureMultiLevelTags: '配置您的多级标签列表。',
-            importMultiLevelTagsSupportingText: "\u8FD9\u662F\u60A8\u7684\u6807\u7B7E\u9884\u89C8\u3002\u5982\u679C\u4E00\u5207\u770B\u8D77\u6765\u4E0D\u9519\uFF0C\u8BF7\u70B9\u51FB\u4E0B\u9762\u5BFC\u5165\u5B83\u4EEC\u3002",
+            importMultiLevelTagsSupportingText: `这是您的标签预览。如果一切看起来不错，请点击下面导入它们。`,
             importMultiLevelTags: {
                 firstRowTitle: '每个标签列表的第一行是标题。',
                 independentTags: '这些是独立标签',
@@ -5243,22 +4419,19 @@ var translations = {
                 prompt5: '了解更多',
                 prompt6: '关于标签级别。',
             },
-            importedTagsMessage: function (_a) {
-                var columnCounts = _a.columnCounts;
-                return "\u6211\u4EEC\u5728\u60A8\u7684\u7535\u5B50\u8868\u683C\u4E2D\u627E\u5230\u4E86*".concat(columnCounts, " \u5217*\u3002\u5728\u5305\u542B\u6807\u7B7E\u540D\u79F0\u7684\u5217\u65C1\u8FB9\u9009\u62E9*\u540D\u79F0*\u3002\u60A8\u8FD8\u53EF\u4EE5\u5728\u8BBE\u7F6E\u6807\u7B7E\u72B6\u6001\u7684\u5217\u65C1\u8FB9\u9009\u62E9*\u542F\u7528*\u3002");
-            },
+            importedTagsMessage: ({ columnCounts }) => `我们在您的电子表格中找到了*${columnCounts} 列*。在包含标签名称的列旁边选择*名称*。您还可以在设置标签状态的列旁边选择*启用*。`,
             cannotDeleteOrDisableAllTags: {
                 title: '无法删除或禁用所有标签',
-                description: "\u7531\u4E8E\u60A8\u7684\u5DE5\u4F5C\u533A\u9700\u8981\u6807\u7B7E\uFF0C\u81F3\u5C11\u5FC5\u987B\u542F\u7528\u4E00\u4E2A\u6807\u7B7E\u3002",
+                description: `由于您的工作区需要标签，至少必须启用一个标签。`,
             },
             cannotMakeAllTagsOptional: {
                 title: '无法将所有标签设为可选',
-                description: "\u81F3\u5C11\u9700\u8981\u4FDD\u7559\u4E00\u4E2A\u6807\u7B7E\u4E3A\u5FC5\u586B\u9879\uFF0C\u56E0\u4E3A\u60A8\u7684\u5DE5\u4F5C\u533A\u8BBE\u7F6E\u8981\u6C42\u4F7F\u7528\u6807\u7B7E\u3002",
+                description: `至少需要保留一个标签为必填项，因为您的工作区设置要求使用标签。`,
             },
-            tagCount: function () { return ({
+            tagCount: () => ({
                 one: '1 标签',
-                other: function (count) { return "".concat(count, " \u4E2A\u6807\u7B7E"); },
-            }); },
+                other: (count) => `${count} 个标签`,
+            }),
         },
         taxes: {
             subtitle: '添加税种名称、税率，并设置默认值。',
@@ -5281,23 +4454,20 @@ var translations = {
                 updateTaxClaimableFailureMessage: '可报销部分必须小于距离费率金额',
             },
             deleteTaxConfirmation: '您确定要删除此税项吗？',
-            deleteMultipleTaxConfirmation: function (_a) {
-                var taxAmount = _a.taxAmount;
-                return "\u60A8\u786E\u5B9A\u8981\u5220\u9664 ".concat(taxAmount, " \u7A0E\u6B3E\u5417\uFF1F");
-            },
+            deleteMultipleTaxConfirmation: ({ taxAmount }) => `您确定要删除 ${taxAmount} 税款吗？`,
             actions: {
                 delete: '删除费率',
                 deleteMultiple: '删除费率',
                 enable: '启用费率',
                 disable: '禁用费率',
-                enableTaxRates: function () { return ({
+                enableTaxRates: () => ({
                     one: '启用费率',
                     other: '启用费率',
-                }); },
-                disableTaxRates: function () { return ({
+                }),
+                disableTaxRates: () => ({
                     one: '禁用费率',
                     other: '禁用费率',
-                }); },
+                }),
             },
             importedFromAccountingSoftware: '以下税费是从您的',
             taxCode: '税码',
@@ -5312,10 +4482,7 @@ var translations = {
             reimbursementAccount: '报销账户',
             delayedSubmission: '延迟提交',
             welcomeNote: '请开始使用我的新工作区',
-            confirmTitle: function (_a) {
-                var newWorkspaceName = _a.newWorkspaceName, totalMembers = _a.totalMembers;
-                return "\u60A8\u5373\u5C06\u521B\u5EFA\u5E76\u4E0E\u539F\u59CB\u5DE5\u4F5C\u533A\u4E2D\u7684 ".concat(totalMembers !== null && totalMembers !== void 0 ? totalMembers : 0, " \u540D\u6210\u5458\u5171\u4EAB ").concat(newWorkspaceName !== null && newWorkspaceName !== void 0 ? newWorkspaceName : '', "\u3002");
-            },
+            confirmTitle: ({ newWorkspaceName, totalMembers }) => `您即将创建并与原始工作区中的 ${totalMembers ?? 0} 名成员共享 ${newWorkspaceName ?? ''}。`,
         },
         emptyWorkspace: {
             title: '您没有任何工作区',
@@ -5333,40 +4500,25 @@ var translations = {
             newWorkspace: '新工作区',
             getTheExpensifyCardAndMore: '获取Expensify卡及更多内容',
             confirmWorkspace: '确认工作区',
-            myGroupWorkspace: function (_a) {
-                var workspaceNumber = _a.workspaceNumber;
-                return "\u6211\u7684\u7FA4\u7EC4\u5DE5\u4F5C\u533A".concat(workspaceNumber ? " ".concat(workspaceNumber) : '');
-            },
-            workspaceName: function (_a) {
-                var userName = _a.userName, workspaceNumber = _a.workspaceNumber;
-                return "".concat(userName, "\u7684\u5DE5\u4F5C\u533A").concat(workspaceNumber ? " ".concat(workspaceNumber) : '');
-            },
+            myGroupWorkspace: ({ workspaceNumber }) => `我的群组工作区${workspaceNumber ? ` ${workspaceNumber}` : ''}`,
+            workspaceName: ({ userName, workspaceNumber }) => `${userName}的工作区${workspaceNumber ? ` ${workspaceNumber}` : ''}`,
         },
         people: {
             genericFailureMessage: '从工作区移除成员时发生错误，请重试。',
-            removeMembersPrompt: function (_a) {
-                var memberName = _a.memberName;
-                return ({
-                    one: "\u60A8\u786E\u5B9A\u8981\u79FB\u9664".concat(memberName, "\u5417\uFF1F"),
-                    other: '您确定要移除这些成员吗？',
-                });
-            },
-            removeMembersWarningPrompt: function (_a) {
-                var memberName = _a.memberName, ownerName = _a.ownerName;
-                return "".concat(memberName, " \u662F\u6B64\u5DE5\u4F5C\u533A\u7684\u5BA1\u6279\u4EBA\u3002\u5F53\u60A8\u53D6\u6D88\u4E0E\u4ED6\u4EEC\u5171\u4EAB\u6B64\u5DE5\u4F5C\u533A\u65F6\uFF0C\u6211\u4EEC\u5C06\u7528\u5DE5\u4F5C\u533A\u6240\u6709\u8005 ").concat(ownerName, " \u66FF\u6362\u4ED6\u4EEC\u5728\u5BA1\u6279\u6D41\u7A0B\u4E2D\u7684\u89D2\u8272\u3002");
-            },
-            removeMembersTitle: function () { return ({
+            removeMembersPrompt: ({ memberName }) => ({
+                one: `您确定要移除${memberName}吗？`,
+                other: '您确定要移除这些成员吗？',
+            }),
+            removeMembersWarningPrompt: ({ memberName, ownerName }) => `${memberName} 是此工作区的审批人。当您取消与他们共享此工作区时，我们将用工作区所有者 ${ownerName} 替换他们在审批流程中的角色。`,
+            removeMembersTitle: () => ({
                 one: '移除成员',
                 other: '移除成员',
-            }); },
+            }),
             findMember: '查找成员',
             removeWorkspaceMemberButtonTitle: '从工作区移除',
             removeGroupMemberButtonTitle: '从群组中移除',
             removeRoomMemberButtonTitle: '从聊天中移除',
-            removeMemberPrompt: function (_a) {
-                var memberName = _a.memberName;
-                return "\u60A8\u786E\u5B9A\u8981\u79FB\u9664".concat(memberName, "\u5417\uFF1F");
-            },
+            removeMemberPrompt: ({ memberName }) => `您确定要移除${memberName}吗？`,
             removeMemberTitle: '移除成员',
             transferOwner: '转移所有者',
             makeMember: '成为成员',
@@ -5379,14 +4531,8 @@ var translations = {
                 genericRemove: '移除该工作区成员时出现问题。',
             },
             addedWithPrimary: '一些成员已使用他们的主要登录信息添加。',
-            invitedBySecondaryLogin: function (_a) {
-                var secondaryLogin = _a.secondaryLogin;
-                return "\u7531\u6B21\u8981\u767B\u5F55 ".concat(secondaryLogin, " \u6DFB\u52A0\u3002");
-            },
-            workspaceMembersCount: function (_a) {
-                var count = _a.count;
-                return "\u5DE5\u4F5C\u533A\u6210\u5458\u603B\u6570\uFF1A".concat(count);
-            },
+            invitedBySecondaryLogin: ({ secondaryLogin }) => `由次要登录 ${secondaryLogin} 添加。`,
+            workspaceMembersCount: ({ count }) => `工作区成员总数：${count}`,
             importMembers: '导入成员',
         },
         card: {
@@ -5443,8 +4589,7 @@ var translations = {
             talkYourAccountManager: '与您的客户经理聊天。',
             talkToConcierge: '与Concierge聊天。',
             needAnotherAccounting: '需要其他会计软件吗？',
-            connectionName: function (_a) {
-                var connectionName = _a.connectionName;
+            connectionName: ({ connectionName }) => {
                 switch (connectionName) {
                     case CONST_1.default.POLICY.CONNECTIONS.NAME.QBO:
                         return 'QuickBooks Online';
@@ -5463,10 +4608,7 @@ var translations = {
             goToODToFix: '请前往 Expensify Classic 解决此问题。',
             goToODToSettings: '请前往 Expensify Classic 管理您的设置。',
             setup: '连接',
-            lastSync: function (_a) {
-                var relativeDate = _a.relativeDate;
-                return "\u4E0A\u6B21\u540C\u6B65\u65F6\u95F4\u4E3A".concat(relativeDate);
-            },
+            lastSync: ({ relativeDate }) => `上次同步时间为${relativeDate}`,
             notSync: '未同步',
             import: '导入',
             export: '导出',
@@ -5475,18 +4617,12 @@ var translations = {
             syncNow: '立即同步',
             disconnect: '断开连接',
             reinstall: '重新安装连接器',
-            disconnectTitle: function (_a) {
-                var _b = _a === void 0 ? {} : _a, connectionName = _b.connectionName;
-                var integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : '集成';
-                return "\u65AD\u5F00 ".concat(integrationName);
+            disconnectTitle: ({ connectionName } = {}) => {
+                const integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : '集成';
+                return `断开 ${integrationName}`;
             },
-            connectTitle: function (_a) {
-                var _b;
-                var connectionName = _a.connectionName;
-                return "Connect ".concat((_b = CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]) !== null && _b !== void 0 ? _b : '会计集成');
-            },
-            syncError: function (_a) {
-                var connectionName = _a.connectionName;
+            connectTitle: ({ connectionName }) => `Connect ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ?? '会计集成'}`,
+            syncError: ({ connectionName }) => {
                 switch (connectionName) {
                     case CONST_1.default.POLICY.CONNECTIONS.NAME.QBO:
                         return '无法连接到 QuickBooks Online';
@@ -5506,29 +4642,23 @@ var translations = {
             imported: '已导入',
             notImported: '未导入',
             importAsCategory: '导入为类别',
-            importTypes: (_10 = {},
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.IMPORTED] = '已导入',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG] = '导入为标签',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.DEFAULT] = '已导入',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NOT_IMPORTED] = '未导入',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE] = '未导入',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD] = '作为报告字段导入',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT] = 'NetSuite 员工默认值',
-                _10),
-            disconnectPrompt: function (_a) {
-                var _b = _a === void 0 ? {} : _a, connectionName = _b.connectionName;
-                var integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : '此集成';
-                return "\u60A8\u786E\u5B9A\u8981\u65AD\u5F00 ".concat(integrationName, " \u5417\uFF1F");
+            importTypes: {
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.IMPORTED]: '已导入',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG]: '导入为标签',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.DEFAULT]: '已导入',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NOT_IMPORTED]: '未导入',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE]: '未导入',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD]: '作为报告字段导入',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT]: 'NetSuite 员工默认值',
             },
-            connectPrompt: function (_a) {
-                var _b;
-                var connectionName = _a.connectionName;
-                return "\u60A8\u786E\u5B9A\u8981\u8FDE\u63A5".concat((_b = CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]) !== null && _b !== void 0 ? _b : '此会计集成', "\u5417\uFF1F\u8FD9\u5C06\u79FB\u9664\u4EFB\u4F55\u73B0\u6709\u7684\u4F1A\u8BA1\u8FDE\u63A5\u3002");
+            disconnectPrompt: ({ connectionName } = {}) => {
+                const integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : '此集成';
+                return `您确定要断开 ${integrationName} 吗？`;
             },
+            connectPrompt: ({ connectionName }) => `您确定要连接${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ?? '此会计集成'}吗？这将移除任何现有的会计连接。`,
             enterCredentials: '输入您的凭证',
             connections: {
-                syncStageName: function (_a) {
-                    var stage = _a.stage;
+                syncStageName: ({ stage }) => {
                     switch (stage) {
                         case 'quickbooksOnlineImportCustomers':
                         case 'quickbooksDesktopImportCustomers':
@@ -5657,7 +4787,7 @@ var translations = {
                             return '导入 Sage Intacct 数据';
                         default: {
                             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                            return "\u9636\u6BB5\u7684\u7FFB\u8BD1\u7F3A\u5931\uFF1A".concat(stage);
+                            return `阶段的翻译缺失：${stage}`;
                         }
                     }
                 },
@@ -5677,18 +4807,12 @@ var translations = {
             reconciliationAccount: '对账账户',
             continuousReconciliation: '持续对账',
             saveHoursOnReconciliation: '通过让Expensify持续为您对账Expensify卡的对账单和结算，您可以在每个会计期间节省数小时的对账时间。',
-            enableContinuousReconciliation: function (_a) {
-                var accountingAdvancedSettingsLink = _a.accountingAdvancedSettingsLink, connectionName = _a.connectionName;
-                return "<muted-text-label>\u8981\u542F\u7528\u6301\u7EED\u5BF9\u8D26\uFF0C\u8BF7\u542F\u7528 ".concat(connectionName, " \u7684<a href=\"").concat(accountingAdvancedSettingsLink, "\">\u81EA\u52A8\u540C\u6B65</a>\u529F\u80FD\u3002</muted-text-label>");
-            },
+            enableContinuousReconciliation: ({ accountingAdvancedSettingsLink, connectionName }) => `<muted-text-label>要启用持续对账，请启用 ${connectionName} 的<a href="${accountingAdvancedSettingsLink}">自动同步</a>功能。</muted-text-label>`,
             chooseReconciliationAccount: {
                 chooseBankAccount: '选择用于对账您的 Expensify Card 支付的银行账户。',
                 accountMatches: '确保此账户与您的账户匹配',
                 settlementAccount: 'Expensify Card 结算账户',
-                reconciliationWorks: function (_a) {
-                    var lastFourPAN = _a.lastFourPAN;
-                    return "\uFF08\u4EE5 ".concat(lastFourPAN, " \u7ED3\u5C3E\uFF09\u4EE5\u4FBF\u6301\u7EED\u5BF9\u8D26\u6B63\u5E38\u5DE5\u4F5C\u3002");
-                },
+                reconciliationWorks: ({ lastFourPAN }) => `（以 ${lastFourPAN} 结尾）以便持续对账正常工作。`,
             },
         },
         export: {
@@ -5718,7 +4842,7 @@ var translations = {
             members: '邀请成员',
             invitePeople: '邀请新成员',
             genericFailureMessage: '邀请成员加入工作区时发生错误。请再试一次。',
-            pleaseEnterValidLogin: "\u8BF7\u786E\u4FDD\u7535\u5B50\u90AE\u4EF6\u6216\u7535\u8BDD\u53F7\u7801\u6709\u6548\uFF08\u4F8B\u5982 ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, "\uFF09\u3002"),
+            pleaseEnterValidLogin: `请确保电子邮件或电话号码有效（例如 ${CONST_1.default.EXAMPLE_PHONE_NUMBER}）。`,
             user: '用户',
             users: '用户',
             invited: '邀请',
@@ -5732,10 +4856,7 @@ var translations = {
             personalMessagePrompt: '消息',
             genericFailureMessage: '邀请成员加入工作区时发生错误。请再试一次。',
             inviteNoMembersError: '请选择至少一位成员进行邀请',
-            joinRequest: function (_a) {
-                var user = _a.user, workspaceName = _a.workspaceName;
-                return "".concat(user, " \u8BF7\u6C42\u52A0\u5165 ").concat(workspaceName);
-            },
+            joinRequest: ({ user, workspaceName }) => `${user} 请求加入 ${workspaceName}`,
         },
         distanceRates: {
             oopsNotSoFast: '哎呀！别这么快...',
@@ -5746,28 +4867,28 @@ var translations = {
             addRate: '添加费率',
             findRate: '查找费率',
             trackTax: '跟踪税款',
-            deleteRates: function () { return ({
+            deleteRates: () => ({
                 one: '删除费率',
                 other: '删除费率',
-            }); },
-            enableRates: function () { return ({
+            }),
+            enableRates: () => ({
                 one: '启用费率',
                 other: '启用费率',
-            }); },
-            disableRates: function () { return ({
+            }),
+            disableRates: () => ({
                 one: '禁用费率',
                 other: '禁用费率',
-            }); },
+            }),
             enableRate: '启用费率',
             status: '状态',
             unit: '单位',
             taxFeatureNotEnabledMessage: '要使用此功能，必须在工作区启用税费。前往',
             changePromptMessage: '进行该更改。',
             deleteDistanceRate: '删除距离费率',
-            areYouSureDelete: function () { return ({
+            areYouSureDelete: () => ({
                 one: '您确定要删除此费率吗？',
                 other: '您确定要删除这些费率吗？',
-            }); },
+            }),
             errors: {
                 rateNameRequired: '费率名称是必需的',
                 existingRateName: '具有此名称的距离费率已存在',
@@ -5782,10 +4903,7 @@ var translations = {
             nameIsRequiredError: '您需要为您的工作区命名',
             currencyInputLabel: '默认货币',
             currencyInputHelpText: '此工作区的所有费用将转换为此货币。',
-            currencyInputDisabledText: function (_a) {
-                var currency = _a.currency;
-                return "\u65E0\u6CD5\u66F4\u6539\u9ED8\u8BA4\u8D27\u5E01\uFF0C\u56E0\u4E3A\u6B64\u5DE5\u4F5C\u533A\u5DF2\u94FE\u63A5\u5230".concat(currency, "\u94F6\u884C\u8D26\u6237\u3002");
-            },
+            currencyInputDisabledText: ({ currency }) => `无法更改默认货币，因为此工作区已链接到${currency}银行账户。`,
             save: '保存',
             genericFailureMessage: '更新工作区时发生错误。请再试一次。',
             avatarUploadFailureMessage: '上传头像时发生错误。请再试一次。',
@@ -5817,158 +4935,136 @@ var translations = {
             updateToUSD: '更新为美元',
             updateWorkspaceCurrency: '更新工作区货币',
             workspaceCurrencyNotSupported: '工作区货币不支持',
-            yourWorkspace: "\u60A8\u7684\u5DE5\u4F5C\u533A\u8BBE\u7F6E\u4E3A\u4E0D\u652F\u6301\u7684\u8D27\u5E01\u3002\u67E5\u770B<a href=\"".concat(CONST_1.default.CONNECT_A_BUSINESS_BANK_ACCOUNT_HELP_URL, "\">\u652F\u6301\u8D27\u5E01\u5217\u8868</a>\u3002"),
+            yourWorkspace: `您的工作区设置为不支持的货币。查看<a href="${CONST_1.default.CONNECT_A_BUSINESS_BANK_ACCOUNT_HELP_URL}">支持货币列表</a>。`,
         },
         changeOwner: {
             changeOwnerPageTitle: '转移所有者',
             addPaymentCardTitle: '输入您的支付卡以转移所有权',
             addPaymentCardButtonText: '接受条款并添加支付卡',
-            addPaymentCardReadAndAcceptText: "<muted-text-micro>\u9605\u8BFB\u5E76\u63A5\u53D7<a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">\u6761\u6B3E</a>\u548C<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">\u9690\u79C1</a> \u653F\u7B56\uFF0C\u6DFB\u52A0\u60A8\u7684\u4F1A\u5458\u5361\u3002</muted-text-micro>"),
+            addPaymentCardReadAndAcceptText: `<muted-text-micro>阅读并接受<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">条款</a>和<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">隐私</a> 政策，添加您的会员卡。</muted-text-micro>`,
             addPaymentCardPciCompliant: '符合PCI-DSS标准',
             addPaymentCardBankLevelEncrypt: '银行级加密',
             addPaymentCardRedundant: '冗余基础设施',
-            addPaymentCardLearnMore: "<muted-text>\u8FDB\u4E00\u6B65\u4E86\u89E3\u6211\u4EEC\u7684<a href=\"".concat(CONST_1.default.PERSONAL_DATA_PROTECTION_INFO_URL, "\">\u5B89\u5168\u6027</a>\u3002</muted-text>"),
+            addPaymentCardLearnMore: `<muted-text>进一步了解我们的<a href="${CONST_1.default.PERSONAL_DATA_PROTECTION_INFO_URL}">安全性</a>。</muted-text>`,
             amountOwedTitle: '未结余额',
             amountOwedButtonText: '好的',
             amountOwedText: '此账户有上个月未结清的余额。\n\n您是否想清除余额并接管此工作区的账单？',
             ownerOwesAmountTitle: '未结余额',
             ownerOwesAmountButtonText: '转账余额',
-            ownerOwesAmountText: function (_a) {
-                var email = _a.email, amount = _a.amount;
-                return "\u62E5\u6709\u6B64\u5DE5\u4F5C\u533A\u7684\u8D26\u6237\uFF08".concat(email, "\uFF09\u6709\u4E0A\u4E2A\u6708\u672A\u7ED3\u6E05\u7684\u4F59\u989D\u3002\n\n\u60A8\u662F\u5426\u5E0C\u671B\u8F6C\u79FB\u6B64\u91D1\u989D\uFF08").concat(amount, "\uFF09\u4EE5\u63A5\u7BA1\u6B64\u5DE5\u4F5C\u533A\u7684\u8D26\u5355\uFF1F\u60A8\u7684\u652F\u4ED8\u5361\u5C06\u7ACB\u5373\u88AB\u6263\u6B3E\u3002");
-            },
+            ownerOwesAmountText: ({ email, amount }) => `拥有此工作区的账户（${email}）有上个月未结清的余额。\n\n您是否希望转移此金额（${amount}）以接管此工作区的账单？您的支付卡将立即被扣款。`,
             subscriptionTitle: '接管年度订阅',
             subscriptionButtonText: '转移订阅',
-            subscriptionText: function (_a) {
-                var usersCount = _a.usersCount, finalCount = _a.finalCount;
-                return "\u63A5\u7BA1\u6B64\u5DE5\u4F5C\u533A\u5C06\u628A\u5176\u5E74\u5EA6\u8BA2\u9605\u4E0E\u60A8\u5F53\u524D\u7684\u8BA2\u9605\u5408\u5E76\u3002\u8FD9\u5C06\u4F7F\u60A8\u7684\u8BA2\u9605\u4EBA\u6570\u589E\u52A0".concat(usersCount, "\u540D\u6210\u5458\uFF0C\u4F7F\u60A8\u7684\u65B0\u8BA2\u9605\u4EBA\u6570\u8FBE\u5230").concat(finalCount, "\u3002\u60A8\u60F3\u7EE7\u7EED\u5417\uFF1F");
-            },
+            subscriptionText: ({ usersCount, finalCount }) => `接管此工作区将把其年度订阅与您当前的订阅合并。这将使您的订阅人数增加${usersCount}名成员，使您的新订阅人数达到${finalCount}。您想继续吗？`,
             duplicateSubscriptionTitle: '重复订阅提醒',
             duplicateSubscriptionButtonText: '继续',
-            duplicateSubscriptionText: function (_a) {
-                var email = _a.email, workspaceName = _a.workspaceName;
-                return "\u60A8\u4F3C\u4E4E\u6B63\u5728\u5C1D\u8BD5\u63A5\u7BA1 ".concat(email, " \u7684\u5DE5\u4F5C\u533A\u7684\u8D26\u5355\uFF0C\u4F46\u8981\u505A\u5230\u8FD9\u4E00\u70B9\uFF0C\u60A8\u9700\u8981\u5148\u6210\u4E3A\u4ED6\u4EEC\u6240\u6709\u5DE5\u4F5C\u533A\u7684\u7BA1\u7406\u5458\u3002\n\n\u5982\u679C\u60A8\u53EA\u60F3\u63A5\u7BA1\u5DE5\u4F5C\u533A ").concat(workspaceName, " \u7684\u8D26\u5355\uFF0C\u8BF7\u70B9\u51FB\u201C\u7EE7\u7EED\u201D\u3002\n\n\u5982\u679C\u60A8\u60F3\u63A5\u7BA1\u4ED6\u4EEC\u6574\u4E2A\u8BA2\u9605\u7684\u8D26\u5355\uFF0C\u8BF7\u5148\u8BA9\u4ED6\u4EEC\u5C06\u60A8\u6DFB\u52A0\u4E3A\u6240\u6709\u5DE5\u4F5C\u533A\u7684\u7BA1\u7406\u5458\uFF0C\u7136\u540E\u518D\u63A5\u7BA1\u8D26\u5355\u3002");
-            },
+            duplicateSubscriptionText: ({ email, workspaceName }) => `您似乎正在尝试接管 ${email} 的工作区的账单，但要做到这一点，您需要先成为他们所有工作区的管理员。\n\n如果您只想接管工作区 ${workspaceName} 的账单，请点击“继续”。\n\n如果您想接管他们整个订阅的账单，请先让他们将您添加为所有工作区的管理员，然后再接管账单。`,
             hasFailedSettlementsTitle: '无法转移所有权',
             hasFailedSettlementsButtonText: '明白了',
-            hasFailedSettlementsText: function (_a) {
-                var email = _a.email;
-                return "\u60A8\u65E0\u6CD5\u63A5\u7BA1\u8D26\u5355\uFF0C\u56E0\u4E3A".concat(email, "\u6709\u4E00\u7B14\u903E\u671F\u7684Expensify Card\u7ED3\u7B97\u3002\u8BF7\u8BA9\u4ED6\u4EEC\u8054\u7CFBconcierge@expensify.com\u89E3\u51B3\u6B64\u95EE\u9898\u3002\u7136\u540E\uFF0C\u60A8\u5C31\u53EF\u4EE5\u63A5\u7BA1\u6B64\u5DE5\u4F5C\u533A\u7684\u8D26\u5355\u3002");
-            },
+            hasFailedSettlementsText: ({ email }) => `您无法接管账单，因为${email}有一笔逾期的Expensify Card结算。请让他们联系concierge@expensify.com解决此问题。然后，您就可以接管此工作区的账单。`,
             failedToClearBalanceTitle: '清除余额失败',
             failedToClearBalanceButtonText: '好的',
             failedToClearBalanceText: '我们无法清除余额。请稍后再试。',
             successTitle: '哇哦！一切就绪。',
             successDescription: '您现在是此工作区的所有者。',
             errorTitle: '哎呀！别这么快...',
-            errorDescription: "<muted-text><centered-text>\u8BE5\u5DE5\u4F5C\u533A\u6240\u6709\u6743\u7684\u8F6C\u79FB\u51FA\u73B0\u95EE\u9898\u3002\u8BF7\u91CD\u8BD5\uFF0C\u6216<concierge-link>\u8054\u7CFB Concierge </concierge-link>\u5BFB\u6C42\u5E2E\u52A9\u3002</centered-text></muted-text>",
+            errorDescription: `<muted-text><centered-text>该工作区所有权的转移出现问题。请重试，或<concierge-link>联系 Concierge </concierge-link>寻求帮助。</centered-text></muted-text>`,
         },
         exportAgainModal: {
             title: '小心！',
-            description: function (_a) {
-                var reportName = _a.reportName, connectionName = _a.connectionName;
-                return "\u4EE5\u4E0B\u62A5\u544A\u5DF2\u7ECF\u5BFC\u51FA\u5230".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\uFF1A\n\n").concat(reportName, "\n\n\u60A8\u786E\u5B9A\u8981\u518D\u6B21\u5BFC\u51FA\u5B83\u4EEC\u5417\uFF1F");
-            },
+            description: ({ reportName, connectionName }) => `以下报告已经导出到${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}：\n\n${reportName}\n\n您确定要再次导出它们吗？`,
             confirmText: '是的，再次导出',
             cancelText: '取消',
         },
-        upgrade: (_11 = {
-                reportFields: {
-                    title: '报告字段',
-                    description: "\u62A5\u544A\u5B57\u6BB5\u5141\u8BB8\u60A8\u6307\u5B9A\u6807\u9898\u7EA7\u522B\u7684\u8BE6\u7EC6\u4FE1\u606F\uFF0C\u4E0E\u9002\u7528\u4E8E\u5355\u4E2A\u9879\u76EE\u8D39\u7528\u7684\u6807\u7B7E\u4E0D\u540C\u3002\u8FD9\u4E9B\u8BE6\u7EC6\u4FE1\u606F\u53EF\u4EE5\u5305\u62EC\u7279\u5B9A\u7684\u9879\u76EE\u540D\u79F0\u3001\u5546\u52A1\u65C5\u884C\u4FE1\u606F\u3001\u5730\u70B9\u7B49\u3002",
-                    onlyAvailableOnPlan: '报告字段仅在Control计划中可用，起价为',
-                }
+        upgrade: {
+            reportFields: {
+                title: '报告字段',
+                description: `报告字段允许您指定标题级别的详细信息，与适用于单个项目费用的标签不同。这些详细信息可以包括特定的项目名称、商务旅行信息、地点等。`,
+                onlyAvailableOnPlan: '报告字段仅在Control计划中可用，起价为',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE]: {
                 title: 'NetSuite',
-                description: "\u901A\u8FC7 Expensify + NetSuite \u96C6\u6210\u4EAB\u53D7\u81EA\u52A8\u540C\u6B65\u5E76\u51CF\u5C11\u624B\u52A8\u8F93\u5165\u3002\u901A\u8FC7\u539F\u751F\u548C\u81EA\u5B9A\u4E49\u5206\u6BB5\u652F\u6301\uFF08\u5305\u62EC\u9879\u76EE\u548C\u5BA2\u6237\u6620\u5C04\uFF09\uFF0C\u83B7\u5F97\u6DF1\u5165\u7684\u5B9E\u65F6\u8D22\u52A1\u6D1E\u5BDF\u3002",
+                description: `通过 Expensify + NetSuite 集成享受自动同步并减少手动输入。通过原生和自定义分段支持（包括项目和客户映射），获得深入的实时财务洞察。`,
                 onlyAvailableOnPlan: '我们的 NetSuite 集成仅在 Control 计划中可用，起价为',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.SAGE_INTACCT] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.SAGE_INTACCT]: {
                 title: 'Sage Intacct',
-                description: "\u901A\u8FC7Expensify + Sage Intacct\u96C6\u6210\uFF0C\u4EAB\u53D7\u81EA\u52A8\u540C\u6B65\u5E76\u51CF\u5C11\u624B\u52A8\u8F93\u5165\u3002\u901A\u8FC7\u7528\u6237\u5B9A\u4E49\u7684\u7EF4\u5EA6\uFF0C\u4EE5\u53CA\u6309\u90E8\u95E8\u3001\u7C7B\u522B\u3001\u5730\u70B9\u3001\u5BA2\u6237\u548C\u9879\u76EE\uFF08\u5DE5\u4F5C\uFF09\u8FDB\u884C\u7684\u8D39\u7528\u7F16\u7801\uFF0C\u83B7\u5F97\u6DF1\u5165\u7684\u5B9E\u65F6\u8D22\u52A1\u6D1E\u5BDF\u3002",
+                description: `通过Expensify + Sage Intacct集成，享受自动同步并减少手动输入。通过用户定义的维度，以及按部门、类别、地点、客户和项目（工作）进行的费用编码，获得深入的实时财务洞察。`,
                 onlyAvailableOnPlan: '我们的 Sage Intacct 集成仅在 Control 计划中可用，起价为',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.QBD] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.QBD]: {
                 title: 'QuickBooks Desktop',
-                description: "\u901A\u8FC7Expensify\u4E0EQuickBooks Desktop\u7684\u96C6\u6210\uFF0C\u4EAB\u53D7\u81EA\u52A8\u540C\u6B65\u5E76\u51CF\u5C11\u624B\u52A8\u8F93\u5165\u3002\u901A\u8FC7\u5B9E\u65F6\u53CC\u5411\u8FDE\u63A5\u4EE5\u53CA\u6309\u7C7B\u522B\u3001\u9879\u76EE\u3001\u5BA2\u6237\u548C\u9879\u76EE\u7684\u8D39\u7528\u7F16\u7801\uFF0C\u5B9E\u73B0\u7EC8\u6781\u6548\u7387\u3002",
+                description: `通过Expensify与QuickBooks Desktop的集成，享受自动同步并减少手动输入。通过实时双向连接以及按类别、项目、客户和项目的费用编码，实现终极效率。`,
                 onlyAvailableOnPlan: '我们的 QuickBooks Desktop 集成仅在 Control 计划中提供，起价为',
             },
-            _11[CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.approvals.id] = {
+            [CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.approvals.id]: {
                 title: '高级审批',
-                description: "\u5982\u679C\u60A8\u60F3\u5728\u5BA1\u6279\u6D41\u7A0B\u4E2D\u589E\u52A0\u66F4\u591A\u5C42\u7EA7\uFF0C\u6216\u8005\u53EA\u662F\u60F3\u786E\u4FDD\u6700\u5927\u989D\u7684\u8D39\u7528\u80FD\u88AB\u518D\u6B21\u5BA1\u6838\uFF0C\u6211\u4EEC\u53EF\u4EE5\u6EE1\u8DB3\u60A8\u7684\u9700\u6C42\u3002\u9AD8\u7EA7\u5BA1\u6279\u5E2E\u52A9\u60A8\u5728\u6BCF\u4E2A\u5C42\u7EA7\u8BBE\u7F6E\u9002\u5F53\u7684\u68C0\u67E5\uFF0C\u4EE5\u4FBF\u63A7\u5236\u56E2\u961F\u7684\u652F\u51FA\u3002",
+                description: `如果您想在审批流程中增加更多层级，或者只是想确保最大额的费用能被再次审核，我们可以满足您的需求。高级审批帮助您在每个层级设置适当的检查，以便控制团队的支出。`,
                 onlyAvailableOnPlan: '高级审批仅在Control计划中提供，起价为',
             },
-            _11.categories = {
+            categories: {
                 title: '类别',
-                description: "\u7C7B\u522B\u5E2E\u52A9\u60A8\u66F4\u597D\u5730\u7EC4\u7EC7\u8D39\u7528\uFF0C\u4EE5\u8DDF\u8E2A\u60A8\u7684\u8D44\u91D1\u53BB\u5411\u3002\u4F7F\u7528\u6211\u4EEC\u5EFA\u8BAE\u7684\u7C7B\u522B\u5217\u8868\u6216\u521B\u5EFA\u60A8\u81EA\u5DF1\u7684\u7C7B\u522B\u3002",
+                description: `类别帮助您更好地组织费用，以跟踪您的资金去向。使用我们建议的类别列表或创建您自己的类别。`,
                 onlyAvailableOnPlan: '类别在 Collect 计划中可用，起价为',
             },
-            _11.glCodes = {
+            glCodes: {
                 title: 'GL代码',
-                description: "\u4E3A\u60A8\u7684\u7C7B\u522B\u548C\u6807\u7B7E\u6DFB\u52A0\u603B\u8D26\u4EE3\u7801\uFF0C\u4EE5\u4FBF\u8F7B\u677E\u5C06\u8D39\u7528\u5BFC\u51FA\u5230\u60A8\u7684\u4F1A\u8BA1\u548C\u5DE5\u8D44\u7CFB\u7EDF\u3002",
+                description: `为您的类别和标签添加总账代码，以便轻松将费用导出到您的会计和工资系统。`,
                 onlyAvailableOnPlan: 'GL 代码仅在 Control 计划中可用，起价为',
             },
-            _11.glAndPayrollCodes = {
+            glAndPayrollCodes: {
                 title: 'GL 和工资代码',
-                description: "\u4E3A\u60A8\u7684\u7C7B\u522B\u6DFB\u52A0 GL \u548C\u5DE5\u8D44\u4EE3\u7801\uFF0C\u4EE5\u4FBF\u8F7B\u677E\u5C06\u8D39\u7528\u5BFC\u51FA\u5230\u60A8\u7684\u4F1A\u8BA1\u548C\u5DE5\u8D44\u7CFB\u7EDF\u3002",
+                description: `为您的类别添加 GL 和工资代码，以便轻松将费用导出到您的会计和工资系统。`,
                 onlyAvailableOnPlan: 'GL 和工资代码仅在 Control 计划中提供，起价为',
             },
-            _11.taxCodes = {
+            taxCodes: {
                 title: '税码',
-                description: "\u5C06\u7A0E\u7801\u6DFB\u52A0\u5230\u60A8\u7684\u7A0E\u6B3E\u4E2D\uFF0C\u4EE5\u4FBF\u8F7B\u677E\u5C06\u8D39\u7528\u5BFC\u51FA\u5230\u60A8\u7684\u4F1A\u8BA1\u548C\u5DE5\u8D44\u7CFB\u7EDF\u3002",
+                description: `将税码添加到您的税款中，以便轻松将费用导出到您的会计和工资系统。`,
                 onlyAvailableOnPlan: '税码仅在起价为的Control计划中提供，',
             },
-            _11.companyCards = {
+            companyCards: {
                 title: '无限公司卡',
-                description: "\u9700\u8981\u6DFB\u52A0\u66F4\u591A\u7684\u5361\u7247\u4FE1\u606F\u6D41\u5417\uFF1F\u89E3\u9501\u65E0\u9650\u516C\u53F8\u5361\uFF0C\u4EE5\u540C\u6B65\u6240\u6709\u4E3B\u8981\u53D1\u5361\u673A\u6784\u7684\u4EA4\u6613\u3002",
+                description: `需要添加更多的卡片信息流吗？解锁无限公司卡，以同步所有主要发卡机构的交易。`,
                 onlyAvailableOnPlan: '这仅在Control计划中提供，起价为',
             },
-            _11.rules = {
+            rules: {
                 title: '规则',
-                description: "\u89C4\u5219\u5728\u540E\u53F0\u8FD0\u884C\uFF0C\u5E2E\u52A9\u60A8\u63A7\u5236\u652F\u51FA\uFF0C\u56E0\u6B64\u60A8\u65E0\u9700\u4E3A\u5C0F\u4E8B\u64CD\u5FC3\u3002\n\n\u8981\u6C42\u63D0\u4F9B\u6536\u636E\u548C\u63CF\u8FF0\u7B49\u8D39\u7528\u8BE6\u60C5\uFF0C\u8BBE\u7F6E\u9650\u5236\u548C\u9ED8\u8BA4\u503C\uFF0C\u5E76\u81EA\u52A8\u5316\u5BA1\u6279\u548C\u652F\u4ED8\u2014\u2014\u6240\u6709\u8FD9\u4E9B\u90FD\u5728\u4E00\u4E2A\u5730\u65B9\u5B8C\u6210\u3002",
+                description: `规则在后台运行，帮助您控制支出，因此您无需为小事操心。\n\n要求提供收据和描述等费用详情，设置限制和默认值，并自动化审批和支付——所有这些都在一个地方完成。`,
                 onlyAvailableOnPlan: '规则仅在控制计划中可用，起价为',
             },
-            _11.perDiem = {
+            perDiem: {
                 title: '每日津贴',
                 description: '每日津贴是确保员工出差时日常费用合规且可预测的好方法。享受自定义费率、默认类别以及更详细的信息，如目的地和子费率等功能。',
                 onlyAvailableOnPlan: '每日津贴仅在Control计划中提供，起价为',
             },
-            _11.travel = {
+            travel: {
                 title: '旅行',
                 description: 'Expensify Travel 是一个新的企业差旅预订和管理平台，允许会员预订住宿、航班、交通等。',
                 onlyAvailableOnPlan: '旅行功能在 Collect 计划中提供，起价为',
             },
-            _11.multiLevelTags = {
+            multiLevelTags: {
                 title: '多级标签',
                 description: '多级标签帮助您更精确地跟踪费用。为每个项目分配多个标签，例如部门、客户或成本中心，以捕获每笔费用的完整上下文。这使得更详细的报告、审批流程和会计导出成为可能。',
                 onlyAvailableOnPlan: '多级标签仅在Control计划中提供，起价为',
             },
-            _11[CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.multiApprovalLevels.id] = {
+            [CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.multiApprovalLevels.id]: {
                 title: '多级审批',
                 description: '多级审批是一种工作流工具，适用于要求一人以上审批报销单后才能进行报销的公司。',
                 onlyAvailableOnPlan: '多级审批仅在 Control 套餐上提供，起价为 ',
             },
-            _11.pricing = {
+            pricing: {
                 perActiveMember: '每位活跃成员每月。',
                 perMember: '每位成员每月。',
             },
-            _11.note = function (_a) {
-                var subscriptionLink = _a.subscriptionLink;
-                return "<muted-text>\u5347\u7EA7\u60A8\u7684\u5DE5\u4F5C\u533A\u5373\u53EF\u4F7F\u7528\u8BE5\u529F\u80FD\uFF0C\u6216<a href=\"".concat(subscriptionLink, "\">\u8FDB\u4E00\u6B65\u4E86\u89E3</a>\u6211\u4EEC\u7684\u8BA1\u5212\u548C\u5B9A\u4EF7\u3002</muted-text>");
-            },
-            _11.upgradeToUnlock = '解锁此功能',
-            _11.completed = {
-                headline: "\u60A8\u7684\u5DE5\u4F5C\u533A\u5DF2\u5347\u7EA7\uFF01",
-                successMessage: function (_a) {
-                    var policyName = _a.policyName, subscriptionLink = _a.subscriptionLink;
-                    return "<centered-text>\u60A8\u5DF2\u6210\u529F\u5C06 ".concat(policyName, " \u5347\u7EA7\u5230\u63A7\u5236\u8BA1\u5212\uFF01<a href=\"").concat(subscriptionLink, "\">\u67E5\u770B\u8BA2\u9605\u8BE6\u60C5</a>\u3002</centered-text>");
-                },
-                categorizeMessage: "\u60A8\u5DF2\u6210\u529F\u5347\u7EA7\u5230 Collect \u8BA1\u5212\u7684\u5DE5\u4F5C\u533A\u3002\u73B0\u5728\u60A8\u53EF\u4EE5\u5BF9\u8D39\u7528\u8FDB\u884C\u5206\u7C7B\u4E86\uFF01",
-                travelMessage: "\u60A8\u5DF2\u6210\u529F\u5347\u7EA7\u5230 Collect \u8BA1\u5212\u7684\u5DE5\u4F5C\u533A\u3002\u73B0\u5728\u60A8\u53EF\u4EE5\u5F00\u59CB\u9884\u8BA2\u548C\u7BA1\u7406\u65C5\u884C\u4E86\uFF01",
+            note: ({ subscriptionLink }) => `<muted-text>升级您的工作区即可使用该功能，或<a href="${subscriptionLink}">进一步了解</a>我们的计划和定价。</muted-text>`,
+            upgradeToUnlock: '解锁此功能',
+            completed: {
+                headline: `您的工作区已升级！`,
+                successMessage: ({ policyName, subscriptionLink }) => `<centered-text>您已成功将 ${policyName} 升级到控制计划！<a href="${subscriptionLink}">查看订阅详情</a>。</centered-text>`,
+                categorizeMessage: `您已成功升级到 Collect 计划的工作区。现在您可以对费用进行分类了！`,
+                travelMessage: `您已成功升级到 Collect 计划的工作区。现在您可以开始预订和管理旅行了！`,
                 gotIt: '知道了，谢谢',
             },
-            _11.commonFeatures = {
+            commonFeatures: {
                 title: '升级到Control计划',
                 note: '解锁我们最强大的功能，包括：',
                 benefits: {
@@ -5984,7 +5080,7 @@ var translations = {
                     selectWorkspace: '选择一个工作区，并将计划类型更改为',
                 },
             },
-            _11),
+        },
         downgrade: {
             commonFeatures: {
                 title: '降级到Collect计划',
@@ -6012,27 +5108,15 @@ var translations = {
         payAndDowngrade: {
             title: '支付和降级',
             headline: '您的最终付款',
-            description1: function (_a) {
-                var formattedAmount = _a.formattedAmount;
-                return "\u60A8\u672C\u6B21\u8BA2\u9605\u7684\u6700\u7EC8\u8D26\u5355\u91D1\u989D\u4E3A <strong>".concat(formattedAmount, "</strong>");
-            },
-            description2: function (_a) {
-                var date = _a.date;
-                return "\u67E5\u770B\u60A8\u5728".concat(date, "\u7684\u660E\u7EC6\uFF1A");
-            },
+            description1: ({ formattedAmount }) => `您本次订阅的最终账单金额为 <strong>${formattedAmount}</strong>`,
+            description2: ({ date }) => `查看您在${date}的明细：`,
             subscription: '注意！此操作将终止您的Expensify订阅，删除此工作区，并移除所有工作区成员。如果您只想移除自己并保留此工作区，请先让其他管理员接管账单。',
             genericFailureMessage: '支付账单时发生错误。请重试。',
         },
         restrictedAction: {
             restricted: 'Restricted',
-            actionsAreCurrentlyRestricted: function (_a) {
-                var workspaceName = _a.workspaceName;
-                return "\u5BF9".concat(workspaceName, "\u5DE5\u4F5C\u533A\u7684\u64CD\u4F5C\u76EE\u524D\u53D7\u5230\u9650\u5236\u3002");
-            },
-            workspaceOwnerWillNeedToAddOrUpdatePaymentCard: function (_a) {
-                var workspaceOwnerName = _a.workspaceOwnerName;
-                return "\u5DE5\u4F5C\u533A\u6240\u6709\u8005 ".concat(workspaceOwnerName, " \u9700\u8981\u6DFB\u52A0\u6216\u66F4\u65B0\u6863\u6848\u4E2D\u7684\u652F\u4ED8\u5361\uFF0C\u4EE5\u89E3\u9501\u65B0\u7684\u5DE5\u4F5C\u533A\u6D3B\u52A8\u3002");
-            },
+            actionsAreCurrentlyRestricted: ({ workspaceName }) => `对${workspaceName}工作区的操作目前受到限制。`,
+            workspaceOwnerWillNeedToAddOrUpdatePaymentCard: ({ workspaceOwnerName }) => `工作区所有者 ${workspaceOwnerName} 需要添加或更新档案中的支付卡，以解锁新的工作区活动。`,
             youWillNeedToAddOrUpdatePaymentCard: '您需要添加或更新档案中的支付卡，以解锁新的工作区活动。',
             addPaymentCardToUnlock: '添加付款卡以解锁！',
             addPaymentCardToContinueUsingWorkspace: '添加支付卡以继续使用此工作区',
@@ -6044,10 +5128,7 @@ var translations = {
         rules: {
             individualExpenseRules: {
                 title: '费用',
-                subtitle: function (_a) {
-                    var categoriesPageLink = _a.categoriesPageLink, tagsPageLink = _a.tagsPageLink;
-                    return "<muted-text>\u4E3A\u5355\u9879\u652F\u51FA\u8BBE\u7F6E\u652F\u51FA\u63A7\u5236\u548C\u9ED8\u8BA4\u503C\u3002\u60A8\u8FD8\u53EF\u4EE5\u4E3A<a href=\"".concat(categoriesPageLink, "\">\u7C7B\u522B</a>\u548C<a href=\"").concat(tagsPageLink, "\">\u6807\u7B7E</a>\u521B\u5EFA\u89C4\u5219\u3002</muted-text>");
-                },
+                subtitle: ({ categoriesPageLink, tagsPageLink }) => `<muted-text>为单项支出设置支出控制和默认值。您还可以为<a href="${categoriesPageLink}">类别</a>和<a href="${tagsPageLink}">标签</a>创建规则。</muted-text>`,
                 receiptRequiredAmount: '所需收据金额',
                 receiptRequiredAmountDescription: '当支出超过此金额时需要收据，除非被类别规则覆盖。',
                 maxExpenseAmount: '最大报销金额',
@@ -6055,10 +5136,10 @@ var translations = {
                 maxAge: '最大年龄',
                 maxExpenseAge: '最大费用年龄',
                 maxExpenseAgeDescription: '标记超过特定天数的支出。',
-                maxExpenseAgeDays: function () { return ({
+                maxExpenseAgeDays: () => ({
                     one: '1天',
-                    other: function (count) { return "".concat(count, "\u5929"); },
-                }); },
+                    other: (count) => `${count}天`,
+                }),
                 cashExpenseDefault: '现金支出默认值',
                 cashExpenseDefaultDescription: '选择如何创建现金支出。如果不是导入的公司卡交易，则视为现金支出。这包括手动创建的支出、收据、津贴、里程和工时支出。',
                 reimbursableDefault: '可报销',
@@ -6070,10 +5151,7 @@ var translations = {
                 alwaysNonReimbursable: '始终不可报销',
                 alwaysNonReimbursableDescription: '支出永远不会报销给员工',
                 billableDefault: '默认计费',
-                billableDefaultDescription: function (_a) {
-                    var tagsPageLink = _a.tagsPageLink;
-                    return "<muted-text>C\u9009\u62E9\u73B0\u91D1\u548C\u4FE1\u7528\u5361\u652F\u51FA\u662F\u5426\u9ED8\u8BA4\u53EF\u8BA1\u8D39\u3002\u53EF\u8BA1\u8D39\u652F\u51FA\u53EF\u5728<a href=\"".concat(tagsPageLink, "\">\u6807\u7B7E</a>\u4E2D\u542F\u7528\u6216\u7981\u7528\u3002</muted-text>");
-                },
+                billableDefaultDescription: ({ tagsPageLink }) => `<muted-text>C选择现金和信用卡支出是否默认可计费。可计费支出可在<a href="${tagsPageLink}">标签</a>中启用或禁用。</muted-text>`,
                 billable: '可计费的',
                 billableDescription: '费用通常会重新计费给客户。',
                 nonBillable: '非计费',
@@ -6104,39 +5182,24 @@ var translations = {
                 randomReportAuditDescription: '要求某些报告必须手动批准，即使符合自动批准的条件。',
                 autoPayApprovedReportsTitle: '自动支付已批准的报告',
                 autoPayApprovedReportsSubtitle: '配置哪些费用报告符合自动支付条件。',
-                autoPayApprovedReportsLimitError: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, currency = _b.currency;
-                    return "\u8BF7\u8F93\u5165\u4E00\u4E2A\u5C0F\u4E8E".concat(currency !== null && currency !== void 0 ? currency : '', "20,000\u7684\u91D1\u989D\u3002");
-                },
+                autoPayApprovedReportsLimitError: ({ currency } = {}) => `请输入一个小于${currency ?? ''}20,000的金额。`,
                 autoPayApprovedReportsLockedSubtitle: '转到更多功能并启用工作流，然后添加付款以解锁此功能。',
                 autoPayReportsUnderTitle: '自动支付报告低于',
                 autoPayReportsUnderDescription: '在此金额以下的完全合规费用报告将自动支付。',
-                unlockFeatureEnableWorkflowsSubtitle: function (_a) {
-                    var featureName = _a.featureName, moreFeaturesLink = _a.moreFeaturesLink;
-                    return "\u524D\u5F80[\u66F4\u591A\u529F\u80FD](".concat(moreFeaturesLink, ")\u5E76\u542F\u7528\u5DE5\u4F5C\u6D41\uFF0C\u7136\u540E\u6DFB\u52A0").concat(featureName, "\u4EE5\u89E3\u9501\u6B64\u529F\u80FD\u3002");
-                },
-                enableFeatureSubtitle: function (_a) {
-                    var featureName = _a.featureName, moreFeaturesLink = _a.moreFeaturesLink;
-                    return "\u524D\u5F80[\u66F4\u591A\u529F\u80FD](".concat(moreFeaturesLink, ")\u5E76\u542F\u7528").concat(featureName, "\u4EE5\u89E3\u9501\u6B64\u529F\u80FD\u3002");
-                },
+                unlockFeatureEnableWorkflowsSubtitle: ({ featureName, moreFeaturesLink }) => `前往[更多功能](${moreFeaturesLink})并启用工作流，然后添加${featureName}以解锁此功能。`,
+                enableFeatureSubtitle: ({ featureName, moreFeaturesLink }) => `前往[更多功能](${moreFeaturesLink})并启用${featureName}以解锁此功能。`,
             },
             categoryRules: {
                 title: '类别规则',
                 approver: '审批人',
                 requireDescription: '需要描述',
                 descriptionHint: '描述提示',
-                descriptionHintDescription: function (_a) {
-                    var categoryName = _a.categoryName;
-                    return "\u63D0\u9192\u5458\u5DE5\u4E3A\u201C".concat(categoryName, "\u201D\u652F\u51FA\u63D0\u4F9B\u66F4\u591A\u4FE1\u606F\u3002\u6B64\u63D0\u793A\u663E\u793A\u5728\u8D39\u7528\u7684\u63CF\u8FF0\u5B57\u6BB5\u4E2D\u3002");
-                },
+                descriptionHintDescription: ({ categoryName }) => `提醒员工为“${categoryName}”支出提供更多信息。此提示显示在费用的描述字段中。`,
                 descriptionHintLabel: '提示',
                 descriptionHintSubtitle: '专业提示：越短越好！',
                 maxAmount: '最大金额',
                 flagAmountsOver: '标记超过的金额',
-                flagAmountsOverDescription: function (_a) {
-                    var categoryName = _a.categoryName;
-                    return "\u9002\u7528\u4E8E\u7C7B\u522B\u201C".concat(categoryName, "\u201D\u3002");
-                },
+                flagAmountsOverDescription: ({ categoryName }) => `适用于类别“${categoryName}”。`,
                 flagAmountsOverSubtitle: '这将覆盖所有费用的最大金额。',
                 expenseLimitTypes: {
                     expense: '单笔费用',
@@ -6146,18 +5209,12 @@ var translations = {
                 },
                 requireReceiptsOver: '要求超过',
                 requireReceiptsOverList: {
-                    default: function (_a) {
-                        var defaultAmount = _a.defaultAmount;
-                        return "".concat(defaultAmount, " ").concat(CONST_1.default.DOT_SEPARATOR, " \u9ED8\u8BA4");
-                    },
+                    default: ({ defaultAmount }) => `${defaultAmount} ${CONST_1.default.DOT_SEPARATOR} 默认`,
                     never: '从不要求收据',
                     always: '始终要求收据',
                 },
                 defaultTaxRate: '默认税率',
-                enableWorkflows: function (_a) {
-                    var moreFeaturesLink = _a.moreFeaturesLink;
-                    return "\u8F6C\u5230[\u66F4\u591A\u529F\u80FD](".concat(moreFeaturesLink, ")\u5E76\u542F\u7528\u5DE5\u4F5C\u6D41\u7A0B\uFF0C\u7136\u540E\u6DFB\u52A0\u5BA1\u6279\u4EE5\u89E3\u9501\u6B64\u529F\u80FD\u3002");
-                },
+                enableWorkflows: ({ moreFeaturesLink }) => `转到[更多功能](${moreFeaturesLink})并启用工作流程，然后添加审批以解锁此功能。`,
             },
             customRules: {
                 title: '自定义规则',
@@ -6177,13 +5234,10 @@ var translations = {
             },
             description: '选择适合您的计划。有关功能和价格的详细列表，请查看我们的',
             subscriptionLink: '计划类型和定价帮助页面',
-            lockedPlanDescription: function (_a) {
-                var count = _a.count, annualSubscriptionEndDate = _a.annualSubscriptionEndDate;
-                return ({
-                    one: "\u60A8\u5DF2\u627F\u8BFA\u5728\u60A8\u7684\u5E74\u5EA6\u8BA2\u9605\u5230\u671F\u65E5".concat(annualSubscriptionEndDate, "\u4E4B\u524D\uFF0C\u5728\u63A7\u5236\u8BA1\u5212\u4E2D\u4FDD\u75591\u540D\u6D3B\u8DC3\u6210\u5458\u3002\u60A8\u53EF\u4EE5\u9009\u62E9\u6309\u4F7F\u7528\u4ED8\u8D39\u7684\u8BA2\u9605\u65B9\u5F0F\uFF0C\u5E76\u5728").concat(annualSubscriptionEndDate, "\u4E4B\u540E\u901A\u8FC7\u7981\u7528\u81EA\u52A8\u7EED\u8BA2\u964D\u7EA7\u5230Collect\u8BA1\u5212\u3002"),
-                    other: "\u60A8\u5DF2\u627F\u8BFA\u5728\u63A7\u5236\u8BA1\u5212\u4E2D\u62E5\u6709 ".concat(count, " \u540D\u6D3B\u8DC3\u6210\u5458\uFF0C\u76F4\u5230\u60A8\u7684\u5E74\u5EA6\u8BA2\u9605\u5728 ").concat(annualSubscriptionEndDate, " \u7ED3\u675F\u3002\u60A8\u53EF\u4EE5\u901A\u8FC7\u5728 ").concat(annualSubscriptionEndDate, " \u5F00\u59CB\u7981\u7528\u81EA\u52A8\u7EED\u8BA2\u6765\u5207\u6362\u5230\u6309\u4F7F\u7528\u4ED8\u8D39\u8BA2\u9605\u5E76\u964D\u7EA7\u5230 Collect \u8BA1\u5212\u3002"),
-                });
-            },
+            lockedPlanDescription: ({ count, annualSubscriptionEndDate }) => ({
+                one: `您已承诺在您的年度订阅到期日${annualSubscriptionEndDate}之前，在控制计划中保留1名活跃成员。您可以选择按使用付费的订阅方式，并在${annualSubscriptionEndDate}之后通过禁用自动续订降级到Collect计划。`,
+                other: `您已承诺在控制计划中拥有 ${count} 名活跃成员，直到您的年度订阅在 ${annualSubscriptionEndDate} 结束。您可以通过在 ${annualSubscriptionEndDate} 开始禁用自动续订来切换到按使用付费订阅并降级到 Collect 计划。`,
+            }),
             subscriptions: '订阅',
         },
     },
@@ -6226,22 +5280,15 @@ var translations = {
         public_announceDescription: '任何人都可以找到这个房间',
         createRoom: '创建房间',
         roomAlreadyExistsError: '已存在一个具有此名称的房间',
-        roomNameReservedError: function (_a) {
-            var reservedName = _a.reservedName;
-            return "".concat(reservedName, " \u662F\u6240\u6709\u5DE5\u4F5C\u533A\u7684\u9ED8\u8BA4\u623F\u95F4\u3002\u8BF7\u9009\u62E9\u53E6\u4E00\u4E2A\u540D\u79F0\u3002");
-        },
+        roomNameReservedError: ({ reservedName }) => `${reservedName} 是所有工作区的默认房间。请选择另一个名称。`,
         roomNameInvalidError: '房间名称只能包含小写字母、数字和连字符',
         pleaseEnterRoomName: '请输入房间名称',
         pleaseSelectWorkspace: '请选择一个工作区',
-        renamedRoomAction: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName, actorName = _a.actorName, isExpenseReport = _a.isExpenseReport;
-            var actor = actorName ? "".concat(actorName, " ") : '';
-            return isExpenseReport ? "".concat(actor, "\u91CD\u547D\u540D\u4E3A\u201C").concat(newName, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldName, "\u201D\uFF09") : "".concat(actor, "\u5C06\u6B64\u623F\u95F4\u91CD\u547D\u540D\u4E3A\u201C").concat(newName, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldName, "\u201D\uFF09");
+        renamedRoomAction: ({ oldName, newName, actorName, isExpenseReport }) => {
+            const actor = actorName ? `${actorName} ` : '';
+            return isExpenseReport ? `${actor}重命名为“${newName}”（之前为“${oldName}”）` : `${actor}将此房间重命名为“${newName}”（之前为“${oldName}”）`;
         },
-        roomRenamedTo: function (_a) {
-            var newName = _a.newName;
-            return "\u623F\u95F4\u91CD\u547D\u540D\u4E3A".concat(newName);
-        },
+        roomRenamedTo: ({ newName }) => `房间重命名为${newName}`,
         social: '社交',
         selectAWorkspace: '选择一个工作区',
         growlMessageOnRenameError: '无法重命名工作区房间。请检查您的连接并重试。',
@@ -6262,286 +5309,154 @@ var translations = {
         billcom: 'BILLCOM',
     },
     workspaceActions: {
-        addApprovalRule: function (_a) {
-            var approverEmail = _a.approverEmail, approverName = _a.approverName, field = _a.field, name = _a.name;
-            return "\u5DF2\u5C06".concat(approverName, "\uFF08").concat(approverEmail, "\uFF09\u6DFB\u52A0\u4E3A").concat(field, "\u201C").concat(name, "\u201D\u7684\u5BA1\u6279\u4EBA");
+        addApprovalRule: ({ approverEmail, approverName, field, name }) => `已将${approverName}（${approverEmail}）添加为${field}“${name}”的审批人`,
+        deleteApprovalRule: ({ approverEmail, approverName, field, name }) => `将 ${approverName} (${approverEmail}) 从 ${field} "${name}" 的审批人中移除`,
+        updateApprovalRule: ({ field, name, newApproverEmail, newApproverName, oldApproverEmail, oldApproverName }) => {
+            const formatApprover = (displayName, email) => (displayName ? `${displayName} (${email})` : email);
+            return `将 ${field} "${name}" 的审批者更改为 ${formatApprover(newApproverName, newApproverEmail)}（之前是 ${formatApprover(oldApproverName, oldApproverEmail)}）`;
         },
-        deleteApprovalRule: function (_a) {
-            var approverEmail = _a.approverEmail, approverName = _a.approverName, field = _a.field, name = _a.name;
-            return "\u5C06 ".concat(approverName, " (").concat(approverEmail, ") \u4ECE ").concat(field, " \"").concat(name, "\" \u7684\u5BA1\u6279\u4EBA\u4E2D\u79FB\u9664");
-        },
-        updateApprovalRule: function (_a) {
-            var field = _a.field, name = _a.name, newApproverEmail = _a.newApproverEmail, newApproverName = _a.newApproverName, oldApproverEmail = _a.oldApproverEmail, oldApproverName = _a.oldApproverName;
-            var formatApprover = function (displayName, email) { return (displayName ? "".concat(displayName, " (").concat(email, ")") : email); };
-            return "\u5C06 ".concat(field, " \"").concat(name, "\" \u7684\u5BA1\u6279\u8005\u66F4\u6539\u4E3A ").concat(formatApprover(newApproverName, newApproverEmail), "\uFF08\u4E4B\u524D\u662F ").concat(formatApprover(oldApproverName, oldApproverEmail), "\uFF09");
-        },
-        addCategory: function (_a) {
-            var categoryName = _a.categoryName;
-            return "\u6DFB\u52A0\u4E86\u7C7B\u522B\u201C".concat(categoryName, "\u201D");
-        },
-        deleteCategory: function (_a) {
-            var categoryName = _a.categoryName;
-            return "\u5DF2\u79FB\u9664\u7C7B\u522B\u201C".concat(categoryName, "\u201D");
-        },
-        updateCategory: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName;
-            return "".concat(oldValue ? 'disabled' : '启用', " \u7C7B\u522B \"").concat(categoryName, "\"");
-        },
-        updateCategoryPayrollCode: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName, newValue = _a.newValue;
+        addCategory: ({ categoryName }) => `添加了类别“${categoryName}”`,
+        deleteCategory: ({ categoryName }) => `已移除类别“${categoryName}”`,
+        updateCategory: ({ oldValue, categoryName }) => `${oldValue ? 'disabled' : '启用'} 类别 "${categoryName}"`,
+        updateCategoryPayrollCode: ({ oldValue, categoryName, newValue }) => {
             if (!oldValue) {
-                return "\u5C06\u5DE5\u8D44\u4EE3\u7801\u201C".concat(newValue, "\u201D\u6DFB\u52A0\u5230\u7C7B\u522B\u201C").concat(categoryName, "\u201D\u4E2D");
+                return `将工资代码“${newValue}”添加到类别“${categoryName}”中`;
             }
             if (!newValue && oldValue) {
-                return "\u4ECE\u7C7B\u522B\u201C".concat(categoryName, "\u201D\u4E2D\u5220\u9664\u4E86\u5DE5\u8D44\u4EE3\u7801\u201C").concat(oldValue, "\u201D");
+                return `从类别“${categoryName}”中删除了工资代码“${oldValue}”`;
             }
-            return "\u5C06\u201C".concat(categoryName, "\u201D\u7C7B\u522B\u7684\u5DE5\u8D44\u4EE3\u7801\u66F4\u6539\u4E3A\u201C").concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
+            return `将“${categoryName}”类别的工资代码更改为“${newValue}”（之前为“${oldValue}”）`;
         },
-        updateCategoryGLCode: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName, newValue = _a.newValue;
+        updateCategoryGLCode: ({ oldValue, categoryName, newValue }) => {
             if (!oldValue) {
-                return "\u5C06 GL \u4EE3\u7801\u201C".concat(newValue, "\u201D\u6DFB\u52A0\u5230\u7C7B\u522B\u201C").concat(categoryName, "\u201D\u4E2D");
+                return `将 GL 代码“${newValue}”添加到类别“${categoryName}”中`;
             }
             if (!newValue && oldValue) {
-                return "\u4ECE\u7C7B\u522B\u201C".concat(categoryName, "\u201D\u4E2D\u79FB\u9664\u4E86GL\u4EE3\u7801\u201C").concat(oldValue, "\u201D");
+                return `从类别“${categoryName}”中移除了GL代码“${oldValue}”`;
             }
-            return "\u5C06\u201C".concat(categoryName, "\u201D\u7C7B\u522B\u7684GL\u4EE3\u7801\u66F4\u6539\u4E3A\u201C").concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
+            return `将“${categoryName}”类别的GL代码更改为“${newValue}”（之前为“${oldValue}”）`;
         },
-        updateAreCommentsRequired: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName;
-            return "\u5C06\u201C".concat(categoryName, "\u201D\u7C7B\u522B\u63CF\u8FF0\u66F4\u6539\u4E3A").concat(!oldValue ? '必需的' : '不需要', "\uFF08\u4E4B\u524D\u4E3A").concat(!oldValue ? '不需要' : '必需的', "\uFF09");
+        updateAreCommentsRequired: ({ oldValue, categoryName }) => {
+            return `将“${categoryName}”类别描述更改为${!oldValue ? '必需的' : '不需要'}（之前为${!oldValue ? '不需要' : '必需的'}）`;
         },
-        updateCategoryMaxExpenseAmount: function (_a) {
-            var categoryName = _a.categoryName, oldAmount = _a.oldAmount, newAmount = _a.newAmount;
+        updateCategoryMaxExpenseAmount: ({ categoryName, oldAmount, newAmount }) => {
             if (newAmount && !oldAmount) {
-                return "\u4E3A\u7C7B\u522B\u201C".concat(categoryName, "\u201D\u6DFB\u52A0\u4E86\u4E00\u4E2A").concat(newAmount, "\u7684\u6700\u5927\u91D1\u989D");
+                return `为类别“${categoryName}”添加了一个${newAmount}的最大金额`;
             }
             if (oldAmount && !newAmount) {
-                return "\u4ECE\u7C7B\u522B\u201C".concat(categoryName, "\u201D\u4E2D\u79FB\u9664\u4E86").concat(oldAmount, "\u7684\u6700\u5927\u91D1\u989D");
+                return `从类别“${categoryName}”中移除了${oldAmount}的最大金额`;
             }
-            return "\u5C06\u201C".concat(categoryName, "\u201D\u7C7B\u522B\u7684\u6700\u5927\u91D1\u989D\u66F4\u6539\u4E3A").concat(newAmount, "\uFF08\u4E4B\u524D\u4E3A").concat(oldAmount, "\uFF09");
+            return `将“${categoryName}”类别的最大金额更改为${newAmount}（之前为${oldAmount}）`;
         },
-        updateCategoryExpenseLimitType: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        updateCategoryExpenseLimitType: ({ categoryName, oldValue, newValue }) => {
             if (!oldValue) {
-                return "\u5C06\u9650\u5236\u7C7B\u578B".concat(newValue, "\u6DFB\u52A0\u5230\u7C7B\u522B\"").concat(categoryName, "\"\u4E2D");
+                return `将限制类型${newValue}添加到类别"${categoryName}"中`;
             }
-            return "\u5C06\u201C".concat(categoryName, "\u201D\u7C7B\u522B\u7684\u9650\u989D\u7C7B\u578B\u66F4\u6539\u4E3A").concat(newValue, "\uFF08\u4E4B\u524D\u4E3A").concat(oldValue, "\uFF09");
+            return `将“${categoryName}”类别的限额类型更改为${newValue}（之前为${oldValue}）`;
         },
-        updateCategoryMaxAmountNoReceipt: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        updateCategoryMaxAmountNoReceipt: ({ categoryName, oldValue, newValue }) => {
             if (!oldValue) {
-                return "\u901A\u8FC7\u5C06\u6536\u636E\u66F4\u6539\u4E3A".concat(newValue, "\u6765\u66F4\u65B0\u7C7B\u522B\u201C").concat(categoryName, "\u201D");
+                return `通过将收据更改为${newValue}来更新类别“${categoryName}”`;
             }
-            return "\u5C06\u201C".concat(categoryName, "\u201D\u7C7B\u522B\u66F4\u6539\u4E3A").concat(newValue, "\uFF08\u4E4B\u524D\u4E3A").concat(oldValue, "\uFF09");
+            return `将“${categoryName}”类别更改为${newValue}（之前为${oldValue}）`;
         },
-        setCategoryName: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "\u5C06\u7C7B\u522B\u4ECE\u201C".concat(oldName, "\u201D\u91CD\u547D\u540D\u4E3A\u201C").concat(newName, "\u201D");
-        },
-        updatedDescriptionHint: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        setCategoryName: ({ oldName, newName }) => `将类别从“${oldName}”重命名为“${newName}”`,
+        updatedDescriptionHint: ({ categoryName, oldValue, newValue }) => {
             if (!newValue) {
-                return "\u4ECE\u7C7B\u522B\u201C".concat(categoryName, "\u201D\u4E2D\u79FB\u9664\u4E86\u63CF\u8FF0\u63D0\u793A\u201C").concat(oldValue, "\u201D");
+                return `从类别“${categoryName}”中移除了描述提示“${oldValue}”`;
             }
-            return !oldValue ? "\u5C06\u63CF\u8FF0\u63D0\u793A\u201C".concat(newValue, "\u201D\u6DFB\u52A0\u5230\u7C7B\u522B\u201C").concat(categoryName, "\u201D\u4E2D") : "\u5C06\u201C".concat(categoryName, "\u201D\u7C7B\u522B\u63CF\u8FF0\u63D0\u793A\u66F4\u6539\u4E3A\u201C").concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
+            return !oldValue ? `将描述提示“${newValue}”添加到类别“${categoryName}”中` : `将“${categoryName}”类别描述提示更改为“${newValue}”（之前为“${oldValue}”）`;
         },
-        updateTagListName: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "\u5C06\u6807\u7B7E\u5217\u8868\u540D\u79F0\u66F4\u6539\u4E3A\u201C".concat(newName, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldName, "\u201D\uFF09");
-        },
-        addTag: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName;
-            return "\u5C06\u6807\u7B7E\u201C".concat(tagName, "\u201D\u6DFB\u52A0\u5230\u5217\u8868\u201C").concat(tagListName, "\u201D\u4E2D");
-        },
-        updateTagName: function (_a) {
-            var tagListName = _a.tagListName, newName = _a.newName, oldName = _a.oldName;
-            return "\u901A\u8FC7\u5C06\u6807\u7B7E\u201C".concat(oldName, "\u201D\u66F4\u6539\u4E3A\u201C").concat(newName, "\u201D\uFF0C\u66F4\u65B0\u4E86\u6807\u7B7E\u5217\u8868\u201C").concat(tagListName, "\u201D");
-        },
-        updateTagEnabled: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName, enabled = _a.enabled;
-            return "".concat(enabled ? '启用' : 'disabled', " \u5217\u8868\u201C").concat(tagListName, "\u201D\u4E2D\u7684\u6807\u7B7E\u201C").concat(tagName, "\u201D");
-        },
-        deleteTag: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName;
-            return "\u5DF2\u4ECE\u5217\u8868\u201C".concat(tagListName, "\u201D\u4E2D\u79FB\u9664\u6807\u7B7E\u201C").concat(tagName, "\u201D");
-        },
-        deleteMultipleTags: function (_a) {
-            var count = _a.count, tagListName = _a.tagListName;
-            return "\u4ECE\u5217\u8868\u201C".concat(tagListName, "\u201D\u4E2D\u79FB\u9664\u4E86\u201C").concat(count, "\u201D\u4E2A\u6807\u7B7E");
-        },
-        updateTag: function (_a) {
-            var tagListName = _a.tagListName, newValue = _a.newValue, tagName = _a.tagName, updatedField = _a.updatedField, oldValue = _a.oldValue;
+        updateTagListName: ({ oldName, newName }) => `将标签列表名称更改为“${newName}”（之前为“${oldName}”）`,
+        addTag: ({ tagListName, tagName }) => `将标签“${tagName}”添加到列表“${tagListName}”中`,
+        updateTagName: ({ tagListName, newName, oldName }) => `通过将标签“${oldName}”更改为“${newName}”，更新了标签列表“${tagListName}”`,
+        updateTagEnabled: ({ tagListName, tagName, enabled }) => `${enabled ? '启用' : 'disabled'} 列表“${tagListName}”中的标签“${tagName}”`,
+        deleteTag: ({ tagListName, tagName }) => `已从列表“${tagListName}”中移除标签“${tagName}”`,
+        deleteMultipleTags: ({ count, tagListName }) => `从列表“${tagListName}”中移除了“${count}”个标签`,
+        updateTag: ({ tagListName, newValue, tagName, updatedField, oldValue }) => {
             if (oldValue) {
-                return "\u5728\u5217\u8868\u201C".concat(tagListName, "\u201D\u4E2D\u66F4\u65B0\u4E86\u6807\u7B7E\u201C").concat(tagName, "\u201D\uFF0C\u5C06").concat(updatedField, "\u66F4\u6539\u4E3A\u201C").concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
+                return `在列表“${tagListName}”中更新了标签“${tagName}”，将${updatedField}更改为“${newValue}”（之前为“${oldValue}”）`;
             }
-            return "\u5728\u5217\u8868\u201C".concat(tagListName, "\u201D\u4E2D\u66F4\u65B0\u4E86\u6807\u7B7E\u201C").concat(tagName, "\u201D\uFF0C\u6DFB\u52A0\u4E86\u4E00\u4E2A").concat(updatedField, "\u4E3A\u201C").concat(newValue, "\u201D");
+            return `在列表“${tagListName}”中更新了标签“${tagName}”，添加了一个${updatedField}为“${newValue}”`;
         },
-        updateCustomUnit: function (_a) {
-            var customUnitName = _a.customUnitName, newValue = _a.newValue, oldValue = _a.oldValue, updatedField = _a.updatedField;
-            return "\u5C06 ".concat(customUnitName, " \u7684 ").concat(updatedField, " \u66F4\u6539\u4E3A\u201C").concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
-        },
-        updateCustomUnitTaxEnabled: function (_a) {
-            var newValue = _a.newValue;
-            return "".concat(newValue ? '启用' : 'disabled', " \u7A0E\u6536\u8DDF\u8E2A\u8DDD\u79BB\u8D39\u7387");
-        },
-        addCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, rateName = _a.rateName;
-            return "\u6DFB\u52A0\u4E86\u65B0\u7684\u201C".concat(customUnitName, "\u201D\u8D39\u7387\u201C").concat(rateName, "\u201D");
-        },
-        updatedCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, oldValue = _a.oldValue, updatedField = _a.updatedField;
-            return "\u5C06".concat(customUnitName, " ").concat(updatedField, " \"").concat(customUnitRateName, "\" \u7684\u8D39\u7387\u66F4\u6539\u4E3A \"").concat(newValue, "\"\uFF08\u4E4B\u524D\u4E3A \"").concat(oldValue, "\"\uFF09");
-        },
-        updatedCustomUnitTaxRateExternalID: function (_a) {
-            var customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, newTaxPercentage = _a.newTaxPercentage, oldTaxPercentage = _a.oldTaxPercentage, oldValue = _a.oldValue;
+        updateCustomUnit: ({ customUnitName, newValue, oldValue, updatedField }) => `将 ${customUnitName} 的 ${updatedField} 更改为“${newValue}”（之前为“${oldValue}”）`,
+        updateCustomUnitTaxEnabled: ({ newValue }) => `${newValue ? '启用' : 'disabled'} 税收跟踪距离费率`,
+        addCustomUnitRate: ({ customUnitName, rateName }) => `添加了新的“${customUnitName}”费率“${rateName}”`,
+        updatedCustomUnitRate: ({ customUnitName, customUnitRateName, newValue, oldValue, updatedField }) => `将${customUnitName} ${updatedField} "${customUnitRateName}" 的费率更改为 "${newValue}"（之前为 "${oldValue}"）`,
+        updatedCustomUnitTaxRateExternalID: ({ customUnitRateName, newValue, newTaxPercentage, oldTaxPercentage, oldValue }) => {
             if (oldTaxPercentage && oldValue) {
-                return "\u5C06\u8DDD\u79BB\u8D39\u7387 \"".concat(customUnitRateName, "\" \u7684\u7A0E\u7387\u66F4\u6539\u4E3A \"").concat(newValue, " (").concat(newTaxPercentage, ")\"\uFF08\u4E4B\u524D\u4E3A \"").concat(oldValue, " (").concat(oldTaxPercentage, ")\"\uFF09");
+                return `将距离费率 "${customUnitRateName}" 的税率更改为 "${newValue} (${newTaxPercentage})"（之前为 "${oldValue} (${oldTaxPercentage})"）`;
             }
-            return "\u5C06\u7A0E\u7387\u201C".concat(newValue, " (").concat(newTaxPercentage, ")\u201D\u6DFB\u52A0\u5230\u8DDD\u79BB\u8D39\u7387\u201C").concat(customUnitRateName, "\u201D\u4E2D\u3002");
+            return `将税率“${newValue} (${newTaxPercentage})”添加到距离费率“${customUnitRateName}”中。`;
         },
-        updatedCustomUnitTaxClaimablePercentage: function (_a) {
-            var customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, oldValue = _a.oldValue;
+        updatedCustomUnitTaxClaimablePercentage: ({ customUnitRateName, newValue, oldValue }) => {
             if (oldValue) {
-                return "\u5C06\u8DDD\u79BB\u8D39\u7387\u4E2D\u7684\u53EF\u9000\u7A0E\u90E8\u5206\u4ECE \"".concat(oldValue, "\" \u66F4\u6539\u4E3A \"").concat(newValue, "\"\uFF08\u4E4B\u524D\u4E3A \"").concat(customUnitRateName, "\"\uFF09");
+                return `将距离费率中的可退税部分从 "${oldValue}" 更改为 "${newValue}"（之前为 "${customUnitRateName}"）`;
             }
-            return "\u5C06\u7A0E\u6B3E\u53EF\u9000\u8FD8\u90E8\u5206\u201C".concat(newValue, "\u201D\u6DFB\u52A0\u5230\u8DDD\u79BB\u8D39\u7387\u201C").concat(customUnitRateName, "\u201D\u4E2D\u3002");
+            return `将税款可退还部分“${newValue}”添加到距离费率“${customUnitRateName}”中。`;
         },
-        deleteCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, rateName = _a.rateName;
-            return "\u5DF2\u79FB\u9664\u201C".concat(customUnitName, "\u201D\u8D39\u7387\u201C").concat(rateName, "\u201D");
-        },
-        addedReportField: function (_a) {
-            var fieldType = _a.fieldType, fieldName = _a.fieldName;
-            return "\u5DF2\u6DFB\u52A0 ".concat(fieldType, " \u62A5\u544A\u5B57\u6BB5 \"").concat(fieldName, "\"");
-        },
-        updateReportFieldDefaultValue: function (_a) {
-            var defaultValue = _a.defaultValue, fieldName = _a.fieldName;
-            return "\u5C06\u62A5\u544A\u5B57\u6BB5 \"".concat(fieldName, "\" \u7684\u9ED8\u8BA4\u503C\u8BBE\u7F6E\u4E3A \"").concat(defaultValue, "\"");
-        },
-        addedReportFieldOption: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName;
-            return "\u5C06\u9009\u9879\u201C".concat(optionName, "\u201D\u6DFB\u52A0\u5230\u62A5\u544A\u5B57\u6BB5\u201C").concat(fieldName, "\u201D\u4E2D\u3002");
-        },
-        removedReportFieldOption: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName;
-            return "\u4ECE\u62A5\u544A\u5B57\u6BB5\u201C".concat(fieldName, "\u201D\u4E2D\u79FB\u9664\u4E86\u9009\u9879\u201C").concat(optionName, "\u201D");
-        },
-        updateReportFieldOptionDisabled: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName, optionEnabled = _a.optionEnabled;
-            return "".concat(optionEnabled ? '启用' : 'disabled', " \u62A5\u544A\u5B57\u6BB5 \"").concat(fieldName, "\" \u7684\u9009\u9879 \"").concat(optionName, "\"");
-        },
-        updateReportFieldAllOptionsDisabled: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName, allEnabled = _a.allEnabled, toggledOptionsCount = _a.toggledOptionsCount;
+        deleteCustomUnitRate: ({ customUnitName, rateName }) => `已移除“${customUnitName}”费率“${rateName}”`,
+        addedReportField: ({ fieldType, fieldName }) => `已添加 ${fieldType} 报告字段 "${fieldName}"`,
+        updateReportFieldDefaultValue: ({ defaultValue, fieldName }) => `将报告字段 "${fieldName}" 的默认值设置为 "${defaultValue}"`,
+        addedReportFieldOption: ({ fieldName, optionName }) => `将选项“${optionName}”添加到报告字段“${fieldName}”中。`,
+        removedReportFieldOption: ({ fieldName, optionName }) => `从报告字段“${fieldName}”中移除了选项“${optionName}”`,
+        updateReportFieldOptionDisabled: ({ fieldName, optionName, optionEnabled }) => `${optionEnabled ? '启用' : 'disabled'} 报告字段 "${fieldName}" 的选项 "${optionName}"`,
+        updateReportFieldAllOptionsDisabled: ({ fieldName, optionName, allEnabled, toggledOptionsCount }) => {
             if (toggledOptionsCount && toggledOptionsCount > 1) {
-                return "".concat(allEnabled ? '启用' : 'disabled', " \u62A5\u544A\u5B57\u6BB5 \"").concat(fieldName, "\" \u7684\u6240\u6709\u9009\u9879");
+                return `${allEnabled ? '启用' : 'disabled'} 报告字段 "${fieldName}" 的所有选项`;
             }
-            return "".concat(allEnabled ? '启用' : 'disabled', " \u62A5\u544A\u5B57\u6BB5 \"").concat(fieldName, "\" \u7684\u9009\u9879 \"").concat(optionName, "\"\uFF0C\u4F7F\u6240\u6709\u9009\u9879 ").concat(allEnabled ? '启用' : 'disabled');
+            return `${allEnabled ? '启用' : 'disabled'} 报告字段 "${fieldName}" 的选项 "${optionName}"，使所有选项 ${allEnabled ? '启用' : 'disabled'}`;
         },
-        deleteReportField: function (_a) {
-            var fieldType = _a.fieldType, fieldName = _a.fieldName;
-            return "\u5DF2\u79FB\u9664".concat(fieldType, "\u62A5\u544A\u5B57\u6BB5\"").concat(fieldName, "\"");
-        },
-        preventSelfApproval: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u5C06\u201CPrevent self-approval\u201D\u66F4\u65B0\u4E3A\u201C".concat(newValue === 'true' ? '已启用' : '禁用', "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue === 'true' ? '已启用' : '禁用', "\u201D\uFF09");
-        },
-        updateMaxExpenseAmountNoReceipt: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u5C06\u6240\u9700\u6536\u636E\u7684\u6700\u5927\u62A5\u9500\u91D1\u989D\u66F4\u6539\u4E3A".concat(newValue, "\uFF08\u4E4B\u524D\u4E3A").concat(oldValue, "\uFF09");
-        },
-        updateMaxExpenseAmount: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u5C06\u8FDD\u89C4\u7684\u6700\u5927\u62A5\u9500\u91D1\u989D\u66F4\u6539\u4E3A".concat(newValue, "\uFF08\u4E4B\u524D\u4E3A").concat(oldValue, "\uFF09");
-        },
-        updateMaxExpenseAge: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u5C06\u201C\u6700\u5927\u8D39\u7528\u5E74\u9F84\uFF08\u5929\u6570\uFF09\u201D\u66F4\u65B0\u4E3A\u201C".concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue === 'false' ? CONST_1.default.POLICY.DEFAULT_MAX_EXPENSE_AGE : oldValue, "\u201D\uFF09");
-        },
-        updateMonthlyOffset: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
+        deleteReportField: ({ fieldType, fieldName }) => `已移除${fieldType}报告字段"${fieldName}"`,
+        preventSelfApproval: ({ oldValue, newValue }) => `将“Prevent self-approval”更新为“${newValue === 'true' ? '已启用' : '禁用'}”（之前为“${oldValue === 'true' ? '已启用' : '禁用'}”）`,
+        updateMaxExpenseAmountNoReceipt: ({ oldValue, newValue }) => `将所需收据的最大报销金额更改为${newValue}（之前为${oldValue}）`,
+        updateMaxExpenseAmount: ({ oldValue, newValue }) => `将违规的最大报销金额更改为${newValue}（之前为${oldValue}）`,
+        updateMaxExpenseAge: ({ oldValue, newValue }) => `将“最大费用年龄（天数）”更新为“${newValue}”（之前为“${oldValue === 'false' ? CONST_1.default.POLICY.DEFAULT_MAX_EXPENSE_AGE : oldValue}”）`,
+        updateMonthlyOffset: ({ oldValue, newValue }) => {
             if (!oldValue) {
-                return "\u5C06\u6708\u5EA6\u62A5\u544A\u63D0\u4EA4\u65E5\u671F\u8BBE\u7F6E\u4E3A\"".concat(newValue, "\"");
+                return `将月度报告提交日期设置为"${newValue}"`;
             }
-            return "\u5C06\u6708\u5EA6\u62A5\u544A\u63D0\u4EA4\u65E5\u671F\u66F4\u65B0\u4E3A\u201C".concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
+            return `将月度报告提交日期更新为“${newValue}”（之前为“${oldValue}”）`;
         },
-        updateDefaultBillable: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u5DF2\u5C06\u201C\u91CD\u65B0\u5411\u5BA2\u6237\u8BA1\u8D39\u8D39\u7528\u201D\u66F4\u65B0\u4E3A\u201C".concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
-        },
-        updateDefaultReimbursable: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u5DF2\u5C06\u201C\u73B0\u91D1\u652F\u51FA\u9ED8\u8BA4\u503C\u201D\u66F4\u65B0\u4E3A\u201C".concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
-        },
-        updateDefaultTitleEnforced: function (_a) {
-            var value = _a.value;
-            return "\"\u5F3A\u5236\u6267\u884C\u9ED8\u8BA4\u62A5\u544A\u6807\u9898\" ".concat(value ? 'on' : '关');
-        },
-        renamedWorkspaceNameAction: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "\u5DF2\u5C06\u6B64\u5DE5\u4F5C\u533A\u7684\u540D\u79F0\u66F4\u65B0\u4E3A\u201C".concat(newName, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldName, "\u201D\uFF09");
-        },
-        updateWorkspaceDescription: function (_a) {
-            var newDescription = _a.newDescription, oldDescription = _a.oldDescription;
-            return !oldDescription ? "\u5C06\u6B64\u5DE5\u4F5C\u533A\u7684\u63CF\u8FF0\u8BBE\u7F6E\u4E3A\"".concat(newDescription, "\"") : "\u5DF2\u5C06\u6B64\u5DE5\u4F5C\u533A\u7684\u63CF\u8FF0\u66F4\u65B0\u4E3A\u201C".concat(newDescription, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldDescription, "\u201D\uFF09");
-        },
-        removedFromApprovalWorkflow: function (_a) {
-            var _b;
-            var submittersNames = _a.submittersNames;
-            var joinedNames = '';
+        updateDefaultBillable: ({ oldValue, newValue }) => `已将“重新向客户计费费用”更新为“${newValue}”（之前为“${oldValue}”）`,
+        updateDefaultReimbursable: ({ oldValue, newValue }) => `已将“现金支出默认值”更新为“${newValue}”（之前为“${oldValue}”）`,
+        updateDefaultTitleEnforced: ({ value }) => `"强制执行默认报告标题" ${value ? 'on' : '关'}`,
+        renamedWorkspaceNameAction: ({ oldName, newName }) => `已将此工作区的名称更新为“${newName}”（之前为“${oldName}”）`,
+        updateWorkspaceDescription: ({ newDescription, oldDescription }) => !oldDescription ? `将此工作区的描述设置为"${newDescription}"` : `已将此工作区的描述更新为“${newDescription}”（之前为“${oldDescription}”）`,
+        removedFromApprovalWorkflow: ({ submittersNames }) => {
+            let joinedNames = '';
             if (submittersNames.length === 1) {
-                joinedNames = (_b = submittersNames.at(0)) !== null && _b !== void 0 ? _b : '';
+                joinedNames = submittersNames.at(0) ?? '';
             }
             else if (submittersNames.length === 2) {
                 joinedNames = submittersNames.join('和');
             }
             else if (submittersNames.length > 2) {
-                joinedNames = "".concat(submittersNames.slice(0, submittersNames.length - 1).join(', '), " and ").concat(submittersNames.at(-1));
+                joinedNames = `${submittersNames.slice(0, submittersNames.length - 1).join(', ')} and ${submittersNames.at(-1)}`;
             }
             return {
-                one: "\u5DF2\u5C06\u60A8\u4ECE".concat(joinedNames, "\u7684\u5BA1\u6279\u6D41\u7A0B\u548C\u8D39\u7528\u804A\u5929\u4E2D\u79FB\u9664\u3002\u4E4B\u524D\u63D0\u4EA4\u7684\u62A5\u544A\u4ECD\u5C06\u5728\u60A8\u7684\u6536\u4EF6\u7BB1\u4E2D\u53EF\u4F9B\u5BA1\u6279\u3002"),
-                other: "\u5DF2\u5C06\u4F60\u4ECE".concat(joinedNames, "\u7684\u5BA1\u6279\u6D41\u7A0B\u548C\u8D39\u7528\u804A\u5929\u4E2D\u79FB\u9664\u3002\u4E4B\u524D\u63D0\u4EA4\u7684\u62A5\u544A\u4ECD\u5C06\u5728\u4F60\u7684\u6536\u4EF6\u7BB1\u4E2D\u53EF\u4F9B\u5BA1\u6279\u3002"),
+                one: `已将您从${joinedNames}的审批流程和费用聊天中移除。之前提交的报告仍将在您的收件箱中可供审批。`,
+                other: `已将你从${joinedNames}的审批流程和费用聊天中移除。之前提交的报告仍将在你的收件箱中可供审批。`,
             };
         },
-        demotedFromWorkspace: function (_a) {
-            var policyName = _a.policyName, oldRole = _a.oldRole;
-            return "\u5DF2\u5C06\u60A8\u5728".concat(policyName, "\u4E2D\u7684\u89D2\u8272\u4ECE").concat(oldRole, "\u66F4\u65B0\u4E3A\u7528\u6237\u3002\u60A8\u5DF2\u88AB\u79FB\u9664\u51FA\u6240\u6709\u63D0\u4EA4\u8005\u8D39\u7528\u804A\u5929\uFF0C\u9664\u4E86\u60A8\u81EA\u5DF1\u7684\u3002");
-        },
-        updatedWorkspaceCurrencyAction: function (_a) {
-            var oldCurrency = _a.oldCurrency, newCurrency = _a.newCurrency;
-            return "\u5C06\u9ED8\u8BA4\u8D27\u5E01\u66F4\u65B0\u4E3A".concat(newCurrency, "\uFF08\u4E4B\u524D\u4E3A").concat(oldCurrency, "\uFF09");
-        },
-        updatedWorkspaceFrequencyAction: function (_a) {
-            var oldFrequency = _a.oldFrequency, newFrequency = _a.newFrequency;
-            return "\u5C06\u81EA\u52A8\u62A5\u544A\u9891\u7387\u66F4\u65B0\u4E3A\u201C".concat(newFrequency, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldFrequency, "\u201D\uFF09");
-        },
-        updateApprovalMode: function (_a) {
-            var newValue = _a.newValue, oldValue = _a.oldValue;
-            return "\u5C06\u5BA1\u6279\u6A21\u5F0F\u66F4\u65B0\u4E3A\u201C".concat(newValue, "\u201D\uFF08\u4E4B\u524D\u4E3A\u201C").concat(oldValue, "\u201D\uFF09");
-        },
+        demotedFromWorkspace: ({ policyName, oldRole }) => `已将您在${policyName}中的角色从${oldRole}更新为用户。您已被移除出所有提交者费用聊天，除了您自己的。`,
+        updatedWorkspaceCurrencyAction: ({ oldCurrency, newCurrency }) => `将默认货币更新为${newCurrency}（之前为${oldCurrency}）`,
+        updatedWorkspaceFrequencyAction: ({ oldFrequency, newFrequency }) => `将自动报告频率更新为“${newFrequency}”（之前为“${oldFrequency}”）`,
+        updateApprovalMode: ({ newValue, oldValue }) => `将审批模式更新为“${newValue}”（之前为“${oldValue}”）`,
         upgradedWorkspace: '将此工作区升级到Control计划',
         downgradedWorkspace: '已将此工作区降级到 Collect 计划',
-        updatedAuditRate: function (_a) {
-            var oldAuditRate = _a.oldAuditRate, newAuditRate = _a.newAuditRate;
-            return "\u5C06\u968F\u673A\u5206\u914D\u8FDB\u884C\u4EBA\u5DE5\u5BA1\u6279\u7684\u62A5\u544A\u6BD4\u4F8B\u66F4\u6539\u4E3A".concat(Math.round(newAuditRate * 100), "\uFF05\uFF08\u4E4B\u524D\u4E3A").concat(Math.round(oldAuditRate * 100), "\uFF05\uFF09");
-        },
-        updatedManualApprovalThreshold: function (_a) {
-            var oldLimit = _a.oldLimit, newLimit = _a.newLimit;
-            return "\u5C06\u6240\u6709\u8D39\u7528\u7684\u4EBA\u5DE5\u5BA1\u6279\u9650\u989D\u66F4\u6539\u4E3A".concat(newLimit, "\uFF08\u4E4B\u524D\u4E3A").concat(oldLimit, "\uFF09");
-        },
+        updatedAuditRate: ({ oldAuditRate, newAuditRate }) => `将随机分配进行人工审批的报告比例更改为${Math.round(newAuditRate * 100)}％（之前为${Math.round(oldAuditRate * 100)}％）`,
+        updatedManualApprovalThreshold: ({ oldLimit, newLimit }) => `将所有费用的人工审批限额更改为${newLimit}（之前为${oldLimit}）`,
     },
     roomMembersPage: {
         memberNotFound: '未找到成员。',
         useInviteButton: '要邀请新成员加入聊天，请使用上面的邀请按钮。',
-        notAuthorized: "\u60A8\u65E0\u6743\u8BBF\u95EE\u6B64\u9875\u9762\u3002\u5982\u679C\u60A8\u60F3\u52A0\u5165\u6B64\u623F\u95F4\uFF0C\u8BF7\u8BA9\u623F\u95F4\u6210\u5458\u6DFB\u52A0\u60A8\u3002\u8FD8\u6709\u5176\u4ED6\u95EE\u9898\uFF1F\u8BF7\u8054\u7CFB".concat(CONST_1.default.EMAIL.CONCIERGE),
-        roomArchived: "\u6B64\u623F\u95F4\u5DF2\u88AB\u5B58\u6863\u3002\u5982\u6709\u7591\u95EE\uFF0C\u8BF7\u8054\u7CFB ".concat(CONST_1.default.EMAIL.CONCIERGE, "\u3002"),
-        removeMembersPrompt: function (_a) {
-            var memberName = _a.memberName;
-            return ({
-                one: "\u60A8\u786E\u5B9A\u8981\u5C06".concat(memberName, "\u4ECE\u623F\u95F4\u4E2D\u79FB\u9664\u5417\uFF1F"),
-                other: '您确定要从房间中移除选定的成员吗？',
-            });
-        },
+        notAuthorized: `您无权访问此页面。如果您想加入此房间，请让房间成员添加您。还有其他问题？请联系${CONST_1.default.EMAIL.CONCIERGE}`,
+        roomArchived: `此房间已被存档。如有疑问，请联系 ${CONST_1.default.EMAIL.CONCIERGE}。`,
+        removeMembersPrompt: ({ memberName }) => ({
+            one: `您确定要将${memberName}从房间中移除吗？`,
+            other: '您确定要从房间中移除选定的成员吗？',
+        }),
         error: {
             genericAdd: '添加此房间成员时出现问题。',
         },
@@ -6563,10 +5478,7 @@ var translations = {
         completed: '已完成',
         action: '完成',
         messages: {
-            created: function (_a) {
-                var title = _a.title;
-                return "".concat(title, "\u7684\u4EFB\u52A1");
-            },
+            created: ({ title }) => `${title}的任务`,
             completed: '标记为完成',
             canceled: '已删除的任务',
             reopened: '标记为未完成',
@@ -6580,10 +5492,7 @@ var translations = {
         deleteConfirmation: '您确定要删除此任务吗？',
     },
     statementPage: {
-        title: function (_a) {
-            var year = _a.year, monthName = _a.monthName;
-            return "".concat(monthName, " ").concat(year, " \u5BF9\u8D26\u5355");
-        },
+        title: ({ year, monthName }) => `${monthName} ${year} 对账单`,
     },
     keyboardShortcutsPage: {
         title: '键盘快捷键',
@@ -6609,7 +5518,7 @@ var translations = {
         searchResults: {
             emptyResults: {
                 title: '无内容显示',
-                subtitle: "\u5C1D\u8BD5\u8C03\u6574\u60A8\u7684\u641C\u7D22\u6761\u4EF6\u6216\u4F7F\u7528\u7EFF\u8272\u7684 ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, " \u6309\u94AE\u521B\u5EFA\u5185\u5BB9\u3002"),
+                subtitle: `尝试调整您的搜索条件或使用绿色的 ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE} 按钮创建内容。`,
             },
             emptyExpenseResults: {
                 title: '您还没有创建任何费用',
@@ -6678,24 +5587,15 @@ var translations = {
         filtersHeader: '筛选器',
         filters: {
             date: {
-                before: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "Before ".concat(date !== null && date !== void 0 ? date : '');
+                before: ({ date } = {}) => `Before ${date ?? ''}`,
+                after: ({ date } = {}) => `After ${date ?? ''}`,
+                on: ({ date } = {}) => `On ${date ?? ''}`,
+                presets: {
+                    [CONST_1.default.SEARCH.DATE_PRESETS.NEVER]: '从未',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.LAST_MONTH]: '上个月',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.THIS_MONTH]: '本月',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.LAST_STATEMENT]: '最后发言',
                 },
-                after: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "After ".concat(date !== null && date !== void 0 ? date : '');
-                },
-                on: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "On ".concat(date !== null && date !== void 0 ? date : '');
-                },
-                presets: (_12 = {},
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.NEVER] = '从未',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.LAST_MONTH] = '上个月',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.THIS_MONTH] = '本月',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.LAST_STATEMENT] = '最后发言',
-                    _12),
             },
             status: '状态',
             keyword: '关键词',
@@ -6706,32 +5606,17 @@ var translations = {
             unread: '未读',
             completed: '已完成',
             amount: {
-                lessThan: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, amount = _b.amount;
-                    return "\u5C11\u4E8E".concat(amount !== null && amount !== void 0 ? amount : '');
-                },
-                greaterThan: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, amount = _b.amount;
-                    return "\u5927\u4E8E".concat(amount !== null && amount !== void 0 ? amount : '');
-                },
-                between: function (_a) {
-                    var greaterThan = _a.greaterThan, lessThan = _a.lessThan;
-                    return "\u5728 ".concat(greaterThan, " \u548C ").concat(lessThan, " \u4E4B\u95F4");
-                },
+                lessThan: ({ amount } = {}) => `少于${amount ?? ''}`,
+                greaterThan: ({ amount } = {}) => `大于${amount ?? ''}`,
+                between: ({ greaterThan, lessThan }) => `在 ${greaterThan} 和 ${lessThan} 之间`,
             },
             card: {
                 expensify: 'Expensify',
                 individualCards: '个人卡片',
                 closedCards: '已关闭的卡片',
                 cardFeeds: '卡片提要',
-                cardFeedName: function (_a) {
-                    var cardFeedBankName = _a.cardFeedBankName, cardFeedLabel = _a.cardFeedLabel;
-                    return "All ".concat(cardFeedBankName).concat(cardFeedLabel ? " - ".concat(cardFeedLabel) : '');
-                },
-                cardFeedNameCSV: function (_a) {
-                    var cardFeedLabel = _a.cardFeedLabel;
-                    return "\u6240\u6709\u5DF2\u5BFC\u5165\u7684CSV\u5361".concat(cardFeedLabel ? " - ".concat(cardFeedLabel) : '');
-                },
+                cardFeedName: ({ cardFeedBankName, cardFeedLabel }) => `All ${cardFeedBankName}${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
+                cardFeedNameCSV: ({ cardFeedLabel }) => `所有已导入的CSV卡${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
             },
             current: '当前',
             past: '过去',
@@ -6744,26 +5629,26 @@ var translations = {
             billable: '可计费的',
             reimbursable: '可报销的',
             purchaseCurrency: '购买货币',
-            groupBy: (_13 = {},
-                _13[CONST_1.default.SEARCH.GROUP_BY.REPORTS] = '报告',
-                _13[CONST_1.default.SEARCH.GROUP_BY.FROM] = '从',
-                _13[CONST_1.default.SEARCH.GROUP_BY.CARD] = '卡片',
-                _13[CONST_1.default.SEARCH.GROUP_BY.WITHDRAWAL_ID] = '提现ID',
-                _13),
+            groupBy: {
+                [CONST_1.default.SEARCH.GROUP_BY.REPORTS]: '报告',
+                [CONST_1.default.SEARCH.GROUP_BY.FROM]: '从',
+                [CONST_1.default.SEARCH.GROUP_BY.CARD]: '卡片',
+                [CONST_1.default.SEARCH.GROUP_BY.WITHDRAWAL_ID]: '提现ID',
+            },
             feed: '通道',
-            withdrawalType: (_14 = {},
-                _14[CONST_1.default.SEARCH.WITHDRAWAL_TYPE.EXPENSIFY_CARD] = 'Expensify Card',
-                _14[CONST_1.default.SEARCH.WITHDRAWAL_TYPE.REIMBURSEMENT] = '报销',
-                _14),
+            withdrawalType: {
+                [CONST_1.default.SEARCH.WITHDRAWAL_TYPE.EXPENSIFY_CARD]: 'Expensify Card',
+                [CONST_1.default.SEARCH.WITHDRAWAL_TYPE.REIMBURSEMENT]: '报销',
+            },
             has: {
                 receipt: '收据',
             },
-            action: (_15 = {},
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.SUBMIT] = '提交',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.APPROVE] = '批准',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.PAY] = '支付',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.EXPORT] = '导出',
-                _15),
+            action: {
+                [CONST_1.default.SEARCH.ACTION_FILTERS.SUBMIT]: '提交',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.APPROVE]: '批准',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.PAY]: '支付',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.EXPORT]: '导出',
+            },
         },
         has: '有',
         groupBy: '组别',
@@ -6867,10 +5752,7 @@ var translations = {
     checkForUpdatesModal: {
         available: {
             title: '可用更新',
-            message: function (_a) {
-                var isSilentUpdating = _a.isSilentUpdating;
-                return "\u65B0\u7248\u672C\u5C06\u5F88\u5FEB\u63A8\u51FA\u3002".concat(!isSilentUpdating ? '我们准备好更新时会通知您。' : '');
-            },
+            message: ({ isSilentUpdating }) => `新版本将很快推出。${!isSilentUpdating ? '我们准备好更新时会通知您。' : ''}`,
             soundsGood: '听起来不错',
         },
         notAvailable: {
@@ -6895,144 +5777,76 @@ var translations = {
         noActivityYet: '暂无活动',
         actions: {
             type: {
-                changeField: function (_a) {
-                    var oldValue = _a.oldValue, newValue = _a.newValue, fieldName = _a.fieldName;
-                    return "\u5C06".concat(fieldName, "\u4ECE").concat(oldValue, "\u66F4\u6539\u4E3A").concat(newValue);
-                },
-                changeFieldEmpty: function (_a) {
-                    var newValue = _a.newValue, fieldName = _a.fieldName;
-                    return "\u5C06".concat(fieldName, "\u66F4\u6539\u4E3A").concat(newValue);
-                },
-                changeReportPolicy: function (_a) {
-                    var fromPolicyName = _a.fromPolicyName, toPolicyName = _a.toPolicyName;
+                changeField: ({ oldValue, newValue, fieldName }) => `将${fieldName}从${oldValue}更改为${newValue}`,
+                changeFieldEmpty: ({ newValue, fieldName }) => `将${fieldName}更改为${newValue}`,
+                changeReportPolicy: ({ fromPolicyName, toPolicyName }) => {
                     if (!toPolicyName) {
-                        return "\u5DF2\u66F4\u6539\u5DE5\u4F5C\u533A".concat(fromPolicyName ? "\uFF08\u4E4B\u524D\u4E3A ".concat(fromPolicyName, "\uFF09") : '');
+                        return `已更改工作区${fromPolicyName ? `（之前为 ${fromPolicyName}）` : ''}`;
                     }
-                    return "\u5DF2\u5C06\u5DE5\u4F5C\u533A\u66F4\u6539\u4E3A ".concat(toPolicyName).concat(fromPolicyName ? "\uFF08\u4E4B\u524D\u4E3A ".concat(fromPolicyName, "\uFF09") : '');
+                    return `已将工作区更改为 ${toPolicyName}${fromPolicyName ? `（之前为 ${fromPolicyName}）` : ''}`;
                 },
-                changeType: function (_a) {
-                    var oldType = _a.oldType, newType = _a.newType;
-                    return "\u7C7B\u578B\u4ECE".concat(oldType, "\u66F4\u6539\u4E3A").concat(newType);
-                },
-                exportedToCSV: "\u5BFC\u51FA\u4E3ACSV",
+                changeType: ({ oldType, newType }) => `类型从${oldType}更改为${newType}`,
+                exportedToCSV: `导出为CSV`,
                 exportedToIntegration: {
-                    automatic: function (_a) {
-                        var _b;
-                        var label = _a.label;
+                    automatic: ({ label }) => {
                         // The label will always be in English, so we need to translate it
-                        var labelTranslations = (_b = {},
-                            _b[CONST_1.default.REPORT.EXPORT_OPTION_LABELS.EXPENSE_LEVEL_EXPORT] = translations.export.expenseLevelExport,
-                            _b[CONST_1.default.REPORT.EXPORT_OPTION_LABELS.REPORT_LEVEL_EXPORT] = translations.export.reportLevelExport,
-                            _b);
-                        var translatedLabel = labelTranslations[label] || label;
-                        return "\u5BFC\u51FA\u5230".concat(translatedLabel);
+                        const labelTranslations = {
+                            [CONST_1.default.REPORT.EXPORT_OPTION_LABELS.EXPENSE_LEVEL_EXPORT]: translations.export.expenseLevelExport,
+                            [CONST_1.default.REPORT.EXPORT_OPTION_LABELS.REPORT_LEVEL_EXPORT]: translations.export.reportLevelExport,
+                        };
+                        const translatedLabel = labelTranslations[label] || label;
+                        return `导出到${translatedLabel}`;
                     },
-                    automaticActionOne: function (_a) {
-                        var label = _a.label;
-                        return "\u901A\u8FC7 ".concat(label, " \u5BFC\u51FA\u5230");
-                    },
+                    automaticActionOne: ({ label }) => `通过 ${label} 导出到`,
                     automaticActionTwo: '会计设置',
-                    manual: function (_a) {
-                        var label = _a.label;
-                        return "\u5C06\u6B64\u62A5\u544A\u6807\u8BB0\u4E3A\u624B\u52A8\u5BFC\u51FA\u5230".concat(label, "\u3002");
-                    },
+                    manual: ({ label }) => `将此报告标记为手动导出到${label}。`,
                     automaticActionThree: '并成功创建了一个记录给',
                     reimburseableLink: '自掏腰包的费用',
                     nonReimbursableLink: '公司卡费用',
-                    pending: function (_a) {
-                        var label = _a.label;
-                        return "\u5F00\u59CB\u5C06\u6B64\u62A5\u544A\u5BFC\u51FA\u5230".concat(label, "...");
-                    },
+                    pending: ({ label }) => `开始将此报告导出到${label}...`,
                 },
-                integrationsMessage: function (_a) {
-                    var errorMessage = _a.errorMessage, label = _a.label, linkText = _a.linkText, linkURL = _a.linkURL;
-                    return "\u65E0\u6CD5\u5C06\u6B64\u62A5\u544A\u5BFC\u51FA\u5230".concat(label, "\uFF08\"").concat(errorMessage).concat(linkText ? " <a href=\"".concat(linkURL, "\">").concat(linkText, "</a>") : '', "\"\uFF09");
-                },
-                managerAttachReceipt: "\u6DFB\u52A0\u4E86\u4E00\u5F20\u6536\u636E",
-                managerDetachReceipt: "\u5DF2\u5220\u9664\u6536\u636E",
-                markedReimbursed: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "\u5728\u5176\u4ED6\u5730\u65B9\u652F\u4ED8\u4E86".concat(currency).concat(amount);
-                },
-                markedReimbursedFromIntegration: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "\u901A\u8FC7\u96C6\u6210\u652F\u4ED8\u4E86".concat(currency).concat(amount);
-                },
-                outdatedBankAccount: "\u7531\u4E8E\u4ED8\u6B3E\u4EBA\u7684\u94F6\u884C\u8D26\u6237\u51FA\u73B0\u95EE\u9898\uFF0C\u65E0\u6CD5\u5904\u7406\u4ED8\u6B3E\u3002",
-                reimbursementACHBounce: "\u65E0\u6CD5\u5904\u7406\u4ED8\u6B3E\uFF0C\u56E0\u4E3A\u4ED8\u6B3E\u4EBA\u8D44\u91D1\u4E0D\u8DB3\u3002",
-                reimbursementACHCancelled: "\u53D6\u6D88\u4E86\u4ED8\u6B3E",
-                reimbursementAccountChanged: "\u65E0\u6CD5\u5904\u7406\u4ED8\u6B3E\uFF0C\u56E0\u4E3A\u4ED8\u6B3E\u4EBA\u66F4\u6362\u4E86\u94F6\u884C\u8D26\u6237\u3002",
-                reimbursementDelayed: "\u5DF2\u5904\u7406\u4ED8\u6B3E\uFF0C\u4F46\u4F1A\u5EF6\u8FDF1-2\u4E2A\u5DE5\u4F5C\u65E5\u3002",
-                selectedForRandomAudit: "\u968F\u673A\u9009\u62E9\u8FDB\u884C\u5BA1\u6838",
-                selectedForRandomAuditMarkdown: "[\u968F\u673A\u9009\u62E9](https://help.expensify.com/articles/expensify-classic/reports/Set-a-random-report-audit-schedule)\u8FDB\u884C\u5BA1\u6838",
-                share: function (_a) {
-                    var to = _a.to;
-                    return "\u5DF2\u9080\u8BF7\u6210\u5458 ".concat(to);
-                },
-                unshare: function (_a) {
-                    var to = _a.to;
-                    return "\u5DF2\u79FB\u9664\u6210\u5458".concat(to);
-                },
-                stripePaid: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "\u652F\u4ED8\u4E86 ".concat(currency).concat(amount);
-                },
-                takeControl: "\u63A7\u5236\u4E86",
-                integrationSyncFailed: function (_a) {
-                    var label = _a.label, errorMessage = _a.errorMessage, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "\u4E0E ".concat(label, " \u540C\u6B65\u65F6\u51FA\u73B0\u95EE\u9898").concat(errorMessage ? "\uFF08\"".concat(errorMessage, "\"\uFF09") : '', "\u3002\u8BF7\u5728<a href=\"").concat(workspaceAccountingLink, "\">\u5DE5\u4F5C\u533A\u8BBE\u7F6E</a>\u4E2D\u89E3\u51B3\u8BE5\u95EE\u9898\u3002");
-                },
-                addEmployee: function (_a) {
-                    var email = _a.email, role = _a.role;
-                    return "\u5DF2\u5C06".concat(email, "\u6DFB\u52A0\u4E3A").concat(role === 'member' ? 'a' : '一个', " ").concat(role);
-                },
-                updateRole: function (_a) {
-                    var email = _a.email, currentRole = _a.currentRole, newRole = _a.newRole;
-                    return "\u5C06 ".concat(email, " \u7684\u89D2\u8272\u66F4\u65B0\u4E3A ").concat(newRole, "\uFF08\u4E4B\u524D\u662F ").concat(currentRole, "\uFF09");
-                },
-                updatedCustomField1: function (_a) {
-                    var email = _a.email, previousValue = _a.previousValue, newValue = _a.newValue;
+                integrationsMessage: ({ errorMessage, label, linkText, linkURL }) => `无法将此报告导出到${label}（"${errorMessage}${linkText ? ` <a href="${linkURL}">${linkText}</a>` : ''}"）`,
+                managerAttachReceipt: `添加了一张收据`,
+                managerDetachReceipt: `已删除收据`,
+                markedReimbursed: ({ amount, currency }) => `在其他地方支付了${currency}${amount}`,
+                markedReimbursedFromIntegration: ({ amount, currency }) => `通过集成支付了${currency}${amount}`,
+                outdatedBankAccount: `由于付款人的银行账户出现问题，无法处理付款。`,
+                reimbursementACHBounce: `无法处理付款，因为付款人资金不足。`,
+                reimbursementACHCancelled: `取消了付款`,
+                reimbursementAccountChanged: `无法处理付款，因为付款人更换了银行账户。`,
+                reimbursementDelayed: `已处理付款，但会延迟1-2个工作日。`,
+                selectedForRandomAudit: `随机选择进行审核`,
+                selectedForRandomAuditMarkdown: `[随机选择](https://help.expensify.com/articles/expensify-classic/reports/Set-a-random-report-audit-schedule)进行审核`,
+                share: ({ to }) => `已邀请成员 ${to}`,
+                unshare: ({ to }) => `已移除成员${to}`,
+                stripePaid: ({ amount, currency }) => `支付了 ${currency}${amount}`,
+                takeControl: `控制了`,
+                integrationSyncFailed: ({ label, errorMessage, workspaceAccountingLink }) => `与 ${label} 同步时出现问题${errorMessage ? `（"${errorMessage}"）` : ''}。请在<a href="${workspaceAccountingLink}">工作区设置</a>中解决该问题。`,
+                addEmployee: ({ email, role }) => `已将${email}添加为${role === 'member' ? 'a' : '一个'} ${role}`,
+                updateRole: ({ email, currentRole, newRole }) => `将 ${email} 的角色更新为 ${newRole}（之前是 ${currentRole}）`,
+                updatedCustomField1: ({ email, previousValue, newValue }) => {
                     if (!newValue) {
-                        return "\u5DF2\u79FB\u9664 ".concat(email, " \u7684\u81EA\u5B9A\u4E49\u5B57\u6BB5 1\uFF08\u4E4B\u524D\u4E3A \"").concat(previousValue, "\"\uFF09");
+                        return `已移除 ${email} 的自定义字段 1（之前为 "${previousValue}"）`;
                     }
-                    return !previousValue ? "\u5C06\u201C".concat(newValue, "\u201D\u6DFB\u52A0\u5230").concat(email, "\u7684\u81EA\u5B9A\u4E49\u5B57\u6BB51\u4E2D") : "\u5C06 ".concat(email, " \u7684\u81EA\u5B9A\u4E49\u5B57\u6BB51\u66F4\u6539\u4E3A \"").concat(newValue, "\"\uFF08\u4E4B\u524D\u4E3A \"").concat(previousValue, "\"\uFF09");
+                    return !previousValue ? `将“${newValue}”添加到${email}的自定义字段1中` : `将 ${email} 的自定义字段1更改为 "${newValue}"（之前为 "${previousValue}"）`;
                 },
-                updatedCustomField2: function (_a) {
-                    var email = _a.email, previousValue = _a.previousValue, newValue = _a.newValue;
+                updatedCustomField2: ({ email, previousValue, newValue }) => {
                     if (!newValue) {
-                        return "\u5DF2\u79FB\u9664 ".concat(email, " \u7684\u81EA\u5B9A\u4E49\u5B57\u6BB52\uFF08\u4E4B\u524D\u4E3A\u201C").concat(previousValue, "\u201D\uFF09");
+                        return `已移除 ${email} 的自定义字段2（之前为“${previousValue}”）`;
                     }
-                    return !previousValue ? "\u5C06\u201C".concat(newValue, "\u201D\u6DFB\u52A0\u5230").concat(email, "\u7684\u81EA\u5B9A\u4E49\u5B57\u6BB52\u4E2D") : "\u5C06 ".concat(email, " \u7684\u81EA\u5B9A\u4E49\u5B57\u6BB52\u66F4\u6539\u4E3A \"").concat(newValue, "\"\uFF08\u4E4B\u524D\u4E3A \"").concat(previousValue, "\"\uFF09");
+                    return !previousValue ? `将“${newValue}”添加到${email}的自定义字段2中` : `将 ${email} 的自定义字段2更改为 "${newValue}"（之前为 "${previousValue}"）`;
                 },
-                leftWorkspace: function (_a) {
-                    var nameOrEmail = _a.nameOrEmail;
-                    return "".concat(nameOrEmail, " \u79BB\u5F00\u4E86\u5DE5\u4F5C\u533A");
-                },
-                removeMember: function (_a) {
-                    var email = _a.email, role = _a.role;
-                    return "\u5DF2\u79FB\u9664".concat(role, " ").concat(email);
-                },
-                removedConnection: function (_a) {
-                    var connectionName = _a.connectionName;
-                    return "\u5DF2\u79FB\u9664\u4E0E".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\u7684\u8FDE\u63A5");
-                },
-                addedConnection: function (_a) {
-                    var connectionName = _a.connectionName;
-                    return "\u5DF2\u8FDE\u63A5\u5230".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]);
-                },
+                leftWorkspace: ({ nameOrEmail }) => `${nameOrEmail} 离开了工作区`,
+                removeMember: ({ email, role }) => `已移除${role} ${email}`,
+                removedConnection: ({ connectionName }) => `已移除与${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}的连接`,
+                addedConnection: ({ connectionName }) => `已连接到${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
                 leftTheChat: '离开了聊天',
             },
         },
     },
     chronos: {
-        oooEventSummaryFullDay: function (_a) {
-            var summary = _a.summary, dayCount = _a.dayCount, date = _a.date;
-            return "".concat(summary, " \u4E3A ").concat(dayCount, " ").concat(dayCount === 1 ? '天' : '天', " \u76F4\u5230 ").concat(date);
-        },
-        oooEventSummaryPartialDay: function (_a) {
-            var summary = _a.summary, timePeriod = _a.timePeriod, date = _a.date;
-            return "".concat(summary, " \u4ECE ").concat(timePeriod, " \u4E8E ").concat(date);
-        },
+        oooEventSummaryFullDay: ({ summary, dayCount, date }) => `${summary} 为 ${dayCount} ${dayCount === 1 ? '天' : '天'} 直到 ${date}`,
+        oooEventSummaryPartialDay: ({ summary, timePeriod, date }) => `${summary} 从 ${timePeriod} 于 ${date}`,
     },
     footer: {
         features: '功能',
@@ -7092,10 +5906,7 @@ var translations = {
         reply: '回复',
         from: '从',
         in: '在',
-        parentNavigationSummary: function (_a) {
-            var reportName = _a.reportName, workspaceName = _a.workspaceName;
-            return "From ".concat(reportName).concat(workspaceName ? "\u5728".concat(workspaceName, "\u4E2D") : '');
-        },
+        parentNavigationSummary: ({ reportName, workspaceName }) => `From ${reportName}${workspaceName ? `在${workspaceName}中` : ''}`,
     },
     qrCodes: {
         copy: '复制网址',
@@ -7151,10 +5962,7 @@ var translations = {
         principalWorkEmail: '主要工作邮箱',
         updateYourEmail: '更新您的电子邮件地址',
         updateEmail: '更新电子邮件地址',
-        schoolMailAsDefault: function (_a) {
-            var contactMethodsRoute = _a.contactMethodsRoute;
-            return "\u5728\u7EE7\u7EED\u4E4B\u524D\uFF0C\u8BF7\u786E\u4FDD\u5C06\u60A8\u7684\u5B66\u6821\u7535\u5B50\u90AE\u4EF6\u8BBE\u7F6E\u4E3A\u9ED8\u8BA4\u8054\u7CFB\u65B9\u5F0F\u3002\u60A8\u53EF\u4EE5\u5728 \u8BBE\u7F6E > \u4E2A\u4EBA\u8D44\u6599 > <a href=\"".concat(contactMethodsRoute, "\">\u8054\u7CFB\u65B9\u5F0F</a> \u4E2D\u8FDB\u884C\u8BBE\u7F6E\u3002");
-        },
+        schoolMailAsDefault: ({ contactMethodsRoute }) => `在继续之前，请确保将您的学校电子邮件设置为默认联系方式。您可以在 设置 > 个人资料 > <a href="${contactMethodsRoute}">联系方式</a> 中进行设置。`,
         error: {
             enterPhoneEmail: '请输入有效的电子邮件或电话号码',
             enterEmail: '输入电子邮件地址',
@@ -7208,71 +6016,55 @@ var translations = {
         guaranteed: '保证电子收据',
         transactionDate: '交易日期',
     },
-    referralProgram: (_16 = {},
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.START_CHAT] = {
+    referralProgram: {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.START_CHAT]: {
             buttonText: '开始聊天，<success><strong>推荐朋友</strong></success>。',
             header: '开始聊天，推荐朋友',
             body: '想让你的朋友也使用Expensify吗？只需与他们开始聊天，我们会处理剩下的事情。',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE]: {
             buttonText: '提交费用，<success><strong>推荐你的老板</strong></success>。',
             header: '提交报销，推荐给您的老板',
             body: '想让你的老板也使用Expensify吗？只需向他们提交一笔费用，其余的交给我们。',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.REFER_FRIEND] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.REFER_FRIEND]: {
             header: '推荐朋友',
             body: '想让你的朋友也使用Expensify吗？只需与他们聊天、付款或分摊费用，我们会处理剩下的事情。或者直接分享你的邀请链接！',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SHARE_CODE] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SHARE_CODE]: {
             buttonText: '推荐朋友',
             header: '推荐朋友',
             body: '想让你的朋友也使用Expensify吗？只需与他们聊天、付款或分摊费用，我们会处理剩下的事情。或者直接分享你的邀请链接！',
         },
-        _16.copyReferralLink = '复制邀请链接',
-        _16),
-    systemChatFooterMessage: (_17 = {},
-        _17[CONST_1.default.INTRO_CHOICES.MANAGE_TEAM] = {
+        copyReferralLink: '复制邀请链接',
+    },
+    systemChatFooterMessage: {
+        [CONST_1.default.INTRO_CHOICES.MANAGE_TEAM]: {
             phrase1: '与您的设置专家聊天',
             phrase2: '帮助',
         },
-        _17.default = {
+        default: {
             phrase1: '消息',
             phrase2: '帮助设置',
         },
-        _17),
+    },
     violations: {
         allTagLevelsRequired: '所有标签均为必填项',
         autoReportedRejectedExpense: '这笔开支被拒绝了。',
         billableExpense: '可计费项不再有效',
-        cashExpenseWithNoReceipt: function (_a) {
-            var _b = _a === void 0 ? {} : _a, formattedLimit = _b.formattedLimit;
-            return "\u9700\u8981\u6536\u636E".concat(formattedLimit ? "\u8D85\u8FC7".concat(formattedLimit) : '');
-        },
+        cashExpenseWithNoReceipt: ({ formattedLimit } = {}) => `需要收据${formattedLimit ? `超过${formattedLimit}` : ''}`,
         categoryOutOfPolicy: '类别不再有效',
-        conversionSurcharge: function (_a) {
-            var surcharge = _a.surcharge;
-            return "\u5DF2\u5E94\u7528".concat(surcharge, "%\u7684\u8F6C\u6362\u9644\u52A0\u8D39");
-        },
+        conversionSurcharge: ({ surcharge }) => `已应用${surcharge}%的转换附加费`,
         customUnitOutOfPolicy: '此工作区的费率无效',
         duplicatedTransaction: 'Duplicate',
         fieldRequired: '报告字段是必需的',
         futureDate: '不允许未来日期',
-        invoiceMarkup: function (_a) {
-            var invoiceMarkup = _a.invoiceMarkup;
-            return "\u4E0A\u8C03\u4E86 ".concat(invoiceMarkup, "%");
-        },
-        maxAge: function (_a) {
-            var maxAge = _a.maxAge;
-            return "\u65E5\u671F\u8D85\u8FC7".concat(maxAge, "\u5929");
-        },
+        invoiceMarkup: ({ invoiceMarkup }) => `上调了 ${invoiceMarkup}%`,
+        maxAge: ({ maxAge }) => `日期超过${maxAge}天`,
         missingCategory: '缺少类别',
         missingComment: '所选类别需要描述',
-        missingTag: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "Missing ".concat(tagName !== null && tagName !== void 0 ? tagName : 'tag');
-        },
-        modifiedAmount: function (_a) {
-            var type = _a.type, displayPercentVariance = _a.displayPercentVariance;
+        missingTag: ({ tagName } = {}) => `Missing ${tagName ?? 'tag'}`,
+        modifiedAmount: ({ type, displayPercentVariance }) => {
             switch (type) {
                 case 'distance':
                     return '金额与计算的距离不同';
@@ -7280,45 +6072,26 @@ var translations = {
                     return '金额大于卡交易金额';
                 default:
                     if (displayPercentVariance) {
-                        return "\u91D1\u989D\u6BD4\u626B\u63CF\u7684\u6536\u636E\u591A".concat(displayPercentVariance, "%");
+                        return `金额比扫描的收据多${displayPercentVariance}%`;
                     }
                     return '金额大于扫描的收据';
             }
         },
         modifiedDate: '日期与扫描的收据不符',
         nonExpensiworksExpense: '非Expensiworks费用',
-        overAutoApprovalLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "\u8D39\u7528\u8D85\u51FA\u4E86\u81EA\u52A8\u6279\u51C6\u9650\u989D ".concat(formattedLimit);
-        },
-        overCategoryLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "\u91D1\u989D\u8D85\u8FC7 ".concat(formattedLimit, "/\u4EBA\u7C7B\u522B\u9650\u5236");
-        },
-        overLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "\u91D1\u989D\u8D85\u8FC7".concat(formattedLimit, "/\u4EBA\u9650\u5236");
-        },
-        overTripLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "\u8D85\u8FC7 ".concat(formattedLimit, "/\u6B21\u9650\u989D\u7684\u91D1\u989D");
-        },
-        overLimitAttendee: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "\u91D1\u989D\u8D85\u8FC7".concat(formattedLimit, "/\u4EBA\u9650\u5236");
-        },
-        perDayLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "\u91D1\u989D\u8D85\u8FC7\u6BCF\u65E5 ".concat(formattedLimit, "/\u4EBA\u7C7B\u522B\u9650\u5236");
-        },
+        overAutoApprovalLimit: ({ formattedLimit }) => `费用超出了自动批准限额 ${formattedLimit}`,
+        overCategoryLimit: ({ formattedLimit }) => `金额超过 ${formattedLimit}/人类别限制`,
+        overLimit: ({ formattedLimit }) => `金额超过${formattedLimit}/人限制`,
+        overTripLimit: ({ formattedLimit }) => `超过 ${formattedLimit}/次限额的金额`,
+        overLimitAttendee: ({ formattedLimit }) => `金额超过${formattedLimit}/人限制`,
+        perDayLimit: ({ formattedLimit }) => `金额超过每日 ${formattedLimit}/人类别限制`,
         receiptNotSmartScanned: '收据和费用详情手动添加。',
-        receiptRequired: function (_a) {
-            var formattedLimit = _a.formattedLimit, category = _a.category;
-            var message = '需要收据';
-            if (formattedLimit !== null && formattedLimit !== void 0 ? formattedLimit : category) {
+        receiptRequired: ({ formattedLimit, category }) => {
+            let message = '需要收据';
+            if (formattedLimit ?? category) {
                 message += '结束';
                 if (formattedLimit) {
-                    message += " ".concat(formattedLimit);
+                    message += ` ${formattedLimit}`;
                 }
                 if (category) {
                     message += '类别限制';
@@ -7326,39 +6099,34 @@ var translations = {
             }
             return message;
         },
-        prohibitedExpense: function (_a) {
-            var prohibitedExpenseType = _a.prohibitedExpenseType;
-            var preMessage = '禁止的费用：';
+        prohibitedExpense: ({ prohibitedExpenseType }) => {
+            const preMessage = '禁止的费用：';
             switch (prohibitedExpenseType) {
                 case 'alcohol':
-                    return "".concat(preMessage, " \u9152\u7CBE");
+                    return `${preMessage} 酒精`;
                 case 'gambling':
-                    return "".concat(preMessage, " \u8D4C\u535A");
+                    return `${preMessage} 赌博`;
                 case 'tobacco':
-                    return "".concat(preMessage, " \u70DF\u8349");
+                    return `${preMessage} 烟草`;
                 case 'adultEntertainment':
-                    return "".concat(preMessage, " \u6210\u4EBA\u5A31\u4E50");
+                    return `${preMessage} 成人娱乐`;
                 case 'hotelIncidentals':
-                    return "".concat(preMessage, " \u9152\u5E97\u6742\u8D39");
+                    return `${preMessage} 酒店杂费`;
                 default:
-                    return "".concat(preMessage).concat(prohibitedExpenseType);
+                    return `${preMessage}${prohibitedExpenseType}`;
             }
         },
-        customRules: function (_a) {
-            var message = _a.message;
-            return message;
-        },
+        customRules: ({ message }) => message,
         reviewRequired: '需要审核',
-        rter: function (_a) {
-            var brokenBankConnection = _a.brokenBankConnection, email = _a.email, isAdmin = _a.isAdmin, isTransactionOlderThan7Days = _a.isTransactionOlderThan7Days, member = _a.member, rterType = _a.rterType;
+        rter: ({ brokenBankConnection, email, isAdmin, isTransactionOlderThan7Days, member, rterType }) => {
             if (rterType === CONST_1.default.RTER_VIOLATION_TYPES.BROKEN_CARD_CONNECTION_530) {
                 return '由于银行连接中断，无法自动匹配收据。';
             }
             if (brokenBankConnection || rterType === CONST_1.default.RTER_VIOLATION_TYPES.BROKEN_CARD_CONNECTION) {
-                return isAdmin ? "\u7531\u4E8E\u94F6\u884C\u8FDE\u63A5\u4E2D\u65AD\uFF0C\u65E0\u6CD5\u81EA\u52A8\u5339\u914D\u6536\u636E\uFF0C\u9700\u8981".concat(email, "\u8FDB\u884C\u4FEE\u590D\u3002") : '由于需要修复的银行连接中断，无法自动匹配收据。';
+                return isAdmin ? `由于银行连接中断，无法自动匹配收据，需要${email}进行修复。` : '由于需要修复的银行连接中断，无法自动匹配收据。';
             }
             if (!isTransactionOlderThan7Days) {
-                return isAdmin ? "\u8BF7".concat(member, "\u6807\u8BB0\u4E3A\u73B0\u91D1\uFF0C\u6216\u7B49\u5F857\u5929\u540E\u518D\u8BD5\u4E00\u6B21\u3002") : '正在等待与卡交易合并。';
+                return isAdmin ? `请${member}标记为现金，或等待7天后再试一次。` : '正在等待与卡交易合并。';
             }
             return '';
         },
@@ -7366,24 +6134,12 @@ var translations = {
         adminBrokenConnectionError: '由于银行连接中断，收据待处理。请在',
         memberBrokenConnectionError: '由于银行连接中断，收据待处理。请联系工作区管理员解决。',
         markAsCashToIgnore: '标记为现金以忽略并请求付款。',
-        smartscanFailed: function (_a) {
-            var _b = _a.canEdit, canEdit = _b === void 0 ? true : _b;
-            return "\u626B\u63CF\u6536\u636E\u5931\u8D25\u3002".concat(canEdit ? '手动输入详细信息。' : '');
-        },
+        smartscanFailed: ({ canEdit = true }) => `扫描收据失败。${canEdit ? '手动输入详细信息。' : ''}`,
         receiptGeneratedWithAI: '潜在的AI生成收据',
-        someTagLevelsRequired: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "\u7F3A\u5C11 ".concat(tagName !== null && tagName !== void 0 ? tagName : '标签');
-        },
-        tagOutOfPolicy: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "".concat(tagName !== null && tagName !== void 0 ? tagName : '标签', " \u4E0D\u518D\u6709\u6548");
-        },
+        someTagLevelsRequired: ({ tagName } = {}) => `缺少 ${tagName ?? '标签'}`,
+        tagOutOfPolicy: ({ tagName } = {}) => `${tagName ?? '标签'} 不再有效`,
         taxAmountChanged: '税额已修改',
-        taxOutOfPolicy: function (_a) {
-            var _b = _a === void 0 ? {} : _a, taxName = _b.taxName;
-            return "".concat(taxName !== null && taxName !== void 0 ? taxName : '税务', " \u4E0D\u518D\u6709\u6548");
-        },
+        taxOutOfPolicy: ({ taxName } = {}) => `${taxName ?? '税务'} 不再有效`,
         taxRateChanged: '税率已修改',
         taxRequired: '缺少税率',
         none: 'None',
@@ -7395,17 +6151,14 @@ var translations = {
         categoryToKeep: '选择要保留的类别',
         isTransactionBillable: '选择交易是否可计费',
         keepThisOne: 'Keep this one',
-        confirmDetails: "\u786E\u8BA4\u60A8\u4FDD\u7559\u7684\u8BE6\u7EC6\u4FE1\u606F",
-        confirmDuplicatesInfo: "\u4F60\u4E0D\u4FDD\u7559\u7684\u91CD\u590D\u9879\u5C06\u88AB\u4FDD\u7559\uFF0C\u4F9B\u63D0\u4EA4\u8005\u5220\u9664\u3002",
+        confirmDetails: `确认您保留的详细信息`,
+        confirmDuplicatesInfo: `你不保留的重复项将被保留，供提交者删除。`,
         hold: '此费用已被搁置',
         resolvedDuplicates: '解决了重复问题',
     },
-    reportViolations: (_18 = {},
-        _18[CONST_1.default.REPORT_VIOLATIONS.FIELD_REQUIRED] = function (_a) {
-            var fieldName = _a.fieldName;
-            return "".concat(fieldName, " \u662F\u5FC5\u9700\u7684");
-        },
-        _18),
+    reportViolations: {
+        [CONST_1.default.REPORT_VIOLATIONS.FIELD_REQUIRED]: ({ fieldName }) => `${fieldName} 是必需的`,
+    },
     violationDismissal: {
         rter: {
             manual: '将此收据标记为现金',
@@ -7430,16 +6183,16 @@ var translations = {
             title: '请告诉我们您离开的原因',
             subtitle: '在您离开之前，请告诉我们您为什么想切换到 Expensify Classic。',
         },
-        reasons: (_19 = {},
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE] = '我需要一个只有在 Expensify Classic 中才有的功能。',
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND] = '我不明白如何使用 New Expensify。',
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC] = '我了解如何使用 New Expensify，但我更喜欢 Expensify Classic。',
-            _19),
-        prompts: (_20 = {},
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE] = '在 New Expensify 中，您需要哪些尚未提供的功能？',
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND] = '你想要做什么？',
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC] = '您为什么更喜欢 Expensify Classic？',
-            _20),
+        reasons: {
+            [CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE]: '我需要一个只有在 Expensify Classic 中才有的功能。',
+            [CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND]: '我不明白如何使用 New Expensify。',
+            [CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC]: '我了解如何使用 New Expensify，但我更喜欢 Expensify Classic。',
+        },
+        prompts: {
+            [CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE]: '在 New Expensify 中，您需要哪些尚未提供的功能？',
+            [CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND]: '你想要做什么？',
+            [CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC]: '您为什么更喜欢 Expensify Classic？',
+        },
         responsePlaceholder: '您的回复',
         thankYou: '感谢您的反馈！',
         thankYouSubtitle: '您的反馈将帮助我们打造更好的产品来完成任务。非常感谢！',
@@ -7451,11 +6204,11 @@ var translations = {
         bookACall: '预约电话',
         noThanks: '不，谢谢',
         bookACallTitle: '您想与产品经理交谈吗？',
-        benefits: (_21 = {},
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.CHATTING_DIRECTLY] = '直接在费用和报告上聊天',
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.EVERYTHING_MOBILE] = '能够在移动设备上完成所有操作',
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.TRAVEL_EXPENSE] = '以聊天的速度处理差旅和费用',
-            _21),
+        benefits: {
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.CHATTING_DIRECTLY]: '直接在费用和报告上聊天',
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.EVERYTHING_MOBILE]: '能够在移动设备上完成所有操作',
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.TRAVEL_EXPENSE]: '以聊天的速度处理差旅和费用',
+        },
         bookACallTextTop: '切换到 Expensify Classic，您将错过：',
         bookACallTextBottom: '我们很高兴能与你通话，以了解原因。你可以预约与我们的高级产品经理之一进行通话，讨论你的需求。',
         takeMeToExpensifyClassic: '带我去Expensify Classic',
@@ -7471,32 +6224,20 @@ var translations = {
         authenticatePaymentCard: '验证支付卡',
         mobileReducedFunctionalityMessage: '您无法在移动应用中更改您的订阅。',
         badge: {
-            freeTrial: function (_a) {
-                var numOfDays = _a.numOfDays;
-                return "\u514D\u8D39\u8BD5\u7528\uFF1A\u5269\u4F59 ".concat(numOfDays, " ").concat(numOfDays === 1 ? '天' : '天', " \u5929");
-            },
+            freeTrial: ({ numOfDays }) => `免费试用：剩余 ${numOfDays} ${numOfDays === 1 ? '天' : '天'} 天`,
         },
         billingBanner: {
             policyOwnerAmountOwed: {
                 title: '您的付款信息已过期',
-                subtitle: function (_a) {
-                    var date = _a.date;
-                    return "\u8BF7\u5728".concat(date, "\u4E4B\u524D\u66F4\u65B0\u60A8\u7684\u652F\u4ED8\u5361\uFF0C\u4EE5\u7EE7\u7EED\u4F7F\u7528\u60A8\u6240\u6709\u559C\u6B22\u7684\u529F\u80FD\u3002");
-                },
+                subtitle: ({ date }) => `请在${date}之前更新您的支付卡，以继续使用您所有喜欢的功能。`,
             },
             policyOwnerAmountOwedOverdue: {
                 title: '您的付款无法处理',
-                subtitle: function (_a) {
-                    var date = _a.date, purchaseAmountOwed = _a.purchaseAmountOwed;
-                    return date && purchaseAmountOwed ? "\u60A8\u5728".concat(date, "\u7684").concat(purchaseAmountOwed, "\u8D39\u7528\u65E0\u6CD5\u5904\u7406\u3002\u8BF7\u6DFB\u52A0\u4E00\u5F20\u652F\u4ED8\u5361\u4EE5\u6E05\u9664\u6B20\u6B3E\u3002") : '请添加支付卡以清除欠款。';
-                },
+                subtitle: ({ date, purchaseAmountOwed }) => date && purchaseAmountOwed ? `您在${date}的${purchaseAmountOwed}费用无法处理。请添加一张支付卡以清除欠款。` : '请添加支付卡以清除欠款。',
             },
             policyOwnerUnderInvoicing: {
                 title: '您的付款信息已过期',
-                subtitle: function (_a) {
-                    var date = _a.date;
-                    return "\u60A8\u7684\u4ED8\u6B3E\u5DF2\u903E\u671F\u3002\u8BF7\u5728".concat(date, "\u4E4B\u524D\u652F\u4ED8\u60A8\u7684\u53D1\u7968\uFF0C\u4EE5\u907F\u514D\u670D\u52A1\u4E2D\u65AD\u3002");
-                },
+                subtitle: ({ date }) => `您的付款已逾期。请在${date}之前支付您的发票，以避免服务中断。`,
             },
             policyOwnerUnderInvoicingOverdue: {
                 title: '您的付款信息已过期',
@@ -7504,31 +6245,19 @@ var translations = {
             },
             billingDisputePending: {
                 title: '您的卡无法扣款',
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed, cardEnding = _a.cardEnding;
-                    return "\u60A8\u5BF9\u5361\u53F7\u4EE5".concat(cardEnding, "\u7ED3\u5C3E\u7684\u5361\u4E0A\u7684").concat(amountOwed, "\u8D39\u7528\u63D0\u51FA\u4E86\u5F02\u8BAE\u3002\u5728\u4E0E\u60A8\u7684\u94F6\u884C\u89E3\u51B3\u4E89\u8BAE\u4E4B\u524D\uFF0C\u60A8\u7684\u8D26\u6237\u5C06\u88AB\u9501\u5B9A\u3002");
-                },
+                subtitle: ({ amountOwed, cardEnding }) => `您对卡号以${cardEnding}结尾的卡上的${amountOwed}费用提出了异议。在与您的银行解决争议之前，您的账户将被锁定。`,
             },
             cardAuthenticationRequired: {
                 title: '您的付款卡尚未完成身份验证。',
-                subtitle: function (_a) {
-                    var cardEnding = _a.cardEnding;
-                    return "\u8BF7\u5B8C\u6210\u8EAB\u4EFD\u9A8C\u8BC1\u6D41\u7A0B\uFF0C\u4EE5\u6FC0\u6D3B\u4EE5 ".concat(cardEnding, " \u7ED3\u5C3E\u7684\u4ED8\u6B3E\u5361\u3002");
-                },
+                subtitle: ({ cardEnding }) => `请完成身份验证流程，以激活以 ${cardEnding} 结尾的付款卡。`,
             },
             insufficientFunds: {
                 title: '您的卡无法扣款',
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed;
-                    return "\u7531\u4E8E\u8D44\u91D1\u4E0D\u8DB3\uFF0C\u60A8\u7684\u652F\u4ED8\u5361\u88AB\u62D2\u7EDD\u3002\u8BF7\u91CD\u8BD5\u6216\u6DFB\u52A0\u65B0\u7684\u652F\u4ED8\u5361\u4EE5\u6E05\u9664\u60A8\u6B20\u4E0B\u7684".concat(amountOwed, "\u4F59\u989D\u3002");
-                },
+                subtitle: ({ amountOwed }) => `由于资金不足，您的支付卡被拒绝。请重试或添加新的支付卡以清除您欠下的${amountOwed}余额。`,
             },
             cardExpired: {
                 title: '您的卡无法扣款',
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed;
-                    return "\u60A8\u7684\u4ED8\u6B3E\u5361\u5DF2\u8FC7\u671F\u3002\u8BF7\u6DFB\u52A0\u65B0\u7684\u4ED8\u6B3E\u5361\u4EE5\u6E05\u9664\u60A8".concat(amountOwed, "\u7684\u672A\u7ED3\u4F59\u989D\u3002");
-                },
+                subtitle: ({ amountOwed }) => `您的付款卡已过期。请添加新的付款卡以清除您${amountOwed}的未结余额。`,
             },
             cardExpireSoon: {
                 title: '您的银行卡即将过期',
@@ -7542,10 +6271,7 @@ var translations = {
                 title: '您的卡无法扣款',
                 subtitle: '在重试之前，请直接联系您的银行授权Expensify费用并解除任何保留。否则，请尝试添加其他付款卡。',
             },
-            cardOnDispute: function (_a) {
-                var amountOwed = _a.amountOwed, cardEnding = _a.cardEnding;
-                return "\u60A8\u5BF9\u5361\u53F7\u4EE5".concat(cardEnding, "\u7ED3\u5C3E\u7684\u5361\u4E0A\u7684").concat(amountOwed, "\u8D39\u7528\u63D0\u51FA\u4E86\u5F02\u8BAE\u3002\u5728\u4E0E\u60A8\u7684\u94F6\u884C\u89E3\u51B3\u4E89\u8BAE\u4E4B\u524D\uFF0C\u60A8\u7684\u8D26\u6237\u5C06\u88AB\u9501\u5B9A\u3002");
-            },
+            cardOnDispute: ({ amountOwed, cardEnding }) => `您对卡号以${cardEnding}结尾的卡上的${amountOwed}费用提出了异议。在与您的银行解决争议之前，您的账户将被锁定。`,
             preTrial: {
                 title: '开始免费试用',
                 subtitleStart: '作为下一步，',
@@ -7553,10 +6279,7 @@ var translations = {
                 subtitleEnd: '这样您的团队就可以开始报销了。',
             },
             trialStarted: {
-                title: function (_a) {
-                    var numOfDays = _a.numOfDays;
-                    return "\u8BD5\u7528\u671F\uFF1A\u5269\u4F59 ".concat(numOfDays, " ").concat(numOfDays === 1 ? '天' : '天', " \u5929\uFF01");
-                },
+                title: ({ numOfDays }) => `试用期：剩余 ${numOfDays} ${numOfDays === 1 ? '天' : '天'} 天！`,
                 subtitle: '添加支付卡以继续使用您所有喜爱的功能。',
             },
             trialEnded: {
@@ -7566,36 +6289,18 @@ var translations = {
             earlyDiscount: {
                 claimOffer: '领取优惠',
                 noThanks: '不，谢谢',
-                subscriptionPageTitle: function (_a) {
-                    var discountType = _a.discountType;
-                    return "<strong>\u9996\u5E74".concat(discountType, "%\u6298\u6263\uFF01</strong> \u53EA\u9700\u6DFB\u52A0\u4E00\u5F20\u652F\u4ED8\u5361\u5E76\u5F00\u59CB\u5E74\u5EA6\u8BA2\u9605\u3002");
-                },
-                onboardingChatTitle: function (_a) {
-                    var discountType = _a.discountType;
-                    return "\u9650\u65F6\u4F18\u60E0\uFF1A\u9996\u5E74".concat(discountType, "%\u6298\u6263\uFF01");
-                },
-                subtitle: function (_a) {
-                    var days = _a.days, hours = _a.hours, minutes = _a.minutes, seconds = _a.seconds;
-                    return "\u5728 ".concat(days > 0 ? "".concat(days, "\u5929 :") : '').concat(hours, "\u5C0F\u65F6 : ").concat(minutes, "\u5206\u949F : ").concat(seconds, "\u79D2 \u5185\u8BA4\u9886");
-                },
+                subscriptionPageTitle: ({ discountType }) => `<strong>首年${discountType}%折扣！</strong> 只需添加一张支付卡并开始年度订阅。`,
+                onboardingChatTitle: ({ discountType }) => `限时优惠：首年${discountType}%折扣！`,
+                subtitle: ({ days, hours, minutes, seconds }) => `在 ${days > 0 ? `${days}天 :` : ''}${hours}小时 : ${minutes}分钟 : ${seconds}秒 内认领`,
             },
         },
         cardSection: {
             title: '付款',
             subtitle: '添加一张卡以支付您的Expensify订阅费用。',
             addCardButton: '添加支付卡',
-            cardNextPayment: function (_a) {
-                var nextPaymentDate = _a.nextPaymentDate;
-                return "\u60A8\u7684\u4E0B\u4E00\u4E2A\u4ED8\u6B3E\u65E5\u671F\u662F".concat(nextPaymentDate, "\u3002");
-            },
-            cardEnding: function (_a) {
-                var cardNumber = _a.cardNumber;
-                return "\u5361\u53F7\u4EE5".concat(cardNumber, "\u7ED3\u5C3E");
-            },
-            cardInfo: function (_a) {
-                var name = _a.name, expiration = _a.expiration, currency = _a.currency;
-                return "\u540D\u79F0: ".concat(name, ", \u5230\u671F: ").concat(expiration, ", \u8D27\u5E01: ").concat(currency);
-            },
+            cardNextPayment: ({ nextPaymentDate }) => `您的下一个付款日期是${nextPaymentDate}。`,
+            cardEnding: ({ cardNumber }) => `卡号以${cardNumber}结尾`,
+            cardInfo: ({ name, expiration, currency }) => `名称: ${name}, 到期: ${expiration}, 货币: ${currency}`,
             changeCard: '更改支付卡',
             changeCurrency: '更改支付货币',
             cardNotFound: '未添加支付卡',
@@ -7612,30 +6317,15 @@ var translations = {
             title: '您的计划',
             exploreAllPlans: '浏览所有计划',
             customPricing: '自定义定价',
-            asLowAs: function (_a) {
-                var price = _a.price;
-                return "\u6BCF\u4F4D\u6D3B\u8DC3\u6210\u5458/\u6708\u4F4E\u81F3".concat(price);
-            },
-            pricePerMemberMonth: function (_a) {
-                var price = _a.price;
-                return "\u6BCF\u4F4D\u6210\u5458\u6BCF\u6708".concat(price);
-            },
-            pricePerMemberPerMonth: function (_a) {
-                var price = _a.price;
-                return "\u6BCF\u4F4D\u6210\u5458\u6BCF\u6708".concat(price);
-            },
+            asLowAs: ({ price }) => `每位活跃成员/月低至${price}`,
+            pricePerMemberMonth: ({ price }) => `每位成员每月${price}`,
+            pricePerMemberPerMonth: ({ price }) => `每位成员每月${price}`,
             perMemberMonth: '每位成员/月',
             collect: {
                 title: '收集',
                 description: '为小型企业提供费用、旅行和聊天功能的计划。',
-                priceAnnual: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "\u4ECE".concat(lower, "/\u6D3B\u8DC3\u6210\u5458\u4F7F\u7528Expensify\u5361\uFF0C").concat(upper, "/\u6D3B\u8DC3\u6210\u5458\u672A\u4F7F\u7528Expensify\u5361\u3002");
-                },
-                pricePayPerUse: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "\u4ECE".concat(lower, "/\u6D3B\u8DC3\u6210\u5458\u4F7F\u7528Expensify\u5361\uFF0C").concat(upper, "/\u6D3B\u8DC3\u6210\u5458\u672A\u4F7F\u7528Expensify\u5361\u3002");
-                },
+                priceAnnual: ({ lower, upper }) => `从${lower}/活跃成员使用Expensify卡，${upper}/活跃成员未使用Expensify卡。`,
+                pricePayPerUse: ({ lower, upper }) => `从${lower}/活跃成员使用Expensify卡，${upper}/活跃成员未使用Expensify卡。`,
                 benefit1: '收据扫描',
                 benefit2: '报销',
                 benefit3: '公司卡管理',
@@ -7648,14 +6338,8 @@ var translations = {
             control: {
                 title: '控制',
                 description: '适用于大型企业的费用、差旅和聊天。',
-                priceAnnual: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "\u4ECE".concat(lower, "/\u6D3B\u8DC3\u6210\u5458\u4F7F\u7528Expensify\u5361\uFF0C").concat(upper, "/\u6D3B\u8DC3\u6210\u5458\u672A\u4F7F\u7528Expensify\u5361\u3002");
-                },
-                pricePayPerUse: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "\u4ECE".concat(lower, "/\u6D3B\u8DC3\u6210\u5458\u4F7F\u7528Expensify\u5361\uFF0C").concat(upper, "/\u6D3B\u8DC3\u6210\u5458\u672A\u4F7F\u7528Expensify\u5361\u3002");
-                },
+                priceAnnual: ({ lower, upper }) => `从${lower}/活跃成员使用Expensify卡，${upper}/活跃成员未使用Expensify卡。`,
+                pricePayPerUse: ({ lower, upper }) => `从${lower}/活跃成员使用Expensify卡，${upper}/活跃成员未使用Expensify卡。`,
                 benefit1: 'Collect 计划中的所有内容',
                 benefit2: '多级审批工作流程',
                 benefit3: '自定义费用规则',
@@ -7675,7 +6359,7 @@ var translations = {
         },
         compareModal: {
             comparePlans: '比较计划',
-            subtitle: "<muted-text>\u4F7F\u7528\u9002\u5408\u60A8\u7684\u8BA1\u5212\uFF0C\u91CA\u653E\u60A8\u6240\u9700\u7684\u529F\u80FD\u3002<a href=\"".concat(CONST_1.default.PRICING, "\">\u67E5\u770B\u6211\u4EEC\u7684\u5B9A\u4EF7\u9875\u9762</a>\u6216\u6BCF\u4E2A\u8BA1\u5212\u7684\u5B8C\u6574\u529F\u80FD\u660E\u7EC6\u3002</muted-text>"),
+            subtitle: `<muted-text>使用适合您的计划，释放您所需的功能。<a href="${CONST_1.default.PRICING}">查看我们的定价页面</a>或每个计划的完整功能明细。</muted-text>`,
         },
         details: {
             title: '订阅详情',
@@ -7695,16 +6379,10 @@ var translations = {
             note: '注意：活跃成员是指任何创建、编辑、提交、批准、报销或导出与您的公司工作区相关的费用数据的人。',
             confirmDetails: '确认您的新年度订阅详情：',
             subscriptionSize: '订阅大小',
-            activeMembers: function (_a) {
-                var size = _a.size;
-                return "".concat(size, " \u6D3B\u8DC3\u6210\u5458/\u6708");
-            },
+            activeMembers: ({ size }) => `${size} 活跃成员/月`,
             subscriptionRenews: '订阅续订',
             youCantDowngrade: '您无法在年度订阅期间降级。',
-            youAlreadyCommitted: function (_a) {
-                var size = _a.size, date = _a.date;
-                return "\u60A8\u5DF2\u7ECF\u627F\u8BFA\u6BCF\u6708\u6709 ".concat(size, " \u540D\u6D3B\u8DC3\u4F1A\u5458\u7684\u5E74\u5EA6\u8BA2\u9605\uFF0C\u76F4\u5230 ").concat(date, "\u3002\u60A8\u53EF\u4EE5\u5728 ").concat(date, " \u901A\u8FC7\u7981\u7528\u81EA\u52A8\u7EED\u8BA2\u5207\u6362\u5230\u6309\u4F7F\u7528\u4ED8\u8D39\u7684\u8BA2\u9605\u3002");
-            },
+            youAlreadyCommitted: ({ size, date }) => `您已经承诺每月有 ${size} 名活跃会员的年度订阅，直到 ${date}。您可以在 ${date} 通过禁用自动续订切换到按使用付费的订阅。`,
             error: {
                 size: '请输入有效的订阅大小',
                 sameSize: '请输入一个与您当前订阅大小不同的数字',
@@ -7718,28 +6396,19 @@ var translations = {
         },
         subscriptionSettings: {
             title: '订阅设置',
-            summary: function (_a) {
-                var subscriptionType = _a.subscriptionType, subscriptionSize = _a.subscriptionSize, autoRenew = _a.autoRenew, autoIncrease = _a.autoIncrease;
-                return "\u8BA2\u9605\u7C7B\u578B\uFF1A".concat(subscriptionType, "\uFF0C\u8BA2\u9605\u89C4\u6A21\uFF1A").concat(subscriptionSize, "\uFF0C\u81EA\u52A8\u7EED\u8BA2\uFF1A").concat(autoRenew, "\uFF0C\u81EA\u52A8\u589E\u52A0\u5E74\u5EA6\u5E2D\u4F4D\uFF1A").concat(autoIncrease);
-            },
+            summary: ({ subscriptionType, subscriptionSize, autoRenew, autoIncrease }) => `订阅类型：${subscriptionType}，订阅规模：${subscriptionSize}，自动续订：${autoRenew}，自动增加年度席位：${autoIncrease}`,
             none: 'none',
             on: 'on',
             off: '关',
             annual: '年度的',
             autoRenew: '自动续订',
             autoIncrease: '自动增加年度席位数量',
-            saveUpTo: function (_a) {
-                var amountWithCurrency = _a.amountWithCurrency;
-                return "\u6BCF\u4F4D\u6D3B\u8DC3\u6210\u5458\u6BCF\u6708\u6700\u591A\u53EF\u8282\u7701".concat(amountWithCurrency);
-            },
+            saveUpTo: ({ amountWithCurrency }) => `每位活跃成员每月最多可节省${amountWithCurrency}`,
             automaticallyIncrease: '自动增加您的年度席位，以容纳超过订阅规模的活跃成员。注意：这将延长您的年度订阅结束日期。',
             disableAutoRenew: '禁用自动续订',
             helpUsImprove: '帮助我们改进Expensify',
             whatsMainReason: '您禁用自动续订的主要原因是什么？',
-            renewsOn: function (_a) {
-                var date = _a.date;
-                return "\u7EED\u8BA2\u65E5\u671F\u4E3A".concat(date, "\u3002");
-            },
+            renewsOn: ({ date }) => `续订日期为${date}。`,
             pricingConfiguration: '定价取决于配置。为了获得最低价格，请选择年度订阅并获取Expensify卡。',
             learnMore: {
                 part1: '在我们的网页上了解更多信息',
@@ -7757,16 +6426,13 @@ var translations = {
                 title: '订阅已取消',
                 subtitle: '您的年度订阅已被取消。',
                 info: '如果您想继续按使用量付费的方式使用您的工作区，您就准备好了。',
-                preventFutureActivity: function (_a) {
-                    var workspacesListRoute = _a.workspacesListRoute;
-                    return "\u5982\u679C\u60A8\u60F3\u9632\u6B62\u672A\u6765\u7684\u6D3B\u52A8\u548C\u6536\u8D39\uFF0C\u60A8\u5FC5\u987B <a href=\"".concat(workspacesListRoute, "\">\u5220\u9664\u60A8\u7684\u5DE5\u4F5C\u533A</a> \u8BF7\u6CE8\u610F\uFF0C\u5F53\u60A8\u5220\u9664\u5DE5\u4F5C\u533A\u65F6\uFF0C\u60A8\u5C06\u88AB\u6536\u53D6\u5F53\u524D\u65E5\u5386\u6708\u5185\u4EA7\u751F\u7684\u4EFB\u4F55\u672A\u7ED3\u6D3B\u52A8\u8D39\u7528\u3002");
-                },
+                preventFutureActivity: ({ workspacesListRoute }) => `如果您想防止未来的活动和收费，您必须 <a href="${workspacesListRoute}">删除您的工作区</a> 请注意，当您删除工作区时，您将被收取当前日历月内产生的任何未结活动费用。`,
             },
             requestSubmitted: {
                 title: '请求已提交',
                 subtitle: '感谢您告知我们您想取消订阅。我们正在审核您的请求，并将尽快通过您与 <concierge-link>Concierge</concierge-link> 的聊天与您联系。',
             },
-            acknowledgement: "\u901A\u8FC7\u8BF7\u6C42\u63D0\u524D\u53D6\u6D88\uFF0C\u6211\u627F\u8BA4\u5E76\u540C\u610FExpensify\u5728Expensify\u6761\u6B3E\u4E0B\u6CA1\u6709\u4E49\u52A1\u6279\u51C6\u6B64\u7C7B\u8BF7\u6C42\u3002<a href=".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, ">\u670D\u52A1\u6761\u6B3E</a>\u6216\u6211\u4E0EExpensify\u4E4B\u95F4\u7684\u5176\u4ED6\u9002\u7528\u670D\u52A1\u534F\u8BAE\uFF0C\u5E76\u4E14Expensify\u4FDD\u7559\u5BF9\u6388\u4E88\u4EFB\u4F55\u6B64\u7C7B\u8BF7\u6C42\u7684\u552F\u4E00\u914C\u60C5\u6743\u3002"),
+            acknowledgement: `通过请求提前取消，我承认并同意Expensify在Expensify条款下没有义务批准此类请求。<a href=${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}>服务条款</a>或我与Expensify之间的其他适用服务协议，并且Expensify保留对授予任何此类请求的唯一酌情权。`,
         },
     },
     feedbackSurvey: {
@@ -7788,8 +6454,7 @@ var translations = {
         addCopilot: '添加副驾驶',
         membersCanAccessYourAccount: '这些成员可以访问您的账户：',
         youCanAccessTheseAccounts: '您可以通过账户切换器访问这些账户：',
-        role: function (_a) {
-            var _b = _a === void 0 ? {} : _a, role = _b.role;
+        role: ({ role } = {}) => {
             switch (role) {
                 case CONST_1.default.DELEGATE_ROLE.ALL:
                     return '满的';
@@ -7800,15 +6465,11 @@ var translations = {
             }
         },
         genericError: '哎呀，出了点问题。请再试一次。',
-        onBehalfOfMessage: function (_a) {
-            var delegator = _a.delegator;
-            return "\u4EE3\u8868".concat(delegator);
-        },
+        onBehalfOfMessage: ({ delegator }) => `代表${delegator}`,
         accessLevel: '访问级别',
         confirmCopilot: '确认您的助手如下。',
         accessLevelDescription: '请选择以下访问级别。完整访问和有限访问都允许副驾驶查看所有对话和费用。',
-        roleDescription: function (_a) {
-            var _b = _a === void 0 ? {} : _a, role = _b.role;
+        roleDescription: ({ role } = {}) => {
             switch (role) {
                 case CONST_1.default.DELEGATE_ROLE.ALL:
                     return '允许其他成员代表您在您的账户中执行所有操作。包括聊天、提交、审批、付款、设置更新等。';
@@ -7822,20 +6483,11 @@ var translations = {
         removeCopilotConfirmation: '您确定要移除此副驾驶吗？',
         changeAccessLevel: '更改访问级别',
         makeSureItIsYou: '让我们确认一下身份',
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "\u8BF7\u8F93\u5165\u53D1\u9001\u5230".concat(contactMethod, "\u7684\u9A8C\u8BC1\u7801\u4EE5\u6DFB\u52A0\u526F\u9A7E\u9A76\u3002\u9A8C\u8BC1\u7801\u5E94\u5728\u4E00\u4E24\u5206\u949F\u5185\u5230\u8FBE\u3002");
-        },
-        enterMagicCodeUpdate: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "\u8BF7\u8F93\u5165\u53D1\u9001\u5230".concat(contactMethod, "\u7684\u9A8C\u8BC1\u7801\u4EE5\u66F4\u65B0\u60A8\u7684\u526F\u9A7E\u9A76\u3002");
-        },
+        enterMagicCode: ({ contactMethod }) => `请输入发送到${contactMethod}的验证码以添加副驾驶。验证码应在一两分钟内到达。`,
+        enterMagicCodeUpdate: ({ contactMethod }) => `请输入发送到${contactMethod}的验证码以更新您的副驾驶。`,
         notAllowed: '慢着...',
         noAccessMessage: '作为副驾驶员，您无权访问此页面。抱歉！',
-        notAllowedMessage: function (_a) {
-            var accountOwnerEmail = _a.accountOwnerEmail;
-            return "\u4F5C\u4E3A ".concat(accountOwnerEmail, " \u7684<a href=\"").concat(CONST_1.default.DELEGATE_ROLE_HELP_DOT_ARTICLE_LINK, "\">\u526F\u9A7E\u9A76\u5458</a>\uFF0C\u60A8\u65E0\u6743\u6267\u884C\u6B64\u64CD\u4F5C\u3002\u5BF9\u4E0D\u8D77\uFF01");
-        },
+        notAllowedMessage: ({ accountOwnerEmail }) => `作为 ${accountOwnerEmail} 的<a href="${CONST_1.default.DELEGATE_ROLE_HELP_DOT_ARTICLE_LINK}">副驾驶员</a>，您无权执行此操作。对不起！`,
         copilotAccess: 'Copilot访问权限',
     },
     debug: {
@@ -7847,18 +6499,9 @@ var translations = {
         nothingToPreview: '无可预览内容',
         editJson: 'Edit JSON:',
         preview: '预览：',
-        missingProperty: function (_a) {
-            var propertyName = _a.propertyName;
-            return "\u7F3A\u5C11".concat(propertyName);
-        },
-        invalidProperty: function (_a) {
-            var propertyName = _a.propertyName, expectedType = _a.expectedType;
-            return "\u65E0\u6548\u5C5E\u6027\uFF1A".concat(propertyName, " - \u9884\u671F\uFF1A").concat(expectedType);
-        },
-        invalidValue: function (_a) {
-            var expectedValues = _a.expectedValues;
-            return "\u65E0\u6548\u503C - \u9884\u671F: ".concat(expectedValues);
-        },
+        missingProperty: ({ propertyName }) => `缺少${propertyName}`,
+        invalidProperty: ({ propertyName, expectedType }) => `无效属性：${propertyName} - 预期：${expectedType}`,
+        invalidValue: ({ expectedValues }) => `无效值 - 预期: ${expectedValues}`,
         missingValue: '缺失值',
         createReportAction: '创建报告操作',
         reportAction: '报告操作',
@@ -8008,10 +6651,7 @@ var translations = {
             readyForTheRealThing: '准备好来真的了吗？',
             getStarted: '开始使用',
         },
-        employeeInviteMessage: function (_a) {
-            var name = _a.name;
-            return "# ".concat(name, "\u9080\u8BF7\u4F60\u8BD5\u7528Expensify\n\u563F\uFF01\u6211\u521A\u4E3A\u6211\u4EEC\u83B7\u5F97\u4E86*3\u4E2A\u6708\u514D\u8D39*\u8BD5\u7528Expensify\uFF0C\u8FD9\u662F\u5904\u7406\u8D39\u7528\u7684\u6700\u5FEB\u65B9\u5F0F\u3002\n\n\u8FD9\u91CC\u6709\u4E00\u4E2A*\u6D4B\u8BD5\u6536\u636E*\u6765\u5411\u4F60\u5C55\u793A\u5B83\u7684\u5DE5\u4F5C\u539F\u7406\uFF1A");
-        },
+        employeeInviteMessage: ({ name }) => `# ${name}邀请你试用Expensify\n嘿！我刚为我们获得了*3个月免费*试用Expensify，这是处理费用的最快方式。\n\n这里有一个*测试收据*来向你展示它的工作原理：`,
     },
     export: {
         basicExport: '基本导出',

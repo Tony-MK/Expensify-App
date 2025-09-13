@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useDelayAutoFocus_1 = require("@hooks/useDelayAutoFocus");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var HelpLinks_1 = require("@pages/ReimbursementAccount/USD/Requestor/PersonalInfo/HelpLinks");
-var CONST_1 = require("@src/CONST");
-function SingleFieldStep(_a) {
-    var formID = _a.formID, formTitle = _a.formTitle, formDisclaimer = _a.formDisclaimer, validate = _a.validate, onSubmit = _a.onSubmit, inputId = _a.inputId, inputLabel = _a.inputLabel, inputMode = _a.inputMode, defaultValue = _a.defaultValue, isEditing = _a.isEditing, _b = _a.shouldShowHelpLinks, shouldShowHelpLinks = _b === void 0 ? true : _b, maxLength = _a.maxLength, enabledWhenOffline = _a.enabledWhenOffline, _c = _a.shouldUseDefaultValue, shouldUseDefaultValue = _c === void 0 ? true : _c, _d = _a.disabled, disabled = _d === void 0 ? false : _d, placeholder = _a.placeholder, _e = _a.shouldDelayAutoFocus, shouldDelayAutoFocus = _e === void 0 ? false : _e;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var internalInputRef = (0, react_1.useRef)(null);
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useDelayAutoFocus_1 = require("@hooks/useDelayAutoFocus");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const HelpLinks_1 = require("@pages/ReimbursementAccount/USD/Requestor/PersonalInfo/HelpLinks");
+const CONST_1 = require("@src/CONST");
+function SingleFieldStep({ formID, formTitle, formDisclaimer, validate, onSubmit, inputId, inputLabel, inputMode, defaultValue, isEditing, shouldShowHelpLinks = true, maxLength, enabledWhenOffline, shouldUseDefaultValue = true, disabled = false, placeholder, shouldDelayAutoFocus = false, }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const internalInputRef = (0, react_1.useRef)(null);
     (0, useDelayAutoFocus_1.default)(internalInputRef, shouldDelayAutoFocus);
     return (<FormProvider_1.default formID={formID} submitButtonText={translate(isEditing ? 'common.confirm' : 'common.next')} validate={validate} onSubmit={onSubmit} style={[styles.mh5, styles.flexGrow1]} submitButtonStyles={[styles.mb0]} enabledWhenOffline={enabledWhenOffline} shouldHideFixErrorsAlert>
             <react_native_1.View>

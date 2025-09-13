@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var uniqueID = expensify_common_1.Str.guid();
+const expensify_common_1 = require("expensify-common");
+const uniqueID = expensify_common_1.Str.guid();
 /**
  * Get the "unique ID of the device".
  * Note deviceID is not truly unique but will be a new GUID each time the app runs (we work around this limitation by saving it in Onyx)
@@ -14,5 +14,5 @@ var uniqueID = expensify_common_1.Str.guid();
  * While this isn't perfect, it's just as good as any other obvious web solution, such as this one https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo/deviceId
  * which is also different/reset under the same circumstances
  */
-var generateDeviceID = function () { return Promise.resolve(uniqueID); };
+const generateDeviceID = () => Promise.resolve(uniqueID);
 exports.default = generateDeviceID;

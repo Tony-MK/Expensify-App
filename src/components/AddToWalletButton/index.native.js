@@ -1,43 +1,42 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_wallet_1 = require("@expensify/react-native-wallet");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var PaymentMethods_1 = require("@libs/actions/PaymentMethods");
-var getPlatform_1 = require("@libs/getPlatform");
-var Log_1 = require("@libs/Log");
-var index_1 = require("@libs/Wallet/index");
-var CONST_1 = require("@src/CONST");
-function AddToWalletButton(_a) {
-    var card = _a.card, cardHolderName = _a.cardHolderName, cardDescription = _a.cardDescription, buttonStyle = _a.buttonStyle;
-    var _b = react_1.default.useState(false), isWalletAvailable = _b[0], setIsWalletAvailable = _b[1];
-    var _c = react_1.default.useState(null), isInWallet = _c[0], setIsInWallet = _c[1];
-    var translate = (0, useLocalize_1.default)().translate;
-    var isCardAvailable = card.state === CONST_1.default.EXPENSIFY_CARD.STATE.OPEN;
-    var _d = (0, react_1.useState)(false), isLoading = _d[0], setIsLoading = _d[1];
-    var theme = (0, useTheme_1.default)();
-    var platform = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.IOS ? 'Apple' : 'Google';
-    var styles = (0, useThemeStyles_1.default)();
-    var checkIfCardIsInWallet = (0, react_1.useCallback)(function () {
+const react_native_wallet_1 = require("@expensify/react-native-wallet");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const PaymentMethods_1 = require("@libs/actions/PaymentMethods");
+const getPlatform_1 = require("@libs/getPlatform");
+const Log_1 = require("@libs/Log");
+const index_1 = require("@libs/Wallet/index");
+const CONST_1 = require("@src/CONST");
+function AddToWalletButton({ card, cardHolderName, cardDescription, buttonStyle }) {
+    const [isWalletAvailable, setIsWalletAvailable] = react_1.default.useState(false);
+    const [isInWallet, setIsInWallet] = react_1.default.useState(null);
+    const { translate } = (0, useLocalize_1.default)();
+    const isCardAvailable = card.state === CONST_1.default.EXPENSIFY_CARD.STATE.OPEN;
+    const [isLoading, setIsLoading] = (0, react_1.useState)(false);
+    const theme = (0, useTheme_1.default)();
+    const platform = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.IOS ? 'Apple' : 'Google';
+    const styles = (0, useThemeStyles_1.default)();
+    const checkIfCardIsInWallet = (0, react_1.useCallback)(() => {
         (0, index_1.isCardInWallet)(card)
-            .then(function (result) {
+            .then((result) => {
             setIsInWallet(result);
         })
-            .catch(function () {
+            .catch(() => {
             setIsInWallet(false);
         })
-            .finally(function () {
+            .finally(() => {
             setIsLoading(false);
         });
     }, [card]);
-    var handleOnPress = (0, react_1.useCallback)(function () {
+    const handleOnPress = (0, react_1.useCallback)(() => {
         setIsLoading(true);
-        (0, index_1.handleAddCardToWallet)(card, cardHolderName, cardDescription, function () { return setIsLoading(false); })
-            .then(function (status) {
+        (0, index_1.handleAddCardToWallet)(card, cardHolderName, cardDescription, () => setIsLoading(false))
+            .then((status) => {
             if (status === 'success') {
                 Log_1.default.info('Card added to wallet');
                 (0, PaymentMethods_1.openWalletPage)();
@@ -46,27 +45,27 @@ function AddToWalletButton(_a) {
                 setIsLoading(false);
             }
         })
-            .catch(function (error) {
+            .catch((error) => {
             setIsLoading(false);
-            Log_1.default.warn("Error while adding card to wallet: ".concat(error));
+            Log_1.default.warn(`Error while adding card to wallet: ${error}`);
             react_native_1.Alert.alert('Failed to add card to wallet', 'Please try again later.');
         });
     }, [card, cardDescription, cardHolderName]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isCardAvailable) {
             return;
         }
         checkIfCardIsInWallet();
     }, [checkIfCardIsInWallet, isCardAvailable, card]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!isCardAvailable) {
             return;
         }
         (0, index_1.checkIfWalletIsAvailable)()
-            .then(function (result) {
+            .then((result) => {
             setIsWalletAvailable(result);
         })
-            .catch(function () {
+            .catch(() => {
             setIsWalletAvailable(false);
         });
     }, [isCardAvailable]);
@@ -78,7 +77,7 @@ function AddToWalletButton(_a) {
     }
     if (isInWallet) {
         return (<react_native_1.View style={buttonStyle}>
-                <Text_1.default style={[styles.textLabelSupporting, styles.mt6]}>{translate('cardPage.cardAddedToWallet', { platform: platform })}</Text_1.default>
+                <Text_1.default style={[styles.textLabelSupporting, styles.mt6]}>{translate('cardPage.cardAddedToWallet', { platform })}</Text_1.default>
             </react_native_1.View>);
     }
     return (<react_native_wallet_1.AddToWalletButton buttonStyle={buttonStyle} locale="en" onPress={handleOnPress}/>);

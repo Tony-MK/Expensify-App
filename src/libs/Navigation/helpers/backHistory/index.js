@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = backHistory;
-var Browser_1 = require("@libs/Browser");
+const Browser_1 = require("@libs/Browser");
 /**
  * This function is used to trigger a browser back navigation and calls the callback once the navigation is complete (only on mobile Chrome).
  * More details - https://github.com/Expensify/App/issues/58946.
@@ -11,7 +11,7 @@ function backHistory(callback) {
         callback();
         return;
     }
-    var onPopState = function () {
+    const onPopState = () => {
         window.removeEventListener('popstate', onPopState);
         callback();
     };

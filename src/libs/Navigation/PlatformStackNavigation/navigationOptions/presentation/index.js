@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Presentation = {
+const Presentation = {
     CARD: 'card',
     MODAL: 'modal',
     TRANSPARENT_MODAL: 'transparentModal',

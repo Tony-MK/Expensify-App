@@ -1,25 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var Text_1 = require("./Text");
-function OfflineIndicator(_a) {
-    var style = _a.style, containerStylesProp = _a.containerStyles, _b = _a.addBottomSafeAreaPadding, addBottomSafeAreaPadding = _b === void 0 ? false : _b;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var fallbackStyle = (0, react_1.useMemo)(function () { return [styles.offlineIndicatorContainer, containerStylesProp]; }, [styles.offlineIndicatorContainer, containerStylesProp]);
-    var containerStyles = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({
-        addBottomSafeAreaPadding: addBottomSafeAreaPadding,
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const Text_1 = require("./Text");
+function OfflineIndicator({ style, containerStyles: containerStylesProp, addBottomSafeAreaPadding = false }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const fallbackStyle = (0, react_1.useMemo)(() => [styles.offlineIndicatorContainer, containerStylesProp], [styles.offlineIndicatorContainer, containerStylesProp]);
+    const containerStyles = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({
+        addBottomSafeAreaPadding,
         addOfflineIndicatorBottomSafeAreaPadding: false,
         style: fallbackStyle,
     });

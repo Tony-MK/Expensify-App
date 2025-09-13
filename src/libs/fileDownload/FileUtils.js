@@ -16,18 +16,18 @@ exports.isImage = isImage;
 exports.getFileResolution = getFileResolution;
 exports.isHighResolutionImage = isHighResolutionImage;
 exports.verifyFileFormat = verifyFileFormat;
-var expensify_common_1 = require("expensify-common");
-var react_native_1 = require("react-native");
-var react_native_blob_util_1 = require("react-native-blob-util");
-var react_native_image_size_1 = require("react-native-image-size");
-var DateUtils_1 = require("@libs/DateUtils");
-var getPlatform_1 = require("@libs/getPlatform");
-var Localize_1 = require("@libs/Localize");
-var Log_1 = require("@libs/Log");
-var saveLastRoute_1 = require("@libs/saveLastRoute");
-var CONST_1 = require("@src/CONST");
-var getImageManipulator_1 = require("./getImageManipulator");
-var getImageResolution_1 = require("./getImageResolution");
+const expensify_common_1 = require("expensify-common");
+const react_native_1 = require("react-native");
+const react_native_blob_util_1 = require("react-native-blob-util");
+const react_native_image_size_1 = require("react-native-image-size");
+const DateUtils_1 = require("@libs/DateUtils");
+const getPlatform_1 = require("@libs/getPlatform");
+const Localize_1 = require("@libs/Localize");
+const Log_1 = require("@libs/Log");
+const saveLastRoute_1 = require("@libs/saveLastRoute");
+const CONST_1 = require("@src/CONST");
+const getImageManipulator_1 = require("./getImageManipulator");
+const getImageResolution_1 = require("./getImageResolution");
 /**
  * Show alert on successful attachment download
  * @param successMessage
@@ -65,7 +65,7 @@ function showPermissionErrorAlert() {
         },
         {
             text: (0, Localize_1.translateLocal)('common.settings'),
-            onPress: function () {
+            onPress: () => {
                 react_native_1.Linking.openSettings();
             },
         },
@@ -82,7 +82,7 @@ function showCameraPermissionsAlert() {
         },
         {
             text: (0, Localize_1.translateLocal)('common.settings'),
-            onPress: function () {
+            onPress: () => {
                 react_native_1.Linking.openSettings();
                 // In the case of ios, the App reloads when we update camera permission from settings
                 // we are saving last route so we can navigate to it after app reload
@@ -101,10 +101,9 @@ function showCameraPermissionsAlert() {
  *    with underscores.
  */
 function getFileName(url) {
-    var _a, _b;
-    var fileName = (_b = (_a = url.split('/').pop()) === null || _a === void 0 ? void 0 : _a.split('?')[0].split('#')[0]) !== null && _b !== void 0 ? _b : '';
+    const fileName = url.split('/').pop()?.split('?')[0].split('#')[0] ?? '';
     if (!fileName) {
-        Log_1.default.warn('[FileUtils] Could not get attachment name', { url: url });
+        Log_1.default.warn('[FileUtils] Could not get attachment name', { url });
     }
     return decodeURIComponent(fileName).replace(CONST_1.default.REGEX.ILLEGAL_FILENAME_CHARACTERS, '_');
 }
@@ -121,7 +120,7 @@ function getFileType(fileUrl) {
     if (!fileUrl) {
         return;
     }
-    var fileName = getFileName(fileUrl);
+    const fileName = getFileName(fileUrl);
     if (!fileName) {
         return;
     }
@@ -136,11 +135,11 @@ function getFileType(fileUrl) {
 /**
  * Returns the filename split into fileName and fileExtension
  */
-var splitExtensionFromFileName = function (fullFileName) {
-    var fileName = fullFileName.trim();
-    var splitFileName = fileName.split('.');
-    var fileExtension = splitFileName.length > 1 ? splitFileName.pop() : '';
-    return { fileName: splitFileName.join('.'), fileExtension: fileExtension !== null && fileExtension !== void 0 ? fileExtension : '' };
+const splitExtensionFromFileName = (fullFileName) => {
+    const fileName = fullFileName.trim();
+    const splitFileName = fileName.split('.');
+    const fileExtension = splitFileName.length > 1 ? splitFileName.pop() : '';
+    return { fileName: splitFileName.join('.'), fileExtension: fileExtension ?? '' };
 };
 exports.splitExtensionFromFileName = splitExtensionFromFileName;
 /**
@@ -150,12 +149,12 @@ function cleanFileName(fileName) {
     return fileName.replace(/[^a-zA-Z0-9\-._]/g, '_');
 }
 function appendTimeToFileName(fileName) {
-    var file = splitExtensionFromFileName(fileName);
-    var newFileName = "".concat(file.fileName, "-").concat(DateUtils_1.default.getDBTime());
+    const file = splitExtensionFromFileName(fileName);
+    let newFileName = `${file.fileName}-${DateUtils_1.default.getDBTime()}`;
     // Replace illegal characters before trying to download the attachment.
     newFileName = newFileName.replace(CONST_1.default.REGEX.ILLEGAL_FILENAME_CHARACTERS, '_');
     if (file.fileExtension) {
-        newFileName += ".".concat(file.fileExtension);
+        newFileName += `.${file.fileExtension}`;
     }
     return newFileName;
 }
@@ -164,48 +163,44 @@ function appendTimeToFileName(fileName) {
  * @param path - the blob url of the locally uploaded file
  * @param fileName - name of the file to read
  */
-var readFileAsync = function (path, fileName, onSuccess, onFailure, fileType) {
-    if (onFailure === void 0) { onFailure = function () { }; }
-    if (fileType === void 0) { fileType = ''; }
-    return new Promise(function (resolve) {
-        if (!path) {
-            resolve();
-            onFailure('[FileUtils] Path not specified');
-            return;
+const readFileAsync = (path, fileName, onSuccess, onFailure = () => { }, fileType = '') => new Promise((resolve) => {
+    if (!path) {
+        resolve();
+        onFailure('[FileUtils] Path not specified');
+        return;
+    }
+    fetch(path)
+        .then((res) => {
+        // For some reason, fetch is "Unable to read uploaded file"
+        // on Android even though the blob is returned, so we'll ignore
+        // in that case
+        if (!res.ok && react_native_1.Platform.OS !== 'android') {
+            throw Error(res.statusText);
         }
-        fetch(path)
-            .then(function (res) {
-            // For some reason, fetch is "Unable to read uploaded file"
-            // on Android even though the blob is returned, so we'll ignore
-            // in that case
-            if (!res.ok && react_native_1.Platform.OS !== 'android') {
-                throw Error(res.statusText);
-            }
-            res.blob()
-                .then(function (blob) {
-                // On Android devices, fetching blob for a file with name containing spaces fails to retrieve the type of file.
-                // In this case, let us fallback on fileType provided by the caller of this function.
-                var file = new File([blob], cleanFileName(fileName), { type: blob.type || fileType });
-                file.source = path;
-                // For some reason, the File object on iOS does not have a uri property
-                // so images aren't uploaded correctly to the backend
-                file.uri = path;
-                onSuccess(file);
-                resolve(file);
-            })
-                .catch(function (e) {
-                console.debug('[FileUtils] Could not read uploaded file', e);
-                onFailure(e);
-                resolve();
-            });
+        res.blob()
+            .then((blob) => {
+            // On Android devices, fetching blob for a file with name containing spaces fails to retrieve the type of file.
+            // In this case, let us fallback on fileType provided by the caller of this function.
+            const file = new File([blob], cleanFileName(fileName), { type: blob.type || fileType });
+            file.source = path;
+            // For some reason, the File object on iOS does not have a uri property
+            // so images aren't uploaded correctly to the backend
+            file.uri = path;
+            onSuccess(file);
+            resolve(file);
         })
-            .catch(function (e) {
+            .catch((e) => {
             console.debug('[FileUtils] Could not read uploaded file', e);
             onFailure(e);
             resolve();
         });
+    })
+        .catch((e) => {
+        console.debug('[FileUtils] Could not read uploaded file', e);
+        onFailure(e);
+        resolve();
     });
-};
+});
 exports.readFileAsync = readFileAsync;
 /**
  * Converts a base64 encoded image string to a File instance.
@@ -221,75 +216,71 @@ exports.readFileAsync = readFileAsync;
  * console.log(imageFile.uri); // Blob URI
  */
 function base64ToFile(base64, filename) {
-    var _a, _b, _c;
     // Decode the base64 string
-    var byteString = atob((_a = base64.split(',').at(1)) !== null && _a !== void 0 ? _a : '');
+    const byteString = atob(base64.split(',').at(1) ?? '');
     // Get the mime type from the base64 string
-    var mimeString = (_c = (_b = base64.split(',').at(0)) === null || _b === void 0 ? void 0 : _b.split(':').at(1)) === null || _c === void 0 ? void 0 : _c.split(';').at(0);
+    const mimeString = base64.split(',').at(0)?.split(':').at(1)?.split(';').at(0);
     // Convert byte string to Uint8Array
-    var arrayBuffer = new ArrayBuffer(byteString.length);
-    var uint8Array = new Uint8Array(arrayBuffer);
-    for (var i = 0; i < byteString.length; i++) {
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
         uint8Array[i] = byteString.charCodeAt(i);
     }
     // Create a blob from the Uint8Array
-    var blob = new Blob([uint8Array], { type: mimeString });
+    const blob = new Blob([uint8Array], { type: mimeString });
     // Create a File instance from the Blob
-    var file = new File([blob], filename, { type: mimeString, lastModified: Date.now() });
+    const file = new File([blob], filename, { type: mimeString, lastModified: Date.now() });
     // Add a uri property to the File instance for accessing the blob as a URI
     file.uri = URL.createObjectURL(blob);
     return file;
 }
 function validateImageForCorruption(file) {
-    var _a;
-    if (!expensify_common_1.Str.isImage((_a = file.name) !== null && _a !== void 0 ? _a : '') || !file.uri) {
+    if (!expensify_common_1.Str.isImage(file.name ?? '') || !file.uri) {
         return Promise.resolve();
     }
-    return new Promise(function (resolve, reject) {
-        var _a;
-        react_native_image_size_1.default.getSize((_a = file.uri) !== null && _a !== void 0 ? _a : '')
-            .then(function (size) {
+    return new Promise((resolve, reject) => {
+        react_native_image_size_1.default.getSize(file.uri ?? '')
+            .then((size) => {
             if (size.height <= 0 || size.width <= 0) {
                 return reject(new Error('Error reading file: The file is corrupted'));
             }
             resolve();
         })
-            .catch(function () {
+            .catch(() => {
             return reject(new Error('Error reading file: The file is corrupted'));
         });
     });
 }
 /** Verify file format based on the magic bytes of the file - some formats might be identified by multiple signatures */
-function verifyFileFormat(_a) {
-    var fileUri = _a.fileUri, formatSignatures = _a.formatSignatures;
-    var MAGIC_BYTES_NEEDED = 16;
+function verifyFileFormat({ fileUri, formatSignatures }) {
+    const MAGIC_BYTES_NEEDED = 16;
     if (!fileUri || !formatSignatures || formatSignatures.length === 0) {
         return Promise.resolve(false);
     }
-    var cleanUri = fileUri.replace('file://', '');
+    const cleanUri = fileUri.replace('file://', '');
     if (react_native_1.Platform.OS === 'ios') {
-        return react_native_blob_util_1.default.fs.readFile(cleanUri, 'base64').then(function (fullBase64Data) {
-            var base64CharsNeeded = Math.ceil((MAGIC_BYTES_NEEDED * 4) / 3);
-            var base64Data = fullBase64Data.substring(0, base64CharsNeeded);
+        return react_native_blob_util_1.default.fs.readFile(cleanUri, 'base64').then((fullBase64Data) => {
+            const base64CharsNeeded = Math.ceil((MAGIC_BYTES_NEEDED * 4) / 3);
+            const base64Data = fullBase64Data.substring(0, base64CharsNeeded);
             if (!base64Data) {
                 return false;
             }
             try {
-                var binaryString = atob(base64Data);
-                var startOffset = 4;
-                var bytesToRead = 12;
-                var endOffset = startOffset + bytesToRead;
+                const binaryString = atob(base64Data);
+                const startOffset = 4;
+                const bytesToRead = 12;
+                const endOffset = startOffset + bytesToRead;
                 if (binaryString.length < endOffset) {
                     return false;
                 }
-                var bytes = new Uint8Array(bytesToRead);
-                for (var i = 0; i < bytesToRead; i++) {
+                const bytes = new Uint8Array(bytesToRead);
+                for (let i = 0; i < bytesToRead; i++) {
                     bytes[i] = binaryString.charCodeAt(startOffset + i);
                 }
-                var hex_1 = Array.from(bytes)
-                    .map(function (b) { return b.toString(16).padStart(2, '0'); })
+                const hex = Array.from(bytes)
+                    .map((b) => b.toString(16).padStart(2, '0'))
                     .join('');
-                var result = formatSignatures.some(function (signature) { return hex_1.startsWith(signature); });
+                const result = formatSignatures.some((signature) => hex.startsWith(signature));
                 return result;
             }
             catch (e) {
@@ -297,54 +288,54 @@ function verifyFileFormat(_a) {
             }
         });
     }
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         react_native_blob_util_1.default.fs
             .readStream(cleanUri, 'base64', 64, 0)
-            .then(function (stream) {
-            var base64Data = '';
-            var hasEnoughData = false;
-            var processData = function () {
+            .then((stream) => {
+            let base64Data = '';
+            let hasEnoughData = false;
+            const processData = () => {
                 if (!base64Data) {
                     resolve(false);
                     return;
                 }
                 try {
-                    var binaryString = atob(base64Data);
-                    var startOffset = 4;
-                    var bytesToRead = 12;
-                    var endOffset = startOffset + bytesToRead;
+                    const binaryString = atob(base64Data);
+                    const startOffset = 4;
+                    const bytesToRead = 12;
+                    const endOffset = startOffset + bytesToRead;
                     if (binaryString.length < endOffset) {
                         resolve(false);
                         return;
                     }
-                    var bytes = new Uint8Array(bytesToRead);
-                    for (var i = 0; i < bytesToRead; i++) {
+                    const bytes = new Uint8Array(bytesToRead);
+                    for (let i = 0; i < bytesToRead; i++) {
                         bytes[i] = binaryString.charCodeAt(startOffset + i);
                     }
-                    var hex_2 = Array.from(bytes)
-                        .map(function (b) { return b.toString(16).padStart(2, '0'); })
+                    const hex = Array.from(bytes)
+                        .map((b) => b.toString(16).padStart(2, '0'))
                         .join('');
-                    var result = formatSignatures.some(function (signature) { return hex_2.startsWith(signature); });
+                    const result = formatSignatures.some((signature) => hex.startsWith(signature));
                     resolve(result);
                 }
                 catch (e) {
                     resolve(false);
                 }
             };
-            stream.onData(function (chunk) {
+            stream.onData((chunk) => {
                 if (hasEnoughData) {
                     return;
                 }
                 try {
-                    var chunkStr = void 0;
+                    let chunkStr;
                     if (Array.isArray(chunk)) {
-                        chunkStr = chunk.map(function (code) { return String.fromCharCode(code); }).join('');
+                        chunkStr = chunk.map((code) => String.fromCharCode(code)).join('');
                     }
                     else {
                         chunkStr = chunk;
                     }
                     base64Data += chunkStr;
-                    var decodedByteCount = Math.floor((base64Data.length * 3) / 4);
+                    const decodedByteCount = Math.floor((base64Data.length * 3) / 4);
                     if (decodedByteCount >= MAGIC_BYTES_NEEDED) {
                         hasEnoughData = true;
                         processData();
@@ -357,14 +348,14 @@ function verifyFileFormat(_a) {
                     }
                 }
             });
-            stream.onError(function () {
+            stream.onError(() => {
                 if (hasEnoughData) {
                     return;
                 }
                 hasEnoughData = true;
                 resolve(false);
             });
-            stream.onEnd(function () {
+            stream.onEnd(() => {
                 if (hasEnoughData) {
                     return;
                 }
@@ -373,31 +364,27 @@ function verifyFileFormat(_a) {
             });
             stream.open();
         })
-            .catch(function () { return resolve(false); });
+            .catch(() => resolve(false));
     });
 }
 function isLocalFile(receiptUri) {
     if (!receiptUri) {
         return false;
     }
-    return typeof receiptUri === 'number' || (receiptUri === null || receiptUri === void 0 ? void 0 : receiptUri.startsWith('blob:')) || (receiptUri === null || receiptUri === void 0 ? void 0 : receiptUri.startsWith('file:')) || (receiptUri === null || receiptUri === void 0 ? void 0 : receiptUri.startsWith('/'));
+    return typeof receiptUri === 'number' || receiptUri?.startsWith('blob:') || receiptUri?.startsWith('file:') || receiptUri?.startsWith('/');
 }
 function getFileResolution(targetFile) {
-    var _a, _b;
     if (!targetFile) {
         return Promise.resolve(null);
     }
     // If the file already has width and height, return them directly
     if ('width' in targetFile && 'height' in targetFile) {
-        return Promise.resolve({ width: (_a = targetFile.width) !== null && _a !== void 0 ? _a : 0, height: (_b = targetFile.height) !== null && _b !== void 0 ? _b : 0 });
+        return Promise.resolve({ width: targetFile.width ?? 0, height: targetFile.height ?? 0 });
     }
     // Otherwise, attempt to get the image resolution
     return (0, getImageResolution_1.default)(targetFile)
-        .then(function (_a) {
-        var width = _a.width, height = _a.height;
-        return ({ width: width, height: height });
-    })
-        .catch(function (error) {
+        .then(({ width, height }) => ({ width, height }))
+        .catch((error) => {
         Log_1.default.hmmm('Failed to get image resolution:', error);
         return null;
     });
@@ -405,30 +392,21 @@ function getFileResolution(targetFile) {
 function isHighResolutionImage(resolution) {
     return resolution !== null && (resolution.width > CONST_1.default.IMAGE_HIGH_RESOLUTION_THRESHOLD || resolution.height > CONST_1.default.IMAGE_HIGH_RESOLUTION_THRESHOLD);
 }
-var getImageDimensionsAfterResize = function (file) {
-    var _a;
-    return react_native_image_size_1.default.getSize((_a = file.uri) !== null && _a !== void 0 ? _a : '').then(function (_a) {
-        var width = _a.width, height = _a.height;
-        var scaleFactor = CONST_1.default.MAX_IMAGE_DIMENSION / (width < height ? height : width);
-        var newWidth = Math.max(1, width * scaleFactor);
-        var newHeight = Math.max(1, height * scaleFactor);
-        return { width: newWidth, height: newHeight };
-    });
-};
+const getImageDimensionsAfterResize = (file) => react_native_image_size_1.default.getSize(file.uri ?? '').then(({ width, height }) => {
+    const scaleFactor = CONST_1.default.MAX_IMAGE_DIMENSION / (width < height ? height : width);
+    const newWidth = Math.max(1, width * scaleFactor);
+    const newHeight = Math.max(1, height * scaleFactor);
+    return { width: newWidth, height: newHeight };
+});
 exports.getImageDimensionsAfterResize = getImageDimensionsAfterResize;
-var resizeImageIfNeeded = function (file) {
-    var _a, _b;
-    if (!file || !expensify_common_1.Str.isImage((_a = file.name) !== null && _a !== void 0 ? _a : '') || ((_b = file === null || file === void 0 ? void 0 : file.size) !== null && _b !== void 0 ? _b : 0) <= CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_SIZE) {
+const resizeImageIfNeeded = (file) => {
+    if (!file || !expensify_common_1.Str.isImage(file.name ?? '') || (file?.size ?? 0) <= CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_SIZE) {
         return Promise.resolve(file);
     }
-    return getImageDimensionsAfterResize(file).then(function (_a) {
-        var _b, _c;
-        var width = _a.width, height = _a.height;
-        return (0, getImageManipulator_1.default)({ fileUri: (_b = file.uri) !== null && _b !== void 0 ? _b : '', width: width, height: height, fileName: (_c = file.name) !== null && _c !== void 0 ? _c : '', type: file.type });
-    });
+    return getImageDimensionsAfterResize(file).then(({ width, height }) => (0, getImageManipulator_1.default)({ fileUri: file.uri ?? '', width, height, fileName: file.name ?? '', type: file.type }));
 };
 exports.resizeImageIfNeeded = resizeImageIfNeeded;
-var createFile = function (file) {
+const createFile = (file) => {
     if ((0, getPlatform_1.default)() === CONST_1.default.PLATFORM.ANDROID || (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.IOS) {
         return {
             uri: file.uri,
@@ -442,42 +420,39 @@ var createFile = function (file) {
     });
 };
 exports.createFile = createFile;
-var validateReceipt = function (file, setUploadReceiptError) {
+const validateReceipt = (file, setUploadReceiptError) => {
     return validateImageForCorruption(file)
-        .then(function () {
-        var _a, _b, _c, _d;
-        var fileExtension = splitExtensionFromFileName((_a = file === null || file === void 0 ? void 0 : file.name) !== null && _a !== void 0 ? _a : '').fileExtension;
+        .then(() => {
+        const { fileExtension } = splitExtensionFromFileName(file?.name ?? '');
         if (!CONST_1.default.API_ATTACHMENT_VALIDATIONS.ALLOWED_RECEIPT_EXTENSIONS.includes(fileExtension.toLowerCase())) {
             setUploadReceiptError(true, 'attachmentPicker.wrongFileType', 'attachmentPicker.notAllowedExtension');
             return false;
         }
-        if (!expensify_common_1.Str.isImage((_b = file.name) !== null && _b !== void 0 ? _b : '') && ((_c = file === null || file === void 0 ? void 0 : file.size) !== null && _c !== void 0 ? _c : 0) > CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE) {
+        if (!expensify_common_1.Str.isImage(file.name ?? '') && (file?.size ?? 0) > CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE) {
             setUploadReceiptError(true, 'attachmentPicker.attachmentTooLarge', 'attachmentPicker.sizeExceededWithLimit');
             return false;
         }
-        if (((_d = file === null || file === void 0 ? void 0 : file.size) !== null && _d !== void 0 ? _d : 0) < CONST_1.default.API_ATTACHMENT_VALIDATIONS.MIN_SIZE) {
+        if ((file?.size ?? 0) < CONST_1.default.API_ATTACHMENT_VALIDATIONS.MIN_SIZE) {
             setUploadReceiptError(true, 'attachmentPicker.attachmentTooSmall', 'attachmentPicker.sizeNotMet');
             return false;
         }
         return true;
     })
-        .catch(function () {
+        .catch(() => {
         setUploadReceiptError(true, 'attachmentPicker.attachmentError', 'attachmentPicker.errorWhileSelectingCorruptedAttachment');
         return false;
     });
 };
 exports.validateReceipt = validateReceipt;
-var isValidReceiptExtension = function (file) {
-    var _a;
-    var fileExtension = splitExtensionFromFileName((_a = file === null || file === void 0 ? void 0 : file.name) !== null && _a !== void 0 ? _a : '').fileExtension;
+const isValidReceiptExtension = (file) => {
+    const { fileExtension } = splitExtensionFromFileName(file?.name ?? '');
     return CONST_1.default.API_ATTACHMENT_VALIDATIONS.ALLOWED_RECEIPT_EXTENSIONS.includes(fileExtension.toLowerCase());
 };
 exports.isValidReceiptExtension = isValidReceiptExtension;
-var isHeicOrHeifImage = function (file) {
-    var _a, _b, _c;
-    return (((_a = file === null || file === void 0 ? void 0 : file.type) === null || _a === void 0 ? void 0 : _a.startsWith('image')) &&
+const isHeicOrHeifImage = (file) => {
+    return (file?.type?.startsWith('image') &&
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        (((_b = file.name) === null || _b === void 0 ? void 0 : _b.toLowerCase().endsWith('.heic')) || ((_c = file.name) === null || _c === void 0 ? void 0 : _c.toLowerCase().endsWith('.heif'))));
+        (file.name?.toLowerCase().endsWith('.heic') || file.name?.toLowerCase().endsWith('.heif')));
 };
 exports.isHeicOrHeifImage = isHeicOrHeifImage;
 /**
@@ -487,13 +462,13 @@ exports.isHeicOrHeifImage = isHeicOrHeifImage;
  * Otherwise, it attempts to fetch the file via its URI and reconstruct a File
  * with full metadata (name, size, type).
  */
-var normalizeFileObject = function (file) {
+const normalizeFileObject = (file) => {
     if (file instanceof File || file instanceof Blob) {
         return Promise.resolve(file);
     }
-    var isAndroidNative = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.ANDROID;
-    var isIOSNative = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.IOS;
-    var isNativePlatform = isAndroidNative || isIOSNative;
+    const isAndroidNative = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.ANDROID;
+    const isIOSNative = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.IOS;
+    const isNativePlatform = isAndroidNative || isIOSNative;
     if (!isNativePlatform || 'size' in file) {
         return Promise.resolve(file);
     }
@@ -501,26 +476,24 @@ var normalizeFileObject = function (file) {
         return Promise.resolve(file);
     }
     return fetch(file.uri)
-        .then(function (response) { return response.blob(); })
-        .then(function (blob) {
-        var _a, _b, _c;
-        var name = (_a = file.name) !== null && _a !== void 0 ? _a : 'unknown';
-        var type = (_c = (_b = file.type) !== null && _b !== void 0 ? _b : blob.type) !== null && _c !== void 0 ? _c : 'application/octet-stream';
-        var normalizedFile = new File([blob], name, { type: type });
+        .then((response) => response.blob())
+        .then((blob) => {
+        const name = file.name ?? 'unknown';
+        const type = file.type ?? blob.type ?? 'application/octet-stream';
+        const normalizedFile = new File([blob], name, { type });
         return normalizedFile;
     })
-        .catch(function (error) {
+        .catch((error) => {
         return Promise.reject(error);
     });
 };
 exports.normalizeFileObject = normalizeFileObject;
-var validateAttachment = function (file, isCheckingMultipleFiles, isValidatingReceipt) {
-    var _a, _b, _c;
-    var maxFileSize = isValidatingReceipt ? CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE : CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_SIZE;
-    if (!expensify_common_1.Str.isImage((_a = file.name) !== null && _a !== void 0 ? _a : '') && !isHeicOrHeifImage(file) && ((_b = file === null || file === void 0 ? void 0 : file.size) !== null && _b !== void 0 ? _b : 0) > maxFileSize) {
+const validateAttachment = (file, isCheckingMultipleFiles, isValidatingReceipt) => {
+    const maxFileSize = isValidatingReceipt ? CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE : CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_SIZE;
+    if (!expensify_common_1.Str.isImage(file.name ?? '') && !isHeicOrHeifImage(file) && (file?.size ?? 0) > maxFileSize) {
         return isCheckingMultipleFiles ? CONST_1.default.FILE_VALIDATION_ERRORS.FILE_TOO_LARGE_MULTIPLE : CONST_1.default.FILE_VALIDATION_ERRORS.FILE_TOO_LARGE;
     }
-    if (isValidatingReceipt && ((_c = file === null || file === void 0 ? void 0 : file.size) !== null && _c !== void 0 ? _c : 0) < CONST_1.default.API_ATTACHMENT_VALIDATIONS.MIN_SIZE) {
+    if (isValidatingReceipt && (file?.size ?? 0) < CONST_1.default.API_ATTACHMENT_VALIDATIONS.MIN_SIZE) {
         return CONST_1.default.FILE_VALIDATION_ERRORS.FILE_TOO_SMALL;
     }
     if (isValidatingReceipt && !isValidReceiptExtension(file)) {
@@ -529,17 +502,14 @@ var validateAttachment = function (file, isCheckingMultipleFiles, isValidatingRe
     return '';
 };
 exports.validateAttachment = validateAttachment;
-var getFileValidationErrorText = function (validationError, additionalData, isValidatingReceipt) {
-    var _a, _b, _c;
-    if (additionalData === void 0) { additionalData = {}; }
-    if (isValidatingReceipt === void 0) { isValidatingReceipt = false; }
+const getFileValidationErrorText = (validationError, additionalData = {}, isValidatingReceipt = false) => {
     if (!validationError) {
         return {
             title: '',
             reason: '',
         };
     }
-    var maxSize = isValidatingReceipt ? CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE : CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_SIZE;
+    const maxSize = isValidatingReceipt ? CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE : CONST_1.default.API_ATTACHMENT_VALIDATIONS.MAX_SIZE;
     switch (validationError) {
         case CONST_1.default.FILE_VALIDATION_ERRORS.WRONG_FILE_TYPE:
             return {
@@ -549,14 +519,14 @@ var getFileValidationErrorText = function (validationError, additionalData, isVa
         case CONST_1.default.FILE_VALIDATION_ERRORS.WRONG_FILE_TYPE_MULTIPLE:
             return {
                 title: (0, Localize_1.translateLocal)('attachmentPicker.someFilesCantBeUploaded'),
-                reason: (0, Localize_1.translateLocal)('attachmentPicker.unsupportedFileType', { fileType: (_a = additionalData.fileType) !== null && _a !== void 0 ? _a : '' }),
+                reason: (0, Localize_1.translateLocal)('attachmentPicker.unsupportedFileType', { fileType: additionalData.fileType ?? '' }),
             };
         case CONST_1.default.FILE_VALIDATION_ERRORS.FILE_TOO_LARGE:
             return {
                 title: (0, Localize_1.translateLocal)('attachmentPicker.attachmentTooLarge'),
                 reason: isValidatingReceipt
                     ? (0, Localize_1.translateLocal)('attachmentPicker.sizeExceededWithLimit', {
-                        maxUploadSizeInMB: (_b = additionalData.maxUploadSizeInMB) !== null && _b !== void 0 ? _b : CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE / 1024 / 1024,
+                        maxUploadSizeInMB: additionalData.maxUploadSizeInMB ?? CONST_1.default.API_ATTACHMENT_VALIDATIONS.RECEIPT_MAX_SIZE / 1024 / 1024,
                     })
                     : (0, Localize_1.translateLocal)('attachmentPicker.sizeExceeded'),
             };
@@ -564,7 +534,7 @@ var getFileValidationErrorText = function (validationError, additionalData, isVa
             return {
                 title: (0, Localize_1.translateLocal)('attachmentPicker.someFilesCantBeUploaded'),
                 reason: (0, Localize_1.translateLocal)('attachmentPicker.sizeLimitExceeded', {
-                    maxUploadSizeInMB: (_c = additionalData.maxUploadSizeInMB) !== null && _c !== void 0 ? _c : maxSize / 1024 / 1024,
+                    maxUploadSizeInMB: additionalData.maxUploadSizeInMB ?? maxSize / 1024 / 1024,
                 }),
             };
         case CONST_1.default.FILE_VALIDATION_ERRORS.FILE_TOO_SMALL:
@@ -600,7 +570,7 @@ var getFileValidationErrorText = function (validationError, additionalData, isVa
     }
 };
 exports.getFileValidationErrorText = getFileValidationErrorText;
-var getConfirmModalPrompt = function (attachmentInvalidReason) {
+const getConfirmModalPrompt = (attachmentInvalidReason) => {
     if (!attachmentInvalidReason) {
         return '';
     }

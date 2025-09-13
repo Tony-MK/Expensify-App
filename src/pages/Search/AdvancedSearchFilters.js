@@ -1,46 +1,37 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var ScrollView_1 = require("@components/ScrollView");
-var SpacerView_1 = require("@components/SpacerView");
-var Text_1 = require("@components/Text");
-var useAdvancedSearchFilters_1 = require("@hooks/useAdvancedSearchFilters");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useSingleExecution_1 = require("@hooks/useSingleExecution");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWaitForNavigation_1 = require("@hooks/useWaitForNavigation");
-var useWorkspaceList_1 = require("@hooks/useWorkspaceList");
-var Search_1 = require("@libs/actions/Search");
-var CardFeedUtils_1 = require("@libs/CardFeedUtils");
-var CardUtils_1 = require("@libs/CardUtils");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
-var SearchUIUtils_1 = require("@libs/SearchUIUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var SearchAdvancedFiltersForm_1 = require("@src/types/form/SearchAdvancedFiltersForm");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var baseFilterConfig = {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const ScrollView_1 = require("@components/ScrollView");
+const SpacerView_1 = require("@components/SpacerView");
+const Text_1 = require("@components/Text");
+const useAdvancedSearchFilters_1 = require("@hooks/useAdvancedSearchFilters");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useSingleExecution_1 = require("@hooks/useSingleExecution");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWaitForNavigation_1 = require("@hooks/useWaitForNavigation");
+const useWorkspaceList_1 = require("@hooks/useWorkspaceList");
+const Search_1 = require("@libs/actions/Search");
+const CardFeedUtils_1 = require("@libs/CardFeedUtils");
+const CardUtils_1 = require("@libs/CardUtils");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
+const SearchUIUtils_1 = require("@libs/SearchUIUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const SearchAdvancedFiltersForm_1 = require("@src/types/form/SearchAdvancedFiltersForm");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const baseFilterConfig = {
     type: {
         getTitle: getFilterDisplayTitle,
         description: 'common.type',
@@ -234,66 +225,61 @@ var baseFilterConfig = {
 };
 function getFilterWorkspaceDisplayTitle(filters, policies) {
     return policies
-        .filter(function (value) { var _a; return value.policyID && ((_a = filters.policyID) === null || _a === void 0 ? void 0 : _a.includes(value.policyID)); })
-        .map(function (value) { return value.text; })
+        .filter((value) => value.policyID && filters.policyID?.includes(value.policyID))
+        .map((value) => value.text)
         .join(', ');
 }
 function getFilterCardDisplayTitle(filters, cards, translate) {
-    var _a, _b;
-    var cardIdsFilter = (_a = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.CARD_ID]) !== null && _a !== void 0 ? _a : [];
-    var feedFilter = (_b = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.FEED]) !== null && _b !== void 0 ? _b : [];
-    var workspaceCardFeeds = Object.entries(cards).reduce(function (workspaceCardsFeed, _a) {
-        var _b;
-        var cardID = _a[0], card = _a[1];
-        var feedKey = "".concat((0, CardFeedUtils_1.createCardFeedKey)(card.fundID, card.bank));
-        var workspaceFeedKey = (0, CardFeedUtils_1.getWorkspaceCardFeedKey)(feedKey);
+    const cardIdsFilter = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.CARD_ID] ?? [];
+    const feedFilter = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.FEED] ?? [];
+    const workspaceCardFeeds = Object.entries(cards).reduce((workspaceCardsFeed, [cardID, card]) => {
+        const feedKey = `${(0, CardFeedUtils_1.createCardFeedKey)(card.fundID, card.bank)}`;
+        const workspaceFeedKey = (0, CardFeedUtils_1.getWorkspaceCardFeedKey)(feedKey);
         /* eslint-disable no-param-reassign */
-        (_b = workspaceCardsFeed[workspaceFeedKey]) !== null && _b !== void 0 ? _b : (workspaceCardsFeed[workspaceFeedKey] = {});
+        workspaceCardsFeed[workspaceFeedKey] ?? (workspaceCardsFeed[workspaceFeedKey] = {});
         workspaceCardsFeed[workspaceFeedKey][cardID] = card;
         /* eslint-enable no-param-reassign */
         return workspaceCardsFeed;
     }, {});
-    var cardFeedNamesWithType = (0, CardFeedUtils_1.getCardFeedNamesWithType)({
-        workspaceCardFeeds: workspaceCardFeeds,
-        translate: translate,
+    const cardFeedNamesWithType = (0, CardFeedUtils_1.getCardFeedNamesWithType)({
+        workspaceCardFeeds,
+        translate,
     });
-    var cardNames = Object.values(cards)
-        .filter(function (card) { return cardIdsFilter.includes(card.cardID.toString()) && !feedFilter.includes((0, CardFeedUtils_1.createCardFeedKey)(card.fundID, card.bank)); })
-        .map(function (card) { return (0, CardUtils_1.getCardDescription)(card); });
-    var feedNames = Object.keys(cardFeedNamesWithType)
-        .filter(function (workspaceCardFeedKey) {
-        var feedKey = (0, CardFeedUtils_1.getCardFeedKey)(workspaceCardFeeds, workspaceCardFeedKey);
+    const cardNames = Object.values(cards)
+        .filter((card) => cardIdsFilter.includes(card.cardID.toString()) && !feedFilter.includes((0, CardFeedUtils_1.createCardFeedKey)(card.fundID, card.bank)))
+        .map((card) => (0, CardUtils_1.getCardDescription)(card));
+    const feedNames = Object.keys(cardFeedNamesWithType)
+        .filter((workspaceCardFeedKey) => {
+        const feedKey = (0, CardFeedUtils_1.getCardFeedKey)(workspaceCardFeeds, workspaceCardFeedKey);
         return !!feedKey && feedFilter.includes(feedKey);
     })
-        .map(function (cardFeedKey) { return cardFeedNamesWithType[cardFeedKey].name; });
-    return __spreadArray(__spreadArray([], feedNames, true), cardNames, true).join(', ');
+        .map((cardFeedKey) => cardFeedNamesWithType[cardFeedKey].name);
+    return [...feedNames, ...cardNames].join(', ');
 }
 function getFilterParticipantDisplayTitle(accountIDs, personalDetails, formatPhoneNumber) {
-    var selectedPersonalDetails = accountIDs.map(function (id) { return personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[id]; });
+    const selectedPersonalDetails = accountIDs.map((id) => personalDetails?.[id]);
     return selectedPersonalDetails
-        .map(function (personalDetail) {
-        var _a;
+        .map((personalDetail) => {
         if (!personalDetail) {
             return '';
         }
-        return (0, PersonalDetailsUtils_1.createDisplayName)((_a = personalDetail.login) !== null && _a !== void 0 ? _a : '', personalDetail, formatPhoneNumber);
+        return (0, PersonalDetailsUtils_1.createDisplayName)(personalDetail.login ?? '', personalDetail, formatPhoneNumber);
     })
         .filter(Boolean)
         .join(', ');
 }
 function getFilterDisplayTitle(filters, filterKey, translate, localeCompare) {
-    var _a, _b, _c;
-    var key = filterKey;
+    let key = filterKey;
     if (SearchAdvancedFiltersForm_1.DATE_FILTER_KEYS.includes(filterKey)) {
-        var keyOn = "".concat(filterKey).concat(CONST_1.default.SEARCH.DATE_MODIFIERS.ON);
-        var keyAfter = "".concat(filterKey).concat(CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER);
-        var keyBefore = "".concat(filterKey).concat(CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE);
-        var dateOn = filters[keyOn];
-        var dateAfter = filters[keyAfter];
-        var dateBefore = filters[keyBefore];
-        var dateValue = [];
+        const keyOn = `${filterKey}${CONST_1.default.SEARCH.DATE_MODIFIERS.ON}`;
+        const keyAfter = `${filterKey}${CONST_1.default.SEARCH.DATE_MODIFIERS.AFTER}`;
+        const keyBefore = `${filterKey}${CONST_1.default.SEARCH.DATE_MODIFIERS.BEFORE}`;
+        const dateOn = filters[keyOn];
+        const dateAfter = filters[keyAfter];
+        const dateBefore = filters[keyBefore];
+        const dateValue = [];
         if (dateOn) {
-            dateValue.push((0, SearchQueryUtils_1.isSearchDatePreset)(dateOn) ? translate("search.filters.date.presets.".concat(dateOn)) : translate('search.filters.date.on', { date: dateOn }));
+            dateValue.push((0, SearchQueryUtils_1.isSearchDatePreset)(dateOn) ? translate(`search.filters.date.presets.${dateOn}`) : translate('search.filters.date.on', { date: dateOn }));
         }
         if (dateAfter) {
             dateValue.push(translate('search.filters.date.after', { date: dateAfter }));
@@ -305,10 +291,10 @@ function getFilterDisplayTitle(filters, filterKey, translate, localeCompare) {
     }
     key = filterKey;
     if (SearchAdvancedFiltersForm_1.AMOUNT_FILTER_KEYS.includes(key)) {
-        var lessThanKey = "".concat(key).concat(CONST_1.default.SEARCH.AMOUNT_MODIFIERS.LESS_THAN);
-        var greaterThanKey = "".concat(key).concat(CONST_1.default.SEARCH.AMOUNT_MODIFIERS.GREATER_THAN);
-        var lessThan = filters[lessThanKey];
-        var greaterThan = filters[greaterThanKey];
+        const lessThanKey = `${key}${CONST_1.default.SEARCH.AMOUNT_MODIFIERS.LESS_THAN}`;
+        const greaterThanKey = `${key}${CONST_1.default.SEARCH.AMOUNT_MODIFIERS.GREATER_THAN}`;
+        const lessThan = filters[lessThanKey];
+        const greaterThan = filters[greaterThanKey];
         if (lessThan && greaterThan) {
             return translate('search.filters.amount.between', {
                 lessThan: (0, CurrencyUtils_1.convertToDisplayStringWithoutCurrency)(Number(lessThan)),
@@ -326,65 +312,65 @@ function getFilterDisplayTitle(filters, filterKey, translate, localeCompare) {
     }
     key = filterKey;
     if ((key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.CURRENCY || key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.PURCHASE_CURRENCY) && filters[key]) {
-        var filterArray = (_a = filters[key]) !== null && _a !== void 0 ? _a : [];
+        const filterArray = filters[key] ?? [];
         return filterArray.sort(localeCompare).join(', ');
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.CATEGORY && filters[key]) {
-        var filterArray = (_b = filters[key]) !== null && _b !== void 0 ? _b : [];
+        const filterArray = filters[key] ?? [];
         return filterArray
-            .sort(function (a, b) { return (0, SearchQueryUtils_1.sortOptionsWithEmptyValue)(a, b, localeCompare); })
-            .map(function (value) { return (value === CONST_1.default.SEARCH.CATEGORY_EMPTY_VALUE ? translate('search.noCategory') : value); })
+            .sort((a, b) => (0, SearchQueryUtils_1.sortOptionsWithEmptyValue)(a, b, localeCompare))
+            .map((value) => (value === CONST_1.default.SEARCH.CATEGORY_EMPTY_VALUE ? translate('search.noCategory') : value))
             .join(', ');
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TAG && filters[key]) {
-        var filterArray = (_c = filters[key]) !== null && _c !== void 0 ? _c : [];
+        const filterArray = filters[key] ?? [];
         return filterArray
-            .sort(function (a, b) { return (0, SearchQueryUtils_1.sortOptionsWithEmptyValue)(a, b, localeCompare); })
-            .map(function (value) { return (value === CONST_1.default.SEARCH.TAG_EMPTY_VALUE ? translate('search.noTag') : (0, PolicyUtils_1.getCleanedTagName)(value)); })
+            .sort((a, b) => (0, SearchQueryUtils_1.sortOptionsWithEmptyValue)(a, b, localeCompare))
+            .map((value) => (value === CONST_1.default.SEARCH.TAG_EMPTY_VALUE ? translate('search.noTag') : (0, PolicyUtils_1.getCleanedTagName)(value)))
             .join(', ');
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.DESCRIPTION || key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TITLE) {
         return filters[key];
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.REIMBURSABLE || key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.BILLABLE) {
-        var filterValue_1 = filters[key];
-        return filterValue_1 ? translate("common.".concat(filterValue_1)) : undefined;
+        const filterValue = filters[key];
+        return filterValue ? translate(`common.${filterValue}`) : undefined;
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TYPE) {
-        var filterValue_2 = filters[key];
-        return filterValue_2 ? translate("common.".concat(filterValue_2)) : undefined;
+        const filterValue = filters[key];
+        return filterValue ? translate(`common.${filterValue}`) : undefined;
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.ACTION) {
-        var filterValue_3 = filters[key];
-        return filterValue_3 ? translate("search.filters.action.".concat(filterValue_3)) : undefined;
+        const filterValue = filters[key];
+        return filterValue ? translate(`search.filters.action.${filterValue}`) : undefined;
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_ROOT_KEYS.GROUP_BY) {
-        var filterValue_4 = filters[key];
-        return filterValue_4 ? translate("search.filters.groupBy.".concat(filterValue_4)) : undefined;
+        const filterValue = filters[key];
+        return filterValue ? translate(`search.filters.groupBy.${filterValue}`) : undefined;
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.WITHDRAWAL_TYPE) {
-        var filterValue_5 = filters[key];
-        return filterValue_5 ? translate("search.filters.withdrawalType.".concat(filterValue_5)) : undefined;
+        const filterValue = filters[key];
+        return filterValue ? translate(`search.filters.withdrawalType.${filterValue}`) : undefined;
     }
     if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.HAS) {
-        var filterValue_6 = filters[key];
-        return filterValue_6 ? filterValue_6.map(function (value) { return translate("search.filters.has.".concat(value)); }).join(', ') : undefined;
+        const filterValue = filters[key];
+        return filterValue ? filterValue.map((value) => translate(`search.filters.has.${value}`)).join(', ') : undefined;
     }
-    var filterValue = filters[key];
+    const filterValue = filters[key];
     return Array.isArray(filterValue) ? filterValue.join(', ') : filterValue;
 }
 function getStatusFilterDisplayTitle(filters, type, groupBy, translate) {
-    var statusOptions = (0, SearchUIUtils_1.getStatusOptions)(type, groupBy).concat({ text: translate('common.all'), value: CONST_1.default.SEARCH.STATUS.EXPENSE.ALL });
-    var filterValue = filters === null || filters === void 0 ? void 0 : filters.status;
-    if (!(filterValue === null || filterValue === void 0 ? void 0 : filterValue.length)) {
+    const statusOptions = (0, SearchUIUtils_1.getStatusOptions)(type, groupBy).concat({ text: translate('common.all'), value: CONST_1.default.SEARCH.STATUS.EXPENSE.ALL });
+    let filterValue = filters?.status;
+    if (!filterValue?.length) {
         return undefined;
     }
     if (typeof filterValue === 'string') {
         filterValue = filterValue.split(',');
     }
     return filterValue
-        .reduce(function (acc, value) {
-        var status = statusOptions.find(function (statusOption) { return statusOption.value === value; });
+        .reduce((acc, value) => {
+        const status = statusOptions.find((statusOption) => statusOption.value === value);
         if (status) {
             return acc.concat(status.text);
         }
@@ -393,14 +379,13 @@ function getStatusFilterDisplayTitle(filters, type, groupBy, translate) {
         .join(', ');
 }
 function getFilterTaxRateDisplayTitle(filters, taxRates) {
-    var selectedTaxRateKeys = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TAX_RATE];
+    const selectedTaxRateKeys = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TAX_RATE];
     if (!selectedTaxRateKeys) {
         return undefined;
     }
-    var result = [];
-    Object.entries(taxRates).forEach(function (_a) {
-        var taxRateName = _a[0], taxRateKeys = _a[1];
-        if (!taxRateKeys.some(function (taxRateKey) { return selectedTaxRateKeys.includes(taxRateKey); }) || result.includes(taxRateName)) {
+    const result = [];
+    Object.entries(taxRates).forEach(([taxRateName, taxRateKeys]) => {
+        if (!taxRateKeys.some((taxRateKey) => selectedTaxRateKeys.includes(taxRateKey)) || result.includes(taxRateName)) {
             return;
         }
         result.push(taxRateName);
@@ -408,69 +393,69 @@ function getFilterTaxRateDisplayTitle(filters, taxRates) {
     return result.join(', ');
 }
 function getFilterExpenseDisplayTitle(filters, translate) {
-    var filterValue = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.EXPENSE_TYPE];
+    const filterValue = filters[CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.EXPENSE_TYPE];
     return filterValue
         ? Object.values(CONST_1.default.SEARCH.TRANSACTION_TYPE)
-            .filter(function (expenseType) { return filterValue.includes(expenseType); })
-            .map(function (expenseType) { return translate((0, SearchUIUtils_1.getExpenseTypeTranslationKey)(expenseType)); })
+            .filter((expenseType) => filterValue.includes(expenseType))
+            .map((expenseType) => translate((0, SearchUIUtils_1.getExpenseTypeTranslationKey)(expenseType)))
             .join(', ')
         : undefined;
 }
 function getFilterInDisplayTitle(filters, _, reports) {
-    var _a, _b, _c;
-    return (_c = (_b = (_a = filters.in) === null || _a === void 0 ? void 0 : _a.map(function (id) { return (0, ReportUtils_1.getReportName)(reports === null || reports === void 0 ? void 0 : reports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(id)]); })) === null || _b === void 0 ? void 0 : _b.filter(Boolean)) === null || _c === void 0 ? void 0 : _c.join(', ');
+    return filters.in
+        ?.map((id) => (0, ReportUtils_1.getReportName)(reports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${id}`]))
+        ?.filter(Boolean)
+        ?.join(', ');
 }
 function AdvancedSearchFilters() {
-    var _a, _b, _c;
-    var _d = (0, useLocalize_1.default)(), translate = _d.translate, localeCompare = _d.localeCompare, formatPhoneNumber = _d.formatPhoneNumber;
-    var styles = (0, useThemeStyles_1.default)();
-    var singleExecution = (0, useSingleExecution_1.default)().singleExecution;
-    var waitForNavigate = (0, useWaitForNavigation_1.default)();
-    var reports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false })[0];
-    var savedSearches = (0, useOnyx_1.default)(ONYXKEYS_1.default.SAVED_SEARCHES, { canBeMissing: true })[0];
-    var _e = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true })[0], searchAdvancedFilters = _e === void 0 ? (0, EmptyObject_1.getEmptyObject)() : _e;
-    var groupBy = searchAdvancedFilters.groupBy;
-    var userCardList = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: false })[0];
-    var workspaceCardFeeds = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: false })[0];
-    var allCards = (0, react_1.useMemo)(function () { return (0, CardUtils_1.mergeCardListWithWorkspaceFeeds)(workspaceCardFeeds !== null && workspaceCardFeeds !== void 0 ? workspaceCardFeeds : CONST_1.default.EMPTY_OBJECT, userCardList, true); }, [userCardList, workspaceCardFeeds]);
-    var taxRates = (0, PolicyUtils_1.getAllTaxRates)();
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var _f = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: false })[0], policies = _f === void 0 ? (0, EmptyObject_1.getEmptyObject)() : _f;
-    var currentUserLogin = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false, selector: function (session) { return session === null || session === void 0 ? void 0 : session.email; } })[0];
-    var workspaces = (0, useWorkspaceList_1.default)({
-        policies: policies,
-        currentUserLogin: currentUserLogin,
+    const { translate, localeCompare, formatPhoneNumber } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { singleExecution } = (0, useSingleExecution_1.default)();
+    const waitForNavigate = (0, useWaitForNavigation_1.default)();
+    const [reports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false });
+    const [savedSearches] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SAVED_SEARCHES, { canBeMissing: true });
+    const [searchAdvancedFilters = (0, EmptyObject_1.getEmptyObject)()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true });
+    const groupBy = searchAdvancedFilters.groupBy;
+    const [userCardList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: false });
+    const [workspaceCardFeeds] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: false });
+    const allCards = (0, react_1.useMemo)(() => (0, CardUtils_1.mergeCardListWithWorkspaceFeeds)(workspaceCardFeeds ?? CONST_1.default.EMPTY_OBJECT, userCardList, true), [userCardList, workspaceCardFeeds]);
+    const taxRates = (0, PolicyUtils_1.getAllTaxRates)();
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const [policies = (0, EmptyObject_1.getEmptyObject)()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: false });
+    const [currentUserLogin] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false, selector: (session) => session?.email });
+    const { sections: workspaces } = (0, useWorkspaceList_1.default)({
+        policies,
+        currentUserLogin,
         shouldShowPendingDeletePolicy: false,
         selectedPolicyIDs: undefined,
         searchTerm: '',
-        localeCompare: localeCompare,
-    }).sections;
-    var _g = (0, useAdvancedSearchFilters_1.default)(), currentType = _g.currentType, typeFiltersKeys = _g.typeFiltersKeys;
-    var queryString = (0, react_1.useMemo)(function () { return (0, SearchQueryUtils_1.buildQueryStringFromFilterFormValues)(searchAdvancedFilters); }, [searchAdvancedFilters]);
-    var queryJSON = (0, react_1.useMemo)(function () { return (0, SearchQueryUtils_1.buildSearchQueryJSON)(queryString || (0, SearchQueryUtils_1.buildCannedSearchQuery)()); }, [queryString]);
-    var applyFiltersAndNavigate = function () {
+        localeCompare,
+    });
+    const { currentType, typeFiltersKeys } = (0, useAdvancedSearchFilters_1.default)();
+    const queryString = (0, react_1.useMemo)(() => (0, SearchQueryUtils_1.buildQueryStringFromFilterFormValues)(searchAdvancedFilters), [searchAdvancedFilters]);
+    const queryJSON = (0, react_1.useMemo)(() => (0, SearchQueryUtils_1.buildSearchQueryJSON)(queryString || (0, SearchQueryUtils_1.buildCannedSearchQuery)()), [queryString]);
+    const applyFiltersAndNavigate = () => {
         (0, Search_1.clearAllFilters)();
         Navigation_1.default.navigate(ROUTES_1.default.SEARCH_ROOT.getRoute({
             query: queryString,
         }), { forceReplace: true });
     };
-    var onSaveSearch = function () {
-        var savedSearchKeys = Object.keys(savedSearches !== null && savedSearches !== void 0 ? savedSearches : {});
+    const onSaveSearch = () => {
+        const savedSearchKeys = Object.keys(savedSearches ?? {});
         if (!queryJSON || (savedSearches && savedSearchKeys.includes(String(queryJSON.hash)))) {
             // If the search is already saved, we only display the results as we don't need to save it.
             applyFiltersAndNavigate();
             return;
         }
         (0, Search_1.saveSearch)({
-            queryJSON: queryJSON,
+            queryJSON,
         });
         applyFiltersAndNavigate();
     };
-    var filters = typeFiltersKeys.map(function (section) {
-        return section.map(function (key) {
-            var _a;
-            var onPress = singleExecution(waitForNavigate(function () { return Navigation_1.default.navigate(baseFilterConfig[key].route); }));
-            var filterTitle;
+    const filters = typeFiltersKeys.map((section) => {
+        return section.map((key) => {
+            const onPress = singleExecution(waitForNavigate(() => Navigation_1.default.navigate(baseFilterConfig[key].route)));
+            let filterTitle;
             if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.CARD_ID) {
                 filterTitle = baseFilterConfig[key].getTitle(searchAdvancedFilters, allCards, translate);
             }
@@ -484,13 +469,13 @@ function AdvancedSearchFilters() {
                 key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TO ||
                 key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.ASSIGNEE ||
                 key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.ATTENDEE) {
-                filterTitle = baseFilterConfig[key].getTitle((_a = searchAdvancedFilters[key]) !== null && _a !== void 0 ? _a : [], personalDetails, formatPhoneNumber);
+                filterTitle = baseFilterConfig[key].getTitle(searchAdvancedFilters[key] ?? [], personalDetails, formatPhoneNumber);
             }
             else if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.IN) {
                 filterTitle = baseFilterConfig[key].getTitle(searchAdvancedFilters, translate, reports);
             }
             else if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.POLICY_ID) {
-                var workspacesData = workspaces.flatMap(function (value) { return value.data; });
+                const workspacesData = workspaces.flatMap((value) => value.data);
                 filterTitle = baseFilterConfig[key].getTitle(searchAdvancedFilters, workspacesData);
             }
             else if (key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.STATUS) {
@@ -500,30 +485,30 @@ function AdvancedSearchFilters() {
                 filterTitle = baseFilterConfig[key].getTitle(searchAdvancedFilters, key, translate, localeCompare);
             }
             return {
-                key: key,
+                key,
                 title: filterTitle,
                 description: translate(baseFilterConfig[key].description),
-                onPress: onPress,
+                onPress,
             };
         });
     });
-    var displaySearchButton = queryJSON && !(0, SearchQueryUtils_1.isCannedSearchQuery)(queryJSON);
-    var sections = [
+    const displaySearchButton = queryJSON && !(0, SearchQueryUtils_1.isCannedSearchQuery)(queryJSON);
+    const sections = [
         {
             titleTranslationKey: 'common.general',
-            items: (_a = filters.at(0)) !== null && _a !== void 0 ? _a : [],
+            items: filters.at(0) ?? [],
         },
         {
             titleTranslationKey: 'common.expenses',
-            items: (_b = filters.at(1)) !== null && _b !== void 0 ? _b : [],
+            items: filters.at(1) ?? [],
         },
         {
             titleTranslationKey: 'common.reports',
-            items: (_c = filters.at(2)) !== null && _c !== void 0 ? _c : [],
+            items: filters.at(2) ?? [],
         },
     ];
-    sections.forEach(function (section) {
-        section.items.sort(function (a, b) {
+    sections.forEach((section) => {
+        section.items.sort((a, b) => {
             if (a.key === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TYPE) {
                 return -1;
             }
@@ -536,17 +521,16 @@ function AdvancedSearchFilters() {
     return (<>
             <ScrollView_1.default contentContainerStyle={[styles.flexGrow1, styles.justifyContentBetween]}>
                 <react_native_1.View>
-                    {sections.map(function (section, index) {
-            var _a;
+                    {sections.map((section, index) => {
             if (section.items.length === 0) {
                 return;
             }
             return (
             // eslint-disable-next-line react/no-array-index-key
-            <react_native_1.View key={"".concat((_a = section.items.at(0)) === null || _a === void 0 ? void 0 : _a.key, "-").concat(index)}>
+            <react_native_1.View key={`${section.items.at(0)?.key}-${index}`}>
                                 {index !== 0 && (<SpacerView_1.default shouldShow style={[styles.reportHorizontalRule]}/>)}
                                 <Text_1.default style={[styles.headerText, styles.reportHorizontalRule, index === 0 ? null : styles.mt4, styles.mb2]}>{translate(section.titleTranslationKey)}</Text_1.default>
-                                {section.items.map(function (item) {
+                                {section.items.map((item) => {
                     return (<MenuItemWithTopDescription_1.default key={item.description} title={item.title} titleStyle={styles.flex1} description={item.description} shouldShowRightIcon onPress={item.onPress}/>);
                 })}
                             </react_native_1.View>);

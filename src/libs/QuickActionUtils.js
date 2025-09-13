@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isQuickActionAllowed = exports.getIOUType = exports.getQuickActionTitle = exports.getQuickActionIcon = void 0;
-var Expensicons = require("@components/Icon/Expensicons");
-var CONST_1 = require("@src/CONST");
-var getIconForAction_1 = require("./getIconForAction");
-var ReportUtils_1 = require("./ReportUtils");
-var getQuickActionIcon = function (action) {
+const Expensicons = require("@components/Icon/Expensicons");
+const CONST_1 = require("@src/CONST");
+const getIconForAction_1 = require("./getIconForAction");
+const ReportUtils_1 = require("./ReportUtils");
+const getQuickActionIcon = (action) => {
     switch (action) {
         case CONST_1.default.QUICK_ACTIONS.REQUEST_MANUAL:
             return (0, getIconForAction_1.default)(CONST_1.default.IOU.TYPE.REQUEST);
@@ -36,7 +36,7 @@ var getQuickActionIcon = function (action) {
     }
 };
 exports.getQuickActionIcon = getQuickActionIcon;
-var getIOUType = function (action) {
+const getIOUType = (action) => {
     switch (action) {
         case CONST_1.default.QUICK_ACTIONS.REQUEST_MANUAL:
         case CONST_1.default.QUICK_ACTIONS.REQUEST_SCAN:
@@ -58,7 +58,7 @@ var getIOUType = function (action) {
     }
 };
 exports.getIOUType = getIOUType;
-var getQuickActionTitle = function (action) {
+const getQuickActionTitle = (action) => {
     switch (action) {
         case CONST_1.default.QUICK_ACTIONS.REQUEST_MANUAL:
         case CONST_1.default.QUICK_ACTIONS.TRACK_MANUAL:
@@ -86,27 +86,25 @@ var getQuickActionTitle = function (action) {
     }
 };
 exports.getQuickActionTitle = getQuickActionTitle;
-var isManagerMcTestQuickActionReport = function (report) {
-    var _a;
-    return !!((_a = report === null || report === void 0 ? void 0 : report.participants) === null || _a === void 0 ? void 0 : _a[CONST_1.default.ACCOUNT_ID.MANAGER_MCTEST]);
+const isManagerMcTestQuickActionReport = (report) => {
+    return !!report?.participants?.[CONST_1.default.ACCOUNT_ID.MANAGER_MCTEST];
 };
-var isQuickActionAllowed = function (quickAction, quickActionReport, quickActionPolicy, isReportArchived) {
-    if (isReportArchived === void 0) { isReportArchived = false; }
-    var iouType = getIOUType(quickAction === null || quickAction === void 0 ? void 0 : quickAction.action);
+const isQuickActionAllowed = (quickAction, quickActionReport, quickActionPolicy, isReportArchived = false) => {
+    const iouType = getIOUType(quickAction?.action);
     if (iouType) {
         // We're disabling QAB for Manager McTest reports to prevent confusion when submitting real data for Manager McTest
-        var isReportHasManagerMCTest = isManagerMcTestQuickActionReport(quickActionReport);
+        const isReportHasManagerMCTest = isManagerMcTestQuickActionReport(quickActionReport);
         if (isReportHasManagerMCTest) {
             return false;
         }
         return (0, ReportUtils_1.canCreateRequest)(quickActionReport, quickActionPolicy, iouType, isReportArchived);
     }
-    if ((quickAction === null || quickAction === void 0 ? void 0 : quickAction.action) === CONST_1.default.QUICK_ACTIONS.PER_DIEM) {
-        return !!(quickActionPolicy === null || quickActionPolicy === void 0 ? void 0 : quickActionPolicy.arePerDiemRatesEnabled);
+    if (quickAction?.action === CONST_1.default.QUICK_ACTIONS.PER_DIEM) {
+        return !!quickActionPolicy?.arePerDiemRatesEnabled;
     }
     // We don't want to show this QAB since this is already available in the FloatingActionButtonAndPopover
     // In the future, we will remove this when the BE no longer returns this action
-    if ((quickAction === null || quickAction === void 0 ? void 0 : quickAction.action) === CONST_1.default.QUICK_ACTIONS.CREATE_REPORT) {
+    if (quickAction?.action === CONST_1.default.QUICK_ACTIONS.CREATE_REPORT) {
         return false;
     }
     return true;

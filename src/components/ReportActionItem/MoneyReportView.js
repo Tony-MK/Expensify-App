@@ -1,103 +1,92 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var SpacerView_1 = require("@components/SpacerView");
-var Text_1 = require("@components/Text");
-var UnreadActionIndicator_1 = require("@components/UnreadActionIndicator");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils_1 = require("@libs/CurrencyUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var AnimatedEmptyStateBackground_1 = require("@pages/home/report/AnimatedEmptyStateBackground");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var Report_1 = require("@src/libs/actions/Report");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-function MoneyReportView(_a) {
-    var _b;
-    var report = _a.report, policy = _a.policy, _c = _a.isCombinedReport, isCombinedReport = _c === void 0 ? false : _c, _d = _a.shouldShowTotal, shouldShowTotal = _d === void 0 ? true : _d, shouldHideThreadDividerLine = _a.shouldHideThreadDividerLine, pendingAction = _a.pendingAction;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var isSettled = (0, ReportUtils_1.isSettled)(report === null || report === void 0 ? void 0 : report.reportID);
-    var isTotalUpdated = (0, ReportUtils_1.hasUpdatedTotal)(report, policy);
-    var _e = (0, ReportUtils_1.getMoneyRequestSpendBreakdown)(report), totalDisplaySpend = _e.totalDisplaySpend, nonReimbursableSpend = _e.nonReimbursableSpend, reimbursableSpend = _e.reimbursableSpend;
-    var shouldShowBreakdown = nonReimbursableSpend && reimbursableSpend && shouldShowTotal;
-    var formattedTotalAmount = (0, CurrencyUtils_1.convertToDisplayString)(totalDisplaySpend, report === null || report === void 0 ? void 0 : report.currency);
-    var formattedOutOfPocketAmount = (0, CurrencyUtils_1.convertToDisplayString)(reimbursableSpend, report === null || report === void 0 ? void 0 : report.currency);
-    var formattedCompanySpendAmount = (0, CurrencyUtils_1.convertToDisplayString)(nonReimbursableSpend, report === null || report === void 0 ? void 0 : report.currency);
-    var isPartiallyPaid = !!((_b = report === null || report === void 0 ? void 0 : report.pendingFields) === null || _b === void 0 ? void 0 : _b.partial);
-    var subAmountTextStyles = [
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const SpacerView_1 = require("@components/SpacerView");
+const Text_1 = require("@components/Text");
+const UnreadActionIndicator_1 = require("@components/UnreadActionIndicator");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils_1 = require("@libs/CurrencyUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const AnimatedEmptyStateBackground_1 = require("@pages/home/report/AnimatedEmptyStateBackground");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const Report_1 = require("@src/libs/actions/Report");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+function MoneyReportView({ report, policy, isCombinedReport = false, shouldShowTotal = true, shouldHideThreadDividerLine, pendingAction }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const isSettled = (0, ReportUtils_1.isSettled)(report?.reportID);
+    const isTotalUpdated = (0, ReportUtils_1.hasUpdatedTotal)(report, policy);
+    const { totalDisplaySpend, nonReimbursableSpend, reimbursableSpend } = (0, ReportUtils_1.getMoneyRequestSpendBreakdown)(report);
+    const shouldShowBreakdown = nonReimbursableSpend && reimbursableSpend && shouldShowTotal;
+    const formattedTotalAmount = (0, CurrencyUtils_1.convertToDisplayString)(totalDisplaySpend, report?.currency);
+    const formattedOutOfPocketAmount = (0, CurrencyUtils_1.convertToDisplayString)(reimbursableSpend, report?.currency);
+    const formattedCompanySpendAmount = (0, CurrencyUtils_1.convertToDisplayString)(nonReimbursableSpend, report?.currency);
+    const isPartiallyPaid = !!report?.pendingFields?.partial;
+    const subAmountTextStyles = [
         styles.taskTitleMenuItem,
         styles.alignSelfCenter,
         StyleUtils.getFontSizeStyle(variables_1.default.fontSizeH1),
         StyleUtils.getColorStyle(theme.textSupporting),
     ];
-    var violations = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_VIOLATIONS).concat(report === null || report === void 0 ? void 0 : report.reportID), { canBeMissing: true })[0];
-    var sortedPolicyReportFields = (0, react_1.useMemo)(function () {
-        var _a;
-        var fields = (0, ReportUtils_1.getAvailableReportFields)(report, Object.values((_a = policy === null || policy === void 0 ? void 0 : policy.fieldList) !== null && _a !== void 0 ? _a : {}));
-        return fields.filter(function (field) { return field.target === (report === null || report === void 0 ? void 0 : report.type); }).sort(function (_a, _b) {
-            var firstOrderWeight = _a.orderWeight;
-            var secondOrderWeight = _b.orderWeight;
-            return firstOrderWeight - secondOrderWeight;
-        });
+    const [violations] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_VIOLATIONS}${report?.reportID}`, { canBeMissing: true });
+    const sortedPolicyReportFields = (0, react_1.useMemo)(() => {
+        const fields = (0, ReportUtils_1.getAvailableReportFields)(report, Object.values(policy?.fieldList ?? {}));
+        return fields.filter((field) => field.target === report?.type).sort(({ orderWeight: firstOrderWeight }, { orderWeight: secondOrderWeight }) => firstOrderWeight - secondOrderWeight);
     }, [policy, report]);
-    var enabledReportFields = sortedPolicyReportFields.filter(function (reportField) { return !(0, ReportUtils_1.isReportFieldDisabled)(report, reportField, policy); });
-    var isOnlyTitleFieldEnabled = enabledReportFields.length === 1 && (0, ReportUtils_1.isReportFieldOfTypeTitle)(enabledReportFields.at(0));
-    var isClosedExpenseReportWithNoExpenses = (0, ReportUtils_1.isClosedExpenseReportWithNoExpenses)(report);
-    var isPaidGroupPolicyExpenseReport = (0, ReportUtils_1.isPaidGroupPolicyExpenseReport)(report);
-    var isInvoiceReport = (0, ReportUtils_1.isInvoiceReport)(report);
-    var shouldHideSingleReportField = function (reportField) {
-        var _a;
-        var fieldValue = (_a = reportField.value) !== null && _a !== void 0 ? _a : reportField.defaultValue;
-        var hasEnableOption = reportField.type !== CONST_1.default.REPORT_FIELD_TYPES.LIST || reportField.disabledOptions.some(function (option) { return !option; });
+    const enabledReportFields = sortedPolicyReportFields.filter((reportField) => !(0, ReportUtils_1.isReportFieldDisabled)(report, reportField, policy));
+    const isOnlyTitleFieldEnabled = enabledReportFields.length === 1 && (0, ReportUtils_1.isReportFieldOfTypeTitle)(enabledReportFields.at(0));
+    const isClosedExpenseReportWithNoExpenses = (0, ReportUtils_1.isClosedExpenseReportWithNoExpenses)(report);
+    const isPaidGroupPolicyExpenseReport = (0, ReportUtils_1.isPaidGroupPolicyExpenseReport)(report);
+    const isInvoiceReport = (0, ReportUtils_1.isInvoiceReport)(report);
+    const shouldHideSingleReportField = (reportField) => {
+        const fieldValue = reportField.value ?? reportField.defaultValue;
+        const hasEnableOption = reportField.type !== CONST_1.default.REPORT_FIELD_TYPES.LIST || reportField.disabledOptions.some((option) => !option);
         return (0, ReportUtils_1.isReportFieldOfTypeTitle)(reportField) || (!fieldValue && !hasEnableOption);
     };
-    var shouldShowReportField = !isClosedExpenseReportWithNoExpenses &&
+    const shouldShowReportField = !isClosedExpenseReportWithNoExpenses &&
         (isPaidGroupPolicyExpenseReport || isInvoiceReport) &&
         (!isCombinedReport || !isOnlyTitleFieldEnabled) &&
         !sortedPolicyReportFields.every(shouldHideSingleReportField);
-    var renderThreadDivider = (0, react_1.useMemo)(function () {
-        return shouldHideThreadDividerLine ? (<UnreadActionIndicator_1.default reportActionID={report === null || report === void 0 ? void 0 : report.reportID} shouldHideThreadDividerLine={shouldHideThreadDividerLine}/>) : (<SpacerView_1.default shouldShow style={styles.reportHorizontalRule}/>);
-    }, [shouldHideThreadDividerLine, report === null || report === void 0 ? void 0 : report.reportID, styles.reportHorizontalRule]);
+    const renderThreadDivider = (0, react_1.useMemo)(() => shouldHideThreadDividerLine ? (<UnreadActionIndicator_1.default reportActionID={report?.reportID} shouldHideThreadDividerLine={shouldHideThreadDividerLine}/>) : (<SpacerView_1.default shouldShow style={styles.reportHorizontalRule}/>), [shouldHideThreadDividerLine, report?.reportID, styles.reportHorizontalRule]);
     return (<>
             <react_native_1.View style={[styles.pRelative]}>
                 <AnimatedEmptyStateBackground_1.default />
                 {!isClosedExpenseReportWithNoExpenses && (<>
                         {(isPaidGroupPolicyExpenseReport || isInvoiceReport) &&
-                (policy === null || policy === void 0 ? void 0 : policy.areReportFieldsEnabled) &&
+                policy?.areReportFieldsEnabled &&
                 (!isCombinedReport || !isOnlyTitleFieldEnabled) &&
-                sortedPolicyReportFields.map(function (reportField) {
-                    var _a, _b, _c;
+                sortedPolicyReportFields.map((reportField) => {
                     if (shouldHideSingleReportField(reportField)) {
                         return null;
                     }
-                    var fieldValue = (_a = reportField.value) !== null && _a !== void 0 ? _a : reportField.defaultValue;
-                    var isFieldDisabled = (0, ReportUtils_1.isReportFieldDisabled)(report, reportField, policy);
-                    var fieldKey = (0, ReportUtils_1.getReportFieldKey)(reportField.fieldID);
-                    var violation = (0, ReportUtils_1.getFieldViolation)(violations, reportField);
-                    var violationTranslation = (0, ReportUtils_1.getFieldViolationTranslation)(reportField, violation);
+                    const fieldValue = reportField.value ?? reportField.defaultValue;
+                    const isFieldDisabled = (0, ReportUtils_1.isReportFieldDisabled)(report, reportField, policy);
+                    const fieldKey = (0, ReportUtils_1.getReportFieldKey)(reportField.fieldID);
+                    const violation = (0, ReportUtils_1.getFieldViolation)(violations, reportField);
+                    const violationTranslation = (0, ReportUtils_1.getFieldViolationTranslation)(reportField, violation);
                     return (<OfflineWithFeedback_1.default 
                     // Need to return undefined when we have pendingAction to avoid the duplicate pending action
-                    pendingAction={pendingAction ? undefined : (_b = report === null || report === void 0 ? void 0 : report.pendingFields) === null || _b === void 0 ? void 0 : _b[fieldKey]} errors={(_c = report === null || report === void 0 ? void 0 : report.errorFields) === null || _c === void 0 ? void 0 : _c[fieldKey]} errorRowStyles={styles.ph5} key={"menuItem-".concat(fieldKey)} onClose={function () { return (0, Report_1.clearReportFieldKeyErrors)(report === null || report === void 0 ? void 0 : report.reportID, fieldKey); }}>
-                                        <MenuItemWithTopDescription_1.default description={expensify_common_1.Str.UCFirst(reportField.name)} title={fieldValue} onPress={function () {
-                            Navigation_1.default.navigate(ROUTES_1.default.EDIT_REPORT_FIELD_REQUEST.getRoute(report === null || report === void 0 ? void 0 : report.reportID, report === null || report === void 0 ? void 0 : report.policyID, reportField.fieldID, Navigation_1.default.getReportRHPActiveRoute()));
-                        }} shouldShowRightIcon={!isFieldDisabled} wrapperStyle={[styles.pv2, styles.taskDescriptionMenuItem]} shouldGreyOutWhenDisabled={false} numberOfLinesTitle={0} interactive={!isFieldDisabled} shouldStackHorizontally={false} onSecondaryInteraction={function () { }} titleWithTooltips={[]} brickRoadIndicator={violation ? 'error' : undefined} errorText={violationTranslation}/>
+                    pendingAction={pendingAction ? undefined : report?.pendingFields?.[fieldKey]} errors={report?.errorFields?.[fieldKey]} errorRowStyles={styles.ph5} key={`menuItem-${fieldKey}`} onClose={() => (0, Report_1.clearReportFieldKeyErrors)(report?.reportID, fieldKey)}>
+                                        <MenuItemWithTopDescription_1.default description={expensify_common_1.Str.UCFirst(reportField.name)} title={fieldValue} onPress={() => {
+                            Navigation_1.default.navigate(ROUTES_1.default.EDIT_REPORT_FIELD_REQUEST.getRoute(report?.reportID, report?.policyID, reportField.fieldID, Navigation_1.default.getReportRHPActiveRoute()));
+                        }} shouldShowRightIcon={!isFieldDisabled} wrapperStyle={[styles.pv2, styles.taskDescriptionMenuItem]} shouldGreyOutWhenDisabled={false} numberOfLinesTitle={0} interactive={!isFieldDisabled} shouldStackHorizontally={false} onSecondaryInteraction={() => { }} titleWithTooltips={[]} brickRoadIndicator={violation ? 'error' : undefined} errorText={violationTranslation}/>
                                     </OfflineWithFeedback_1.default>);
                 })}
                         {shouldShowTotal && (<react_native_1.View style={[styles.flexRow, styles.pointerEventsNone, styles.containerWithSpaceBetween, styles.ph5, styles.pv2]}>

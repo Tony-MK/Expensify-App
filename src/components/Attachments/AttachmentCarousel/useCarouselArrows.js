@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var DeviceCapabilities = require("@libs/DeviceCapabilities");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const DeviceCapabilities = require("@libs/DeviceCapabilities");
+const CONST_1 = require("@src/CONST");
 function useCarouselArrows() {
-    var canUseTouchScreen = DeviceCapabilities.canUseTouchScreen();
-    var _a = (0, react_1.useState)(canUseTouchScreen), shouldShowArrows = _a[0], setShouldShowArrowsInternal = _a[1];
-    var autoHideArrowTimeout = (0, react_1.useRef)(null);
+    const canUseTouchScreen = DeviceCapabilities.canUseTouchScreen();
+    const [shouldShowArrows, setShouldShowArrowsInternal] = (0, react_1.useState)(canUseTouchScreen);
+    const autoHideArrowTimeout = (0, react_1.useRef)(null);
     /**
      * Cancels the automatic hiding of the arrows.
      */
-    var cancelAutoHideArrows = (0, react_1.useCallback)(function () {
+    const cancelAutoHideArrows = (0, react_1.useCallback)(() => {
         if (!autoHideArrowTimeout.current) {
             return;
         }
@@ -19,27 +19,26 @@ function useCarouselArrows() {
     /**
      * Automatically hide the arrows if there is no interaction for 3 seconds.
      */
-    var autoHideArrows = (0, react_1.useCallback)(function () {
+    const autoHideArrows = (0, react_1.useCallback)(() => {
         if (!canUseTouchScreen) {
             return;
         }
         cancelAutoHideArrows();
-        autoHideArrowTimeout.current = setTimeout(function () {
+        autoHideArrowTimeout.current = setTimeout(() => {
             setShouldShowArrowsInternal(false);
         }, CONST_1.default.ARROW_HIDE_DELAY);
     }, [canUseTouchScreen, cancelAutoHideArrows]);
     /**
      * Sets the visibility of the arrows.
      */
-    var setShouldShowArrows = (0, react_1.useCallback)(function (show) {
-        if (show === void 0) { show = true; }
+    const setShouldShowArrows = (0, react_1.useCallback)((show = true) => {
         setShouldShowArrowsInternal(show);
         autoHideArrows();
     }, [autoHideArrows]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         autoHideArrows();
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, []);
-    return { shouldShowArrows: shouldShowArrows, setShouldShowArrows: setShouldShowArrows, autoHideArrows: autoHideArrows, cancelAutoHideArrows: cancelAutoHideArrows };
+    return { shouldShowArrows, setShouldShowArrows, autoHideArrows, cancelAutoHideArrows };
 }
 exports.default = useCarouselArrows;

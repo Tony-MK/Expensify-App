@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createRandomTransaction;
-var falso_1 = require("@ngneat/falso");
-var date_fns_1 = require("date-fns");
-var CONST_1 = require("@src/CONST");
+const falso_1 = require("@ngneat/falso");
+const date_fns_1 = require("date-fns");
+const CONST_1 = require("@src/CONST");
 function createRandomTransaction(index) {
-    var _a;
     return {
         amount: (0, falso_1.randAmount)(),
         bank: (0, falso_1.randWord)(),
@@ -16,14 +15,14 @@ function createRandomTransaction(index) {
         category: (0, falso_1.randWord)(),
         comment: {
             comment: (0, falso_1.randWord)(),
-            waypoints: (_a = {},
-                _a[(0, falso_1.randWord)()] = {
+            waypoints: {
+                [(0, falso_1.randWord)()]: {
                     address: (0, falso_1.randWord)(),
                     lat: index,
                     lng: index,
                     name: (0, falso_1.randWord)(),
                 },
-                _a),
+            },
             attendees: [{ email: (0, falso_1.randWord)(), displayName: 'Test User', avatarUrl: '' }],
         },
         filename: (0, falso_1.randWord)(),

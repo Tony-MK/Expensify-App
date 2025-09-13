@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var RootNavigatorExtraContent_1 = require("@components/Navigation/RootNavigatorExtraContent");
-var useNavigationResetOnLayoutChange_1 = require("@libs/Navigation/AppNavigator/useNavigationResetOnLayoutChange");
-var createPlatformStackNavigatorComponent_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigatorComponent");
-var defaultPlatformStackScreenOptions_1 = require("@libs/Navigation/PlatformStackNavigation/defaultPlatformStackScreenOptions");
-var RootStackRouter_1 = require("./RootStackRouter");
-var useCustomRootStackNavigatorState_1 = require("./useCustomRootStackNavigatorState");
-var RootStackNavigatorComponent = (0, createPlatformStackNavigatorComponent_1.default)('RootStackNavigator', {
+const native_1 = require("@react-navigation/native");
+const RootNavigatorExtraContent_1 = require("@components/Navigation/RootNavigatorExtraContent");
+const useNavigationResetOnLayoutChange_1 = require("@libs/Navigation/AppNavigator/useNavigationResetOnLayoutChange");
+const createPlatformStackNavigatorComponent_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigatorComponent");
+const defaultPlatformStackScreenOptions_1 = require("@libs/Navigation/PlatformStackNavigation/defaultPlatformStackScreenOptions");
+const RootStackRouter_1 = require("./RootStackRouter");
+const useCustomRootStackNavigatorState_1 = require("./useCustomRootStackNavigatorState");
+const RootStackNavigatorComponent = (0, createPlatformStackNavigatorComponent_1.default)('RootStackNavigator', {
     createRouter: RootStackRouter_1.default,
     defaultScreenOptions: defaultPlatformStackScreenOptions_1.default,
     useCustomEffects: useNavigationResetOnLayoutChange_1.default,

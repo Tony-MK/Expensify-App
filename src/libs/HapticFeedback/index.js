@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Web does not support Haptic feedback
  */
-var hapticFeedback = {
-    press: function () { },
-    longPress: function () { },
-    success: function () { },
-    error: function () { },
+const hapticFeedback = {
+    press: () => { },
+    longPress: () => { },
+    success: () => { },
+    error: () => { },
 };
 exports.default = hapticFeedback;

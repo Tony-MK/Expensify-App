@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var NAVIGATION_TABS = {
+const NAVIGATION_TABS = {
     HOME: 'HOME',
     SEARCH: 'SEARCH',
     WORKSPACES: 'WORKSPACES',

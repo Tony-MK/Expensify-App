@@ -1,5 +1,4 @@
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21;
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *   _____                      __         __
@@ -12,11 +11,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * - Improve the prompts in prompts/translation, or
  * - Improve context annotations in src/languages/en.ts
  */
-var expensify_common_1 = require("expensify-common");
-var startCase_1 = require("lodash/startCase");
-var CONST_1 = require("@src/CONST");
+const expensify_common_1 = require("expensify-common");
+const startCase_1 = require("lodash/startCase");
+const CONST_1 = require("@src/CONST");
 /* eslint-disable max-len */
-var translations = {
+const translations = {
     common: {
         count: 'Compter',
         cancel: 'Annuler',
@@ -70,7 +69,7 @@ var translations = {
         wallet: 'Portefeuille',
         preferences: 'Préférences',
         view: 'Voir',
-        review: function (reviewParams) { return "Review".concat((reviewParams === null || reviewParams === void 0 ? void 0 : reviewParams.amount) ? " ".concat(reviewParams === null || reviewParams === void 0 ? void 0 : reviewParams.amount) : ''); },
+        review: (reviewParams) => `Review${reviewParams?.amount ? ` ${reviewParams?.amount}` : ''}`,
         not: 'Pas',
         signIn: 'Se connecter',
         signInWithGoogle: 'Se connecter avec Google',
@@ -117,10 +116,7 @@ var translations = {
         currentMonth: 'Mois en cours',
         ssnLast4: 'Les 4 derniers chiffres du SSN',
         ssnFull9: 'Les 9 chiffres complets du SSN',
-        addressLine: function (_a) {
-            var lineNumber = _a.lineNumber;
-            return "Adresse ligne ".concat(lineNumber);
-        },
+        addressLine: ({ lineNumber }) => `Adresse ligne ${lineNumber}`,
         personalAddress: 'Adresse personnelle',
         companyAddress: "Adresse de l'entreprise",
         noPO: "Pas de boîtes postales ou d'adresses de dépôt de courrier, s'il vous plaît.",
@@ -140,10 +136,7 @@ var translations = {
         send: 'Envoyer',
         na: 'N/A',
         noResultsFound: 'Aucun résultat trouvé',
-        noResultsFoundMatching: function (_a) {
-            var searchString = _a.searchString;
-            return "Aucun r\u00E9sultat trouv\u00E9 correspondant \u00E0 \"".concat(searchString, "\"");
-        },
+        noResultsFoundMatching: ({ searchString }) => `Aucun résultat trouvé correspondant à "${searchString}"`,
         recentDestinations: 'Destinations récentes',
         timePrefix: "C'est",
         conjunctionFor: 'pour',
@@ -157,13 +150,10 @@ var translations = {
         error: {
             invalidAmount: 'Montant invalide',
             acceptTerms: "Vous devez accepter les Conditions d'utilisation pour continuer.",
-            phoneNumber: "Veuillez entrer un num\u00E9ro de t\u00E9l\u00E9phone valide, avec l'indicatif du pays (par exemple, ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, ")"),
+            phoneNumber: `Veuillez entrer un numéro de téléphone valide, avec l'indicatif du pays (par exemple, ${CONST_1.default.EXAMPLE_PHONE_NUMBER})`,
             fieldRequired: 'Ce champ est requis',
             requestModified: 'Cette demande est en cours de modification par un autre membre',
-            characterLimitExceedCounter: function (_a) {
-                var length = _a.length, limit = _a.limit;
-                return "Limite de caract\u00E8res d\u00E9pass\u00E9 (".concat(length, "/").concat(limit, ")");
-            },
+            characterLimitExceedCounter: ({ length, limit }) => `Limite de caractères dépassé (${length}/${limit})`,
             dateInvalid: 'Veuillez sélectionner une date valide',
             invalidDateShouldBeFuture: "Veuillez choisir aujourd'hui ou une date future",
             invalidTimeShouldBeFuture: 'Veuillez choisir une heure au moins une minute plus tard.',
@@ -219,10 +209,7 @@ var translations = {
         verify: 'Vérifier',
         yesContinue: 'Oui, continuez',
         websiteExample: 'e.g. https://www.expensify.com',
-        zipCodeExampleFormat: function (_a) {
-            var zipSampleFormat = _a.zipSampleFormat;
-            return (zipSampleFormat ? "e.g. ".concat(zipSampleFormat) : '');
-        },
+        zipCodeExampleFormat: ({ zipSampleFormat }) => (zipSampleFormat ? `e.g. ${zipSampleFormat}` : ''),
         description: 'Description',
         title: 'Titre',
         assignee: 'Cessionnaire',
@@ -237,8 +224,8 @@ var translations = {
         someone: "Quelqu'un",
         total: 'Total',
         edit: 'Modifier',
-        letsDoThis: "Allons-y !",
-        letsStart: "Commen\u00E7ons",
+        letsDoThis: `Allons-y !`,
+        letsStart: `Commençons`,
         showMore: 'Afficher plus',
         merchant: 'Marchand',
         category: 'Catégorie',
@@ -330,10 +317,7 @@ var translations = {
         hourAbbreviation: 'h',
         minuteAbbreviation: 'm',
         skip: 'Passer',
-        chatWithAccountManager: function (_a) {
-            var accountManagerDisplayName = _a.accountManagerDisplayName;
-            return "Besoin de quelque chose de sp\u00E9cifique ? Discutez avec votre gestionnaire de compte, ".concat(accountManagerDisplayName, ".");
-        },
+        chatWithAccountManager: ({ accountManagerDisplayName }) => `Besoin de quelque chose de spécifique ? Discutez avec votre gestionnaire de compte, ${accountManagerDisplayName}.`,
         chatNow: 'Discuter maintenant',
         workEmail: 'Email professionnel',
         destination: 'Destination',
@@ -413,10 +397,7 @@ var translations = {
         chooseDocument: 'Choisir un fichier',
         attachmentTooLarge: 'La pièce jointe est trop volumineuse',
         sizeExceeded: 'La taille de la pièce jointe dépasse la limite de 24 Mo',
-        sizeExceededWithLimit: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "La taille de la pi\u00E8ce jointe d\u00E9passe la limite de ".concat(maxUploadSizeInMB, " Mo");
-        },
+        sizeExceededWithLimit: ({ maxUploadSizeInMB }) => `La taille de la pièce jointe dépasse la limite de ${maxUploadSizeInMB} Mo`,
         attachmentTooSmall: 'La pièce jointe est trop petite',
         sizeNotMet: 'La taille de la pièce jointe doit être supérieure à 240 octets',
         wrongFileType: 'Type de fichier invalide',
@@ -425,24 +406,12 @@ var translations = {
         protectedPDFNotSupported: 'Les PDF protégés par mot de passe ne sont pas pris en charge',
         attachmentImageResized: "Cette image a été redimensionnée pour l'aperçu. Téléchargez pour la pleine résolution.",
         attachmentImageTooLarge: 'Cette image est trop grande pour être prévisualisée avant le téléchargement.',
-        tooManyFiles: function (_a) {
-            var fileLimit = _a.fileLimit;
-            return "Vous pouvez t\u00E9l\u00E9charger jusqu'\u00E0 ".concat(fileLimit, " fichiers \u00E0 la fois.");
-        },
-        sizeExceededWithValue: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "Les fichiers d\u00E9passent ".concat(maxUploadSizeInMB, " MB. Veuillez r\u00E9essayer.");
-        },
+        tooManyFiles: ({ fileLimit }) => `Vous pouvez télécharger jusqu'à ${fileLimit} fichiers à la fois.`,
+        sizeExceededWithValue: ({ maxUploadSizeInMB }) => `Les fichiers dépassent ${maxUploadSizeInMB} MB. Veuillez réessayer.`,
         someFilesCantBeUploaded: 'Certains fichiers ne peuvent pas être téléchargés',
-        sizeLimitExceeded: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "Les fichiers doivent faire moins de ".concat(maxUploadSizeInMB, " MB. Les fichiers plus volumineux ne seront pas t\u00E9l\u00E9charg\u00E9s.");
-        },
+        sizeLimitExceeded: ({ maxUploadSizeInMB }) => `Les fichiers doivent faire moins de ${maxUploadSizeInMB} MB. Les fichiers plus volumineux ne seront pas téléchargés.`,
         maxFileLimitExceeded: "Vous pouvez télécharger jusqu'à 30 reçus à la fois. Les fichiers supplémentaires ne seront pas téléchargés.",
-        unsupportedFileType: function (_a) {
-            var fileType = _a.fileType;
-            return "Les fichiers ".concat(fileType, " ne sont pas pris en charge. Seuls les types de fichiers pris en charge seront t\u00E9l\u00E9charg\u00E9s.");
-        },
+        unsupportedFileType: ({ fileType }) => `Les fichiers ${fileType} ne sont pas pris en charge. Seuls les types de fichiers pris en charge seront téléchargés.`,
         learnMoreAboutSupportedFiles: 'En savoir plus sur les formats pris en charge.',
         passwordProtected: 'Les PDF protégés par mot de passe ne sont pas pris en charge. Seuls les fichiers pris en charge seront téléchargés.',
     },
@@ -467,14 +436,8 @@ var translations = {
     composer: {
         noExtensionFoundForMimeType: 'Aucune extension trouvée pour le type MIME',
         problemGettingImageYouPasted: "Un problème est survenu lors de l'obtention de l'image que vous avez collée.",
-        commentExceededMaxLength: function (_a) {
-            var formattedMaxLength = _a.formattedMaxLength;
-            return "La longueur maximale du commentaire est de ".concat(formattedMaxLength, " caract\u00E8res.");
-        },
-        taskTitleExceededMaxLength: function (_a) {
-            var formattedMaxLength = _a.formattedMaxLength;
-            return "La longueur maximale du titre de la t\u00E2che est de ".concat(formattedMaxLength, " caract\u00E8res.");
-        },
+        commentExceededMaxLength: ({ formattedMaxLength }) => `La longueur maximale du commentaire est de ${formattedMaxLength} caractères.`,
+        taskTitleExceededMaxLength: ({ formattedMaxLength }) => `La longueur maximale du titre de la tâche est de ${formattedMaxLength} caractères.`,
     },
     baseUpdateAppModal: {
         updateApp: "Mettre à jour l'application",
@@ -487,10 +450,7 @@ var translations = {
         redirectedToDesktopApp: "Nous vous avons redirigé vers l'application de bureau.",
         youCanAlso: 'Vous pouvez également',
         openLinkInBrowser: 'ouvrez ce lien dans votre navigateur',
-        loggedInAs: function (_a) {
-            var email = _a.email;
-            return "Vous \u00EAtes connect\u00E9 en tant que ".concat(email, ". Cliquez sur \"Ouvrir le lien\" dans l'invite pour vous connecter \u00E0 l'application de bureau avec ce compte.");
-        },
+        loggedInAs: ({ email }) => `Vous êtes connecté en tant que ${email}. Cliquez sur "Ouvrir le lien" dans l'invite pour vous connecter à l'application de bureau avec ce compte.`,
         doNotSeePrompt: "Impossible de voir l'invite ?",
         tryAgain: 'Réessayez',
         or: ', ou',
@@ -520,12 +480,12 @@ var translations = {
         findMember: 'Trouver un membre',
         searchForSomeone: "Rechercher quelqu'un",
     },
-    emptyList: (_a = {},
-        _a[CONST_1.default.IOU.TYPE.CREATE] = {
+    emptyList: {
+        [CONST_1.default.IOU.TYPE.CREATE]: {
             title: 'Soumettre une dépense, référer votre patron',
             subtitleText: 'Vous voulez que votre patron utilise Expensify aussi ? Soumettez-lui simplement une dépense et nous nous occuperons du reste.',
         },
-        _a),
+    },
     videoChatButtonAndMenu: {
         tooltip: 'Réserver un appel',
     },
@@ -540,14 +500,8 @@ var translations = {
         phrase2: "L'argent parle. Et maintenant que la messagerie et les paiements sont au même endroit, c'est aussi facile.",
         phrase3: 'Vos paiements vous parviennent aussi rapidement que vous pouvez faire passer votre message.',
         enterPassword: 'Veuillez entrer votre mot de passe',
-        welcomeNewFace: function (_a) {
-            var login = _a.login;
-            return "".concat(login, ", c'est toujours un plaisir de voir un nouveau visage ici !");
-        },
-        welcomeEnterMagicCode: function (_a) {
-            var login = _a.login;
-            return "Veuillez entrer le code magique envoy\u00E9 \u00E0 ".concat(login, ". Il devrait arriver dans une minute ou deux.");
-        },
+        welcomeNewFace: ({ login }) => `${login}, c'est toujours un plaisir de voir un nouveau visage ici !`,
+        welcomeEnterMagicCode: ({ login }) => `Veuillez entrer le code magique envoyé à ${login}. Il devrait arriver dans une minute ou deux.`,
     },
     login: {
         hero: {
@@ -556,14 +510,8 @@ var translations = {
         },
     },
     thirdPartySignIn: {
-        alreadySignedIn: function (_a) {
-            var email = _a.email;
-            return "Vous \u00EAtes d\u00E9j\u00E0 connect\u00E9 en tant que ".concat(email, ".");
-        },
-        goBackMessage: function (_a) {
-            var provider = _a.provider;
-            return "Vous ne voulez pas vous connecter avec ".concat(provider, " ?");
-        },
+        alreadySignedIn: ({ email }) => `Vous êtes déjà connecté en tant que ${email}.`,
+        goBackMessage: ({ provider }) => `Vous ne voulez pas vous connecter avec ${provider} ?`,
         continueWithMyCurrentSession: 'Continuer avec ma session actuelle',
         redirectToDesktopMessage: "Nous vous redirigerons vers l'application de bureau une fois que vous aurez terminé de vous connecter.",
     },
@@ -582,10 +530,7 @@ var translations = {
         writeSomething: 'Écrivez quelque chose...',
         blockedFromConcierge: 'La communication est interdite',
         fileUploadFailed: "Échec du téléchargement. Le fichier n'est pas pris en charge.",
-        localTime: function (_a) {
-            var user = _a.user, time = _a.time;
-            return "Il est ".concat(time, " pour ").concat(user);
-        },
+        localTime: ({ user, time }) => `Il est ${time} pour ${user}`,
         edited: '(édité)',
         emoji: 'Emoji',
         collapse: 'Réduire',
@@ -599,18 +544,9 @@ var translations = {
         copyEmailToClipboard: "Copier l'email dans le presse-papiers",
         markAsUnread: 'Marquer comme non lu',
         markAsRead: 'Marquer comme lu',
-        editAction: function (_a) {
-            var action = _a.action;
-            return "Editer ".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? 'dépense' : 'commentaire');
-        },
-        deleteAction: function (_a) {
-            var action = _a.action;
-            return "Supprimer ".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? 'dépense' : 'commentaire');
-        },
-        deleteConfirmation: function (_a) {
-            var action = _a.action;
-            return "\u00CAtes-vous s\u00FBr de vouloir supprimer ce ".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? 'dépense' : 'commentaire', " ?");
-        },
+        editAction: ({ action }) => `Editer ${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? 'dépense' : 'commentaire'}`,
+        deleteAction: ({ action }) => `Supprimer ${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? 'dépense' : 'commentaire'}`,
+        deleteConfirmation: ({ action }) => `Êtes-vous sûr de vouloir supprimer ce ${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? 'dépense' : 'commentaire'} ?`,
         onlyVisible: 'Visible uniquement pour',
         replyInThread: 'Répondre dans le fil de discussion',
         joinThread: 'Rejoindre le fil de discussion',
@@ -624,48 +560,21 @@ var translations = {
         reactedWith: 'a réagi avec',
     },
     reportActionsView: {
-        beginningOfArchivedRoom: function (_a) {
-            var reportName = _a.reportName, reportDetailsLink = _a.reportDetailsLink;
-            return "Vous avez rat\u00E9 la f\u00EAte \u00E0 <strong><a class=\"no-style-link\" href=\"".concat(reportDetailsLink, "\">").concat(reportName, "</a></strong>, il n'y a rien \u00E0 voir ici.");
-        },
-        beginningOfChatHistoryDomainRoom: function (_a) {
-            var domainRoom = _a.domainRoom;
-            return "Ce chat est destin\u00E9 \u00E0 tous les membres d'Expensify sur le domaine <strong>".concat(domainRoom, "</strong>. Utilisez-le pour discuter avec vos coll\u00E8gues, partager des astuces et poser des questions.");
-        },
-        beginningOfChatHistoryAdminRoom: function (_a) {
-            var workspaceName = _a.workspaceName;
-            return "Ce chat est avec l'administrateur <strong>".concat(workspaceName, "</strong>. Utilisez-le pour discuter de la configuration de l'espace de travail et d'autres sujets.");
-        },
-        beginningOfChatHistoryAnnounceRoom: function (_a) {
-            var workspaceName = _a.workspaceName;
-            return "Cette discussion est ouverte \u00E0 tous les membres de <strong>".concat(workspaceName, "</strong>. Utilisez-le pour les annonces les plus importantes.");
-        },
-        beginningOfChatHistoryUserRoom: function (_a) {
-            var reportName = _a.reportName, reportDetailsLink = _a.reportDetailsLink;
-            return "Ce salon de discussion est destin\u00E9 \u00E0 tout ce qui concerne <strong><a class=\"no-style-link\" href=\"".concat(reportDetailsLink, "\">").concat(reportName, "</a></strong>.");
-        },
-        beginningOfChatHistoryInvoiceRoom: function (_a) {
-            var invoicePayer = _a.invoicePayer, invoiceReceiver = _a.invoiceReceiver;
-            return "Ce chat concerne les factures entre <strong>".concat(invoicePayer, "</strong> et <strong>").concat(invoiceReceiver, "</strong>. Utilisez le bouton <emoji>").concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "</emoji> pour envoyer une facture.");
-        },
+        beginningOfArchivedRoom: ({ reportName, reportDetailsLink }) => `Vous avez raté la fête à <strong><a class="no-style-link" href="${reportDetailsLink}">${reportName}</a></strong>, il n'y a rien à voir ici.`,
+        beginningOfChatHistoryDomainRoom: ({ domainRoom }) => `Ce chat est destiné à tous les membres d'Expensify sur le domaine <strong>${domainRoom}</strong>. Utilisez-le pour discuter avec vos collègues, partager des astuces et poser des questions.`,
+        beginningOfChatHistoryAdminRoom: ({ workspaceName }) => `Ce chat est avec l'administrateur <strong>${workspaceName}</strong>. Utilisez-le pour discuter de la configuration de l'espace de travail et d'autres sujets.`,
+        beginningOfChatHistoryAnnounceRoom: ({ workspaceName }) => `Cette discussion est ouverte à tous les membres de <strong>${workspaceName}</strong>. Utilisez-le pour les annonces les plus importantes.`,
+        beginningOfChatHistoryUserRoom: ({ reportName, reportDetailsLink }) => `Ce salon de discussion est destiné à tout ce qui concerne <strong><a class="no-style-link" href="${reportDetailsLink}">${reportName}</a></strong>.`,
+        beginningOfChatHistoryInvoiceRoom: ({ invoicePayer, invoiceReceiver }) => `Ce chat concerne les factures entre <strong>${invoicePayer}</strong> et <strong>${invoiceReceiver}</strong>. Utilisez le bouton <emoji>${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}</emoji> pour envoyer une facture.`,
         beginningOfChatHistory: 'Ce chat est avec',
-        beginningOfChatHistoryPolicyExpenseChat: function (_a) {
-            var workspaceName = _a.workspaceName, submitterDisplayName = _a.submitterDisplayName;
-            return "C'est ici que <strong>".concat(submitterDisplayName, "</strong> soumettra ses d\u00E9penses \u00E0 <strong>").concat(workspaceName, "</strong>. Il suffit d'utiliser le bouton <emoji>").concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "</emoji>.");
-        },
+        beginningOfChatHistoryPolicyExpenseChat: ({ workspaceName, submitterDisplayName }) => `C'est ici que <strong>${submitterDisplayName}</strong> soumettra ses dépenses à <strong>${workspaceName}</strong>. Il suffit d'utiliser le bouton <emoji>${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}</emoji>.`,
         beginningOfChatHistorySelfDM: "C'est votre espace personnel. Utilisez-le pour des notes, des tâches, des brouillons et des rappels.",
         beginningOfChatHistorySystemDM: 'Bienvenue ! Commençons votre configuration.',
         chatWithAccountManager: 'Discutez avec votre gestionnaire de compte ici',
         sayHello: 'Dites bonjour !',
         yourSpace: 'Votre espace',
-        welcomeToRoom: function (_a) {
-            var roomName = _a.roomName;
-            return "Bienvenue dans ".concat(roomName, " !");
-        },
-        usePlusButton: function (_a) {
-            var additionalText = _a.additionalText;
-            return " Utilisez le bouton ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, " pour ").concat(additionalText, " une d\u00E9pense.");
-        },
+        welcomeToRoom: ({ roomName }) => `Bienvenue dans ${roomName} !`,
+        usePlusButton: ({ additionalText }) => ` Utilisez le bouton ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE} pour ${additionalText} une dépense.`,
         askConcierge: 'Posez des questions et obtenez une assistance en temps réel 24h/24 et 7j/7.',
         conciergeSupport: 'Support 24h/24 et 7j/7',
         create: 'créer',
@@ -692,32 +601,17 @@ var translations = {
         areTyping: "sont en train d'écrire...",
         multipleMembers: 'Plusieurs membres',
     },
-    reportArchiveReasons: (_b = {},
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.DEFAULT] = 'Cette salle de chat a été archivée.',
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_CLOSED] = function (_a) {
-            var displayName = _a.displayName;
-            return "Ce chat n'est plus actif car ".concat(displayName, " a ferm\u00E9 son compte.");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_MERGED] = function (_a) {
-            var displayName = _a.displayName, oldDisplayName = _a.oldDisplayName;
-            return "Ce chat n'est plus actif car ".concat(oldDisplayName, " a fusionn\u00E9 son compte avec ").concat(displayName, ".");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.REMOVED_FROM_POLICY] = function (_a) {
-            var displayName = _a.displayName, policyName = _a.policyName, _b = _a.shouldUseYou, shouldUseYou = _b === void 0 ? false : _b;
-            return shouldUseYou
-                ? "Ce chat n'est plus actif car <strong>vous</strong> n'\u00EAtes plus membre de l'espace de travail ".concat(policyName, ".")
-                : "Ce chat n'est plus actif car ".concat(displayName, " n'est plus membre de l'espace de travail ").concat(policyName, ".");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.POLICY_DELETED] = function (_a) {
-            var policyName = _a.policyName;
-            return "Ce chat n'est plus actif car ".concat(policyName, " n'est plus un espace de travail actif.");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.INVOICE_RECEIVER_POLICY_DELETED] = function (_a) {
-            var policyName = _a.policyName;
-            return "Ce chat n'est plus actif car ".concat(policyName, " n'est plus un espace de travail actif.");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.BOOKING_END_DATE_HAS_PASSED] = 'Cette réservation est archivée.',
-        _b),
+    reportArchiveReasons: {
+        [CONST_1.default.REPORT.ARCHIVE_REASON.DEFAULT]: 'Cette salle de chat a été archivée.',
+        [CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_CLOSED]: ({ displayName }) => `Ce chat n'est plus actif car ${displayName} a fermé son compte.`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_MERGED]: ({ displayName, oldDisplayName }) => `Ce chat n'est plus actif car ${oldDisplayName} a fusionné son compte avec ${displayName}.`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.REMOVED_FROM_POLICY]: ({ displayName, policyName, shouldUseYou = false }) => shouldUseYou
+            ? `Ce chat n'est plus actif car <strong>vous</strong> n'êtes plus membre de l'espace de travail ${policyName}.`
+            : `Ce chat n'est plus actif car ${displayName} n'est plus membre de l'espace de travail ${policyName}.`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.POLICY_DELETED]: ({ policyName }) => `Ce chat n'est plus actif car ${policyName} n'est plus un espace de travail actif.`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.INVOICE_RECEIVER_POLICY_DELETED]: ({ policyName }) => `Ce chat n'est plus actif car ${policyName} n'est plus un espace de travail actif.`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.BOOKING_END_DATE_HAS_PASSED]: 'Cette réservation est archivée.',
+    },
     writeCapabilityPage: {
         label: 'Qui peut publier',
         writeCapability: {
@@ -757,53 +651,31 @@ var translations = {
         upload: 'Télécharger une feuille de calcul',
         import: 'Importer une feuille de calcul',
         dragAndDrop: '<muted-link>Faites glisser et déposez votre feuille de calcul ici, ou choisissez un fichier ci-dessous. Formats pris en charge : .csv, .txt, .xls et .xlsx.</muted-link>',
-        dragAndDropMultiLevelTag: "<muted-link>Faites glisser et d\u00E9posez votre feuille de calcul ici, ou choisissez un fichier ci-dessous. <a href=\"".concat(CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK, "\">En savoir plus</a> sur les formats de fichier pris en charge.</muted-link>"),
+        dragAndDropMultiLevelTag: `<muted-link>Faites glisser et déposez votre feuille de calcul ici, ou choisissez un fichier ci-dessous. <a href="${CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK}">En savoir plus</a> sur les formats de fichier pris en charge.</muted-link>`,
         chooseSpreadsheet: '<muted-link>Sélectionnez un fichier de feuille de calcul à importer. Formats pris en charge : .csv, .txt, .xls et .xlsx.</muted-link>',
-        chooseSpreadsheetMultiLevelTag: "<muted-link>S\u00E9lectionnez un fichier de feuille de calcul \u00E0 importer. <a href=\"".concat(CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK, "\">En savoir plus</a> sur les formats de fichier pris en charge.</muted-link>"),
+        chooseSpreadsheetMultiLevelTag: `<muted-link>Sélectionnez un fichier de feuille de calcul à importer. <a href="${CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK}">En savoir plus</a> sur les formats de fichier pris en charge.</muted-link>`,
         fileContainsHeader: 'Le fichier contient des en-têtes de colonnes',
-        column: function (_a) {
-            var name = _a.name;
-            return "Colonne ".concat(name);
-        },
-        fieldNotMapped: function (_a) {
-            var fieldName = _a.fieldName;
-            return "Oups ! Un champ requis (\u00AB ".concat(fieldName, " \u00BB) n'a pas \u00E9t\u00E9 mapp\u00E9. Veuillez v\u00E9rifier et r\u00E9essayer.");
-        },
-        singleFieldMultipleColumns: function (_a) {
-            var fieldName = _a.fieldName;
-            return "Oups ! Vous avez associ\u00E9 un seul champ (\"".concat(fieldName, "\") \u00E0 plusieurs colonnes. Veuillez v\u00E9rifier et r\u00E9essayer.");
-        },
-        emptyMappedField: function (_a) {
-            var fieldName = _a.fieldName;
-            return "Oups ! Le champ (\u00AB ".concat(fieldName, " \u00BB) contient une ou plusieurs valeurs vides. Veuillez v\u00E9rifier et r\u00E9essayer.");
-        },
+        column: ({ name }) => `Colonne ${name}`,
+        fieldNotMapped: ({ fieldName }) => `Oups ! Un champ requis (« ${fieldName} ») n'a pas été mappé. Veuillez vérifier et réessayer.`,
+        singleFieldMultipleColumns: ({ fieldName }) => `Oups ! Vous avez associé un seul champ ("${fieldName}") à plusieurs colonnes. Veuillez vérifier et réessayer.`,
+        emptyMappedField: ({ fieldName }) => `Oups ! Le champ (« ${fieldName} ») contient une ou plusieurs valeurs vides. Veuillez vérifier et réessayer.`,
         importSuccessfulTitle: 'Importation réussie',
-        importCategoriesSuccessfulDescription: function (_a) {
-            var categories = _a.categories;
-            return (categories > 1 ? "".concat(categories, " cat\u00E9gories ont \u00E9t\u00E9 ajout\u00E9es.") : '1 catégorie a été ajoutée.');
-        },
-        importMembersSuccessfulDescription: function (_a) {
-            var added = _a.added, updated = _a.updated;
+        importCategoriesSuccessfulDescription: ({ categories }) => (categories > 1 ? `${categories} catégories ont été ajoutées.` : '1 catégorie a été ajoutée.'),
+        importMembersSuccessfulDescription: ({ added, updated }) => {
             if (!added && !updated) {
                 return "Aucun membre n'a été ajouté ou mis à jour.";
             }
             if (added && updated) {
-                return "".concat(added, " membre").concat(added > 1 ? 's' : '', " ajout\u00E9, ").concat(updated, " membre").concat(updated > 1 ? 's' : '', " mis \u00E0 jour.");
+                return `${added} membre${added > 1 ? 's' : ''} ajouté, ${updated} membre${updated > 1 ? 's' : ''} mis à jour.`;
             }
             if (updated) {
-                return updated > 1 ? "".concat(updated, " membres ont \u00E9t\u00E9 mis \u00E0 jour.") : '1 membre a été mis à jour.';
+                return updated > 1 ? `${updated} membres ont été mis à jour.` : '1 membre a été mis à jour.';
             }
-            return added > 1 ? "".concat(added, " membres ont \u00E9t\u00E9 ajout\u00E9s.") : '1 membre a été ajouté.';
+            return added > 1 ? `${added} membres ont été ajoutés.` : '1 membre a été ajouté.';
         },
-        importTagsSuccessfulDescription: function (_a) {
-            var tags = _a.tags;
-            return (tags > 1 ? "".concat(tags, " tags ont \u00E9t\u00E9 ajout\u00E9s.") : '1 tag a été ajouté.');
-        },
+        importTagsSuccessfulDescription: ({ tags }) => (tags > 1 ? `${tags} tags ont été ajoutés.` : '1 tag a été ajouté.'),
         importMultiLevelTagsSuccessfulDescription: 'Des balises multi-niveaux ont été ajoutées.',
-        importPerDiemRatesSuccessfulDescription: function (_a) {
-            var rates = _a.rates;
-            return rates > 1 ? "".concat(rates, " taux journaliers ont \u00E9t\u00E9 ajout\u00E9s.") : '1 taux de per diem a été ajouté.';
-        },
+        importPerDiemRatesSuccessfulDescription: ({ rates }) => rates > 1 ? `${rates} taux journaliers ont été ajoutés.` : '1 taux de per diem a été ajouté.',
         importFailedTitle: "Échec de l'importation",
         importFailedDescription: 'Veuillez vous assurer que tous les champs sont correctement remplis et réessayez. Si le problème persiste, veuillez contacter Concierge.',
         importDescription: 'Choisissez les champs à mapper depuis votre feuille de calcul en cliquant sur le menu déroulant à côté de chaque colonne importée ci-dessous.',
@@ -812,12 +684,10 @@ var translations = {
         importSpreadsheetLibraryError: 'Échec du chargement du module de feuille de calcul. Veuillez vérifier votre connexion Internet et réessayer.',
         importSpreadsheet: 'Importer une feuille de calcul',
         downloadCSV: 'Télécharger CSV',
-        importMemberConfirmation: function () { return ({
-            one: "Veuillez confirmer les informations ci-dessous pour un nouveau membre de l\u2019espace de travail qui sera ajout\u00E9 dans le cadre de cet import. Les membres existants ne recevront aucune mise \u00E0 jour de r\u00F4le ni de message d\u2019invitation.",
-            other: function (count) {
-                return "Veuillez confirmer les informations ci-dessous pour les ".concat(count, " nouveaux membres de l\u2019espace de travail qui seront ajout\u00E9s dans le cadre de cet import. Les membres existants ne recevront aucune mise \u00E0 jour de r\u00F4le ni de message d\u2019invitation.");
-            },
-        }); },
+        importMemberConfirmation: () => ({
+            one: `Veuillez confirmer les informations ci-dessous pour un nouveau membre de l’espace de travail qui sera ajouté dans le cadre de cet import. Les membres existants ne recevront aucune mise à jour de rôle ni de message d’invitation.`,
+            other: (count) => `Veuillez confirmer les informations ci-dessous pour les ${count} nouveaux membres de l’espace de travail qui seront ajoutés dans le cadre de cet import. Les membres existants ne recevront aucune mise à jour de rôle ni de message d’invitation.`,
+        }),
     },
     receipt: {
         upload: 'Télécharger le reçu',
@@ -838,7 +708,7 @@ var translations = {
         locationAccessMessage: "L'accès à la localisation nous aide à garder votre fuseau horaire et votre devise précis où que vous alliez.",
         locationErrorTitle: "Autoriser l'accès à la localisation",
         locationErrorMessage: "L'accès à la localisation nous aide à garder votre fuseau horaire et votre devise précis où que vous alliez.",
-        allowLocationFromSetting: "L'acc\u00E8s \u00E0 la localisation nous aide \u00E0 garder votre fuseau horaire et votre devise pr\u00E9cis o\u00F9 que vous alliez. Veuillez autoriser l'acc\u00E8s \u00E0 la localisation dans les param\u00E8tres de permission de votre appareil.",
+        allowLocationFromSetting: `L'accès à la localisation nous aide à garder votre fuseau horaire et votre devise précis où que vous alliez. Veuillez autoriser l'accès à la localisation dans les paramètres de permission de votre appareil.`,
         dropTitle: 'Laisse tomber',
         dropMessage: 'Déposez votre fichier ici',
         flash: 'flash',
@@ -858,10 +728,7 @@ var translations = {
         splitBill: 'Fractionner la dépense',
         splitScan: 'Diviser le reçu',
         splitDistance: 'Diviser la distance',
-        paySomeone: function (_a) {
-            var _b = _a === void 0 ? {} : _a, name = _b.name;
-            return "Payer ".concat(name !== null && name !== void 0 ? name : "quelqu'un");
-        },
+        paySomeone: ({ name } = {}) => `Payer ${name ?? "quelqu'un"}`,
         assignTask: 'Attribuer une tâche',
         header: 'Action rapide',
         noLongerHaveReportAccess: "Vous n'avez plus accès à votre destination d'action rapide précédente. Choisissez-en une nouvelle ci-dessous.",
@@ -872,58 +739,34 @@ var translations = {
         amount: 'Montant',
         taxAmount: 'Montant de la taxe',
         taxRate: "Taux d'imposition",
-        approve: function (_a) {
-            var _b = _a === void 0 ? {} : _a, formattedAmount = _b.formattedAmount;
-            return (formattedAmount ? "Approuver ".concat(formattedAmount) : 'Approuver');
-        },
+        approve: ({ formattedAmount, } = {}) => (formattedAmount ? `Approuver ${formattedAmount}` : 'Approuver'),
         approved: 'Approuvé',
         cash: 'Espèces',
         card: 'Carte',
         original: 'Original',
         split: 'Diviser',
         splitExpense: 'Fractionner la dépense',
-        splitExpenseSubtitle: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "".concat(amount, " de ").concat(merchant);
-        },
+        splitExpenseSubtitle: ({ amount, merchant }) => `${amount} de ${merchant}`,
         addSplit: 'Ajouter une répartition',
-        totalAmountGreaterThanOriginal: function (_a) {
-            var amount = _a.amount;
-            return "Le montant total est de ".concat(amount, " sup\u00E9rieur \u00E0 la d\u00E9pense initiale.");
-        },
-        totalAmountLessThanOriginal: function (_a) {
-            var amount = _a.amount;
-            return "Le montant total est de ".concat(amount, " inf\u00E9rieur \u00E0 la d\u00E9pense originale.");
-        },
+        totalAmountGreaterThanOriginal: ({ amount }) => `Le montant total est de ${amount} supérieur à la dépense initiale.`,
+        totalAmountLessThanOriginal: ({ amount }) => `Le montant total est de ${amount} inférieur à la dépense originale.`,
         splitExpenseZeroAmount: 'Veuillez entrer un montant valide avant de continuer.',
-        splitExpenseEditTitle: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "Modifier ".concat(amount, " pour ").concat(merchant);
-        },
+        splitExpenseEditTitle: ({ amount, merchant }) => `Modifier ${amount} pour ${merchant}`,
         removeSplit: 'Supprimer la division',
-        paySomeone: function (_a) {
-            var _b = _a === void 0 ? {} : _a, name = _b.name;
-            return "Payer ".concat(name !== null && name !== void 0 ? name : "quelqu'un");
-        },
+        paySomeone: ({ name } = {}) => `Payer ${name ?? "quelqu'un"}`,
         expense: 'Dépense',
         categorize: 'Catégoriser',
         share: 'Partager',
         participants: 'Participants',
         createExpense: 'Créer une dépense',
         trackDistance: 'Suivre la distance',
-        createExpenses: function (_a) {
-            var expensesNumber = _a.expensesNumber;
-            return "Cr\u00E9er ".concat(expensesNumber, " d\u00E9penses");
-        },
+        createExpenses: ({ expensesNumber }) => `Créer ${expensesNumber} dépenses`,
         removeExpense: 'Supprimer une dépense',
         removeThisExpense: 'Supprimer cette dépense',
         removeExpenseConfirmation: 'Êtes-vous sûr de vouloir supprimer ce reçu ? Cette action est irréversible.',
         addExpense: 'Ajouter une dépense',
         chooseRecipient: 'Choisir le destinataire',
-        createExpenseWithAmount: function (_a) {
-            var amount = _a.amount;
-            return "Cr\u00E9er une d\u00E9pense de ".concat(amount);
-        },
+        createExpenseWithAmount: ({ amount }) => `Créer une dépense de ${amount}`,
         confirmDetails: 'Confirmer les détails',
         pay: 'Payer',
         cancelPayment: 'Annuler le paiement',
@@ -933,54 +776,38 @@ var translations = {
         canceled: 'Annulé',
         posted: 'Publié',
         deleteReceipt: 'Supprimer le reçu',
-        deletedTransaction: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "supprim\u00E9 une d\u00E9pense (".concat(amount, " pour ").concat(merchant, ")");
-        },
-        movedFromReport: function (_a) {
-            var reportName = _a.reportName;
-            return "a d\u00E9plac\u00E9 une d\u00E9pense".concat(reportName ? "de ".concat(reportName) : '');
-        },
-        movedTransaction: function (_a) {
-            var reportUrl = _a.reportUrl, reportName = _a.reportName;
-            return "d\u00E9plac\u00E9 cette d\u00E9pense".concat(reportName ? "\u00E0 <a href=\"".concat(reportUrl, "\">").concat(reportName, "</a>") : '');
-        },
-        unreportedTransaction: function (_a) {
-            var reportUrl = _a.reportUrl;
-            return "d\u00E9plac\u00E9 cette d\u00E9pense vers votre <a href=\"".concat(reportUrl, "\">espace personnel</a>");
-        },
-        movedAction: function (_a) {
-            var shouldHideMovedReportUrl = _a.shouldHideMovedReportUrl, movedReportUrl = _a.movedReportUrl, newParentReportUrl = _a.newParentReportUrl, toPolicyName = _a.toPolicyName;
+        deletedTransaction: ({ amount, merchant }) => `supprimé une dépense (${amount} pour ${merchant})`,
+        movedFromReport: ({ reportName }) => `a déplacé une dépense${reportName ? `de ${reportName}` : ''}`,
+        movedTransaction: ({ reportUrl, reportName }) => `déplacé cette dépense${reportName ? `à <a href="${reportUrl}">${reportName}</a>` : ''}`,
+        unreportedTransaction: ({ reportUrl }) => `déplacé cette dépense vers votre <a href="${reportUrl}">espace personnel</a>`,
+        movedAction: ({ shouldHideMovedReportUrl, movedReportUrl, newParentReportUrl, toPolicyName }) => {
             if (shouldHideMovedReportUrl) {
-                return "a d\u00E9plac\u00E9 ce rapport vers l\u2019espace de travail <a href=\"".concat(newParentReportUrl, "\">").concat(toPolicyName, "</a>");
+                return `a déplacé ce rapport vers l’espace de travail <a href="${newParentReportUrl}">${toPolicyName}</a>`;
             }
-            return "a d\u00E9plac\u00E9 ce <a href=\"".concat(movedReportUrl, "\">rapport</a> vers l\u2019espace de travail <a href=\"").concat(newParentReportUrl, "\">").concat(toPolicyName, "</a>");
+            return `a déplacé ce <a href="${movedReportUrl}">rapport</a> vers l’espace de travail <a href="${newParentReportUrl}">${toPolicyName}</a>`;
         },
         pendingMatchWithCreditCard: 'Reçu en attente de correspondance avec la transaction par carte',
         pendingMatch: 'Correspondance en attente',
         pendingMatchWithCreditCardDescription: 'Reçu en attente de correspondance avec une transaction par carte. Marquer comme espèce pour annuler.',
         markAsCash: 'Marquer comme espèces',
         routePending: 'Itinéraire en attente...',
-        receiptScanning: function () { return ({
+        receiptScanning: () => ({
             one: 'Numérisation du reçu...',
             other: 'Numérisation des reçus...',
-        }); },
+        }),
         scanMultipleReceipts: 'Scanner plusieurs reçus',
         scanMultipleReceiptsDescription: "Prenez des photos de tous vos reçus en une seule fois, puis confirmez les détails vous-même ou laissez SmartScan s'en charger.",
         receiptScanInProgress: 'Numérisation du reçu en cours',
         receiptScanInProgressDescription: 'Numérisation du reçu en cours. Revenez plus tard ou saisissez les détails maintenant.',
         removeFromReport: 'Supprimer du rapport',
         moveToPersonalSpace: 'Déplacer les dépenses vers votre espace personnel',
-        duplicateTransaction: function (_a) {
-            var isSubmitted = _a.isSubmitted;
-            return !isSubmitted
-                ? 'Dépenses potentiellement en double identifiées. Vérifiez les doublons pour permettre la soumission.'
-                : "Dépenses potentiellement dupliquées identifiées. Vérifiez les doublons pour permettre l'approbation.";
-        },
-        receiptIssuesFound: function () { return ({
+        duplicateTransaction: ({ isSubmitted }) => !isSubmitted
+            ? 'Dépenses potentiellement en double identifiées. Vérifiez les doublons pour permettre la soumission.'
+            : "Dépenses potentiellement dupliquées identifiées. Vérifiez les doublons pour permettre l'approbation.",
+        receiptIssuesFound: () => ({
             one: 'Problème trouvé',
             other: 'Problèmes trouvés',
-        }); },
+        }),
         fieldPending: 'En attente...',
         defaultRate: 'Taux par défaut',
         receiptMissingDetails: 'Reçu manquant de détails',
@@ -998,34 +825,33 @@ var translations = {
         invalidDomainError: 'Vous avez saisi un domaine invalide. Pour continuer, veuillez entrer un domaine valide.',
         publicDomainError: 'Vous êtes entré dans un domaine public. Pour continuer, veuillez entrer un domaine privé.',
         // TODO: This key should be deprecated. More details: https://github.com/Expensify/App/pull/59653#discussion_r2028653252
-        expenseCountWithStatus: function (_a) {
-            var _b = _a.scanningReceipts, scanningReceipts = _b === void 0 ? 0 : _b, _c = _a.pendingReceipts, pendingReceipts = _c === void 0 ? 0 : _c;
-            var statusText = [];
+        expenseCountWithStatus: ({ scanningReceipts = 0, pendingReceipts = 0 }) => {
+            const statusText = [];
             if (scanningReceipts > 0) {
-                statusText.push("".concat(scanningReceipts, " num\u00E9risation"));
+                statusText.push(`${scanningReceipts} numérisation`);
             }
             if (pendingReceipts > 0) {
-                statusText.push("".concat(pendingReceipts, " en attente"));
+                statusText.push(`${pendingReceipts} en attente`);
             }
             return {
-                one: statusText.length > 0 ? "1 d\u00E9pense (".concat(statusText.join(', '), ")") : "1 d\u00E9pense",
-                other: function (count) { return (statusText.length > 0 ? "".concat(count, " d\u00E9penses (").concat(statusText.join(', '), ")") : "".concat(count, " d\u00E9penses")); },
+                one: statusText.length > 0 ? `1 dépense (${statusText.join(', ')})` : `1 dépense`,
+                other: (count) => (statusText.length > 0 ? `${count} dépenses (${statusText.join(', ')})` : `${count} dépenses`),
             };
         },
-        expenseCount: function () {
+        expenseCount: () => {
             return {
                 one: '1 dépense',
-                other: function (count) { return "".concat(count, " d\u00E9penses"); },
+                other: (count) => `${count} dépenses`,
             };
         },
-        deleteExpense: function () { return ({
+        deleteExpense: () => ({
             one: 'Supprimer la dépense',
             other: 'Supprimer les dépenses',
-        }); },
-        deleteConfirmation: function () { return ({
+        }),
+        deleteConfirmation: () => ({
             one: 'Êtes-vous sûr de vouloir supprimer cette dépense ?',
             other: 'Êtes-vous sûr de vouloir supprimer ces dépenses ?',
-        }); },
+        }),
         deleteReport: 'Supprimer le rapport',
         deleteReportConfirmation: 'Êtes-vous sûr de vouloir supprimer ce rapport ?',
         settledExpensify: 'Payé',
@@ -1033,210 +859,66 @@ var translations = {
         settledElsewhere: 'Payé ailleurs',
         individual: 'Individuel',
         business: 'Entreprise',
-        settleExpensify: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "Payer ".concat(formattedAmount, " avec Expensify") : "Payer avec Expensify");
-        },
-        settlePersonal: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "Payer ".concat(formattedAmount, " en tant qu'individu") : "Payer avec un compte personnel");
-        },
-        settleWallet: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "Payer ".concat(formattedAmount, " avec le portefeuille") : "Payer avec le portefeuille");
-        },
-        settlePayment: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return "Payer ".concat(formattedAmount);
-        },
-        settleBusiness: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "Payer ".concat(formattedAmount, " en tant qu'entreprise") : "Payer avec un compte professionnel");
-        },
-        payElsewhere: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "Marquer ".concat(formattedAmount, " comme pay\u00E9") : "Marquer comme pay\u00E9");
-        },
-        settleInvoicePersonal: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return (amount ? "Pay\u00E9 ".concat(amount, " avec le compte personnel ").concat(last4Digits) : "Pay\u00E9 avec le compte personnel");
-        },
-        settleInvoiceBusiness: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return amount ? "Pay\u00E9 ".concat(amount, " avec le compte professionnel ").concat(last4Digits) : "Pay\u00E9 avec le compte professionnel";
-        },
-        payWithPolicy: function (_a) {
-            var formattedAmount = _a.formattedAmount, policyName = _a.policyName;
-            return formattedAmount ? "Payer ".concat(formattedAmount, " via ").concat(policyName) : "Payer via ".concat(policyName);
-        },
-        businessBankAccount: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return amount ? "Pay\u00E9 ".concat(amount, " avec le compte bancaire ").concat(last4Digits, ".") : "Pay\u00E9 avec le compte bancaire ".concat(last4Digits);
-        },
-        automaticallyPaidWithBusinessBankAccount: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return "pay\u00E9 ".concat(amount ? "".concat(amount, " ") : '', "avec le compte bancaire se terminant par ").concat(last4Digits, " via les <a href=\"").concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">r\u00E8gles de l\u2019espace de travail</a>");
-        },
-        invoicePersonalBank: function (_a) {
-            var lastFour = _a.lastFour;
-            return "Compte personnel \u2022 ".concat(lastFour);
-        },
-        invoiceBusinessBank: function (_a) {
-            var lastFour = _a.lastFour;
-            return "Compte professionnel \u2022 ".concat(lastFour);
-        },
+        settleExpensify: ({ formattedAmount }) => (formattedAmount ? `Payer ${formattedAmount} avec Expensify` : `Payer avec Expensify`),
+        settlePersonal: ({ formattedAmount }) => (formattedAmount ? `Payer ${formattedAmount} en tant qu'individu` : `Payer avec un compte personnel`),
+        settleWallet: ({ formattedAmount }) => (formattedAmount ? `Payer ${formattedAmount} avec le portefeuille` : `Payer avec le portefeuille`),
+        settlePayment: ({ formattedAmount }) => `Payer ${formattedAmount}`,
+        settleBusiness: ({ formattedAmount }) => (formattedAmount ? `Payer ${formattedAmount} en tant qu'entreprise` : `Payer avec un compte professionnel`),
+        payElsewhere: ({ formattedAmount }) => (formattedAmount ? `Marquer ${formattedAmount} comme payé` : `Marquer comme payé`),
+        settleInvoicePersonal: ({ amount, last4Digits }) => (amount ? `Payé ${amount} avec le compte personnel ${last4Digits}` : `Payé avec le compte personnel`),
+        settleInvoiceBusiness: ({ amount, last4Digits }) => amount ? `Payé ${amount} avec le compte professionnel ${last4Digits}` : `Payé avec le compte professionnel`,
+        payWithPolicy: ({ formattedAmount, policyName }) => formattedAmount ? `Payer ${formattedAmount} via ${policyName}` : `Payer via ${policyName}`,
+        businessBankAccount: ({ amount, last4Digits }) => amount ? `Payé ${amount} avec le compte bancaire ${last4Digits}.` : `Payé avec le compte bancaire ${last4Digits}`,
+        automaticallyPaidWithBusinessBankAccount: ({ amount, last4Digits }) => `payé ${amount ? `${amount} ` : ''}avec le compte bancaire se terminant par ${last4Digits} via les <a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">règles de l’espace de travail</a>`,
+        invoicePersonalBank: ({ lastFour }) => `Compte personnel • ${lastFour}`,
+        invoiceBusinessBank: ({ lastFour }) => `Compte professionnel • ${lastFour}`,
         nextStep: 'Étapes suivantes',
         finished: 'Terminé',
-        sendInvoice: function (_a) {
-            var amount = _a.amount;
-            return "Envoyer une facture de ".concat(amount);
-        },
-        submitAmount: function (_a) {
-            var amount = _a.amount;
-            return "Soumettre ".concat(amount);
-        },
-        expenseAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount).concat(comment ? "pour ".concat(comment) : '');
-        },
-        submitted: function (_a) {
-            var memo = _a.memo;
-            return "soumis".concat(memo ? ", en disant ".concat(memo) : '');
-        },
-        automaticallySubmitted: "soumis via <a href=\"".concat(CONST_1.default.SELECT_WORKFLOWS_HELP_URL, "\">soumissions diff\u00E9r\u00E9es</a>"),
-        trackedAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "suivi ".concat(formattedAmount).concat(comment ? "pour ".concat(comment) : '');
-        },
-        splitAmount: function (_a) {
-            var amount = _a.amount;
-            return "diviser ".concat(amount);
-        },
-        didSplitAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "split ".concat(formattedAmount).concat(comment ? "pour ".concat(comment) : '');
-        },
-        yourSplit: function (_a) {
-            var amount = _a.amount;
-            return "Votre part ".concat(amount);
-        },
-        payerOwesAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount, comment = _a.comment;
-            return "".concat(payer, " doit ").concat(amount).concat(comment ? "pour ".concat(comment) : '');
-        },
-        payerOwes: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " doit :");
-        },
-        payerPaidAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount;
-            return "".concat(payer ? "".concat(payer, " ") : '', " a pay\u00E9 ").concat(amount);
-        },
-        payerPaid: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " a pay\u00E9 :");
-        },
-        payerSpentAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount;
-            return "".concat(payer, " a d\u00E9pens\u00E9 ").concat(amount);
-        },
-        payerSpent: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " a d\u00E9pens\u00E9 :");
-        },
-        managerApproved: function (_a) {
-            var manager = _a.manager;
-            return "".concat(manager, " approuv\u00E9 :");
-        },
-        managerApprovedAmount: function (_a) {
-            var manager = _a.manager, amount = _a.amount;
-            return "".concat(manager, " a approuv\u00E9 ").concat(amount);
-        },
-        payerSettled: function (_a) {
-            var amount = _a.amount;
-            return "pay\u00E9 ".concat(amount);
-        },
-        payerSettledWithMissingBankAccount: function (_a) {
-            var amount = _a.amount;
-            return "pay\u00E9 ".concat(amount, ". Ajoutez un compte bancaire pour recevoir votre paiement.");
-        },
-        automaticallyApproved: "approuv\u00E9 via les <a href=\"".concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">r\u00E8gles de l'espace de travail</a>"),
-        approvedAmount: function (_a) {
-            var amount = _a.amount;
-            return "approuv\u00E9 ".concat(amount);
-        },
-        approvedMessage: "approuv\u00E9",
-        unapproved: "non approuv\u00E9",
-        automaticallyForwarded: "approuv\u00E9 via les <a href=\"".concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">r\u00E8gles de l'espace de travail</a>"),
-        forwarded: "approuv\u00E9",
+        sendInvoice: ({ amount }) => `Envoyer une facture de ${amount}`,
+        submitAmount: ({ amount }) => `Soumettre ${amount}`,
+        expenseAmount: ({ formattedAmount, comment }) => `${formattedAmount}${comment ? `pour ${comment}` : ''}`,
+        submitted: ({ memo }) => `soumis${memo ? `, en disant ${memo}` : ''}`,
+        automaticallySubmitted: `soumis via <a href="${CONST_1.default.SELECT_WORKFLOWS_HELP_URL}">soumissions différées</a>`,
+        trackedAmount: ({ formattedAmount, comment }) => `suivi ${formattedAmount}${comment ? `pour ${comment}` : ''}`,
+        splitAmount: ({ amount }) => `diviser ${amount}`,
+        didSplitAmount: ({ formattedAmount, comment }) => `split ${formattedAmount}${comment ? `pour ${comment}` : ''}`,
+        yourSplit: ({ amount }) => `Votre part ${amount}`,
+        payerOwesAmount: ({ payer, amount, comment }) => `${payer} doit ${amount}${comment ? `pour ${comment}` : ''}`,
+        payerOwes: ({ payer }) => `${payer} doit :`,
+        payerPaidAmount: ({ payer, amount }) => `${payer ? `${payer} ` : ''} a payé ${amount}`,
+        payerPaid: ({ payer }) => `${payer} a payé :`,
+        payerSpentAmount: ({ payer, amount }) => `${payer} a dépensé ${amount}`,
+        payerSpent: ({ payer }) => `${payer} a dépensé :`,
+        managerApproved: ({ manager }) => `${manager} approuvé :`,
+        managerApprovedAmount: ({ manager, amount }) => `${manager} a approuvé ${amount}`,
+        payerSettled: ({ amount }) => `payé ${amount}`,
+        payerSettledWithMissingBankAccount: ({ amount }) => `payé ${amount}. Ajoutez un compte bancaire pour recevoir votre paiement.`,
+        automaticallyApproved: `approuvé via les <a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">règles de l'espace de travail</a>`,
+        approvedAmount: ({ amount }) => `approuvé ${amount}`,
+        approvedMessage: `approuvé`,
+        unapproved: `non approuvé`,
+        automaticallyForwarded: `approuvé via les <a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">règles de l'espace de travail</a>`,
+        forwarded: `approuvé`,
         rejectedThisReport: 'a rejeté ce rapport',
-        waitingOnBankAccount: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName;
-            return "a commenc\u00E9 le paiement, mais attend que ".concat(submitterDisplayName, " ajoute un compte bancaire.");
-        },
-        adminCanceledRequest: function (_a) {
-            var manager = _a.manager;
-            return "".concat(manager ? "".concat(manager, ": ") : '', " a annul\u00E9 le paiement");
-        },
-        canceledRequest: function (_a) {
-            var amount = _a.amount, submitterDisplayName = _a.submitterDisplayName;
-            return "a annul\u00E9 le paiement de ".concat(amount, ", car ").concat(submitterDisplayName, " n'a pas activ\u00E9 leur Expensify Wallet dans les 30 jours");
-        },
-        settledAfterAddedBankAccount: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName, amount = _a.amount;
-            return "".concat(submitterDisplayName, " a ajout\u00E9 un compte bancaire. Le paiement de ").concat(amount, " a \u00E9t\u00E9 effectu\u00E9.");
-        },
-        paidElsewhere: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "marqu\u00E9 comme pay\u00E9");
-        },
-        paidWithExpensify: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "pay\u00E9 avec le portefeuille");
-        },
-        automaticallyPaidWithExpensify: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', " pay\u00E9 avec Expensify via les <a href=\"").concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">r\u00E8gles de l'espace de travail</a>");
-        },
+        waitingOnBankAccount: ({ submitterDisplayName }) => `a commencé le paiement, mais attend que ${submitterDisplayName} ajoute un compte bancaire.`,
+        adminCanceledRequest: ({ manager }) => `${manager ? `${manager}: ` : ''} a annulé le paiement`,
+        canceledRequest: ({ amount, submitterDisplayName }) => `a annulé le paiement de ${amount}, car ${submitterDisplayName} n'a pas activé leur Expensify Wallet dans les 30 jours`,
+        settledAfterAddedBankAccount: ({ submitterDisplayName, amount }) => `${submitterDisplayName} a ajouté un compte bancaire. Le paiement de ${amount} a été effectué.`,
+        paidElsewhere: ({ payer } = {}) => `${payer ? `${payer} ` : ''}marqué comme payé`,
+        paidWithExpensify: ({ payer } = {}) => `${payer ? `${payer} ` : ''}payé avec le portefeuille`,
+        automaticallyPaidWithExpensify: ({ payer } = {}) => `${payer ? `${payer} ` : ''} payé avec Expensify via les <a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">règles de l'espace de travail</a>`,
         noReimbursableExpenses: 'Ce rapport contient un montant invalide',
         pendingConversionMessage: 'Le total sera mis à jour lorsque vous serez de nouveau en ligne.',
         changedTheExpense: 'modifié la dépense',
-        setTheRequest: function (_a) {
-            var valueName = _a.valueName, newValueToDisplay = _a.newValueToDisplay;
-            return "le ".concat(valueName, " \u00E0 ").concat(newValueToDisplay);
-        },
-        setTheDistanceMerchant: function (_a) {
-            var translatedChangedField = _a.translatedChangedField, newMerchant = _a.newMerchant, newAmountToDisplay = _a.newAmountToDisplay;
-            return "d\u00E9finir le ".concat(translatedChangedField, " sur ").concat(newMerchant, ", ce qui a d\u00E9fini le montant \u00E0 ").concat(newAmountToDisplay);
-        },
-        removedTheRequest: function (_a) {
-            var valueName = _a.valueName, oldValueToDisplay = _a.oldValueToDisplay;
-            return "le ".concat(valueName, " (pr\u00E9c\u00E9demment ").concat(oldValueToDisplay, ")");
-        },
-        updatedTheRequest: function (_a) {
-            var valueName = _a.valueName, newValueToDisplay = _a.newValueToDisplay, oldValueToDisplay = _a.oldValueToDisplay;
-            return "le ".concat(valueName, " \u00E0 ").concat(newValueToDisplay, " (pr\u00E9c\u00E9demment ").concat(oldValueToDisplay, ")");
-        },
-        updatedTheDistanceMerchant: function (_a) {
-            var translatedChangedField = _a.translatedChangedField, newMerchant = _a.newMerchant, oldMerchant = _a.oldMerchant, newAmountToDisplay = _a.newAmountToDisplay, oldAmountToDisplay = _a.oldAmountToDisplay;
-            return "a chang\u00E9 le ".concat(translatedChangedField, " en ").concat(newMerchant, " (pr\u00E9c\u00E9demment ").concat(oldMerchant, "), ce qui a mis \u00E0 jour le montant \u00E0 ").concat(newAmountToDisplay, " (pr\u00E9c\u00E9demment ").concat(oldAmountToDisplay, ")");
-        },
-        threadExpenseReportName: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount, " ").concat(comment ? "pour ".concat(comment) : 'dépense');
-        },
-        invoiceReportName: function (_a) {
-            var linkedReportID = _a.linkedReportID;
-            return "Rapport de Facture n\u00B0".concat(linkedReportID);
-        },
-        threadPaySomeoneReportName: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount, " envoy\u00E9").concat(comment ? "pour ".concat(comment) : '');
-        },
-        movedFromPersonalSpace: function (_a) {
-            var workspaceName = _a.workspaceName, reportName = _a.reportName;
-            return "d\u00E9plac\u00E9 la d\u00E9pense de l'espace personnel vers ".concat(workspaceName !== null && workspaceName !== void 0 ? workspaceName : "discuter avec ".concat(reportName));
-        },
+        setTheRequest: ({ valueName, newValueToDisplay }) => `le ${valueName} à ${newValueToDisplay}`,
+        setTheDistanceMerchant: ({ translatedChangedField, newMerchant, newAmountToDisplay }) => `définir le ${translatedChangedField} sur ${newMerchant}, ce qui a défini le montant à ${newAmountToDisplay}`,
+        removedTheRequest: ({ valueName, oldValueToDisplay }) => `le ${valueName} (précédemment ${oldValueToDisplay})`,
+        updatedTheRequest: ({ valueName, newValueToDisplay, oldValueToDisplay }) => `le ${valueName} à ${newValueToDisplay} (précédemment ${oldValueToDisplay})`,
+        updatedTheDistanceMerchant: ({ translatedChangedField, newMerchant, oldMerchant, newAmountToDisplay, oldAmountToDisplay }) => `a changé le ${translatedChangedField} en ${newMerchant} (précédemment ${oldMerchant}), ce qui a mis à jour le montant à ${newAmountToDisplay} (précédemment ${oldAmountToDisplay})`,
+        threadExpenseReportName: ({ formattedAmount, comment }) => `${formattedAmount} ${comment ? `pour ${comment}` : 'dépense'}`,
+        invoiceReportName: ({ linkedReportID }) => `Rapport de Facture n°${linkedReportID}`,
+        threadPaySomeoneReportName: ({ formattedAmount, comment }) => `${formattedAmount} envoyé${comment ? `pour ${comment}` : ''}`,
+        movedFromPersonalSpace: ({ workspaceName, reportName }) => `déplacé la dépense de l'espace personnel vers ${workspaceName ?? `discuter avec ${reportName}`}`,
         movedToPersonalSpace: "a déplacé la dépense vers l'espace personnel",
         tagSelection: 'Sélectionnez une étiquette pour mieux organiser vos dépenses.',
         categorySelection: 'Sélectionnez une catégorie pour mieux organiser vos dépenses.',
@@ -1246,10 +928,7 @@ var translations = {
             invalidAmount: 'Veuillez entrer un montant valide avant de continuer',
             invalidDistance: 'Veuillez entrer une distance valide avant de continuer',
             invalidIntegerAmount: 'Veuillez entrer un montant en dollars entiers avant de continuer.',
-            invalidTaxAmount: function (_a) {
-                var amount = _a.amount;
-                return "Le montant maximal de la taxe est ".concat(amount);
-            },
+            invalidTaxAmount: ({ amount }) => `Le montant maximal de la taxe est ${amount}`,
             invalidSplit: 'La somme des répartitions doit être égale au montant total',
             invalidSplitParticipants: 'Veuillez entrer un montant supérieur à zéro pour au moins deux participants',
             invalidSplitYourself: 'Veuillez entrer un montant non nul pour votre répartition',
@@ -1280,10 +959,7 @@ var translations = {
         },
         dismissReceiptError: "Ignorer l'erreur",
         dismissReceiptErrorConfirmation: 'Attention ! Ignorer cette erreur supprimera entièrement votre reçu téléchargé. Êtes-vous sûr ?',
-        waitingOnEnabledWallet: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName;
-            return "a commenc\u00E9 \u00E0 r\u00E9gler. Le paiement est en attente jusqu'\u00E0 ce que ".concat(submitterDisplayName, " active son portefeuille.");
-        },
+        waitingOnEnabledWallet: ({ submitterDisplayName }) => `a commencé à régler. Le paiement est en attente jusqu'à ce que ${submitterDisplayName} active son portefeuille.`,
         enableWallet: 'Activer le portefeuille',
         hold: 'Attente',
         unhold: 'Supprimer la suspension',
@@ -1302,10 +978,7 @@ var translations = {
         retract: 'Retirer',
         reopened: 'rouvert',
         reopenReport: 'Rouvrir le rapport',
-        reopenExportedReportConfirmation: function (_a) {
-            var connectionName = _a.connectionName;
-            return "Ce rapport a d\u00E9j\u00E0 \u00E9t\u00E9 export\u00E9 vers ".concat(connectionName, ". Le modifier pourrait entra\u00EEner des incoh\u00E9rences de donn\u00E9es. \u00CAtes-vous s\u00FBr de vouloir rouvrir ce rapport ?");
-        },
+        reopenExportedReportConfirmation: ({ connectionName }) => `Ce rapport a déjà été exporté vers ${connectionName}. Le modifier pourrait entraîner des incohérences de données. Êtes-vous sûr de vouloir rouvrir ce rapport ?`,
         reason: 'Raison',
         holdReasonRequired: 'Un motif est requis lors de la mise en attente.',
         expenseWasPutOnHold: 'La dépense a été mise en attente',
@@ -1317,16 +990,16 @@ var translations = {
         keepAll: 'Garder tout',
         confirmApprove: 'Confirmer le montant approuvé',
         confirmApprovalAmount: "Approuvez uniquement les dépenses conformes, ou approuvez l'ensemble du rapport.",
-        confirmApprovalAllHoldAmount: function () { return ({
+        confirmApprovalAllHoldAmount: () => ({
             one: 'Cette dépense est en attente. Voulez-vous approuver quand même ?',
             other: 'Ces dépenses sont en attente. Voulez-vous approuver quand même ?',
-        }); },
+        }),
         confirmPay: 'Confirmer le montant du paiement',
         confirmPayAmount: "Payez ce qui n'est pas en attente, ou payez l'intégralité du rapport.",
-        confirmPayAllHoldAmount: function () { return ({
+        confirmPayAllHoldAmount: () => ({
             one: 'Cette dépense est en attente. Voulez-vous payer quand même ?',
             other: 'Ces dépenses sont en attente. Voulez-vous payer quand même ?',
-        }); },
+        }),
         payOnly: 'Payer seulement',
         approveOnly: 'Approuver seulement',
         holdEducationalTitle: 'Cette demande est activée',
@@ -1349,10 +1022,7 @@ var translations = {
         unapprove: 'Désapprouver',
         unapproveReport: 'Désapprouver le rapport',
         headsUp: 'Attention !',
-        unapproveWithIntegrationWarning: function (_a) {
-            var accountingIntegration = _a.accountingIntegration;
-            return "Ce rapport a d\u00E9j\u00E0 \u00E9t\u00E9 export\u00E9 vers ".concat(accountingIntegration, ". Le modifier pourrait entra\u00EEner des incoh\u00E9rences de donn\u00E9es. \u00CAtes-vous s\u00FBr de vouloir d\u00E9sapprouver ce rapport ?");
-        },
+        unapproveWithIntegrationWarning: ({ accountingIntegration }) => `Ce rapport a déjà été exporté vers ${accountingIntegration}. Le modifier pourrait entraîner des incohérences de données. Êtes-vous sûr de vouloir désapprouver ce rapport ?`,
         reimbursable: 'remboursable',
         nonReimbursable: 'non-remboursable',
         bookingPending: 'Cette réservation est en attente',
@@ -1372,25 +1042,22 @@ var translations = {
         quantity: 'Quantité',
         subrateSelection: 'Sélectionnez un sous-taux et entrez une quantité.',
         qty: 'Qté',
-        firstDayText: function () { return ({
-            one: "Premier jour : 1 heure",
-            other: function (count) { return "Premier jour : ".concat(count.toFixed(2), " heures"); },
-        }); },
-        lastDayText: function () { return ({
-            one: "Dernier jour : 1 heure",
-            other: function (count) { return "Dernier jour : ".concat(count.toFixed(2), " heures"); },
-        }); },
-        tripLengthText: function () { return ({
-            one: "Voyage : 1 journ\u00E9e compl\u00E8te",
-            other: function (count) { return "Voyage : ".concat(count, " jours complets"); },
-        }); },
+        firstDayText: () => ({
+            one: `Premier jour : 1 heure`,
+            other: (count) => `Premier jour : ${count.toFixed(2)} heures`,
+        }),
+        lastDayText: () => ({
+            one: `Dernier jour : 1 heure`,
+            other: (count) => `Dernier jour : ${count.toFixed(2)} heures`,
+        }),
+        tripLengthText: () => ({
+            one: `Voyage : 1 journée complète`,
+            other: (count) => `Voyage : ${count} jours complets`,
+        }),
         dates: 'Dates',
         rates: 'Tarifs',
-        submitsTo: function (_a) {
-            var name = _a.name;
-            return "Soumet \u00E0 ".concat(name);
-        },
-        moveExpenses: function () { return ({ one: 'Déplacer la dépense', other: 'Déplacer les dépenses' }); },
+        submitsTo: ({ name }) => `Soumet à ${name}`,
+        moveExpenses: () => ({ one: 'Déplacer la dépense', other: 'Déplacer les dépenses' }),
         reject: {
             educationalTitle: 'Faut-il mettre en attente ou rejeter ?',
             educationalText: "Si vous n'êtes pas prêt à approuver ou à payer une dépense, vous pouvez la mettre en attente ou la rejeter.",
@@ -1411,14 +1078,8 @@ var translations = {
         changeApprover: {
             title: "Modifier l'approbateur",
             subtitle: "Choisissez une option pour modifier l'approbateur de ce rapport.",
-            description: function (_a) {
-                var workflowSettingLink = _a.workflowSettingLink;
-                return "Vous pouvez \u00E9galement modifier l'approbateur de mani\u00E8re permanente pour tous les rapports dans vos <a href=\"".concat(workflowSettingLink, "\">param\u00E8tres de flux de travail</a>.");
-            },
-            changedApproverMessage: function (_a) {
-                var managerID = _a.managerID;
-                return "a chang\u00E9 l'approbateur en <mention-user accountID=\"".concat(managerID, "\"/>");
-            },
+            description: ({ workflowSettingLink }) => `Vous pouvez également modifier l'approbateur de manière permanente pour tous les rapports dans vos <a href="${workflowSettingLink}">paramètres de flux de travail</a>.`,
+            changedApproverMessage: ({ managerID }) => `a changé l'approbateur en <mention-user accountID="${managerID}"/>`,
             actions: {
                 addApprover: 'Ajouter un approbateur',
                 addApproverSubtitle: 'Ajouter un approbateur supplémentaire au flux de travail existant.',
@@ -1434,11 +1095,8 @@ var translations = {
         listPage: {
             header: 'Fusionner les dépenses',
             noEligibleExpenseFound: 'Aucune dépense éligible trouvée',
-            noEligibleExpenseFoundSubtitle: "<muted-text><centered-text>Vous n\u2019avez aucune d\u00E9pense pouvant \u00EAtre fusionn\u00E9e avec celle-ci. <a href=\"".concat(CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES, "\">En savoir plus</a> sur les d\u00E9penses \u00E9ligibles.</centered-text></muted-text>"),
-            selectTransactionToMerge: function (_a) {
-                var reportName = _a.reportName;
-                return "S\u00E9lectionnez une <a href=\"".concat(CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES, "\">d\u00E9pense \u00E9ligible</a> \u00E0 fusionner <strong>").concat(reportName, "</strong>.");
-            },
+            noEligibleExpenseFoundSubtitle: `<muted-text><centered-text>Vous n’avez aucune dépense pouvant être fusionnée avec celle-ci. <a href="${CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES}">En savoir plus</a> sur les dépenses éligibles.</centered-text></muted-text>`,
+            selectTransactionToMerge: ({ reportName }) => `Sélectionnez une <a href="${CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES}">dépense éligible</a> à fusionner <strong>${reportName}</strong>.`,
         },
         receiptPage: {
             header: 'Sélectionner le reçu',
@@ -1448,10 +1106,7 @@ var translations = {
             header: 'Sélectionner les détails',
             pageTitle: 'Sélectionnez les détails à conserver :',
             noDifferences: 'Aucune différence trouvée entre les transactions',
-            pleaseSelectError: function (_a) {
-                var field = _a.field;
-                return "Veuillez s\u00E9lectionner un/une ".concat(field);
-            },
+            pleaseSelectError: ({ field }) => `Veuillez sélectionner un/une ${field}`,
             selectAllDetailsError: 'Sélectionnez tous les détails avant de continuer.',
         },
         confirmationPage: {
@@ -1485,18 +1140,9 @@ var translations = {
         viewPhoto: 'Voir la photo',
         imageUploadFailed: "Échec du téléchargement de l'image",
         deleteWorkspaceError: "Désolé, un problème inattendu est survenu lors de la suppression de l'avatar de votre espace de travail.",
-        sizeExceeded: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "L'image s\u00E9lectionn\u00E9e d\u00E9passe la taille maximale de t\u00E9l\u00E9chargement de ".concat(maxUploadSizeInMB, " Mo.");
-        },
-        resolutionConstraints: function (_a) {
-            var minHeightInPx = _a.minHeightInPx, minWidthInPx = _a.minWidthInPx, maxHeightInPx = _a.maxHeightInPx, maxWidthInPx = _a.maxWidthInPx;
-            return "Veuillez t\u00E9l\u00E9charger une image de taille sup\u00E9rieure \u00E0 ".concat(minHeightInPx, "x").concat(minWidthInPx, " pixels et inf\u00E9rieure \u00E0 ").concat(maxHeightInPx, "x").concat(maxWidthInPx, " pixels.");
-        },
-        notAllowedExtension: function (_a) {
-            var allowedExtensions = _a.allowedExtensions;
-            return "La photo de profil doit \u00EAtre l'un des types suivants : ".concat(allowedExtensions.join(', '), ".");
-        },
+        sizeExceeded: ({ maxUploadSizeInMB }) => `L'image sélectionnée dépasse la taille maximale de téléchargement de ${maxUploadSizeInMB} Mo.`,
+        resolutionConstraints: ({ minHeightInPx, minWidthInPx, maxHeightInPx, maxWidthInPx }) => `Veuillez télécharger une image de taille supérieure à ${minHeightInPx}x${minWidthInPx} pixels et inférieure à ${maxHeightInPx}x${maxWidthInPx} pixels.`,
+        notAllowedExtension: ({ allowedExtensions }) => `La photo de profil doit être l'un des types suivants : ${allowedExtensions.join(', ')}.`,
     },
     modal: {
         backdropLabel: 'Toile de fond du modal',
@@ -1547,10 +1193,7 @@ var translations = {
         helpTextAfterEmail: 'depuis plusieurs adresses e-mail.',
         pleaseVerify: 'Veuillez vérifier cette méthode de contact',
         getInTouch: 'Chaque fois que nous devons vous contacter, nous utiliserons cette méthode de contact.',
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "Veuillez entrer le code magique envoy\u00E9 \u00E0 ".concat(contactMethod, ". Il devrait arriver dans une minute ou deux.");
-        },
+        enterMagicCode: ({ contactMethod }) => `Veuillez entrer le code magique envoyé à ${contactMethod}. Il devrait arriver dans une minute ou deux.`,
         setAsDefault: 'Définir par défaut',
         yourDefaultContactMethod: "C'est votre méthode de contact par défaut actuelle. Avant de pouvoir la supprimer, vous devez choisir une autre méthode de contact et cliquer sur « Définir par défaut ».",
         removeContactMethod: 'Supprimer la méthode de contact',
@@ -1674,10 +1317,7 @@ var translations = {
             enterCommand: 'Entrer la commande',
             execute: 'Exécuter',
             noLogsAvailable: 'Aucun journal disponible',
-            logSizeTooLarge: function (_a) {
-                var size = _a.size;
-                return "La taille du journal d\u00E9passe la limite de ".concat(size, " Mo. Veuillez utiliser \"Enregistrer le journal\" pour t\u00E9l\u00E9charger le fichier journal \u00E0 la place.");
-            },
+            logSizeTooLarge: ({ size }) => `La taille du journal dépasse la limite de ${size} Mo. Veuillez utiliser "Enregistrer le journal" pour télécharger le fichier journal à la place.`,
             logs: 'Journaux',
             viewConsole: 'Afficher la console',
         },
@@ -1686,7 +1326,7 @@ var translations = {
         restoreStashed: 'Restaurer la connexion mise en attente',
         signOutConfirmationText: 'Vous perdrez toutes les modifications hors ligne si vous vous déconnectez.',
         versionLetter: 'v',
-        readTheTermsAndPrivacy: "<muted-text-micro>Lisez les <a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">Conditions d'utilisation</a> et de <a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">Confidentialit\u00E9</a>.</muted-text-micro>"),
+        readTheTermsAndPrivacy: `<muted-text-micro>Lisez les <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">Conditions d'utilisation</a> et de <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">Confidentialité</a>.</muted-text-micro>`,
         help: 'Aide',
         whatIsNew: 'Quoi de neuf',
         accountSettings: 'Paramètres du compte',
@@ -1712,8 +1352,8 @@ var translations = {
         },
         accountValidate: {
             confirmMerge: 'Êtes-vous sûr de vouloir fusionner les comptes ?',
-            lossOfUnsubmittedData: "La fusion de vos comptes est irr\u00E9versible et entra\u00EEnera la perte de toutes les d\u00E9penses non soumises pour",
-            enterMagicCode: "Pour continuer, veuillez entrer le code magique envoy\u00E9 \u00E0",
+            lossOfUnsubmittedData: `La fusion de vos comptes est irréversible et entraînera la perte de toutes les dépenses non soumises pour`,
+            enterMagicCode: `Pour continuer, veuillez entrer le code magique envoyé à`,
             errors: {
                 incorrectMagicCode: 'Code magique incorrect ou invalide. Veuillez réessayer ou demander un nouveau code.',
                 fallback: 'Un problème est survenu. Veuillez réessayer plus tard.',
@@ -1721,10 +1361,7 @@ var translations = {
         },
         mergeSuccess: {
             accountsMerged: 'Comptes fusionnés !',
-            description: function (_a) {
-                var from = _a.from, to = _a.to;
-                return "<muted-text><centered-text>Vous avez fusionn\u00E9 avec succ\u00E8s toutes les donn\u00E9es de <strong>".concat(from, "</strong> dans <strong>").concat(to, "</strong>. Pour la suite, vous pouvez utiliser n'importe quel login pour ce compte.</centered-text></muted-text>");
-            },
+            description: ({ from, to }) => `<muted-text><centered-text>Vous avez fusionné avec succès toutes les données de <strong>${from}</strong> dans <strong>${to}</strong>. Pour la suite, vous pouvez utiliser n'importe quel login pour ce compte.</centered-text></muted-text>`,
         },
         mergePendingSAML: {
             weAreWorkingOnIt: 'Nous y travaillons',
@@ -1732,38 +1369,16 @@ var translations = {
             reachOutForHelp: "<muted-text><centered-text>N'hésitez pas à <concierge-link>contacter le Concierge</concierge-link> si vous avez des questions !</centered-text></muted-text>",
             goToExpensifyClassic: 'Aller à Expensify Classic',
         },
-        mergeFailureSAMLDomainControlDescription: function (_a) {
-            var _b;
-            var email = _a.email;
-            return "<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>".concat(email, "</strong> car il est contr\u00F4l\u00E9 par <strong>").concat((_b = email.split('@').at(1)) !== null && _b !== void 0 ? _b : '', "</strong>. Veuillez <concierge-link>contacter le Concierge</concierge-link> pour obtenir de l'aide.</centered-text></muted-text>");
-        },
-        mergeFailureSAMLAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>".concat(email, "</strong> iavec d'autres comptes car votre administrateur de domaine l'a d\u00E9fini comme votre login principal. Veuillez fusionner d'autres comptes \u00E0 la place.</centered-text></muted-text>");
-        },
+        mergeFailureSAMLDomainControlDescription: ({ email }) => `<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>${email}</strong> car il est contrôlé par <strong>${email.split('@').at(1) ?? ''}</strong>. Veuillez <concierge-link>contacter le Concierge</concierge-link> pour obtenir de l'aide.</centered-text></muted-text>`,
+        mergeFailureSAMLAccountDescription: ({ email }) => `<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>${email}</strong> iavec d'autres comptes car votre administrateur de domaine l'a défini comme votre login principal. Veuillez fusionner d'autres comptes à la place.</centered-text></muted-text>`,
         mergeFailure2FA: {
-            description: function (_a) {
-                var email = _a.email;
-                return "<muted-text><centered-text>Vous ne pouvez pas fusionner les comptes car l'authentification \u00E0 deux facteurs (2FA) est activ\u00E9e sur <strong>".concat(email, "</strong>. Veuillez d\u00E9sactiver l'authentification \u00E0 deux facteurs pour <strong>").concat(email, "</strong> et r\u00E9essayer.</centered-text></muted-text>");
-            },
+            description: ({ email }) => `<muted-text><centered-text>Vous ne pouvez pas fusionner les comptes car l'authentification à deux facteurs (2FA) est activée sur <strong>${email}</strong>. Veuillez désactiver l'authentification à deux facteurs pour <strong>${email}</strong> et réessayer.</centered-text></muted-text>`,
             learnMore: 'En savoir plus sur la fusion des comptes.',
         },
-        mergeFailureAccountLockedDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>".concat(email, "</strong> parce qu'il est verrouill\u00E9. Veuillez <concierge-link>contacter le Concierge</concierge-link> pour obtenir de l'aide.</centered-text></muted-text>");
-        },
-        mergeFailureUncreatedAccountDescription: function (_a) {
-            var email = _a.email, contactMethodLink = _a.contactMethodLink;
-            return "<muted-text><centered-text>Vous ne pouvez pas fusionner les comptes car <strong>".concat(email, "</strong> n'a pas de compte Expensify. Veuillez <a href=\"").concat(contactMethodLink, "\">l'ajouter comme m\u00E9thode de contact</a> \u00E0 la place.</centered-text></muted-text>");
-        },
-        mergeFailureSmartScannerAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>".concat(email, "</strong> avec d'autres comptes. Veuillez fusionner d'autres comptes \u00E0 la place.</centered-text></muted-text>");
-        },
-        mergeFailureInvoicedAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>Vous ne pouvez pas fusionner des comptes dans <strong>".concat(email, "</strong> parce que ce compte poss\u00E8de une relation de facturation.</centered-text></muted-text>");
-        },
+        mergeFailureAccountLockedDescription: ({ email }) => `<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>${email}</strong> parce qu'il est verrouillé. Veuillez <concierge-link>contacter le Concierge</concierge-link> pour obtenir de l'aide.</centered-text></muted-text>`,
+        mergeFailureUncreatedAccountDescription: ({ email, contactMethodLink }) => `<muted-text><centered-text>Vous ne pouvez pas fusionner les comptes car <strong>${email}</strong> n'a pas de compte Expensify. Veuillez <a href="${contactMethodLink}">l'ajouter comme méthode de contact</a> à la place.</centered-text></muted-text>`,
+        mergeFailureSmartScannerAccountDescription: ({ email }) => `<muted-text><centered-text>Vous ne pouvez pas fusionner <strong>${email}</strong> avec d'autres comptes. Veuillez fusionner d'autres comptes à la place.</centered-text></muted-text>`,
+        mergeFailureInvoicedAccountDescription: ({ email }) => `<muted-text><centered-text>Vous ne pouvez pas fusionner des comptes dans <strong>${email}</strong> parce que ce compte possède une relation de facturation.</centered-text></muted-text>`,
         mergeFailureTooManyAttempts: {
             heading: 'Réessayez plus tard',
             description: 'Il y a eu trop de tentatives de fusion de comptes. Veuillez réessayer plus tard.',
@@ -1787,7 +1402,7 @@ var translations = {
     },
     failedToLockAccountPage: {
         failedToLockAccount: 'Échec du verrouillage du compte',
-        failedToLockAccountDescription: "Nous n'avons pas pu verrouiller votre compte. Veuillez discuter avec Concierge pour r\u00E9soudre ce probl\u00E8me.",
+        failedToLockAccountDescription: `Nous n'avons pas pu verrouiller votre compte. Veuillez discuter avec Concierge pour résoudre ce problème.`,
         chatWithConcierge: 'Discuter avec Concierge',
     },
     unlockAccountPage: {
@@ -1872,7 +1487,7 @@ var translations = {
         changePaymentCurrency: 'Changer la devise de paiement',
         paymentCurrency: 'Devise de paiement',
         paymentCurrencyDescription: 'Sélectionnez une devise standardisée à laquelle toutes les dépenses personnelles doivent être converties',
-        note: "Note : Changer la devise de paiement peut avoir un impact sur le montant que vous paierez pour Expensify. Consultez notre <a href=\"".concat(CONST_1.default.PRICING, "\">page de tarification</a> pour plus de d\u00E9tails."),
+        note: `Note : Changer la devise de paiement peut avoir un impact sur le montant que vous paierez pour Expensify. Consultez notre <a href="${CONST_1.default.PRICING}">page de tarification</a> pour plus de détails.`,
     },
     addDebitCardPage: {
         addADebitCard: 'Ajouter une carte de débit',
@@ -1963,24 +1578,15 @@ var translations = {
         availableSpend: 'Limite restante',
         smartLimit: {
             name: 'Limite intelligent',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "Vous pouvez d\u00E9penser jusqu'\u00E0 ".concat(formattedLimit, " avec cette carte, et la limite sera r\u00E9initialis\u00E9e au fur et \u00E0 mesure que vos d\u00E9penses soumises sont approuv\u00E9es.");
-            },
+            title: ({ formattedLimit }) => `Vous pouvez dépenser jusqu'à ${formattedLimit} avec cette carte, et la limite sera réinitialisée au fur et à mesure que vos dépenses soumises sont approuvées.`,
         },
         fixedLimit: {
             name: 'Limite fixe',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "Vous pouvez d\u00E9penser jusqu'\u00E0 ".concat(formattedLimit, " avec cette carte, puis elle sera d\u00E9sactiv\u00E9e.");
-            },
+            title: ({ formattedLimit }) => `Vous pouvez dépenser jusqu'à ${formattedLimit} avec cette carte, puis elle sera désactivée.`,
         },
         monthlyLimit: {
             name: 'Limite mensuel',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "Vous pouvez d\u00E9penser jusqu'\u00E0 ".concat(formattedLimit, " sur cette carte par mois. La limite sera r\u00E9initialis\u00E9e le 1er jour de chaque mois calendaire.");
-            },
+            title: ({ formattedLimit }) => `Vous pouvez dépenser jusqu'à ${formattedLimit} sur cette carte par mois. La limite sera réinitialisée le 1er jour de chaque mois calendaire.`,
         },
         virtualCardNumber: 'Numéro de carte virtuelle',
         travelCardCvv: 'CVV de la carte de voyage',
@@ -2003,16 +1609,10 @@ var translations = {
             copyCardNumber: 'Copier le numéro de carte',
             updateAddress: "Mettre à jour l'adresse",
         },
-        cardAddedToWallet: function (_a) {
-            var platform = _a.platform;
-            return "Ajout\u00E9 au portefeuille ".concat(platform);
-        },
+        cardAddedToWallet: ({ platform }) => `Ajouté au portefeuille ${platform}`,
         cardDetailsLoadingFailure: "Une erreur s'est produite lors du chargement des détails de la carte. Veuillez vérifier votre connexion Internet et réessayer.",
         validateCardTitle: "Assurons-nous que c'est bien vous",
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "Veuillez entrer le code magique envoy\u00E9 \u00E0 ".concat(contactMethod, " pour voir les d\u00E9tails de votre carte. Il devrait arriver dans une minute ou deux.");
-        },
+        enterMagicCode: ({ contactMethod }) => `Veuillez entrer le code magique envoyé à ${contactMethod} pour voir les détails de votre carte. Il devrait arriver dans une minute ou deux.`,
     },
     workflowsPage: {
         workflowTitle: 'Dépenser',
@@ -2062,10 +1662,7 @@ var translations = {
             },
         },
         approverInMultipleWorkflows: "Ce membre appartient déjà à un autre flux de travail d'approbation. Toute mise à jour ici sera également reflétée là-bas.",
-        approverCircularReference: function (_a) {
-            var name1 = _a.name1, name2 = _a.name2;
-            return "<strong>".concat(name1, "</strong> approuve d\u00E9j\u00E0 les rapports \u00E0 <strong>").concat(name2, "</strong>. Veuillez choisir un autre approbateur pour \u00E9viter un flux de travail circulaire.");
-        },
+        approverCircularReference: ({ name1, name2 }) => `<strong>${name1}</strong> approuve déjà les rapports à <strong>${name2}</strong>. Veuillez choisir un autre approbateur pour éviter un flux de travail circulaire.`,
         emptyContent: {
             title: 'Aucun membre à afficher',
             expensesFromSubtitle: "Tous les membres de l'espace de travail appartiennent déjà à un flux de travail d'approbation existant.",
@@ -2145,15 +1742,9 @@ var translations = {
         shipCard: "Carte d'expédition",
     },
     transferAmountPage: {
-        transfer: function (_a) {
-            var amount = _a.amount;
-            return "Transfer".concat(amount ? " ".concat(amount) : '');
-        },
+        transfer: ({ amount }) => `Transfer${amount ? ` ${amount}` : ''}`,
         instant: 'Instantané (carte de débit)',
-        instantSummary: function (_a) {
-            var rate = _a.rate, minAmount = _a.minAmount;
-            return "".concat(rate, "% de frais (").concat(minAmount, " minimum)");
-        },
+        instantSummary: ({ rate, minAmount }) => `${rate}% de frais (${minAmount} minimum)`,
         ach: '1 à 3 jours ouvrables (Compte bancaire)',
         achSummary: 'Pas de frais',
         whichAccount: 'Quel compte ?',
@@ -2176,10 +1767,7 @@ var translations = {
         cardLastFour: 'Carte se terminant par',
         addFirstPaymentMethod: "Ajoutez un mode de paiement pour envoyer et recevoir des paiements directement dans l'application.",
         defaultPaymentMethod: 'Par défaut',
-        bankAccountLastFour: function (_a) {
-            var lastFour = _a.lastFour;
-            return "Bank Account \u2022 ".concat(lastFour);
-        },
+        bankAccountLastFour: ({ lastFour }) => `Bank Account • ${lastFour}`,
     },
     preferencesPage: {
         appSection: {
@@ -2207,10 +1795,7 @@ var translations = {
         },
     },
     reportDetailsPage: {
-        inWorkspace: function (_a) {
-            var policyName = _a.policyName;
-            return "dans ".concat(policyName);
-        },
+        inWorkspace: ({ policyName }) => `dans ${policyName}`,
         generatingPDF: 'Génération du PDF',
         waitForPDF: 'Veuillez patienter pendant que nous générons le PDF',
         errorPDF: "Une erreur s'est produite lors de la tentative de génération de votre PDF.",
@@ -2224,10 +1809,7 @@ var translations = {
     groupChat: {
         lastMemberTitle: 'Attention !',
         lastMemberWarning: 'Puisque vous êtes la dernière personne ici, partir rendra cette discussion inaccessible à tous les membres. Êtes-vous sûr de vouloir partir ?',
-        defaultReportName: function (_a) {
-            var displayName = _a.displayName;
-            return "Discussion de groupe de ".concat(displayName);
-        },
+        defaultReportName: ({ displayName }) => `Discussion de groupe de ${displayName}`,
     },
     languagePage: {
         language: 'Langue',
@@ -2249,8 +1831,8 @@ var translations = {
         chooseThemeBelowOrSync: 'Choisissez un thème ci-dessous ou synchronisez avec les paramètres de votre appareil.',
     },
     termsOfUse: {
-        terms: "<muted-text-xs>En vous connectant, vous acceptez les <a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">Conditions de service</a> et de <a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">Confidentialit\u00E9</a>.</muted-text-xs>"),
-        license: "<muted-text-xs>Le transfert de fonds est assur\u00E9 par ".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS, " (NMLS ID:2017010) conform\u00E9ment \u00E0 ses <a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.LICENSES_URL, "\">licences</a>.</muted-text-xs>"),
+        terms: `<muted-text-xs>En vous connectant, vous acceptez les <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">Conditions de service</a> et de <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">Confidentialité</a>.</muted-text-xs>`,
+        license: `<muted-text-xs>Le transfert de fonds est assuré par ${CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS} (NMLS ID:2017010) conformément à ses <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.LICENSES_URL}">licences</a>.</muted-text-xs>`,
     },
     validateCodeForm: {
         magicCodeNotReceived: "Vous n'avez pas reçu de code magique ?",
@@ -2291,10 +1873,7 @@ var translations = {
         },
         cannotGetAccountDetails: 'Impossible de récupérer les détails du compte. Veuillez essayer de vous reconnecter.',
         loginForm: 'Formulaire de connexion',
-        notYou: function (_a) {
-            var user = _a.user;
-            return "Pas ".concat(user, " ?");
-        },
+        notYou: ({ user }) => `Pas ${user} ?`,
     },
     onboarding: {
         welcome: 'Bienvenue !',
@@ -2308,38 +1887,30 @@ var translations = {
         getStarted: 'Commencer',
         whatsYourName: 'Quel est votre nom ?',
         peopleYouMayKnow: 'Des personnes que vous connaissez sont déjà ici ! Vérifiez votre e-mail pour les rejoindre.',
-        workspaceYouMayJoin: function (_a) {
-            var domain = _a.domain, email = _a.email;
-            return "Quelqu'un de ".concat(domain, " a d\u00E9j\u00E0 cr\u00E9\u00E9 un espace de travail. Veuillez entrer le code magique envoy\u00E9 \u00E0 ").concat(email, ".");
-        },
+        workspaceYouMayJoin: ({ domain, email }) => `Quelqu'un de ${domain} a déjà créé un espace de travail. Veuillez entrer le code magique envoyé à ${email}.`,
         joinAWorkspace: 'Rejoindre un espace de travail',
         listOfWorkspaces: 'Voici la liste des espaces de travail que vous pouvez rejoindre. Ne vous inquiétez pas, vous pouvez toujours les rejoindre plus tard si vous le préférez.',
-        workspaceMemberList: function (_a) {
-            var employeeCount = _a.employeeCount, policyOwner = _a.policyOwner;
-            return "".concat(employeeCount, " membre").concat(employeeCount > 1 ? 's' : '', " \u2022 ").concat(policyOwner);
-        },
+        workspaceMemberList: ({ employeeCount, policyOwner }) => `${employeeCount} membre${employeeCount > 1 ? 's' : ''} • ${policyOwner}`,
         whereYouWork: 'Où travaillez-vous ?',
         errorSelection: 'Sélectionnez une option pour continuer',
-        purpose: (_c = {
-                title: "Que voulez-vous faire aujourd'hui ?",
-                errorContinue: 'Veuillez appuyer sur continuer pour commencer la configuration.',
-                errorBackButton: "Veuillez terminer les questions de configuration pour commencer à utiliser l'application."
-            },
-            _c[CONST_1.default.ONBOARDING_CHOICES.EMPLOYER] = 'Être remboursé par mon employeur',
-            _c[CONST_1.default.ONBOARDING_CHOICES.MANAGE_TEAM] = 'Gérer les dépenses de mon équipe',
-            _c[CONST_1.default.ONBOARDING_CHOICES.PERSONAL_SPEND] = 'Suivre et budgétiser les dépenses',
-            _c[CONST_1.default.ONBOARDING_CHOICES.CHAT_SPLIT] = 'Discutez et partagez les dépenses avec des amis',
-            _c[CONST_1.default.ONBOARDING_CHOICES.LOOKING_AROUND] = "Quelque chose d'autre",
-            _c),
-        employees: (_d = {
-                title: "Combien d'employés avez-vous ?"
-            },
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO] = '1-10 employés',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL] = '11-50 employés',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM_SMALL] = '51-100 employés',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM] = '101-1 000 employés',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.LARGE] = 'Plus de 1 000 employés',
-            _d),
+        purpose: {
+            title: "Que voulez-vous faire aujourd'hui ?",
+            errorContinue: 'Veuillez appuyer sur continuer pour commencer la configuration.',
+            errorBackButton: "Veuillez terminer les questions de configuration pour commencer à utiliser l'application.",
+            [CONST_1.default.ONBOARDING_CHOICES.EMPLOYER]: 'Être remboursé par mon employeur',
+            [CONST_1.default.ONBOARDING_CHOICES.MANAGE_TEAM]: 'Gérer les dépenses de mon équipe',
+            [CONST_1.default.ONBOARDING_CHOICES.PERSONAL_SPEND]: 'Suivre et budgétiser les dépenses',
+            [CONST_1.default.ONBOARDING_CHOICES.CHAT_SPLIT]: 'Discutez et partagez les dépenses avec des amis',
+            [CONST_1.default.ONBOARDING_CHOICES.LOOKING_AROUND]: "Quelque chose d'autre",
+        },
+        employees: {
+            title: "Combien d'employés avez-vous ?",
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO]: '1-10 employés',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL]: '11-50 employés',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM_SMALL]: '51-100 employés',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM]: '101-1 000 employés',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.LARGE]: 'Plus de 1 000 employés',
+        },
         accounting: {
             title: 'Utilisez-vous un logiciel de comptabilité ?',
             none: 'Aucun',
@@ -2364,10 +1935,7 @@ var translations = {
         },
         workEmailValidation: {
             title: 'Vérifiez votre adresse e-mail professionnelle',
-            magicCodeSent: function (_a) {
-                var workEmail = _a.workEmail;
-                return "Veuillez entrer le code magique envoy\u00E9 \u00E0 ".concat(workEmail, ". Il devrait arriver dans une minute ou deux.");
-            },
+            magicCodeSent: ({ workEmail }) => `Veuillez entrer le code magique envoyé à ${workEmail}. Il devrait arriver dans une minute ou deux.`,
         },
         workEmailValidationError: {
             publicEmail: "Veuillez entrer une adresse e-mail professionnelle valide provenant d'un domaine privé, par exemple mitch@company.com.",
@@ -2375,82 +1943,52 @@ var translations = {
         },
         mergeBlockScreen: {
             title: "Impossible d'ajouter l'email professionnel",
-            subtitle: function (_a) {
-                var workEmail = _a.workEmail;
-                return "Nous n'avons pas pu ajouter ".concat(workEmail, ". Veuillez r\u00E9essayer plus tard dans les Param\u00E8tres ou discuter avec Concierge pour obtenir de l'aide.");
-            },
+            subtitle: ({ workEmail }) => `Nous n'avons pas pu ajouter ${workEmail}. Veuillez réessayer plus tard dans les Paramètres ou discuter avec Concierge pour obtenir de l'aide.`,
         },
         tasks: {
             testDriveAdminTask: {
-                title: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "Faites un [essai gratuit](".concat(testDriveURL, ")");
-                },
-                description: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "[Faites une visite rapide du produit](".concat(testDriveURL, ") pour d\u00E9couvrir pourquoi Expensify est le moyen le plus rapide de g\u00E9rer vos notes de frais.");
-                },
+                title: ({ testDriveURL }) => `Faites un [essai gratuit](${testDriveURL})`,
+                description: ({ testDriveURL }) => `[Faites une visite rapide du produit](${testDriveURL}) pour découvrir pourquoi Expensify est le moyen le plus rapide de gérer vos notes de frais.`,
             },
             testDriveEmployeeTask: {
-                title: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "Faites un [essai gratuit](".concat(testDriveURL, ")");
-                },
-                description: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "Essayez-nous avec un [essai gratuit](".concat(testDriveURL, ") et offrez \u00E0 votre \u00E9quipe *3 mois gratuits sur Expensify !*");
-                },
+                title: ({ testDriveURL }) => `Faites un [essai gratuit](${testDriveURL})`,
+                description: ({ testDriveURL }) => `Essayez-nous avec un [essai gratuit](${testDriveURL}) et offrez à votre équipe *3 mois gratuits sur Expensify !*`,
             },
             createTestDriveAdminWorkspaceTask: {
-                title: function (_a) {
-                    var workspaceConfirmationLink = _a.workspaceConfirmationLink;
-                    return "[Cr\u00E9ez](".concat(workspaceConfirmationLink, ") un espace de travail");
-                },
+                title: ({ workspaceConfirmationLink }) => `[Créez](${workspaceConfirmationLink}) un espace de travail`,
                 description: 'Créez un espace de travail et configurez les paramètres avec l’aide de votre spécialiste de configuration !',
             },
             createWorkspaceTask: {
-                title: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return "Cr\u00E9ez un [espace de travail](".concat(workspaceSettingsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return '*Créez un espace de travail* pour suivre les dépenses, scanner les reçus, discuter, et plus encore.\n\n' +
-                        '1. Cliquez sur *Espaces de travail* > *Nouvel espace de travail*.\n\n' +
-                        "*Votre nouvel espace est pr\u00EAt !* [Voir maintenant](".concat(workspaceSettingsLink, ").");
-                },
+                title: ({ workspaceSettingsLink }) => `Créez un [espace de travail](${workspaceSettingsLink})`,
+                description: ({ workspaceSettingsLink }) => '*Créez un espace de travail* pour suivre les dépenses, scanner les reçus, discuter, et plus encore.\n\n' +
+                    '1. Cliquez sur *Espaces de travail* > *Nouvel espace de travail*.\n\n' +
+                    `*Votre nouvel espace est prêt !* [Voir maintenant](${workspaceSettingsLink}).`,
             },
             setupCategoriesTask: {
-                title: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink;
-                    return "Configurez les [cat\u00E9gories](".concat(workspaceCategoriesLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink;
-                    return '*Configurez les catégories* pour que votre équipe puisse coder les dépenses facilement.\n\n' +
-                        '1. Cliquez sur *Espaces de travail*.\n' +
-                        '3. Sélectionnez votre espace.\n' +
-                        '4. Cliquez sur *Catégories*.\n' +
-                        '5. Désactivez les catégories inutiles.\n' +
-                        '6. Ajoutez vos propres catégories en haut à droite.\n\n' +
-                        "[Acc\u00E9der aux param\u00E8tres de cat\u00E9gories](".concat(workspaceCategoriesLink, ").\n\n") +
-                        "![Configurer les cat\u00E9gories](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-categories-v2.mp4)");
-                },
+                title: ({ workspaceCategoriesLink }) => `Configurez les [catégories](${workspaceCategoriesLink})`,
+                description: ({ workspaceCategoriesLink }) => '*Configurez les catégories* pour que votre équipe puisse coder les dépenses facilement.\n\n' +
+                    '1. Cliquez sur *Espaces de travail*.\n' +
+                    '3. Sélectionnez votre espace.\n' +
+                    '4. Cliquez sur *Catégories*.\n' +
+                    '5. Désactivez les catégories inutiles.\n' +
+                    '6. Ajoutez vos propres catégories en haut à droite.\n\n' +
+                    `[Accéder aux paramètres de catégories](${workspaceCategoriesLink}).\n\n` +
+                    `![Configurer les catégories](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-categories-v2.mp4)`,
             },
             combinedTrackSubmitExpenseTask: {
                 title: 'Soumettre une dépense',
                 description: '*Soumettez une dépense* en saisissant un montant ou en scannant un reçu.\n\n' +
-                    "1. Cliquez sur le bouton ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, ".\n") +
+                    `1. Cliquez sur le bouton ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}.\n` +
                     '2. Choisissez *Créer une dépense*.\n' +
                     '3. Saisissez un montant ou scannez un reçu.\n' +
-                    "4. Ajoutez l\u2019email ou num\u00E9ro de t\u00E9l\u00E9phone de votre responsable.\n" +
+                    `4. Ajoutez l’email ou numéro de téléphone de votre responsable.\n` +
                     '5. Cliquez sur *Créer*.\n\n' +
                     'Et voilà, c’est fait !',
             },
             adminSubmitExpenseTask: {
                 title: 'Soumettre une dépense',
                 description: '*Soumettez une dépense* en saisissant un montant ou en scannant un reçu.\n\n' +
-                    "1. Cliquez sur le bouton ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, ".\n") +
+                    `1. Cliquez sur le bouton ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}.\n` +
                     '2. Choisissez *Créer une dépense*.\n' +
                     '3. Saisissez un montant ou scannez un reçu.\n' +
                     '4. Confirmez les détails.\n' +
@@ -2460,7 +1998,7 @@ var translations = {
             trackExpenseTask: {
                 title: 'Suivre une dépense',
                 description: '*Suivez une dépense* dans n’importe quelle devise, avec ou sans reçu.\n\n' +
-                    "1. Cliquez sur le bouton ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, ".\n") +
+                    `1. Cliquez sur le bouton ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}.\n` +
                     '2. Choisissez *Créer une dépense*.\n' +
                     '3. Saisissez un montant ou scannez un reçu.\n' +
                     '4. Choisissez votre espace *personnel*.\n' +
@@ -2468,108 +2006,72 @@ var translations = {
                     'Et voilà, aussi simple que ça.',
             },
             addAccountingIntegrationTask: {
-                title: function (_a) {
-                    var integrationName = _a.integrationName, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "Connecter".concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '' : ' à', " [").concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? 'votre' : '', " ").concat(integrationName, "](").concat(workspaceAccountingLink, ")");
-                },
-                description: function (_a) {
-                    var integrationName = _a.integrationName, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "Connectez".concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '-vous à votre' : '-vous à', " ").concat(integrationName, " pour automatiser le codage et la synchronisation des d\u00E9penses. La cl\u00F4ture mensuelle devient un jeu d\u2019enfant.\n") +
-                        '\n' +
-                        '1. Cliquez sur *Paramètres*.\n' +
-                        '2. Accédez à *Espaces de travail*.\n' +
-                        '3. Sélectionnez votre espace.\n' +
-                        '4. Cliquez sur *Comptabilité*.\n' +
-                        "5. Trouvez ".concat(integrationName, ".\n") +
-                        '6. Cliquez sur *Connecter*.\n\n' +
-                        "".concat(integrationName && CONST_1.default.connectionsVideoPaths[integrationName]
-                            ? "[Acc\u00E9der \u00E0 la comptabilit\u00E9](".concat(workspaceAccountingLink, ").\n\n![Connecter ").concat(integrationName, "](").concat(CONST_1.default.CLOUDFRONT_URL, "/").concat(CONST_1.default.connectionsVideoPaths[integrationName], ")")
-                            : "[Acc\u00E9der \u00E0 la comptabilit\u00E9](".concat(workspaceAccountingLink, ")."));
-                },
+                title: ({ integrationName, workspaceAccountingLink }) => `Connecter${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '' : ' à'} [${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? 'votre' : ''} ${integrationName}](${workspaceAccountingLink})`,
+                description: ({ integrationName, workspaceAccountingLink }) => `Connectez${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '-vous à votre' : '-vous à'} ${integrationName} pour automatiser le codage et la synchronisation des dépenses. La clôture mensuelle devient un jeu d’enfant.\n` +
+                    '\n' +
+                    '1. Cliquez sur *Paramètres*.\n' +
+                    '2. Accédez à *Espaces de travail*.\n' +
+                    '3. Sélectionnez votre espace.\n' +
+                    '4. Cliquez sur *Comptabilité*.\n' +
+                    `5. Trouvez ${integrationName}.\n` +
+                    '6. Cliquez sur *Connecter*.\n\n' +
+                    `${integrationName && CONST_1.default.connectionsVideoPaths[integrationName]
+                        ? `[Accéder à la comptabilité](${workspaceAccountingLink}).\n\n![Connecter ${integrationName}](${CONST_1.default.CLOUDFRONT_URL}/${CONST_1.default.connectionsVideoPaths[integrationName]})`
+                        : `[Accéder à la comptabilité](${workspaceAccountingLink}).`}`,
             },
             connectCorporateCardTask: {
-                title: function (_a) {
-                    var corporateCardLink = _a.corporateCardLink;
-                    return "Connecter [votre carte pro](".concat(corporateCardLink, ")");
-                },
-                description: function (_a) {
-                    var corporateCardLink = _a.corporateCardLink;
-                    return "Connectez votre carte pro pour importer et coder automatiquement les d\u00E9penses.\n\n" +
-                        '1. Cliquez sur *Espaces de travail*.\n' +
-                        '2. Sélectionnez votre espace.\n' +
-                        '3. Cliquez sur *Cartes professionnelles*.\n' +
-                        '4. Suivez les instructions pour connecter votre carte.\n\n' +
-                        "[Acc\u00E9der \u00E0 la connexion carte pro](".concat(corporateCardLink, ").");
-                },
+                title: ({ corporateCardLink }) => `Connecter [votre carte pro](${corporateCardLink})`,
+                description: ({ corporateCardLink }) => `Connectez votre carte pro pour importer et coder automatiquement les dépenses.\n\n` +
+                    '1. Cliquez sur *Espaces de travail*.\n' +
+                    '2. Sélectionnez votre espace.\n' +
+                    '3. Cliquez sur *Cartes professionnelles*.\n' +
+                    '4. Suivez les instructions pour connecter votre carte.\n\n' +
+                    `[Accéder à la connexion carte pro](${corporateCardLink}).`,
             },
             inviteTeamTask: {
-                title: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return "Invitez [votre \u00E9quipe](".concat(workspaceMembersLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return '*Invitez votre équipe* sur Expensify pour qu’ils commencent à suivre leurs dépenses dès aujourd’hui.\n\n' +
-                        '1. Cliquez sur *Espaces de travail*.\n' +
-                        '3. Sélectionnez votre espace.\n' +
-                        '4. Cliquez sur *Membres* > *Inviter un membre*.\n' +
-                        '5. Entrez des emails ou numéros de téléphone.\n' +
-                        '6. Ajoutez un message personnalisé si vous le souhaitez !\n\n' +
-                        "[Acc\u00E9der aux membres](".concat(workspaceMembersLink, ").\n\n") +
-                        "![Inviter votre \u00E9quipe](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-invite_members-v2.mp4)");
-                },
+                title: ({ workspaceMembersLink }) => `Invitez [votre équipe](${workspaceMembersLink})`,
+                description: ({ workspaceMembersLink }) => '*Invitez votre équipe* sur Expensify pour qu’ils commencent à suivre leurs dépenses dès aujourd’hui.\n\n' +
+                    '1. Cliquez sur *Espaces de travail*.\n' +
+                    '3. Sélectionnez votre espace.\n' +
+                    '4. Cliquez sur *Membres* > *Inviter un membre*.\n' +
+                    '5. Entrez des emails ou numéros de téléphone.\n' +
+                    '6. Ajoutez un message personnalisé si vous le souhaitez !\n\n' +
+                    `[Accéder aux membres](${workspaceMembersLink}).\n\n` +
+                    `![Inviter votre équipe](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-invite_members-v2.mp4)`,
             },
             setupCategoriesAndTags: {
-                title: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink, workspaceTagsLink = _a.workspaceTagsLink;
-                    return "Configurer les [cat\u00E9gories](".concat(workspaceCategoriesLink, ") et [tags](").concat(workspaceTagsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return '*Configurez les catégories et tags* pour aider votre équipe à coder les dépenses plus facilement.\n\n' +
-                        "Importez-les automatiquement en [connectant votre logiciel comptable](".concat(workspaceAccountingLink, "), ou configurez-les manuellement dans les [param\u00E8tres de l\u2019espace](").concat(workspaceCategoriesLink, ").");
-                },
+                title: ({ workspaceCategoriesLink, workspaceTagsLink }) => `Configurer les [catégories](${workspaceCategoriesLink}) et [tags](${workspaceTagsLink})`,
+                description: ({ workspaceCategoriesLink, workspaceAccountingLink }) => '*Configurez les catégories et tags* pour aider votre équipe à coder les dépenses plus facilement.\n\n' +
+                    `Importez-les automatiquement en [connectant votre logiciel comptable](${workspaceAccountingLink}), ou configurez-les manuellement dans les [paramètres de l’espace](${workspaceCategoriesLink}).`,
             },
             setupTagsTask: {
-                title: function (_a) {
-                    var workspaceTagsLink = _a.workspaceTagsLink;
-                    return "Configurer les [tags](".concat(workspaceTagsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceMoreFeaturesLink = _a.workspaceMoreFeaturesLink;
-                    return 'Utilisez les tags pour ajouter des détails comme projets, clients, emplacements et départements. Pour plusieurs niveaux de tags, passez au plan Control.\n\n' +
-                        '1. Cliquez sur *Espaces de travail*.\n' +
-                        '3. Sélectionnez votre espace.\n' +
-                        '4. Cliquez sur *Fonctionnalités supplémentaires*.\n' +
-                        '5. Activez *Tags*.\n' +
-                        '6. Allez dans *Tags* dans l’éditeur.\n' +
-                        '7. Cliquez sur *+ Ajouter un tag* pour en créer un.\n\n' +
-                        "[Acc\u00E9der aux fonctionnalit\u00E9s suppl\u00E9mentaires](".concat(workspaceMoreFeaturesLink, ").\n\n") +
-                        "![Configurer les tags](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-tags-v2.mp4)");
-                },
+                title: ({ workspaceTagsLink }) => `Configurer les [tags](${workspaceTagsLink})`,
+                description: ({ workspaceMoreFeaturesLink }) => 'Utilisez les tags pour ajouter des détails comme projets, clients, emplacements et départements. Pour plusieurs niveaux de tags, passez au plan Control.\n\n' +
+                    '1. Cliquez sur *Espaces de travail*.\n' +
+                    '3. Sélectionnez votre espace.\n' +
+                    '4. Cliquez sur *Fonctionnalités supplémentaires*.\n' +
+                    '5. Activez *Tags*.\n' +
+                    '6. Allez dans *Tags* dans l’éditeur.\n' +
+                    '7. Cliquez sur *+ Ajouter un tag* pour en créer un.\n\n' +
+                    `[Accéder aux fonctionnalités supplémentaires](${workspaceMoreFeaturesLink}).\n\n` +
+                    `![Configurer les tags](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-tags-v2.mp4)`,
             },
             inviteAccountantTask: {
-                title: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return "Invitez votre [comptable](".concat(workspaceMembersLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return '*Invitez votre comptable* à collaborer dans votre espace de travail et à gérer les dépenses de votre entreprise.\n' +
-                        '\n' +
-                        '1. Cliquez sur *Espaces de travail*.\n' +
-                        '2. Sélectionnez votre espace.\n' +
-                        '3. Cliquez sur *Membres*.\n' +
-                        '4. Cliquez sur *Inviter un membre*.\n' +
-                        '5. Saisissez l’adresse e-mail de votre comptable.\n' +
-                        '\n' +
-                        "[Invitez votre comptable maintenant](".concat(workspaceMembersLink, ").");
-                },
+                title: ({ workspaceMembersLink }) => `Invitez votre [comptable](${workspaceMembersLink})`,
+                description: ({ workspaceMembersLink }) => '*Invitez votre comptable* à collaborer dans votre espace de travail et à gérer les dépenses de votre entreprise.\n' +
+                    '\n' +
+                    '1. Cliquez sur *Espaces de travail*.\n' +
+                    '2. Sélectionnez votre espace.\n' +
+                    '3. Cliquez sur *Membres*.\n' +
+                    '4. Cliquez sur *Inviter un membre*.\n' +
+                    '5. Saisissez l’adresse e-mail de votre comptable.\n' +
+                    '\n' +
+                    `[Invitez votre comptable maintenant](${workspaceMembersLink}).`,
             },
             startChatTask: {
                 title: 'Démarrer un chat',
                 description: '*Démarrez un chat* avec quelqu’un grâce à son email ou numéro.\n\n' +
-                    "1. Cliquez sur le bouton ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, ".\n") +
+                    `1. Cliquez sur le bouton ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}.\n` +
                     '2. Choisissez *Démarrer un chat*.\n' +
                     '3. Entrez un email ou numéro de téléphone.\n\n' +
                     'S’ils ne sont pas encore sur Expensify, une invitation sera envoyée automatiquement.\n\n' +
@@ -2578,7 +2080,7 @@ var translations = {
             splitExpenseTask: {
                 title: 'Partager une dépense',
                 description: '*Partagez une dépense* avec une ou plusieurs personnes.\n\n' +
-                    "1. Cliquez sur le bouton ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, ".\n") +
+                    `1. Cliquez sur le bouton ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}.\n` +
                     '2. Choisissez *Démarrer un chat*.\n' +
                     '3. Entrez des emails ou numéros de téléphone.\n' +
                     '4. Cliquez sur le bouton gris *+* > *Partager une dépense*.\n' +
@@ -2586,22 +2088,16 @@ var translations = {
                     'Ajoutez plus de détails si vous le souhaitez, ou envoyez simplement. On vous rembourse vite !',
             },
             reviewWorkspaceSettingsTask: {
-                title: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return "V\u00E9rifiez les [param\u00E8tres de l\u2019espace](".concat(workspaceSettingsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return 'Voici comment vérifier et mettre à jour vos paramètres :\n' +
-                        '1. Cliquez sur l’onglet paramètres.\n' +
-                        '2. Cliquez sur *Espaces de travail* > [Votre espace].\n' +
-                        "[Acc\u00E9der \u00E0 votre espace](".concat(workspaceSettingsLink, "). Nous suivrons les changements dans la salle #admins.");
-                },
+                title: ({ workspaceSettingsLink }) => `Vérifiez les [paramètres de l’espace](${workspaceSettingsLink})`,
+                description: ({ workspaceSettingsLink }) => 'Voici comment vérifier et mettre à jour vos paramètres :\n' +
+                    '1. Cliquez sur l’onglet paramètres.\n' +
+                    '2. Cliquez sur *Espaces de travail* > [Votre espace].\n' +
+                    `[Accéder à votre espace](${workspaceSettingsLink}). Nous suivrons les changements dans la salle #admins.`,
             },
             createReportTask: {
                 title: 'Créer votre premier rapport',
                 description: 'Voici comment créer un rapport :\n\n' +
-                    "1. Cliquez sur le bouton ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, ".\n") +
+                    `1. Cliquez sur le bouton ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}.\n` +
                     '2. Choisissez *Créer un rapport*.\n' +
                     '3. Cliquez sur *Ajouter une dépense*.\n' +
                     '4. Ajoutez votre première dépense.\n\n' +
@@ -2609,10 +2105,7 @@ var translations = {
             },
         },
         testDrive: {
-            name: function (_a) {
-                var testDriveURL = _a.testDriveURL;
-                return (testDriveURL ? "Faites un [essai gratuit](".concat(testDriveURL, ")") : 'Faites un essai gratuit');
-            },
+            name: ({ testDriveURL }) => (testDriveURL ? `Faites un [essai gratuit](${testDriveURL})` : 'Faites un essai gratuit'),
             embeddedDemoIframeTitle: 'Essai Gratuit',
             employeeFakeReceipt: {
                 description: 'Mon reçu de test !',
@@ -2621,12 +2114,9 @@ var translations = {
         messages: {
             onboardingEmployerOrSubmitMessage: 'Se faire rembourser est aussi simple que d’envoyer un message. Voici les bases.',
             onboardingPersonalSpendMessage: 'Voici comment suivre vos dépenses en quelques clics.',
-            onboardingManageTeamMessage: function (_a) {
-                var hasIntroSelected = _a.hasIntroSelected;
-                return hasIntroSelected
-                    ? '# Votre essai gratuit a commencé ! Configurons tout cela.\n👋 Bonjour, je suis votre spécialiste de configuration Expensify. Maintenant que vous avez créé un espace de travail, profitez pleinement de votre essai gratuit de 30 jours en suivant les étapes ci-dessous.'
-                    : '# Votre essai gratuit a commencé ! Configurons tout cela.\n👋 Bonjour, je suis votre spécialiste de configuration Expensify. J’ai déjà créé un espace de travail pour vous aider à gérer les reçus et dépenses de votre équipe. Pour profiter pleinement de votre essai gratuit de 30 jours, suivez simplement les étapes de configuration ci-dessous.';
-            },
+            onboardingManageTeamMessage: ({ hasIntroSelected }) => hasIntroSelected
+                ? '# Votre essai gratuit a commencé ! Configurons tout cela.\n👋 Bonjour, je suis votre spécialiste de configuration Expensify. Maintenant que vous avez créé un espace de travail, profitez pleinement de votre essai gratuit de 30 jours en suivant les étapes ci-dessous.'
+                : '# Votre essai gratuit a commencé ! Configurons tout cela.\n👋 Bonjour, je suis votre spécialiste de configuration Expensify. J’ai déjà créé un espace de travail pour vous aider à gérer les reçus et dépenses de votre équipe. Pour profiter pleinement de votre essai gratuit de 30 jours, suivez simplement les étapes de configuration ci-dessous.',
             onboardingTrackWorkspaceMessage: '# Configurons votre espace\n👋 Je suis là pour vous aider ! J’ai personnalisé votre espace pour les entrepreneurs individuels et entreprises similaires. Vous pouvez le modifier via le lien ci-dessous.\n\nVoici comment suivre vos dépenses rapidement :',
             onboardingChatSplitMessage: 'Partager des dépenses entre amis est aussi simple qu’un message. Voici comment faire.',
             onboardingAdminMessage: 'Apprenez à gérer l’espace de votre équipe en tant qu’admin et soumettez vos propres dépenses.',
@@ -2675,52 +2165,28 @@ var translations = {
         legalLastName: 'Nom de famille légal',
         address: 'Adresse',
         error: {
-            dateShouldBeBefore: function (_a) {
-                var dateString = _a.dateString;
-                return "La date doit \u00EAtre avant ".concat(dateString);
-            },
-            dateShouldBeAfter: function (_a) {
-                var dateString = _a.dateString;
-                return "La date doit \u00EAtre apr\u00E8s ".concat(dateString);
-            },
+            dateShouldBeBefore: ({ dateString }) => `La date doit être avant ${dateString}`,
+            dateShouldBeAfter: ({ dateString }) => `La date doit être après ${dateString}`,
             hasInvalidCharacter: 'Le nom ne peut inclure que des caractères latins.',
-            incorrectZipFormat: function (_a) {
-                var _b = _a === void 0 ? {} : _a, zipFormat = _b.zipFormat;
-                return "Format de code postal incorrect".concat(zipFormat ? "Format acceptable : ".concat(zipFormat) : '');
-            },
-            invalidPhoneNumber: "Veuillez vous assurer que le num\u00E9ro de t\u00E9l\u00E9phone est valide (par exemple, ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, ")"),
+            incorrectZipFormat: ({ zipFormat } = {}) => `Format de code postal incorrect${zipFormat ? `Format acceptable : ${zipFormat}` : ''}`,
+            invalidPhoneNumber: `Veuillez vous assurer que le numéro de téléphone est valide (par exemple, ${CONST_1.default.EXAMPLE_PHONE_NUMBER})`,
         },
     },
     resendValidationForm: {
         linkHasBeenResent: 'Le lien a été renvoyé',
-        weSentYouMagicSignInLink: function (_a) {
-            var login = _a.login, loginType = _a.loginType;
-            return "J'ai envoy\u00E9 un lien magique de connexion \u00E0 ".concat(login, ". Veuillez v\u00E9rifier votre ").concat(loginType, " pour vous connecter.");
-        },
+        weSentYouMagicSignInLink: ({ login, loginType }) => `J'ai envoyé un lien magique de connexion à ${login}. Veuillez vérifier votre ${loginType} pour vous connecter.`,
         resendLink: 'Renvoyer le lien',
     },
     unlinkLoginForm: {
-        toValidateLogin: function (_a) {
-            var primaryLogin = _a.primaryLogin, secondaryLogin = _a.secondaryLogin;
-            return "Pour valider ".concat(secondaryLogin, ", veuillez renvoyer le code magique depuis les Param\u00E8tres du compte de ").concat(primaryLogin, ".");
-        },
-        noLongerHaveAccess: function (_a) {
-            var primaryLogin = _a.primaryLogin;
-            return "Si vous n'avez plus acc\u00E8s \u00E0 ".concat(primaryLogin, ", veuillez dissocier vos comptes.");
-        },
+        toValidateLogin: ({ primaryLogin, secondaryLogin }) => `Pour valider ${secondaryLogin}, veuillez renvoyer le code magique depuis les Paramètres du compte de ${primaryLogin}.`,
+        noLongerHaveAccess: ({ primaryLogin }) => `Si vous n'avez plus accès à ${primaryLogin}, veuillez dissocier vos comptes.`,
         unlink: 'Dissocier',
         linkSent: 'Lien envoyé !',
         successfullyUnlinkedLogin: 'Connexion secondaire dissociée avec succès !',
     },
     emailDeliveryFailurePage: {
-        ourEmailProvider: function (_a) {
-            var login = _a.login;
-            return "Notre fournisseur de messagerie a temporairement suspendu les emails vers ".concat(login, " en raison de probl\u00E8mes de livraison. Pour d\u00E9bloquer votre connexion, veuillez suivre ces \u00E9tapes :");
-        },
-        confirmThat: function (_a) {
-            var login = _a.login;
-            return "Confirmez que ".concat(login, " est orthographi\u00E9 correctement et qu'il s'agit d'une adresse e-mail r\u00E9elle et valide.");
-        },
+        ourEmailProvider: ({ login }) => `Notre fournisseur de messagerie a temporairement suspendu les emails vers ${login} en raison de problèmes de livraison. Pour débloquer votre connexion, veuillez suivre ces étapes :`,
+        confirmThat: ({ login }) => `Confirmez que ${login} est orthographié correctement et qu'il s'agit d'une adresse e-mail réelle et valide.`,
         emailAliases: 'Les alias d\'e-mail tels que "expenses@domain.com" doivent avoir accès à leur propre boîte de réception pour être un identifiant Expensify valide.',
         ensureYourEmailClient: 'Assurez-vous que votre client de messagerie autorise les emails de expensify.com.',
         youCanFindDirections: 'Vous pouvez trouver des instructions sur la façon de compléter cette étape',
@@ -2729,38 +2195,33 @@ var translations = {
         toUnblock: 'pour débloquer votre connexion.',
     },
     smsDeliveryFailurePage: {
-        smsDeliveryFailureMessage: function (_a) {
-            var login = _a.login;
-            return "Nous n'avons pas pu livrer les messages SMS \u00E0 ".concat(login, ", nous l'avons donc suspendu temporairement. Veuillez essayer de valider votre num\u00E9ro :");
-        },
+        smsDeliveryFailureMessage: ({ login }) => `Nous n'avons pas pu livrer les messages SMS à ${login}, nous l'avons donc suspendu temporairement. Veuillez essayer de valider votre numéro :`,
         validationSuccess: 'Votre numéro a été validé ! Cliquez ci-dessous pour envoyer un nouveau code de connexion magique.',
-        validationFailed: function (_a) {
-            var _b;
-            var timeData = _a.timeData;
+        validationFailed: ({ timeData, }) => {
             if (!timeData) {
                 return 'Veuillez patienter un moment avant de réessayer.';
             }
-            var timeParts = [];
+            const timeParts = [];
             if (timeData.days) {
-                timeParts.push("".concat(timeData.days, " ").concat(timeData.days === 1 ? 'jour' : 'jours'));
+                timeParts.push(`${timeData.days} ${timeData.days === 1 ? 'jour' : 'jours'}`);
             }
             if (timeData.hours) {
-                timeParts.push("".concat(timeData.hours, " ").concat(timeData.hours === 1 ? 'heure' : 'heures'));
+                timeParts.push(`${timeData.hours} ${timeData.hours === 1 ? 'heure' : 'heures'}`);
             }
             if (timeData.minutes) {
-                timeParts.push("".concat(timeData.minutes, " ").concat(timeData.minutes === 1 ? 'minute' : 'minutes'));
+                timeParts.push(`${timeData.minutes} ${timeData.minutes === 1 ? 'minute' : 'minutes'}`);
             }
-            var timeText = '';
+            let timeText = '';
             if (timeParts.length === 1) {
-                timeText = (_b = timeParts.at(0)) !== null && _b !== void 0 ? _b : '';
+                timeText = timeParts.at(0) ?? '';
             }
             else if (timeParts.length === 2) {
-                timeText = "".concat(timeParts.at(0), " and ").concat(timeParts.at(1));
+                timeText = `${timeParts.at(0)} and ${timeParts.at(1)}`;
             }
             else if (timeParts.length === 3) {
-                timeText = "".concat(timeParts.at(0), ", ").concat(timeParts.at(1), ", and ").concat(timeParts.at(2));
+                timeText = `${timeParts.at(0)}, ${timeParts.at(1)}, and ${timeParts.at(2)}`;
             }
-            return "Patientez un peu ! Vous devez attendre ".concat(timeText, " avant de r\u00E9essayer de valider votre num\u00E9ro.");
+            return `Patientez un peu ! Vous devez attendre ${timeText} avant de réessayer de valider votre numéro.`;
         },
     },
     welcomeSignUpForm: {
@@ -2795,10 +2256,7 @@ var translations = {
         goToChatInstead: 'Allez plutôt dans la discussion.',
     },
     errorPage: {
-        title: function (_a) {
-            var isBreakLine = _a.isBreakLine;
-            return "Oups... ".concat(isBreakLine ? '\n' : '', "Quelque chose a mal tourn\u00E9");
-        },
+        title: ({ isBreakLine }) => `Oups... ${isBreakLine ? '\n' : ''}Quelque chose a mal tourné`,
         subtitle: "Votre demande n'a pas pu être complétée. Veuillez réessayer plus tard.",
     },
     setPasswordPage: {
@@ -2826,38 +2284,25 @@ var translations = {
             custom: 'Custom',
         },
         untilTomorrow: 'À demain',
-        untilTime: function (_a) {
-            var time = _a.time;
-            return "Jusqu'\u00E0 ".concat(time);
-        },
+        untilTime: ({ time }) => `Jusqu'à ${time}`,
         date: 'Date',
         time: 'Temps',
         clearAfter: 'Effacer après',
         whenClearStatus: 'Quand devrions-nous effacer votre statut ?',
         vacationDelegate: 'Délégué de vacances',
-        setVacationDelegate: "D\u00E9finissez un d\u00E9l\u00E9gu\u00E9 de vacances pour approuver les rapports en votre absence.",
+        setVacationDelegate: `Définissez un délégué de vacances pour approuver les rapports en votre absence.`,
         vacationDelegateError: 'Une erreur est survenue lors de la mise à jour de votre délégué de vacances.',
-        asVacationDelegate: function (_a) {
-            var managerName = _a.nameOrEmail;
-            return "en tant que d\u00E9l\u00E9gu\u00E9 de vacances de ".concat(managerName);
-        },
-        toAsVacationDelegate: function (_a) {
-            var submittedToName = _a.submittedToName, vacationDelegateName = _a.vacationDelegateName;
-            return "\u00E0 ".concat(submittedToName, " en tant que d\u00E9l\u00E9gu\u00E9 de vacances de ").concat(vacationDelegateName);
-        },
-        vacationDelegateWarning: function (_a) {
-            var nameOrEmail = _a.nameOrEmail;
-            return "Vous assignez ".concat(nameOrEmail, " en tant que d\u00E9l\u00E9gu\u00E9 de vacances. Il/elle n'est pas encore pr\u00E9sent(e) dans tous vos espaces de travail. Si vous choisissez de continuer, un e-mail sera envoy\u00E9 \u00E0 tous les administrateurs de vos espaces pour l\u2019ajouter.");
-        },
+        asVacationDelegate: ({ nameOrEmail: managerName }) => `en tant que délégué de vacances de ${managerName}`,
+        toAsVacationDelegate: ({ submittedToName, vacationDelegateName }) => `à ${submittedToName} en tant que délégué de vacances de ${vacationDelegateName}`,
+        vacationDelegateWarning: ({ nameOrEmail }) => `Vous assignez ${nameOrEmail} en tant que délégué de vacances. Il/elle n'est pas encore présent(e) dans tous vos espaces de travail. Si vous choisissez de continuer, un e-mail sera envoyé à tous les administrateurs de vos espaces pour l’ajouter.`,
     },
-    stepCounter: function (_a) {
-        var step = _a.step, total = _a.total, text = _a.text;
-        var result = "\u00C9tape ".concat(step);
+    stepCounter: ({ step, total, text }) => {
+        let result = `Étape ${step}`;
         if (total) {
-            result = "".concat(result, " of ").concat(total);
+            result = `${result} of ${total}`;
         }
         if (text) {
-            result = "".concat(result, ": ").concat(text);
+            result = `${result}: ${text}`;
         }
         return result;
     },
@@ -2880,22 +2325,16 @@ var translations = {
         toGetStarted: 'Ajoutez un compte bancaire pour rembourser les dépenses, émettre des cartes Expensify, collecter les paiements de factures et payer les factures, le tout depuis un seul endroit.',
         plaidBodyCopy: "Offrez à vos employés un moyen plus simple de payer - et d'être remboursés - pour les dépenses de l'entreprise.",
         checkHelpLine: 'Votre numéro de routage et votre numéro de compte se trouvent sur un chèque pour le compte.',
-        hasPhoneLoginError: function (_a) {
-            var contactMethodRoute = _a.contactMethodRoute;
-            return "Pour connecter un compte bancaire, veuillez <a href=\"".concat(contactMethodRoute, "\">ajoutez un e-mail comme identifiant principal</a> et r\u00E9essayez. Vous pouvez ajouter votre num\u00E9ro de t\u00E9l\u00E9phone comme connexion secondaire.");
-        },
+        hasPhoneLoginError: ({ contactMethodRoute }) => `Pour connecter un compte bancaire, veuillez <a href="${contactMethodRoute}">ajoutez un e-mail comme identifiant principal</a> et réessayez. Vous pouvez ajouter votre numéro de téléphone comme connexion secondaire.`,
         hasBeenThrottledError: "Une erreur s'est produite lors de l'ajout de votre compte bancaire. Veuillez attendre quelques minutes et réessayer.",
-        hasCurrencyError: function (_a) {
-            var workspaceRoute = _a.workspaceRoute;
-            return "Oups ! Il semble que la devise de votre espace de travail soit diff\u00E9rente de l'USD. Pour continuer, veuillez aller sur <a href=\"".concat(workspaceRoute, "\">vos param\u00E8tres d'espace de travail</a> pour le r\u00E9gler sur USD et r\u00E9essayer.");
-        },
+        hasCurrencyError: ({ workspaceRoute }) => `Oups ! Il semble que la devise de votre espace de travail soit différente de l'USD. Pour continuer, veuillez aller sur <a href="${workspaceRoute}">vos paramètres d'espace de travail</a> pour le régler sur USD et réessayer.`,
         error: {
             youNeedToSelectAnOption: 'Veuillez sélectionner une option pour continuer',
             noBankAccountAvailable: "Désolé, aucun compte bancaire n'est disponible.",
             noBankAccountSelected: 'Veuillez choisir un compte',
             taxID: "Veuillez entrer un numéro d'identification fiscale valide",
             website: 'Veuillez entrer un site web valide',
-            zipCode: "Veuillez entrer un code postal valide en utilisant le format : ".concat(CONST_1.default.COUNTRY_ZIP_REGEX_DATA.US.samples),
+            zipCode: `Veuillez entrer un code postal valide en utilisant le format : ${CONST_1.default.COUNTRY_ZIP_REGEX_DATA.US.samples}`,
             phoneNumber: 'Veuillez entrer un numéro de téléphone valide',
             email: 'Veuillez entrer une adresse e-mail valide',
             companyName: "Veuillez entrer un nom d'entreprise valide",
@@ -2959,12 +2398,9 @@ var translations = {
         retry: 'Réessayer',
     },
     messages: {
-        errorMessageInvalidPhone: "Veuillez entrer un num\u00E9ro de t\u00E9l\u00E9phone valide sans parenth\u00E8ses ni tirets. Si vous \u00EAtes en dehors des \u00C9tats-Unis, veuillez inclure votre indicatif de pays (par exemple, ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, ")."),
+        errorMessageInvalidPhone: `Veuillez entrer un numéro de téléphone valide sans parenthèses ni tirets. Si vous êtes en dehors des États-Unis, veuillez inclure votre indicatif de pays (par exemple, ${CONST_1.default.EXAMPLE_PHONE_NUMBER}).`,
         errorMessageInvalidEmail: 'E-mail invalide',
-        userIsAlreadyMember: function (_a) {
-            var login = _a.login, name = _a.name;
-            return "".concat(login, " est d\u00E9j\u00E0 membre de ").concat(name);
-        },
+        userIsAlreadyMember: ({ login, name }) => `${login} est déjà membre de ${name}`,
     },
     onfidoStep: {
         acceptTerms: "En continuant avec la demande d'activation de votre Expensify Wallet, vous confirmez que vous avez lu, compris et accepté",
@@ -2972,7 +2408,7 @@ var translations = {
         tryAgain: 'Réessayez',
         verifyIdentity: "Vérifier l'identité",
         letsVerifyIdentity: 'Vérifions votre identité',
-        butFirst: "Mais d'abord, les choses ennuyeuses. Lisez les termes juridiques \u00E0 l'\u00E9tape suivante et cliquez sur \"Accepter\" lorsque vous \u00EAtes pr\u00EAt.",
+        butFirst: `Mais d'abord, les choses ennuyeuses. Lisez les termes juridiques à l'étape suivante et cliquez sur "Accepter" lorsque vous êtes prêt.`,
         genericError: "Une erreur s'est produite lors du traitement de cette étape. Veuillez réessayer.",
         cameraPermissionsNotGranted: "Activer l'accès à la caméra",
         cameraRequestMessage: "Nous avons besoin d'accéder à votre appareil photo pour compléter la vérification de votre compte bancaire. Veuillez l'activer via Réglages > New Expensify.",
@@ -3018,10 +2454,7 @@ var translations = {
         checkTheBoxes: 'Veuillez cocher les cases ci-dessous.',
         agreeToTerms: 'Acceptez les conditions et vous serez prêt à partir !',
         shortTermsForm: {
-            expensifyPaymentsAccount: function (_a) {
-                var walletProgram = _a.walletProgram;
-                return "Le portefeuille Expensify est \u00E9mis par ".concat(walletProgram, ".");
-            },
+            expensifyPaymentsAccount: ({ walletProgram }) => `Le portefeuille Expensify est émis par ${walletProgram}.`,
             perPurchase: 'Par achat',
             atmWithdrawal: 'Retrait au distributeur automatique',
             cashReload: 'Recharge en espèces',
@@ -3038,10 +2471,7 @@ var translations = {
             conditionsDetails: 'Pour plus de détails et de conditions concernant tous les frais et services, visitez',
             conditionsPhone: 'ou en appelant le +1 833-400-0904.',
             instant: '(instant)',
-            electronicFundsInstantFeeMin: function (_a) {
-                var amount = _a.amount;
-                return "(min ".concat(amount, ")");
-            },
+            electronicFundsInstantFeeMin: ({ amount }) => `(min ${amount})`,
         },
         longTermsForm: {
             listOfAllFees: 'Une liste de tous les frais du portefeuille Expensify',
@@ -3059,21 +2489,15 @@ var translations = {
             electronicFundsStandardDetails: "There's no fee to transfer funds from your Expensify Wallet " +
                 'to your bank account using the standard option. This transfer usually completes within 1-3 business' +
                 ' days.',
-            electronicFundsInstantDetails: function (_a) {
-                var percentage = _a.percentage, amount = _a.amount;
-                return "There's a fee to transfer funds from your Expensify Wallet to " +
-                    'your linked debit card using the instant transfer option. This transfer usually completes within ' +
-                    "several minutes. The fee is ".concat(percentage, "% of the transfer amount (with a minimum fee of ").concat(amount, ").");
-            },
-            fdicInsuranceBancorp: function (_a) {
-                var amount = _a.amount;
-                return 'Your funds are eligible for FDIC insurance. Your funds will be held at or ' +
-                    "transferred to ".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK, ", an FDIC-insured institution. Once there, your funds are insured up ") +
-                    "to ".concat(amount, " by the FDIC in the event ").concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK, " fails, if specific deposit insurance requirements ") +
-                    "are met and your card is registered. See";
-            },
+            electronicFundsInstantDetails: ({ percentage, amount }) => "There's a fee to transfer funds from your Expensify Wallet to " +
+                'your linked debit card using the instant transfer option. This transfer usually completes within ' +
+                `several minutes. The fee is ${percentage}% of the transfer amount (with a minimum fee of ${amount}).`,
+            fdicInsuranceBancorp: ({ amount }) => 'Your funds are eligible for FDIC insurance. Your funds will be held at or ' +
+                `transferred to ${CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK}, an FDIC-insured institution. Once there, your funds are insured up ` +
+                `to ${amount} by the FDIC in the event ${CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK} fails, if specific deposit insurance requirements ` +
+                `are met and your card is registered. See`,
             fdicInsuranceBancorp2: 'pour plus de détails.',
-            contactExpensifyPayments: "Contactez ".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS, " en appelant le +1 833-400-0904, par email \u00E0"),
+            contactExpensifyPayments: `Contactez ${CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS} en appelant le +1 833-400-0904, par email à`,
             contactExpensifyPayments2: 'ou connectez-vous à',
             generalInformation: 'Pour des informations générales sur les comptes prépayés, visitez',
             generalInformation2: 'Si vous avez une plainte concernant un compte prépayé, appelez le Bureau de Protection Financière des Consommateurs au 1-855-411-2372 ou visitez',
@@ -3081,10 +2505,7 @@ var translations = {
             automated: 'Automatisé',
             liveAgent: 'Agent en direct',
             instant: 'Instantané',
-            electronicFundsInstantFeeMin: function (_a) {
-                var amount = _a.amount;
-                return "Min ".concat(amount);
-            },
+            electronicFundsInstantFeeMin: ({ amount }) => `Min ${amount}`,
         },
     },
     activateStep: {
@@ -3183,8 +2604,7 @@ var translations = {
         whatsTheBusinessName: "Quel est le nom de l'entreprise ?",
         whatsTheBusinessAddress: "Quelle est l'adresse de l'entreprise ?",
         whatsTheBusinessContactInformation: 'Quelles sont les coordonnées professionnelles ?',
-        whatsTheBusinessRegistrationNumber: function (_a) {
-            var country = _a.country;
+        whatsTheBusinessRegistrationNumber: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.GB:
                     return 'Quel est le numéro d’enregistrement de l’entreprise (CRN) ?';
@@ -3192,8 +2612,7 @@ var translations = {
                     return 'Quel est le numéro d’enregistrement de l’entreprise ?';
             }
         },
-        whatsTheBusinessTaxIDEIN: function (_a) {
-            var country = _a.country;
+        whatsTheBusinessTaxIDEIN: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.US:
                     return 'Quel est le numéro d’identification d’employeur (EIN) ?';
@@ -3213,8 +2632,7 @@ var translations = {
         whatsTheBusinessAnnualPayment: "Quel est le volume annuel de paiements de l'entreprise ?",
         whatsYourExpectedAverageReimbursements: 'Quel est le montant moyen de remboursement que vous attendez ?',
         registrationNumber: "Numéro d'enregistrement",
-        taxIDEIN: function (_a) {
-            var country = _a.country;
+        taxIDEIN: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.US:
                     return 'EIN';
@@ -3235,15 +2653,9 @@ var translations = {
         incorporationTypeName: "Type d'incorporation",
         businessCategory: "Catégorie d'entreprise",
         annualPaymentVolume: 'Volume de paiement annuel',
-        annualPaymentVolumeInCurrency: function (_a) {
-            var currencyCode = _a.currencyCode;
-            return "Volume de paiement annuel en ".concat(currencyCode);
-        },
+        annualPaymentVolumeInCurrency: ({ currencyCode }) => `Volume de paiement annuel en ${currencyCode}`,
         averageReimbursementAmount: 'Montant moyen de remboursement',
-        averageReimbursementAmountInCurrency: function (_a) {
-            var currencyCode = _a.currencyCode;
-            return "Montant moyen de remboursement en ".concat(currencyCode);
-        },
+        averageReimbursementAmountInCurrency: ({ currencyCode }) => `Montant moyen de remboursement en ${currencyCode}`,
         selectIncorporationType: "Sélectionnez le type d'incorporation",
         selectBusinessCategory: "Sélectionner la catégorie d'entreprise",
         selectAnnualPaymentVolume: 'Sélectionner le volume de paiement annuel',
@@ -3257,8 +2669,7 @@ var translations = {
         findAverageReimbursement: 'Trouver le montant moyen de remboursement',
         error: {
             registrationNumber: "Veuillez fournir un numéro d'enregistrement valide",
-            taxIDEIN: function (_a) {
-                var country = _a.country;
+            taxIDEIN: ({ country }) => {
                 switch (country) {
                     case CONST_1.default.COUNTRY.US:
                         return 'Veuillez fournir un numéro d’identification d’employeur (EIN) valide';
@@ -3275,18 +2686,9 @@ var translations = {
         },
     },
     beneficialOwnerInfoStep: {
-        doYouOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "Poss\u00E9dez-vous 25 % ou plus de ".concat(companyName, " ?");
-        },
-        doAnyIndividualOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "Est-ce qu'une personne poss\u00E8de 25 % ou plus de ".concat(companyName, " ?");
-        },
-        areThereMoreIndividualsWhoOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "Y a-t-il d'autres personnes qui d\u00E9tiennent 25 % ou plus de ".concat(companyName, " ?");
-        },
+        doYouOwn25percent: ({ companyName }) => `Possédez-vous 25 % ou plus de ${companyName} ?`,
+        doAnyIndividualOwn25percent: ({ companyName }) => `Est-ce qu'une personne possède 25 % ou plus de ${companyName} ?`,
+        areThereMoreIndividualsWhoOwn25percent: ({ companyName }) => `Y a-t-il d'autres personnes qui détiennent 25 % ou plus de ${companyName} ?`,
         regulationRequiresUsToVerifyTheIdentity: "La réglementation nous oblige à vérifier l'identité de toute personne qui possède plus de 25 % de l'entreprise.",
         companyOwner: "Propriétaire d'entreprise",
         enterLegalFirstAndLastName: 'Quel est le nom légal du propriétaire ?',
@@ -3307,14 +2709,8 @@ var translations = {
         ownerInfo: 'Informations sur le propriétaire',
         businessOwner: "Propriétaire d'entreprise",
         signerInfo: 'Informations du signataire',
-        doYouOwn: function (_a) {
-            var companyName = _a.companyName;
-            return "Poss\u00E9dez-vous 25 % ou plus de ".concat(companyName, " ?");
-        },
-        doesAnyoneOwn: function (_a) {
-            var companyName = _a.companyName;
-            return "Est-ce qu'une personne poss\u00E8de 25 % ou plus de ".concat(companyName, " ?");
-        },
+        doYouOwn: ({ companyName }) => `Possédez-vous 25 % ou plus de ${companyName} ?`,
+        doesAnyoneOwn: ({ companyName }) => `Est-ce qu'une personne possède 25 % ou plus de ${companyName} ?`,
         regulationsRequire: "Les réglementations nous obligent à vérifier l'identité de toute personne possédant plus de 25 % de l'entreprise.",
         legalFirstName: 'Prénom légal',
         legalLastName: 'Nom de famille légal',
@@ -3335,10 +2731,7 @@ var translations = {
         letsDoubleCheck: 'Vérifions que tout est correct.',
         legalName: 'Nom légal',
         ownershipPercentage: 'Pourcentage de propriété',
-        areThereOther: function (_a) {
-            var companyName = _a.companyName;
-            return "Y a-t-il d'autres personnes qui poss\u00E8dent 25 % ou plus de ".concat(companyName, " ?");
-        },
+        areThereOther: ({ companyName }) => `Y a-t-il d'autres personnes qui possèdent 25 % ou plus de ${companyName} ?`,
         owners: 'Propriétaires',
         addCertified: 'Ajoutez un organigramme certifié qui montre les propriétaires bénéficiaires',
         regulationRequiresChart: "La réglementation nous oblige à collecter une copie certifiée du tableau de propriété qui montre chaque individu ou entité possédant 25 % ou plus de l'entreprise.",
@@ -3365,7 +2758,7 @@ var translations = {
         headerTitle: 'Valider le compte bancaire',
         buttonText: 'Terminer la configuration',
         maxAttemptsReached: 'La validation de ce compte bancaire a été désactivée en raison de trop nombreuses tentatives incorrectes.',
-        description: "Dans un d\u00E9lai de 1 \u00E0 2 jours ouvrables, nous enverrons trois (3) petites transactions sur votre compte bancaire sous un nom tel que \"Expensify, Inc. Validation\".",
+        description: `Dans un délai de 1 à 2 jours ouvrables, nous enverrons trois (3) petites transactions sur votre compte bancaire sous un nom tel que "Expensify, Inc. Validation".`,
         descriptionCTA: 'Veuillez entrer le montant de chaque transaction dans les champs ci-dessous. Exemple : 1,51.',
         reviewingInfo: 'Merci ! Nous examinons vos informations et nous vous contacterons sous peu. Veuillez vérifier votre chat avec Concierge.',
         forNextStep: 'pour les prochaines étapes pour terminer la configuration de votre compte bancaire.',
@@ -3391,7 +2784,7 @@ var translations = {
         validateButtonText: 'Valider',
         validationInputLabel: 'Transaction',
         maxAttemptsReached: 'La validation de ce compte bancaire a été désactivée en raison de trop nombreuses tentatives incorrectes.',
-        description: "Dans un d\u00E9lai de 1 \u00E0 2 jours ouvrables, nous enverrons trois (3) petites transactions sur votre compte bancaire sous un nom tel que \"Expensify, Inc. Validation\".",
+        description: `Dans un délai de 1 à 2 jours ouvrables, nous enverrons trois (3) petites transactions sur votre compte bancaire sous un nom tel que "Expensify, Inc. Validation".`,
         descriptionCTA: 'Veuillez entrer le montant de chaque transaction dans les champs ci-dessous. Exemple : 1,51.',
         reviewingInfo: 'Merci ! Nous examinons vos informations et nous vous contacterons sous peu. Veuillez vérifier votre chat avec Concierge.',
         forNextSteps: 'pour les prochaines étapes pour terminer la configuration de votre compte bancaire.',
@@ -3419,10 +2812,7 @@ var translations = {
     },
     signerInfoStep: {
         signerInfo: 'Informations du signataire',
-        areYouDirector: function (_a) {
-            var companyName = _a.companyName;
-            return "\u00CAtes-vous un directeur ou un cadre sup\u00E9rieur chez ".concat(companyName, " ?");
-        },
+        areYouDirector: ({ companyName }) => `Êtes-vous un directeur ou un cadre supérieur chez ${companyName} ?`,
         regulationRequiresUs: "La réglementation nous oblige à vérifier si le signataire a l'autorité pour prendre cette action au nom de l'entreprise.",
         whatsYourName: 'Quel est votre nom légal ?',
         fullName: 'Nom légal complet',
@@ -3434,16 +2824,10 @@ var translations = {
         letsDoubleCheck: 'Vérifions que tout est correct.',
         legalName: 'Nom légal',
         proofOf: 'Justificatif de domicile personnel',
-        enterOneEmail: function (_a) {
-            var companyName = _a.companyName;
-            return "Entrez l'email du directeur ou d'un cadre sup\u00E9rieur chez ".concat(companyName);
-        },
+        enterOneEmail: ({ companyName }) => `Entrez l'email du directeur ou d'un cadre supérieur chez ${companyName}`,
         regulationRequiresOneMoreDirector: 'La réglementation exige au moins un autre directeur ou cadre supérieur en tant que signataire.',
         hangTight: 'Patientez...',
-        enterTwoEmails: function (_a) {
-            var companyName = _a.companyName;
-            return "Entrez les e-mails de deux directeurs ou cadres sup\u00E9rieurs chez ".concat(companyName);
-        },
+        enterTwoEmails: ({ companyName }) => `Entrez les e-mails de deux directeurs ou cadres supérieurs chez ${companyName}`,
         sendReminder: 'Envoyer un rappel',
         chooseFile: 'Choisir un fichier',
         weAreWaiting: "Nous attendons que d'autres vérifient leur identité en tant que directeurs ou cadres supérieurs de l'entreprise.",
@@ -3457,10 +2841,7 @@ var translations = {
         pleaseUpload: "Veuillez télécharger ci-dessous des documents supplémentaires pour nous aider à vérifier votre identité en tant que directeur ou cadre supérieur de l'entité commerciale.",
         enterSignerInfo: 'Entrez les informations du signataire',
         thisStep: 'Cette étape a été complétée',
-        isConnecting: function (_a) {
-            var bankAccountLastFour = _a.bankAccountLastFour, currency = _a.currency;
-            return "connecte un compte bancaire professionnel en ".concat(currency, " se terminant par ").concat(bankAccountLastFour, " \u00E0 Expensify pour payer les employ\u00E9s en ").concat(currency, ". L'\u00E9tape suivante n\u00E9cessite les informations d\u2019un signataire, tel qu\u2019un directeur ou un cadre sup\u00E9rieur.");
-        },
+        isConnecting: ({ bankAccountLastFour, currency }) => `connecte un compte bancaire professionnel en ${currency} se terminant par ${bankAccountLastFour} à Expensify pour payer les employés en ${currency}. L'étape suivante nécessite les informations d’un signataire, tel qu’un directeur ou un cadre supérieur.`,
     },
     agreementsStep: {
         agreements: 'Accords',
@@ -3468,10 +2849,10 @@ var translations = {
         regulationRequiresUs: "La réglementation nous oblige à vérifier l'identité de toute personne qui possède plus de 25 % de l'entreprise.",
         iAmAuthorized: 'Je suis autorisé à utiliser le compte bancaire professionnel pour les dépenses professionnelles.',
         iCertify: 'Je certifie que les informations fournies sont vraies et exactes.',
-        iAcceptTheTermsAndConditions: "J'accepte les <a href=\"https://cross-border.corpay.com/tc/\">termes et conditions</a>.",
+        iAcceptTheTermsAndConditions: `J'accepte les <a href="https://cross-border.corpay.com/tc/">termes et conditions</a>.`,
         iAcceptTheTermsAndConditionsAccessibility: "J'accepte les termes et conditions.",
         accept: 'Accepter et ajouter un compte bancaire',
-        iConsentToThePrivacyNotice: "J'accepte la <a href=\"https://payments.corpay.com/compliance\">politique de confidentialit\u00E9</a>.",
+        iConsentToThePrivacyNotice: `J'accepte la <a href="https://payments.corpay.com/compliance">politique de confidentialité</a>.`,
         iConsentToThePrivacyNoticeAccessibility: "J'accepte la politique de confidentialité.",
         error: {
             authorized: "Vous devez être un agent de contrôle avec l'autorisation d'opérer le compte bancaire de l'entreprise.",
@@ -3520,17 +2901,14 @@ var translations = {
             header: 'Avant de continuer...',
             title: 'Termes et conditions',
             label: "J'accepte les termes et conditions",
-            subtitle: "Veuillez accepter les <a href=\"".concat(CONST_1.default.TRAVEL_TERMS_URL, "\">conditions g\u00E9n\u00E9rales</a> d'Expensify Travel."),
+            subtitle: `Veuillez accepter les <a href="${CONST_1.default.TRAVEL_TERMS_URL}">conditions générales</a> d'Expensify Travel.`,
             error: 'Vous devez accepter les conditions générales de Expensify Travel pour continuer.',
             defaultWorkspaceError: "Vous devez définir un espace de travail par défaut pour activer Expensify Travel. Allez dans Paramètres > Espaces de travail > cliquez sur les trois points verticaux à côté d'un espace de travail > Définir comme espace de travail par défaut, puis réessayez !",
         },
         flight: 'Vol',
         flightDetails: {
             passenger: 'Passager',
-            layover: function (_a) {
-                var layover = _a.layover;
-                return "<muted-text-label>Vous avez une <strong>escale de ".concat(layover, "</strong> avant ce vol</muted-text-label>");
-            },
+            layover: ({ layover }) => `<muted-text-label>Vous avez une <strong>escale de ${layover}</strong> avant ce vol</muted-text-label>`,
             takeOff: 'Décollage',
             landing: 'Atterrissage',
             seat: 'Siège',
@@ -3592,10 +2970,7 @@ var translations = {
         tripSummary: 'Résumé du voyage',
         departs: 'Départs',
         errorMessage: 'Un problème est survenu. Veuillez réessayer plus tard.',
-        phoneError: function (_a) {
-            var phoneErrorMethodsRoute = _a.phoneErrorMethodsRoute;
-            return "<rbr>Veuillez <a href=\"".concat(phoneErrorMethodsRoute, "\">ajouter un courriel professionnel comme identifiant principal</a> pour r\u00E9server un voyage.</rbr>");
-        },
+        phoneError: ({ phoneErrorMethodsRoute }) => `<rbr>Veuillez <a href="${phoneErrorMethodsRoute}">ajouter un courriel professionnel comme identifiant principal</a> pour réserver un voyage.</rbr>`,
         domainSelector: {
             title: 'Domaine',
             subtitle: "Choisissez un domaine pour la configuration d'Expensify Travel.",
@@ -3603,102 +2978,42 @@ var translations = {
         },
         domainPermissionInfo: {
             title: 'Domaine',
-            restriction: function (_a) {
-                var domain = _a.domain;
-                return "Vous n'avez pas l'autorisation d'activer Expensify Travel pour le domaine <strong>".concat(domain, "</strong>. Vous devrez demander \u00E0 quelqu'un de ce domaine d'activer Travel \u00E0 votre place.");
-            },
-            accountantInvitation: "Si vous \u00EAtes comptable, pensez \u00E0 rejoindre le <a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.EXPENSIFY_APPROVED_PROGRAM_URL, "\">programme ExpensifyApproved! pour les comptables</a> afin d'activer les d\u00E9placements pour ce domaine."),
+            restriction: ({ domain }) => `Vous n'avez pas l'autorisation d'activer Expensify Travel pour le domaine <strong>${domain}</strong>. Vous devrez demander à quelqu'un de ce domaine d'activer Travel à votre place.`,
+            accountantInvitation: `Si vous êtes comptable, pensez à rejoindre le <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.EXPENSIFY_APPROVED_PROGRAM_URL}">programme ExpensifyApproved! pour les comptables</a> afin d'activer les déplacements pour ce domaine.`,
         },
         publicDomainError: {
             title: 'Commencez avec Expensify Travel',
-            message: "Vous devrez utiliser votre e-mail professionnel (par exemple, nom@entreprise.com) avec Expensify Travel, et non votre e-mail personnel (par exemple, nom@gmail.com).",
+            message: `Vous devrez utiliser votre e-mail professionnel (par exemple, nom@entreprise.com) avec Expensify Travel, et non votre e-mail personnel (par exemple, nom@gmail.com).`,
         },
         blockedFeatureModal: {
             title: 'Expensify Travel a été désactivé',
-            message: "Votre administrateur a d\u00E9sactiv\u00E9 Expensify Travel. Veuillez suivre la politique de r\u00E9servation de votre entreprise pour les arrangements de voyage.",
+            message: `Votre administrateur a désactivé Expensify Travel. Veuillez suivre la politique de réservation de votre entreprise pour les arrangements de voyage.`,
         },
         verifyCompany: {
             title: "Commencez votre voyage dès aujourd'hui !",
-            message: "Veuillez contacter votre gestionnaire de compte ou salesteam@expensify.com pour obtenir une d\u00E9monstration de voyage et l'activer pour votre entreprise.",
+            message: `Veuillez contacter votre gestionnaire de compte ou salesteam@expensify.com pour obtenir une démonstration de voyage et l'activer pour votre entreprise.`,
         },
         updates: {
-            bookingTicketed: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate, _b = _a.confirmationID, confirmationID = _b === void 0 ? '' : _b;
-                return "Votre vol ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") le ").concat(startDate, " a \u00E9t\u00E9 r\u00E9serv\u00E9. Code de confirmation : ").concat(confirmationID);
-            },
-            ticketVoided: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "Votre billet pour le vol ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") du ").concat(startDate, " a \u00E9t\u00E9 annul\u00E9.");
-            },
-            ticketRefunded: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "Votre billet pour le vol ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") le ").concat(startDate, " a \u00E9t\u00E9 rembours\u00E9 ou \u00E9chang\u00E9.");
-            },
-            flightCancelled: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "Votre vol ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") du ").concat(startDate, " a \u00E9t\u00E9 annul\u00E9 par la compagnie a\u00E9rienne.");
-            },
-            flightScheduleChangePending: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "La compagnie a\u00E9rienne a propos\u00E9 un changement d'horaire pour le vol ".concat(airlineCode, " ; nous attendons la confirmation.");
-            },
-            flightScheduleChangeClosed: function (_a) {
-                var airlineCode = _a.airlineCode, startDate = _a.startDate;
-                return "Changement d'horaire confirm\u00E9 : le vol ".concat(airlineCode, " part maintenant \u00E0 ").concat(startDate, ".");
-            },
-            flightUpdated: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "Votre vol ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") le ").concat(startDate, " a \u00E9t\u00E9 mis \u00E0 jour.");
-            },
-            flightCabinChanged: function (_a) {
-                var airlineCode = _a.airlineCode, cabinClass = _a.cabinClass;
-                return "Votre classe de cabine a \u00E9t\u00E9 mise \u00E0 jour en ".concat(cabinClass, " sur le vol ").concat(airlineCode, ".");
-            },
-            flightSeatConfirmed: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "Votre attribution de si\u00E8ge sur le vol ".concat(airlineCode, " a \u00E9t\u00E9 confirm\u00E9e.");
-            },
-            flightSeatChanged: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "Votre attribution de si\u00E8ge sur le vol ".concat(airlineCode, " a \u00E9t\u00E9 modifi\u00E9e.");
-            },
-            flightSeatCancelled: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "Votre attribution de si\u00E8ge sur le vol ".concat(airlineCode, " a \u00E9t\u00E9 supprim\u00E9e.");
-            },
+            bookingTicketed: ({ airlineCode, origin, destination, startDate, confirmationID = '' }) => `Votre vol ${airlineCode} (${origin} → ${destination}) le ${startDate} a été réservé. Code de confirmation : ${confirmationID}`,
+            ticketVoided: ({ airlineCode, origin, destination, startDate }) => `Votre billet pour le vol ${airlineCode} (${origin} → ${destination}) du ${startDate} a été annulé.`,
+            ticketRefunded: ({ airlineCode, origin, destination, startDate }) => `Votre billet pour le vol ${airlineCode} (${origin} → ${destination}) le ${startDate} a été remboursé ou échangé.`,
+            flightCancelled: ({ airlineCode, origin, destination, startDate }) => `Votre vol ${airlineCode} (${origin} → ${destination}) du ${startDate} a été annulé par la compagnie aérienne.`,
+            flightScheduleChangePending: ({ airlineCode }) => `La compagnie aérienne a proposé un changement d'horaire pour le vol ${airlineCode} ; nous attendons la confirmation.`,
+            flightScheduleChangeClosed: ({ airlineCode, startDate }) => `Changement d'horaire confirmé : le vol ${airlineCode} part maintenant à ${startDate}.`,
+            flightUpdated: ({ airlineCode, origin, destination, startDate }) => `Votre vol ${airlineCode} (${origin} → ${destination}) le ${startDate} a été mis à jour.`,
+            flightCabinChanged: ({ airlineCode, cabinClass }) => `Votre classe de cabine a été mise à jour en ${cabinClass} sur le vol ${airlineCode}.`,
+            flightSeatConfirmed: ({ airlineCode }) => `Votre attribution de siège sur le vol ${airlineCode} a été confirmée.`,
+            flightSeatChanged: ({ airlineCode }) => `Votre attribution de siège sur le vol ${airlineCode} a été modifiée.`,
+            flightSeatCancelled: ({ airlineCode }) => `Votre attribution de siège sur le vol ${airlineCode} a été supprimée.`,
             paymentDeclined: 'Le paiement de votre réservation de vol a échoué. Veuillez réessayer.',
-            bookingCancelledByTraveler: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "Vous avez annul\u00E9 votre r\u00E9servation de ".concat(type, " ").concat(id, ".");
-            },
-            bookingCancelledByVendor: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "Le fournisseur a annul\u00E9 votre r\u00E9servation de ".concat(type, " ").concat(id, ".");
-            },
-            bookingRebooked: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "Votre r\u00E9servation de ".concat(type, " a \u00E9t\u00E9 rebook\u00E9e. Nouveau num\u00E9ro de confirmation : ").concat(id, ".");
-            },
-            bookingUpdated: function (_a) {
-                var type = _a.type;
-                return "Votre r\u00E9servation de ".concat(type, " a \u00E9t\u00E9 mise \u00E0 jour. Consultez les nouveaux d\u00E9tails dans l'itin\u00E9raire.");
-            },
-            railTicketRefund: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "Votre billet de train pour ".concat(origin, " \u2192 ").concat(destination, " le ").concat(startDate, " a \u00E9t\u00E9 rembours\u00E9. Un cr\u00E9dit sera trait\u00E9.");
-            },
-            railTicketExchange: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "Votre billet de train pour ".concat(origin, " \u2192 ").concat(destination, " le ").concat(startDate, " a \u00E9t\u00E9 \u00E9chang\u00E9.");
-            },
-            railTicketUpdate: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "Votre billet de train pour ".concat(origin, " \u2192 ").concat(destination, " le ").concat(startDate, " a \u00E9t\u00E9 mis \u00E0 jour.");
-            },
-            defaultUpdate: function (_a) {
-                var type = _a.type;
-                return "Votre r\u00E9servation de ".concat(type, " a \u00E9t\u00E9 mise \u00E0 jour.");
-            },
+            bookingCancelledByTraveler: ({ type, id = '' }) => `Vous avez annulé votre réservation de ${type} ${id}.`,
+            bookingCancelledByVendor: ({ type, id = '' }) => `Le fournisseur a annulé votre réservation de ${type} ${id}.`,
+            bookingRebooked: ({ type, id = '' }) => `Votre réservation de ${type} a été rebookée. Nouveau numéro de confirmation : ${id}.`,
+            bookingUpdated: ({ type }) => `Votre réservation de ${type} a été mise à jour. Consultez les nouveaux détails dans l'itinéraire.`,
+            railTicketRefund: ({ origin, destination, startDate }) => `Votre billet de train pour ${origin} → ${destination} le ${startDate} a été remboursé. Un crédit sera traité.`,
+            railTicketExchange: ({ origin, destination, startDate }) => `Votre billet de train pour ${origin} → ${destination} le ${startDate} a été échangé.`,
+            railTicketUpdate: ({ origin, destination, startDate }) => `Votre billet de train pour ${origin} → ${destination} le ${startDate} a été mis à jour.`,
+            defaultUpdate: ({ type }) => `Votre réservation de ${type} a été mise à jour.`,
         },
         flightTo: 'Vol pour',
         trainTo: 'Train pour',
@@ -3747,18 +3062,18 @@ var translations = {
             issueAndManageCards: 'Émettre et gérer des cartes',
             reconcileCards: 'Rapprocher les cartes',
             selectAll: 'Sélectionner tout',
-            selected: function () { return ({
+            selected: () => ({
                 one: '1 sélectionné',
-                other: function (count) { return "".concat(count, " s\u00E9lectionn\u00E9(s)"); },
-            }); },
+                other: (count) => `${count} sélectionné(s)`,
+            }),
             settlementFrequency: 'Fréquence de règlement',
             setAsDefault: 'Définir comme espace de travail par défaut',
-            defaultNote: "Les re\u00E7us envoy\u00E9s \u00E0 ".concat(CONST_1.default.EMAIL.RECEIPTS, " appara\u00EEtront dans cet espace de travail."),
+            defaultNote: `Les reçus envoyés à ${CONST_1.default.EMAIL.RECEIPTS} apparaîtront dans cet espace de travail.`,
             deleteConfirmation: 'Êtes-vous sûr de vouloir supprimer cet espace de travail ?',
             deleteWithCardsConfirmation: 'Êtes-vous sûr de vouloir supprimer cet espace de travail ? Cela supprimera tous les flux de cartes et les cartes attribuées.',
             unavailable: 'Espace de travail indisponible',
             memberNotFound: "Membre introuvable. Pour inviter un nouveau membre à l'espace de travail, veuillez utiliser le bouton d'invitation ci-dessus.",
-            notAuthorized: "Vous n'avez pas acc\u00E8s \u00E0 cette page. Si vous essayez de rejoindre cet espace de travail, demandez simplement au propri\u00E9taire de l'espace de travail de vous ajouter en tant que membre. Autre chose ? Contactez ".concat(CONST_1.default.EMAIL.CONCIERGE, "."),
+            notAuthorized: `Vous n'avez pas accès à cette page. Si vous essayez de rejoindre cet espace de travail, demandez simplement au propriétaire de l'espace de travail de vous ajouter en tant que membre. Autre chose ? Contactez ${CONST_1.default.EMAIL.CONCIERGE}.`,
             goToWorkspace: "Aller à l'espace de travail",
             duplicateWorkspace: 'Dupliquer l’espace de travail',
             duplicateWorkspacePrefix: 'Dupliquer',
@@ -3778,10 +3093,7 @@ var translations = {
             subscription: 'Abonnement',
             markAsEntered: 'Marquer comme saisi manuellement',
             markAsExported: 'Marquer comme exporté',
-            exportIntegrationSelected: function (_a) {
-                var connectionName = _a.connectionName;
-                return "Exporter vers ".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]);
-            },
+            exportIntegrationSelected: ({ connectionName }) => `Exporter vers ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
             letsDoubleCheck: 'Vérifions que tout est correct.',
             lineItemLevel: 'Niveau des postes de dépense',
             reportLevel: 'Niveau de rapport',
@@ -3789,36 +3101,20 @@ var translations = {
             appliedOnExport: "Non importé dans Expensify, appliqué à l'exportation",
             shareNote: {
                 header: "Partagez votre espace de travail avec d'autres membres",
-                content: function (_a) {
-                    var adminsRoomLink = _a.adminsRoomLink;
-                    return "Partagez ce code QR ou copiez le lien ci-dessous pour permettre aux membres de demander facilement l'acc\u00E8s \u00E0 votre espace de travail. Toutes les demandes d'adh\u00E9sion \u00E0 l'espace de travail s'afficheront dans la salle <a href=\"".concat(adminsRoomLink, "\">").concat(CONST_1.default.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS, "</a> pour que vous puissiez les examiner.");
-                },
+                content: ({ adminsRoomLink }) => `Partagez ce code QR ou copiez le lien ci-dessous pour permettre aux membres de demander facilement l'accès à votre espace de travail. Toutes les demandes d'adhésion à l'espace de travail s'afficheront dans la salle <a href="${adminsRoomLink}">${CONST_1.default.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS}</a> pour que vous puissiez les examiner.`,
             },
-            connectTo: function (_a) {
-                var connectionName = _a.connectionName;
-                return "Se connecter \u00E0 ".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]);
-            },
+            connectTo: ({ connectionName }) => `Se connecter à ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
             createNewConnection: 'Créer une nouvelle connexion',
             reuseExistingConnection: 'Réutiliser la connexion existante',
             existingConnections: 'Connexions existantes',
-            existingConnectionsDescription: function (_a) {
-                var connectionName = _a.connectionName;
-                return "Puisque vous vous \u00EAtes d\u00E9j\u00E0 connect\u00E9 \u00E0 ".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], ", vous pouvez choisir de r\u00E9utiliser une connexion existante ou d'en cr\u00E9er une nouvelle.");
-            },
-            lastSyncDate: function (_a) {
-                var connectionName = _a.connectionName, formattedDate = _a.formattedDate;
-                return "".concat(connectionName, " - Derni\u00E8re synchronisation le ").concat(formattedDate);
-            },
-            authenticationError: function (_a) {
-                var connectionName = _a.connectionName;
-                return "Impossible de se connecter \u00E0 ".concat(connectionName, " en raison d'une erreur d'authentification.");
-            },
+            existingConnectionsDescription: ({ connectionName }) => `Puisque vous vous êtes déjà connecté à ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}, vous pouvez choisir de réutiliser une connexion existante ou d'en créer une nouvelle.`,
+            lastSyncDate: ({ connectionName, formattedDate }) => `${connectionName} - Dernière synchronisation le ${formattedDate}`,
+            authenticationError: ({ connectionName }) => `Impossible de se connecter à ${connectionName} en raison d'une erreur d'authentification.`,
             learnMore: 'En savoir plus',
             memberAlternateText: 'Les membres peuvent soumettre et approuver des rapports.',
             adminAlternateText: "Les administrateurs ont un accès complet pour modifier tous les rapports et les paramètres de l'espace de travail.",
             auditorAlternateText: 'Les auditeurs peuvent voir et commenter les rapports.',
-            roleName: function (_a) {
-                var _b = _a === void 0 ? {} : _a, role = _b.role;
+            roleName: ({ role } = {}) => {
                 switch (role) {
                     case CONST_1.default.POLICY.ROLE.ADMIN:
                         return 'Admin';
@@ -3843,11 +3139,8 @@ var translations = {
             submitExpense: 'Soumettez vos dépenses ci-dessous :',
             defaultCategory: 'Catégorie par défaut',
             viewTransactions: 'Voir les transactions',
-            policyExpenseChatName: function (_a) {
-                var displayName = _a.displayName;
-                return "Les d\u00E9penses de ".concat(displayName);
-            },
-            deepDiveExpensifyCard: "<muted-text-label>Les transactions Expensify Card seront automatiquement export\u00E9es vers un \u00AB Expensify Card Liability Account \u00BB cr\u00E9\u00E9 avec <a href=\"".concat(CONST_1.default.DEEP_DIVE_EXPENSIFY_CARD, "\">notre int\u00E9gration</a>.</muted-text-label>"),
+            policyExpenseChatName: ({ displayName }) => `Les dépenses de ${displayName}`,
+            deepDiveExpensifyCard: `<muted-text-label>Les transactions Expensify Card seront automatiquement exportées vers un « Expensify Card Liability Account » créé avec <a href="${CONST_1.default.DEEP_DIVE_EXPENSIFY_CARD}">notre intégration</a>.</muted-text-label>`,
         },
         receiptPartners: {
             connect: 'Connectez-vous maintenant',
@@ -3864,14 +3157,13 @@ var translations = {
                 all: 'Tous',
                 linked: 'Lié',
                 outstanding: 'En attente',
-                status: (_e = {
-                        resend: 'Renvoyer',
-                        invite: 'Inviter'
-                    },
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED] = 'Lié',
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED_PENDING_APPROVAL] = 'En attente',
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.SUSPENDED] = 'Suspendu',
-                    _e),
+                status: {
+                    resend: 'Renvoyer',
+                    invite: 'Inviter',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED]: 'Lié',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED_PENDING_APPROVAL]: 'En attente',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.SUSPENDED]: 'Suspendu',
+                },
                 invitationFailure: "Échec de l'invitation des membres à Uber for Business",
                 autoRemove: "Inviter de nouveaux membres de l'espace de travail sur Uber",
                 autoInvite: "Désactiver les membres supprimés de l'espace de travail sur Uber",
@@ -3886,37 +3178,28 @@ var translations = {
         perDiem: {
             subtitle: 'Définissez des taux de per diem pour contrôler les dépenses quotidiennes des employés.',
             amount: 'Montant',
-            deleteRates: function () { return ({
+            deleteRates: () => ({
                 one: 'Supprimer le taux',
                 other: 'Supprimer les tarifs',
-            }); },
+            }),
             deletePerDiemRate: 'Supprimer le taux de per diem',
             findPerDiemRate: 'Trouver le taux journalier',
-            areYouSureDelete: function () { return ({
+            areYouSureDelete: () => ({
                 one: 'Êtes-vous sûr de vouloir supprimer ce tarif ?',
                 other: 'Êtes-vous sûr de vouloir supprimer ces tarifs ?',
-            }); },
+            }),
             emptyList: {
                 title: 'Per diem',
                 subtitle: 'Définissez des taux de per diem pour contrôler les dépenses quotidiennes des employés. Importez les taux depuis une feuille de calcul pour commencer.',
             },
             errors: {
-                existingRateError: function (_a) {
-                    var rate = _a.rate;
-                    return "Un taux avec la valeur ".concat(rate, " existe d\u00E9j\u00E0");
-                },
+                existingRateError: ({ rate }) => `Un taux avec la valeur ${rate} existe déjà`,
             },
             importPerDiemRates: 'Importer les taux de per diem',
             editPerDiemRate: 'Modifier le taux de per diem',
             editPerDiemRates: 'Modifier les taux de per diem',
-            editDestinationSubtitle: function (_a) {
-                var destination = _a.destination;
-                return "La mise \u00E0 jour de cette destination la modifiera pour tous les sous-taux de ".concat(destination, " par diem.");
-            },
-            editCurrencySubtitle: function (_a) {
-                var destination = _a.destination;
-                return "La mise \u00E0 jour de cette devise la modifiera pour tous les sous-taux de per diem ".concat(destination, ".");
-            },
+            editDestinationSubtitle: ({ destination }) => `La mise à jour de cette destination la modifiera pour tous les sous-taux de ${destination} par diem.`,
+            editCurrencySubtitle: ({ destination }) => `La mise à jour de cette devise la modifiera pour tous les sous-taux de per diem ${destination}.`,
         },
         qbd: {
             exportOutOfPocketExpensesDescription: 'Définissez comment les dépenses hors de la poche sont exportées vers QuickBooks Desktop.',
@@ -3936,41 +3219,41 @@ var translations = {
             exportDate: {
                 label: "Date d'exportation",
                 description: "Utilisez cette date lors de l'exportation des rapports vers QuickBooks Desktop.",
-                values: (_f = {},
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE]: {
                         label: 'Date de la dernière dépense',
                         description: 'Date de la dépense la plus récente sur le rapport.',
                     },
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: "Date d'exportation",
                         description: 'Date à laquelle le rapport a été exporté vers QuickBooks Desktop.',
                     },
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: 'Date de soumission',
                         description: 'Date à laquelle le rapport a été soumis pour approbation.',
                     },
-                    _f),
+                },
             },
             exportCheckDescription: "Nous créerons un chèque détaillé pour chaque rapport Expensify et l'enverrons depuis le compte bancaire ci-dessous.",
             exportJournalEntryDescription: 'Nous créerons une écriture de journal détaillée pour chaque rapport Expensify et la publierons sur le compte ci-dessous.',
             exportVendorBillDescription: "Nous créerons une facture détaillée pour chaque rapport Expensify et l'ajouterons au compte ci-dessous. Si cette période est clôturée, nous la publierons au 1er de la prochaine période ouverte.",
             outOfPocketTaxEnabledDescription: "QuickBooks Desktop ne prend pas en charge les taxes sur les exportations d'écritures de journal. Comme vous avez activé les taxes dans votre espace de travail, cette option d'exportation n'est pas disponible.",
             outOfPocketTaxEnabledError: "Les écritures de journal ne sont pas disponibles lorsque les taxes sont activées. Veuillez choisir une autre option d'exportation.",
-            accounts: (_g = {},
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD] = 'Carte de crédit',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = 'Facture fournisseur',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = 'Écriture comptable',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = 'Vérifier',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CHECK, "Description")] = "Nous créerons un chèque détaillé pour chaque rapport Expensify et l'enverrons depuis le compte bancaire ci-dessous.",
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "Description")] = "Nous associerons automatiquement le nom du commerçant sur la transaction par carte de crédit à tout fournisseur correspondant dans QuickBooks. Si aucun fournisseur n'existe, nous créerons un fournisseur « Crédit Carte Divers » pour l'association.",
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Description")] = "Nous créerons une facture fournisseur détaillée pour chaque rapport Expensify avec la date de la dernière dépense, et l'ajouterons au compte ci-dessous. Si cette période est clôturée, nous la publierons au 1er de la prochaine période ouverte.",
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "AccountDescription")] = 'Choisissez où exporter les transactions par carte de crédit.',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "AccountDescription")] = 'Choisissez un fournisseur à appliquer à toutes les transactions par carte de crédit.',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "AccountDescription")] = "Choisissez d'où envoyer les chèques.",
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Error")] = "Les factures des fournisseurs ne sont pas disponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "Error")] = "Les chèques sont indisponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY, "Error")] = "Les écritures de journal ne sont pas disponibles lorsque les taxes sont activées. Veuillez choisir une autre option d'exportation.",
-                _g),
+            accounts: {
+                [CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD]: 'Carte de crédit',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: 'Facture fournisseur',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: 'Écriture comptable',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: 'Vérifier',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CHECK}Description`]: "Nous créerons un chèque détaillé pour chaque rapport Expensify et l'enverrons depuis le compte bancaire ci-dessous.",
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}Description`]: "Nous associerons automatiquement le nom du commerçant sur la transaction par carte de crédit à tout fournisseur correspondant dans QuickBooks. Si aucun fournisseur n'existe, nous créerons un fournisseur « Crédit Carte Divers » pour l'association.",
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Description`]: "Nous créerons une facture fournisseur détaillée pour chaque rapport Expensify avec la date de la dernière dépense, et l'ajouterons au compte ci-dessous. Si cette période est clôturée, nous la publierons au 1er de la prochaine période ouverte.",
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}AccountDescription`]: 'Choisissez où exporter les transactions par carte de crédit.',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}AccountDescription`]: 'Choisissez un fournisseur à appliquer à toutes les transactions par carte de crédit.',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK}AccountDescription`]: "Choisissez d'où envoyer les chèques.",
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Error`]: "Les factures des fournisseurs ne sont pas disponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK}Error`]: "Les chèques sont indisponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY}Error`]: "Les écritures de journal ne sont pas disponibles lorsque les taxes sont activées. Veuillez choisir une autre option d'exportation.",
+            },
             noAccountsFound: 'Aucun compte trouvé',
             noAccountsFoundDescription: 'Ajoutez le compte dans QuickBooks Desktop et synchronisez à nouveau la connexion.',
             qbdSetup: 'Configuration de QuickBooks Desktop',
@@ -3983,10 +3266,7 @@ var translations = {
                 title: 'Ouvrez ce lien pour vous connecter.',
                 body: "Pour terminer la configuration, ouvrez le lien suivant sur l'ordinateur où QuickBooks Desktop est en cours d'exécution.",
                 setupErrorTitle: "Quelque chose s'est mal passé",
-                setupErrorBody: function (_a) {
-                    var conciergeLink = _a.conciergeLink;
-                    return "<muted-text><centered-text>La connexion \u00E0 QuickBooks Desktop ne fonctionne pas pour le moment. Veuillez r\u00E9essayer plus tard ou <a href=\"".concat(conciergeLink, "\">contacter le Concierge</a> si le probl\u00E8me persiste.</centered-text></muted-text>");
-                },
+                setupErrorBody: ({ conciergeLink }) => `<muted-text><centered-text>La connexion à QuickBooks Desktop ne fonctionne pas pour le moment. Veuillez réessayer plus tard ou <a href="${conciergeLink}">contacter le Concierge</a> si le problème persiste.</centered-text></muted-text>`,
             },
             importDescription: 'Choisissez quelles configurations de codage importer de QuickBooks Desktop vers Expensify.',
             classes: 'Cours',
@@ -4030,20 +3310,20 @@ var translations = {
             exportDate: {
                 label: "Date d'exportation",
                 description: "Utilisez cette date lors de l'exportation des rapports vers QuickBooks Online.",
-                values: (_h = {},
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE]: {
                         label: 'Date de la dernière dépense',
                         description: 'Date de la dépense la plus récente sur le rapport.',
                     },
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: "Date d'exportation",
                         description: 'Date à laquelle le rapport a été exporté vers QuickBooks Online.',
                     },
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: 'Date de soumission',
                         description: 'Date à laquelle le rapport a été soumis pour approbation.',
                     },
-                    _h),
+                },
             },
             receivable: 'Comptes clients', // This is an account name that will come directly from QBO, so I don't know why we need a translation for it. It should take whatever the name of the account is in QBO. Leaving this note for CS.
             archive: 'Archive des comptes clients', // This is an account name that will come directly from QBO, so I don't know why we need a translation for it. It should take whatever the name of the account is in QBO. Leaving this note for CS.
@@ -4078,45 +3358,45 @@ var translations = {
                 accountSelectDescription: "Choisissez d'où payer les factures et nous créerons le paiement dans QuickBooks Online.",
                 invoiceAccountSelectorDescription: 'Choisissez où recevoir les paiements de factures et nous créerons le paiement dans QuickBooks Online.',
             },
-            accounts: (_j = {},
-                _j[CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD] = 'Carte de débit',
-                _j[CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD] = 'Carte de crédit',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = 'Facture fournisseur',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = 'Écriture comptable',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = 'Vérifier',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD, "Description")] = "Nous associerons automatiquement le nom du marchand sur la transaction par carte de débit à tout fournisseur correspondant dans QuickBooks. Si aucun fournisseur n'existe, nous créerons un fournisseur 'Carte de Débit Divers' pour l'association.",
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "Description")] = "Nous associerons automatiquement le nom du commerçant sur la transaction par carte de crédit à tout fournisseur correspondant dans QuickBooks. Si aucun fournisseur n'existe, nous créerons un fournisseur « Crédit Carte Divers » pour l'association.",
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Description")] = "Nous créerons une facture fournisseur détaillée pour chaque rapport Expensify avec la date de la dernière dépense, et l'ajouterons au compte ci-dessous. Si cette période est clôturée, nous la publierons au 1er de la prochaine période ouverte.",
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD, "AccountDescription")] = 'Choisissez où exporter les transactions par carte de débit.',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "AccountDescription")] = 'Choisissez où exporter les transactions par carte de crédit.',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "AccountDescription")] = 'Choisissez un fournisseur à appliquer à toutes les transactions par carte de crédit.',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Error")] = "Les factures des fournisseurs ne sont pas disponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "Error")] = "Les chèques sont indisponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY, "Error")] = "Les écritures de journal ne sont pas disponibles lorsque les taxes sont activées. Veuillez choisir une autre option d'exportation.",
-                _j),
-            exportDestinationAccountsMisconfigurationError: (_k = {},
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = "Choisissez un compte valide pour l'exportation de la facture fournisseur",
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = "Choisissez un compte valide pour l'exportation de l'écriture de journal",
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = "Choisissez un compte valide pour l'exportation de chèques",
-                _k),
-            exportDestinationSetupAccountsInfo: (_l = {},
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = "Pour utiliser l'exportation de factures fournisseurs, configurez un compte de comptes fournisseurs dans QuickBooks Online.",
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = "Pour utiliser l'exportation d'écritures de journal, configurez un compte de journal dans QuickBooks Online.",
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = "Pour utiliser l'exportation de chèques, configurez un compte bancaire dans QuickBooks Online.",
-                _l),
+            accounts: {
+                [CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD]: 'Carte de débit',
+                [CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD]: 'Carte de crédit',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: 'Facture fournisseur',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: 'Écriture comptable',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: 'Vérifier',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD}Description`]: "Nous associerons automatiquement le nom du marchand sur la transaction par carte de débit à tout fournisseur correspondant dans QuickBooks. Si aucun fournisseur n'existe, nous créerons un fournisseur 'Carte de Débit Divers' pour l'association.",
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}Description`]: "Nous associerons automatiquement le nom du commerçant sur la transaction par carte de crédit à tout fournisseur correspondant dans QuickBooks. Si aucun fournisseur n'existe, nous créerons un fournisseur « Crédit Carte Divers » pour l'association.",
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Description`]: "Nous créerons une facture fournisseur détaillée pour chaque rapport Expensify avec la date de la dernière dépense, et l'ajouterons au compte ci-dessous. Si cette période est clôturée, nous la publierons au 1er de la prochaine période ouverte.",
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD}AccountDescription`]: 'Choisissez où exporter les transactions par carte de débit.',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}AccountDescription`]: 'Choisissez où exporter les transactions par carte de crédit.',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}AccountDescription`]: 'Choisissez un fournisseur à appliquer à toutes les transactions par carte de crédit.',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Error`]: "Les factures des fournisseurs ne sont pas disponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK}Error`]: "Les chèques sont indisponibles lorsque les emplacements sont activés. Veuillez choisir une autre option d'exportation.",
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY}Error`]: "Les écritures de journal ne sont pas disponibles lorsque les taxes sont activées. Veuillez choisir une autre option d'exportation.",
+            },
+            exportDestinationAccountsMisconfigurationError: {
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: "Choisissez un compte valide pour l'exportation de la facture fournisseur",
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: "Choisissez un compte valide pour l'exportation de l'écriture de journal",
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: "Choisissez un compte valide pour l'exportation de chèques",
+            },
+            exportDestinationSetupAccountsInfo: {
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: "Pour utiliser l'exportation de factures fournisseurs, configurez un compte de comptes fournisseurs dans QuickBooks Online.",
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: "Pour utiliser l'exportation d'écritures de journal, configurez un compte de journal dans QuickBooks Online.",
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: "Pour utiliser l'exportation de chèques, configurez un compte bancaire dans QuickBooks Online.",
+            },
             noAccountsFound: 'Aucun compte trouvé',
             noAccountsFoundDescription: 'Ajoutez le compte dans QuickBooks Online et synchronisez à nouveau la connexion.',
             accountingMethods: {
                 label: 'Quand exporter',
                 description: 'Choisissez quand exporter les dépenses :',
-                values: (_m = {},
-                    _m[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Accrual',
-                    _m[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = 'Espèces',
-                    _m),
-                alternateText: (_o = {},
-                    _o[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
-                    _o[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
-                    _o),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Accrual',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: 'Espèces',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
+                },
             },
         },
         workspaceList: {
@@ -4132,24 +3412,18 @@ var translations = {
             accountsSwitchDescription: 'Les catégories activées seront disponibles pour les membres lors de la création de leurs dépenses.',
             trackingCategories: 'Catégories de suivi',
             trackingCategoriesDescription: 'Choisissez comment gérer les catégories de suivi Xero dans Expensify.',
-            mapTrackingCategoryTo: function (_a) {
-                var categoryName = _a.categoryName;
-                return "Mapper ".concat(categoryName, " de Xero \u00E0");
-            },
-            mapTrackingCategoryToDescription: function (_a) {
-                var categoryName = _a.categoryName;
-                return "Choisissez o\u00F9 mapper ".concat(categoryName, " lors de l'exportation vers Xero.");
-            },
+            mapTrackingCategoryTo: ({ categoryName }) => `Mapper ${categoryName} de Xero à`,
+            mapTrackingCategoryToDescription: ({ categoryName }) => `Choisissez où mapper ${categoryName} lors de l'exportation vers Xero.`,
             customers: 'Refacturer les clients',
             customersDescription: 'Choisissez si vous souhaitez refacturer les clients dans Expensify. Vos contacts clients Xero peuvent être associés à des dépenses et seront exportés vers Xero en tant que facture de vente.',
             taxesDescription: 'Choisissez comment gérer les taxes Xero dans Expensify.',
             notImported: 'Non importé',
             notConfigured: 'Non configuré',
-            trackingCategoriesOptions: (_p = {},
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.DEFAULT] = 'Xero contact par défaut',
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.TAG] = 'Tags',
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.REPORT_FIELD] = 'Champs de rapport',
-                _p),
+            trackingCategoriesOptions: {
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.DEFAULT]: 'Xero contact par défaut',
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.TAG]: 'Tags',
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.REPORT_FIELD]: 'Champs de rapport',
+            },
             exportDescription: 'Configurez comment les données Expensify sont exportées vers Xero.',
             purchaseBill: "Facture d'achat",
             exportDeepDiveCompanyCard: 'Les dépenses exportées seront enregistrées comme transactions bancaires sur le compte bancaire Xero ci-dessous, et les dates des transactions correspondront aux dates de votre relevé bancaire.',
@@ -4173,43 +3447,43 @@ var translations = {
             exportDate: {
                 label: "Date de la facture d'achat",
                 description: "Utilisez cette date lors de l'exportation des rapports vers Xero.",
-                values: (_q = {},
-                    _q[CONST_1.default.XERO_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.XERO_EXPORT_DATE.LAST_EXPENSE]: {
                         label: 'Date de la dernière dépense',
                         description: 'Date de la dépense la plus récente sur le rapport.',
                     },
-                    _q[CONST_1.default.XERO_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.XERO_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: "Date d'exportation",
                         description: 'Date à laquelle le rapport a été exporté vers Xero.',
                     },
-                    _q[CONST_1.default.XERO_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.XERO_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: 'Date de soumission',
                         description: 'Date à laquelle le rapport a été soumis pour approbation.',
                     },
-                    _q),
+                },
             },
             invoiceStatus: {
                 label: "Statut de la facture d'achat",
                 description: "Utilisez ce statut lors de l'exportation des factures d'achat vers Xero.",
-                values: (_r = {},
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.DRAFT] = 'Brouillon',
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_APPROVAL] = "En attente d'approbation",
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_PAYMENT] = 'En attente de paiement',
-                    _r),
+                values: {
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.DRAFT]: 'Brouillon',
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_APPROVAL]: "En attente d'approbation",
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_PAYMENT]: 'En attente de paiement',
+                },
             },
             noAccountsFound: 'Aucun compte trouvé',
             noAccountsFoundDescription: 'Veuillez ajouter le compte dans Xero et synchroniser à nouveau la connexion.',
             accountingMethods: {
                 label: 'Quand exporter',
                 description: 'Choisissez quand exporter les dépenses :',
-                values: (_s = {},
-                    _s[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Accrual',
-                    _s[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = 'Espèces',
-                    _s),
-                alternateText: (_t = {},
-                    _t[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
-                    _t[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
-                    _t),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Accrual',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: 'Espèces',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
+                },
             },
         },
         sageIntacct: {
@@ -4219,46 +3493,43 @@ var translations = {
             exportDate: {
                 label: "Date d'exportation",
                 description: "Utilisez cette date lors de l'exportation des rapports vers Sage Intacct.",
-                values: (_u = {},
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.LAST_EXPENSE]: {
                         label: 'Date de la dernière dépense',
                         description: 'Date de la dépense la plus récente sur le rapport.',
                     },
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.EXPORTED] = {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.EXPORTED]: {
                         label: "Date d'exportation",
                         description: 'Date à laquelle le rapport a été exporté vers Sage Intacct.',
                     },
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.SUBMITTED] = {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.SUBMITTED]: {
                         label: 'Date de soumission',
                         description: 'Date à laquelle le rapport a été soumis pour approbation.',
                     },
-                    _u),
+                },
             },
             reimbursableExpenses: {
                 description: 'Définissez comment les dépenses personnelles sont exportées vers Sage Intacct.',
-                values: (_v = {},
-                    _v[CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.EXPENSE_REPORT] = 'Rapports de dépenses',
-                    _v[CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL] = 'Factures fournisseurs',
-                    _v),
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.EXPENSE_REPORT]: 'Rapports de dépenses',
+                    [CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL]: 'Factures fournisseurs',
+                },
             },
             nonReimbursableExpenses: {
                 description: "Définissez comment les achats par carte d'entreprise sont exportés vers Sage Intacct.",
-                values: (_w = {},
-                    _w[CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.CREDIT_CARD_CHARGE] = 'Cartes de crédit',
-                    _w[CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL] = 'Factures fournisseurs',
-                    _w),
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.CREDIT_CARD_CHARGE]: 'Cartes de crédit',
+                    [CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL]: 'Factures fournisseurs',
+                },
             },
             creditCardAccount: 'Compte de carte de crédit',
             defaultVendor: 'Fournisseur par défaut',
-            defaultVendorDescription: function (_a) {
-                var isReimbursable = _a.isReimbursable;
-                return "D\u00E9finissez un fournisseur par d\u00E9faut qui s'appliquera aux d\u00E9penses remboursables de ".concat(isReimbursable ? '' : 'non-', " qui n'ont pas de fournisseur correspondant dans Sage Intacct.");
-            },
+            defaultVendorDescription: ({ isReimbursable }) => `Définissez un fournisseur par défaut qui s'appliquera aux dépenses remboursables de ${isReimbursable ? '' : 'non-'} qui n'ont pas de fournisseur correspondant dans Sage Intacct.`,
             exportDescription: 'Configurez comment les données Expensify sont exportées vers Sage Intacct.',
             exportPreferredExporterNote: "L'exportateur préféré peut être n'importe quel administrateur de l'espace de travail, mais doit également être un administrateur de domaine si vous définissez différents comptes d'exportation pour des cartes d'entreprise individuelles dans les paramètres de domaine.",
             exportPreferredExporterSubNote: "Une fois défini, l'exportateur préféré verra les rapports à exporter dans son compte.",
             noAccountsFound: 'Aucun compte trouvé',
-            noAccountsFoundDescription: "Veuillez ajouter le compte dans Sage Intacct et synchroniser \u00E0 nouveau la connexion.",
+            noAccountsFoundDescription: `Veuillez ajouter le compte dans Sage Intacct et synchroniser à nouveau la connexion.`,
             autoSync: 'Synchronisation automatique',
             autoSyncDescription: 'Expensify se synchronisera automatiquement avec Sage Intacct tous les jours.',
             inviteEmployees: 'Inviter des employés',
@@ -4269,14 +3540,14 @@ var translations = {
             accountingMethods: {
                 label: 'Quand exporter',
                 description: 'Choisissez quand exporter les dépenses :',
-                values: (_x = {},
-                    _x[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Accrual',
-                    _x[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = 'Espèces',
-                    _x),
-                alternateText: (_y = {},
-                    _y[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
-                    _y[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
-                    _y),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Accrual',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: 'Espèces',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
+                },
             },
         },
         netsuite: {
@@ -4292,50 +3563,50 @@ var translations = {
             reimbursableJournalPostingAccount: 'Compte de publication de journal remboursable',
             journalPostingPreference: {
                 label: 'Préférence de publication des écritures de journal',
-                values: (_z = {},
-                    _z[CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_INDIVIDUAL_LINE] = 'Entrée unique et détaillée pour chaque rapport',
-                    _z[CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_TOTAL_LINE] = 'Une seule entrée pour chaque dépense',
-                    _z),
+                values: {
+                    [CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_INDIVIDUAL_LINE]: 'Entrée unique et détaillée pour chaque rapport',
+                    [CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_TOTAL_LINE]: 'Une seule entrée pour chaque dépense',
+                },
             },
             invoiceItem: {
                 label: 'Article de facture',
-                values: (_0 = {},
-                    _0[CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.CREATE] = {
+                values: {
+                    [CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.CREATE]: {
                         label: 'Créez-en un pour moi',
                         description: 'Nous créerons un "élément de ligne de facture Expensify" pour vous lors de l\'exportation (si un n\'existe pas déjà).',
                     },
-                    _0[CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.SELECT] = {
+                    [CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.SELECT]: {
                         label: 'Sélectionner existant',
                         description: "Nous lierons les factures d'Expensify à l'élément sélectionné ci-dessous.",
                     },
-                    _0),
+                },
             },
             exportDate: {
                 label: "Date d'exportation",
                 description: "Utilisez cette date lors de l'exportation des rapports vers NetSuite.",
-                values: (_1 = {},
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.LAST_EXPENSE]: {
                         label: 'Date de la dernière dépense',
                         description: 'Date de la dépense la plus récente sur le rapport.',
                     },
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.EXPORTED] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.EXPORTED]: {
                         label: "Date d'exportation",
                         description: 'Date à laquelle le rapport a été exporté vers NetSuite.',
                     },
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.SUBMITTED] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.SUBMITTED]: {
                         label: 'Date de soumission',
                         description: 'Date à laquelle le rapport a été soumis pour approbation.',
                     },
-                    _1),
+                },
             },
             exportDestination: {
-                values: (_2 = {},
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.EXPENSE_REPORT] = {
+                values: {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.EXPENSE_REPORT]: {
                         label: 'Rapports de dépenses',
                         reimbursableDescription: 'Les dépenses personnelles seront exportées sous forme de rapports de dépenses vers NetSuite.',
                         nonReimbursableDescription: "Les dépenses des cartes d'entreprise seront exportées sous forme de rapports de dépenses vers NetSuite.",
                     },
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.VENDOR_BILL] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.VENDOR_BILL]: {
                         label: 'Factures fournisseurs',
                         reimbursableDescription: 'Out-of-pocket expenses will export as bills payable to the NetSuite vendor specified below.\n' +
                             '\n' +
@@ -4344,7 +3615,7 @@ var translations = {
                             '\n' +
                             'If you’d like to set a specific vendor for each card, go to *Settings > Domains > Company Cards*.',
                     },
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.JOURNAL_ENTRY] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.JOURNAL_ENTRY]: {
                         label: 'Écritures de journal',
                         reimbursableDescription: 'Out-of-pocket expenses will export as journal entries to the NetSuite account specified below.\n' +
                             '\n' +
@@ -4353,7 +3624,7 @@ var translations = {
                             '\n' +
                             'If you’d like to set a specific vendor for each card, go to *Settings > Domains > Company Cards*.',
                     },
-                    _2),
+                },
             },
             advancedConfig: {
                 autoSyncDescription: 'Expensify se synchronisera automatiquement avec NetSuite tous les jours.',
@@ -4376,42 +3647,42 @@ var translations = {
                 exportReportsTo: {
                     label: "Niveau d'approbation du rapport de dépenses",
                     description: "Une fois qu'un rapport de dépenses est approuvé dans Expensify et exporté vers NetSuite, vous pouvez définir un niveau d'approbation supplémentaire dans NetSuite avant la publication.",
-                    values: (_3 = {},
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_NONE] = 'Préférence par défaut de NetSuite',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_SUPERVISOR_APPROVED] = 'Approuvé uniquement par le superviseur',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_ACCOUNTING_APPROVED] = 'Seulement la comptabilité approuvée',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_BOTH] = 'Superviseur et comptabilité approuvés',
-                        _3),
+                    values: {
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_NONE]: 'Préférence par défaut de NetSuite',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_SUPERVISOR_APPROVED]: 'Approuvé uniquement par le superviseur',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_ACCOUNTING_APPROVED]: 'Seulement la comptabilité approuvée',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_BOTH]: 'Superviseur et comptabilité approuvés',
+                    },
                 },
                 accountingMethods: {
                     label: 'Quand exporter',
                     description: 'Choisissez quand exporter les dépenses :',
-                    values: (_4 = {},
-                        _4[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Accrual',
-                        _4[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = 'Espèces',
-                        _4),
-                    alternateText: (_5 = {},
-                        _5[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
-                        _5[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
-                        _5),
+                    values: {
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Accrual',
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: 'Espèces',
+                    },
+                    alternateText: {
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: 'Les dépenses hors de la poche seront exportées une fois approuvées définitivement.',
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: "Les dépenses personnelles seront exportées lorsqu'elles seront payées.",
+                    },
                 },
                 exportVendorBillsTo: {
                     label: "Niveau d'approbation des factures fournisseurs",
                     description: "Une fois qu'une facture fournisseur est approuvée dans Expensify et exportée vers NetSuite, vous pouvez définir un niveau d'approbation supplémentaire dans NetSuite avant la publication.",
-                    values: (_6 = {},
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED_NONE] = 'Préférence par défaut de NetSuite',
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVAL_PENDING] = "En attente d'approbation",
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED] = 'Approuvé pour publication',
-                        _6),
+                    values: {
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED_NONE]: 'Préférence par défaut de NetSuite',
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVAL_PENDING]: "En attente d'approbation",
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED]: 'Approuvé pour publication',
+                    },
                 },
                 exportJournalsTo: {
                     label: "Niveau d'approbation de l'écriture de journal",
                     description: "Une fois qu'une écriture de journal est approuvée dans Expensify et exportée vers NetSuite, vous pouvez définir un niveau d'approbation supplémentaire dans NetSuite avant de la comptabiliser.",
-                    values: (_7 = {},
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED_NONE] = 'Préférence par défaut de NetSuite',
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVAL_PENDING] = "En attente d'approbation",
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED] = 'Approuvé pour publication',
-                        _7),
+                    values: {
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED_NONE]: 'Préférence par défaut de NetSuite',
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVAL_PENDING]: "En attente d'approbation",
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED]: 'Approuvé pour publication',
+                    },
                 },
                 error: {
                     customFormID: 'Veuillez entrer un ID de formulaire personnalisé numérique valide',
@@ -4480,22 +3751,13 @@ var translations = {
                     importJobs: 'Importer des projets',
                     customers: 'clients',
                     jobs: 'projets',
-                    label: function (_a) {
-                        var importFields = _a.importFields, importType = _a.importType;
-                        return "".concat(importFields.join('et'), ", ").concat(importType);
-                    },
+                    label: ({ importFields, importType }) => `${importFields.join('et')}, ${importType}`,
                 },
                 importTaxDescription: 'Importer des groupes de taxes depuis NetSuite.',
                 importCustomFields: {
                     chooseOptionBelow: 'Choisissez une option ci-dessous :',
-                    label: function (_a) {
-                        var importedTypes = _a.importedTypes;
-                        return "Import\u00E9 en tant que ".concat(importedTypes.join('et'));
-                    },
-                    requiredFieldError: function (_a) {
-                        var fieldName = _a.fieldName;
-                        return "Veuillez entrer le ".concat(fieldName);
-                    },
+                    label: ({ importedTypes }) => `Importé en tant que ${importedTypes.join('et')}`,
+                    requiredFieldError: ({ fieldName }) => `Veuillez entrer le ${fieldName}`,
                     customSegments: {
                         title: 'Segments/enregistrements personnalisés',
                         addText: 'Ajouter un segment/enregistrement personnalisé',
@@ -4523,23 +3785,20 @@ var translations = {
                             segmentRecordType: 'Voulez-vous ajouter un segment personnalisé ou un enregistrement personnalisé ?',
                             customSegmentNameTitle: 'Quel est le nom du segment personnalisé ?',
                             customRecordNameTitle: "Quel est le nom de l'enregistrement personnalisé ?",
-                            customSegmentNameFooter: "Vous pouvez trouver les noms de segments personnalis\u00E9s dans NetSuite sous *Customizations > Links, Records & Fields > Custom Segments*.\n\n_Pour des instructions plus d\u00E9taill\u00E9es, [visitez notre site d'aide](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_."),
-                            customRecordNameFooter: "Vous pouvez trouver des noms d'enregistrements personnalis\u00E9s dans NetSuite en entrant \"Transaction Column Field\" dans la recherche globale.\n\n_Pour des instructions plus d\u00E9taill\u00E9es, [visitez notre site d'aide](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_."),
+                            customSegmentNameFooter: `Vous pouvez trouver les noms de segments personnalisés dans NetSuite sous *Customizations > Links, Records & Fields > Custom Segments*.\n\n_Pour des instructions plus détaillées, [visitez notre site d'aide](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_.`,
+                            customRecordNameFooter: `Vous pouvez trouver des noms d'enregistrements personnalisés dans NetSuite en entrant "Transaction Column Field" dans la recherche globale.\n\n_Pour des instructions plus détaillées, [visitez notre site d'aide](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_.`,
                             customSegmentInternalIDTitle: "Quel est l'ID interne ?",
-                            customSegmentInternalIDFooter: "Tout d'abord, assurez-vous d'avoir activ\u00E9 les ID internes dans NetSuite sous *Accueil > D\u00E9finir les pr\u00E9f\u00E9rences > Afficher l'ID interne.*\n\nVous pouvez trouver les ID internes des segments personnalis\u00E9s dans NetSuite sous :\n\n1. *Personnalisation > Listes, enregistrements et champs > Segments personnalis\u00E9s*.\n2. Cliquez sur un segment personnalis\u00E9.\n3. Cliquez sur le lien hypertexte \u00E0 c\u00F4t\u00E9 de *Type d'enregistrement personnalis\u00E9*.\n4. Trouvez l'ID interne dans le tableau en bas.\n\n_Pour des instructions plus d\u00E9taill\u00E9es, [visitez notre site d'aide](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")_."),
-                            customRecordInternalIDFooter: "Vous pouvez trouver les ID internes des enregistrements personnalis\u00E9s dans NetSuite en suivant ces \u00E9tapes :\n\n1. Entrez \"Transaction Line Fields\" dans la recherche globale.\n2. Cliquez sur un enregistrement personnalis\u00E9.\n3. Trouvez l'ID interne sur le c\u00F4t\u00E9 gauche.\n\n_Pour des instructions plus d\u00E9taill\u00E9es, [visitez notre site d'aide](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_."),
+                            customSegmentInternalIDFooter: `Tout d'abord, assurez-vous d'avoir activé les ID internes dans NetSuite sous *Accueil > Définir les préférences > Afficher l'ID interne.*\n\nVous pouvez trouver les ID internes des segments personnalisés dans NetSuite sous :\n\n1. *Personnalisation > Listes, enregistrements et champs > Segments personnalisés*.\n2. Cliquez sur un segment personnalisé.\n3. Cliquez sur le lien hypertexte à côté de *Type d'enregistrement personnalisé*.\n4. Trouvez l'ID interne dans le tableau en bas.\n\n_Pour des instructions plus détaillées, [visitez notre site d'aide](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})_.`,
+                            customRecordInternalIDFooter: `Vous pouvez trouver les ID internes des enregistrements personnalisés dans NetSuite en suivant ces étapes :\n\n1. Entrez "Transaction Line Fields" dans la recherche globale.\n2. Cliquez sur un enregistrement personnalisé.\n3. Trouvez l'ID interne sur le côté gauche.\n\n_Pour des instructions plus détaillées, [visitez notre site d'aide](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_.`,
                             customSegmentScriptIDTitle: "Quel est l'ID du script ?",
-                            customSegmentScriptIDFooter: "Vous pouvez trouver les IDs de script de segment personnalis\u00E9 dans NetSuite sous :\n\n1. *Personnalisation > Listes, Enregistrements et Champs > Segments Personnalis\u00E9s*.\n2. Cliquez sur un segment personnalis\u00E9.\n3. Cliquez sur l'onglet *Application et Sourcing* en bas, puis :\n    a. Si vous souhaitez afficher le segment personnalis\u00E9 comme un *tag* (au niveau de l'article) dans Expensify, cliquez sur le sous-onglet *Colonnes de Transaction* et utilisez l'*ID de Champ*.\n    b. Si vous souhaitez afficher le segment personnalis\u00E9 comme un *champ de rapport* (au niveau du rapport) dans Expensify, cliquez sur le sous-onglet *Transactions* et utilisez l'*ID de Champ*.\n\n_Pour des instructions plus d\u00E9taill\u00E9es, [visitez notre site d'aide](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")_."),
+                            customSegmentScriptIDFooter: `Vous pouvez trouver les IDs de script de segment personnalisé dans NetSuite sous :\n\n1. *Personnalisation > Listes, Enregistrements et Champs > Segments Personnalisés*.\n2. Cliquez sur un segment personnalisé.\n3. Cliquez sur l'onglet *Application et Sourcing* en bas, puis :\n    a. Si vous souhaitez afficher le segment personnalisé comme un *tag* (au niveau de l'article) dans Expensify, cliquez sur le sous-onglet *Colonnes de Transaction* et utilisez l'*ID de Champ*.\n    b. Si vous souhaitez afficher le segment personnalisé comme un *champ de rapport* (au niveau du rapport) dans Expensify, cliquez sur le sous-onglet *Transactions* et utilisez l'*ID de Champ*.\n\n_Pour des instructions plus détaillées, [visitez notre site d'aide](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})_.`,
                             customRecordScriptIDTitle: "Quel est l'ID de la colonne de transaction ?",
-                            customRecordScriptIDFooter: "Vous pouvez trouver les ID de script d'enregistrement personnalis\u00E9 dans NetSuite sous :\n\n1. Entrez \"Transaction Line Fields\" dans la recherche globale.\n2. Cliquez sur un enregistrement personnalis\u00E9.\n3. Trouvez l'ID de script sur le c\u00F4t\u00E9 gauche.\n\n_Pour des instructions plus d\u00E9taill\u00E9es, [visitez notre site d'aide](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")_."),
+                            customRecordScriptIDFooter: `Vous pouvez trouver les ID de script d'enregistrement personnalisé dans NetSuite sous :\n\n1. Entrez "Transaction Line Fields" dans la recherche globale.\n2. Cliquez sur un enregistrement personnalisé.\n3. Trouvez l'ID de script sur le côté gauche.\n\n_Pour des instructions plus détaillées, [visitez notre site d'aide](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})_.`,
                             customSegmentMappingTitle: 'Comment ce segment personnalisé doit-il être affiché dans Expensify ?',
                             customRecordMappingTitle: 'Comment cet enregistrement personnalisé doit-il être affiché dans Expensify ?',
                         },
                         errors: {
-                            uniqueFieldError: function (_a) {
-                                var fieldName = _a.fieldName;
-                                return "Un segment/enregistrement personnalis\u00E9 avec ce ".concat(fieldName === null || fieldName === void 0 ? void 0 : fieldName.toLowerCase(), " existe d\u00E9j\u00E0.");
-                            },
+                            uniqueFieldError: ({ fieldName }) => `Un segment/enregistrement personnalisé avec ce ${fieldName?.toLowerCase()} existe déjà.`,
                         },
                     },
                     customLists: {
@@ -4561,40 +3820,31 @@ var translations = {
                         addForm: {
                             listNameTitle: 'Choisir une liste personnalisée',
                             transactionFieldIDTitle: "Quel est l'ID du champ de transaction ?",
-                            transactionFieldIDFooter: "Vous pouvez trouver les identifiants des champs de transaction dans NetSuite en suivant ces \u00E9tapes :\n\n1. Entrez \"Champs de ligne de transaction\" dans la recherche globale.\n2. Cliquez sur une liste personnalis\u00E9e.\n3. Trouvez l'identifiant du champ de transaction sur le c\u00F4t\u00E9 gauche.\n\n_Pour des instructions plus d\u00E9taill\u00E9es, [visitez notre site d'aide](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")_."),
+                            transactionFieldIDFooter: `Vous pouvez trouver les identifiants des champs de transaction dans NetSuite en suivant ces étapes :\n\n1. Entrez "Champs de ligne de transaction" dans la recherche globale.\n2. Cliquez sur une liste personnalisée.\n3. Trouvez l'identifiant du champ de transaction sur le côté gauche.\n\n_Pour des instructions plus détaillées, [visitez notre site d'aide](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})_.`,
                             mappingTitle: 'Comment cette liste personnalisée doit-elle être affichée dans Expensify ?',
                         },
                         errors: {
-                            uniqueTransactionFieldIDError: "Une liste personnalis\u00E9e avec cet ID de champ de transaction existe d\u00E9j\u00E0.",
+                            uniqueTransactionFieldIDError: `Une liste personnalisée avec cet ID de champ de transaction existe déjà.`,
                         },
                     },
                 },
-                importTypes: (_8 = {},
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT] = {
+                importTypes: {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT]: {
                         label: 'Employé par défaut de NetSuite',
                         description: "Non importé dans Expensify, appliqué à l'exportation",
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "Si vous utilisez ".concat(importField, " dans NetSuite, nous appliquerons la valeur par d\u00E9faut d\u00E9finie sur le dossier de l'employ\u00E9 lors de l'exportation vers le rapport de d\u00E9penses ou l'\u00E9criture de journal.");
-                        },
+                        footerContent: ({ importField }) => `Si vous utilisez ${importField} dans NetSuite, nous appliquerons la valeur par défaut définie sur le dossier de l'employé lors de l'exportation vers le rapport de dépenses ou l'écriture de journal.`,
                     },
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG] = {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG]: {
                         label: 'Tags',
                         description: 'Niveau des postes de dépense',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "".concat((0, startCase_1.default)(importField), " sera s\u00E9lectionnable pour chaque d\u00E9pense individuelle sur le rapport d'un employ\u00E9.");
-                        },
+                        footerContent: ({ importField }) => `${(0, startCase_1.default)(importField)} sera sélectionnable pour chaque dépense individuelle sur le rapport d'un employé.`,
                     },
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD] = {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD]: {
                         label: 'Champs de rapport',
                         description: 'Niveau de rapport',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "La s\u00E9lection ".concat((0, startCase_1.default)(importField), " s'appliquera \u00E0 toutes les d\u00E9penses sur le rapport d'un employ\u00E9.");
-                        },
+                        footerContent: ({ importField }) => `La sélection ${(0, startCase_1.default)(importField)} s'appliquera à toutes les dépenses sur le rapport d'un employé.`,
                     },
-                    _8),
+                },
             },
         },
         intacct: {
@@ -4624,12 +3874,11 @@ var translations = {
             addAUserDefinedDimension: "Ajouter une dimension définie par l'utilisateur",
             detailedInstructionsLink: 'Voir les instructions détaillées',
             detailedInstructionsRestOfSentence: "sur l'ajout de dimensions définies par l'utilisateur.",
-            userDimensionsAdded: function () { return ({
+            userDimensionsAdded: () => ({
                 one: '1 UDD ajouté',
-                other: function (count) { return "".concat(count, " UDD ajout\u00E9s"); },
-            }); },
-            mappingTitle: function (_a) {
-                var mappingName = _a.mappingName;
+                other: (count) => `${count} UDD ajoutés`,
+            }),
+            mappingTitle: ({ mappingName }) => {
                 switch (mappingName) {
                     case CONST_1.default.SAGE_INTACCT_CONFIG.MAPPINGS.DEPARTMENTS:
                         return 'départements';
@@ -4662,7 +3911,7 @@ var translations = {
                     vcf: 'Visa Commercial Cards',
                     stripe: 'Cartes Stripe',
                 },
-                yourCardProvider: "Qui est votre fournisseur de carte ?",
+                yourCardProvider: `Qui est votre fournisseur de carte ?`,
                 whoIsYourBankAccount: 'Quelle est votre banque ?',
                 whereIsYourBankLocated: 'Où se trouve votre banque ?',
                 howDoYouWantToConnect: 'Comment souhaitez-vous vous connecter à votre banque ?',
@@ -4671,20 +3920,17 @@ var translations = {
                     linkText: 'options.',
                 },
                 commercialFeedDetails: 'Nécessite une configuration avec votre banque. Cela est généralement utilisé par les grandes entreprises et est souvent la meilleure option si vous êtes éligible.',
-                commercialFeedPlaidDetails: "N\u00E9cessite une configuration avec votre banque, mais nous vous guiderons. Cela est g\u00E9n\u00E9ralement limit\u00E9 aux grandes entreprises.",
+                commercialFeedPlaidDetails: `Nécessite une configuration avec votre banque, mais nous vous guiderons. Cela est généralement limité aux grandes entreprises.`,
                 directFeedDetails: "L'approche la plus simple. Connectez-vous immédiatement en utilisant vos identifiants principaux. Cette méthode est la plus courante.",
                 enableFeed: {
-                    title: function (_a) {
-                        var provider = _a.provider;
-                        return "Activez votre flux ".concat(provider);
-                    },
+                    title: ({ provider }) => `Activez votre flux ${provider}`,
                     heading: "Nous avons une intégration directe avec l'émetteur de votre carte et pouvons importer vos données de transaction dans Expensify rapidement et avec précision.\n\nPour commencer, il vous suffit de :",
                     visa: "Nous avons des intégrations globales avec Visa, bien que l'éligibilité varie selon la banque et le programme de carte.\n\nPour commencer, il suffit de :",
                     mastercard: "Nous avons des intégrations globales avec Mastercard, bien que l'éligibilité varie selon la banque et le programme de carte.\n\nPour commencer, il vous suffit de :",
-                    vcf: "1. Consultez [cet article d'aide](".concat(CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP, ") pour des instructions d\u00E9taill\u00E9es sur la configuration de vos cartes commerciales Visa.\n\n2. [Contactez votre banque](").concat(CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP, ") pour v\u00E9rifier qu'elle prend en charge un flux commercial pour votre programme, et demandez-lui de l'activer.\n\n3. *Une fois le flux activ\u00E9 et ses d\u00E9tails obtenus, passez \u00E0 l'\u00E9cran suivant.*"),
-                    gl1025: "1. Visitez [cet article d'aide](".concat(CONST_1.default.COMPANY_CARDS_AMEX_COMMERCIAL_CARD_HELP, ") pour savoir si American Express peut activer un flux commercial pour votre programme.\n\n2. Une fois le flux activ\u00E9, Amex vous enverra une lettre de production.\n\n3. *Une fois que vous avez les informations du flux, continuez \u00E0 l'\u00E9cran suivant.*"),
-                    cdf: "1. Consultez [cet article d'aide](".concat(CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS, ") pour obtenir des instructions d\u00E9taill\u00E9es sur la configuration de vos cartes commerciales Mastercard.\n\n2. [Contactez votre banque](").concat(CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS, ") pour v\u00E9rifier qu'elle prend en charge un flux commercial pour votre programme et demandez-lui de l'activer.\n\n3. *Une fois le flux activ\u00E9 et ses d\u00E9tails obtenus, passez \u00E0 l'\u00E9cran suivant.*"),
-                    stripe: "1. Visitez le tableau de bord de Stripe, et allez dans [Param\u00E8tres](".concat(CONST_1.default.COMPANY_CARDS_STRIPE_HELP, ").\n\n2. Sous Int\u00E9grations de produits, cliquez sur Activer \u00E0 c\u00F4t\u00E9 de Expensify.\n\n3. Une fois le flux activ\u00E9, cliquez sur Soumettre ci-dessous et nous travaillerons \u00E0 l'ajouter."),
+                    vcf: `1. Consultez [cet article d'aide](${CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP}) pour des instructions détaillées sur la configuration de vos cartes commerciales Visa.\n\n2. [Contactez votre banque](${CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP}) pour vérifier qu'elle prend en charge un flux commercial pour votre programme, et demandez-lui de l'activer.\n\n3. *Une fois le flux activé et ses détails obtenus, passez à l'écran suivant.*`,
+                    gl1025: `1. Visitez [cet article d'aide](${CONST_1.default.COMPANY_CARDS_AMEX_COMMERCIAL_CARD_HELP}) pour savoir si American Express peut activer un flux commercial pour votre programme.\n\n2. Une fois le flux activé, Amex vous enverra une lettre de production.\n\n3. *Une fois que vous avez les informations du flux, continuez à l'écran suivant.*`,
+                    cdf: `1. Consultez [cet article d'aide](${CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS}) pour obtenir des instructions détaillées sur la configuration de vos cartes commerciales Mastercard.\n\n2. [Contactez votre banque](${CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS}) pour vérifier qu'elle prend en charge un flux commercial pour votre programme et demandez-lui de l'activer.\n\n3. *Une fois le flux activé et ses détails obtenus, passez à l'écran suivant.*`,
+                    stripe: `1. Visitez le tableau de bord de Stripe, et allez dans [Paramètres](${CONST_1.default.COMPANY_CARDS_STRIPE_HELP}).\n\n2. Sous Intégrations de produits, cliquez sur Activer à côté de Expensify.\n\n3. Une fois le flux activé, cliquez sur Soumettre ci-dessous et nous travaillerons à l'ajouter.`,
                 },
                 whatBankIssuesCard: 'Quelle banque émet ces cartes ?',
                 enterNameOfBank: 'Entrez le nom de la banque',
@@ -4697,12 +3943,12 @@ var translations = {
                         helpLabel: 'Où puis-je trouver ces identifiants ?',
                     },
                     gl1025: {
-                        title: "Quel est le nom du fichier de livraison Amex ?",
+                        title: `Quel est le nom du fichier de livraison Amex ?`,
                         fileNameLabel: 'Nom du fichier de livraison',
                         helpLabel: 'Où puis-je trouver le nom du fichier de livraison ?',
                     },
                     cdf: {
-                        title: "Quel est l'identifiant de distribution Mastercard ?",
+                        title: `Quel est l'identifiant de distribution Mastercard ?`,
                         distributionLabel: 'ID de distribution',
                         helpLabel: "Où puis-je trouver l'ID de distribution ?",
                     },
@@ -4718,26 +3964,20 @@ var translations = {
                     pleaseSelectFeedType: 'Veuillez sélectionner un type de flux avant de continuer',
                 },
             },
-            statementCloseDate: (_9 = {},
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_DAY_OF_MONTH] = 'Dernier jour du mois',
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_BUSINESS_DAY_OF_MONTH] = 'Dernier jour ouvrable du mois',
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH] = 'Jour personnalisé du mois',
-                _9),
+            statementCloseDate: {
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_DAY_OF_MONTH]: 'Dernier jour du mois',
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_BUSINESS_DAY_OF_MONTH]: 'Dernier jour ouvrable du mois',
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH]: 'Jour personnalisé du mois',
+            },
             assignCard: 'Attribuer la carte',
             findCard: 'Trouver la carte',
             cardNumber: 'Numéro de carte',
             commercialFeed: 'Flux commercial',
-            feedName: function (_a) {
-                var feedName = _a.feedName;
-                return "Cartes ".concat(feedName);
-            },
+            feedName: ({ feedName }) => `Cartes ${feedName}`,
             directFeed: 'Flux direct',
             whoNeedsCardAssigned: "Qui a besoin d'une carte assignée ?",
             chooseCard: 'Choisissez une carte',
-            chooseCardFor: function (_a) {
-                var assignee = _a.assignee, feed = _a.feed;
-                return "Choisissez une carte pour ".concat(assignee, " \u00E0 partir du flux de cartes ").concat(feed, ".");
-            },
+            chooseCardFor: ({ assignee, feed }) => `Choisissez une carte pour ${assignee} à partir du flux de cartes ${feed}.`,
             noActiveCards: 'Aucune carte active dans ce flux',
             somethingMightBeBroken: "<muted-text><centered-text>Ou quelque chose pourrait être cassé. Dans tous les cas, si vous avez des questions, n'hésitez pas à <concierge-link>contacter le Concierge</concierge-link>.</centered-text></muted-text>",
             chooseTransactionStartDate: 'Choisissez une date de début de transaction',
@@ -4750,13 +3990,10 @@ var translations = {
             cardholder: 'Titulaire de carte',
             card: 'Carte',
             cardName: 'Nom de la carte',
-            brokenConnectionErrorFirstPart: "La connexion du flux de carte est interrompue. S'il vous pla\u00EEt",
+            brokenConnectionErrorFirstPart: `La connexion du flux de carte est interrompue. S'il vous plaît`,
             brokenConnectionErrorLink: 'connectez-vous à votre banque',
             brokenConnectionErrorSecondPart: 'afin que nous puissions rétablir la connexion.',
-            assignedCard: function (_a) {
-                var assignee = _a.assignee, link = _a.link;
-                return "a attribu\u00E9 ".concat(link, " \u00E0 ").concat(assignee, " ! Les transactions import\u00E9es appara\u00EEtront dans cette discussion.");
-            },
+            assignedCard: ({ assignee, link }) => `a attribué ${link} à ${assignee} ! Les transactions importées apparaîtront dans cette discussion.`,
             companyCard: "carte d'entreprise",
             chooseCardFeed: 'Choisir le flux de cartes',
             ukRegulation: "Expensify, Inc. est un agent de Plaid Financial Ltd., une institution de paiement autorisée régulée par la Financial Conduct Authority sous les Payment Services Regulations 2017 (Numéro de Référence de l'Entreprise : 804718). Plaid vous fournit des services d'information de compte régulés via Expensify Limited en tant qu'agent.",
@@ -4776,10 +4013,7 @@ var translations = {
             limit: 'Limite',
             currentBalance: 'Solde actuel',
             currentBalanceDescription: 'Le solde actuel est la somme de toutes les transactions effectuées avec la carte Expensify depuis la dernière date de règlement.',
-            balanceWillBeSettledOn: function (_a) {
-                var settlementDate = _a.settlementDate;
-                return "Le solde sera r\u00E9gl\u00E9 le ".concat(settlementDate);
-            },
+            balanceWillBeSettledOn: ({ settlementDate }) => `Le solde sera réglé le ${settlementDate}`,
             settleBalance: 'Régler le solde',
             cardLimit: 'Limite de carte',
             remainingLimit: 'Limite restante',
@@ -4795,10 +4029,7 @@ var translations = {
             addNewBankAccount: 'Ajouter un nouveau compte bancaire',
             settlementAccount: 'Compte de règlement',
             settlementAccountDescription: 'Choisissez un compte pour payer le solde de votre carte Expensify.',
-            settlementAccountInfo: function (_a) {
-                var reconciliationAccountSettingsLink = _a.reconciliationAccountSettingsLink, accountNumber = _a.accountNumber;
-                return "Assurez-vous que ce compte correspond \u00E0 votre <a href=\"".concat(reconciliationAccountSettingsLink, "\">compte de r\u00E9conciliation</a> (").concat(accountNumber, ") afin que le r\u00E9conciliation continu fonctionne correctement.");
-            },
+            settlementAccountInfo: ({ reconciliationAccountSettingsLink, accountNumber }) => `Assurez-vous que ce compte correspond à votre <a href="${reconciliationAccountSettingsLink}">compte de réconciliation</a> (${accountNumber}) afin que le réconciliation continu fonctionne correctement.`,
             settlementFrequency: 'Fréquence de règlement',
             settlementFrequencyDescription: 'Choisissez la fréquence à laquelle vous paierez le solde de votre Expensify Card.',
             settlementFrequencyInfo: 'Si vous souhaitez passer à un règlement mensuel, vous devrez connecter votre compte bancaire via Plaid et avoir un historique de solde positif sur 90 jours.',
@@ -4812,45 +4043,18 @@ var translations = {
             deactivate: 'Désactiver la carte',
             changeCardLimit: 'Modifier la limite de la carte',
             changeLimit: 'Modifier la limite',
-            smartLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "Si vous modifiez la limite de cette carte \u00E0 ".concat(limit, ", les nouvelles transactions seront refus\u00E9es jusqu'\u00E0 ce que vous approuviez plus de d\u00E9penses sur la carte.");
-            },
-            monthlyLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "Si vous changez la limite de cette carte \u00E0 ".concat(limit, ", les nouvelles transactions seront refus\u00E9es jusqu'au mois prochain.");
-            },
-            fixedLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "Si vous changez la limite de cette carte \u00E0 ".concat(limit, ", les nouvelles transactions seront refus\u00E9es.");
-            },
+            smartLimitWarning: ({ limit }) => `Si vous modifiez la limite de cette carte à ${limit}, les nouvelles transactions seront refusées jusqu'à ce que vous approuviez plus de dépenses sur la carte.`,
+            monthlyLimitWarning: ({ limit }) => `Si vous changez la limite de cette carte à ${limit}, les nouvelles transactions seront refusées jusqu'au mois prochain.`,
+            fixedLimitWarning: ({ limit }) => `Si vous changez la limite de cette carte à ${limit}, les nouvelles transactions seront refusées.`,
             changeCardLimitType: 'Modifier le type de limite de carte',
             changeLimitType: 'Modifier le type de limite',
-            changeCardSmartLimitTypeWarning: function (_a) {
-                var limit = _a.limit;
-                return "Si vous changez le type de limite de cette carte en Limite Intelligente, les nouvelles transactions seront refus\u00E9es car la limite non approuv\u00E9e de ".concat(limit, " a d\u00E9j\u00E0 \u00E9t\u00E9 atteinte.");
-            },
-            changeCardMonthlyLimitTypeWarning: function (_a) {
-                var limit = _a.limit;
-                return "Si vous changez le type de limite de cette carte en Mensuel, les nouvelles transactions seront refus\u00E9es car la limite mensuelle de ".concat(limit, " a d\u00E9j\u00E0 \u00E9t\u00E9 atteinte.");
-            },
+            changeCardSmartLimitTypeWarning: ({ limit }) => `Si vous changez le type de limite de cette carte en Limite Intelligente, les nouvelles transactions seront refusées car la limite non approuvée de ${limit} a déjà été atteinte.`,
+            changeCardMonthlyLimitTypeWarning: ({ limit }) => `Si vous changez le type de limite de cette carte en Mensuel, les nouvelles transactions seront refusées car la limite mensuelle de ${limit} a déjà été atteinte.`,
             addShippingDetails: "Ajouter les détails d'expédition",
-            issuedCard: function (_a) {
-                var assignee = _a.assignee;
-                return "a \u00E9mis une carte Expensify \u00E0 ".concat(assignee, " ! La carte arrivera dans 2-3 jours ouvrables.");
-            },
-            issuedCardNoShippingDetails: function (_a) {
-                var assignee = _a.assignee;
-                return "a \u00E9mis une carte Expensify \u00E0 ".concat(assignee, " ! La carte sera exp\u00E9di\u00E9e une fois que les d\u00E9tails d'exp\u00E9dition seront ajout\u00E9s.");
-            },
-            issuedCardVirtual: function (_a) {
-                var assignee = _a.assignee, link = _a.link;
-                return "a \u00E9mis une ".concat(link, " virtuelle \u00E0 ").concat(assignee, " ! La carte peut \u00EAtre utilis\u00E9e imm\u00E9diatement.");
-            },
-            addedShippingDetails: function (_a) {
-                var assignee = _a.assignee;
-                return "".concat(assignee, " a ajout\u00E9 les d\u00E9tails d'exp\u00E9dition. La carte Expensify arrivera dans 2-3 jours ouvrables.");
-            },
+            issuedCard: ({ assignee }) => `a émis une carte Expensify à ${assignee} ! La carte arrivera dans 2-3 jours ouvrables.`,
+            issuedCardNoShippingDetails: ({ assignee }) => `a émis une carte Expensify à ${assignee} ! La carte sera expédiée une fois que les détails d'expédition seront ajoutés.`,
+            issuedCardVirtual: ({ assignee, link }) => `a émis une ${link} virtuelle à ${assignee} ! La carte peut être utilisée immédiatement.`,
+            addedShippingDetails: ({ assignee }) => `${assignee} a ajouté les détails d'expédition. La carte Expensify arrivera dans 2-3 jours ouvrables.`,
             verifyingHeader: 'Vérification en cours',
             bankAccountVerifiedHeader: 'Compte bancaire vérifié',
             verifyingBankAccount: 'Vérification du compte bancaire...',
@@ -4876,18 +4080,12 @@ var translations = {
             deleteFailureMessage: "Une erreur s'est produite lors de la suppression de la catégorie, veuillez réessayer.",
             categoryName: 'Nom de catégorie',
             requiresCategory: 'Les membres doivent catégoriser toutes les dépenses',
-            needCategoryForExportToIntegration: function (_a) {
-                var connectionName = _a.connectionName;
-                return "Toutes les d\u00E9penses doivent \u00EAtre cat\u00E9goris\u00E9es pour pouvoir \u00EAtre export\u00E9es vers ".concat(connectionName, ".");
-            },
+            needCategoryForExportToIntegration: ({ connectionName }) => `Toutes les dépenses doivent être catégorisées pour pouvoir être exportées vers ${connectionName}.`,
             subtitle: "Obtenez une meilleure vue d'ensemble de l'endroit où l'argent est dépensé. Utilisez nos catégories par défaut ou ajoutez les vôtres.",
             emptyCategories: {
                 title: "Vous n'avez créé aucune catégorie",
                 subtitle: 'Ajoutez une catégorie pour organiser vos dépenses.',
-                subtitleWithAccounting: function (_a) {
-                    var accountingPageURL = _a.accountingPageURL;
-                    return "<muted-text><centered-text>Vos cat\u00E9gories sont actuellement import\u00E9es \u00E0 partir d'une connexion comptable. Allez dans la <a href=\"".concat(accountingPageURL, "\">comptabilit\u00E9</a> pour faire des changements.</centered-text></muted-text>");
-                },
+                subtitleWithAccounting: ({ accountingPageURL }) => `<muted-text><centered-text>Vos catégories sont actuellement importées à partir d'une connexion comptable. Allez dans la <a href="${accountingPageURL}">comptabilité</a> pour faire des changements.</centered-text></muted-text>`,
             },
             updateFailureMessage: "Une erreur s'est produite lors de la mise à jour de la catégorie, veuillez réessayer.",
             createFailureMessage: "Une erreur s'est produite lors de la création de la catégorie, veuillez réessayer.",
@@ -4906,7 +4104,7 @@ var translations = {
             importCategories: 'Importer des catégories',
             cannotDeleteOrDisableAllCategories: {
                 title: 'Impossible de supprimer ou désactiver toutes les catégories',
-                description: "Au moins une cat\u00E9gorie doit rester activ\u00E9e car votre espace de travail n\u00E9cessite des cat\u00E9gories.",
+                description: `Au moins une catégorie doit rester activée car votre espace de travail nécessite des catégories.`,
             },
         },
         moreFeatures: {
@@ -4974,18 +4172,9 @@ var translations = {
                 cardNumber: 'Numéro de carte',
                 cardholder: 'Titulaire de carte',
                 cardName: 'Nom de la carte',
-                integrationExport: function (_a) {
-                    var integration = _a.integration, type = _a.type;
-                    return integration && type ? "".concat(integration, " ").concat(type.toLowerCase(), " exportation") : "exportation ".concat(integration);
-                },
-                integrationExportTitleXero: function (_a) {
-                    var integration = _a.integration;
-                    return "Choisissez le compte ".concat(integration, " vers lequel les transactions doivent \u00EAtre export\u00E9es.");
-                },
-                integrationExportTitle: function (_a) {
-                    var integration = _a.integration, exportPageLink = _a.exportPageLink;
-                    return "Choisissez le compte ".concat(integration, " vers lequel les transactions doivent \u00EAtre export\u00E9es. S\u00E9lectionnez une autre <a href=\"").concat(exportPageLink, "\">option d'exportation</a> pour modifier les comptes disponibles.");
-                },
+                integrationExport: ({ integration, type }) => integration && type ? `${integration} ${type.toLowerCase()} exportation` : `exportation ${integration}`,
+                integrationExportTitleXero: ({ integration }) => `Choisissez le compte ${integration} vers lequel les transactions doivent être exportées.`,
+                integrationExportTitle: ({ integration, exportPageLink }) => `Choisissez le compte ${integration} vers lequel les transactions doivent être exportées. Sélectionnez une autre <a href="${exportPageLink}">option d'exportation</a> pour modifier les comptes disponibles.`,
                 lastUpdated: 'Dernière mise à jour',
                 transactionStartDate: 'Date de début de la transaction',
                 updateCard: 'Mettre à jour la carte',
@@ -5000,10 +4189,7 @@ var translations = {
                 cardFeedRestrictDeletingTransaction: 'Restreindre la suppression des transactions',
                 cardFeedAllowDeletingTransaction: 'Autoriser la suppression des transactions',
                 removeCardFeed: 'Supprimer le flux de cartes',
-                removeCardFeedTitle: function (_a) {
-                    var feedName = _a.feedName;
-                    return "Supprimer le flux ".concat(feedName);
-                },
+                removeCardFeedTitle: ({ feedName }) => `Supprimer le flux ${feedName}`,
                 removeCardFeedDescription: 'Êtes-vous sûr de vouloir supprimer ce flux de cartes ? Cela désassignera toutes les cartes.',
                 error: {
                     feedNameRequired: 'Le nom du flux de carte est requis',
@@ -5015,26 +4201,20 @@ var translations = {
                 setTransactionLiabilityDescription: "Lorsqu'elle est activée, les titulaires de carte peuvent supprimer des transactions par carte. Les nouvelles transactions suivront cette règle.",
                 emptyAddedFeedTitle: "Attribuer des cartes d'entreprise",
                 emptyAddedFeedDescription: 'Commencez en attribuant votre première carte à un membre.',
-                pendingFeedTitle: "Nous examinons votre demande...",
-                pendingFeedDescription: "Nous examinons actuellement les d\u00E9tails de votre flux. Une fois cela termin\u00E9, nous vous contacterons via",
+                pendingFeedTitle: `Nous examinons votre demande...`,
+                pendingFeedDescription: `Nous examinons actuellement les détails de votre flux. Une fois cela terminé, nous vous contacterons via`,
                 pendingBankTitle: 'Vérifiez la fenêtre de votre navigateur',
-                pendingBankDescription: function (_a) {
-                    var bankName = _a.bankName;
-                    return "Veuillez vous connecter \u00E0 ".concat(bankName, " via la fen\u00EAtre de votre navigateur qui vient de s'ouvrir. Si aucune ne s'est ouverte,");
-                },
+                pendingBankDescription: ({ bankName }) => `Veuillez vous connecter à ${bankName} via la fenêtre de votre navigateur qui vient de s'ouvrir. Si aucune ne s'est ouverte,`,
                 pendingBankLink: 'veuillez cliquer ici',
                 giveItNameInstruction: 'Donnez un nom à la carte qui la distingue des autres.',
                 updating: 'Mise à jour...',
                 noAccountsFound: 'Aucun compte trouvé',
                 defaultCard: 'Carte par défaut',
-                downgradeTitle: "Impossible de r\u00E9trograder l'espace de travail",
-                downgradeSubTitleFirstPart: "Cet espace de travail ne peut pas \u00EAtre r\u00E9trograd\u00E9 car plusieurs flux de cartes sont connect\u00E9s (\u00E0 l'exclusion des cartes Expensify). Veuillez",
-                downgradeSubTitleMiddlePart: "garder uniquement un flux de cartes",
+                downgradeTitle: `Impossible de rétrograder l'espace de travail`,
+                downgradeSubTitleFirstPart: `Cet espace de travail ne peut pas être rétrogradé car plusieurs flux de cartes sont connectés (à l'exclusion des cartes Expensify). Veuillez`,
+                downgradeSubTitleMiddlePart: `garder uniquement un flux de cartes`,
                 downgradeSubTitleLastPart: 'pour continuer.',
-                noAccountsFoundDescription: function (_a) {
-                    var connection = _a.connection;
-                    return "Veuillez ajouter le compte dans ".concat(connection, " et synchroniser \u00E0 nouveau la connexion.");
-                },
+                noAccountsFoundDescription: ({ connection }) => `Veuillez ajouter le compte dans ${connection} et synchroniser à nouveau la connexion.`,
                 expensifyCardBannerTitle: 'Obtenez la carte Expensify',
                 expensifyCardBannerSubtitle: "Profitez de remises en argent sur chaque achat aux États-Unis, jusqu'à 50 % de réduction sur votre facture Expensify, des cartes virtuelles illimitées, et bien plus encore.",
                 expensifyCardBannerLearnMoreButton: 'En savoir plus',
@@ -5098,9 +4278,9 @@ var translations = {
         },
         reports: {
             reportsCustomTitleExamples: 'Exemples :',
-            customReportNamesSubtitle: "<muted-text>Personnalisez les titres des rapports \u00E0 l'aide de nos <a href=\"".concat(CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL, "\">formules compl\u00E8tes</a>.</muted-text>"),
+            customReportNamesSubtitle: `<muted-text>Personnalisez les titres des rapports à l'aide de nos <a href="${CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL}">formules complètes</a>.</muted-text>`,
             customNameTitle: 'Titre de rapport par défaut',
-            customNameDescription: "Choisissez un nom personnalis\u00E9 pour vos notes de frais \u00E0 l'aide de nos <a href=\"".concat(CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL, "\">formules compl\u00E8tes</a>."),
+            customNameDescription: `Choisissez un nom personnalisé pour vos notes de frais à l'aide de nos <a href="${CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL}">formules complètes</a>.`,
             customNameInputLabel: 'Nom',
             customNameEmailPhoneExample: 'E-mail ou téléphone du membre : {report:submit:from}',
             customNameStartDateExample: 'Date de début du rapport : {report:startdate}',
@@ -5175,19 +4355,13 @@ var translations = {
             editTags: 'Modifier les balises',
             findTag: 'Trouver une balise',
             subtitle: 'Les étiquettes ajoutent des moyens plus détaillés pour classer les coûts.',
-            dependentMultiLevelTagsSubtitle: function (_a) {
-                var importSpreadsheetLink = _a.importSpreadsheetLink;
-                return "<muted-text>Vous utilisez des <a href=\"".concat(CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL_DEPENDENT_TAGS, "\">balises d\u00E9pendantes</a>. Vous pouvez <a href=\"").concat(importSpreadsheetLink, "\">r\u00E9importer une feuille de calcul</a> pour mettre \u00E0 jour vos balises.</muted-text>");
-            },
+            dependentMultiLevelTagsSubtitle: ({ importSpreadsheetLink }) => `<muted-text>Vous utilisez des <a href="${CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL_DEPENDENT_TAGS}">balises dépendantes</a>. Vous pouvez <a href="${importSpreadsheetLink}">réimporter une feuille de calcul</a> pour mettre à jour vos balises.</muted-text>`,
             emptyTags: {
                 title: "Vous n'avez créé aucun tag",
                 //  We need to remove the subtitle and use the below one when we remove the canUseMultiLevelTags beta
                 subtitle: 'Ajoutez une étiquette pour suivre les projets, les emplacements, les départements, et plus encore.',
-                subtitleHTML: "<muted-text><centered-text>Importez une feuille de calcul pour ajouter des balises permettant de suivre les projets, les lieux, les services, etc. <a href=\"".concat(CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL, "\">En savoir plus</a> sur le formatage des fichiers de balises.</centered-text></muted-text>"),
-                subtitleWithAccounting: function (_a) {
-                    var accountingPageURL = _a.accountingPageURL;
-                    return "<muted-text><centered-text>Vos \u00E9tiquettes sont actuellement import\u00E9es \u00E0 partir d'une connexion comptable. Allez dans la <a href=\"".concat(accountingPageURL, "\">comptabilit\u00E9</a> pour faire des changements.</centered-text></muted-text>");
-                },
+                subtitleHTML: `<muted-text><centered-text>Importez une feuille de calcul pour ajouter des balises permettant de suivre les projets, les lieux, les services, etc. <a href="${CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL}">En savoir plus</a> sur le formatage des fichiers de balises.</centered-text></muted-text>`,
+                subtitleWithAccounting: ({ accountingPageURL }) => `<muted-text><centered-text>Vos étiquettes sont actuellement importées à partir d'une connexion comptable. Allez dans la <a href="${accountingPageURL}">comptabilité</a> pour faire des changements.</centered-text></muted-text>`,
             },
             deleteTag: 'Supprimer le tag',
             deleteTags: 'Supprimer les balises',
@@ -5206,7 +4380,7 @@ var translations = {
             importTags: 'Importer des tags',
             importTagsSupportingText: 'Codez vos dépenses avec un type de balise ou plusieurs.',
             configureMultiLevelTags: 'Configurez votre liste de tags pour un étiquetage multi-niveaux.',
-            importMultiLevelTagsSupportingText: "Voici un aper\u00E7u de vos \u00E9tiquettes. Si tout semble correct, cliquez ci-dessous pour les importer.",
+            importMultiLevelTagsSupportingText: `Voici un aperçu de vos étiquettes. Si tout semble correct, cliquez ci-dessous pour les importer.`,
             importMultiLevelTags: {
                 firstRowTitle: 'La première ligne est le titre de chaque liste de tags',
                 independentTags: 'Ce sont des balises indépendantes',
@@ -5225,22 +4399,19 @@ var translations = {
                 prompt5: 'En savoir plus',
                 prompt6: 'à propos des niveaux de balises.',
             },
-            importedTagsMessage: function (_a) {
-                var columnCounts = _a.columnCounts;
-                return "Nous avons trouv\u00E9 *".concat(columnCounts, " colonnes* dans votre feuille de calcul. S\u00E9lectionnez *Nom* \u00E0 c\u00F4t\u00E9 de la colonne contenant les noms des balises. Vous pouvez \u00E9galement s\u00E9lectionner *Activ\u00E9* \u00E0 c\u00F4t\u00E9 de la colonne qui d\u00E9finit le statut des balises.");
-            },
+            importedTagsMessage: ({ columnCounts }) => `Nous avons trouvé *${columnCounts} colonnes* dans votre feuille de calcul. Sélectionnez *Nom* à côté de la colonne contenant les noms des balises. Vous pouvez également sélectionner *Activé* à côté de la colonne qui définit le statut des balises.`,
             cannotDeleteOrDisableAllTags: {
                 title: 'Impossible de supprimer ou de désactiver tous les tags',
-                description: "Au moins une \u00E9tiquette doit rester activ\u00E9e car votre espace de travail n\u00E9cessite des \u00E9tiquettes.",
+                description: `Au moins une étiquette doit rester activée car votre espace de travail nécessite des étiquettes.`,
             },
             cannotMakeAllTagsOptional: {
                 title: 'Impossible de rendre toutes les balises facultatives',
-                description: "Au moins une \u00E9tiquette doit rester obligatoire car les param\u00E8tres de votre espace de travail exigent des \u00E9tiquettes.",
+                description: `Au moins une étiquette doit rester obligatoire car les paramètres de votre espace de travail exigent des étiquettes.`,
             },
-            tagCount: function () { return ({
+            tagCount: () => ({
                 one: '1 jour',
-                other: function (count) { return "".concat(count, " Tags"); },
-            }); },
+                other: (count) => `${count} Tags`,
+            }),
         },
         taxes: {
             subtitle: 'Ajoutez les noms de taxes, les taux et définissez les valeurs par défaut.',
@@ -5263,23 +4434,20 @@ var translations = {
                 updateTaxClaimableFailureMessage: 'La portion récupérable doit être inférieure au montant du taux de distance.',
             },
             deleteTaxConfirmation: 'Êtes-vous sûr de vouloir supprimer cette taxe ?',
-            deleteMultipleTaxConfirmation: function (_a) {
-                var taxAmount = _a.taxAmount;
-                return "\u00CAtes-vous s\u00FBr de vouloir supprimer les taxes de ".concat(taxAmount, " ?");
-            },
+            deleteMultipleTaxConfirmation: ({ taxAmount }) => `Êtes-vous sûr de vouloir supprimer les taxes de ${taxAmount} ?`,
             actions: {
                 delete: 'Supprimer le taux',
                 deleteMultiple: 'Supprimer les tarifs',
                 enable: 'Activer le tarif',
                 disable: 'Désactiver le taux',
-                enableTaxRates: function () { return ({
+                enableTaxRates: () => ({
                     one: 'Activer le tarif',
                     other: 'Activer les tarifs',
-                }); },
-                disableTaxRates: function () { return ({
+                }),
+                disableTaxRates: () => ({
                     one: 'Désactiver le taux',
                     other: 'Désactiver les taux',
-                }); },
+                }),
             },
             importedFromAccountingSoftware: 'Les taxes ci-dessous sont importées de votre',
             taxCode: 'Code fiscal',
@@ -5294,10 +4462,7 @@ var translations = {
             reimbursementAccount: 'Cuenta de reembolso',
             delayedSubmission: 'Envío retrasado',
             welcomeNote: 'Empieza a usar mi nuevo espacio de trabajo',
-            confirmTitle: function (_a) {
-                var newWorkspaceName = _a.newWorkspaceName, totalMembers = _a.totalMembers;
-                return "Vous \u00EAtes sur le point de cr\u00E9er et de partager ".concat(newWorkspaceName !== null && newWorkspaceName !== void 0 ? newWorkspaceName : '', " avec ").concat(totalMembers !== null && totalMembers !== void 0 ? totalMembers : 0, " membres de l'espace de travail d'origine.");
-            },
+            confirmTitle: ({ newWorkspaceName, totalMembers }) => `Vous êtes sur le point de créer et de partager ${newWorkspaceName ?? ''} avec ${totalMembers ?? 0} membres de l'espace de travail d'origine.`,
         },
         emptyWorkspace: {
             title: "Vous n'avez aucun espace de travail",
@@ -5315,40 +4480,25 @@ var translations = {
             newWorkspace: 'Nouvel espace de travail',
             getTheExpensifyCardAndMore: 'Obtenez la carte Expensify et plus encore',
             confirmWorkspace: "Confirmer l'espace de travail",
-            myGroupWorkspace: function (_a) {
-                var workspaceNumber = _a.workspaceNumber;
-                return "Mon espace de travail de groupe".concat(workspaceNumber ? " ".concat(workspaceNumber) : '');
-            },
-            workspaceName: function (_a) {
-                var userName = _a.userName, workspaceNumber = _a.workspaceNumber;
-                return "Espace de travail de ".concat(userName).concat(workspaceNumber ? " ".concat(workspaceNumber) : '');
-            },
+            myGroupWorkspace: ({ workspaceNumber }) => `Mon espace de travail de groupe${workspaceNumber ? ` ${workspaceNumber}` : ''}`,
+            workspaceName: ({ userName, workspaceNumber }) => `Espace de travail de ${userName}${workspaceNumber ? ` ${workspaceNumber}` : ''}`,
         },
         people: {
             genericFailureMessage: "Une erreur s'est produite lors de la suppression d'un membre de l'espace de travail, veuillez réessayer.",
-            removeMembersPrompt: function (_a) {
-                var memberName = _a.memberName;
-                return ({
-                    one: "\u00CAtes-vous s\u00FBr de vouloir supprimer ".concat(memberName, " ?"),
-                    other: 'Êtes-vous sûr de vouloir supprimer ces membres ?',
-                });
-            },
-            removeMembersWarningPrompt: function (_a) {
-                var memberName = _a.memberName, ownerName = _a.ownerName;
-                return "".concat(memberName, " est un approbateur dans cet espace de travail. Lorsque vous ne partagez plus cet espace de travail avec eux, nous les remplacerons dans le flux d'approbation par le propri\u00E9taire de l'espace de travail, ").concat(ownerName, ".");
-            },
-            removeMembersTitle: function () { return ({
+            removeMembersPrompt: ({ memberName }) => ({
+                one: `Êtes-vous sûr de vouloir supprimer ${memberName} ?`,
+                other: 'Êtes-vous sûr de vouloir supprimer ces membres ?',
+            }),
+            removeMembersWarningPrompt: ({ memberName, ownerName }) => `${memberName} est un approbateur dans cet espace de travail. Lorsque vous ne partagez plus cet espace de travail avec eux, nous les remplacerons dans le flux d'approbation par le propriétaire de l'espace de travail, ${ownerName}.`,
+            removeMembersTitle: () => ({
                 one: 'Supprimer le membre',
                 other: 'Supprimer des membres',
-            }); },
+            }),
             findMember: 'Trouver un membre',
             removeWorkspaceMemberButtonTitle: "Supprimer de l'espace de travail",
             removeGroupMemberButtonTitle: 'Retirer du groupe',
             removeRoomMemberButtonTitle: 'Supprimer du chat',
-            removeMemberPrompt: function (_a) {
-                var memberName = _a.memberName;
-                return "\u00CAtes-vous s\u00FBr de vouloir supprimer ".concat(memberName, " ?");
-            },
+            removeMemberPrompt: ({ memberName }) => `Êtes-vous sûr de vouloir supprimer ${memberName} ?`,
             removeMemberTitle: 'Supprimer le membre',
             transferOwner: 'Transférer le propriétaire',
             makeMember: 'Rendre membre',
@@ -5361,14 +4511,8 @@ var translations = {
                 genericRemove: "Un problème est survenu lors de la suppression de ce membre de l'espace de travail.",
             },
             addedWithPrimary: 'Certains membres ont été ajoutés avec leurs identifiants principaux.',
-            invitedBySecondaryLogin: function (_a) {
-                var secondaryLogin = _a.secondaryLogin;
-                return "Ajout\u00E9 par la connexion secondaire ".concat(secondaryLogin, ".");
-            },
-            workspaceMembersCount: function (_a) {
-                var count = _a.count;
-                return "Nombre total de membres de l\u2019espace de travail : ".concat(count);
-            },
+            invitedBySecondaryLogin: ({ secondaryLogin }) => `Ajouté par la connexion secondaire ${secondaryLogin}.`,
+            workspaceMembersCount: ({ count }) => `Nombre total de membres de l’espace de travail : ${count}`,
             importMembers: 'Importer des membres',
         },
         card: {
@@ -5425,8 +4569,7 @@ var translations = {
             talkYourAccountManager: 'Discutez avec votre gestionnaire de compte.',
             talkToConcierge: 'Discuter avec Concierge.',
             needAnotherAccounting: "Besoin d'un autre logiciel de comptabilité ?",
-            connectionName: function (_a) {
-                var connectionName = _a.connectionName;
+            connectionName: ({ connectionName }) => {
                 switch (connectionName) {
                     case CONST_1.default.POLICY.CONNECTIONS.NAME.QBO:
                         return 'QuickBooks Online';
@@ -5445,10 +4588,7 @@ var translations = {
             goToODToFix: 'Allez sur Expensify Classic pour résoudre ce problème.',
             goToODToSettings: 'Accédez à Expensify Classic pour gérer vos paramètres.',
             setup: 'Connecter',
-            lastSync: function (_a) {
-                var relativeDate = _a.relativeDate;
-                return "Derni\u00E8re synchronisation ".concat(relativeDate);
-            },
+            lastSync: ({ relativeDate }) => `Dernière synchronisation ${relativeDate}`,
             notSync: 'Non synchronisé',
             import: 'Importation',
             export: 'Exportation',
@@ -5457,18 +4597,12 @@ var translations = {
             syncNow: 'Synchroniser maintenant',
             disconnect: 'Déconnecter',
             reinstall: 'Réinstaller le connecteur',
-            disconnectTitle: function (_a) {
-                var _b = _a === void 0 ? {} : _a, connectionName = _b.connectionName;
-                var integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : 'intégration';
-                return "D\u00E9connecter ".concat(integrationName);
+            disconnectTitle: ({ connectionName } = {}) => {
+                const integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : 'intégration';
+                return `Déconnecter ${integrationName}`;
             },
-            connectTitle: function (_a) {
-                var _b;
-                var connectionName = _a.connectionName;
-                return "Connecter ".concat((_b = CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]) !== null && _b !== void 0 ? _b : 'intégration comptable');
-            },
-            syncError: function (_a) {
-                var connectionName = _a.connectionName;
+            connectTitle: ({ connectionName }) => `Connecter ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ?? 'intégration comptable'}`,
+            syncError: ({ connectionName }) => {
                 switch (connectionName) {
                     case CONST_1.default.POLICY.CONNECTIONS.NAME.QBO:
                         return 'Impossible de se connecter à QuickBooks Online';
@@ -5488,29 +4622,23 @@ var translations = {
             imported: 'Importé',
             notImported: 'Non importé',
             importAsCategory: 'Importé en tant que catégories',
-            importTypes: (_10 = {},
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.IMPORTED] = 'Importé',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG] = 'Importé en tant que tags',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.DEFAULT] = 'Importé',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NOT_IMPORTED] = 'Non importé',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE] = 'Non importé',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD] = 'Importé en tant que champs de rapport',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT] = 'Employé par défaut de NetSuite',
-                _10),
-            disconnectPrompt: function (_a) {
-                var _b = _a === void 0 ? {} : _a, connectionName = _b.connectionName;
-                var integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : 'cette intégration';
-                return "\u00CAtes-vous s\u00FBr de vouloir d\u00E9connecter ".concat(integrationName, " ?");
+            importTypes: {
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.IMPORTED]: 'Importé',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG]: 'Importé en tant que tags',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.DEFAULT]: 'Importé',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NOT_IMPORTED]: 'Non importé',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE]: 'Non importé',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD]: 'Importé en tant que champs de rapport',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT]: 'Employé par défaut de NetSuite',
             },
-            connectPrompt: function (_a) {
-                var _b;
-                var connectionName = _a.connectionName;
-                return "\u00CAtes-vous s\u00FBr de vouloir connecter ".concat((_b = CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]) !== null && _b !== void 0 ? _b : 'cette intégration comptable', " ? Cela supprimera toutes les connexions comptables existantes.");
+            disconnectPrompt: ({ connectionName } = {}) => {
+                const integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : 'cette intégration';
+                return `Êtes-vous sûr de vouloir déconnecter ${integrationName} ?`;
             },
+            connectPrompt: ({ connectionName }) => `Êtes-vous sûr de vouloir connecter ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ?? 'cette intégration comptable'} ? Cela supprimera toutes les connexions comptables existantes.`,
             enterCredentials: 'Entrez vos identifiants',
             connections: {
-                syncStageName: function (_a) {
-                    var stage = _a.stage;
+                syncStageName: ({ stage }) => {
                     switch (stage) {
                         case 'quickbooksOnlineImportCustomers':
                         case 'quickbooksDesktopImportCustomers':
@@ -5639,7 +4767,7 @@ var translations = {
                             return 'Importation des données Sage Intacct';
                         default: {
                             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                            return "Traduction manquante pour l'\u00E9tape : ".concat(stage);
+                            return `Traduction manquante pour l'étape : ${stage}`;
                         }
                     }
                 },
@@ -5659,18 +4787,12 @@ var translations = {
             reconciliationAccount: 'Compte de réconciliation',
             continuousReconciliation: 'Réconciliation Continue',
             saveHoursOnReconciliation: 'Gagnez des heures sur la réconciliation à chaque période comptable en laissant Expensify réconcilier en continu les relevés et les règlements de la carte Expensify pour vous.',
-            enableContinuousReconciliation: function (_a) {
-                var accountingAdvancedSettingsLink = _a.accountingAdvancedSettingsLink, connectionName = _a.connectionName;
-                return "<muted-text-label>Pour activer la r\u00E9conciliation continue, veuillez activer la <a href=\"".concat(accountingAdvancedSettingsLink, "\">synchronisation automatique</a> pour ").concat(connectionName, ".</muted-text-label>");
-            },
+            enableContinuousReconciliation: ({ accountingAdvancedSettingsLink, connectionName }) => `<muted-text-label>Pour activer la réconciliation continue, veuillez activer la <a href="${accountingAdvancedSettingsLink}">synchronisation automatique</a> pour ${connectionName}.</muted-text-label>`,
             chooseReconciliationAccount: {
                 chooseBankAccount: 'Choisissez le compte bancaire sur lequel les paiements de votre carte Expensify seront rapprochés.',
                 accountMatches: 'Assurez-vous que ce compte correspond à votre',
                 settlementAccount: 'Compte de règlement de la carte Expensify',
-                reconciliationWorks: function (_a) {
-                    var lastFourPAN = _a.lastFourPAN;
-                    return "(terminant par ".concat(lastFourPAN, ") afin que la R\u00E9conciliation Continue fonctionne correctement.");
-                },
+                reconciliationWorks: ({ lastFourPAN }) => `(terminant par ${lastFourPAN}) afin que la Réconciliation Continue fonctionne correctement.`,
             },
         },
         export: {
@@ -5700,7 +4822,7 @@ var translations = {
             members: 'Inviter des membres',
             invitePeople: 'Inviter de nouveaux membres',
             genericFailureMessage: "Une erreur s'est produite lors de l'invitation du membre à l'espace de travail. Veuillez réessayer.",
-            pleaseEnterValidLogin: "Veuillez vous assurer que l'email ou le num\u00E9ro de t\u00E9l\u00E9phone est valide (par exemple, ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, ")."),
+            pleaseEnterValidLogin: `Veuillez vous assurer que l'email ou le numéro de téléphone est valide (par exemple, ${CONST_1.default.EXAMPLE_PHONE_NUMBER}).`,
             user: 'utilisateur',
             users: 'utilisateurs',
             invited: 'invité',
@@ -5714,10 +4836,7 @@ var translations = {
             personalMessagePrompt: 'Message',
             genericFailureMessage: "Une erreur s'est produite lors de l'invitation du membre à l'espace de travail. Veuillez réessayer.",
             inviteNoMembersError: 'Veuillez sélectionner au moins un membre à inviter',
-            joinRequest: function (_a) {
-                var user = _a.user, workspaceName = _a.workspaceName;
-                return "".concat(user, " a demand\u00E9 \u00E0 rejoindre ").concat(workspaceName);
-            },
+            joinRequest: ({ user, workspaceName }) => `${user} a demandé à rejoindre ${workspaceName}`,
         },
         distanceRates: {
             oopsNotSoFast: 'Oups ! Pas si vite...',
@@ -5728,28 +4847,28 @@ var translations = {
             addRate: 'Ajouter un tarif',
             findRate: 'Trouver le tarif',
             trackTax: 'Suivre la taxe',
-            deleteRates: function () { return ({
+            deleteRates: () => ({
                 one: 'Supprimer le taux',
                 other: 'Supprimer les tarifs',
-            }); },
-            enableRates: function () { return ({
+            }),
+            enableRates: () => ({
                 one: 'Activer le tarif',
                 other: 'Activer les tarifs',
-            }); },
-            disableRates: function () { return ({
+            }),
+            disableRates: () => ({
                 one: 'Désactiver le taux',
                 other: 'Désactiver les taux',
-            }); },
+            }),
             enableRate: 'Activer le tarif',
             status: 'Statut',
             unit: 'Unité',
             taxFeatureNotEnabledMessage: "Les taxes doivent être activées sur l'espace de travail pour utiliser cette fonctionnalité. Rendez-vous sur",
             changePromptMessage: 'pour effectuer ce changement.',
             deleteDistanceRate: 'Supprimer le tarif de distance',
-            areYouSureDelete: function () { return ({
+            areYouSureDelete: () => ({
                 one: 'Êtes-vous sûr de vouloir supprimer ce tarif ?',
                 other: 'Êtes-vous sûr de vouloir supprimer ces tarifs ?',
-            }); },
+            }),
             errors: {
                 rateNameRequired: 'Le nom du tarif est requis',
                 existingRateName: 'Un tarif de distance avec ce nom existe déjà.',
@@ -5764,10 +4883,7 @@ var translations = {
             nameIsRequiredError: 'Vous devrez donner un nom à votre espace de travail',
             currencyInputLabel: 'Devise par défaut',
             currencyInputHelpText: 'Toutes les dépenses de cet espace de travail seront converties dans cette devise.',
-            currencyInputDisabledText: function (_a) {
-                var currency = _a.currency;
-                return "La devise par d\u00E9faut ne peut pas \u00EAtre modifi\u00E9e car cet espace de travail est li\u00E9 \u00E0 un compte bancaire en ".concat(currency, ".");
-            },
+            currencyInputDisabledText: ({ currency }) => `La devise par défaut ne peut pas être modifiée car cet espace de travail est lié à un compte bancaire en ${currency}.`,
             save: 'Enregistrer',
             genericFailureMessage: "Une erreur s'est produite lors de la mise à jour de l'espace de travail. Veuillez réessayer.",
             avatarUploadFailureMessage: "Une erreur s'est produite lors du téléchargement de l'avatar. Veuillez réessayer.",
@@ -5799,158 +4915,136 @@ var translations = {
             updateToUSD: 'Mettre à jour en USD',
             updateWorkspaceCurrency: "Mettre à jour la devise de l'espace de travail",
             workspaceCurrencyNotSupported: "Devise de l'espace de travail non prise en charge",
-            yourWorkspace: "Votre espace de travail est configur\u00E9 avec une devise non prise en charge. Consultez la <a href=\"".concat(CONST_1.default.CONNECT_A_BUSINESS_BANK_ACCOUNT_HELP_URL, "\">liste des devises prises en charge</a>."),
+            yourWorkspace: `Votre espace de travail est configuré avec une devise non prise en charge. Consultez la <a href="${CONST_1.default.CONNECT_A_BUSINESS_BANK_ACCOUNT_HELP_URL}">liste des devises prises en charge</a>.`,
         },
         changeOwner: {
             changeOwnerPageTitle: 'Transférer le propriétaire',
             addPaymentCardTitle: 'Entrez votre carte de paiement pour transférer la propriété',
             addPaymentCardButtonText: 'Accepter les conditions et ajouter une carte de paiement',
-            addPaymentCardReadAndAcceptText: "<muted-text-micro>Lisez et acceptez les <a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">termes</a> et la <a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">politique de confidentialit\u00E9</a> pour ajouter votre carte.</muted-text-micro>"),
+            addPaymentCardReadAndAcceptText: `<muted-text-micro>Lisez et acceptez les <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">termes</a> et la <a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">politique de confidentialité</a> pour ajouter votre carte.</muted-text-micro>`,
             addPaymentCardPciCompliant: 'Conforme à la norme PCI-DSS',
             addPaymentCardBankLevelEncrypt: 'Chiffrement de niveau bancaire',
             addPaymentCardRedundant: 'Infrastructure redondante',
-            addPaymentCardLearnMore: "<muted-text>LEn savoir plus sur notre <a href=\"".concat(CONST_1.default.PERSONAL_DATA_PROTECTION_INFO_URL, "\">s\u00E9curit\u00E9</a>.</muted-text>"),
+            addPaymentCardLearnMore: `<muted-text>LEn savoir plus sur notre <a href="${CONST_1.default.PERSONAL_DATA_PROTECTION_INFO_URL}">sécurité</a>.</muted-text>`,
             amountOwedTitle: 'Solde impayé',
             amountOwedButtonText: "D'accord",
             amountOwedText: "Ce compte a un solde impayé d'un mois précédent.\n\nVoulez-vous régler le solde et prendre en charge la facturation de cet espace de travail ?",
             ownerOwesAmountTitle: 'Solde impayé',
             ownerOwesAmountButtonText: 'Transférer le solde',
-            ownerOwesAmountText: function (_a) {
-                var email = _a.email, amount = _a.amount;
-                return "Le compte propri\u00E9taire de cet espace de travail (".concat(email, ") a un solde impay\u00E9 d'un mois pr\u00E9c\u00E9dent.\n\nSouhaitez-vous transf\u00E9rer ce montant (").concat(amount, ") afin de prendre en charge la facturation de cet espace de travail ? Votre carte de paiement sera d\u00E9bit\u00E9e imm\u00E9diatement.");
-            },
+            ownerOwesAmountText: ({ email, amount }) => `Le compte propriétaire de cet espace de travail (${email}) a un solde impayé d'un mois précédent.\n\nSouhaitez-vous transférer ce montant (${amount}) afin de prendre en charge la facturation de cet espace de travail ? Votre carte de paiement sera débitée immédiatement.`,
             subscriptionTitle: "Prendre en charge l'abonnement annuel",
             subscriptionButtonText: "Transférer l'abonnement",
-            subscriptionText: function (_a) {
-                var usersCount = _a.usersCount, finalCount = _a.finalCount;
-                return "Prendre en charge cet espace de travail fusionnera son abonnement annuel avec votre abonnement actuel. Cela augmentera la taille de votre abonnement de ".concat(usersCount, " membres, portant la nouvelle taille de votre abonnement \u00E0 ").concat(finalCount, ". Souhaitez-vous continuer ?");
-            },
+            subscriptionText: ({ usersCount, finalCount }) => `Prendre en charge cet espace de travail fusionnera son abonnement annuel avec votre abonnement actuel. Cela augmentera la taille de votre abonnement de ${usersCount} membres, portant la nouvelle taille de votre abonnement à ${finalCount}. Souhaitez-vous continuer ?`,
             duplicateSubscriptionTitle: "Alerte d'abonnement en double",
             duplicateSubscriptionButtonText: 'Continuer',
-            duplicateSubscriptionText: function (_a) {
-                var email = _a.email, workspaceName = _a.workspaceName;
-                return "Il semble que vous essayiez de prendre en charge la facturation des espaces de travail de ".concat(email, ", mais pour cela, vous devez d'abord \u00EAtre administrateur sur tous leurs espaces de travail.\n\nCliquez sur \"Continuer\" si vous souhaitez uniquement prendre en charge la facturation pour l'espace de travail ").concat(workspaceName, ".\n\nSi vous souhaitez prendre en charge la facturation de l'ensemble de leur abonnement, veuillez leur demander de vous ajouter en tant qu'administrateur \u00E0 tous leurs espaces de travail avant de prendre en charge la facturation.");
-            },
+            duplicateSubscriptionText: ({ email, workspaceName }) => `Il semble que vous essayiez de prendre en charge la facturation des espaces de travail de ${email}, mais pour cela, vous devez d'abord être administrateur sur tous leurs espaces de travail.\n\nCliquez sur "Continuer" si vous souhaitez uniquement prendre en charge la facturation pour l'espace de travail ${workspaceName}.\n\nSi vous souhaitez prendre en charge la facturation de l'ensemble de leur abonnement, veuillez leur demander de vous ajouter en tant qu'administrateur à tous leurs espaces de travail avant de prendre en charge la facturation.`,
             hasFailedSettlementsTitle: 'Impossible de transférer la propriété',
             hasFailedSettlementsButtonText: 'Compris',
-            hasFailedSettlementsText: function (_a) {
-                var email = _a.email;
-                return "Vous ne pouvez pas prendre en charge la facturation car ".concat(email, " a un r\u00E8glement de carte Expensify en retard. Veuillez leur demander de contacter concierge@expensify.com pour r\u00E9soudre le probl\u00E8me. Ensuite, vous pourrez prendre en charge la facturation de cet espace de travail.");
-            },
+            hasFailedSettlementsText: ({ email }) => `Vous ne pouvez pas prendre en charge la facturation car ${email} a un règlement de carte Expensify en retard. Veuillez leur demander de contacter concierge@expensify.com pour résoudre le problème. Ensuite, vous pourrez prendre en charge la facturation de cet espace de travail.`,
             failedToClearBalanceTitle: "Échec de l'effacement du solde",
             failedToClearBalanceButtonText: "D'accord",
             failedToClearBalanceText: "Nous n'avons pas pu régler le solde. Veuillez réessayer plus tard.",
             successTitle: 'Youpi ! Tout est prêt.',
             successDescription: 'Vous êtes maintenant le propriétaire de cet espace de travail.',
             errorTitle: 'Oups ! Pas si vite...',
-            errorDescription: "<muted-text><centered-text>Un probl\u00E8me est survenu lors du transfert de propri\u00E9t\u00E9 de cet espace de travail. Veuillez r\u00E9essayer ou <concierge-link>contacter le Concierge</concierge-link> pour obtenir de l'aide.</centered-text></muted-text>",
+            errorDescription: `<muted-text><centered-text>Un problème est survenu lors du transfert de propriété de cet espace de travail. Veuillez réessayer ou <concierge-link>contacter le Concierge</concierge-link> pour obtenir de l'aide.</centered-text></muted-text>`,
         },
         exportAgainModal: {
             title: 'Attention !',
-            description: function (_a) {
-                var reportName = _a.reportName, connectionName = _a.connectionName;
-                return "Les rapports suivants ont d\u00E9j\u00E0 \u00E9t\u00E9 export\u00E9s vers ".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], " :\n\n").concat(reportName, "\n\n\u00CAtes-vous s\u00FBr de vouloir les exporter \u00E0 nouveau ?");
-            },
+            description: ({ reportName, connectionName }) => `Les rapports suivants ont déjà été exportés vers ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]} :\n\n${reportName}\n\nÊtes-vous sûr de vouloir les exporter à nouveau ?`,
             confirmText: 'Oui, exporter à nouveau',
             cancelText: 'Annuler',
         },
-        upgrade: (_11 = {
-                reportFields: {
-                    title: 'Champs de rapport',
-                    description: "Les champs de rapport vous permettent de sp\u00E9cifier des d\u00E9tails au niveau de l'en-t\u00EAte, distincts des tags qui se rapportent aux d\u00E9penses sur des \u00E9l\u00E9ments de ligne individuels. Ces d\u00E9tails peuvent inclure des noms de projet sp\u00E9cifiques, des informations sur les voyages d'affaires, des emplacements, et plus encore.",
-                    onlyAvailableOnPlan: 'Les champs de rapport ne sont disponibles que sur le plan Control, à partir de',
-                }
+        upgrade: {
+            reportFields: {
+                title: 'Champs de rapport',
+                description: `Les champs de rapport vous permettent de spécifier des détails au niveau de l'en-tête, distincts des tags qui se rapportent aux dépenses sur des éléments de ligne individuels. Ces détails peuvent inclure des noms de projet spécifiques, des informations sur les voyages d'affaires, des emplacements, et plus encore.`,
+                onlyAvailableOnPlan: 'Les champs de rapport ne sont disponibles que sur le plan Control, à partir de',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE]: {
                 title: 'NetSuite',
-                description: "Profitez de la synchronisation automatis\u00E9e et r\u00E9duisez les saisies manuelles gr\u00E2ce \u00E0 l'int\u00E9gration Expensify + NetSuite. Obtenez des informations financi\u00E8res approfondies et en temps r\u00E9el avec la prise en charge des segments natifs et personnalis\u00E9s, y compris la cartographie des projets et des clients.",
+                description: `Profitez de la synchronisation automatisée et réduisez les saisies manuelles grâce à l'intégration Expensify + NetSuite. Obtenez des informations financières approfondies et en temps réel avec la prise en charge des segments natifs et personnalisés, y compris la cartographie des projets et des clients.`,
                 onlyAvailableOnPlan: 'Notre intégration NetSuite est uniquement disponible avec le plan Control, à partir de',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.SAGE_INTACCT] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.SAGE_INTACCT]: {
                 title: 'Sage Intacct',
-                description: "Profitez de la synchronisation automatis\u00E9e et r\u00E9duisez les saisies manuelles avec l'int\u00E9gration Expensify + Sage Intacct. Obtenez des informations financi\u00E8res approfondies et en temps r\u00E9el gr\u00E2ce \u00E0 des dimensions d\u00E9finies par l'utilisateur, ainsi qu'un codage des d\u00E9penses par d\u00E9partement, classe, emplacement, client et projet (travail).",
+                description: `Profitez de la synchronisation automatisée et réduisez les saisies manuelles avec l'intégration Expensify + Sage Intacct. Obtenez des informations financières approfondies et en temps réel grâce à des dimensions définies par l'utilisateur, ainsi qu'un codage des dépenses par département, classe, emplacement, client et projet (travail).`,
                 onlyAvailableOnPlan: 'Notre intégration Sage Intacct est uniquement disponible avec le plan Control, à partir de',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.QBD] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.QBD]: {
                 title: 'QuickBooks Desktop',
-                description: "Profitez de la synchronisation automatis\u00E9e et r\u00E9duisez les saisies manuelles avec l'int\u00E9gration Expensify + QuickBooks Desktop. Obtenez une efficacit\u00E9 ultime gr\u00E2ce \u00E0 une connexion bidirectionnelle en temps r\u00E9el et au codage des d\u00E9penses par classe, article, client et projet.",
+                description: `Profitez de la synchronisation automatisée et réduisez les saisies manuelles avec l'intégration Expensify + QuickBooks Desktop. Obtenez une efficacité ultime grâce à une connexion bidirectionnelle en temps réel et au codage des dépenses par classe, article, client et projet.`,
                 onlyAvailableOnPlan: 'Notre intégration QuickBooks Desktop est uniquement disponible avec le plan Control, à partir de',
             },
-            _11[CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.approvals.id] = {
+            [CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.approvals.id]: {
                 title: 'Approvals avancés',
-                description: "Si vous souhaitez ajouter plus de niveaux d'approbation au processus \u2013 ou simplement vous assurer que les d\u00E9penses les plus importantes b\u00E9n\u00E9ficient d'un autre regard \u2013 nous avons ce qu'il vous faut. Les approbations avanc\u00E9es vous aident \u00E0 mettre en place les contr\u00F4les appropri\u00E9s \u00E0 chaque niveau afin de garder les d\u00E9penses de votre \u00E9quipe sous contr\u00F4le.",
+                description: `Si vous souhaitez ajouter plus de niveaux d'approbation au processus – ou simplement vous assurer que les dépenses les plus importantes bénéficient d'un autre regard – nous avons ce qu'il vous faut. Les approbations avancées vous aident à mettre en place les contrôles appropriés à chaque niveau afin de garder les dépenses de votre équipe sous contrôle.`,
                 onlyAvailableOnPlan: 'Les approbations avancées ne sont disponibles que sur le plan Control, qui commence à',
             },
-            _11.categories = {
+            categories: {
                 title: 'Catégories',
-                description: "Les cat\u00E9gories vous aident \u00E0 mieux organiser vos d\u00E9penses pour suivre o\u00F9 vous d\u00E9pensez votre argent. Utilisez notre liste de cat\u00E9gories sugg\u00E9r\u00E9es ou cr\u00E9ez les v\u00F4tres.",
+                description: `Les catégories vous aident à mieux organiser vos dépenses pour suivre où vous dépensez votre argent. Utilisez notre liste de catégories suggérées ou créez les vôtres.`,
                 onlyAvailableOnPlan: 'Les catégories sont disponibles sur le plan Collect, à partir de',
             },
-            _11.glCodes = {
+            glCodes: {
                 title: 'Codes GL',
-                description: "Ajoutez des codes GL \u00E0 vos cat\u00E9gories et \u00E9tiquettes pour faciliter l'exportation des d\u00E9penses vers vos syst\u00E8mes de comptabilit\u00E9 et de paie.",
+                description: `Ajoutez des codes GL à vos catégories et étiquettes pour faciliter l'exportation des dépenses vers vos systèmes de comptabilité et de paie.`,
                 onlyAvailableOnPlan: 'Les codes GL sont uniquement disponibles sur le plan Control, à partir de',
             },
-            _11.glAndPayrollCodes = {
+            glAndPayrollCodes: {
                 title: 'Codes GL et de paie',
-                description: "Ajoutez des codes GL et de paie \u00E0 vos cat\u00E9gories pour faciliter l'exportation des d\u00E9penses vers vos syst\u00E8mes de comptabilit\u00E9 et de paie.",
+                description: `Ajoutez des codes GL et de paie à vos catégories pour faciliter l'exportation des dépenses vers vos systèmes de comptabilité et de paie.`,
                 onlyAvailableOnPlan: 'Les codes GL et de paie sont uniquement disponibles sur le plan Control, à partir de',
             },
-            _11.taxCodes = {
+            taxCodes: {
                 title: 'Codes fiscaux',
-                description: "Ajoutez des codes fiscaux \u00E0 vos taxes pour faciliter l'exportation des d\u00E9penses vers vos syst\u00E8mes de comptabilit\u00E9 et de paie.",
+                description: `Ajoutez des codes fiscaux à vos taxes pour faciliter l'exportation des dépenses vers vos systèmes de comptabilité et de paie.`,
                 onlyAvailableOnPlan: 'Les codes fiscaux sont uniquement disponibles avec le plan Control, à partir de',
             },
-            _11.companyCards = {
+            companyCards: {
                 title: "Cartes d'entreprise illimitées",
-                description: "Besoin d'ajouter plus de flux de cartes ? D\u00E9bloquez des cartes d'entreprise illimit\u00E9es pour synchroniser les transactions de tous les principaux \u00E9metteurs de cartes.",
+                description: `Besoin d'ajouter plus de flux de cartes ? Débloquez des cartes d'entreprise illimitées pour synchroniser les transactions de tous les principaux émetteurs de cartes.`,
                 onlyAvailableOnPlan: 'Ceci est uniquement disponible sur le plan Control, à partir de',
             },
-            _11.rules = {
+            rules: {
                 title: 'Règles',
-                description: "Les r\u00E8gles fonctionnent en arri\u00E8re-plan et gardent vos d\u00E9penses sous contr\u00F4le pour que vous n'ayez pas \u00E0 vous soucier des petites choses.\n\nExigez des d\u00E9tails de d\u00E9pense comme des re\u00E7us et des descriptions, d\u00E9finissez des limites et des valeurs par d\u00E9faut, et automatisez les approbations et les paiements \u2013 tout en un seul endroit.",
+                description: `Les règles fonctionnent en arrière-plan et gardent vos dépenses sous contrôle pour que vous n'ayez pas à vous soucier des petites choses.\n\nExigez des détails de dépense comme des reçus et des descriptions, définissez des limites et des valeurs par défaut, et automatisez les approbations et les paiements – tout en un seul endroit.`,
                 onlyAvailableOnPlan: 'Les règles sont uniquement disponibles sur le plan Control, à partir de',
             },
-            _11.perDiem = {
+            perDiem: {
                 title: 'Per diem',
                 description: 'Le per diem est un excellent moyen de maintenir vos coûts quotidiens conformes et prévisibles lorsque vos employés voyagent. Profitez de fonctionnalités telles que des tarifs personnalisés, des catégories par défaut et des détails plus précis comme les destinations et les sous-tarifs.',
                 onlyAvailableOnPlan: 'Les indemnités journalières ne sont disponibles que sur le plan Control, à partir de',
             },
-            _11.travel = {
+            travel: {
                 title: 'Voyage',
                 description: "Expensify Travel est une nouvelle plateforme de réservation et de gestion de voyages d'affaires qui permet aux membres de réserver des hébergements, des vols, des transports, et plus encore.",
                 onlyAvailableOnPlan: 'Le voyage est disponible sur le plan Collect, à partir de',
             },
-            _11.multiLevelTags = {
+            multiLevelTags: {
                 title: 'Tags multi-niveaux',
                 description: "Les balises multi-niveaux vous aident à suivre les dépenses avec plus de précision. Assignez plusieurs balises à chaque poste—comme le département, le client ou le centre de coût—pour capturer le contexte complet de chaque dépense. Cela permet des rapports plus détaillés, des flux de travail d'approbation et des exportations comptables.",
                 onlyAvailableOnPlan: 'Les balises multi-niveaux sont uniquement disponibles sur le plan Control, à partir de',
             },
-            _11[CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.multiApprovalLevels.id] = {
+            [CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.multiApprovalLevels.id]: {
                 title: "Niveaux d'approbation multiples",
                 description: "Les niveaux d'approbation multiples sont un outil de flux de travail pour les entreprises qui exigent que plus d'une personne approuve un rapport avant qu'il ne puisse être remboursé.",
                 onlyAvailableOnPlan: "Les niveaux d'approbation multiples sont uniquement disponibles sur le plan Control, à partir de ",
             },
-            _11.pricing = {
+            pricing: {
                 perActiveMember: 'par membre actif par mois.',
                 perMember: 'par membre par mois.',
             },
-            _11.note = function (_a) {
-                var subscriptionLink = _a.subscriptionLink;
-                return "<muted-text>Mettez \u00E0 niveau votre espace de travail pour acc\u00E9der \u00E0 cette fonctionnalit\u00E9, ou <a href=\"".concat(subscriptionLink, "\">en savoir plus sur</a> nos offres et tarifs.</muted-text>");
-            },
-            _11.upgradeToUnlock = 'Débloquez cette fonctionnalité',
-            _11.completed = {
-                headline: "Vous avez am\u00E9lior\u00E9 votre espace de travail !",
-                successMessage: function (_a) {
-                    var policyName = _a.policyName, subscriptionLink = _a.subscriptionLink;
-                    return "<centered-text>Vous avez r\u00E9ussi \u00E0 passer de ".concat(policyName, " au forfait Control ! <a href=\"").concat(subscriptionLink, "\">Consultez votre abonnement</a> pour plus de d\u00E9tails.</centered-text>");
-                },
-                categorizeMessage: "Vous avez r\u00E9ussi \u00E0 passer \u00E0 un espace de travail sur le plan Collect. Vous pouvez maintenant cat\u00E9goriser vos d\u00E9penses !",
-                travelMessage: "Vous avez r\u00E9ussi \u00E0 passer \u00E0 un espace de travail sur le plan Collect. Vous pouvez maintenant commencer \u00E0 r\u00E9server et g\u00E9rer vos voyages !",
+            note: ({ subscriptionLink }) => `<muted-text>Mettez à niveau votre espace de travail pour accéder à cette fonctionnalité, ou <a href="${subscriptionLink}">en savoir plus sur</a> nos offres et tarifs.</muted-text>`,
+            upgradeToUnlock: 'Débloquez cette fonctionnalité',
+            completed: {
+                headline: `Vous avez amélioré votre espace de travail !`,
+                successMessage: ({ policyName, subscriptionLink }) => `<centered-text>Vous avez réussi à passer de ${policyName} au forfait Control ! <a href="${subscriptionLink}">Consultez votre abonnement</a> pour plus de détails.</centered-text>`,
+                categorizeMessage: `Vous avez réussi à passer à un espace de travail sur le plan Collect. Vous pouvez maintenant catégoriser vos dépenses !`,
+                travelMessage: `Vous avez réussi à passer à un espace de travail sur le plan Collect. Vous pouvez maintenant commencer à réserver et gérer vos voyages !`,
                 gotIt: 'Compris, merci',
             },
-            _11.commonFeatures = {
+            commonFeatures: {
                 title: 'Passez au plan Control',
                 note: 'Débloquez nos fonctionnalités les plus puissantes, y compris :',
                 benefits: {
@@ -5966,7 +5060,7 @@ var translations = {
                     selectWorkspace: 'sélectionnez un espace de travail et changez le type de plan en',
                 },
             },
-            _11),
+        },
         downgrade: {
             commonFeatures: {
                 title: 'Passer au plan Collect',
@@ -5994,27 +5088,15 @@ var translations = {
         payAndDowngrade: {
             title: 'Payer et rétrograder',
             headline: 'Votre paiement final',
-            description1: function (_a) {
-                var formattedAmount = _a.formattedAmount;
-                return "Votre facture finale pour cet abonnement sera de <strong>".concat(formattedAmount, "</strong>");
-            },
-            description2: function (_a) {
-                var date = _a.date;
-                return "Voir votre r\u00E9partition ci-dessous pour le ".concat(date, " :");
-            },
+            description1: ({ formattedAmount }) => `Votre facture finale pour cet abonnement sera de <strong>${formattedAmount}</strong>`,
+            description2: ({ date }) => `Voir votre répartition ci-dessous pour le ${date} :`,
             subscription: "Attention ! Cette action mettra fin à votre abonnement Expensify, supprimera cet espace de travail et retirera tous les membres de l'espace de travail. Si vous souhaitez conserver cet espace de travail et seulement vous retirer, demandez à un autre administrateur de prendre en charge la facturation d'abord.",
             genericFailureMessage: "Une erreur s'est produite lors du paiement de votre facture. Veuillez réessayer.",
         },
         restrictedAction: {
             restricted: 'Restreint',
-            actionsAreCurrentlyRestricted: function (_a) {
-                var workspaceName = _a.workspaceName;
-                return "Les actions sur l'espace de travail ".concat(workspaceName, " sont actuellement restreintes.");
-            },
-            workspaceOwnerWillNeedToAddOrUpdatePaymentCard: function (_a) {
-                var workspaceOwnerName = _a.workspaceOwnerName;
-                return "Le propri\u00E9taire de l'espace de travail, ".concat(workspaceOwnerName, ", devra ajouter ou mettre \u00E0 jour la carte de paiement enregistr\u00E9e pour d\u00E9bloquer la nouvelle activit\u00E9 de l'espace de travail.");
-            },
+            actionsAreCurrentlyRestricted: ({ workspaceName }) => `Les actions sur l'espace de travail ${workspaceName} sont actuellement restreintes.`,
+            workspaceOwnerWillNeedToAddOrUpdatePaymentCard: ({ workspaceOwnerName }) => `Le propriétaire de l'espace de travail, ${workspaceOwnerName}, devra ajouter ou mettre à jour la carte de paiement enregistrée pour débloquer la nouvelle activité de l'espace de travail.`,
             youWillNeedToAddOrUpdatePaymentCard: "Vous devrez ajouter ou mettre à jour la carte de paiement enregistrée pour débloquer la nouvelle activité de l'espace de travail.",
             addPaymentCardToUnlock: 'Ajoutez une carte de paiement pour débloquer !',
             addPaymentCardToContinueUsingWorkspace: 'Ajoutez une carte de paiement pour continuer à utiliser cet espace de travail.',
@@ -6026,10 +5108,7 @@ var translations = {
         rules: {
             individualExpenseRules: {
                 title: 'Dépenses',
-                subtitle: function (_a) {
-                    var categoriesPageLink = _a.categoriesPageLink, tagsPageLink = _a.tagsPageLink;
-                    return "<muted-text>D\u00E9finissez des contr\u00F4les de d\u00E9penses et des valeurs par d\u00E9faut pour chaque d\u00E9pense. Vous pouvez \u00E9galement cr\u00E9er des r\u00E8gles pour les <a href=\"".concat(categoriesPageLink, "\">cat\u00E9gories</a> et <a href=\"").concat(tagsPageLink, "\">tags</a>.</muted-text>");
-                },
+                subtitle: ({ categoriesPageLink, tagsPageLink }) => `<muted-text>Définissez des contrôles de dépenses et des valeurs par défaut pour chaque dépense. Vous pouvez également créer des règles pour les <a href="${categoriesPageLink}">catégories</a> et <a href="${tagsPageLink}">tags</a>.</muted-text>`,
                 receiptRequiredAmount: 'Montant requis pour le reçu',
                 receiptRequiredAmountDescription: 'Exiger des reçus lorsque les dépenses dépassent ce montant, sauf si une règle de catégorie le remplace.',
                 maxExpenseAmount: 'Montant maximum de la dépense',
@@ -6037,10 +5116,10 @@ var translations = {
                 maxAge: 'Âge maximum',
                 maxExpenseAge: 'Âge maximal des dépenses',
                 maxExpenseAgeDescription: "Signaler les dépenses plus anciennes qu'un nombre spécifique de jours.",
-                maxExpenseAgeDays: function () { return ({
+                maxExpenseAgeDays: () => ({
                     one: '1 jour',
-                    other: function (count) { return "".concat(count, " jours"); },
-                }); },
+                    other: (count) => `${count} jours`,
+                }),
                 cashExpenseDefault: 'Dépense en espèces par défaut',
                 cashExpenseDefaultDescription: 'Choisissez comment les dépenses en espèces doivent être créées. Une dépense est considérée comme en espèces si elle n’est pas une transaction par carte d’entreprise importée. Cela inclut les dépenses créées manuellement, les reçus, les indemnités journalières, les frais kilométriques et les frais de temps.',
                 reimbursableDefault: 'Remboursable',
@@ -6052,10 +5131,7 @@ var translations = {
                 alwaysNonReimbursable: 'Jamais remboursable',
                 alwaysNonReimbursableDescription: 'Les dépenses ne sont jamais remboursées aux employés',
                 billableDefault: 'Par défaut facturable',
-                billableDefaultDescription: function (_a) {
-                    var tagsPageLink = _a.tagsPageLink;
-                    return "<muted-text>Choisissez si les d\u00E9penses en esp\u00E8ces et par carte de cr\u00E9dit doivent \u00EAtre facturables par d\u00E9faut. Les d\u00E9penses facturables sont activ\u00E9es ou d\u00E9sactiv\u00E9es dans les <a href=\"".concat(tagsPageLink, "\">tags</a>.</muted-text>");
-                },
+                billableDefaultDescription: ({ tagsPageLink }) => `<muted-text>Choisissez si les dépenses en espèces et par carte de crédit doivent être facturables par défaut. Les dépenses facturables sont activées ou désactivées dans les <a href="${tagsPageLink}">tags</a>.</muted-text>`,
                 billable: 'Facturable',
                 billableDescription: 'Les dépenses sont le plus souvent refacturées aux clients.',
                 nonBillable: 'Non-facturable',
@@ -6086,39 +5162,24 @@ var translations = {
                 randomReportAuditDescription: "Exiger que certains rapports soient approuvés manuellement, même s'ils sont éligibles pour une approbation automatique.",
                 autoPayApprovedReportsTitle: 'Rapports approuvés de paiement automatique',
                 autoPayApprovedReportsSubtitle: 'Configurez quels rapports de dépenses sont éligibles pour le paiement automatique.',
-                autoPayApprovedReportsLimitError: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, currency = _b.currency;
-                    return "Veuillez entrer un montant inf\u00E9rieur \u00E0 ".concat(currency !== null && currency !== void 0 ? currency : '', "20 000");
-                },
+                autoPayApprovedReportsLimitError: ({ currency } = {}) => `Veuillez entrer un montant inférieur à ${currency ?? ''}20 000`,
                 autoPayApprovedReportsLockedSubtitle: 'Allez dans plus de fonctionnalités et activez les flux de travail, puis ajoutez des paiements pour débloquer cette fonctionnalité.',
                 autoPayReportsUnderTitle: 'Rapports de paiement automatique sous',
                 autoPayReportsUnderDescription: 'Les rapports de dépenses entièrement conformes en dessous de ce montant seront automatiquement payés.',
-                unlockFeatureEnableWorkflowsSubtitle: function (_a) {
-                    var featureName = _a.featureName, moreFeaturesLink = _a.moreFeaturesLink;
-                    return "Acc\u00E9dez \u00E0 [plus de fonctionnalit\u00E9s](".concat(moreFeaturesLink, ") et activez les workflows, puis ajoutez ").concat(featureName, " pour d\u00E9bloquer cette fonctionnalit\u00E9.");
-                },
-                enableFeatureSubtitle: function (_a) {
-                    var featureName = _a.featureName, moreFeaturesLink = _a.moreFeaturesLink;
-                    return "Acc\u00E9dez \u00E0 [plus de fonctionnalit\u00E9s](".concat(moreFeaturesLink, ") et activez ").concat(featureName, " pour d\u00E9bloquer cette fonctionnalit\u00E9.");
-                },
+                unlockFeatureEnableWorkflowsSubtitle: ({ featureName, moreFeaturesLink }) => `Accédez à [plus de fonctionnalités](${moreFeaturesLink}) et activez les workflows, puis ajoutez ${featureName} pour débloquer cette fonctionnalité.`,
+                enableFeatureSubtitle: ({ featureName, moreFeaturesLink }) => `Accédez à [plus de fonctionnalités](${moreFeaturesLink}) et activez ${featureName} pour débloquer cette fonctionnalité.`,
             },
             categoryRules: {
                 title: 'Règles de catégorie',
                 approver: 'Approbateur',
                 requireDescription: 'Description requise',
                 descriptionHint: 'Indice de description',
-                descriptionHintDescription: function (_a) {
-                    var categoryName = _a.categoryName;
-                    return "Rappelez aux employ\u00E9s de fournir des informations suppl\u00E9mentaires pour les d\u00E9penses de \u00AB ".concat(categoryName, " \u00BB. Cet indice appara\u00EEt dans le champ de description des d\u00E9penses.");
-                },
+                descriptionHintDescription: ({ categoryName }) => `Rappelez aux employés de fournir des informations supplémentaires pour les dépenses de « ${categoryName} ». Cet indice apparaît dans le champ de description des dépenses.`,
                 descriptionHintLabel: 'Indice',
                 descriptionHintSubtitle: "Astuce : Plus c'est court, mieux c'est !",
                 maxAmount: 'Montant maximum',
                 flagAmountsOver: 'Signaler les montants supérieurs à',
-                flagAmountsOverDescription: function (_a) {
-                    var categoryName = _a.categoryName;
-                    return "S'applique \u00E0 la cat\u00E9gorie \u00AB ".concat(categoryName, " \u00BB.");
-                },
+                flagAmountsOverDescription: ({ categoryName }) => `S'applique à la catégorie « ${categoryName} ».`,
                 flagAmountsOverSubtitle: 'Cela remplace le montant maximum pour toutes les dépenses.',
                 expenseLimitTypes: {
                     expense: 'Dépense individuelle',
@@ -6128,18 +5189,12 @@ var translations = {
                 },
                 requireReceiptsOver: 'Exiger des reçus au-dessus de',
                 requireReceiptsOverList: {
-                    default: function (_a) {
-                        var defaultAmount = _a.defaultAmount;
-                        return "".concat(defaultAmount, " ").concat(CONST_1.default.DOT_SEPARATOR, " Par d\u00E9faut");
-                    },
+                    default: ({ defaultAmount }) => `${defaultAmount} ${CONST_1.default.DOT_SEPARATOR} Par défaut`,
                     never: 'Ne jamais exiger de reçus',
                     always: 'Toujours exiger des reçus',
                 },
                 defaultTaxRate: 'Taux de taxe par défaut',
-                enableWorkflows: function (_a) {
-                    var moreFeaturesLink = _a.moreFeaturesLink;
-                    return "Acc\u00E9dez \u00E0 [Plus de fonctionnalit\u00E9s](".concat(moreFeaturesLink, ") et activez les workflows, puis ajoutez des approbations pour d\u00E9bloquer cette fonctionnalit\u00E9.");
-                },
+                enableWorkflows: ({ moreFeaturesLink }) => `Accédez à [Plus de fonctionnalités](${moreFeaturesLink}) et activez les workflows, puis ajoutez des approbations pour débloquer cette fonctionnalité.`,
             },
             customRules: {
                 title: 'Règles personnalisées',
@@ -6159,13 +5214,10 @@ var translations = {
             },
             description: 'Choisissez un plan qui vous convient. Pour une liste détaillée des fonctionnalités et des tarifs, consultez notre',
             subscriptionLink: "types de plan et page d'aide sur les tarifs",
-            lockedPlanDescription: function (_a) {
-                var count = _a.count, annualSubscriptionEndDate = _a.annualSubscriptionEndDate;
-                return ({
-                    one: "Vous vous \u00EAtes engag\u00E9 \u00E0 avoir 1 membre actif sur le plan Control jusqu'\u00E0 la fin de votre abonnement annuel le ".concat(annualSubscriptionEndDate, ". Vous pouvez passer \u00E0 un abonnement \u00E0 l'utilisation et r\u00E9trograder vers le plan Collect \u00E0 partir du ").concat(annualSubscriptionEndDate, " en d\u00E9sactivant le renouvellement automatique dans"),
-                    other: "Vous vous \u00EAtes engag\u00E9 \u00E0 avoir ".concat(count, " membres actifs sur le plan Control jusqu'\u00E0 la fin de votre abonnement annuel le ").concat(annualSubscriptionEndDate, ". Vous pouvez passer \u00E0 l'abonnement \u00E0 l'utilisation et r\u00E9trograder au plan Collect \u00E0 partir du ").concat(annualSubscriptionEndDate, " en d\u00E9sactivant le renouvellement automatique dans"),
-                });
-            },
+            lockedPlanDescription: ({ count, annualSubscriptionEndDate }) => ({
+                one: `Vous vous êtes engagé à avoir 1 membre actif sur le plan Control jusqu'à la fin de votre abonnement annuel le ${annualSubscriptionEndDate}. Vous pouvez passer à un abonnement à l'utilisation et rétrograder vers le plan Collect à partir du ${annualSubscriptionEndDate} en désactivant le renouvellement automatique dans`,
+                other: `Vous vous êtes engagé à avoir ${count} membres actifs sur le plan Control jusqu'à la fin de votre abonnement annuel le ${annualSubscriptionEndDate}. Vous pouvez passer à l'abonnement à l'utilisation et rétrograder au plan Collect à partir du ${annualSubscriptionEndDate} en désactivant le renouvellement automatique dans`,
+            }),
             subscriptions: 'Abonnements',
         },
     },
@@ -6208,22 +5260,15 @@ var translations = {
         public_announceDescription: 'Tout le monde peut trouver cette salle',
         createRoom: 'Créer une salle',
         roomAlreadyExistsError: 'Une salle portant ce nom existe déjà',
-        roomNameReservedError: function (_a) {
-            var reservedName = _a.reservedName;
-            return "".concat(reservedName, " est une salle par d\u00E9faut sur tous les espaces de travail. Veuillez choisir un autre nom.");
-        },
+        roomNameReservedError: ({ reservedName }) => `${reservedName} est une salle par défaut sur tous les espaces de travail. Veuillez choisir un autre nom.`,
         roomNameInvalidError: 'Les noms de salle peuvent uniquement inclure des lettres minuscules, des chiffres et des tirets',
         pleaseEnterRoomName: 'Veuillez entrer un nom de salle',
         pleaseSelectWorkspace: 'Veuillez sélectionner un espace de travail',
-        renamedRoomAction: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName, actorName = _a.actorName, isExpenseReport = _a.isExpenseReport;
-            var actor = actorName ? "".concat(actorName, " ") : '';
-            return isExpenseReport ? "".concat(actor, " renomm\u00E9 en \"").concat(newName, "\" (pr\u00E9c\u00E9demment \"").concat(oldName, "\")") : "".concat(actor, " a renomm\u00E9 cette salle en \"").concat(newName, "\" (pr\u00E9c\u00E9demment \"").concat(oldName, "\")");
+        renamedRoomAction: ({ oldName, newName, actorName, isExpenseReport }) => {
+            const actor = actorName ? `${actorName} ` : '';
+            return isExpenseReport ? `${actor} renommé en "${newName}" (précédemment "${oldName}")` : `${actor} a renommé cette salle en "${newName}" (précédemment "${oldName}")`;
         },
-        roomRenamedTo: function (_a) {
-            var newName = _a.newName;
-            return "Salle renomm\u00E9e en ".concat(newName);
-        },
+        roomRenamedTo: ({ newName }) => `Salle renommée en ${newName}`,
         social: 'social',
         selectAWorkspace: 'Sélectionner un espace de travail',
         growlMessageOnRenameError: "Impossible de renommer la salle de l'espace de travail. Veuillez vérifier votre connexion et réessayer.",
@@ -6244,290 +5289,158 @@ var translations = {
         billcom: 'BILLCOM',
     },
     workspaceActions: {
-        addApprovalRule: function (_a) {
-            var approverEmail = _a.approverEmail, approverName = _a.approverName, field = _a.field, name = _a.name;
-            return "ajout\u00E9 ".concat(approverName, " (").concat(approverEmail, ") comme approbateur pour le ").concat(field, " \"").concat(name, "\"");
+        addApprovalRule: ({ approverEmail, approverName, field, name }) => `ajouté ${approverName} (${approverEmail}) comme approbateur pour le ${field} "${name}"`,
+        deleteApprovalRule: ({ approverEmail, approverName, field, name }) => `supprimé ${approverName} (${approverEmail}) en tant qu'approbateur pour le ${field} "${name}"`,
+        updateApprovalRule: ({ field, name, newApproverEmail, newApproverName, oldApproverEmail, oldApproverName }) => {
+            const formatApprover = (displayName, email) => (displayName ? `${displayName} (${email})` : email);
+            return `a changé l'approbateur pour le ${field} "${name}" à ${formatApprover(newApproverName, newApproverEmail)} (précédemment ${formatApprover(oldApproverName, oldApproverEmail)})`;
         },
-        deleteApprovalRule: function (_a) {
-            var approverEmail = _a.approverEmail, approverName = _a.approverName, field = _a.field, name = _a.name;
-            return "supprim\u00E9 ".concat(approverName, " (").concat(approverEmail, ") en tant qu'approbateur pour le ").concat(field, " \"").concat(name, "\"");
-        },
-        updateApprovalRule: function (_a) {
-            var field = _a.field, name = _a.name, newApproverEmail = _a.newApproverEmail, newApproverName = _a.newApproverName, oldApproverEmail = _a.oldApproverEmail, oldApproverName = _a.oldApproverName;
-            var formatApprover = function (displayName, email) { return (displayName ? "".concat(displayName, " (").concat(email, ")") : email); };
-            return "a chang\u00E9 l'approbateur pour le ".concat(field, " \"").concat(name, "\" \u00E0 ").concat(formatApprover(newApproverName, newApproverEmail), " (pr\u00E9c\u00E9demment ").concat(formatApprover(oldApproverName, oldApproverEmail), ")");
-        },
-        addCategory: function (_a) {
-            var categoryName = _a.categoryName;
-            return "a ajout\u00E9 la cat\u00E9gorie \"".concat(categoryName, "\"");
-        },
-        deleteCategory: function (_a) {
-            var categoryName = _a.categoryName;
-            return "a supprim\u00E9 la cat\u00E9gorie \"".concat(categoryName, "\"");
-        },
-        updateCategory: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName;
-            return "".concat(oldValue ? 'désactivé' : 'activé', " la cat\u00E9gorie \"").concat(categoryName, "\"");
-        },
-        updateCategoryPayrollCode: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName, newValue = _a.newValue;
+        addCategory: ({ categoryName }) => `a ajouté la catégorie "${categoryName}"`,
+        deleteCategory: ({ categoryName }) => `a supprimé la catégorie "${categoryName}"`,
+        updateCategory: ({ oldValue, categoryName }) => `${oldValue ? 'désactivé' : 'activé'} la catégorie "${categoryName}"`,
+        updateCategoryPayrollCode: ({ oldValue, categoryName, newValue }) => {
             if (!oldValue) {
-                return "ajout\u00E9 le code de paie \"".concat(newValue, "\" \u00E0 la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `ajouté le code de paie "${newValue}" à la catégorie "${categoryName}"`;
             }
             if (!newValue && oldValue) {
-                return "a supprim\u00E9 le code de paie \"".concat(oldValue, "\" de la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `a supprimé le code de paie "${oldValue}" de la catégorie "${categoryName}"`;
             }
-            return "a chang\u00E9 le code de paie de la cat\u00E9gorie \"".concat(categoryName, "\" en \u201C").concat(newValue, "\u201D (auparavant \u201C").concat(oldValue, "\u201D)");
+            return `a changé le code de paie de la catégorie "${categoryName}" en “${newValue}” (auparavant “${oldValue}”)`;
         },
-        updateCategoryGLCode: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName, newValue = _a.newValue;
+        updateCategoryGLCode: ({ oldValue, categoryName, newValue }) => {
             if (!oldValue) {
-                return "a ajout\u00E9 le code GL \"".concat(newValue, "\" \u00E0 la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `a ajouté le code GL "${newValue}" à la catégorie "${categoryName}"`;
             }
             if (!newValue && oldValue) {
-                return "a supprim\u00E9 le code GL \"".concat(oldValue, "\" de la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `a supprimé le code GL "${oldValue}" de la catégorie "${categoryName}"`;
             }
-            return "a chang\u00E9 le code GL de la cat\u00E9gorie \u201C".concat(categoryName, "\u201D en \u201C").concat(newValue, "\u201D (pr\u00E9c\u00E9demment \u201C").concat(oldValue, "\u201C)");
+            return `a changé le code GL de la catégorie “${categoryName}” en “${newValue}” (précédemment “${oldValue}“)`;
         },
-        updateAreCommentsRequired: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName;
-            return "a chang\u00E9 la description de la cat\u00E9gorie \"".concat(categoryName, "\" en ").concat(!oldValue ? 'requis' : 'pas requis', " (pr\u00E9c\u00E9demment ").concat(!oldValue ? 'pas requis' : 'requis', ")");
+        updateAreCommentsRequired: ({ oldValue, categoryName }) => {
+            return `a changé la description de la catégorie "${categoryName}" en ${!oldValue ? 'requis' : 'pas requis'} (précédemment ${!oldValue ? 'pas requis' : 'requis'})`;
         },
-        updateCategoryMaxExpenseAmount: function (_a) {
-            var categoryName = _a.categoryName, oldAmount = _a.oldAmount, newAmount = _a.newAmount;
+        updateCategoryMaxExpenseAmount: ({ categoryName, oldAmount, newAmount }) => {
             if (newAmount && !oldAmount) {
-                return "a ajout\u00E9 un montant maximum de ".concat(newAmount, " \u00E0 la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `a ajouté un montant maximum de ${newAmount} à la catégorie "${categoryName}"`;
             }
             if (oldAmount && !newAmount) {
-                return "a supprim\u00E9 le montant maximum de ".concat(oldAmount, " de la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `a supprimé le montant maximum de ${oldAmount} de la catégorie "${categoryName}"`;
             }
-            return "a modifi\u00E9 le montant maximum de la cat\u00E9gorie \"".concat(categoryName, "\" \u00E0 ").concat(newAmount, " (pr\u00E9c\u00E9demment ").concat(oldAmount, ")");
+            return `a modifié le montant maximum de la catégorie "${categoryName}" à ${newAmount} (précédemment ${oldAmount})`;
         },
-        updateCategoryExpenseLimitType: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        updateCategoryExpenseLimitType: ({ categoryName, oldValue, newValue }) => {
             if (!oldValue) {
-                return "a ajout\u00E9 un type de limite de ".concat(newValue, " \u00E0 la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `a ajouté un type de limite de ${newValue} à la catégorie "${categoryName}"`;
             }
-            return "a chang\u00E9 le type de limite de la cat\u00E9gorie \"".concat(categoryName, "\" en ").concat(newValue, " (pr\u00E9c\u00E9demment ").concat(oldValue, ")");
+            return `a changé le type de limite de la catégorie "${categoryName}" en ${newValue} (précédemment ${oldValue})`;
         },
-        updateCategoryMaxAmountNoReceipt: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        updateCategoryMaxAmountNoReceipt: ({ categoryName, oldValue, newValue }) => {
             if (!oldValue) {
-                return "mis \u00E0 jour la cat\u00E9gorie \"".concat(categoryName, "\" en changeant Re\u00E7us en ").concat(newValue);
+                return `mis à jour la catégorie "${categoryName}" en changeant Reçus en ${newValue}`;
             }
-            return "a chang\u00E9 la cat\u00E9gorie \"".concat(categoryName, "\" en ").concat(newValue, " (pr\u00E9c\u00E9demment ").concat(oldValue, ")");
+            return `a changé la catégorie "${categoryName}" en ${newValue} (précédemment ${oldValue})`;
         },
-        setCategoryName: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "a renomm\u00E9 la cat\u00E9gorie \"".concat(oldName, "\" en \"").concat(newName, "\"");
-        },
-        updatedDescriptionHint: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        setCategoryName: ({ oldName, newName }) => `a renommé la catégorie "${oldName}" en "${newName}"`,
+        updatedDescriptionHint: ({ categoryName, oldValue, newValue }) => {
             if (!newValue) {
-                return "a supprim\u00E9 l'indication de description \"".concat(oldValue, "\" de la cat\u00E9gorie \"").concat(categoryName, "\"");
+                return `a supprimé l'indication de description "${oldValue}" de la catégorie "${categoryName}"`;
             }
             return !oldValue
-                ? "ajout\u00E9 l'indice de description \"".concat(newValue, "\" \u00E0 la cat\u00E9gorie \"").concat(categoryName, "\"")
-                : "a chang\u00E9 l'indice de description de la cat\u00E9gorie \"".concat(categoryName, "\" en \u00AB ").concat(newValue, " \u00BB (auparavant \u00AB ").concat(oldValue, " \u00BB)");
+                ? `ajouté l'indice de description "${newValue}" à la catégorie "${categoryName}"`
+                : `a changé l'indice de description de la catégorie "${categoryName}" en « ${newValue} » (auparavant « ${oldValue} »)`;
         },
-        updateTagListName: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "a chang\u00E9 le nom de la liste de tags en \"".concat(newName, "\" (pr\u00E9c\u00E9demment \"").concat(oldName, "\")");
-        },
-        addTag: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName;
-            return "a ajout\u00E9 le tag \"".concat(tagName, "\" \u00E0 la liste \"").concat(tagListName, "\"");
-        },
-        updateTagName: function (_a) {
-            var tagListName = _a.tagListName, newName = _a.newName, oldName = _a.oldName;
-            return "a mis \u00E0 jour la liste des \u00E9tiquettes \"".concat(tagListName, "\" en changeant l'\u00E9tiquette \"").concat(oldName, "\" en \"").concat(newName, "\"");
-        },
-        updateTagEnabled: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName, enabled = _a.enabled;
-            return "".concat(enabled ? 'activé' : 'désactivé', " le tag \"").concat(tagName, "\" dans la liste \"").concat(tagListName, "\"");
-        },
-        deleteTag: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName;
-            return "a supprim\u00E9 le tag \"".concat(tagName, "\" de la liste \"").concat(tagListName, "\"");
-        },
-        deleteMultipleTags: function (_a) {
-            var count = _a.count, tagListName = _a.tagListName;
-            return "supprim\u00E9 les balises \"".concat(count, "\" de la liste \"").concat(tagListName, "\"");
-        },
-        updateTag: function (_a) {
-            var tagListName = _a.tagListName, newValue = _a.newValue, tagName = _a.tagName, updatedField = _a.updatedField, oldValue = _a.oldValue;
+        updateTagListName: ({ oldName, newName }) => `a changé le nom de la liste de tags en "${newName}" (précédemment "${oldName}")`,
+        addTag: ({ tagListName, tagName }) => `a ajouté le tag "${tagName}" à la liste "${tagListName}"`,
+        updateTagName: ({ tagListName, newName, oldName }) => `a mis à jour la liste des étiquettes "${tagListName}" en changeant l'étiquette "${oldName}" en "${newName}"`,
+        updateTagEnabled: ({ tagListName, tagName, enabled }) => `${enabled ? 'activé' : 'désactivé'} le tag "${tagName}" dans la liste "${tagListName}"`,
+        deleteTag: ({ tagListName, tagName }) => `a supprimé le tag "${tagName}" de la liste "${tagListName}"`,
+        deleteMultipleTags: ({ count, tagListName }) => `supprimé les balises "${count}" de la liste "${tagListName}"`,
+        updateTag: ({ tagListName, newValue, tagName, updatedField, oldValue }) => {
             if (oldValue) {
-                return "mis \u00E0 jour le tag \"".concat(tagName, "\" dans la liste \"").concat(tagListName, "\" en changeant le ").concat(updatedField, " \u00E0 \"").concat(newValue, "\" (auparavant \"").concat(oldValue, "\")");
+                return `mis à jour le tag "${tagName}" dans la liste "${tagListName}" en changeant le ${updatedField} à "${newValue}" (auparavant "${oldValue}")`;
             }
-            return "a mis \u00E0 jour le tag \"".concat(tagName, "\" dans la liste \"").concat(tagListName, "\" en ajoutant un ").concat(updatedField, " de \"").concat(newValue, "\"");
+            return `a mis à jour le tag "${tagName}" dans la liste "${tagListName}" en ajoutant un ${updatedField} de "${newValue}"`;
         },
-        updateCustomUnit: function (_a) {
-            var customUnitName = _a.customUnitName, newValue = _a.newValue, oldValue = _a.oldValue, updatedField = _a.updatedField;
-            return "a chang\u00E9 le ".concat(customUnitName, " ").concat(updatedField, " en \"").concat(newValue, "\" (auparavant \"").concat(oldValue, "\")");
-        },
-        updateCustomUnitTaxEnabled: function (_a) {
-            var newValue = _a.newValue;
-            return "Suivi fiscal ".concat(newValue ? 'activé' : 'désactivé', " sur les taux de distance");
-        },
-        addCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, rateName = _a.rateName;
-            return "a ajout\u00E9 un nouveau taux \"".concat(customUnitName, "\" \"").concat(rateName, "\"");
-        },
-        updatedCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, oldValue = _a.oldValue, updatedField = _a.updatedField;
-            return "a chang\u00E9 le taux de ".concat(customUnitName, " ").concat(updatedField, " \"").concat(customUnitRateName, "\" \u00E0 \"").concat(newValue, "\" (auparavant \"").concat(oldValue, "\")");
-        },
-        updatedCustomUnitTaxRateExternalID: function (_a) {
-            var customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, newTaxPercentage = _a.newTaxPercentage, oldTaxPercentage = _a.oldTaxPercentage, oldValue = _a.oldValue;
+        updateCustomUnit: ({ customUnitName, newValue, oldValue, updatedField }) => `a changé le ${customUnitName} ${updatedField} en "${newValue}" (auparavant "${oldValue}")`,
+        updateCustomUnitTaxEnabled: ({ newValue }) => `Suivi fiscal ${newValue ? 'activé' : 'désactivé'} sur les taux de distance`,
+        addCustomUnitRate: ({ customUnitName, rateName }) => `a ajouté un nouveau taux "${customUnitName}" "${rateName}"`,
+        updatedCustomUnitRate: ({ customUnitName, customUnitRateName, newValue, oldValue, updatedField }) => `a changé le taux de ${customUnitName} ${updatedField} "${customUnitRateName}" à "${newValue}" (auparavant "${oldValue}")`,
+        updatedCustomUnitTaxRateExternalID: ({ customUnitRateName, newValue, newTaxPercentage, oldTaxPercentage, oldValue }) => {
             if (oldTaxPercentage && oldValue) {
-                return "a modifi\u00E9 le taux de taxe sur le taux de distance \"".concat(customUnitRateName, "\" \u00E0 \"").concat(newValue, " (").concat(newTaxPercentage, ")\" (pr\u00E9c\u00E9demment \"").concat(oldValue, " (").concat(oldTaxPercentage, ")\")");
+                return `a modifié le taux de taxe sur le taux de distance "${customUnitRateName}" à "${newValue} (${newTaxPercentage})" (précédemment "${oldValue} (${oldTaxPercentage})")`;
             }
-            return "a ajout\u00E9 le taux de taxe \"".concat(newValue, " (").concat(newTaxPercentage, ")\" au taux de distance \"").concat(customUnitRateName, "\"");
+            return `a ajouté le taux de taxe "${newValue} (${newTaxPercentage})" au taux de distance "${customUnitRateName}"`;
         },
-        updatedCustomUnitTaxClaimablePercentage: function (_a) {
-            var customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, oldValue = _a.oldValue;
+        updatedCustomUnitTaxClaimablePercentage: ({ customUnitRateName, newValue, oldValue }) => {
             if (oldValue) {
-                return "a modifi\u00E9 la partie r\u00E9cup\u00E9rable de la taxe sur le taux de distance \"".concat(customUnitRateName, "\" \u00E0 \"").concat(newValue, "\" (auparavant \"").concat(oldValue, "\")");
+                return `a modifié la partie récupérable de la taxe sur le taux de distance "${customUnitRateName}" à "${newValue}" (auparavant "${oldValue}")`;
             }
-            return "ajout\u00E9 une partie r\u00E9cup\u00E9rable de taxe de \"".concat(newValue, "\" au taux de distance \"").concat(customUnitRateName, "\"");
+            return `ajouté une partie récupérable de taxe de "${newValue}" au taux de distance "${customUnitRateName}"`;
         },
-        deleteCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, rateName = _a.rateName;
-            return "supprim\u00E9 le taux \"".concat(rateName, "\" de \"").concat(customUnitName, "\"");
-        },
-        addedReportField: function (_a) {
-            var fieldType = _a.fieldType, fieldName = _a.fieldName;
-            return "ajout\u00E9 le champ de rapport ".concat(fieldType, " \"").concat(fieldName, "\"");
-        },
-        updateReportFieldDefaultValue: function (_a) {
-            var defaultValue = _a.defaultValue, fieldName = _a.fieldName;
-            return "d\u00E9finir la valeur par d\u00E9faut du champ de rapport \"".concat(fieldName, "\" sur \"").concat(defaultValue, "\"");
-        },
-        addedReportFieldOption: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName;
-            return "a ajout\u00E9 l'option \"".concat(optionName, "\" au champ de rapport \"").concat(fieldName, "\"");
-        },
-        removedReportFieldOption: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName;
-            return "a supprim\u00E9 l'option \"".concat(optionName, "\" du champ de rapport \"").concat(fieldName, "\"");
-        },
-        updateReportFieldOptionDisabled: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName, optionEnabled = _a.optionEnabled;
-            return "".concat(optionEnabled ? 'activé' : 'désactivé', " l'option \"").concat(optionName, "\" pour le champ de rapport \"").concat(fieldName, "\"");
-        },
-        updateReportFieldAllOptionsDisabled: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName, allEnabled = _a.allEnabled, toggledOptionsCount = _a.toggledOptionsCount;
+        deleteCustomUnitRate: ({ customUnitName, rateName }) => `supprimé le taux "${rateName}" de "${customUnitName}"`,
+        addedReportField: ({ fieldType, fieldName }) => `ajouté le champ de rapport ${fieldType} "${fieldName}"`,
+        updateReportFieldDefaultValue: ({ defaultValue, fieldName }) => `définir la valeur par défaut du champ de rapport "${fieldName}" sur "${defaultValue}"`,
+        addedReportFieldOption: ({ fieldName, optionName }) => `a ajouté l'option "${optionName}" au champ de rapport "${fieldName}"`,
+        removedReportFieldOption: ({ fieldName, optionName }) => `a supprimé l'option "${optionName}" du champ de rapport "${fieldName}"`,
+        updateReportFieldOptionDisabled: ({ fieldName, optionName, optionEnabled }) => `${optionEnabled ? 'activé' : 'désactivé'} l'option "${optionName}" pour le champ de rapport "${fieldName}"`,
+        updateReportFieldAllOptionsDisabled: ({ fieldName, optionName, allEnabled, toggledOptionsCount }) => {
             if (toggledOptionsCount && toggledOptionsCount > 1) {
-                return "".concat(allEnabled ? 'activé' : 'désactivé', " toutes les options pour le champ de rapport \"").concat(fieldName, "\"");
+                return `${allEnabled ? 'activé' : 'désactivé'} toutes les options pour le champ de rapport "${fieldName}"`;
             }
-            return "".concat(allEnabled ? 'activé' : 'désactivé', " l'option \"").concat(optionName, "\" pour le champ de rapport \"").concat(fieldName, "\", rendant toutes les options ").concat(allEnabled ? 'activé' : 'désactivé');
+            return `${allEnabled ? 'activé' : 'désactivé'} l'option "${optionName}" pour le champ de rapport "${fieldName}", rendant toutes les options ${allEnabled ? 'activé' : 'désactivé'}`;
         },
-        deleteReportField: function (_a) {
-            var fieldType = _a.fieldType, fieldName = _a.fieldName;
-            return "supprim\u00E9 le champ de rapport ".concat(fieldType, " \"").concat(fieldName, "\"");
-        },
-        preventSelfApproval: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "mis \u00E0 jour \"Emp\u00EAcher l'auto-approbation\" en \"".concat(newValue === 'true' ? 'Activé' : 'Désactivé', "\" (pr\u00E9c\u00E9demment \"").concat(oldValue === 'true' ? 'Activé' : 'Désactivé', "\")");
-        },
-        updateMaxExpenseAmountNoReceipt: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "a modifi\u00E9 le montant maximum requis pour les d\u00E9penses avec re\u00E7u \u00E0 ".concat(newValue, " (auparavant ").concat(oldValue, ")");
-        },
-        updateMaxExpenseAmount: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "a modifi\u00E9 le montant maximum des d\u00E9penses pour les violations \u00E0 ".concat(newValue, " (pr\u00E9c\u00E9demment ").concat(oldValue, ")");
-        },
-        updateMaxExpenseAge: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "mis \u00E0 jour \"\u00C2ge maximal des d\u00E9penses (jours)\" \u00E0 \"".concat(newValue, "\" (pr\u00E9c\u00E9demment \"").concat(oldValue === 'false' ? CONST_1.default.POLICY.DEFAULT_MAX_EXPENSE_AGE : oldValue, "\")");
-        },
-        updateMonthlyOffset: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
+        deleteReportField: ({ fieldType, fieldName }) => `supprimé le champ de rapport ${fieldType} "${fieldName}"`,
+        preventSelfApproval: ({ oldValue, newValue }) => `mis à jour "Empêcher l'auto-approbation" en "${newValue === 'true' ? 'Activé' : 'Désactivé'}" (précédemment "${oldValue === 'true' ? 'Activé' : 'Désactivé'}")`,
+        updateMaxExpenseAmountNoReceipt: ({ oldValue, newValue }) => `a modifié le montant maximum requis pour les dépenses avec reçu à ${newValue} (auparavant ${oldValue})`,
+        updateMaxExpenseAmount: ({ oldValue, newValue }) => `a modifié le montant maximum des dépenses pour les violations à ${newValue} (précédemment ${oldValue})`,
+        updateMaxExpenseAge: ({ oldValue, newValue }) => `mis à jour "Âge maximal des dépenses (jours)" à "${newValue}" (précédemment "${oldValue === 'false' ? CONST_1.default.POLICY.DEFAULT_MAX_EXPENSE_AGE : oldValue}")`,
+        updateMonthlyOffset: ({ oldValue, newValue }) => {
             if (!oldValue) {
-                return "d\u00E9finir la date de soumission du rapport mensuel sur \"".concat(newValue, "\"");
+                return `définir la date de soumission du rapport mensuel sur "${newValue}"`;
             }
-            return "a mis \u00E0 jour la date de soumission du rapport mensuel \u00E0 \"".concat(newValue, "\" (pr\u00E9c\u00E9demment \"").concat(oldValue, "\")");
+            return `a mis à jour la date de soumission du rapport mensuel à "${newValue}" (précédemment "${oldValue}")`;
         },
-        updateDefaultBillable: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "mis \u00E0 jour \"Refacturer les d\u00E9penses aux clients\" \u00E0 \"".concat(newValue, "\" (pr\u00E9c\u00E9demment \"").concat(oldValue, "\")");
-        },
-        updateDefaultReimbursable: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "mis \u00E0 jour \"D\u00E9pense en esp\u00E8ces par d\u00E9faut\" en \"".concat(newValue, "\" (anciennement \"").concat(oldValue, "\")");
-        },
-        updateDefaultTitleEnforced: function (_a) {
-            var value = _a.value;
-            return "\"Appliquer les titres de rapport par d\u00E9faut\" ".concat(value ? 'sur' : 'désactivé');
-        },
-        renamedWorkspaceNameAction: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "a mis \u00E0 jour le nom de cet espace de travail en \"".concat(newName, "\" (pr\u00E9c\u00E9demment \"").concat(oldName, "\")");
-        },
-        updateWorkspaceDescription: function (_a) {
-            var newDescription = _a.newDescription, oldDescription = _a.oldDescription;
-            return !oldDescription
-                ? "d\u00E9finir la description de cet espace de travail sur \"".concat(newDescription, "\"")
-                : "a mis \u00E0 jour la description de cet espace de travail en \"".concat(newDescription, "\" (pr\u00E9c\u00E9demment \"").concat(oldDescription, "\")");
-        },
-        removedFromApprovalWorkflow: function (_a) {
-            var _b;
-            var submittersNames = _a.submittersNames;
-            var joinedNames = '';
+        updateDefaultBillable: ({ oldValue, newValue }) => `mis à jour "Refacturer les dépenses aux clients" à "${newValue}" (précédemment "${oldValue}")`,
+        updateDefaultReimbursable: ({ oldValue, newValue }) => `mis à jour "Dépense en espèces par défaut" en "${newValue}" (anciennement "${oldValue}")`,
+        updateDefaultTitleEnforced: ({ value }) => `"Appliquer les titres de rapport par défaut" ${value ? 'sur' : 'désactivé'}`,
+        renamedWorkspaceNameAction: ({ oldName, newName }) => `a mis à jour le nom de cet espace de travail en "${newName}" (précédemment "${oldName}")`,
+        updateWorkspaceDescription: ({ newDescription, oldDescription }) => !oldDescription
+            ? `définir la description de cet espace de travail sur "${newDescription}"`
+            : `a mis à jour la description de cet espace de travail en "${newDescription}" (précédemment "${oldDescription}")`,
+        removedFromApprovalWorkflow: ({ submittersNames }) => {
+            let joinedNames = '';
             if (submittersNames.length === 1) {
-                joinedNames = (_b = submittersNames.at(0)) !== null && _b !== void 0 ? _b : '';
+                joinedNames = submittersNames.at(0) ?? '';
             }
             else if (submittersNames.length === 2) {
                 joinedNames = submittersNames.join('et');
             }
             else if (submittersNames.length > 2) {
-                joinedNames = "".concat(submittersNames.slice(0, submittersNames.length - 1).join(', '), " and ").concat(submittersNames.at(-1));
+                joinedNames = `${submittersNames.slice(0, submittersNames.length - 1).join(', ')} and ${submittersNames.at(-1)}`;
             }
             return {
-                one: "vous a retir\u00E9 du flux de travail d'approbation et du chat de d\u00E9penses de ".concat(joinedNames, ". Les rapports pr\u00E9c\u00E9demment soumis resteront disponibles pour approbation dans votre bo\u00EEte de r\u00E9ception."),
-                other: "vous a retir\u00E9 des flux de travail d'approbation et des discussions de d\u00E9penses de ".concat(joinedNames, ". Les rapports pr\u00E9c\u00E9demment soumis resteront disponibles pour approbation dans votre bo\u00EEte de r\u00E9ception."),
+                one: `vous a retiré du flux de travail d'approbation et du chat de dépenses de ${joinedNames}. Les rapports précédemment soumis resteront disponibles pour approbation dans votre boîte de réception.`,
+                other: `vous a retiré des flux de travail d'approbation et des discussions de dépenses de ${joinedNames}. Les rapports précédemment soumis resteront disponibles pour approbation dans votre boîte de réception.`,
             };
         },
-        demotedFromWorkspace: function (_a) {
-            var policyName = _a.policyName, oldRole = _a.oldRole;
-            return "a mis \u00E0 jour votre r\u00F4le dans ".concat(policyName, " de ").concat(oldRole, " \u00E0 utilisateur. Vous avez \u00E9t\u00E9 retir\u00E9 de toutes les discussions de d\u00E9penses des soumetteurs, sauf la v\u00F4tre.");
-        },
-        updatedWorkspaceCurrencyAction: function (_a) {
-            var oldCurrency = _a.oldCurrency, newCurrency = _a.newCurrency;
-            return "a mis \u00E0 jour la devise par d\u00E9faut en ".concat(newCurrency, " (pr\u00E9c\u00E9demment ").concat(oldCurrency, ")");
-        },
-        updatedWorkspaceFrequencyAction: function (_a) {
-            var oldFrequency = _a.oldFrequency, newFrequency = _a.newFrequency;
-            return "a mis \u00E0 jour la fr\u00E9quence de rapport automatique \u00E0 \"".concat(newFrequency, "\" (pr\u00E9c\u00E9demment \"").concat(oldFrequency, "\")");
-        },
-        updateApprovalMode: function (_a) {
-            var newValue = _a.newValue, oldValue = _a.oldValue;
-            return "a mis \u00E0 jour le mode d'approbation en \"".concat(newValue, "\" (auparavant \"").concat(oldValue, "\")");
-        },
+        demotedFromWorkspace: ({ policyName, oldRole }) => `a mis à jour votre rôle dans ${policyName} de ${oldRole} à utilisateur. Vous avez été retiré de toutes les discussions de dépenses des soumetteurs, sauf la vôtre.`,
+        updatedWorkspaceCurrencyAction: ({ oldCurrency, newCurrency }) => `a mis à jour la devise par défaut en ${newCurrency} (précédemment ${oldCurrency})`,
+        updatedWorkspaceFrequencyAction: ({ oldFrequency, newFrequency }) => `a mis à jour la fréquence de rapport automatique à "${newFrequency}" (précédemment "${oldFrequency}")`,
+        updateApprovalMode: ({ newValue, oldValue }) => `a mis à jour le mode d'approbation en "${newValue}" (auparavant "${oldValue}")`,
         upgradedWorkspace: 'a mis à niveau cet espace de travail vers le plan Control',
         downgradedWorkspace: 'a rétrogradé cet espace de travail vers le plan Collect',
-        updatedAuditRate: function (_a) {
-            var oldAuditRate = _a.oldAuditRate, newAuditRate = _a.newAuditRate;
-            return "a chang\u00E9 le taux de rapports achemin\u00E9s al\u00E9atoirement pour approbation manuelle \u00E0 ".concat(Math.round(newAuditRate * 100), "% (pr\u00E9c\u00E9demment ").concat(Math.round(oldAuditRate * 100), "%)");
-        },
-        updatedManualApprovalThreshold: function (_a) {
-            var oldLimit = _a.oldLimit, newLimit = _a.newLimit;
-            return "a modifi\u00E9 la limite d'approbation manuelle pour toutes les d\u00E9penses \u00E0 ".concat(newLimit, " (pr\u00E9c\u00E9demment ").concat(oldLimit, ")");
-        },
+        updatedAuditRate: ({ oldAuditRate, newAuditRate }) => `a changé le taux de rapports acheminés aléatoirement pour approbation manuelle à ${Math.round(newAuditRate * 100)}% (précédemment ${Math.round(oldAuditRate * 100)}%)`,
+        updatedManualApprovalThreshold: ({ oldLimit, newLimit }) => `a modifié la limite d'approbation manuelle pour toutes les dépenses à ${newLimit} (précédemment ${oldLimit})`,
     },
     roomMembersPage: {
         memberNotFound: 'Membre non trouvé.',
         useInviteButton: "Pour inviter un nouveau membre à la discussion, veuillez utiliser le bouton d'invitation ci-dessus.",
-        notAuthorized: "Vous n'avez pas acc\u00E8s \u00E0 cette page. Si vous essayez de rejoindre cette salle, demandez simplement \u00E0 un membre de la salle de vous ajouter. Autre chose ? Contactez ".concat(CONST_1.default.EMAIL.CONCIERGE),
-        roomArchived: "Il semblerait que cette salle ait \u00E9t\u00E9 archiv\u00E9e. Si vous avez des questions, contactez ".concat(CONST_1.default.EMAIL.CONCIERGE, "."),
-        removeMembersPrompt: function (_a) {
-            var memberName = _a.memberName;
-            return ({
-                one: "\u00CAtes-vous s\u00FBr de vouloir retirer ".concat(memberName, " de la salle ?"),
-                other: 'Êtes-vous sûr de vouloir supprimer les membres sélectionnés de la salle ?',
-            });
-        },
+        notAuthorized: `Vous n'avez pas accès à cette page. Si vous essayez de rejoindre cette salle, demandez simplement à un membre de la salle de vous ajouter. Autre chose ? Contactez ${CONST_1.default.EMAIL.CONCIERGE}`,
+        roomArchived: `Il semblerait que cette salle ait été archivée. Si vous avez des questions, contactez ${CONST_1.default.EMAIL.CONCIERGE}.`,
+        removeMembersPrompt: ({ memberName }) => ({
+            one: `Êtes-vous sûr de vouloir retirer ${memberName} de la salle ?`,
+            other: 'Êtes-vous sûr de vouloir supprimer les membres sélectionnés de la salle ?',
+        }),
         error: {
             genericAdd: "Un problème est survenu lors de l'ajout de ce membre à la salle.",
         },
@@ -6549,10 +5462,7 @@ var translations = {
         completed: 'Terminé',
         action: 'Compléter',
         messages: {
-            created: function (_a) {
-                var title = _a.title;
-                return "t\u00E2che pour ".concat(title);
-            },
+            created: ({ title }) => `tâche pour ${title}`,
             completed: 'marqué comme terminé',
             canceled: 'tâche supprimée',
             reopened: 'marqué comme incomplet',
@@ -6566,10 +5476,7 @@ var translations = {
         deleteConfirmation: 'Êtes-vous sûr de vouloir supprimer cette tâche ?',
     },
     statementPage: {
-        title: function (_a) {
-            var year = _a.year, monthName = _a.monthName;
-            return "Relev\u00E9 de ".concat(monthName, " ").concat(year);
-        },
+        title: ({ year, monthName }) => `Relevé de ${monthName} ${year}`,
     },
     keyboardShortcutsPage: {
         title: 'Raccourcis clavier',
@@ -6595,7 +5502,7 @@ var translations = {
         searchResults: {
             emptyResults: {
                 title: 'Rien à afficher',
-                subtitle: "Essayez d'ajuster vos crit\u00E8res de recherche ou de cr\u00E9er quelque chose avec le bouton vert ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "."),
+                subtitle: `Essayez d'ajuster vos critères de recherche ou de créer quelque chose avec le bouton vert ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}.`,
             },
             emptyExpenseResults: {
                 title: "Vous n'avez pas encore créé de dépenses.",
@@ -6664,24 +5571,15 @@ var translations = {
         filtersHeader: 'Filtres',
         filters: {
             date: {
-                before: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "Before ".concat(date !== null && date !== void 0 ? date : '');
+                before: ({ date } = {}) => `Before ${date ?? ''}`,
+                after: ({ date } = {}) => `Après ${date ?? ''}`,
+                on: ({ date } = {}) => `On ${date ?? ''}`,
+                presets: {
+                    [CONST_1.default.SEARCH.DATE_PRESETS.NEVER]: 'Jamais',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.LAST_MONTH]: 'Le mois dernier',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.THIS_MONTH]: 'Ce mois-ci',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.LAST_STATEMENT]: 'Dernière relevé',
                 },
-                after: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "Apr\u00E8s ".concat(date !== null && date !== void 0 ? date : '');
-                },
-                on: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "On ".concat(date !== null && date !== void 0 ? date : '');
-                },
-                presets: (_12 = {},
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.NEVER] = 'Jamais',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.LAST_MONTH] = 'Le mois dernier',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.THIS_MONTH] = 'Ce mois-ci',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.LAST_STATEMENT] = 'Dernière relevé',
-                    _12),
             },
             status: 'Statut',
             keyword: 'Mot-clé',
@@ -6692,32 +5590,17 @@ var translations = {
             unread: 'Non lu',
             completed: 'Terminé',
             amount: {
-                lessThan: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, amount = _b.amount;
-                    return "Moins de ".concat(amount !== null && amount !== void 0 ? amount : '');
-                },
-                greaterThan: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, amount = _b.amount;
-                    return "Sup\u00E9rieur \u00E0 ".concat(amount !== null && amount !== void 0 ? amount : '');
-                },
-                between: function (_a) {
-                    var greaterThan = _a.greaterThan, lessThan = _a.lessThan;
-                    return "Entre ".concat(greaterThan, " et ").concat(lessThan);
-                },
+                lessThan: ({ amount } = {}) => `Moins de ${amount ?? ''}`,
+                greaterThan: ({ amount } = {}) => `Supérieur à ${amount ?? ''}`,
+                between: ({ greaterThan, lessThan }) => `Entre ${greaterThan} et ${lessThan}`,
             },
             card: {
                 expensify: 'Expensify',
                 individualCards: 'Cartes individuelles',
                 closedCards: 'Cartes fermées',
                 cardFeeds: 'Flux de cartes',
-                cardFeedName: function (_a) {
-                    var cardFeedBankName = _a.cardFeedBankName, cardFeedLabel = _a.cardFeedLabel;
-                    return "Tout ".concat(cardFeedBankName).concat(cardFeedLabel ? " - ".concat(cardFeedLabel) : '');
-                },
-                cardFeedNameCSV: function (_a) {
-                    var cardFeedLabel = _a.cardFeedLabel;
-                    return "Toutes les cartes import\u00E9es CSV".concat(cardFeedLabel ? " - ".concat(cardFeedLabel) : '');
-                },
+                cardFeedName: ({ cardFeedBankName, cardFeedLabel }) => `Tout ${cardFeedBankName}${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
+                cardFeedNameCSV: ({ cardFeedLabel }) => `Toutes les cartes importées CSV${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
             },
             current: 'Actuel',
             past: 'Passé',
@@ -6730,26 +5613,26 @@ var translations = {
             billable: 'Facturable',
             reimbursable: 'Remboursable',
             purchaseCurrency: "Devise d'achat",
-            groupBy: (_13 = {},
-                _13[CONST_1.default.SEARCH.GROUP_BY.REPORTS] = 'Rapport',
-                _13[CONST_1.default.SEARCH.GROUP_BY.FROM] = 'De',
-                _13[CONST_1.default.SEARCH.GROUP_BY.CARD] = 'Carte',
-                _13[CONST_1.default.SEARCH.GROUP_BY.WITHDRAWAL_ID] = 'ID de retrait',
-                _13),
+            groupBy: {
+                [CONST_1.default.SEARCH.GROUP_BY.REPORTS]: 'Rapport',
+                [CONST_1.default.SEARCH.GROUP_BY.FROM]: 'De',
+                [CONST_1.default.SEARCH.GROUP_BY.CARD]: 'Carte',
+                [CONST_1.default.SEARCH.GROUP_BY.WITHDRAWAL_ID]: 'ID de retrait',
+            },
             feed: 'Flux',
-            withdrawalType: (_14 = {},
-                _14[CONST_1.default.SEARCH.WITHDRAWAL_TYPE.EXPENSIFY_CARD] = 'Expensify Card',
-                _14[CONST_1.default.SEARCH.WITHDRAWAL_TYPE.REIMBURSEMENT] = 'Remboursement',
-                _14),
+            withdrawalType: {
+                [CONST_1.default.SEARCH.WITHDRAWAL_TYPE.EXPENSIFY_CARD]: 'Expensify Card',
+                [CONST_1.default.SEARCH.WITHDRAWAL_TYPE.REIMBURSEMENT]: 'Remboursement',
+            },
             has: {
                 receipt: 'Reçu',
             },
-            action: (_15 = {},
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.SUBMIT] = 'Soumettre',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.APPROVE] = 'Approuver',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.PAY] = 'Payer',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.EXPORT] = 'Exporter',
-                _15),
+            action: {
+                [CONST_1.default.SEARCH.ACTION_FILTERS.SUBMIT]: 'Soumettre',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.APPROVE]: 'Approuver',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.PAY]: 'Payer',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.EXPORT]: 'Exporter',
+            },
         },
         has: 'A',
         groupBy: 'Groupe par',
@@ -6853,10 +5736,7 @@ var translations = {
     checkForUpdatesModal: {
         available: {
             title: 'Mise à jour disponible',
-            message: function (_a) {
-                var isSilentUpdating = _a.isSilentUpdating;
-                return "La nouvelle version sera bient\u00F4t disponible.".concat(!isSilentUpdating ? 'Nous vous informerons lorsque nous serons prêts à mettre à jour.' : '');
-            },
+            message: ({ isSilentUpdating }) => `La nouvelle version sera bientôt disponible.${!isSilentUpdating ? 'Nous vous informerons lorsque nous serons prêts à mettre à jour.' : ''}`,
             soundsGood: 'Ça marche',
         },
         notAvailable: {
@@ -6881,148 +5761,80 @@ var translations = {
         noActivityYet: 'Aucune activité pour le moment',
         actions: {
             type: {
-                changeField: function (_a) {
-                    var oldValue = _a.oldValue, newValue = _a.newValue, fieldName = _a.fieldName;
-                    return "modifi\u00E9 ".concat(fieldName, " de ").concat(oldValue, " \u00E0 ").concat(newValue);
-                },
-                changeFieldEmpty: function (_a) {
-                    var newValue = _a.newValue, fieldName = _a.fieldName;
-                    return "chang\u00E9 ".concat(fieldName, " en ").concat(newValue);
-                },
-                changeReportPolicy: function (_a) {
-                    var fromPolicyName = _a.fromPolicyName, toPolicyName = _a.toPolicyName;
+                changeField: ({ oldValue, newValue, fieldName }) => `modifié ${fieldName} de ${oldValue} à ${newValue}`,
+                changeFieldEmpty: ({ newValue, fieldName }) => `changé ${fieldName} en ${newValue}`,
+                changeReportPolicy: ({ fromPolicyName, toPolicyName }) => {
                     if (!toPolicyName) {
-                        return "Espace de travail modifi\u00E9".concat(fromPolicyName ? " (auparavant ".concat(fromPolicyName, ")") : '');
+                        return `Espace de travail modifié${fromPolicyName ? ` (auparavant ${fromPolicyName})` : ''}`;
                     }
-                    return "Espace de travail modifi\u00E9 en ".concat(toPolicyName).concat(fromPolicyName ? " (auparavant ".concat(fromPolicyName, ")") : '');
+                    return `Espace de travail modifié en ${toPolicyName}${fromPolicyName ? ` (auparavant ${fromPolicyName})` : ''}`;
                 },
-                changeType: function (_a) {
-                    var oldType = _a.oldType, newType = _a.newType;
-                    return "chang\u00E9 le type de ".concat(oldType, " \u00E0 ").concat(newType);
-                },
-                exportedToCSV: "export\u00E9 en CSV",
+                changeType: ({ oldType, newType }) => `changé le type de ${oldType} à ${newType}`,
+                exportedToCSV: `exporté en CSV`,
                 exportedToIntegration: {
-                    automatic: function (_a) {
-                        var _b;
-                        var label = _a.label;
+                    automatic: ({ label }) => {
                         // The label will always be in English, so we need to translate it
-                        var labelTranslations = (_b = {},
-                            _b[CONST_1.default.REPORT.EXPORT_OPTION_LABELS.EXPENSE_LEVEL_EXPORT] = translations.export.expenseLevelExport,
-                            _b[CONST_1.default.REPORT.EXPORT_OPTION_LABELS.REPORT_LEVEL_EXPORT] = translations.export.reportLevelExport,
-                            _b);
-                        var translatedLabel = labelTranslations[label] || label;
-                        return "export\u00E9 vers ".concat(translatedLabel);
+                        const labelTranslations = {
+                            [CONST_1.default.REPORT.EXPORT_OPTION_LABELS.EXPENSE_LEVEL_EXPORT]: translations.export.expenseLevelExport,
+                            [CONST_1.default.REPORT.EXPORT_OPTION_LABELS.REPORT_LEVEL_EXPORT]: translations.export.reportLevelExport,
+                        };
+                        const translatedLabel = labelTranslations[label] || label;
+                        return `exporté vers ${translatedLabel}`;
                     },
-                    automaticActionOne: function (_a) {
-                        var label = _a.label;
-                        return "export\u00E9 vers ".concat(label, " via");
-                    },
+                    automaticActionOne: ({ label }) => `exporté vers ${label} via`,
                     automaticActionTwo: 'paramètres de comptabilité',
-                    manual: function (_a) {
-                        var label = _a.label;
-                        return "a marqu\u00E9 ce rapport comme export\u00E9 manuellement vers ".concat(label, ".");
-                    },
+                    manual: ({ label }) => `a marqué ce rapport comme exporté manuellement vers ${label}.`,
                     automaticActionThree: 'et a créé avec succès un enregistrement pour',
                     reimburseableLink: 'dépenses personnelles',
                     nonReimbursableLink: "dépenses de carte d'entreprise",
-                    pending: function (_a) {
-                        var label = _a.label;
-                        return "a commenc\u00E9 \u00E0 exporter ce rapport vers ".concat(label, "...");
-                    },
+                    pending: ({ label }) => `a commencé à exporter ce rapport vers ${label}...`,
                 },
-                integrationsMessage: function (_a) {
-                    var errorMessage = _a.errorMessage, label = _a.label, linkText = _a.linkText, linkURL = _a.linkURL;
-                    return "\u00E9chec de l'exportation de ce rapport vers ".concat(label, " (\"").concat(errorMessage).concat(linkText ? " <a href=\"".concat(linkURL, "\">").concat(linkText, "</a>") : '', "\")");
-                },
-                managerAttachReceipt: "a ajout\u00E9 un re\u00E7u",
-                managerDetachReceipt: "a supprim\u00E9 un re\u00E7u",
-                markedReimbursed: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "pay\u00E9 ".concat(currency).concat(amount, " ailleurs");
-                },
-                markedReimbursedFromIntegration: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "pay\u00E9 ".concat(currency).concat(amount, " via int\u00E9gration");
-                },
-                outdatedBankAccount: "n\u2019a pas pu traiter le paiement en raison d\u2019un probl\u00E8me avec le compte bancaire du payeur",
-                reimbursementACHBounce: "impossible de traiter le paiement, car le payeur n'a pas suffisamment de fonds",
-                reimbursementACHCancelled: "annul\u00E9 le paiement",
-                reimbursementAccountChanged: "impossible de traiter le paiement, car le payeur a chang\u00E9 de compte bancaire",
-                reimbursementDelayed: "a trait\u00E9 le paiement mais il est retard\u00E9 de 1 \u00E0 2 jours ouvrables suppl\u00E9mentaires",
-                selectedForRandomAudit: "s\u00E9lectionn\u00E9 au hasard pour examen",
-                selectedForRandomAuditMarkdown: "[s\u00E9lectionn\u00E9 au hasard](https://help.expensify.com/articles/expensify-classic/reports/Set-a-random-report-audit-schedule) pour examen",
-                share: function (_a) {
-                    var to = _a.to;
-                    return "membre invit\u00E9 ".concat(to);
-                },
-                unshare: function (_a) {
-                    var to = _a.to;
-                    return "membre supprim\u00E9 ".concat(to);
-                },
-                stripePaid: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "pay\u00E9 ".concat(currency).concat(amount);
-                },
-                takeControl: "a pris le contr\u00F4le",
-                integrationSyncFailed: function (_a) {
-                    var label = _a.label, errorMessage = _a.errorMessage, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "Un probl\u00E8me est survenu lors de la synchronisation avec ".concat(label).concat(errorMessage ? " (\"".concat(errorMessage, "\")") : '', ". Veuillez corriger le probl\u00E8me dans les <a href=\"").concat(workspaceAccountingLink, "\">param\u00E8tres de l'espace de travail</a>.");
-                },
-                addEmployee: function (_a) {
-                    var email = _a.email, role = _a.role;
-                    return "ajout\u00E9 ".concat(email, " en tant que ").concat(role === 'member' ? 'a' : 'un', " ").concat(role);
-                },
-                updateRole: function (_a) {
-                    var email = _a.email, currentRole = _a.currentRole, newRole = _a.newRole;
-                    return "a mis \u00E0 jour le r\u00F4le de ".concat(email, " \u00E0 ").concat(newRole, " (pr\u00E9c\u00E9demment ").concat(currentRole, ")");
-                },
-                updatedCustomField1: function (_a) {
-                    var email = _a.email, previousValue = _a.previousValue, newValue = _a.newValue;
+                integrationsMessage: ({ errorMessage, label, linkText, linkURL }) => `échec de l'exportation de ce rapport vers ${label} ("${errorMessage}${linkText ? ` <a href="${linkURL}">${linkText}</a>` : ''}")`,
+                managerAttachReceipt: `a ajouté un reçu`,
+                managerDetachReceipt: `a supprimé un reçu`,
+                markedReimbursed: ({ amount, currency }) => `payé ${currency}${amount} ailleurs`,
+                markedReimbursedFromIntegration: ({ amount, currency }) => `payé ${currency}${amount} via intégration`,
+                outdatedBankAccount: `n’a pas pu traiter le paiement en raison d’un problème avec le compte bancaire du payeur`,
+                reimbursementACHBounce: `impossible de traiter le paiement, car le payeur n'a pas suffisamment de fonds`,
+                reimbursementACHCancelled: `annulé le paiement`,
+                reimbursementAccountChanged: `impossible de traiter le paiement, car le payeur a changé de compte bancaire`,
+                reimbursementDelayed: `a traité le paiement mais il est retardé de 1 à 2 jours ouvrables supplémentaires`,
+                selectedForRandomAudit: `sélectionné au hasard pour examen`,
+                selectedForRandomAuditMarkdown: `[sélectionné au hasard](https://help.expensify.com/articles/expensify-classic/reports/Set-a-random-report-audit-schedule) pour examen`,
+                share: ({ to }) => `membre invité ${to}`,
+                unshare: ({ to }) => `membre supprimé ${to}`,
+                stripePaid: ({ amount, currency }) => `payé ${currency}${amount}`,
+                takeControl: `a pris le contrôle`,
+                integrationSyncFailed: ({ label, errorMessage, workspaceAccountingLink }) => `Un problème est survenu lors de la synchronisation avec ${label}${errorMessage ? ` ("${errorMessage}")` : ''}. Veuillez corriger le problème dans les <a href="${workspaceAccountingLink}">paramètres de l'espace de travail</a>.`,
+                addEmployee: ({ email, role }) => `ajouté ${email} en tant que ${role === 'member' ? 'a' : 'un'} ${role}`,
+                updateRole: ({ email, currentRole, newRole }) => `a mis à jour le rôle de ${email} à ${newRole} (précédemment ${currentRole})`,
+                updatedCustomField1: ({ email, previousValue, newValue }) => {
                     if (!newValue) {
-                        return "a supprim\u00E9 le champ personnalis\u00E9 1 de ".concat(email, " (pr\u00E9c\u00E9demment \"").concat(previousValue, "\")");
+                        return `a supprimé le champ personnalisé 1 de ${email} (précédemment "${previousValue}")`;
                     }
                     return !previousValue
-                        ? "ajout\u00E9 \"".concat(newValue, "\" au champ personnalis\u00E9 1 de ").concat(email)
-                        : "a chang\u00E9 le champ personnalis\u00E9 1 de ".concat(email, " en \"").concat(newValue, "\" (pr\u00E9c\u00E9demment \"").concat(previousValue, "\")");
+                        ? `ajouté "${newValue}" au champ personnalisé 1 de ${email}`
+                        : `a changé le champ personnalisé 1 de ${email} en "${newValue}" (précédemment "${previousValue}")`;
                 },
-                updatedCustomField2: function (_a) {
-                    var email = _a.email, previousValue = _a.previousValue, newValue = _a.newValue;
+                updatedCustomField2: ({ email, previousValue, newValue }) => {
                     if (!newValue) {
-                        return "supprim\u00E9 le champ personnalis\u00E9 2 de ".concat(email, " (pr\u00E9c\u00E9demment \"").concat(previousValue, "\")");
+                        return `supprimé le champ personnalisé 2 de ${email} (précédemment "${previousValue}")`;
                     }
                     return !previousValue
-                        ? "ajout\u00E9 \"".concat(newValue, "\" au champ personnalis\u00E9 2 de ").concat(email)
-                        : "a chang\u00E9 le champ personnalis\u00E9 2 de ".concat(email, " en \"").concat(newValue, "\" (auparavant \"").concat(previousValue, "\")");
+                        ? `ajouté "${newValue}" au champ personnalisé 2 de ${email}`
+                        : `a changé le champ personnalisé 2 de ${email} en "${newValue}" (auparavant "${previousValue}")`;
                 },
-                leftWorkspace: function (_a) {
-                    var nameOrEmail = _a.nameOrEmail;
-                    return "".concat(nameOrEmail, " a quitt\u00E9 l'espace de travail");
-                },
-                removeMember: function (_a) {
-                    var email = _a.email, role = _a.role;
-                    return "supprim\u00E9 ".concat(role, " ").concat(email);
-                },
-                removedConnection: function (_a) {
-                    var connectionName = _a.connectionName;
-                    return "connexion supprim\u00E9e vers ".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]);
-                },
-                addedConnection: function (_a) {
-                    var connectionName = _a.connectionName;
-                    return "connect\u00E9 \u00E0 ".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]);
-                },
+                leftWorkspace: ({ nameOrEmail }) => `${nameOrEmail} a quitté l'espace de travail`,
+                removeMember: ({ email, role }) => `supprimé ${role} ${email}`,
+                removedConnection: ({ connectionName }) => `connexion supprimée vers ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
+                addedConnection: ({ connectionName }) => `connecté à ${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}`,
                 leftTheChat: 'a quitté le chat',
             },
         },
     },
     chronos: {
-        oooEventSummaryFullDay: function (_a) {
-            var summary = _a.summary, dayCount = _a.dayCount, date = _a.date;
-            return "".concat(summary, " pour ").concat(dayCount, " ").concat(dayCount === 1 ? 'jour' : 'jours', " jusqu'\u00E0 ").concat(date);
-        },
-        oooEventSummaryPartialDay: function (_a) {
-            var summary = _a.summary, timePeriod = _a.timePeriod, date = _a.date;
-            return "".concat(summary, " de ").concat(timePeriod, " le ").concat(date);
-        },
+        oooEventSummaryFullDay: ({ summary, dayCount, date }) => `${summary} pour ${dayCount} ${dayCount === 1 ? 'jour' : 'jours'} jusqu'à ${date}`,
+        oooEventSummaryPartialDay: ({ summary, timePeriod, date }) => `${summary} de ${timePeriod} le ${date}`,
     },
     footer: {
         features: 'Fonctionnalités',
@@ -7082,10 +5894,7 @@ var translations = {
         reply: 'Répondre',
         from: 'De',
         in: 'dans',
-        parentNavigationSummary: function (_a) {
-            var reportName = _a.reportName, workspaceName = _a.workspaceName;
-            return "De ".concat(reportName).concat(workspaceName ? "dans ".concat(workspaceName) : '');
-        },
+        parentNavigationSummary: ({ reportName, workspaceName }) => `De ${reportName}${workspaceName ? `dans ${workspaceName}` : ''}`,
     },
     qrCodes: {
         copy: "Copier l'URL",
@@ -7141,10 +5950,7 @@ var translations = {
         principalWorkEmail: 'Email professionnel principal',
         updateYourEmail: 'Mettez à jour votre adresse e-mail',
         updateEmail: "Mettre à jour l'adresse e-mail",
-        schoolMailAsDefault: function (_a) {
-            var contactMethodsRoute = _a.contactMethodsRoute;
-            return "Avant de continuer, veuillez vous assurer de d\u00E9finir votre e-mail scolaire comme m\u00E9thode de contact par d\u00E9faut. Vous pouvez le faire dans Param\u00E8tres > Profil > <a href=\"".concat(contactMethodsRoute, "\">M\u00E9thodes de contact</a>.");
-        },
+        schoolMailAsDefault: ({ contactMethodsRoute }) => `Avant de continuer, veuillez vous assurer de définir votre e-mail scolaire comme méthode de contact par défaut. Vous pouvez le faire dans Paramètres > Profil > <a href="${contactMethodsRoute}">Méthodes de contact</a>.`,
         error: {
             enterPhoneEmail: 'Entrez un e-mail ou un numéro de téléphone valide',
             enterEmail: 'Entrez un e-mail',
@@ -7198,71 +6004,55 @@ var translations = {
         guaranteed: 'eReçu garanti',
         transactionDate: 'Date de transaction',
     },
-    referralProgram: (_16 = {},
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.START_CHAT] = {
+    referralProgram: {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.START_CHAT]: {
             buttonText: 'Commencez un chat, <success><strong>recommandez un ami</strong></success>.',
             header: 'Démarrer une discussion, recommander un ami',
             body: 'Vous voulez que vos amis utilisent aussi Expensify ? Commencez simplement une discussion avec eux et nous nous occuperons du reste.',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE]: {
             buttonText: 'Soumettre une dépense, <success><strong>référez-vous à votre patron</strong></success>.',
             header: 'Soumettre une dépense, référer votre patron',
             body: 'Vous voulez que votre patron utilise Expensify aussi ? Soumettez-lui simplement une dépense et nous nous occuperons du reste.',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.REFER_FRIEND] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.REFER_FRIEND]: {
             header: 'Parrainez un ami',
             body: "Vous voulez que vos amis utilisent aussi Expensify ? Discutez, payez ou partagez une dépense avec eux et nous nous occupons du reste. Ou partagez simplement votre lien d'invitation !",
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SHARE_CODE] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SHARE_CODE]: {
             buttonText: 'Parrainez un ami',
             header: 'Parrainez un ami',
             body: "Vous voulez que vos amis utilisent aussi Expensify ? Discutez, payez ou partagez une dépense avec eux et nous nous occupons du reste. Ou partagez simplement votre lien d'invitation !",
         },
-        _16.copyReferralLink = "Copier le lien d'invitation",
-        _16),
-    systemChatFooterMessage: (_17 = {},
-        _17[CONST_1.default.INTRO_CHOICES.MANAGE_TEAM] = {
+        copyReferralLink: "Copier le lien d'invitation",
+    },
+    systemChatFooterMessage: {
+        [CONST_1.default.INTRO_CHOICES.MANAGE_TEAM]: {
             phrase1: 'Discutez avec votre spécialiste de configuration en',
             phrase2: "pour obtenir de l'aide",
         },
-        _17.default = {
+        default: {
             phrase1: 'Message',
             phrase2: "pour obtenir de l'aide avec la configuration",
         },
-        _17),
+    },
     violations: {
         allTagLevelsRequired: 'Tous les tags requis',
         autoReportedRejectedExpense: 'Cette dépense a été refusée.',
         billableExpense: "Facturable n'est plus valide",
-        cashExpenseWithNoReceipt: function (_a) {
-            var _b = _a === void 0 ? {} : _a, formattedLimit = _b.formattedLimit;
-            return "Receipt required".concat(formattedLimit ? "au-del\u00E0 de ".concat(formattedLimit) : '');
-        },
+        cashExpenseWithNoReceipt: ({ formattedLimit } = {}) => `Receipt required${formattedLimit ? `au-delà de ${formattedLimit}` : ''}`,
         categoryOutOfPolicy: 'Catégorie non valide',
-        conversionSurcharge: function (_a) {
-            var surcharge = _a.surcharge;
-            return "Surcharge de conversion de ".concat(surcharge, "% appliqu\u00E9");
-        },
+        conversionSurcharge: ({ surcharge }) => `Surcharge de conversion de ${surcharge}% appliqué`,
         customUnitOutOfPolicy: 'Tarif non valide pour cet espace de travail',
         duplicatedTransaction: 'Duplicate',
         fieldRequired: 'Les champs du rapport sont obligatoires',
         futureDate: 'Date future non autorisée',
-        invoiceMarkup: function (_a) {
-            var invoiceMarkup = _a.invoiceMarkup;
-            return "Major\u00E9 de ".concat(invoiceMarkup, "%");
-        },
-        maxAge: function (_a) {
-            var maxAge = _a.maxAge;
-            return "Date ant\u00E9rieure \u00E0 ".concat(maxAge, " jours");
-        },
+        invoiceMarkup: ({ invoiceMarkup }) => `Majoré de ${invoiceMarkup}%`,
+        maxAge: ({ maxAge }) => `Date antérieure à ${maxAge} jours`,
         missingCategory: 'Catégorie manquante',
         missingComment: 'Description requise pour la catégorie sélectionnée',
-        missingTag: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "Manquant ".concat(tagName !== null && tagName !== void 0 ? tagName : 'tag');
-        },
-        modifiedAmount: function (_a) {
-            var type = _a.type, displayPercentVariance = _a.displayPercentVariance;
+        missingTag: ({ tagName } = {}) => `Manquant ${tagName ?? 'tag'}`,
+        modifiedAmount: ({ type, displayPercentVariance }) => {
             switch (type) {
                 case 'distance':
                     return 'Le montant diffère de la distance calculée';
@@ -7270,45 +6060,26 @@ var translations = {
                     return 'Montant supérieur à la transaction par carte';
                 default:
                     if (displayPercentVariance) {
-                        return "Montant ".concat(displayPercentVariance, "% sup\u00E9rieur au re\u00E7u scann\u00E9");
+                        return `Montant ${displayPercentVariance}% supérieur au reçu scanné`;
                     }
                     return 'Montant supérieur au reçu scanné';
             }
         },
         modifiedDate: 'La date diffère du reçu scanné',
         nonExpensiworksExpense: 'Dépense non-Expensiworks',
-        overAutoApprovalLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "La d\u00E9pense d\u00E9passe la limite d'approbation automatique de ".concat(formattedLimit);
-        },
-        overCategoryLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "Montant sup\u00E9rieur \u00E0 ".concat(formattedLimit, "/limite de cat\u00E9gorie par personne");
-        },
-        overLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "Montant au-del\u00E0 de la limite de ".concat(formattedLimit, "/personne");
-        },
-        overTripLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "Montant sup\u00E9rieur \u00E0 la limite de ".concat(formattedLimit, "/voyage");
-        },
-        overLimitAttendee: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "Montant au-del\u00E0 de la limite de ".concat(formattedLimit, "/personne");
-        },
-        perDayLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "Montant d\u00E9passant la limite quotidienne de ".concat(formattedLimit, "/personne pour la cat\u00E9gorie");
-        },
+        overAutoApprovalLimit: ({ formattedLimit }) => `La dépense dépasse la limite d'approbation automatique de ${formattedLimit}`,
+        overCategoryLimit: ({ formattedLimit }) => `Montant supérieur à ${formattedLimit}/limite de catégorie par personne`,
+        overLimit: ({ formattedLimit }) => `Montant au-delà de la limite de ${formattedLimit}/personne`,
+        overTripLimit: ({ formattedLimit }) => `Montant supérieur à la limite de ${formattedLimit}/voyage`,
+        overLimitAttendee: ({ formattedLimit }) => `Montant au-delà de la limite de ${formattedLimit}/personne`,
+        perDayLimit: ({ formattedLimit }) => `Montant dépassant la limite quotidienne de ${formattedLimit}/personne pour la catégorie`,
         receiptNotSmartScanned: 'Reçu et détails de la dépense ajoutés manuellement.',
-        receiptRequired: function (_a) {
-            var formattedLimit = _a.formattedLimit, category = _a.category;
-            var message = 'Reçu requis';
-            if (formattedLimit !== null && formattedLimit !== void 0 ? formattedLimit : category) {
+        receiptRequired: ({ formattedLimit, category }) => {
+            let message = 'Reçu requis';
+            if (formattedLimit ?? category) {
                 message += 'terminé';
                 if (formattedLimit) {
-                    message += " ".concat(formattedLimit);
+                    message += ` ${formattedLimit}`;
                 }
                 if (category) {
                     message += 'limite de catégorie';
@@ -7316,41 +6087,36 @@ var translations = {
             }
             return message;
         },
-        prohibitedExpense: function (_a) {
-            var prohibitedExpenseType = _a.prohibitedExpenseType;
-            var preMessage = 'Dépense interdite :';
+        prohibitedExpense: ({ prohibitedExpenseType }) => {
+            const preMessage = 'Dépense interdite :';
             switch (prohibitedExpenseType) {
                 case 'alcohol':
-                    return "".concat(preMessage, " alcool");
+                    return `${preMessage} alcool`;
                 case 'gambling':
-                    return "".concat(preMessage, " jeu d'argent");
+                    return `${preMessage} jeu d'argent`;
                 case 'tobacco':
-                    return "".concat(preMessage, " tabac");
+                    return `${preMessage} tabac`;
                 case 'adultEntertainment':
-                    return "".concat(preMessage, " divertissement pour adultes");
+                    return `${preMessage} divertissement pour adultes`;
                 case 'hotelIncidentals':
-                    return "".concat(preMessage, " frais accessoires d'h\u00F4tel");
+                    return `${preMessage} frais accessoires d'hôtel`;
                 default:
-                    return "".concat(preMessage).concat(prohibitedExpenseType);
+                    return `${preMessage}${prohibitedExpenseType}`;
             }
         },
-        customRules: function (_a) {
-            var message = _a.message;
-            return message;
-        },
+        customRules: ({ message }) => message,
         reviewRequired: 'Examen requis',
-        rter: function (_a) {
-            var brokenBankConnection = _a.brokenBankConnection, email = _a.email, isAdmin = _a.isAdmin, isTransactionOlderThan7Days = _a.isTransactionOlderThan7Days, member = _a.member, rterType = _a.rterType;
+        rter: ({ brokenBankConnection, email, isAdmin, isTransactionOlderThan7Days, member, rterType }) => {
             if (rterType === CONST_1.default.RTER_VIOLATION_TYPES.BROKEN_CARD_CONNECTION_530) {
                 return "Impossible de faire correspondre automatiquement le reçu en raison d'une connexion bancaire défectueuse.";
             }
             if (brokenBankConnection || rterType === CONST_1.default.RTER_VIOLATION_TYPES.BROKEN_CARD_CONNECTION) {
                 return isAdmin
-                    ? "Impossible de faire correspondre automatiquement le re\u00E7u en raison d'une connexion bancaire d\u00E9fectueuse que ".concat(email, " doit corriger.")
+                    ? `Impossible de faire correspondre automatiquement le reçu en raison d'une connexion bancaire défectueuse que ${email} doit corriger.`
                     : "Impossible de faire correspondre automatiquement le reçu en raison d'une connexion bancaire défectueuse que vous devez réparer.";
             }
             if (!isTransactionOlderThan7Days) {
-                return isAdmin ? "Demandez \u00E0 ".concat(member, " de marquer comme esp\u00E8ce ou attendez 7 jours et r\u00E9essayez") : 'En attente de fusion avec la transaction par carte.';
+                return isAdmin ? `Demandez à ${member} de marquer comme espèce ou attendez 7 jours et réessayez` : 'En attente de fusion avec la transaction par carte.';
             }
             return '';
         },
@@ -7358,24 +6124,12 @@ var translations = {
         adminBrokenConnectionError: "Reçu en attente en raison d'une connexion bancaire défaillante. Veuillez résoudre dans",
         memberBrokenConnectionError: "Reçu en attente en raison d'une connexion bancaire défectueuse. Veuillez demander à un administrateur de l'espace de travail de résoudre le problème.",
         markAsCashToIgnore: 'Marquer comme espèce pour ignorer et demander un paiement.',
-        smartscanFailed: function (_a) {
-            var _b = _a.canEdit, canEdit = _b === void 0 ? true : _b;
-            return "\u00C9chec de la num\u00E9risation du re\u00E7u.".concat(canEdit ? 'Saisir les détails manuellement.' : '');
-        },
+        smartscanFailed: ({ canEdit = true }) => `Échec de la numérisation du reçu.${canEdit ? 'Saisir les détails manuellement.' : ''}`,
         receiptGeneratedWithAI: 'Reçu potentiellement généré par IA',
-        someTagLevelsRequired: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "Missing ".concat(tagName !== null && tagName !== void 0 ? tagName : 'Tag');
-        },
-        tagOutOfPolicy: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "".concat(tagName !== null && tagName !== void 0 ? tagName : 'Tag', " n'est plus valide");
-        },
+        someTagLevelsRequired: ({ tagName } = {}) => `Missing ${tagName ?? 'Tag'}`,
+        tagOutOfPolicy: ({ tagName } = {}) => `${tagName ?? 'Tag'} n'est plus valide`,
         taxAmountChanged: 'Le montant de la taxe a été modifié',
-        taxOutOfPolicy: function (_a) {
-            var _b = _a === void 0 ? {} : _a, taxName = _b.taxName;
-            return "".concat(taxName !== null && taxName !== void 0 ? taxName : 'Taxe', " n'est plus valide");
-        },
+        taxOutOfPolicy: ({ taxName } = {}) => `${taxName ?? 'Taxe'} n'est plus valide`,
         taxRateChanged: 'Le taux de taxe a été modifié',
         taxRequired: 'Taux de taxe manquant',
         none: 'Aucun',
@@ -7387,17 +6141,14 @@ var translations = {
         categoryToKeep: 'Choisissez quelle catégorie conserver',
         isTransactionBillable: 'Choisissez si la transaction est facturable',
         keepThisOne: 'Keep this one',
-        confirmDetails: "Confirmez les d\u00E9tails que vous conservez",
-        confirmDuplicatesInfo: "Les doublons que vous ne conservez pas seront conserv\u00E9s afin que l\u2019exp\u00E9diteur puisse les supprimer.",
+        confirmDetails: `Confirmez les détails que vous conservez`,
+        confirmDuplicatesInfo: `Les doublons que vous ne conservez pas seront conservés afin que l’expéditeur puisse les supprimer.`,
         hold: 'Cette dépense a été mise en attente',
         resolvedDuplicates: 'résolu le doublon',
     },
-    reportViolations: (_18 = {},
-        _18[CONST_1.default.REPORT_VIOLATIONS.FIELD_REQUIRED] = function (_a) {
-            var fieldName = _a.fieldName;
-            return "".concat(fieldName, " est requis");
-        },
-        _18),
+    reportViolations: {
+        [CONST_1.default.REPORT_VIOLATIONS.FIELD_REQUIRED]: ({ fieldName }) => `${fieldName} est requis`,
+    },
     violationDismissal: {
         rter: {
             manual: 'a marqué ce reçu comme espèces',
@@ -7422,16 +6173,16 @@ var translations = {
             title: 'Veuillez nous dire pourquoi vous partez',
             subtitle: 'Avant de partir, veuillez nous dire pourquoi vous souhaitez passer à Expensify Classic.',
         },
-        reasons: (_19 = {},
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE] = "J'ai besoin d'une fonctionnalité qui n'est disponible que dans Expensify Classic.",
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND] = 'Je ne comprends pas comment utiliser New Expensify.',
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC] = 'Je comprends comment utiliser New Expensify, mais je préfère Expensify Classic.',
-            _19),
-        prompts: (_20 = {},
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE] = 'Quelle fonctionnalité vous manque-t-il dans le nouveau Expensify ?',
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND] = 'Que cherchez-vous à faire ?',
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC] = 'Pourquoi préférez-vous Expensify Classic ?',
-            _20),
+        reasons: {
+            [CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE]: "J'ai besoin d'une fonctionnalité qui n'est disponible que dans Expensify Classic.",
+            [CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND]: 'Je ne comprends pas comment utiliser New Expensify.',
+            [CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC]: 'Je comprends comment utiliser New Expensify, mais je préfère Expensify Classic.',
+        },
+        prompts: {
+            [CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE]: 'Quelle fonctionnalité vous manque-t-il dans le nouveau Expensify ?',
+            [CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND]: 'Que cherchez-vous à faire ?',
+            [CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC]: 'Pourquoi préférez-vous Expensify Classic ?',
+        },
         responsePlaceholder: 'Votre réponse',
         thankYou: 'Merci pour le retour !',
         thankYouSubtitle: 'Vos réponses nous aideront à créer un meilleur produit pour accomplir les tâches. Merci beaucoup !',
@@ -7443,11 +6194,11 @@ var translations = {
         bookACall: 'Réserver un appel',
         noThanks: 'Non merci',
         bookACallTitle: 'Souhaitez-vous parler à un chef de produit ?',
-        benefits: (_21 = {},
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.CHATTING_DIRECTLY] = 'Discussion directe sur les dépenses et les rapports',
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.EVERYTHING_MOBILE] = 'Possibilité de tout faire sur mobile',
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.TRAVEL_EXPENSE] = 'Voyage et dépenses à la vitesse du chat',
-            _21),
+        benefits: {
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.CHATTING_DIRECTLY]: 'Discussion directe sur les dépenses et les rapports',
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.EVERYTHING_MOBILE]: 'Possibilité de tout faire sur mobile',
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.TRAVEL_EXPENSE]: 'Voyage et dépenses à la vitesse du chat',
+        },
         bookACallTextTop: 'En passant à Expensify Classic, vous manquerez :',
         bookACallTextBottom: "Nous serions ravis de vous appeler pour comprendre pourquoi. Vous pouvez réserver un appel avec l'un de nos chefs de produit senior pour discuter de vos besoins.",
         takeMeToExpensifyClassic: 'Emmenez-moi à Expensify Classic',
@@ -7463,34 +6214,22 @@ var translations = {
         authenticatePaymentCard: 'Authentifier la carte de paiement',
         mobileReducedFunctionalityMessage: "Vous ne pouvez pas apporter de modifications à votre abonnement dans l'application mobile.",
         badge: {
-            freeTrial: function (_a) {
-                var numOfDays = _a.numOfDays;
-                return "Essai gratuit : ".concat(numOfDays, " ").concat(numOfDays === 1 ? 'jour' : 'jours', " restants");
-            },
+            freeTrial: ({ numOfDays }) => `Essai gratuit : ${numOfDays} ${numOfDays === 1 ? 'jour' : 'jours'} restants`,
         },
         billingBanner: {
             policyOwnerAmountOwed: {
                 title: 'Vos informations de paiement sont obsolètes.',
-                subtitle: function (_a) {
-                    var date = _a.date;
-                    return "Mettez \u00E0 jour votre carte de paiement avant le ".concat(date, " pour continuer \u00E0 utiliser toutes vos fonctionnalit\u00E9s pr\u00E9f\u00E9r\u00E9es.");
-                },
+                subtitle: ({ date }) => `Mettez à jour votre carte de paiement avant le ${date} pour continuer à utiliser toutes vos fonctionnalités préférées.`,
             },
             policyOwnerAmountOwedOverdue: {
                 title: "Votre paiement n'a pas pu être traité",
-                subtitle: function (_a) {
-                    var date = _a.date, purchaseAmountOwed = _a.purchaseAmountOwed;
-                    return date && purchaseAmountOwed
-                        ? "Votre charge du ".concat(date, " de ").concat(purchaseAmountOwed, " n'a pas pu \u00EAtre trait\u00E9e. Veuillez ajouter une carte de paiement pour r\u00E9gler le montant d\u00FB.")
-                        : 'Veuillez ajouter une carte de paiement pour régler le montant dû.';
-                },
+                subtitle: ({ date, purchaseAmountOwed }) => date && purchaseAmountOwed
+                    ? `Votre charge du ${date} de ${purchaseAmountOwed} n'a pas pu être traitée. Veuillez ajouter une carte de paiement pour régler le montant dû.`
+                    : 'Veuillez ajouter une carte de paiement pour régler le montant dû.',
             },
             policyOwnerUnderInvoicing: {
                 title: 'Vos informations de paiement sont obsolètes.',
-                subtitle: function (_a) {
-                    var date = _a.date;
-                    return "Votre paiement est en retard. Veuillez r\u00E9gler votre facture avant le ".concat(date, " pour \u00E9viter une interruption de service.");
-                },
+                subtitle: ({ date }) => `Votre paiement est en retard. Veuillez régler votre facture avant le ${date} pour éviter une interruption de service.`,
             },
             policyOwnerUnderInvoicingOverdue: {
                 title: 'Vos informations de paiement sont obsolètes.',
@@ -7498,31 +6237,19 @@ var translations = {
             },
             billingDisputePending: {
                 title: "Votre carte n'a pas pu être débitée",
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed, cardEnding = _a.cardEnding;
-                    return "Vous avez contest\u00E9 le d\u00E9bit de ".concat(amountOwed, " sur la carte se terminant par ").concat(cardEnding, ". Votre compte sera verrouill\u00E9 jusqu'\u00E0 ce que le litige soit r\u00E9solu avec votre banque.");
-                },
+                subtitle: ({ amountOwed, cardEnding }) => `Vous avez contesté le débit de ${amountOwed} sur la carte se terminant par ${cardEnding}. Votre compte sera verrouillé jusqu'à ce que le litige soit résolu avec votre banque.`,
             },
             cardAuthenticationRequired: {
                 title: "Votre carte de paiement n'a pas été entièrement authentifiée.",
-                subtitle: function (_a) {
-                    var cardEnding = _a.cardEnding;
-                    return "Veuillez terminer le processus d'authentification pour activer votre carte se terminant par ".concat(cardEnding, ".");
-                },
+                subtitle: ({ cardEnding }) => `Veuillez terminer le processus d'authentification pour activer votre carte se terminant par ${cardEnding}.`,
             },
             insufficientFunds: {
                 title: "Votre carte n'a pas pu être débitée",
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed;
-                    return "Votre carte de paiement a \u00E9t\u00E9 refus\u00E9e en raison de fonds insuffisants. Veuillez r\u00E9essayer ou ajouter une nouvelle carte de paiement pour r\u00E9gler votre solde impay\u00E9 de ".concat(amountOwed, ".");
-                },
+                subtitle: ({ amountOwed }) => `Votre carte de paiement a été refusée en raison de fonds insuffisants. Veuillez réessayer ou ajouter une nouvelle carte de paiement pour régler votre solde impayé de ${amountOwed}.`,
             },
             cardExpired: {
                 title: "Votre carte n'a pas pu être débitée",
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed;
-                    return "Votre carte de paiement a expir\u00E9. Veuillez ajouter une nouvelle carte de paiement pour r\u00E9gler votre solde impay\u00E9 de ".concat(amountOwed, ".");
-                },
+                subtitle: ({ amountOwed }) => `Votre carte de paiement a expiré. Veuillez ajouter une nouvelle carte de paiement pour régler votre solde impayé de ${amountOwed}.`,
             },
             cardExpireSoon: {
                 title: 'Votre carte expire bientôt',
@@ -7536,10 +6263,7 @@ var translations = {
                 title: "Votre carte n'a pas pu être débitée",
                 subtitle: "Avant de réessayer, veuillez appeler directement votre banque pour autoriser les frais Expensify et supprimer toute retenue. Sinon, essayez d'ajouter une autre carte de paiement.",
             },
-            cardOnDispute: function (_a) {
-                var amountOwed = _a.amountOwed, cardEnding = _a.cardEnding;
-                return "Vous avez contest\u00E9 le d\u00E9bit de ".concat(amountOwed, " sur la carte se terminant par ").concat(cardEnding, ". Votre compte sera verrouill\u00E9 jusqu'\u00E0 ce que le litige soit r\u00E9solu avec votre banque.");
-            },
+            cardOnDispute: ({ amountOwed, cardEnding }) => `Vous avez contesté le débit de ${amountOwed} sur la carte se terminant par ${cardEnding}. Votre compte sera verrouillé jusqu'à ce que le litige soit résolu avec votre banque.`,
             preTrial: {
                 title: 'Commencer un essai gratuit',
                 subtitleStart: 'Comme prochaine étape,',
@@ -7547,10 +6271,7 @@ var translations = {
                 subtitleEnd: 'afin que votre équipe puisse commencer à soumettre des notes de frais.',
             },
             trialStarted: {
-                title: function (_a) {
-                    var numOfDays = _a.numOfDays;
-                    return "Essai : ".concat(numOfDays, " ").concat(numOfDays === 1 ? 'jour' : 'jours', " restants !");
-                },
+                title: ({ numOfDays }) => `Essai : ${numOfDays} ${numOfDays === 1 ? 'jour' : 'jours'} restants !`,
                 subtitle: 'Ajoutez une carte de paiement pour continuer à utiliser toutes vos fonctionnalités préférées.',
             },
             trialEnded: {
@@ -7560,36 +6281,18 @@ var translations = {
             earlyDiscount: {
                 claimOffer: "Réclamer l'offre",
                 noThanks: 'Non merci',
-                subscriptionPageTitle: function (_a) {
-                    var discountType = _a.discountType;
-                    return "<strong>".concat(discountType, "% de r\u00E9duction sur votre premi\u00E8re ann\u00E9e !</strong> Ajoutez simplement une carte de paiement et commencez un abonnement annuel.");
-                },
-                onboardingChatTitle: function (_a) {
-                    var discountType = _a.discountType;
-                    return "Offre \u00E0 dur\u00E9e limit\u00E9e : ".concat(discountType, "% de r\u00E9duction sur votre premi\u00E8re ann\u00E9e !");
-                },
-                subtitle: function (_a) {
-                    var days = _a.days, hours = _a.hours, minutes = _a.minutes, seconds = _a.seconds;
-                    return "R\u00E9clamer dans ".concat(days > 0 ? "".concat(days, "j :") : '').concat(hours, "h : ").concat(minutes, "m : ").concat(seconds, "s");
-                },
+                subscriptionPageTitle: ({ discountType }) => `<strong>${discountType}% de réduction sur votre première année !</strong> Ajoutez simplement une carte de paiement et commencez un abonnement annuel.`,
+                onboardingChatTitle: ({ discountType }) => `Offre à durée limitée : ${discountType}% de réduction sur votre première année !`,
+                subtitle: ({ days, hours, minutes, seconds }) => `Réclamer dans ${days > 0 ? `${days}j :` : ''}${hours}h : ${minutes}m : ${seconds}s`,
             },
         },
         cardSection: {
             title: 'Paiement',
             subtitle: 'Ajoutez une carte pour payer votre abonnement Expensify.',
             addCardButton: 'Ajouter une carte de paiement',
-            cardNextPayment: function (_a) {
-                var nextPaymentDate = _a.nextPaymentDate;
-                return "Votre prochaine date de paiement est le ".concat(nextPaymentDate, ".");
-            },
-            cardEnding: function (_a) {
-                var cardNumber = _a.cardNumber;
-                return "Carte se terminant par ".concat(cardNumber);
-            },
-            cardInfo: function (_a) {
-                var name = _a.name, expiration = _a.expiration, currency = _a.currency;
-                return "Nom : ".concat(name, ", Expiration : ").concat(expiration, ", Devise : ").concat(currency);
-            },
+            cardNextPayment: ({ nextPaymentDate }) => `Votre prochaine date de paiement est le ${nextPaymentDate}.`,
+            cardEnding: ({ cardNumber }) => `Carte se terminant par ${cardNumber}`,
+            cardInfo: ({ name, expiration, currency }) => `Nom : ${name}, Expiration : ${expiration}, Devise : ${currency}`,
             changeCard: 'Changer la carte de paiement',
             changeCurrency: 'Changer la devise de paiement',
             cardNotFound: 'Aucune carte de paiement ajoutée',
@@ -7606,30 +6309,15 @@ var translations = {
             title: 'Votre plan',
             exploreAllPlans: 'Explorez tous les forfaits',
             customPricing: 'Tarification personnalisée',
-            asLowAs: function (_a) {
-                var price = _a.price;
-                return "\u00E0 partir de ".concat(price, " par membre actif/mois");
-            },
-            pricePerMemberMonth: function (_a) {
-                var price = _a.price;
-                return "".concat(price, " par membre/mois");
-            },
-            pricePerMemberPerMonth: function (_a) {
-                var price = _a.price;
-                return "".concat(price, " par membre par mois");
-            },
+            asLowAs: ({ price }) => `à partir de ${price} par membre actif/mois`,
+            pricePerMemberMonth: ({ price }) => `${price} par membre/mois`,
+            pricePerMemberPerMonth: ({ price }) => `${price} par membre par mois`,
             perMemberMonth: 'par membre/mois',
             collect: {
                 title: 'Collecter',
                 description: 'Le plan pour petites entreprises qui vous offre la gestion des dépenses, des voyages et le chat.',
-                priceAnnual: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "De ".concat(lower, "/membre actif avec la carte Expensify, ").concat(upper, "/membre actif sans la carte Expensify.");
-                },
-                pricePayPerUse: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "De ".concat(lower, "/membre actif avec la carte Expensify, ").concat(upper, "/membre actif sans la carte Expensify.");
-                },
+                priceAnnual: ({ lower, upper }) => `De ${lower}/membre actif avec la carte Expensify, ${upper}/membre actif sans la carte Expensify.`,
+                pricePayPerUse: ({ lower, upper }) => `De ${lower}/membre actif avec la carte Expensify, ${upper}/membre actif sans la carte Expensify.`,
                 benefit1: 'Numérisation de reçus',
                 benefit2: 'Remboursements',
                 benefit3: "Gestion des cartes d'entreprise",
@@ -7642,14 +6330,8 @@ var translations = {
             control: {
                 title: 'Contrôle',
                 description: 'Dépenses, voyages et discussions pour les grandes entreprises.',
-                priceAnnual: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "De ".concat(lower, "/membre actif avec la carte Expensify, ").concat(upper, "/membre actif sans la carte Expensify.");
-                },
-                pricePayPerUse: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "De ".concat(lower, "/membre actif avec la carte Expensify, ").concat(upper, "/membre actif sans la carte Expensify.");
-                },
+                priceAnnual: ({ lower, upper }) => `De ${lower}/membre actif avec la carte Expensify, ${upper}/membre actif sans la carte Expensify.`,
+                pricePayPerUse: ({ lower, upper }) => `De ${lower}/membre actif avec la carte Expensify, ${upper}/membre actif sans la carte Expensify.`,
                 benefit1: 'Tout dans le plan Collect',
                 benefit2: "Flux de travail d'approbation à plusieurs niveaux",
                 benefit3: 'Règles de dépenses personnalisées',
@@ -7669,7 +6351,7 @@ var translations = {
         },
         compareModal: {
             comparePlans: 'Comparer les forfaits',
-            subtitle: "<muted-text>D\u00E9bloquez les fonctionnalit\u00E9s dont vous avez besoin avec le forfait qui vous convient. <a href=\"".concat(CONST_1.default.PRICING, "\">Consultez notre page de tarifs</a> ou la liste compl\u00E8te des fonctionnalit\u00E9s de chacun de nos forfaits.</muted-text>"),
+            subtitle: `<muted-text>Débloquez les fonctionnalités dont vous avez besoin avec le forfait qui vous convient. <a href="${CONST_1.default.PRICING}">Consultez notre page de tarifs</a> ou la liste complète des fonctionnalités de chacun de nos forfaits.</muted-text>`,
         },
         details: {
             title: "Détails de l'abonnement",
@@ -7689,16 +6371,10 @@ var translations = {
             note: "Remarque : Un membre actif est toute personne qui a créé, modifié, soumis, approuvé, remboursé ou exporté des données de dépenses liées à l'espace de travail de votre entreprise.",
             confirmDetails: 'Confirmez les détails de votre nouvel abonnement annuel :',
             subscriptionSize: "Taille de l'abonnement",
-            activeMembers: function (_a) {
-                var size = _a.size;
-                return "".concat(size, " membres actifs/mois");
-            },
+            activeMembers: ({ size }) => `${size} membres actifs/mois`,
             subscriptionRenews: "Renouvellement de l'abonnement",
             youCantDowngrade: 'Vous ne pouvez pas rétrograder pendant votre abonnement annuel.',
-            youAlreadyCommitted: function (_a) {
-                var size = _a.size, date = _a.date;
-                return "Vous vous \u00EAtes d\u00E9j\u00E0 engag\u00E9 \u00E0 un abonnement annuel de ".concat(size, " membres actifs par mois jusqu'au ").concat(date, ". Vous pouvez passer \u00E0 un abonnement \u00E0 l'utilisation le ").concat(date, " en d\u00E9sactivant le renouvellement automatique.");
-            },
+            youAlreadyCommitted: ({ size, date }) => `Vous vous êtes déjà engagé à un abonnement annuel de ${size} membres actifs par mois jusqu'au ${date}. Vous pouvez passer à un abonnement à l'utilisation le ${date} en désactivant le renouvellement automatique.`,
             error: {
                 size: "Veuillez entrer une taille d'abonnement valide",
                 sameSize: 'Veuillez entrer un nombre différent de la taille actuelle de votre abonnement',
@@ -7712,28 +6388,19 @@ var translations = {
         },
         subscriptionSettings: {
             title: "Paramètres d'abonnement",
-            summary: function (_a) {
-                var subscriptionType = _a.subscriptionType, subscriptionSize = _a.subscriptionSize, autoRenew = _a.autoRenew, autoIncrease = _a.autoIncrease;
-                return "Type d'abonnement : ".concat(subscriptionType, ", Taille de l'abonnement : ").concat(subscriptionSize, ", Renouvellement automatique : ").concat(autoRenew, ", Augmentation automatique des si\u00E8ges annuels : ").concat(autoIncrease);
-            },
+            summary: ({ subscriptionType, subscriptionSize, autoRenew, autoIncrease }) => `Type d'abonnement : ${subscriptionType}, Taille de l'abonnement : ${subscriptionSize}, Renouvellement automatique : ${autoRenew}, Augmentation automatique des sièges annuels : ${autoIncrease}`,
             none: 'aucun',
             on: 'sur',
             off: 'désactivé',
             annual: 'Annuel',
             autoRenew: 'Renouvellement automatique',
             autoIncrease: 'Augmenter automatiquement les sièges annuels',
-            saveUpTo: function (_a) {
-                var amountWithCurrency = _a.amountWithCurrency;
-                return "\u00C9conomisez jusqu'\u00E0 ".concat(amountWithCurrency, "/mois par membre actif");
-            },
+            saveUpTo: ({ amountWithCurrency }) => `Économisez jusqu'à ${amountWithCurrency}/mois par membre actif`,
             automaticallyIncrease: 'Augmentez automatiquement vos sièges annuels pour accueillir les membres actifs qui dépassent la taille de votre abonnement. Remarque : Cela prolongera la date de fin de votre abonnement annuel.',
             disableAutoRenew: 'Désactiver le renouvellement automatique',
             helpUsImprove: 'Aidez-nous à améliorer Expensify',
             whatsMainReason: 'Quelle est la principale raison pour laquelle vous désactivez le renouvellement automatique ?',
-            renewsOn: function (_a) {
-                var date = _a.date;
-                return "Renouvelle le ".concat(date, ".");
-            },
+            renewsOn: ({ date }) => `Renouvelle le ${date}.`,
             pricingConfiguration: 'Les tarifs dépendent de la configuration. Pour le prix le plus bas, choisissez un abonnement annuel et obtenez la carte Expensify.',
             learnMore: {
                 part1: 'En savoir plus sur notre',
@@ -7751,16 +6418,13 @@ var translations = {
                 title: 'Abonnement annulé',
                 subtitle: 'Votre abonnement annuel a été annulé.',
                 info: "Si vous souhaitez continuer à utiliser votre/vos espace(s) de travail sur une base de paiement à l'utilisation, vous êtes prêt.",
-                preventFutureActivity: function (_a) {
-                    var workspacesListRoute = _a.workspacesListRoute;
-                    return "Si vous souhaitez \u00E9viter toute activit\u00E9 et frais futurs, vous devez <a href=\"".concat(workspacesListRoute, "\">supprimer votre/vos espace(s) de travail</a>. Notez que lorsque vous supprimez votre(vos) espace(s) de travail, vous serez factur\u00E9 pour toute activit\u00E9 en cours qui a \u00E9t\u00E9 engag\u00E9e au cours du mois civil en cours.");
-                },
+                preventFutureActivity: ({ workspacesListRoute }) => `Si vous souhaitez éviter toute activité et frais futurs, vous devez <a href="${workspacesListRoute}">supprimer votre/vos espace(s) de travail</a>. Notez que lorsque vous supprimez votre(vos) espace(s) de travail, vous serez facturé pour toute activité en cours qui a été engagée au cours du mois civil en cours.`,
             },
             requestSubmitted: {
                 title: 'Demande soumise',
                 subtitle: 'Merci de nous avoir fait part de votre souhait de résilier votre abonnement. Nous examinons actuellement votre demande et vous contacterons prochainement via votre chat avec <concierge-link>Concierge</concierge-link>.',
             },
-            acknowledgement: "En demandant une annulation anticip\u00E9e, je reconnais et accepte qu'Expensify n'a aucune obligation d'acc\u00E9der \u00E0 cette demande en vertu d'Expensify.<a href=".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, ">Conditions d'utilisation</a>ou tout autre accord de services applicable entre moi et Expensify et qu'Expensify conserve l'enti\u00E8re discr\u00E9tion quant \u00E0 l'octroi de toute demande de ce type."),
+            acknowledgement: `En demandant une annulation anticipée, je reconnais et accepte qu'Expensify n'a aucune obligation d'accéder à cette demande en vertu d'Expensify.<a href=${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}>Conditions d'utilisation</a>ou tout autre accord de services applicable entre moi et Expensify et qu'Expensify conserve l'entière discrétion quant à l'octroi de toute demande de ce type.`,
         },
     },
     feedbackSurvey: {
@@ -7782,8 +6446,7 @@ var translations = {
         addCopilot: 'Ajouter copilote',
         membersCanAccessYourAccount: 'Ces membres peuvent accéder à votre compte :',
         youCanAccessTheseAccounts: 'Vous pouvez accéder à ces comptes via le sélecteur de compte :',
-        role: function (_a) {
-            var _b = _a === void 0 ? {} : _a, role = _b.role;
+        role: ({ role } = {}) => {
             switch (role) {
                 case CONST_1.default.DELEGATE_ROLE.ALL:
                     return 'Complet';
@@ -7794,15 +6457,11 @@ var translations = {
             }
         },
         genericError: "Oups, quelque chose s'est mal passé. Veuillez réessayer.",
-        onBehalfOfMessage: function (_a) {
-            var delegator = _a.delegator;
-            return "au nom de ".concat(delegator);
-        },
+        onBehalfOfMessage: ({ delegator }) => `au nom de ${delegator}`,
         accessLevel: "Niveau d'accès",
         confirmCopilot: 'Confirmez votre copilote ci-dessous.',
         accessLevelDescription: "Choisissez un niveau d'accès ci-dessous. Les accès Complet et Limité permettent aux copilotes de voir toutes les conversations et dépenses.",
-        roleDescription: function (_a) {
-            var _b = _a === void 0 ? {} : _a, role = _b.role;
+        roleDescription: ({ role } = {}) => {
             switch (role) {
                 case CONST_1.default.DELEGATE_ROLE.ALL:
                     return 'Autoriser un autre membre à effectuer toutes les actions sur votre compte, en votre nom. Inclut le chat, les soumissions, les approbations, les paiements, les mises à jour des paramètres, et plus encore.';
@@ -7816,20 +6475,11 @@ var translations = {
         removeCopilotConfirmation: 'Êtes-vous sûr de vouloir supprimer ce copilote ?',
         changeAccessLevel: "Modifier le niveau d'accès",
         makeSureItIsYou: "Assurons-nous que c'est bien vous",
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "Veuillez entrer le code magique envoy\u00E9 \u00E0 ".concat(contactMethod, " pour ajouter un copilote. Il devrait arriver d'ici une \u00E0 deux minutes.");
-        },
-        enterMagicCodeUpdate: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "Veuillez entrer le code magique envoy\u00E9 \u00E0 ".concat(contactMethod, " pour mettre \u00E0 jour votre copilote.");
-        },
+        enterMagicCode: ({ contactMethod }) => `Veuillez entrer le code magique envoyé à ${contactMethod} pour ajouter un copilote. Il devrait arriver d'ici une à deux minutes.`,
+        enterMagicCodeUpdate: ({ contactMethod }) => `Veuillez entrer le code magique envoyé à ${contactMethod} pour mettre à jour votre copilote.`,
         notAllowed: 'Pas si vite...',
         noAccessMessage: "En tant que copilote, vous n'avez pas accès à cette page. Désolé !",
-        notAllowedMessage: function (_a) {
-            var accountOwnerEmail = _a.accountOwnerEmail;
-            return "En tant que <a href=\"".concat(CONST_1.default.DELEGATE_ROLE_HELP_DOT_ARTICLE_LINK, "\">copilote</a> de ").concat(accountOwnerEmail, ", vous n'avez pas la permission d'entreprendre cette action. D\u00E9sol\u00E9 de ne pas pouvoir effectuer cette action.");
-        },
+        notAllowedMessage: ({ accountOwnerEmail }) => `En tant que <a href="${CONST_1.default.DELEGATE_ROLE_HELP_DOT_ARTICLE_LINK}">copilote</a> de ${accountOwnerEmail}, vous n'avez pas la permission d'entreprendre cette action. Désolé de ne pas pouvoir effectuer cette action.`,
         copilotAccess: 'Accès Copilot',
     },
     debug: {
@@ -7841,18 +6491,9 @@ var translations = {
         nothingToPreview: 'Rien à prévisualiser',
         editJson: 'Modifier JSON :',
         preview: 'Aperçu :',
-        missingProperty: function (_a) {
-            var propertyName = _a.propertyName;
-            return "".concat(propertyName, " manquant");
-        },
-        invalidProperty: function (_a) {
-            var propertyName = _a.propertyName, expectedType = _a.expectedType;
-            return "Propri\u00E9t\u00E9 invalide : ".concat(propertyName, " - Attendu : ").concat(expectedType);
-        },
-        invalidValue: function (_a) {
-            var expectedValues = _a.expectedValues;
-            return "Valeur invalide - Attendu : ".concat(expectedValues);
-        },
+        missingProperty: ({ propertyName }) => `${propertyName} manquant`,
+        invalidProperty: ({ propertyName, expectedType }) => `Propriété invalide : ${propertyName} - Attendu : ${expectedType}`,
+        invalidValue: ({ expectedValues }) => `Valeur invalide - Attendu : ${expectedValues}`,
         missingValue: 'Valeur manquante',
         createReportAction: 'Créer une action de rapport',
         reportAction: "Signaler l'action",
@@ -8002,10 +6643,7 @@ var translations = {
             readyForTheRealThing: 'Prêt pour le grand saut ?',
             getStarted: 'Commencer',
         },
-        employeeInviteMessage: function (_a) {
-            var name = _a.name;
-            return "# ".concat(name, " vous a invit\u00E9 \u00E0 essayer Expensify\nSalut ! Je viens de nous obtenir *3 mois gratuits* pour essayer Expensify, la fa\u00E7on la plus rapide de g\u00E9rer les notes de frais.\n\nVoici un *re\u00E7u de test* pour vous montrer comment cela fonctionne :");
-        },
+        employeeInviteMessage: ({ name }) => `# ${name} vous a invité à essayer Expensify\nSalut ! Je viens de nous obtenir *3 mois gratuits* pour essayer Expensify, la façon la plus rapide de gérer les notes de frais.\n\nVoici un *reçu de test* pour vous montrer comment cela fonctionne :`,
     },
     export: {
         basicExport: 'Exportation basique',

@@ -1,18 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable react/no-array-index-key */
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ReportActionUtils = require("@libs/ReportActionsUtils");
-function ExportIntegration(_a) {
-    var action = _a.action;
-    var styles = (0, useThemeStyles_1.default)();
-    var fragments = ReportActionUtils.getExportIntegrationActionFragments(action);
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ReportActionUtils = require("@libs/ReportActionsUtils");
+function ExportIntegration({ action }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const fragments = ReportActionUtils.getExportIntegrationActionFragments(action);
     return (<react_native_1.View style={[styles.flex1, styles.flexRow, styles.alignItemsCenter, styles.flexWrap]}>
-            {fragments.map(function (fragment, index) {
+            {fragments.map((fragment, index) => {
             if (!fragment.url) {
                 return (<Text_1.default key={index} style={[styles.chatItemMessage, styles.colorMuted]}>
                             {fragment.text}{' '}

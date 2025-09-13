@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRandomDate = void 0;
 exports.default = createRandomReportAction;
-var falso_1 = require("@ngneat/falso");
-var date_fns_1 = require("date-fns");
-var CONST_1 = require("@src/CONST");
-var flattenActionNamesValues = function (actionNames) {
-    var result = [];
-    Object.values(actionNames).forEach(function (value) {
+const falso_1 = require("@ngneat/falso");
+const date_fns_1 = require("date-fns");
+const CONST_1 = require("@src/CONST");
+const flattenActionNamesValues = (actionNames) => {
+    let result = [];
+    Object.values(actionNames).forEach((value) => {
         if (typeof value === 'object') {
             result = result.concat(flattenActionNamesValues(value));
         }
@@ -17,14 +17,14 @@ var flattenActionNamesValues = function (actionNames) {
     });
     return result;
 };
-var getRandomDate = function () {
-    var randomTimestamp = Math.random() * new Date().getTime();
-    var randomDate = new Date(randomTimestamp);
-    var formattedDate = (0, date_fns_1.format)(randomDate, CONST_1.default.DATE.FNS_DB_FORMAT_STRING);
+const getRandomDate = () => {
+    const randomTimestamp = Math.random() * new Date().getTime();
+    const randomDate = new Date(randomTimestamp);
+    const formattedDate = (0, date_fns_1.format)(randomDate, CONST_1.default.DATE.FNS_DB_FORMAT_STRING);
     return formattedDate;
 };
 exports.getRandomDate = getRandomDate;
-var deprecatedReportActions = [
+const deprecatedReportActions = [
     CONST_1.default.REPORT.ACTIONS.TYPE.DELETED_ACCOUNT,
     CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_REQUESTED,
     CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_SETUP_REQUESTED,
@@ -33,7 +33,7 @@ var deprecatedReportActions = [
 function createRandomReportAction(index) {
     return {
         // We need to assert the type of actionName so that rest of the properties are inferred correctly
-        actionName: (0, falso_1.rand)(flattenActionNamesValues(CONST_1.default.REPORT.ACTIONS.TYPE).filter(function (actionType) { return !deprecatedReportActions.includes(actionType); })),
+        actionName: (0, falso_1.rand)(flattenActionNamesValues(CONST_1.default.REPORT.ACTIONS.TYPE).filter((actionType) => !deprecatedReportActions.includes(actionType))),
         reportActionID: index.toString(),
         actorAccountID: index,
         person: [

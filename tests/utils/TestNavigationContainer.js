@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var createRootStackNavigator_1 = require("@libs/Navigation/AppNavigator/createRootStackNavigator");
-var createSplitNavigator_1 = require("@libs/Navigation/AppNavigator/createSplitNavigator");
-var navigationRef_1 = require("@libs/Navigation/navigationRef");
-var createPlatformStackNavigator_1 = require("@navigation/PlatformStackNavigation/createPlatformStackNavigator");
-var CONST_1 = require("@src/CONST");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var SCREENS_1 = require("@src/SCREENS");
-var RootStack = (0, createRootStackNavigator_1.default)();
-var ReportsSplit = (0, createSplitNavigator_1.default)();
-var SettingsSplit = (0, createSplitNavigator_1.default)();
-var SearchStack = (0, createPlatformStackNavigator_1.default)();
-var WorkspaceSplit = (0, createSplitNavigator_1.default)();
-var getEmptyComponent = function () { return jest.fn(); };
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const createRootStackNavigator_1 = require("@libs/Navigation/AppNavigator/createRootStackNavigator");
+const createSplitNavigator_1 = require("@libs/Navigation/AppNavigator/createSplitNavigator");
+const navigationRef_1 = require("@libs/Navigation/navigationRef");
+const createPlatformStackNavigator_1 = require("@navigation/PlatformStackNavigation/createPlatformStackNavigator");
+const CONST_1 = require("@src/CONST");
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const SCREENS_1 = require("@src/SCREENS");
+const RootStack = (0, createRootStackNavigator_1.default)();
+const ReportsSplit = (0, createSplitNavigator_1.default)();
+const SettingsSplit = (0, createSplitNavigator_1.default)();
+const SearchStack = (0, createPlatformStackNavigator_1.default)();
+const WorkspaceSplit = (0, createSplitNavigator_1.default)();
+const getEmptyComponent = () => jest.fn();
 function TestWorkspaceSplitNavigator() {
     return (<WorkspaceSplit.Navigator sidebarScreen={SCREENS_1.default.WORKSPACE.INITIAL} defaultCentralScreen={SCREENS_1.default.WORKSPACE.PROFILE} parentRoute={CONST_1.default.NAVIGATION_TESTS.DEFAULT_PARENT_ROUTE}>
             <WorkspaceSplit.Screen name={SCREENS_1.default.WORKSPACE.INITIAL} getComponent={getEmptyComponent}/>
@@ -45,8 +45,7 @@ function TestSearchFullscreenNavigator() {
             <SearchStack.Screen name={SCREENS_1.default.SEARCH.MONEY_REQUEST_REPORT} getComponent={getEmptyComponent()}/>
         </SearchStack.Navigator>);
 }
-function TestNavigationContainer(_a) {
-    var initialState = _a.initialState;
+function TestNavigationContainer({ initialState }) {
     return (<native_1.NavigationContainer ref={navigationRef_1.default} initialState={initialState}>
             <RootStack.Navigator>
                 <RootStack.Screen name={NAVIGATORS_1.default.REPORTS_SPLIT_NAVIGATOR} component={TestReportsSplitNavigator}/>

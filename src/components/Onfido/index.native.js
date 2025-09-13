@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_sdk_1 = require("@onfido/react-native-sdk");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_permissions_1 = require("react-native-permissions");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var useLocalize_1 = require("@hooks/useLocalize");
-var getPlatform_1 = require("@libs/getPlatform");
-var Log_1 = require("@libs/Log");
-var CONST_1 = require("@src/CONST");
-var AppStateTracker = react_native_1.NativeModules.AppStateTracker;
-function Onfido(_a) {
-    var sdkToken = _a.sdkToken, onUserExit = _a.onUserExit, onSuccess = _a.onSuccess, onError = _a.onError;
-    var translate = (0, useLocalize_1.default)().translate;
-    (0, react_1.useEffect)(function () {
+const react_native_sdk_1 = require("@onfido/react-native-sdk");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_permissions_1 = require("react-native-permissions");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const useLocalize_1 = require("@hooks/useLocalize");
+const getPlatform_1 = require("@libs/getPlatform");
+const Log_1 = require("@libs/Log");
+const CONST_1 = require("@src/CONST");
+const { AppStateTracker } = react_native_1.NativeModules;
+function Onfido({ sdkToken, onUserExit, onSuccess, onError }) {
+    const { translate } = (0, useLocalize_1.default)();
+    (0, react_1.useEffect)(() => {
         react_native_sdk_1.Onfido.start({
-            sdkToken: sdkToken,
+            sdkToken,
             theme: react_native_sdk_1.OnfidoTheme.AUTOMATIC,
             flowSteps: {
                 welcome: true,
@@ -30,16 +29,15 @@ function Onfido(_a) {
             disableNFC: true,
         })
             .then(onSuccess)
-            .catch(function (error) {
-            var _a;
-            var errorMessage = (_a = error.message) !== null && _a !== void 0 ? _a : CONST_1.default.ERROR.UNKNOWN_ERROR;
-            var errorType = error.type;
-            Log_1.default.hmmm('Onfido error on native', { errorType: errorType, errorMessage: errorMessage });
+            .catch((error) => {
+            const errorMessage = error.message ?? CONST_1.default.ERROR.UNKNOWN_ERROR;
+            const errorType = error.type;
+            Log_1.default.hmmm('Onfido error on native', { errorType, errorMessage });
             // If the user cancels the Onfido flow we won't log this error as it's normal. In the React Native SDK the user exiting the flow will trigger this error which we can use as
             // our "user exited the flow" callback. On web, this event has it's own callback passed as a config so we don't need to bother with this there.
             if ([CONST_1.default.ONFIDO.ERROR.USER_CANCELLED, CONST_1.default.ONFIDO.ERROR.USER_TAPPED_BACK, CONST_1.default.ONFIDO.ERROR.USER_EXITED].includes(errorMessage)) {
                 if ((0, getPlatform_1.default)() === CONST_1.default.PLATFORM.ANDROID) {
-                    AppStateTracker.getWasAppRelaunchedFromIcon().then(function (wasAppRelaunchedFromIcon) {
+                    AppStateTracker.getWasAppRelaunchedFromIcon().then((wasAppRelaunchedFromIcon) => {
                         onUserExit(!wasAppRelaunchedFromIcon);
                     });
                     return;
@@ -49,11 +47,11 @@ function Onfido(_a) {
             }
             if (!!errorMessage && (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.IOS) {
                 (0, react_native_permissions_1.checkMultiple)([react_native_permissions_1.PERMISSIONS.IOS.MICROPHONE, react_native_permissions_1.PERMISSIONS.IOS.CAMERA])
-                    .then(function (statuses) {
-                    var isMicAllowed = statuses[react_native_permissions_1.PERMISSIONS.IOS.MICROPHONE] === react_native_permissions_1.RESULTS.GRANTED;
-                    var isCameraAllowed = statuses[react_native_permissions_1.PERMISSIONS.IOS.CAMERA] === react_native_permissions_1.RESULTS.GRANTED;
-                    var alertTitle = '';
-                    var alertMessage = '';
+                    .then((statuses) => {
+                    const isMicAllowed = statuses[react_native_permissions_1.PERMISSIONS.IOS.MICROPHONE] === react_native_permissions_1.RESULTS.GRANTED;
+                    const isCameraAllowed = statuses[react_native_permissions_1.PERMISSIONS.IOS.CAMERA] === react_native_permissions_1.RESULTS.GRANTED;
+                    let alertTitle = '';
+                    let alertMessage = '';
                     if (!isCameraAllowed) {
                         alertTitle = 'onfidoStep.cameraPermissionsNotGranted';
                         alertMessage = 'onfidoStep.cameraRequestMessage';
@@ -66,11 +64,11 @@ function Onfido(_a) {
                         react_native_1.Alert.alert(translate(alertTitle), translate(alertMessage), [
                             {
                                 text: translate('common.cancel'),
-                                onPress: function () { return onUserExit(); },
+                                onPress: () => onUserExit(),
                             },
                             {
                                 text: translate('common.settings'),
-                                onPress: function () {
+                                onPress: () => {
                                     onUserExit();
                                     react_native_1.Linking.openSettings();
                                 },
@@ -80,7 +78,7 @@ function Onfido(_a) {
                     }
                     onError(errorMessage);
                 })
-                    .catch(function () {
+                    .catch(() => {
                     onError(errorMessage);
                 });
             }

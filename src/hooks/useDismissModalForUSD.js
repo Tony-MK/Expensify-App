@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const CONST_1 = require("@src/CONST");
 function useDismissModalForUSD(workspaceCurrency) {
-    var _a = (0, react_1.useState)(false), isCurrencyModalOpen = _a[0], setIsCurrencyModalOpen = _a[1];
-    (0, react_1.useEffect)(function () {
+    const [isCurrencyModalOpen, setIsCurrencyModalOpen] = (0, react_1.useState)(false);
+    (0, react_1.useEffect)(() => {
         if (!isCurrencyModalOpen || workspaceCurrency !== CONST_1.default.CURRENCY.USD) {
             return;
         }

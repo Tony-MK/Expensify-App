@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var searchOptions_1 = require("@libs/searchOptions");
-describe('searchCountryOptions', function () {
-    test('when the search term is a country code, the country with that code should be prioritized', function () {
-        var searchValue = 'US';
-        var countriesData = [
+const searchOptions_1 = require("@libs/searchOptions");
+describe('searchCountryOptions', () => {
+    test('when the search term is a country code, the country with that code should be prioritized', () => {
+        const searchValue = 'US';
+        const countriesData = [
             {
                 value: 'US',
                 keyForList: 'US',
@@ -34,7 +34,7 @@ describe('searchCountryOptions', function () {
                 searchValue: 'auaustralia',
             },
         ];
-        var expected = [
+        const expected = [
             {
                 value: 'US',
                 keyForList: 'US',
@@ -50,12 +50,12 @@ describe('searchCountryOptions', function () {
                 searchValue: 'auaustralia',
             },
         ];
-        var actual = (0, searchOptions_1.default)(searchValue, countriesData);
+        const actual = (0, searchOptions_1.default)(searchValue, countriesData);
         expect(actual).toEqual(expected);
     });
-    test('when the search term contains diacritics the country names that exactly match should be prioritized', function () {
-        var searchValue = 'Ål';
-        var countriesData = [
+    test('when the search term contains diacritics the country names that exactly match should be prioritized', () => {
+        const searchValue = 'Ål';
+        const countriesData = [
             {
                 value: 'AX',
                 keyForList: 'AX',
@@ -78,7 +78,7 @@ describe('searchCountryOptions', function () {
                 searchValue: 'asamericansamoa',
             },
         ];
-        var expected = [
+        const expected = [
             {
                 value: 'AX',
                 keyForList: 'AX',
@@ -94,12 +94,12 @@ describe('searchCountryOptions', function () {
                 searchValue: 'alalbania',
             },
         ];
-        var actual = (0, searchOptions_1.default)(searchValue, countriesData);
+        const actual = (0, searchOptions_1.default)(searchValue, countriesData);
         expect(actual).toEqual(expected);
     });
-    test('when the search term contains diacritics the country names that exactly match should be prioritized, test case #2', function () {
-        var searchValue = 'é';
-        var countriesData = [
+    test('when the search term contains diacritics the country names that exactly match should be prioritized, test case #2', () => {
+        const searchValue = 'é';
+        const countriesData = [
             {
                 value: 'BE',
                 keyForList: 'BE',
@@ -122,7 +122,7 @@ describe('searchCountryOptions', function () {
                 searchValue: 'blsaintbarthelemy',
             },
         ];
-        var expected = [
+        const expected = [
             {
                 value: 'BL',
                 keyForList: 'BL',
@@ -145,12 +145,12 @@ describe('searchCountryOptions', function () {
                 searchValue: 'usunitedstates',
             },
         ];
-        var actual = (0, searchOptions_1.default)(searchValue, countriesData);
+        const actual = (0, searchOptions_1.default)(searchValue, countriesData);
         expect(actual).toEqual(expected);
     });
-    test('when the search term contains no diacritics, countries with diacritics should still be searched by their sanitized names', function () {
-        var searchValue = 'al';
-        var countriesData = [
+    test('when the search term contains no diacritics, countries with diacritics should still be searched by their sanitized names', () => {
+        const searchValue = 'al';
+        const countriesData = [
             {
                 value: 'AX',
                 keyForList: 'AX',
@@ -173,7 +173,7 @@ describe('searchCountryOptions', function () {
                 searchValue: 'asamericansamoa',
             },
         ];
-        var expected = [
+        const expected = [
             {
                 value: 'AL',
                 keyForList: 'AL',
@@ -189,12 +189,12 @@ describe('searchCountryOptions', function () {
                 searchValue: 'axalandislands',
             },
         ];
-        var actual = (0, searchOptions_1.default)(searchValue, countriesData);
+        const actual = (0, searchOptions_1.default)(searchValue, countriesData);
         expect(actual).toEqual(expected);
     });
-    test('when a search term exactly matches the beginning of a countries name, that country should be prioritized', function () {
-        var searchValue = 'bar'; // for barbados
-        var countriesData = [
+    test('when a search term exactly matches the beginning of a countries name, that country should be prioritized', () => {
+        const searchValue = 'bar'; // for barbados
+        const countriesData = [
             {
                 value: 'BB',
                 keyForList: 'BB',
@@ -224,7 +224,7 @@ describe('searchCountryOptions', function () {
                 searchValue: 'agantiguaandbarbuda',
             },
         ];
-        var expected = [
+        const expected = [
             {
                 value: 'BB',
                 keyForList: 'BB',
@@ -240,12 +240,12 @@ describe('searchCountryOptions', function () {
                 searchValue: 'agantiguaandbarbuda',
             },
         ];
-        var actual = (0, searchOptions_1.default)(searchValue, countriesData);
+        const actual = (0, searchOptions_1.default)(searchValue, countriesData);
         expect(actual).toEqual(expected);
     });
-    test('when the search term is empty, all countries should be returned', function () {
-        var searchValue = '';
-        var countriesData = [
+    test('when the search term is empty, all countries should be returned', () => {
+        const searchValue = '';
+        const countriesData = [
             {
                 value: 'BB',
                 keyForList: 'BB',
@@ -275,8 +275,8 @@ describe('searchCountryOptions', function () {
                 searchValue: 'agantiguaandbarbuda',
             },
         ];
-        var expected = countriesData;
-        var actual = (0, searchOptions_1.default)(searchValue, countriesData);
+        const expected = countriesData;
+        const actual = (0, searchOptions_1.default)(searchValue, countriesData);
         expect(actual).toEqual(expected);
     });
 });

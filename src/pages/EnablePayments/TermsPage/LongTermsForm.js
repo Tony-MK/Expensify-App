@@ -1,22 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var CollapsibleSection_1 = require("@components/CollapsibleSection");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CurrencyUtils = require("@libs/CurrencyUtils");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const CollapsibleSection_1 = require("@components/CollapsibleSection");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CurrencyUtils = require("@libs/CurrencyUtils");
+const CONST_1 = require("@src/CONST");
 function LongTermsForm() {
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var _a = (0, useLocalize_1.default)(), translate = _a.translate, numberFormat = _a.numberFormat;
-    var termsData = [
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate, numberFormat } = (0, useLocalize_1.default)();
+    const termsData = [
         {
             title: translate('termsStep.longTermsForm.openingAccountTitle'),
             rightText: CurrencyUtils.convertToDisplayString(0, 'USD'),
@@ -58,15 +58,14 @@ function LongTermsForm() {
         {
             title: translate('termsStep.electronicFundsWithdrawal'),
             subTitle: translate('termsStep.longTermsForm.instant'),
-            rightText: "".concat(numberFormat(1.5), "%"),
+            rightText: `${numberFormat(1.5)}%`,
             subRightText: translate('termsStep.longTermsForm.electronicFundsInstantFeeMin', { amount: CurrencyUtils.convertToDisplayString(25, 'USD') }),
             details: translate('termsStep.longTermsForm.electronicFundsInstantDetails', { percentage: numberFormat(1.5), amount: CurrencyUtils.convertToDisplayString(25, 'USD') }),
         },
     ];
-    var getLongTermsSections = function () {
-        return termsData.map(function (section, index) { return (
-        // eslint-disable-next-line react/no-array-index-key
-        <react_native_1.View key={section.title + index}>
+    const getLongTermsSections = () => termsData.map((section, index) => (
+    // eslint-disable-next-line react/no-array-index-key
+    <react_native_1.View key={section.title + index}>
                 <react_native_1.View style={[styles.longTermsRow]}>
                     <react_native_1.View style={[styles.flex4]}>
                         <Text_1.default>{section.title}</Text_1.default>
@@ -78,8 +77,7 @@ function LongTermsForm() {
                     </react_native_1.View>
                 </react_native_1.View>
                 <Text_1.default style={[styles.textLabelSupporting, styles.mt2]}>{section.details}</Text_1.default>
-            </react_native_1.View>); });
-    };
+            </react_native_1.View>));
     return (<>
             <CollapsibleSection_1.default title={translate('termsStep.longTermsForm.listOfAllFees')} shouldShowSectionBorder>
                 {getLongTermsSections()}

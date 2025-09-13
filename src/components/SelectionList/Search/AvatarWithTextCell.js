@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Avatar_1 = require("@components/Avatar");
-var Text_1 = require("@components/Text");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-function AvatarWithTextCell(_a) {
-    var reportName = _a.reportName, icon = _a.icon;
-    var styles = (0, useThemeStyles_1.default)();
-    var isLargeScreenWidth = (0, useResponsiveLayout_1.default)().isLargeScreenWidth;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Avatar_1 = require("@components/Avatar");
+const Text_1 = require("@components/Text");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+function AvatarWithTextCell({ reportName, icon }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { isLargeScreenWidth } = (0, useResponsiveLayout_1.default)();
     if (!reportName || !icon) {
         return null;
     }

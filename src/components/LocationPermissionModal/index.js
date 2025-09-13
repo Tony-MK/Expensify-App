@@ -1,55 +1,54 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var debounce_1 = require("lodash/debounce");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_permissions_1 = require("react-native-permissions");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var Illustrations = require("@components/Icon/Illustrations");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var getPlatform_1 = require("@libs/getPlatform");
-var Visibility_1 = require("@libs/Visibility");
-var LocationPermission_1 = require("@pages/iou/request/step/IOURequestStepScan/LocationPermission");
-var CONST_1 = require("@src/CONST");
-function LocationPermissionModal(_a) {
-    var startPermissionFlow = _a.startPermissionFlow, resetPermissionFlow = _a.resetPermissionFlow, onDeny = _a.onDeny, onGrant = _a.onGrant, onInitialGetLocationCompleted = _a.onInitialGetLocationCompleted;
-    var _b = (0, react_1.useState)(false), hasError = _b[0], setHasError = _b[1];
-    var _c = (0, react_1.useState)(false), showModal = _c[0], setShowModal = _c[1];
-    var _d = (0, react_1.useState)(false), isLoading = _d[0], setIsLoading = _d[1];
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isWeb = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.WEB;
-    var checkPermission = (0, react_1.useCallback)(function () {
-        (0, LocationPermission_1.getLocationPermission)().then(function (status) {
+const debounce_1 = require("lodash/debounce");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_permissions_1 = require("react-native-permissions");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const Illustrations = require("@components/Icon/Illustrations");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const getPlatform_1 = require("@libs/getPlatform");
+const Visibility_1 = require("@libs/Visibility");
+const LocationPermission_1 = require("@pages/iou/request/step/IOURequestStepScan/LocationPermission");
+const CONST_1 = require("@src/CONST");
+function LocationPermissionModal({ startPermissionFlow, resetPermissionFlow, onDeny, onGrant, onInitialGetLocationCompleted }) {
+    const [hasError, setHasError] = (0, react_1.useState)(false);
+    const [showModal, setShowModal] = (0, react_1.useState)(false);
+    const [isLoading, setIsLoading] = (0, react_1.useState)(false);
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const isWeb = (0, getPlatform_1.default)() === CONST_1.default.PLATFORM.WEB;
+    const checkPermission = (0, react_1.useCallback)(() => {
+        (0, LocationPermission_1.getLocationPermission)().then((status) => {
             if (status !== react_native_permissions_1.RESULTS.GRANTED && status !== react_native_permissions_1.RESULTS.LIMITED) {
                 return;
             }
             onGrant();
         });
     }, [onGrant]);
-    var debouncedCheckPermission = (0, react_1.useMemo)(function () { return (0, debounce_1.default)(checkPermission, CONST_1.default.TIMING.USE_DEBOUNCED_STATE_DELAY); }, [checkPermission]);
-    (0, react_1.useEffect)(function () {
+    const debouncedCheckPermission = (0, react_1.useMemo)(() => (0, debounce_1.default)(checkPermission, CONST_1.default.TIMING.USE_DEBOUNCED_STATE_DELAY), [checkPermission]);
+    (0, react_1.useEffect)(() => {
         if (!showModal) {
             return;
         }
-        var unsubscribe = Visibility_1.default.onVisibilityChange(function () {
+        const unsubscribe = Visibility_1.default.onVisibilityChange(() => {
             debouncedCheckPermission();
         });
-        var intervalId = setInterval(function () {
+        const intervalId = setInterval(() => {
             debouncedCheckPermission();
         }, CONST_1.default.TIMING.LOCATION_UPDATE_INTERVAL);
-        return function () {
+        return () => {
             unsubscribe();
             clearInterval(intervalId);
         };
     }, [showModal, debouncedCheckPermission]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!startPermissionFlow) {
             return;
         }
-        (0, LocationPermission_1.getLocationPermission)().then(function (status) {
-            onInitialGetLocationCompleted === null || onInitialGetLocationCompleted === void 0 ? void 0 : onInitialGetLocationCompleted();
+        (0, LocationPermission_1.getLocationPermission)().then((status) => {
+            onInitialGetLocationCompleted?.();
             if (status === react_native_permissions_1.RESULTS.GRANTED || status === react_native_permissions_1.RESULTS.LIMITED) {
                 return onGrant();
             }
@@ -58,7 +57,7 @@ function LocationPermissionModal(_a) {
         });
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- We only want to run this effect when startPermissionFlow changes
     }, [startPermissionFlow]);
-    var handledBlockedPermission = function (cb) { return function () {
+    const handledBlockedPermission = (cb) => () => {
         setIsLoading(true);
         if (hasError) {
             if (react_native_1.Linking.openSettings) {
@@ -66,12 +65,12 @@ function LocationPermissionModal(_a) {
             }
             else {
                 // check one more time in case user enabled location before continue
-                (0, LocationPermission_1.getLocationPermission)().then(function (status) {
+                (0, LocationPermission_1.getLocationPermission)().then((status) => {
                     if (status === react_native_permissions_1.RESULTS.GRANTED || status === react_native_permissions_1.RESULTS.LIMITED) {
                         onGrant();
                     }
                     else {
-                        onDeny === null || onDeny === void 0 ? void 0 : onDeny();
+                        onDeny?.();
                     }
                 });
             }
@@ -79,10 +78,10 @@ function LocationPermissionModal(_a) {
             return;
         }
         cb();
-    }; };
-    var grantLocationPermission = handledBlockedPermission(function () {
+    };
+    const grantLocationPermission = handledBlockedPermission(() => {
         (0, LocationPermission_1.requestLocationPermission)()
-            .then(function (status) {
+            .then((status) => {
             if (status === react_native_permissions_1.RESULTS.GRANTED || status === react_native_permissions_1.RESULTS.LIMITED) {
                 onGrant();
             }
@@ -90,29 +89,29 @@ function LocationPermissionModal(_a) {
                 onDeny();
             }
         })
-            .finally(function () {
+            .finally(() => {
             setIsLoading(false);
             setShowModal(false);
             setHasError(false);
         });
     });
-    var skipLocationPermission = function () {
+    const skipLocationPermission = () => {
         onDeny();
         setShowModal(false);
         setHasError(false);
     };
-    var getConfirmText = function () {
+    const getConfirmText = () => {
         if (!hasError) {
             return translate('common.continue');
         }
         return isWeb ? translate('common.buttonConfirm') : translate('common.settings');
     };
-    var closeModal = function () {
+    const closeModal = () => {
         setShowModal(false);
         resetPermissionFlow();
     };
-    var locationErrorMessage = (0, react_1.useMemo)(function () { return (isWeb ? 'receipt.allowLocationFromSetting' : 'receipt.locationErrorMessage'); }, [isWeb]);
-    return (<ConfirmModal_1.default shouldShowCancelButton={!(isWeb && hasError)} onModalHide={function () {
+    const locationErrorMessage = (0, react_1.useMemo)(() => (isWeb ? 'receipt.allowLocationFromSetting' : 'receipt.locationErrorMessage'), [isWeb]);
+    return (<ConfirmModal_1.default shouldShowCancelButton={!(isWeb && hasError)} onModalHide={() => {
             setHasError(false);
             resetPermissionFlow();
         }} isVisible={showModal} onConfirm={grantLocationPermission} onCancel={skipLocationPermission} onBackdropPress={closeModal} confirmText={getConfirmText()} cancelText={translate('common.notNow')} promptStyles={[styles.textLabelSupportingEmptyValue, styles.mb4]} title={translate(hasError ? 'receipt.locationErrorTitle' : 'receipt.locationAccessTitle')} titleContainerStyles={[styles.mt2, styles.mb0]} titleStyles={[styles.textHeadline]} iconSource={Illustrations.ReceiptLocationMarker} iconFill={false} iconWidth={140} iconHeight={120} shouldCenterIcon shouldReverseStackedButtons prompt={translate(hasError ? locationErrorMessage : 'receipt.locationAccessMessage')} isConfirmLoading={isLoading}/>);

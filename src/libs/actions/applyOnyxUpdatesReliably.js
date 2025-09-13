@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = applyOnyxUpdatesReliably;
-var Log_1 = require("@libs/Log");
-var SequentialQueue = require("@libs/Network/SequentialQueue");
-var CONST_1 = require("@src/CONST");
-var OnyxUpdateManager_1 = require("./OnyxUpdateManager");
-var OnyxUpdates_1 = require("./OnyxUpdates");
+const Log_1 = require("@libs/Log");
+const SequentialQueue = require("@libs/Network/SequentialQueue");
+const CONST_1 = require("@src/CONST");
+const OnyxUpdateManager_1 = require("./OnyxUpdateManager");
+const OnyxUpdates_1 = require("./OnyxUpdates");
 /**
  * Checks for and handles gaps of onyx updates between the client and the given server updates before applying them
  *
@@ -15,10 +15,8 @@ var OnyxUpdates_1 = require("./OnyxUpdates");
  * @param shouldRunSync
  * @returns
  */
-function applyOnyxUpdatesReliably(updates, _a) {
-    var _b;
-    var _c = _a === void 0 ? {} : _a, _d = _c.shouldRunSync, shouldRunSync = _d === void 0 ? false : _d, clientLastUpdateID = _c.clientLastUpdateID;
-    var fetchMissingUpdates = function () {
+function applyOnyxUpdatesReliably(updates, { shouldRunSync = false, clientLastUpdateID } = {}) {
+    const fetchMissingUpdates = () => {
         Log_1.default.info('[applyOnyxUpdatesReliably] Fetching missing updates');
         // If we got here, that means we are missing some updates on our local storage. To
         // guarantee that we're not fetching more updates before our local data is up to date,
@@ -34,8 +32,8 @@ function applyOnyxUpdatesReliably(updates, _a) {
     if (updates.shouldFetchPendingUpdates) {
         return fetchMissingUpdates();
     }
-    var previousUpdateID = (_b = Number(updates.previousUpdateID)) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID;
-    if (!(0, OnyxUpdates_1.doesClientNeedToBeUpdated)({ previousUpdateID: previousUpdateID, clientLastUpdateID: clientLastUpdateID })) {
+    const previousUpdateID = Number(updates.previousUpdateID) ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    if (!(0, OnyxUpdates_1.doesClientNeedToBeUpdated)({ previousUpdateID, clientLastUpdateID })) {
         return (0, OnyxUpdates_1.apply)(updates).then();
     }
     return fetchMissingUpdates();

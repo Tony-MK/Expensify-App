@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var autocompleteParser_1 = require("@libs/SearchParser/autocompleteParser");
-var searchParsersCommonQueries_1 = require("../utils/fixtures/searchParsersCommonQueries");
-var tests = [
+const autocompleteParser_1 = require("@libs/SearchParser/autocompleteParser");
+const searchParsersCommonQueries_1 = require("../utils/fixtures/searchParsersCommonQueries");
+const tests = [
     {
         query: searchParsersCommonQueries_1.default.simple,
         expected: {
@@ -260,7 +260,7 @@ var tests = [
         },
     },
 ];
-var nameFieldContinuationTests = [
+const nameFieldContinuationTests = [
     {
         query: 'to:John Smi',
         expected: {
@@ -480,17 +480,15 @@ var nameFieldContinuationTests = [
         description: 'Quoted full name should provide autocomplete normally',
     },
 ];
-describe('autocomplete parser', function () {
-    test.each(tests)("parsing: $query", function (_a) {
-        var query = _a.query, expected = _a.expected;
-        var result = (0, autocompleteParser_1.parse)(query);
+describe('autocomplete parser', () => {
+    test.each(tests)(`parsing: $query`, ({ query, expected }) => {
+        const result = (0, autocompleteParser_1.parse)(query);
         expect(result).toEqual(expected);
     });
 });
-describe('autocomplete parser - name field continuation detection', function () {
-    test.each(nameFieldContinuationTests)("$description: $query", function (_a) {
-        var query = _a.query, expected = _a.expected;
-        var result = (0, autocompleteParser_1.parse)(query);
+describe('autocomplete parser - name field continuation detection', () => {
+    test.each(nameFieldContinuationTests)(`$description: $query`, ({ query, expected }) => {
+        const result = (0, autocompleteParser_1.parse)(query);
         expect(result).toEqual(expected);
     });
 });

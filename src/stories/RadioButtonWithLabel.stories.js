@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Checked = exports.Default = void 0;
-var react_1 = require("react");
-var RadioButtonWithLabel_1 = require("@components/RadioButtonWithLabel");
+const react_1 = require("react");
+const RadioButtonWithLabel_1 = require("@components/RadioButtonWithLabel");
 /**
  * We use the Component Story Format for writing stories. Follow the docs here:
  *
  * https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
  */
-var story = {
+const story = {
     title: 'Components/RadioButtonWithLabel',
     component: RadioButtonWithLabel_1.default,
 };
@@ -18,9 +18,9 @@ function Template(props) {
 }
 // Arguments can be passed to the component by binding
 // See: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-var Default = Template.bind({});
+const Default = Template.bind({});
 exports.Default = Default;
-var Checked = Template.bind({});
+const Checked = Template.bind({});
 exports.Checked = Checked;
 Default.args = {
     isChecked: false,

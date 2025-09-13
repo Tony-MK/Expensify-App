@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var applyOnyxUpdatesReliably_1 = require("@libs/actions/applyOnyxUpdatesReliably");
-var Log_1 = require("@libs/Log");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Visibility_1 = require("@libs/Visibility");
-var App_1 = require("@userActions/App");
-var Modal = require("@userActions/Modal");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var _1 = require(".");
+const react_native_1 = require("react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const applyOnyxUpdatesReliably_1 = require("@libs/actions/applyOnyxUpdatesReliably");
+const Log_1 = require("@libs/Log");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Visibility_1 = require("@libs/Visibility");
+const App_1 = require("@userActions/App");
+const Modal = require("@userActions/Modal");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const _1 = require(".");
 /**
  * Manage push notification subscriptions on sign-in/sign-out.
  */
 // We do not depend on updates on the UI for notifications, so we can use `connectWithoutView` here.
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.NVP_PRIVATE_PUSH_NOTIFICATION_ID,
-    callback: function (notificationID) {
+    callback: (notificationID) => {
         if (notificationID) {
             _1.default.register(notificationID);
             _1.default.init();
@@ -37,53 +37,51 @@ react_native_onyx_1.default.connectWithoutView({
         }
     },
 });
-var isSingleNewDotEntry;
+let isSingleNewDotEntry;
 // Hybrid app config is not determined by changes in the UI, so we can use `connectWithoutView` here.
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.HYBRID_APP,
-    callback: function (value) {
+    callback: (value) => {
         if (!value) {
             return;
         }
-        isSingleNewDotEntry = value === null || value === void 0 ? void 0 : value.isSingleNewDotEntry;
+        isSingleNewDotEntry = value?.isSingleNewDotEntry;
     },
 });
-function applyOnyxData(_a) {
-    var reportID = _a.reportID, onyxData = _a.onyxData, lastUpdateID = _a.lastUpdateID, previousUpdateID = _a.previousUpdateID, _b = _a.hasPendingOnyxUpdates, hasPendingOnyxUpdates = _b === void 0 ? false : _b;
-    Log_1.default.info("[PushNotification] Applying onyx data in the ".concat(Visibility_1.default.isVisible() ? 'foreground' : 'background'), false, { reportID: reportID, lastUpdateID: lastUpdateID });
-    var logMissingOnyxDataInfo = function (isDataMissing) {
-        var _a, _b;
+function applyOnyxData({ reportID, onyxData, lastUpdateID, previousUpdateID, hasPendingOnyxUpdates = false }) {
+    Log_1.default.info(`[PushNotification] Applying onyx data in the ${Visibility_1.default.isVisible() ? 'foreground' : 'background'}`, false, { reportID, lastUpdateID });
+    const logMissingOnyxDataInfo = (isDataMissing) => {
         if (isDataMissing) {
-            Log_1.default.hmmm("[PushNotification] didn't apply onyx updates because some data is missing", { lastUpdateID: lastUpdateID, previousUpdateID: previousUpdateID, onyxDataCount: (_a = onyxData === null || onyxData === void 0 ? void 0 : onyxData.length) !== null && _a !== void 0 ? _a : 0 });
+            Log_1.default.hmmm("[PushNotification] didn't apply onyx updates because some data is missing", { lastUpdateID, previousUpdateID, onyxDataCount: onyxData?.length ?? 0 });
             return false;
         }
-        Log_1.default.info('[PushNotification] reliable onyx update received', false, { lastUpdateID: lastUpdateID, previousUpdateID: previousUpdateID, onyxDataCount: (_b = onyxData === null || onyxData === void 0 ? void 0 : onyxData.length) !== null && _b !== void 0 ? _b : 0 });
+        Log_1.default.info('[PushNotification] reliable onyx update received', false, { lastUpdateID, previousUpdateID, onyxDataCount: onyxData?.length ?? 0 });
         return true;
     };
-    var updates;
+    let updates;
     if (hasPendingOnyxUpdates) {
-        var isDataMissing = !lastUpdateID;
+        const isDataMissing = !lastUpdateID;
         logMissingOnyxDataInfo(isDataMissing);
         if (isDataMissing) {
             return Promise.resolve();
         }
         updates = {
             type: CONST_1.default.ONYX_UPDATE_TYPES.AIRSHIP,
-            lastUpdateID: lastUpdateID,
+            lastUpdateID,
             shouldFetchPendingUpdates: true,
             updates: [],
         };
     }
     else {
-        var isDataMissing = !lastUpdateID || !onyxData || !previousUpdateID;
+        const isDataMissing = !lastUpdateID || !onyxData || !previousUpdateID;
         logMissingOnyxDataInfo(isDataMissing);
         if (isDataMissing) {
             return Promise.resolve();
         }
         updates = {
             type: CONST_1.default.ONYX_UPDATE_TYPES.AIRSHIP,
-            lastUpdateID: lastUpdateID,
-            previousUpdateID: previousUpdateID,
+            lastUpdateID,
+            previousUpdateID,
             updates: [
                 {
                     eventType: '', // This is only needed for Pusher events
@@ -98,20 +96,19 @@ function applyOnyxData(_a) {
      * and pass it as a param
      */
     return getLastUpdateIDAppliedToClient()
-        .then(function (lastUpdateIDAppliedToClient) { return (0, applyOnyxUpdatesReliably_1.default)(updates, { shouldRunSync: true, clientLastUpdateID: lastUpdateIDAppliedToClient }); })
-        .then(function () { return react_native_1.NativeModules.PushNotificationBridge.finishBackgroundProcessing(); });
+        .then((lastUpdateIDAppliedToClient) => (0, applyOnyxUpdatesReliably_1.default)(updates, { shouldRunSync: true, clientLastUpdateID: lastUpdateIDAppliedToClient }))
+        .then(() => react_native_1.NativeModules.PushNotificationBridge.finishBackgroundProcessing());
 }
-function navigateToReport(_a) {
-    var reportID = _a.reportID;
-    Log_1.default.info('[PushNotification] Navigating to report', false, { reportID: reportID });
-    Navigation_1.default.waitForProtectedRoutes().then(function () {
+function navigateToReport({ reportID }) {
+    Log_1.default.info('[PushNotification] Navigating to report', false, { reportID });
+    Navigation_1.default.waitForProtectedRoutes().then(() => {
         // The attachment modal remains open when navigating to the report so we need to close it
-        Modal.close(function () {
+        Modal.close(() => {
             try {
                 // When transitioning to the new experience via the singleNewDotEntry flow, the navigation
                 // is handled elsewhere. So we cancel here to prevent double navigation.
                 if (isSingleNewDotEntry) {
-                    Log_1.default.info('[PushNotification] Not navigating because this is a singleNewDotEntry flow', false, { reportID: reportID });
+                    Log_1.default.info('[PushNotification] Not navigating because this is a singleNewDotEntry flow', false, { reportID });
                     return;
                 }
                 // Get rid of the transition screen, if it is on the top of the stack
@@ -119,32 +116,32 @@ function navigateToReport(_a) {
                     Navigation_1.default.goBack();
                 }
                 // If a chat is visible other than the one we are trying to navigate to, then we need to navigate back
-                if (Navigation_1.default.getActiveRoute().slice(1, 2) === ROUTES_1.default.REPORT && !Navigation_1.default.isActiveRoute("r/".concat(reportID))) {
+                if (Navigation_1.default.getActiveRoute().slice(1, 2) === ROUTES_1.default.REPORT && !Navigation_1.default.isActiveRoute(`r/${reportID}`)) {
                     Navigation_1.default.goBack();
                 }
-                Log_1.default.info('[PushNotification] onSelected() - Navigation is ready. Navigating...', false, { reportID: reportID });
-                var backTo = Navigation_1.default.isActiveRoute(ROUTES_1.default.REPORT_WITH_ID.getRoute(String(reportID))) ? undefined : Navigation_1.default.getActiveRoute();
+                Log_1.default.info('[PushNotification] onSelected() - Navigation is ready. Navigating...', false, { reportID });
+                const backTo = Navigation_1.default.isActiveRoute(ROUTES_1.default.REPORT_WITH_ID.getRoute(String(reportID))) ? undefined : Navigation_1.default.getActiveRoute();
                 Navigation_1.default.navigate(ROUTES_1.default.REPORT_WITH_ID.getRoute(String(reportID), undefined, undefined, backTo));
                 (0, App_1.updateLastVisitedPath)(ROUTES_1.default.REPORT_WITH_ID.getRoute(String(reportID)));
             }
             catch (error) {
-                var errorMessage = String(error);
+                let errorMessage = String(error);
                 if (error instanceof Error) {
                     errorMessage = error.message;
                 }
-                Log_1.default.alert('[PushNotification] onSelected() - failed', { reportID: reportID, error: errorMessage });
+                Log_1.default.alert('[PushNotification] onSelected() - failed', { reportID, error: errorMessage });
             }
         });
     });
     return Promise.resolve();
 }
 function getLastUpdateIDAppliedToClient() {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         // We do not depend on updates on the UI to determine the last update ID applied to the client
         // So we can use `connectWithoutView` here.
         react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.ONYX_UPDATES_LAST_UPDATE_ID_APPLIED_TO_CLIENT,
-            callback: function (value) { return resolve(value !== null && value !== void 0 ? value : CONST_1.default.DEFAULT_NUMBER_ID); },
+            callback: (value) => resolve(value ?? CONST_1.default.DEFAULT_NUMBER_ID),
         });
     });
 }

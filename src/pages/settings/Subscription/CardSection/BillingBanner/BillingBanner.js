@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Pressable_1 = require("@components/Pressable");
-var Text_1 = require("@components/Text");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-function BillingBanner(_a) {
-    var title = _a.title, subtitle = _a.subtitle, icon = _a.icon, brickRoadIndicator = _a.brickRoadIndicator, style = _a.style, titleStyle = _a.titleStyle, subtitleStyle = _a.subtitleStyle, rightIcon = _a.rightIcon, onRightIconPress = _a.onRightIconPress, rightIconAccessibilityLabel = _a.rightIconAccessibilityLabel, rightComponent = _a.rightComponent;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var rightIconComponent = (0, react_1.useMemo)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Pressable_1 = require("@components/Pressable");
+const Text_1 = require("@components/Text");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+function BillingBanner({ title, subtitle, icon, brickRoadIndicator, style, titleStyle, subtitleStyle, rightIcon, onRightIconPress, rightIconAccessibilityLabel, rightComponent, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const rightIconComponent = (0, react_1.useMemo)(() => {
         if (rightIcon) {
             return onRightIconPress && rightIconAccessibilityLabel ? (<Pressable_1.PressableWithoutFeedback onPress={onRightIconPress} style={[styles.touchableButtonImage]} role={CONST_1.default.ROLE.BUTTON} accessibilityLabel={rightIconAccessibilityLabel}>
                     <Icon_1.default src={rightIcon} fill={theme.icon}/>

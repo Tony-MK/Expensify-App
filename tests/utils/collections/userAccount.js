@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getValidAccount = getValidAccount;
-var CONST_1 = require("@src/CONST");
-function getValidAccount(credentialLogin) {
-    if (credentialLogin === void 0) { credentialLogin = ''; }
+const CONST_1 = require("@src/CONST");
+function getValidAccount(credentialLogin = '') {
     return {
         validated: true,
         primaryLogin: credentialLogin,

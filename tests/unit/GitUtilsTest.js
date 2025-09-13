@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var GitUtils_1 = require("../../.github/libs/GitUtils");
-var data = [
+const GitUtils_1 = require("../../.github/libs/GitUtils");
+const data = [
     {
         input: [],
         expectedOutput: [],
@@ -38,10 +38,10 @@ var data = [
         expectedOutput: [1521],
     },
 ];
-describe('GitUtils', function () {
-    describe.each(data)('getValidMergedPRs', function (exampleCase) {
-        test('getValidMergedPRs', function () {
-            var result = GitUtils_1.default.getValidMergedPRs(exampleCase.input);
+describe('GitUtils', () => {
+    describe.each(data)('getValidMergedPRs', (exampleCase) => {
+        test('getValidMergedPRs', () => {
+            const result = GitUtils_1.default.getValidMergedPRs(exampleCase.input);
             expect(result).toStrictEqual(exampleCase.expectedOutput);
         });
     });

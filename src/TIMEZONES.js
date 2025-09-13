@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.timezoneNewToBackwardMap = exports.timezoneBackwardToNewMap = void 0;
-var TIMEZONES = [
+const TIMEZONES = [
     'Africa/Abidjan',
     'Africa/Accra',
     'Africa/Addis_Ababa',
@@ -425,7 +425,7 @@ var TIMEZONES = [
  * The timezones supported in browser and on native devices differ, so we must map each timezone to its supported equivalent.
  * Data sourced from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  */
-var timezoneBackwardToNewMap = {
+const timezoneBackwardToNewMap = {
     'Africa/Asmera': 'Africa/Nairobi',
     'Africa/Timbuktu': 'Africa/Abidjan',
     'America/Argentina/ComodRivadavia': 'America/Argentina/Catamarca',
@@ -562,9 +562,6 @@ var timezoneBackwardToNewMap = {
     WET: 'Europe/Lisbon',
 };
 exports.timezoneBackwardToNewMap = timezoneBackwardToNewMap;
-var timezoneNewToBackwardMap = Object.fromEntries(Object.entries(timezoneBackwardToNewMap).map(function (_a) {
-    var oldTimezone = _a[0], newTimezone = _a[1];
-    return [newTimezone, oldTimezone];
-}));
+const timezoneNewToBackwardMap = Object.fromEntries(Object.entries(timezoneBackwardToNewMap).map(([oldTimezone, newTimezone]) => [newTimezone, oldTimezone]));
 exports.timezoneNewToBackwardMap = timezoneNewToBackwardMap;
 exports.default = TIMEZONES;

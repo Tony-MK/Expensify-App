@@ -1,53 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("core-js/features/array/at");
-var react_1 = require("react");
-var react_fast_pdf_1 = require("react-fast-pdf");
-var react_native_1 = require("react-native");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var variables_1 = require("@styles/variables");
-var CanvasSize_1 = require("@userActions/CanvasSize");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var PDFPasswordForm_1 = require("./PDFPasswordForm");
-var LOADING_THUMBNAIL_HEIGHT = 250;
-var LOADING_THUMBNAIL_WIDTH = 250;
-function PDFView(_a) {
-    var onToggleKeyboard = _a.onToggleKeyboard, fileName = _a.fileName, onPress = _a.onPress, isFocused = _a.isFocused, sourceURL = _a.sourceURL, style = _a.style, isUsedAsChatAttachment = _a.isUsedAsChatAttachment, onLoadError = _a.onLoadError;
-    var _b = (0, react_1.useState)(false), isKeyboardOpen = _b[0], setIsKeyboardOpen = _b[1];
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var windowHeight = (0, useWindowDimensions_1.default)().windowHeight;
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var prevWindowHeight = (0, usePrevious_1.default)(windowHeight);
-    var translate = (0, useLocalize_1.default)().translate;
-    var maxCanvasArea = (0, useOnyx_1.default)(ONYXKEYS_1.default.MAX_CANVAS_AREA, { canBeMissing: true })[0];
-    var maxCanvasHeight = (0, useOnyx_1.default)(ONYXKEYS_1.default.MAX_CANVAS_HEIGHT, { canBeMissing: true })[0];
-    var maxCanvasWidth = (0, useOnyx_1.default)(ONYXKEYS_1.default.MAX_CANVAS_WIDTH, { canBeMissing: true })[0];
+const react_1 = require("react");
+const react_fast_pdf_1 = require("react-fast-pdf");
+const react_native_1 = require("react-native");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const variables_1 = require("@styles/variables");
+const CanvasSize_1 = require("@userActions/CanvasSize");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const PDFPasswordForm_1 = require("./PDFPasswordForm");
+const LOADING_THUMBNAIL_HEIGHT = 250;
+const LOADING_THUMBNAIL_WIDTH = 250;
+function PDFView({ onToggleKeyboard, fileName, onPress, isFocused, sourceURL, style, isUsedAsChatAttachment, onLoadError }) {
+    const [isKeyboardOpen, setIsKeyboardOpen] = (0, react_1.useState)(false);
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { windowHeight } = (0, useWindowDimensions_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const prevWindowHeight = (0, usePrevious_1.default)(windowHeight);
+    const { translate } = (0, useLocalize_1.default)();
+    const [maxCanvasArea] = (0, useOnyx_1.default)(ONYXKEYS_1.default.MAX_CANVAS_AREA, { canBeMissing: true });
+    const [maxCanvasHeight] = (0, useOnyx_1.default)(ONYXKEYS_1.default.MAX_CANVAS_HEIGHT, { canBeMissing: true });
+    const [maxCanvasWidth] = (0, useOnyx_1.default)(ONYXKEYS_1.default.MAX_CANVAS_WIDTH, { canBeMissing: true });
     /**
      * On small screens notify parent that the keyboard has opened or closed.
      *
      * @param isKBOpen True if keyboard is open
      */
-    var toggleKeyboardOnSmallScreens = (0, react_1.useCallback)(function (isKBOpen) {
+    const toggleKeyboardOnSmallScreens = (0, react_1.useCallback)((isKBOpen) => {
         if (!shouldUseNarrowLayout) {
             return;
         }
         setIsKeyboardOpen(isKBOpen);
-        onToggleKeyboard === null || onToggleKeyboard === void 0 ? void 0 : onToggleKeyboard(isKBOpen);
+        onToggleKeyboard?.(isKBOpen);
     }, [shouldUseNarrowLayout, onToggleKeyboard]);
     /**
      * Verify that the canvas limits have been calculated already, if not calculate them and put them in Onyx
      */
-    var retrieveCanvasLimits = function () {
+    const retrieveCanvasLimits = () => {
         if (!maxCanvasArea) {
             (0, CanvasSize_1.retrieveMaxCanvasArea)();
         }
@@ -58,12 +57,12 @@ function PDFView(_a) {
             (0, CanvasSize_1.retrieveMaxCanvasWidth)();
         }
     };
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         retrieveCanvasLimits();
         // This rule needs to be applied so that this effect is executed only when the component is mounted
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, []);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // Use window height changes to toggle the keyboard. To maintain keyboard state
         // on all platforms we also use focus/blur events. So we need to make sure here
         // that we avoid redundant keyboard toggling.
@@ -77,17 +76,14 @@ function PDFView(_a) {
             toggleKeyboardOnSmallScreens(false);
         }
     }, [isKeyboardOpen, prevWindowHeight, toggleKeyboardOnSmallScreens, windowHeight]);
-    var renderPDFView = function () {
-        var outerContainerStyle = [styles.w100, styles.h100, styles.justifyContentCenter, styles.alignItemsCenter];
+    const renderPDFView = () => {
+        const outerContainerStyle = [styles.w100, styles.h100, styles.justifyContentCenter, styles.alignItemsCenter];
         return (<react_native_1.View style={outerContainerStyle} tabIndex={0}>
                 <react_fast_pdf_1.PDFPreviewer contentContainerStyle={style} file={sourceURL} pageMaxWidth={variables_1.default.pdfPageMaxWidth} isSmallScreen={shouldUseNarrowLayout} maxCanvasWidth={maxCanvasWidth} maxCanvasHeight={maxCanvasHeight} maxCanvasArea={maxCanvasArea} LoadingComponent={<FullscreenLoadingIndicator_1.default style={isUsedAsChatAttachment && [
                     styles.chatItemPDFAttachmentLoading,
                     StyleUtils.getWidthAndHeightStyle(LOADING_THUMBNAIL_WIDTH, LOADING_THUMBNAIL_HEIGHT),
                     styles.pRelative,
-                ]}/>} shouldShowErrorComponent={false} onLoadError={onLoadError} renderPasswordForm={function (_a) {
-                var isPasswordInvalid = _a.isPasswordInvalid, onSubmit = _a.onSubmit, onPasswordChange = _a.onPasswordChange;
-                return (<PDFPasswordForm_1.default isFocused={!!isFocused} isPasswordInvalid={isPasswordInvalid} onSubmit={onSubmit} onPasswordUpdated={onPasswordChange}/>);
-            }}/>
+                ]}/>} shouldShowErrorComponent={false} onLoadError={onLoadError} renderPasswordForm={({ isPasswordInvalid, onSubmit, onPasswordChange }) => (<PDFPasswordForm_1.default isFocused={!!isFocused} isPasswordInvalid={isPasswordInvalid} onSubmit={onSubmit} onPasswordUpdated={onPasswordChange}/>)}/>
             </react_native_1.View>);
     };
     return onPress ? (<PressableWithoutFeedback_1.default onPress={onPress} style={[styles.flex1, styles.flexRow, styles.alignSelfStretch]} accessibilityRole={CONST_1.default.ROLE.BUTTON} 

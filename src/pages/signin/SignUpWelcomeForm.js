@@ -1,33 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var FormHelpMessage_1 = require("@components/FormHelpMessage");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var HybridApp_1 = require("@userActions/HybridApp");
-var Session_1 = require("@userActions/Session");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ChangeExpensifyLoginLink_1 = require("./ChangeExpensifyLoginLink");
-var Terms_1 = require("./Terms");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const FormHelpMessage_1 = require("@components/FormHelpMessage");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const HybridApp_1 = require("@userActions/HybridApp");
+const Session_1 = require("@userActions/Session");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ChangeExpensifyLoginLink_1 = require("./ChangeExpensifyLoginLink");
+const Terms_1 = require("./Terms");
 function SignUpWelcomeForm() {
-    var network = (0, useNetwork_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: false })[0];
-    var serverErrorText = (0, react_1.useMemo)(function () { return (account ? (0, ErrorUtils_1.getLatestErrorMessage)(account) : ''); }, [account]);
+    const network = (0, useNetwork_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: false });
+    const serverErrorText = (0, react_1.useMemo)(() => (account ? (0, ErrorUtils_1.getLatestErrorMessage)(account) : ''), [account]);
     return (<>
             <react_native_1.View style={[styles.mt3, styles.mb2]}>
-                <Button_1.default isDisabled={network.isOffline || !!(account === null || account === void 0 ? void 0 : account.message)} success large text={translate('welcomeSignUpForm.join')} isLoading={account === null || account === void 0 ? void 0 : account.isLoading} onPress={function () {
+                <Button_1.default isDisabled={network.isOffline || !!account?.message} success large text={translate('welcomeSignUpForm.join')} isLoading={account?.isLoading} onPress={() => {
             (0, Session_1.signUpUser)();
             (0, HybridApp_1.setReadyToShowAuthScreens)(true);
         }} pressOnEnter style={[styles.mb2]}/>
                 {!!serverErrorText && (<FormHelpMessage_1.default isError message={serverErrorText}/>)}
-                <ChangeExpensifyLoginLink_1.default onPress={function () { return (0, Session_1.clearSignInData)(); }}/>
+                <ChangeExpensifyLoginLink_1.default onPress={() => (0, Session_1.clearSignInData)()}/>
             </react_native_1.View>
             <react_native_1.View style={[styles.mt4, styles.signInPageWelcomeTextContainer]}>
                 <Terms_1.default />

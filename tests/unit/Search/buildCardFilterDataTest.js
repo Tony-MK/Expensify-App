@@ -1,12 +1,12 @@
 "use strict";
 // The cards_ object keys don't follow normal naming convention, so to test this reliably we have to disable liner
 Object.defineProperty(exports, "__esModule", { value: true });
-var CardFeedUtils_1 = require("@libs/CardFeedUtils");
+const CardFeedUtils_1 = require("@libs/CardFeedUtils");
 // eslint-disable-next-line no-restricted-syntax
-var PolicyUtils = require("@libs/PolicyUtils");
+const PolicyUtils = require("@libs/PolicyUtils");
 jest.mock('@src/components/ConfirmedRoute.tsx');
 // Use jest.spyOn to mock the implementation
-jest.spyOn(PolicyUtils, 'getPolicy').mockImplementation(function (policyID) {
+jest.spyOn(PolicyUtils, 'getPolicy').mockImplementation((policyID) => {
     switch (policyID) {
         case '1':
             return { name: '' };
@@ -18,7 +18,7 @@ jest.spyOn(PolicyUtils, 'getPolicy').mockImplementation(function (policyID) {
             return { name: '' };
     }
 });
-var workspaceCardFeeds = {
+const workspaceCardFeeds = {
     cards_18680694_vcf: {
         '21593492': {
             accountID: 1,
@@ -138,7 +138,7 @@ var workspaceCardFeeds = {
         },
     },
 };
-var cardList = {
+const cardList = {
     '21588678': {
         accountID: 1,
         bank: 'Expensify Card',
@@ -180,7 +180,7 @@ var cardList = {
         lastFourPAN: '1138',
     },
 };
-var workspaceCardFeedsHiddenOnSearch = {
+const workspaceCardFeedsHiddenOnSearch = {
     'cards_11111_Expensify Card': {
         '21534278': {
             accountID: 1,
@@ -204,7 +204,7 @@ var workspaceCardFeedsHiddenOnSearch = {
         },
     },
 };
-var cardListHiddenOnSearch = {
+const cardListHiddenOnSearch = {
     '21534538': {
         accountID: 1,
         bank: 'Expensify Card',
@@ -226,7 +226,7 @@ var cardListHiddenOnSearch = {
         state: 4, // NOT_ACTIVATED
     },
 };
-var workspaceCardFeedsClosed = {
+const workspaceCardFeedsClosed = {
     'cards_11111_Expensify Card': {
         '21534278': {
             accountID: 1,
@@ -260,7 +260,7 @@ var workspaceCardFeedsClosed = {
         },
     },
 };
-var cardListClosed = {
+const cardListClosed = {
     '21534538': {
         accountID: 1,
         bank: 'Expensify Card',
@@ -292,11 +292,11 @@ var cardListClosed = {
         state: 3, // OPEN
     },
 };
-var domainFeedDataMock = {
+const domainFeedDataMock = {
     'mockDomain.com': { domainName: 'mockDomain.com', bank: 'Expensify Card', correspondingCardIDs: ['21589168', '21589182'] },
 };
-var translateMock = jest.fn();
-var illustrationsMock = {
+const translateMock = jest.fn();
+const illustrationsMock = {
     EmptyStateBackgroundImage: jest.fn(),
     ExampleCheckES: jest.fn(),
     ExampleCheckEN: jest.fn(),
@@ -306,55 +306,55 @@ var illustrationsMock = {
     GenericCompanyCardLarge: jest.fn(),
     GenericCSVCompanyCardLarge: jest.fn(),
 };
-describe('buildIndividualCardsData', function () {
-    it("Builds all individual cards and doesn't generate duplicates", function () {
-        var result = (0, CardFeedUtils_1.buildCardsData)(workspaceCardFeeds, cardList, {}, ['21588678'], illustrationsMock);
+describe('buildIndividualCardsData', () => {
+    it("Builds all individual cards and doesn't generate duplicates", () => {
+        const result = (0, CardFeedUtils_1.buildCardsData)(workspaceCardFeeds, cardList, {}, ['21588678'], illustrationsMock);
         expect(result.unselected.length + result.selected.length).toEqual(13);
         // Check if Expensify card was built correctly
-        var expensifyCard = result.selected.find(function (card) { return card.keyForList === '21588678'; });
+        const expensifyCard = result.selected.find((card) => card.keyForList === '21588678');
         expect(expensifyCard).toMatchObject({
             lastFourPAN: '1138',
             isSelected: true,
         });
         // Check if company card was built correctly
-        var companyCard = result.unselected.find(function (card) { return card.keyForList === '21604933'; });
+        const companyCard = result.unselected.find((card) => card.keyForList === '21604933');
         expect(companyCard).toMatchObject({
             lastFourPAN: '1601',
             isSelected: false,
         });
     });
-    it("Doesn't include physical cards that haven't been issued or haven't been activated", function () {
-        var result = (0, CardFeedUtils_1.buildCardsData)(workspaceCardFeedsHiddenOnSearch, cardListHiddenOnSearch, {}, [], illustrationsMock);
+    it("Doesn't include physical cards that haven't been issued or haven't been activated", () => {
+        const result = (0, CardFeedUtils_1.buildCardsData)(workspaceCardFeedsHiddenOnSearch, cardListHiddenOnSearch, {}, [], illustrationsMock);
         expect(result.unselected.length + result.selected.length).toEqual(0);
     });
 });
-describe('buildCardsData closed cards', function () {
-    it("Builds all closed cards and doesn't generate duplicates", function () {
-        var result = (0, CardFeedUtils_1.buildCardsData)(workspaceCardFeedsClosed, cardListClosed, {}, ['21539012'], illustrationsMock, true);
+describe('buildCardsData closed cards', () => {
+    it("Builds all closed cards and doesn't generate duplicates", () => {
+        const result = (0, CardFeedUtils_1.buildCardsData)(workspaceCardFeedsClosed, cardListClosed, {}, ['21539012'], illustrationsMock, true);
         expect(result.unselected.length + result.selected.length).toEqual(4);
         // Check if Expensify card was built correctly
-        var expensifyCard = result.selected.find(function (card) { return card.keyForList === '21539012'; });
+        const expensifyCard = result.selected.find((card) => card.keyForList === '21539012');
         expect(expensifyCard).toMatchObject({
             lastFourPAN: '3211',
             isSelected: true,
         });
         // Check if company card was built correctly
-        var companyCard = result.unselected.find(function (card) { return card.keyForList === '21534525'; });
+        const companyCard = result.unselected.find((card) => card.keyForList === '21534525');
         expect(companyCard).toMatchObject({
             lastFourPAN: '',
             isSelected: false,
         });
     });
 });
-describe('buildCardsData with empty argument objects', function () {
-    it('Returns empty array when cardList and workspaceCardFeeds are empty', function () {
-        var result = (0, CardFeedUtils_1.buildCardsData)({}, {}, {}, [], illustrationsMock);
+describe('buildCardsData with empty argument objects', () => {
+    it('Returns empty array when cardList and workspaceCardFeeds are empty', () => {
+        const result = (0, CardFeedUtils_1.buildCardsData)({}, {}, {}, [], illustrationsMock);
         expect(result).toEqual({ selected: [], unselected: [] });
     });
 });
-describe('buildCardFeedsData', function () {
-    var result = (0, CardFeedUtils_1.buildCardFeedsData)(workspaceCardFeeds, domainFeedDataMock, [], translateMock, illustrationsMock);
-    it('Build domain card feed properly', function () {
+describe('buildCardFeedsData', () => {
+    const result = (0, CardFeedUtils_1.buildCardFeedsData)(workspaceCardFeeds, domainFeedDataMock, [], translateMock, illustrationsMock);
+    it('Build domain card feed properly', () => {
         // Check if external domain feed was built properly
         expect(result.unselected.at(0)).toMatchObject({
             isCardFeed: true,
@@ -383,9 +383,9 @@ describe('buildCardFeedsData', function () {
         expect(result.unselected.length).toEqual(4);
     });
 });
-describe('buildIndividualCardsData with empty argument objects', function () {
-    it('Return empty array when domainCardFeeds and workspaceCardFeeds are empty', function () {
-        var result = (0, CardFeedUtils_1.buildCardFeedsData)({}, {}, [], translateMock, illustrationsMock);
+describe('buildIndividualCardsData with empty argument objects', () => {
+    it('Return empty array when domainCardFeeds and workspaceCardFeeds are empty', () => {
+        const result = (0, CardFeedUtils_1.buildCardFeedsData)({}, {}, [], translateMock, illustrationsMock);
         expect(result).toEqual({ selected: [], unselected: [] });
     });
 });

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Tests to ensure that both parsers use the same set of base rules
  */
-var parserCommonTests = {
+const parserCommonTests = {
     simple: 'type:expense',
     userFriendlyNames: 'tax-rate:rate1 expense-type:card card:"Big Bank" report-id:1234',
     oldNames: 'taxRate:rate1 expenseType:card cardID:"Big Bank" report-id:1234',

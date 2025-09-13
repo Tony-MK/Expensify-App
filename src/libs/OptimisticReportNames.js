@@ -1,27 +1,16 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.computeReportNameIfNeeded = computeReportNameIfNeeded;
 exports.getReportByTransactionID = getReportByTransactionID;
 exports.shouldComputeReportName = shouldComputeReportName;
 exports.updateOptimisticReportNamesFromUpdates = updateOptimisticReportNamesFromUpdates;
-var react_native_onyx_1 = require("react-native-onyx");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var Formula_1 = require("./Formula");
-var Log_1 = require("./Log");
-var Permissions_1 = require("./Permissions");
-var ReportUtils_1 = require("./ReportUtils");
+const react_native_onyx_1 = require("react-native-onyx");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const Formula_1 = require("./Formula");
+const Log_1 = require("./Log");
+const Permissions_1 = require("./Permissions");
+const ReportUtils_1 = require("./ReportUtils");
 /**
  * Get the object type from an Onyx key
  */
@@ -60,7 +49,7 @@ function getTransactionIDFromKey(key) {
  * Get report by ID from the reports collection
  */
 function getReportByID(reportID, allReports) {
-    return allReports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(reportID)];
+    return allReports[`${ONYXKEYS_1.default.COLLECTION.REPORT}${reportID}`];
 }
 /**
  * Get policy by ID from the policies collection
@@ -69,13 +58,13 @@ function getPolicyByID(policyID, allPolicies) {
     if (!policyID) {
         return;
     }
-    return allPolicies["".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID)];
+    return allPolicies[`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`];
 }
 /**
  * Get transaction by ID from the transactions collection
  */
 function getTransactionByID(transactionID, allTransactions) {
-    return allTransactions["".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(transactionID)];
+    return allTransactions[`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${transactionID}`];
 }
 /**
  * Get all reports associated with a policy ID
@@ -84,8 +73,8 @@ function getReportsForNameComputation(policyID, allReports, context) {
     if (policyID === CONST_1.default.POLICY.ID_FAKE) {
         return [];
     }
-    return Object.values(allReports).filter(function (report) {
-        if ((report === null || report === void 0 ? void 0 : report.policyID) !== policyID) {
+    return Object.values(allReports).filter((report) => {
+        if (report?.policyID !== policyID) {
             return false;
         }
         // Filter by type - only reports that support custom names
@@ -93,12 +82,12 @@ function getReportsForNameComputation(policyID, allReports, context) {
             return false;
         }
         // Filter by state - exclude reports in high states (like approved or higher)
-        var stateThreshold = CONST_1.default.REPORT.STATE_NUM.APPROVED;
+        const stateThreshold = CONST_1.default.REPORT.STATE_NUM.APPROVED;
         if (report.stateNum && report.stateNum > stateThreshold) {
             return false;
         }
         // Filter by isArchived - exclude archived reports
-        var reportNameValuePairs = context.allReportNameValuePairs["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(report === null || report === void 0 ? void 0 : report.reportID)];
+        const reportNameValuePairs = context.allReportNameValuePairs[`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report?.reportID}`];
         if ((0, ReportUtils_1.isArchivedReport)(reportNameValuePairs)) {
             return false;
         }
@@ -112,8 +101,8 @@ function getReportByTransactionID(transactionID, context) {
     if (!transactionID) {
         return undefined;
     }
-    var transaction = getTransactionByID(transactionID, context.allTransactions);
-    if (!(transaction === null || transaction === void 0 ? void 0 : transaction.reportID)) {
+    const transaction = getTransactionByID(transactionID, context.allTransactions);
+    if (!transaction?.reportID) {
         return undefined;
     }
     // Get the report using the transaction's reportID from context
@@ -123,13 +112,12 @@ function getReportByTransactionID(transactionID, context) {
  * Generate the Onyx key for a report
  */
 function getReportKey(reportID) {
-    return "".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(reportID);
+    return `${ONYXKEYS_1.default.COLLECTION.REPORT}${reportID}`;
 }
 /**
  * Check if a report should have its name automatically computed
  */
 function shouldComputeReportName(report, policy) {
-    var _a;
     if (!report || !policy) {
         return false;
     }
@@ -138,8 +126,8 @@ function shouldComputeReportName(report, policy) {
     }
     // Only compute names for expense reports with policies that have title fields
     // Check if the policy has a title field with a formula
-    var titleField = (0, ReportUtils_1.getTitleReportField)((_a = policy.fieldList) !== null && _a !== void 0 ? _a : {});
-    if (!(titleField === null || titleField === void 0 ? void 0 : titleField.defaultValue)) {
+    const titleField = (0, ReportUtils_1.getTitleReportField)(policy.fieldList ?? {});
+    if (!titleField?.defaultValue) {
         return false;
     }
     return true;
@@ -158,31 +146,30 @@ function isValidReportType(reportType) {
  * Compute a new report name if needed based on an optimistic update
  */
 function computeReportNameIfNeeded(report, incomingUpdate, context) {
-    var _a;
-    var allPolicies = context.allPolicies;
+    const { allPolicies } = context;
     // If no report is provided, extract it from the update (for new reports)
-    var targetReport = report !== null && report !== void 0 ? report : incomingUpdate.value;
+    const targetReport = report ?? incomingUpdate.value;
     if (!targetReport) {
         return null;
     }
-    var policy = getPolicyByID(targetReport.policyID, allPolicies);
+    const policy = getPolicyByID(targetReport.policyID, allPolicies);
     if (!shouldComputeReportName(targetReport, policy)) {
         return null;
     }
-    var titleField = (0, ReportUtils_1.getTitleReportField)((_a = policy === null || policy === void 0 ? void 0 : policy.fieldList) !== null && _a !== void 0 ? _a : {});
-    if (!(titleField === null || titleField === void 0 ? void 0 : titleField.defaultValue)) {
+    const titleField = (0, ReportUtils_1.getTitleReportField)(policy?.fieldList ?? {});
+    if (!titleField?.defaultValue) {
         return null;
     }
     // Quick check: see if the update might affect the report name
-    var updateType = determineObjectTypeByKey(incomingUpdate.key);
-    var formula = titleField.defaultValue;
-    var formulaParts = (0, Formula_1.parse)(formula);
-    var transaction;
+    const updateType = determineObjectTypeByKey(incomingUpdate.key);
+    const formula = titleField.defaultValue;
+    const formulaParts = (0, Formula_1.parse)(formula);
+    let transaction;
     if (updateType === 'transaction') {
         transaction = getTransactionByID(incomingUpdate.value.transactionID, context.allTransactions);
     }
     // Check if any formula part might be affected by this update
-    var isAffected = formulaParts.some(function (part) {
+    const isAffected = formulaParts.some((part) => {
         if (part.type === Formula_1.FORMULA_PART_TYPES.REPORT) {
             // Checking if the formula part is affected in this manner works, but it could certainly be more precise.
             // For example, a policy update only affects the part if the formula in the policy changed, or if the report part references a field on the policy.
@@ -198,20 +185,20 @@ function computeReportNameIfNeeded(report, incomingUpdate, context) {
         return null;
     }
     // Build context with the updated data
-    var updatedReport = updateType === 'report' && targetReport.reportID === getReportIDFromKey(incomingUpdate.key) ? __assign(__assign({}, targetReport), incomingUpdate.value) : targetReport;
-    var updatedPolicy = updateType === 'policy' && targetReport.policyID === getPolicyIDFromKey(incomingUpdate.key) ? __assign(__assign({}, (policy !== null && policy !== void 0 ? policy : {})), incomingUpdate.value) : policy;
-    var updatedTransaction = updateType === 'transaction' ? __assign(__assign({}, (transaction !== null && transaction !== void 0 ? transaction : {})), incomingUpdate.value) : undefined;
+    const updatedReport = updateType === 'report' && targetReport.reportID === getReportIDFromKey(incomingUpdate.key) ? { ...targetReport, ...incomingUpdate.value } : targetReport;
+    const updatedPolicy = updateType === 'policy' && targetReport.policyID === getPolicyIDFromKey(incomingUpdate.key) ? { ...(policy ?? {}), ...incomingUpdate.value } : policy;
+    const updatedTransaction = updateType === 'transaction' ? { ...(transaction ?? {}), ...incomingUpdate.value } : undefined;
     // Compute the new name
-    var formulaContext = {
+    const formulaContext = {
         report: updatedReport,
         policy: updatedPolicy,
         transaction: updatedTransaction,
     };
-    var newName = (0, Formula_1.compute)(formula, formulaContext);
+    const newName = (0, Formula_1.compute)(formula, formulaContext);
     // Only return an update if the name actually changed
     if (newName && newName !== targetReport.reportName) {
         Log_1.default.info('[OptimisticReportNames] Report name computed', false, {
-            updateType: updateType,
+            updateType,
             isNewReport: !report,
         });
         return newName;
@@ -223,7 +210,7 @@ function computeReportNameIfNeeded(report, incomingUpdate, context) {
  * This is the main middleware function that processes optimistic data
  */
 function updateOptimisticReportNamesFromUpdates(updates, context) {
-    var betas = context.betas, allReports = context.allReports, betaConfiguration = context.betaConfiguration;
+    const { betas, allReports, betaConfiguration } = context;
     // Check if the feature is enabled
     if (!Permissions_1.default.isBetaEnabled(CONST_1.default.BETAS.AUTH_AUTO_REPORT_TITLE, betas, betaConfiguration)) {
         return updates;
@@ -231,16 +218,15 @@ function updateOptimisticReportNamesFromUpdates(updates, context) {
     Log_1.default.info('[OptimisticReportNames] Processing optimistic updates for report names', false, {
         updatesCount: updates.length,
     });
-    var additionalUpdates = [];
-    for (var _i = 0, updates_1 = updates; _i < updates_1.length; _i++) {
-        var update = updates_1[_i];
-        var objectType = determineObjectTypeByKey(update.key);
+    const additionalUpdates = [];
+    for (const update of updates) {
+        const objectType = determineObjectTypeByKey(update.key);
         switch (objectType) {
             case 'report': {
-                var reportID = getReportIDFromKey(update.key);
-                var report = getReportByID(reportID, allReports);
+                const reportID = getReportIDFromKey(update.key);
+                const report = getReportByID(reportID, allReports);
                 // Handle both existing and new reports with the same function
-                var reportNameUpdate = computeReportNameIfNeeded(report, update, context);
+                const reportNameUpdate = computeReportNameIfNeeded(report, update, context);
                 if (reportNameUpdate) {
                     additionalUpdates.push({
                         key: getReportKey(reportID),
@@ -253,11 +239,10 @@ function updateOptimisticReportNamesFromUpdates(updates, context) {
                 break;
             }
             case 'policy': {
-                var policyID = getPolicyIDFromKey(update.key);
-                var affectedReports = getReportsForNameComputation(policyID, allReports, context);
-                for (var _a = 0, affectedReports_1 = affectedReports; _a < affectedReports_1.length; _a++) {
-                    var report = affectedReports_1[_a];
-                    var reportNameUpdate = computeReportNameIfNeeded(report, update, context);
+                const policyID = getPolicyIDFromKey(update.key);
+                const affectedReports = getReportsForNameComputation(policyID, allReports, context);
+                for (const report of affectedReports) {
+                    const reportNameUpdate = computeReportNameIfNeeded(report, update, context);
                     if (reportNameUpdate) {
                         additionalUpdates.push({
                             key: getReportKey(report.reportID),
@@ -271,8 +256,8 @@ function updateOptimisticReportNamesFromUpdates(updates, context) {
                 break;
             }
             case 'transaction': {
-                var report = void 0;
-                var transactionUpdate = update.value;
+                let report;
+                const transactionUpdate = update.value;
                 if (transactionUpdate.reportID) {
                     report = getReportByID(transactionUpdate.reportID, allReports);
                 }
@@ -280,7 +265,7 @@ function updateOptimisticReportNamesFromUpdates(updates, context) {
                     report = getReportByTransactionID(getTransactionIDFromKey(update.key), context);
                 }
                 if (report) {
-                    var reportNameUpdate = computeReportNameIfNeeded(report, update, context);
+                    const reportNameUpdate = computeReportNameIfNeeded(report, update, context);
                     if (reportNameUpdate) {
                         additionalUpdates.push({
                             key: getReportKey(report.reportID),

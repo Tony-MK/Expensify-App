@@ -1,43 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var AddressSearch_1 = require("@components/AddressSearch");
-var CountryPicker_1 = require("@components/CountryPicker");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var StatePicker_1 = require("@components/StatePicker");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var usePersonalDetailsFormSubmit_1 = require("@hooks/usePersonalDetailsFormSubmit");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var PersonalDetailsForm_1 = require("@src/types/form/PersonalDetailsForm");
-var STEP_FIELDS = [PersonalDetailsForm_1.default.ADDRESS_LINE_1, PersonalDetailsForm_1.default.ADDRESS_LINE_2, PersonalDetailsForm_1.default.CITY, PersonalDetailsForm_1.default.STATE, PersonalDetailsForm_1.default.ZIP_POST_CODE, PersonalDetailsForm_1.default.COUNTRY];
-function AddressStep(_a) {
-    var _b, _c;
-    var isEditing = _a.isEditing, onNext = _a.onNext, personalDetailsValues = _a.personalDetailsValues;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var _d = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.COUNTRY]), currentCountry = _d[0], setCurrentCountry = _d[1];
-    var _e = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.STATE]), state = _e[0], setState = _e[1];
-    var _f = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.CITY]), city = _f[0], setCity = _f[1];
-    var _g = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.ZIP_POST_CODE]), zipcode = _g[0], setZipcode = _g[1];
-    var handleSubmit = (0, usePersonalDetailsFormSubmit_1.default)({
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const AddressSearch_1 = require("@components/AddressSearch");
+const CountryPicker_1 = require("@components/CountryPicker");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const StatePicker_1 = require("@components/StatePicker");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const usePersonalDetailsFormSubmit_1 = require("@hooks/usePersonalDetailsFormSubmit");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const PersonalDetailsForm_1 = require("@src/types/form/PersonalDetailsForm");
+const STEP_FIELDS = [PersonalDetailsForm_1.default.ADDRESS_LINE_1, PersonalDetailsForm_1.default.ADDRESS_LINE_2, PersonalDetailsForm_1.default.CITY, PersonalDetailsForm_1.default.STATE, PersonalDetailsForm_1.default.ZIP_POST_CODE, PersonalDetailsForm_1.default.COUNTRY];
+function AddressStep({ isEditing, onNext, personalDetailsValues }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [currentCountry, setCurrentCountry] = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.COUNTRY]);
+    const [state, setState] = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.STATE]);
+    const [city, setCity] = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.CITY]);
+    const [zipcode, setZipcode] = (0, react_1.useState)(personalDetailsValues[PersonalDetailsForm_1.default.ZIP_POST_CODE]);
+    const handleSubmit = (0, usePersonalDetailsFormSubmit_1.default)({
         fieldIds: STEP_FIELDS,
-        onNext: onNext,
+        onNext,
         shouldSaveDraft: true,
     });
-    var validate = (0, react_1.useCallback)(function (values) {
-        var _a, _b, _c, _d, _e, _f, _g;
-        var errors = {};
-        var addressRequiredFields = [PersonalDetailsForm_1.default.ADDRESS_LINE_1, PersonalDetailsForm_1.default.CITY, PersonalDetailsForm_1.default.COUNTRY, PersonalDetailsForm_1.default.STATE];
-        addressRequiredFields.forEach(function (fieldKey) {
-            var _a;
-            var fieldValue = (_a = values[fieldKey]) !== null && _a !== void 0 ? _a : '';
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = {};
+        const addressRequiredFields = [PersonalDetailsForm_1.default.ADDRESS_LINE_1, PersonalDetailsForm_1.default.CITY, PersonalDetailsForm_1.default.COUNTRY, PersonalDetailsForm_1.default.STATE];
+        addressRequiredFields.forEach((fieldKey) => {
+            const fieldValue = values[fieldKey] ?? '';
             if ((0, ValidationUtils_1.isRequiredFulfilled)(fieldValue)) {
                 return;
             }
@@ -62,13 +58,13 @@ function AddressStep(_a) {
             });
         }
         // If no country is selected, default value is an empty string and there's no related regex data so we default to an empty object
-        var countryRegexDetails = (values.country ? (_a = CONST_1.default.COUNTRY_ZIP_REGEX_DATA) === null || _a === void 0 ? void 0 : _a[values.country] : {});
+        const countryRegexDetails = (values.country ? CONST_1.default.COUNTRY_ZIP_REGEX_DATA?.[values.country] : {});
         // The postal code system might not exist for a country, so no regex either for them.
-        var countrySpecificZipRegex = countryRegexDetails === null || countryRegexDetails === void 0 ? void 0 : countryRegexDetails.regex;
-        var countryZipFormat = (_b = countryRegexDetails === null || countryRegexDetails === void 0 ? void 0 : countryRegexDetails.samples) !== null && _b !== void 0 ? _b : '';
+        const countrySpecificZipRegex = countryRegexDetails?.regex;
+        const countryZipFormat = countryRegexDetails?.samples ?? '';
         if (countrySpecificZipRegex) {
-            if (!countrySpecificZipRegex.test((_c = values[PersonalDetailsForm_1.default.ZIP_POST_CODE]) === null || _c === void 0 ? void 0 : _c.trim().toUpperCase())) {
-                if ((0, ValidationUtils_1.isRequiredFulfilled)((_d = values[PersonalDetailsForm_1.default.ZIP_POST_CODE]) === null || _d === void 0 ? void 0 : _d.trim())) {
+            if (!countrySpecificZipRegex.test(values[PersonalDetailsForm_1.default.ZIP_POST_CODE]?.trim().toUpperCase())) {
+                if ((0, ValidationUtils_1.isRequiredFulfilled)(values[PersonalDetailsForm_1.default.ZIP_POST_CODE]?.trim())) {
                     errors[PersonalDetailsForm_1.default.ZIP_POST_CODE] = translate('privatePersonalDetails.error.incorrectZipFormat', { zipFormat: countryZipFormat });
                 }
                 else {
@@ -76,14 +72,14 @@ function AddressStep(_a) {
                 }
             }
         }
-        else if (!CONST_1.default.GENERIC_ZIP_CODE_REGEX.test((_g = (_f = (_e = values[PersonalDetailsForm_1.default.ZIP_POST_CODE]) === null || _e === void 0 ? void 0 : _e.trim()) === null || _f === void 0 ? void 0 : _f.toUpperCase()) !== null && _g !== void 0 ? _g : '')) {
+        else if (!CONST_1.default.GENERIC_ZIP_CODE_REGEX.test(values[PersonalDetailsForm_1.default.ZIP_POST_CODE]?.trim()?.toUpperCase() ?? '')) {
             errors[PersonalDetailsForm_1.default.ZIP_POST_CODE] = translate('privatePersonalDetails.error.incorrectZipFormat');
         }
         return errors;
     }, [translate]);
-    var handleAddressChange = (0, react_1.useCallback)(function (value, key) {
-        var addressPart = value;
-        var addressPartKey = key;
+    const handleAddressChange = (0, react_1.useCallback)((value, key) => {
+        const addressPart = value;
+        const addressPartKey = key;
         if (addressPartKey !== PersonalDetailsForm_1.default.COUNTRY && addressPartKey !== PersonalDetailsForm_1.default.STATE && addressPartKey !== PersonalDetailsForm_1.default.CITY && addressPartKey !== PersonalDetailsForm_1.default.ZIP_POST_CODE) {
             return;
         }
@@ -107,14 +103,14 @@ function AddressStep(_a) {
         }
         setZipcode(addressPart);
     }, []);
-    var isUSAForm = currentCountry === CONST_1.default.COUNTRY.US;
-    var zipSampleFormat = (_c = (currentCountry && ((_b = CONST_1.default.COUNTRY_ZIP_REGEX_DATA[currentCountry]) === null || _b === void 0 ? void 0 : _b.samples))) !== null && _c !== void 0 ? _c : '';
-    var zipFormat = translate('common.zipCodeExampleFormat', { zipSampleFormat: zipSampleFormat });
+    const isUSAForm = currentCountry === CONST_1.default.COUNTRY.US;
+    const zipSampleFormat = (currentCountry && CONST_1.default.COUNTRY_ZIP_REGEX_DATA[currentCountry]?.samples) ?? '';
+    const zipFormat = translate('common.zipCodeExampleFormat', { zipSampleFormat });
     return (<FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.PERSONAL_DETAILS_FORM} submitButtonText={translate(isEditing ? 'common.confirm' : 'common.next')} onSubmit={handleSubmit} validate={validate} style={[styles.flexGrow1, styles.mt3]} submitButtonStyles={[styles.ph5, styles.mb0]} enabledWhenOffline>
             <react_native_1.View style={styles.ph5}>
                 <Text_1.default style={[styles.textHeadlineLineHeightXXL, styles.mb3]}>{translate('privatePersonalDetails.enterAddress')}</Text_1.default>
                 <react_native_1.View>
-                    <InputWrapper_1.default InputComponent={AddressSearch_1.default} inputID={PersonalDetailsForm_1.default.ADDRESS_LINE_1} label={translate('common.addressLine', { lineNumber: 1 })} onValueChange={function (data, key) {
+                    <InputWrapper_1.default InputComponent={AddressSearch_1.default} inputID={PersonalDetailsForm_1.default.ADDRESS_LINE_1} label={translate('common.addressLine', { lineNumber: 1 })} onValueChange={(data, key) => {
             handleAddressChange(data, key);
         }} defaultValue={personalDetailsValues[PersonalDetailsForm_1.default.ADDRESS_LINE_1]} renamedInputKeys={{
             street: PersonalDetailsForm_1.default.ADDRESS_LINE_1,

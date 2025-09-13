@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function getBackgroundColor(_a) {
-    var routesLength = _a.routesLength, tabIndex = _a.tabIndex, affectedTabs = _a.affectedTabs, theme = _a.theme, position = _a.position, isActive = _a.isActive;
+function getBackgroundColor({ routesLength, tabIndex, affectedTabs, theme, position, isActive }) {
     if (routesLength > 1) {
-        var inputRange = Array.from({ length: routesLength }, function (_, i) { return i; });
+        const inputRange = Array.from({ length: routesLength }, (_, i) => i);
         if (position) {
             return position.interpolate({
-                inputRange: inputRange,
-                outputRange: inputRange.map(function (i) {
+                inputRange,
+                outputRange: inputRange.map((i) => {
                     return affectedTabs.includes(tabIndex) && i === tabIndex ? theme.border : theme.appBG;
                 }),
             });

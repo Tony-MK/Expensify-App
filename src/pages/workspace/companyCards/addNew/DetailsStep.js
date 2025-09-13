@@ -1,66 +1,56 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var TextLink_1 = require("@components/TextLink");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var variables_1 = require("@styles/variables");
-var CompanyCards_1 = require("@userActions/CompanyCards");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var AddNewCardFeedForm_1 = require("@src/types/form/AddNewCardFeedForm");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const TextLink_1 = require("@components/TextLink");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const variables_1 = require("@styles/variables");
+const CompanyCards_1 = require("@userActions/CompanyCards");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const AddNewCardFeedForm_1 = require("@src/types/form/AddNewCardFeedForm");
 function DetailsStep() {
-    var _a, _b;
-    var translate = (0, useLocalize_1.default)().translate;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var addNewCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: false })[0];
-    var feedProvider = (_a = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _a === void 0 ? void 0 : _a.feedType;
-    var isStripeFeedProvider = feedProvider === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE;
-    var bank = (_b = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _b === void 0 ? void 0 : _b.selectedBank;
-    var isOtherBankSelected = bank === CONST_1.default.COMPANY_CARDS.BANKS.OTHER;
-    var submit = (0, react_1.useCallback)(function (values) {
-        var _a;
-        if (!(addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data)) {
+    const { translate } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const [addNewCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: false });
+    const feedProvider = addNewCard?.data?.feedType;
+    const isStripeFeedProvider = feedProvider === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE;
+    const bank = addNewCard?.data?.selectedBank;
+    const isOtherBankSelected = bank === CONST_1.default.COMPANY_CARDS.BANKS.OTHER;
+    const submit = (0, react_1.useCallback)((values) => {
+        if (!addNewCard?.data) {
             return;
         }
-        var feedDetails = __assign(__assign({}, values), { bankName: (_a = addNewCard.data.bankName) !== null && _a !== void 0 ? _a : 'Amex' });
-        (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({ step: CONST_1.default.COMPANY_CARDS.STEP.SELECT_STATEMENT_CLOSE_DATE, data: { feedDetails: feedDetails } });
-    }, [addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data]);
-    var handleBackButtonPress = function () {
+        const feedDetails = {
+            ...values,
+            bankName: addNewCard.data.bankName ?? 'Amex',
+        };
+        (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({ step: CONST_1.default.COMPANY_CARDS.STEP.SELECT_STATEMENT_CLOSE_DATE, data: { feedDetails } });
+    }, [addNewCard?.data]);
+    const handleBackButtonPress = () => {
         if (isOtherBankSelected) {
             (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({ step: CONST_1.default.COMPANY_CARDS.STEP.CARD_NAME });
             return;
         }
         (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({ step: CONST_1.default.COMPANY_CARDS.STEP.CARD_INSTRUCTIONS });
     };
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [AddNewCardFeedForm_1.default.BANK_ID]);
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, [AddNewCardFeedForm_1.default.BANK_ID]);
         switch (feedProvider) {
             case CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA:
                 if (!values[AddNewCardFeedForm_1.default.BANK_ID]) {
@@ -118,19 +108,18 @@ function DetailsStep() {
         }
         return errors;
     }, [feedProvider, translate]);
-    var renderInputs = function () {
-        var _a, _b, _c, _d, _e;
+    const renderInputs = () => {
         switch (feedProvider) {
             case CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA:
                 return (<>
-                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.PROCESSOR_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.vcf.processorLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} ref={inputCallbackRef} defaultValue={(_a = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedDetails) === null || _a === void 0 ? void 0 : _a.processorID}/>
-                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.BANK_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.vcf.bankLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} defaultValue={(_b = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedDetails) === null || _b === void 0 ? void 0 : _b.bankID}/>
-                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.COMPANY_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.vcf.companyLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} defaultValue={(_c = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedDetails) === null || _c === void 0 ? void 0 : _c.companyID}/>
+                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.PROCESSOR_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.vcf.processorLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} ref={inputCallbackRef} defaultValue={addNewCard?.data.feedDetails?.processorID}/>
+                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.BANK_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.vcf.bankLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} defaultValue={addNewCard?.data.feedDetails?.bankID}/>
+                        <InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.COMPANY_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.vcf.companyLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} defaultValue={addNewCard?.data.feedDetails?.companyID}/>
                     </>);
             case CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.MASTER_CARD:
-                return (<InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.DISTRIBUTION_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.cdf.distributionLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} ref={inputCallbackRef} defaultValue={(_d = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedDetails) === null || _d === void 0 ? void 0 : _d.distributionID}/>);
+                return (<InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.DISTRIBUTION_ID} label={translate('workspace.companyCards.addNewCard.feedDetails.cdf.distributionLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} ref={inputCallbackRef} defaultValue={addNewCard?.data.feedDetails?.distributionID}/>);
             case CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX:
-                return (<InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.DELIVERY_FILE_NAME} label={translate('workspace.companyCards.addNewCard.feedDetails.gl1025.fileNameLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} ref={inputCallbackRef} defaultValue={(_e = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data.feedDetails) === null || _e === void 0 ? void 0 : _e.deliveryFileName}/>);
+                return (<InputWrapper_1.default InputComponent={TextInput_1.default} inputID={AddNewCardFeedForm_1.default.DELIVERY_FILE_NAME} label={translate('workspace.companyCards.addNewCard.feedDetails.gl1025.fileNameLabel')} role={CONST_1.default.ROLE.PRESENTATION} containerStyles={[styles.mb6]} ref={inputCallbackRef} defaultValue={addNewCard?.data.feedDetails?.deliveryFileName}/>);
             default:
                 return null;
         }
@@ -139,13 +128,13 @@ function DetailsStep() {
             <HeaderWithBackButton_1.default title={translate('workspace.companyCards.addCards')} onBackButtonPress={handleBackButtonPress}/>
             <FormProvider_1.default formID={ONYXKEYS_1.default.FORMS.ADD_NEW_CARD_FEED_FORM} submitButtonText={translate('common.next')} onSubmit={submit} validate={validate} style={[styles.mh5, styles.flexGrow1]} shouldHideFixErrorsAlert={feedProvider !== CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA} addBottomSafeAreaPadding>
                 <Text_1.default style={[styles.textHeadlineLineHeightXXL, styles.mv3]}>
-                    {!!feedProvider && !isStripeFeedProvider ? translate("workspace.companyCards.addNewCard.feedDetails.".concat(feedProvider, ".title")) : ''}
+                    {!!feedProvider && !isStripeFeedProvider ? translate(`workspace.companyCards.addNewCard.feedDetails.${feedProvider}.title`) : ''}
                 </Text_1.default>
                 {renderInputs()}
                 {!!feedProvider && !isStripeFeedProvider && (<react_native_1.View style={[styles.flexRow, styles.alignItemsCenter]}>
                         <Icon_1.default src={Expensicons.QuestionMark} width={variables_1.default.iconSizeExtraSmall} height={variables_1.default.iconSizeExtraSmall} fill={theme.icon}/>
                         <TextLink_1.default style={[styles.label, styles.textLineHeightNormal, styles.ml2]} href={CONST_1.default.COMPANY_CARDS_DELIVERY_FILE_HELP[feedProvider]}>
-                            {translate("workspace.companyCards.addNewCard.feedDetails.".concat(feedProvider, ".helpLabel"))}
+                            {translate(`workspace.companyCards.addNewCard.feedDetails.${feedProvider}.helpLabel`)}
                         </TextLink_1.default>
                     </react_native_1.View>)}
             </FormProvider_1.default>

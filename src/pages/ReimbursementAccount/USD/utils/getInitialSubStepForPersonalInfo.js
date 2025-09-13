@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
-var personalInfoKeys = ReimbursementAccountForm_1.default.PERSONAL_INFO_STEP;
+const ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
+const personalInfoKeys = ReimbursementAccountForm_1.default.PERSONAL_INFO_STEP;
 /**
  * Returns the initial subStep for the Personal Info step based on already existing data
  */

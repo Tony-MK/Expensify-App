@@ -1,24 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var date_fns_1 = require("date-fns");
-var react_1 = require("react");
-var DatePicker_1 = require("@components/DatePicker");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-function DateOfBirthStep(_a) {
-    var formID = _a.formID, formTitle = _a.formTitle, customValidate = _a.customValidate, onSubmit = _a.onSubmit, stepFields = _a.stepFields, dobInputID = _a.dobInputID, dobDefaultValue = _a.dobDefaultValue, isEditing = _a.isEditing, footerComponent = _a.footerComponent;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var minDate = (0, date_fns_1.subYears)(new Date(), CONST_1.default.DATE_BIRTH.MAX_AGE);
-    var maxDate = (0, date_fns_1.subYears)(new Date(), CONST_1.default.DATE_BIRTH.MIN_AGE_FOR_PAYMENT);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, stepFields);
-        var valuesToValidate = values[dobInputID];
+const date_fns_1 = require("date-fns");
+const react_1 = require("react");
+const DatePicker_1 = require("@components/DatePicker");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+function DateOfBirthStep({ formID, formTitle, customValidate, onSubmit, stepFields, dobInputID, dobDefaultValue, isEditing, footerComponent, }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const minDate = (0, date_fns_1.subYears)(new Date(), CONST_1.default.DATE_BIRTH.MAX_AGE);
+    const maxDate = (0, date_fns_1.subYears)(new Date(), CONST_1.default.DATE_BIRTH.MIN_AGE_FOR_PAYMENT);
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, stepFields);
+        const valuesToValidate = values[dobInputID];
         if (valuesToValidate) {
             if (!(0, ValidationUtils_1.isValidPastDate)(valuesToValidate) || !(0, ValidationUtils_1.meetsMaximumAgeRequirement)(valuesToValidate)) {
                 // @ts-expect-error type mismatch to be fixed
@@ -31,7 +30,7 @@ function DateOfBirthStep(_a) {
         }
         return errors;
     }, [dobInputID, stepFields, translate]);
-    return (<FormProvider_1.default formID={formID} submitButtonText={translate(isEditing ? 'common.confirm' : 'common.next')} validate={customValidate !== null && customValidate !== void 0 ? customValidate : validate} onSubmit={onSubmit} style={[styles.mh5, styles.flexGrow2, styles.justifyContentBetween]} submitButtonStyles={[styles.mb0]} enabledWhenOffline shouldHideFixErrorsAlert>
+    return (<FormProvider_1.default formID={formID} submitButtonText={translate(isEditing ? 'common.confirm' : 'common.next')} validate={customValidate ?? validate} onSubmit={onSubmit} style={[styles.mh5, styles.flexGrow2, styles.justifyContentBetween]} submitButtonStyles={[styles.mb0]} enabledWhenOffline shouldHideFixErrorsAlert>
             <Text_1.default style={[styles.textHeadlineLineHeightXXL, styles.mb5]}>{formTitle}</Text_1.default>
             <InputWrapper_1.default InputComponent={DatePicker_1.default} inputID={dobInputID} label={translate('common.dob')} placeholder={translate('common.dateFormat')} defaultValue={dobDefaultValue} minDate={minDate} maxDate={maxDate} shouldSaveDraft={!isEditing} autoFocus/>
             {footerComponent}

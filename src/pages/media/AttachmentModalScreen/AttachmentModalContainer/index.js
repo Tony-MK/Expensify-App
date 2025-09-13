@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Modal_1 = require("@components/Modal");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var AttachmentModalBaseContent_1 = require("@pages/media/AttachmentModalScreen/AttachmentModalBaseContent");
-var AttachmentModalContext_1 = require("@pages/media/AttachmentModalScreen/AttachmentModalContext");
-var CONST_1 = require("@src/CONST");
-function AttachmentModalContainer(_a) {
-    var contentProps = _a.contentProps, modalType = _a.modalType, onShow = _a.onShow, onClose = _a.onClose, shouldHandleNavigationBack = _a.shouldHandleNavigationBack;
-    var _b = (0, react_1.useState)(true), isVisible = _b[0], setIsVisible = _b[1];
-    var attachmentsContext = (0, react_1.useContext)(AttachmentModalContext_1.default);
-    var _c = (0, react_1.useState)(false), shouldDisableAnimationAfterInitialMount = _c[0], setShouldDisableAnimationAfterInitialMount = _c[1];
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Modal_1 = require("@components/Modal");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const AttachmentModalBaseContent_1 = require("@pages/media/AttachmentModalScreen/AttachmentModalBaseContent");
+const AttachmentModalContext_1 = require("@pages/media/AttachmentModalScreen/AttachmentModalContext");
+const CONST_1 = require("@src/CONST");
+function AttachmentModalContainer({ contentProps, modalType, onShow, onClose, shouldHandleNavigationBack }) {
+    const [isVisible, setIsVisible] = (0, react_1.useState)(true);
+    const attachmentsContext = (0, react_1.useContext)(AttachmentModalContext_1.default);
+    const [shouldDisableAnimationAfterInitialMount, setShouldDisableAnimationAfterInitialMount] = (0, react_1.useState)(false);
     /**
      * Closes the modal.
      * @param {boolean} [shouldCallDirectly] If true, directly calls `onModalClose`.
@@ -19,29 +18,28 @@ function AttachmentModalContainer(_a) {
      * If `shouldCallDirectly` is false or undefined, it calls `attachmentModalHandler.handleModalClose` to close the modal.
      * This ensures smooth modal closing behavior without causing delays in closing.
      */
-    var closeModal = (0, react_1.useCallback)(function (options) {
+    const closeModal = (0, react_1.useCallback)((options) => {
         attachmentsContext.setCurrentAttachment(undefined);
         setIsVisible(false);
-        onClose === null || onClose === void 0 ? void 0 : onClose();
+        onClose?.();
         Navigation_1.default.dismissModal();
-        if (options === null || options === void 0 ? void 0 : options.onAfterClose) {
-            options === null || options === void 0 ? void 0 : options.onAfterClose();
+        if (options?.onAfterClose) {
+            options?.onAfterClose();
         }
     }, [attachmentsContext, onClose]);
     // After the modal has initially been mounted and animated in,
     // we don't want to show another animation when the modal type changes or
     // when the browser switches to narrow layout.
-    (0, react_1.useEffect)(function () {
-        react_native_1.InteractionManager.runAfterInteractions(function () {
+    (0, react_1.useEffect)(() => {
+        react_native_1.InteractionManager.runAfterInteractions(() => {
             setShouldDisableAnimationAfterInitialMount(true);
         });
     }, []);
-    (0, react_1.useEffect)(function () {
-        onShow === null || onShow === void 0 ? void 0 : onShow();
+    (0, react_1.useEffect)(() => {
+        onShow?.();
     }, [onShow]);
-    return (<Modal_1.default disableAnimationIn={shouldDisableAnimationAfterInitialMount} isVisible={isVisible} type={modalType !== null && modalType !== void 0 ? modalType : CONST_1.default.MODAL.MODAL_TYPE.CENTERED_UNSWIPEABLE} propagateSwipe initialFocus={function () {
-            var _a;
-            if (!((_a = contentProps.submitRef) === null || _a === void 0 ? void 0 : _a.current)) {
+    return (<Modal_1.default disableAnimationIn={shouldDisableAnimationAfterInitialMount} isVisible={isVisible} type={modalType ?? CONST_1.default.MODAL.MODAL_TYPE.CENTERED_UNSWIPEABLE} propagateSwipe initialFocus={() => {
+            if (!contentProps.submitRef?.current) {
                 return false;
             }
             return contentProps.submitRef.current;

@@ -1,63 +1,62 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
-var Button_1 = require("@components/Button");
-var FixedFooter_1 = require("@components/FixedFooter");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var MoneyRequestView_1 = require("@components/ReportActionItem/MoneyRequestView");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var MergeTransaction_1 = require("@libs/actions/MergeTransaction");
-var MergeTransactionUtils_1 = require("@libs/MergeTransactionUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
-function ConfirmationPage(_a) {
-    var route = _a.route;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = (0, react_1.useState)(false), isMergingExpenses = _b[0], setIsMergingExpenses = _b[1];
-    var _c = route.params, transactionID = _c.transactionID, backTo = _c.backTo;
-    var allReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false })[0];
-    var _d = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.MERGE_TRANSACTION).concat(transactionID), { canBeMissing: true }), mergeTransaction = _d[0], mergeTransactionMetadata = _d[1];
-    var _e = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(mergeTransaction === null || mergeTransaction === void 0 ? void 0 : mergeTransaction.targetTransactionID), {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
+const Button_1 = require("@components/Button");
+const FixedFooter_1 = require("@components/FixedFooter");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const MoneyRequestView_1 = require("@components/ReportActionItem/MoneyRequestView");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const MergeTransaction_1 = require("@libs/actions/MergeTransaction");
+const MergeTransactionUtils_1 = require("@libs/MergeTransactionUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+function ConfirmationPage({ route }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [isMergingExpenses, setIsMergingExpenses] = (0, react_1.useState)(false);
+    const { transactionID, backTo } = route.params;
+    const [allReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false });
+    const [mergeTransaction, mergeTransactionMetadata] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.MERGE_TRANSACTION}${transactionID}`, { canBeMissing: true });
+    const [targetTransaction = (0, MergeTransactionUtils_1.getTargetTransactionFromMergeTransaction)(mergeTransaction)] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${mergeTransaction?.targetTransactionID}`, {
         canBeMissing: true,
-    })[0], targetTransaction = _e === void 0 ? (0, MergeTransactionUtils_1.getTargetTransactionFromMergeTransaction)(mergeTransaction) : _e;
-    var _f = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(mergeTransaction === null || mergeTransaction === void 0 ? void 0 : mergeTransaction.sourceTransactionID), {
+    });
+    const [sourceTransaction = (0, MergeTransactionUtils_1.getSourceTransactionFromMergeTransaction)(mergeTransaction)] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${mergeTransaction?.sourceTransactionID}`, {
         canBeMissing: true,
-    })[0], sourceTransaction = _f === void 0 ? (0, MergeTransactionUtils_1.getSourceTransactionFromMergeTransaction)(mergeTransaction) : _f;
-    var targetTransactionThreadReportID = (0, MergeTransactionUtils_1.getTransactionThreadReportID)(targetTransaction);
-    var targetTransactionThreadReport = allReports === null || allReports === void 0 ? void 0 : allReports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(targetTransactionThreadReportID)];
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(targetTransactionThreadReport === null || targetTransactionThreadReport === void 0 ? void 0 : targetTransactionThreadReport.policyID), { canBeMissing: true })[0];
+    });
+    const targetTransactionThreadReportID = (0, MergeTransactionUtils_1.getTransactionThreadReportID)(targetTransaction);
+    const targetTransactionThreadReport = allReports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${targetTransactionThreadReportID}`];
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${targetTransactionThreadReport?.policyID}`, { canBeMissing: true });
     // Build the merged transaction data for display
-    var mergedTransactionData = (0, react_1.useMemo)(function () { return (0, MergeTransactionUtils_1.buildMergedTransactionData)(targetTransaction, mergeTransaction); }, [targetTransaction, mergeTransaction]);
-    var contextValue = (0, react_1.useMemo)(function () { return ({
+    const mergedTransactionData = (0, react_1.useMemo)(() => (0, MergeTransactionUtils_1.buildMergedTransactionData)(targetTransaction, mergeTransaction), [targetTransaction, mergeTransaction]);
+    const contextValue = (0, react_1.useMemo)(() => ({
         transactionThreadReport: targetTransactionThreadReport,
         action: undefined,
         report: targetTransactionThreadReport,
-        checkIfContextMenuActive: function () { },
-        onShowContextMenu: function () { },
+        checkIfContextMenuActive: () => { },
+        onShowContextMenu: () => { },
         isReportArchived: false,
         anchor: null,
         isDisabled: false,
-    }); }, [targetTransactionThreadReport]);
-    var handleMergeExpenses = (0, react_1.useCallback)(function () {
+    }), [targetTransactionThreadReport]);
+    const handleMergeExpenses = (0, react_1.useCallback)(() => {
         if (!targetTransaction || !mergeTransaction || !sourceTransaction) {
             return;
         }
-        var reportID = mergeTransaction.reportID;
+        const reportID = mergeTransaction.reportID;
         setIsMergingExpenses(true);
         (0, MergeTransaction_1.mergeTransactionRequest)(transactionID, mergeTransaction, targetTransaction, sourceTransaction);
-        var reportIDToDismiss = reportID !== CONST_1.default.REPORT.UNREPORTED_REPORT_ID ? reportID : targetTransactionThreadReportID;
+        const reportIDToDismiss = reportID !== CONST_1.default.REPORT.UNREPORTED_REPORT_ID ? reportID : targetTransactionThreadReportID;
         if (reportID !== targetTransaction.reportID && reportIDToDismiss) {
             Navigation_1.default.dismissModalWithReport({ reportID: reportIDToDismiss });
         }
@@ -65,12 +64,12 @@ function ConfirmationPage(_a) {
             Navigation_1.default.dismissModal();
         }
     }, [targetTransaction, mergeTransaction, sourceTransaction, transactionID, targetTransactionThreadReportID]);
-    if ((0, isLoadingOnyxValue_1.default)(mergeTransactionMetadata) || !(targetTransactionThreadReport === null || targetTransactionThreadReport === void 0 ? void 0 : targetTransactionThreadReport.reportID)) {
+    if ((0, isLoadingOnyxValue_1.default)(mergeTransactionMetadata) || !targetTransactionThreadReport?.reportID) {
         return <FullscreenLoadingIndicator_1.default />;
     }
     return (<ScreenWrapper_1.default testID={ConfirmationPage.displayName} shouldEnableMaxHeight includeSafeAreaPaddingBottom>
             <FullPageNotFoundView_1.default shouldShow={!mergeTransaction && !isMergingExpenses}>
-                <HeaderWithBackButton_1.default title={translate('transactionMerge.confirmationPage.header')} onBackButtonPress={function () {
+                <HeaderWithBackButton_1.default title={translate('transactionMerge.confirmationPage.header')} onBackButtonPress={() => {
             Navigation_1.default.goBack(backTo);
         }}/>
                 <ScrollView_1.default>

@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var validateFormDataParameter_1 = require("@libs/validateFormDataParameter");
+const validateFormDataParameter_1 = require("@libs/validateFormDataParameter");
 /**
  * Prepares the request payload (body) for a given command and data.
  */
-var prepareRequestPayload = function (command, data) {
-    var formData = new FormData();
-    Object.keys(data).forEach(function (key) {
-        var value = data[key];
+const prepareRequestPayload = (command, data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+        const value = data[key];
         if (value === undefined) {
             return;
         }

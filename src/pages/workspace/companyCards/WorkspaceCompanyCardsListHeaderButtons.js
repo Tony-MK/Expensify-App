@@ -1,92 +1,90 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var ButtonWithDropdownMenu_1 = require("@components/ButtonWithDropdownMenu");
-var FeedSelector_1 = require("@components/FeedSelector");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useCardFeeds_1 = require("@hooks/useCardFeeds");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePolicy_1 = require("@hooks/usePolicy");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeIllustrations_1 = require("@hooks/useThemeIllustrations");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWorkspaceAccountID_1 = require("@hooks/useWorkspaceAccountID");
-var CardUtils_1 = require("@libs/CardUtils");
-var Navigation_1 = require("@navigation/Navigation");
-var CompanyCards_1 = require("@userActions/CompanyCards");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function WorkspaceCompanyCardsListHeaderButtons(_a) {
-    var _b;
-    var policyID = _a.policyID, selectedFeed = _a.selectedFeed, shouldShowAssignCardButton = _a.shouldShowAssignCardButton, handleAssignCard = _a.handleAssignCard;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var theme = (0, useTheme_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var illustrations = (0, useThemeIllustrations_1.default)();
-    var _c = (0, useResponsiveLayout_1.default)(), shouldUseNarrowLayout = _c.shouldUseNarrowLayout, isMediumScreenWidth = _c.isMediumScreenWidth;
-    var workspaceAccountID = (0, useWorkspaceAccountID_1.default)(policyID);
-    var cardFeeds = (0, useCardFeeds_1.default)(policyID)[0];
-    var policy = (0, usePolicy_1.default)(policyID);
-    var allFeedsCards = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST), { canBeMissing: false })[0];
-    var _d = (0, useOnyx_1.default)(ONYXKEYS_1.default.CURRENCY_LIST, { canBeMissing: true })[0], currencyList = _d === void 0 ? (0, EmptyObject_1.getEmptyObject)() : _d;
-    var countryByIp = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY, { canBeMissing: false })[0];
-    var shouldChangeLayout = isMediumScreenWidth || shouldUseNarrowLayout;
-    var formattedFeedName = (0, CardUtils_1.getCustomOrFormattedFeedName)(selectedFeed, (_b = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _b === void 0 ? void 0 : _b.companyCardNicknames);
-    var isCommercialFeed = (0, CardUtils_1.isCustomFeed)(selectedFeed);
-    var plaidUrl = (0, CardUtils_1.getPlaidInstitutionIconUrl)(selectedFeed);
-    var companyFeeds = (0, CardUtils_1.getCompanyFeeds)(cardFeeds);
-    var currentFeedData = companyFeeds === null || companyFeeds === void 0 ? void 0 : companyFeeds[selectedFeed];
-    var bankName = plaidUrl && formattedFeedName ? formattedFeedName : (0, CardUtils_1.getBankName)(selectedFeed);
-    var domainOrWorkspaceAccountID = (0, CardUtils_1.getDomainOrWorkspaceAccountID)(workspaceAccountID, currentFeedData);
-    var filteredFeedCards = (0, CardUtils_1.filterInactiveCards)(allFeedsCards === null || allFeedsCards === void 0 ? void 0 : allFeedsCards["".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(domainOrWorkspaceAccountID, "_").concat(selectedFeed)]);
-    var isSelectedFeedConnectionBroken = (0, CardUtils_1.checkIfFeedConnectionIsBroken)(filteredFeedCards);
-    var openBankConnection = function () {
-        var institutionId = !!(0, CardUtils_1.getPlaidInstitutionId)(selectedFeed);
-        var data = {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const ButtonWithDropdownMenu_1 = require("@components/ButtonWithDropdownMenu");
+const FeedSelector_1 = require("@components/FeedSelector");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useCardFeeds_1 = require("@hooks/useCardFeeds");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePolicy_1 = require("@hooks/usePolicy");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeIllustrations_1 = require("@hooks/useThemeIllustrations");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWorkspaceAccountID_1 = require("@hooks/useWorkspaceAccountID");
+const CardUtils_1 = require("@libs/CardUtils");
+const Navigation_1 = require("@navigation/Navigation");
+const CompanyCards_1 = require("@userActions/CompanyCards");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function WorkspaceCompanyCardsListHeaderButtons({ policyID, selectedFeed, shouldShowAssignCardButton, handleAssignCard }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const illustrations = (0, useThemeIllustrations_1.default)();
+    const { shouldUseNarrowLayout, isMediumScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const workspaceAccountID = (0, useWorkspaceAccountID_1.default)(policyID);
+    const [cardFeeds] = (0, useCardFeeds_1.default)(policyID);
+    const policy = (0, usePolicy_1.default)(policyID);
+    const [allFeedsCards] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}`, { canBeMissing: false });
+    const [currencyList = (0, EmptyObject_1.getEmptyObject)()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CURRENCY_LIST, { canBeMissing: true });
+    const [countryByIp] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY, { canBeMissing: false });
+    const shouldChangeLayout = isMediumScreenWidth || shouldUseNarrowLayout;
+    const formattedFeedName = (0, CardUtils_1.getCustomOrFormattedFeedName)(selectedFeed, cardFeeds?.settings?.companyCardNicknames);
+    const isCommercialFeed = (0, CardUtils_1.isCustomFeed)(selectedFeed);
+    const plaidUrl = (0, CardUtils_1.getPlaidInstitutionIconUrl)(selectedFeed);
+    const companyFeeds = (0, CardUtils_1.getCompanyFeeds)(cardFeeds);
+    const currentFeedData = companyFeeds?.[selectedFeed];
+    const bankName = plaidUrl && formattedFeedName ? formattedFeedName : (0, CardUtils_1.getBankName)(selectedFeed);
+    const domainOrWorkspaceAccountID = (0, CardUtils_1.getDomainOrWorkspaceAccountID)(workspaceAccountID, currentFeedData);
+    const filteredFeedCards = (0, CardUtils_1.filterInactiveCards)(allFeedsCards?.[`${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${domainOrWorkspaceAccountID}_${selectedFeed}`]);
+    const isSelectedFeedConnectionBroken = (0, CardUtils_1.checkIfFeedConnectionIsBroken)(filteredFeedCards);
+    const openBankConnection = () => {
+        const institutionId = !!(0, CardUtils_1.getPlaidInstitutionId)(selectedFeed);
+        const data = {
             bankName: selectedFeed,
         };
         if (institutionId) {
-            var country = (0, CardUtils_1.getPlaidCountry)(policy === null || policy === void 0 ? void 0 : policy.outputCurrency, currencyList, countryByIp);
+            const country = (0, CardUtils_1.getPlaidCountry)(policy?.outputCurrency, currencyList, countryByIp);
             (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({
                 data: {
                     selectedCountry: country,
                 },
             });
             (0, CompanyCards_1.setAssignCardStepAndData)({
-                data: data,
+                data,
                 currentStep: CONST_1.default.COMPANY_CARD.STEP.PLAID_CONNECTION,
             });
-            Navigation_1.default.setNavigationActionToMicrotaskQueue(function () { return Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_ASSIGN_CARD.getRoute(policyID, selectedFeed)); });
+            Navigation_1.default.setNavigationActionToMicrotaskQueue(() => Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_ASSIGN_CARD.getRoute(policyID, selectedFeed)));
             return;
         }
-        (0, CompanyCards_1.setAssignCardStepAndData)({ data: data, currentStep: CONST_1.default.COMPANY_CARD.STEP.BANK_CONNECTION });
-        Navigation_1.default.setNavigationActionToMicrotaskQueue(function () { return Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_ASSIGN_CARD.getRoute(policyID, selectedFeed)); });
+        (0, CompanyCards_1.setAssignCardStepAndData)({ data, currentStep: CONST_1.default.COMPANY_CARD.STEP.BANK_CONNECTION });
+        Navigation_1.default.setNavigationActionToMicrotaskQueue(() => Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_ASSIGN_CARD.getRoute(policyID, selectedFeed)));
     };
-    var secondaryActions = (0, react_1.useMemo)(function () { return [
+    const secondaryActions = (0, react_1.useMemo)(() => [
         {
             icon: Expensicons.Gear,
             text: translate('common.settings'),
-            onSelected: function () { return Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_SETTINGS.getRoute(policyID)); },
+            onSelected: () => Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_SETTINGS.getRoute(policyID)),
             value: CONST_1.default.POLICY.SECONDARY_ACTIONS.SETTINGS,
         },
-    ]; }, [policyID, translate]);
+    ], [policyID, translate]);
     return (<react_native_1.View>
             <react_native_1.View style={[styles.w100, styles.ph5, !shouldChangeLayout ? [styles.pv2, styles.flexRow, styles.alignItemsCenter, styles.justifyContentBetween] : styles.pb2]}>
-                <FeedSelector_1.default plaidUrl={plaidUrl} onFeedSelect={function () { return Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_SELECT_FEED.getRoute(policyID)); }} cardIcon={(0, CardUtils_1.getCardFeedIcon)(selectedFeed, illustrations)} shouldChangeLayout={shouldChangeLayout} feedName={formattedFeedName} supportingText={translate(isCommercialFeed ? 'workspace.companyCards.commercialFeed' : 'workspace.companyCards.directFeed')} shouldShowRBR={(0, CardUtils_1.checkIfFeedConnectionIsBroken)((0, CardUtils_1.flatAllCardsList)(allFeedsCards, domainOrWorkspaceAccountID), selectedFeed)}/>
+                <FeedSelector_1.default plaidUrl={plaidUrl} onFeedSelect={() => Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_COMPANY_CARDS_SELECT_FEED.getRoute(policyID))} cardIcon={(0, CardUtils_1.getCardFeedIcon)(selectedFeed, illustrations)} shouldChangeLayout={shouldChangeLayout} feedName={formattedFeedName} supportingText={translate(isCommercialFeed ? 'workspace.companyCards.commercialFeed' : 'workspace.companyCards.directFeed')} shouldShowRBR={(0, CardUtils_1.checkIfFeedConnectionIsBroken)((0, CardUtils_1.flatAllCardsList)(allFeedsCards, domainOrWorkspaceAccountID), selectedFeed)}/>
                 <react_native_1.View style={[styles.flexRow, styles.gap2]}>
-                    {!!shouldShowAssignCardButton && (<Button_1.default success isDisabled={!currentFeedData || !!(currentFeedData === null || currentFeedData === void 0 ? void 0 : currentFeedData.pending) || isSelectedFeedConnectionBroken} onPress={handleAssignCard} icon={Expensicons.Plus} text={translate('workspace.companyCards.assignCard')} style={shouldChangeLayout && styles.flex1}/>)}
-                    <ButtonWithDropdownMenu_1.default success={false} onPress={function () { }} shouldUseOptionIcon customText={translate('common.more')} options={secondaryActions} isSplitButton={false} wrapperStyle={shouldShowAssignCardButton ? styles.flexGrow0 : styles.flex1}/>
+                    {!!shouldShowAssignCardButton && (<Button_1.default success isDisabled={!currentFeedData || !!currentFeedData?.pending || isSelectedFeedConnectionBroken} onPress={handleAssignCard} icon={Expensicons.Plus} text={translate('workspace.companyCards.assignCard')} style={shouldChangeLayout && styles.flex1}/>)}
+                    <ButtonWithDropdownMenu_1.default success={false} onPress={() => { }} shouldUseOptionIcon customText={translate('common.more')} options={secondaryActions} isSplitButton={false} wrapperStyle={shouldShowAssignCardButton ? styles.flexGrow0 : styles.flex1}/>
                 </react_native_1.View>
             </react_native_1.View>
             {isSelectedFeedConnectionBroken && !!bankName && (<react_native_1.View style={[styles.flexRow, styles.ph5, styles.alignItemsCenter]}>

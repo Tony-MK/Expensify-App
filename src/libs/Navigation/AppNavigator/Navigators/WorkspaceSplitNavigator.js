@@ -1,44 +1,42 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CENTRAL_PANE_WORKSPACE_SCREENS = void 0;
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FocusTrapForScreen_1 = require("@components/FocusTrap/FocusTrapForScreen");
-var GetStateForActionHandlers_1 = require("@libs/Navigation/AppNavigator/createRootStackNavigator/GetStateForActionHandlers");
-var createSplitNavigator_1 = require("@libs/Navigation/AppNavigator/createSplitNavigator");
-var usePreloadFullScreenNavigators_1 = require("@libs/Navigation/AppNavigator/usePreloadFullScreenNavigators");
-var useSplitNavigatorScreenOptions_1 = require("@libs/Navigation/AppNavigator/useSplitNavigatorScreenOptions");
-var animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
-var SCREENS_1 = require("@src/SCREENS");
-var loadWorkspaceInitialPage = function () { return require('../../../../pages/workspace/WorkspaceInitialPage').default; };
-var CENTRAL_PANE_WORKSPACE_SCREENS = (_a = {},
-    _a[SCREENS_1.default.WORKSPACE.PROFILE] = function () { return require('../../../../pages/workspace/WorkspaceOverviewPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.WORKFLOWS] = function () { return require('../../../../pages/workspace/workflows/WorkspaceWorkflowsPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.INVOICES] = function () { return require('../../../../pages/workspace/invoices/WorkspaceInvoicesPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.MEMBERS] = function () { return require('../../../../pages/workspace/WorkspaceMembersPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.ACCOUNTING.ROOT] = function () { return require('../../../../pages/workspace/accounting/PolicyAccountingPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.CATEGORIES] = function () { return require('../../../../pages/workspace/categories/WorkspaceCategoriesPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.MORE_FEATURES] = function () { return require('../../../../pages/workspace/WorkspaceMoreFeaturesPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.TAGS] = function () { return require('../../../../pages/workspace/tags/WorkspaceTagsPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.TAXES] = function () { return require('../../../../pages/workspace/taxes/WorkspaceTaxesPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.REPORTS] = function () { return require('../../../../pages/workspace/reports/WorkspaceReportsPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.COMPANY_CARDS] = function () { return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardsPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.PER_DIEM] = function () { return require('../../../../pages/workspace/perDiem/WorkspacePerDiemPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.RECEIPT_PARTNERS] = function () { return require('../../../../pages/workspace/receiptPartners/WorkspaceReceiptPartnersPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.DISTANCE_RATES] = function () { return require('../../../../pages/workspace/distanceRates/PolicyDistanceRatesPage').default; },
-    _a[SCREENS_1.default.WORKSPACE.RULES] = function () { return require('../../../../pages/workspace/rules/PolicyRulesPage').default; },
-    _a);
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FocusTrapForScreen_1 = require("@components/FocusTrap/FocusTrapForScreen");
+const GetStateForActionHandlers_1 = require("@libs/Navigation/AppNavigator/createRootStackNavigator/GetStateForActionHandlers");
+const createSplitNavigator_1 = require("@libs/Navigation/AppNavigator/createSplitNavigator");
+const usePreloadFullScreenNavigators_1 = require("@libs/Navigation/AppNavigator/usePreloadFullScreenNavigators");
+const useSplitNavigatorScreenOptions_1 = require("@libs/Navigation/AppNavigator/useSplitNavigatorScreenOptions");
+const animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
+const SCREENS_1 = require("@src/SCREENS");
+const loadWorkspaceInitialPage = () => require('../../../../pages/workspace/WorkspaceInitialPage').default;
+const CENTRAL_PANE_WORKSPACE_SCREENS = {
+    [SCREENS_1.default.WORKSPACE.PROFILE]: () => require('../../../../pages/workspace/WorkspaceOverviewPage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS]: () => require('../../../../pages/workspace/workflows/WorkspaceWorkflowsPage').default,
+    [SCREENS_1.default.WORKSPACE.INVOICES]: () => require('../../../../pages/workspace/invoices/WorkspaceInvoicesPage').default,
+    [SCREENS_1.default.WORKSPACE.MEMBERS]: () => require('../../../../pages/workspace/WorkspaceMembersPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.ROOT]: () => require('../../../../pages/workspace/accounting/PolicyAccountingPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORIES]: () => require('../../../../pages/workspace/categories/WorkspaceCategoriesPage').default,
+    [SCREENS_1.default.WORKSPACE.MORE_FEATURES]: () => require('../../../../pages/workspace/WorkspaceMoreFeaturesPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS]: () => require('../../../../pages/workspace/tags/WorkspaceTagsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAXES]: () => require('../../../../pages/workspace/taxes/WorkspaceTaxesPage').default,
+    [SCREENS_1.default.WORKSPACE.REPORTS]: () => require('../../../../pages/workspace/reports/WorkspaceReportsPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardPage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardsPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM]: () => require('../../../../pages/workspace/perDiem/WorkspacePerDiemPage').default,
+    [SCREENS_1.default.WORKSPACE.RECEIPT_PARTNERS]: () => require('../../../../pages/workspace/receiptPartners/WorkspaceReceiptPartnersPage').default,
+    [SCREENS_1.default.WORKSPACE.DISTANCE_RATES]: () => require('../../../../pages/workspace/distanceRates/PolicyDistanceRatesPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES]: () => require('../../../../pages/workspace/rules/PolicyRulesPage').default,
+};
 exports.CENTRAL_PANE_WORKSPACE_SCREENS = CENTRAL_PANE_WORKSPACE_SCREENS;
-var Split = (0, createSplitNavigator_1.default)();
-function WorkspaceSplitNavigator(_a) {
-    var route = _a.route, navigation = _a.navigation;
-    var splitNavigatorScreenOptions = (0, useSplitNavigatorScreenOptions_1.default)();
+const Split = (0, createSplitNavigator_1.default)();
+function WorkspaceSplitNavigator({ route, navigation }) {
+    const splitNavigatorScreenOptions = (0, useSplitNavigatorScreenOptions_1.default)();
     // This hook preloads the screens of adjacent tabs to make changing tabs faster.
     (0, usePreloadFullScreenNavigators_1.default)();
-    (0, react_1.useEffect)(function () {
-        var unsubscribe = navigation.addListener('transitionEnd', function () {
+    (0, react_1.useEffect)(() => {
+        const unsubscribe = navigation.addListener('transitionEnd', () => {
             // We want to call this function only once.
             unsubscribe();
             // If we open this screen from a different tab, then it won't have animation.
@@ -54,10 +52,7 @@ function WorkspaceSplitNavigator(_a) {
             <react_native_1.View style={{ flex: 1 }}>
                 <Split.Navigator persistentScreens={[SCREENS_1.default.WORKSPACE.INITIAL]} sidebarScreen={SCREENS_1.default.WORKSPACE.INITIAL} defaultCentralScreen={SCREENS_1.default.WORKSPACE.PROFILE} parentRoute={route} screenOptions={splitNavigatorScreenOptions.centralScreen}>
                     <Split.Screen name={SCREENS_1.default.WORKSPACE.INITIAL} getComponent={loadWorkspaceInitialPage} options={splitNavigatorScreenOptions.sidebarScreen}/>
-                    {Object.entries(CENTRAL_PANE_WORKSPACE_SCREENS).map(function (_a) {
-            var screenName = _a[0], componentGetter = _a[1];
-            return (<Split.Screen key={screenName} name={screenName} getComponent={componentGetter}/>);
-        })}
+                    {Object.entries(CENTRAL_PANE_WORKSPACE_SCREENS).map(([screenName, componentGetter]) => (<Split.Screen key={screenName} name={screenName} getComponent={componentGetter}/>))}
                 </Split.Navigator>
             </react_native_1.View>
         </FocusTrapForScreen_1.default>);

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var variables_1 = require("@styles/variables");
-var roundToNearestMultipleOfFour_1 = require("./roundToNearestMultipleOfFour");
+const variables_1 = require("@styles/variables");
+const roundToNearestMultipleOfFour_1 = require("./roundToNearestMultipleOfFour");
 /**
  * Compute the amount that the Context menu's Anchor needs to be horizontally shifted
  * in order to keep it from displaying in the gutters.
@@ -11,7 +11,7 @@ var roundToNearestMultipleOfFour_1 = require("./roundToNearestMultipleOfFour");
  * @param windowWidth - The width of the Window.
  */
 function computeHorizontalShift(anchorLeftEdge, menuWidth, windowWidth) {
-    var popoverRightEdge = anchorLeftEdge + menuWidth;
+    const popoverRightEdge = anchorLeftEdge + menuWidth;
     if (anchorLeftEdge < variables_1.default.gutterWidth) {
         // Anchor is in left gutter, shift right by a multiple of four.
         return (0, roundToNearestMultipleOfFour_1.default)(variables_1.default.gutterWidth - anchorLeftEdge);
@@ -33,10 +33,9 @@ function computeHorizontalShift(anchorLeftEdge, menuWidth, windowWidth) {
  * @param anchorHeight - The height of anchor component
  * @param shouldSwitchPositionIfOverflow -
  */
-function computeVerticalShift(anchorTopEdge, menuHeight, windowHeight, anchorHeight, shouldSwitchPositionIfOverflow) {
-    if (shouldSwitchPositionIfOverflow === void 0) { shouldSwitchPositionIfOverflow = false; }
-    var popoverBottomEdge = anchorTopEdge + menuHeight;
-    var canSwitchPosition = false;
+function computeVerticalShift(anchorTopEdge, menuHeight, windowHeight, anchorHeight, shouldSwitchPositionIfOverflow = false) {
+    const popoverBottomEdge = anchorTopEdge + menuHeight;
+    let canSwitchPosition = false;
     if (anchorTopEdge < 0) {
         // Anchor is in top window Edge, shift bottom by a multiple of four.
         canSwitchPosition = popoverBottomEdge + menuHeight + anchorHeight <= windowHeight;
@@ -50,5 +49,5 @@ function computeVerticalShift(anchorTopEdge, menuHeight, windowHeight, anchorHei
     // Anchor is not in the gutter, so no need to shift it vertically
     return 0;
 }
-var PopoverWithMeasuredContentUtils = { computeHorizontalShift: computeHorizontalShift, computeVerticalShift: computeVerticalShift };
+const PopoverWithMeasuredContentUtils = { computeHorizontalShift, computeVerticalShift };
 exports.default = PopoverWithMeasuredContentUtils;

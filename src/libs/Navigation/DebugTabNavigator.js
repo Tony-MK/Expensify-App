@@ -1,28 +1,17 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var stack_1 = require("@react-navigation/stack");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Expensicons = require("@components/Icon/Expensicons");
-var getBackground_1 = require("@components/TabSelector/getBackground");
-var getOpacity_1 = require("@components/TabSelector/getOpacity");
-var TabSelectorItem_1 = require("@components/TabSelector/TabSelectorItem");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
+const native_1 = require("@react-navigation/native");
+const stack_1 = require("@react-navigation/stack");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Expensicons = require("@components/Icon/Expensicons");
+const getBackground_1 = require("@components/TabSelector/getBackground");
+const getOpacity_1 = require("@components/TabSelector/getOpacity");
+const TabSelectorItem_1 = require("@components/TabSelector/TabSelectorItem");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
 function getIconAndTitle(route, translate) {
     switch (route) {
         case CONST_1.default.DEBUG.DETAILS:
@@ -36,58 +25,56 @@ function getIconAndTitle(route, translate) {
         case CONST_1.default.DEBUG.TRANSACTION_VIOLATIONS:
             return { icon: Expensicons.Exclamation, title: translate('debug.violations') };
         default:
-            throw new Error("Route ".concat(route, " has no icon nor title set."));
+            throw new Error(`Route ${route} has no icon nor title set.`);
     }
 }
-var StackNavigator = (0, stack_1.createStackNavigator)();
-function DebugTabNavigator(_a) {
-    var _b;
-    var id = _a.id, routes = _a.routes;
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var navigation = (0, native_1.useNavigation)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _c = (0, react_1.useState)((_b = routes.at(0)) === null || _b === void 0 ? void 0 : _b.name), currentTab = _c[0], setCurrentTab = _c[1];
-    var defaultAffectedAnimatedTabs = (0, react_1.useMemo)(function () { return Array.from({ length: routes.length }, function (v, i) { return i; }); }, [routes.length]);
-    var _d = (0, react_1.useState)(defaultAffectedAnimatedTabs), affectedAnimatedTabs = _d[0], setAffectedAnimatedTabs = _d[1];
-    var routeData = (0, native_1.useRoute)();
-    (0, react_1.useEffect)(function () {
+const StackNavigator = (0, stack_1.createStackNavigator)();
+function DebugTabNavigator({ id, routes }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const navigation = (0, native_1.useNavigation)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [currentTab, setCurrentTab] = (0, react_1.useState)(routes.at(0)?.name);
+    const defaultAffectedAnimatedTabs = (0, react_1.useMemo)(() => Array.from({ length: routes.length }, (v, i) => i), [routes.length]);
+    const [affectedAnimatedTabs, setAffectedAnimatedTabs] = (0, react_1.useState)(defaultAffectedAnimatedTabs);
+    const routeData = (0, native_1.useRoute)();
+    (0, react_1.useEffect)(() => {
         // It is required to wait transition end to reset affectedAnimatedTabs because tabs style is still animating during transition.
-        setTimeout(function () {
+        setTimeout(() => {
             setAffectedAnimatedTabs(defaultAffectedAnimatedTabs);
         }, CONST_1.default.ANIMATED_TRANSITION);
     }, [defaultAffectedAnimatedTabs, currentTab]);
     return (<>
             <react_native_1.View style={styles.tabSelector}>
-                {routes.map(function (route, index) {
-            var isActive = route.name === currentTab;
-            var activeOpacity = (0, getOpacity_1.default)({
+                {routes.map((route, index) => {
+            const isActive = route.name === currentTab;
+            const activeOpacity = (0, getOpacity_1.default)({
                 routesLength: routes.length,
                 tabIndex: index,
                 active: true,
                 affectedTabs: affectedAnimatedTabs,
                 position: undefined,
-                isActive: isActive,
+                isActive,
             });
-            var inactiveOpacity = (0, getOpacity_1.default)({
+            const inactiveOpacity = (0, getOpacity_1.default)({
                 routesLength: routes.length,
                 tabIndex: index,
                 active: false,
                 affectedTabs: affectedAnimatedTabs,
                 position: undefined,
-                isActive: isActive,
+                isActive,
             });
-            var backgroundColor = (0, getBackground_1.default)({
+            const backgroundColor = (0, getBackground_1.default)({
                 routesLength: routes.length,
                 tabIndex: index,
                 affectedTabs: affectedAnimatedTabs,
-                theme: theme,
+                theme,
                 position: undefined,
-                isActive: isActive,
+                isActive,
             });
-            var _a = getIconAndTitle(route.name, translate), icon = _a.icon, title = _a.title;
-            var onPress = function () {
-                navigation.navigate(routeData.name, __assign(__assign({}, routeData === null || routeData === void 0 ? void 0 : routeData.params), { screen: route.name }));
+            const { icon, title } = getIconAndTitle(route.name, translate);
+            const onPress = () => {
+                navigation.navigate(routeData.name, { ...routeData?.params, screen: route.name });
                 setCurrentTab(route.name);
             };
             return (<TabSelectorItem_1.default key={route.name} icon={icon} title={title} onPress={onPress} activeOpacity={activeOpacity} inactiveOpacity={inactiveOpacity} backgroundColor={backgroundColor} isActive={isActive}/>);
@@ -97,19 +84,18 @@ function DebugTabNavigator(_a) {
             animation: 'none',
             headerShown: false,
         }} screenListeners={{
-            state: function (e) {
-                var _a;
-                var event = e;
-                var state = event.data.state;
-                var routeNames = state.routeNames;
-                var newSelectedTab = (_a = state.routes.at(state.routes.length - 1)) === null || _a === void 0 ? void 0 : _a.name;
+            state: (e) => {
+                const event = e;
+                const state = event.data.state;
+                const routeNames = state.routeNames;
+                const newSelectedTab = state.routes.at(state.routes.length - 1)?.name;
                 if (currentTab === newSelectedTab || (currentTab && !routeNames.includes(currentTab))) {
                     return;
                 }
                 setCurrentTab(newSelectedTab);
             },
         }}>
-                {routes.map(function (route) { return (<StackNavigator.Screen key={route.name} name={route.name} component={route.component}/>); })}
+                {routes.map((route) => (<StackNavigator.Screen key={route.name} name={route.name} component={route.component}/>))}
             </StackNavigator.Navigator>
         </>);
 }

@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shouldOpenTravelDotLinkWeb = exports.openTravelDotLink = void 0;
-var Link_1 = require("@libs/actions/Link");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ROUTES_1 = require("@src/ROUTES");
-var openTravelDotLink = function (activePolicyID) {
-    var _a, _b;
-    (_b = (_a = (0, Link_1.openTravelDotLink)(activePolicyID)) === null || _a === void 0 ? void 0 : _a.then(function () { })) === null || _b === void 0 ? void 0 : _b.catch(function () {
+const Link_1 = require("@libs/actions/Link");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ROUTES_1 = require("@src/ROUTES");
+const openTravelDotLink = (activePolicyID) => {
+    (0, Link_1.openTravelDotLink)(activePolicyID)
+        ?.then(() => { })
+        ?.catch(() => {
         Navigation_1.default.navigate(ROUTES_1.default.TRAVEL_MY_TRIPS);
     });
 };
 exports.openTravelDotLink = openTravelDotLink;
-var shouldOpenTravelDotLinkWeb = function () { return true; };
+const shouldOpenTravelDotLinkWeb = () => true;
 exports.shouldOpenTravelDotLinkWeb = shouldOpenTravelDotLinkWeb;

@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var format = require("./format");
-var printRegularLine = function (entry) {
-    console.debug(" - ".concat(entry.name, ": ").concat(format.formatMetricDiffChange(entry)));
+const format = require("./format");
+const printRegularLine = (entry) => {
+    console.debug(` - ${entry.name}: ${format.formatMetricDiffChange(entry)}`);
 };
 /**
  * Prints the result simply to console.
  */
-exports.default = (function (data, skippedTests) {
+exports.default = (data, skippedTests) => {
     // No need to log errors or warnings as these were be logged on the fly
     console.debug('');
     console.debug('❇️  Performance comparison results:');
@@ -17,6 +17,6 @@ exports.default = (function (data, skippedTests) {
     data.meaningless.forEach(printRegularLine);
     console.debug('');
     if (skippedTests.length > 0) {
-        console.debug("\u26A0\uFE0F Some tests did not pass successfully, so some results are omitted from final report: ".concat(skippedTests.join(', ')));
+        console.debug(`⚠️ Some tests did not pass successfully, so some results are omitted from final report: ${skippedTests.join(', ')}`);
     }
-});
+};

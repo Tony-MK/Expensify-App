@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var EReceipt_1 = require("./EReceipt");
-var eReceiptAspectRatio = variables_1.default.eReceiptBGHWidth / variables_1.default.eReceiptBGHeight;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const EReceipt_1 = require("./EReceipt");
+const eReceiptAspectRatio = variables_1.default.eReceiptBGHWidth / variables_1.default.eReceiptBGHeight;
 function EReceiptWithSizeCalculation(props) {
-    var _a = (0, react_1.useState)(0), scaleFactor = _a[0], setScaleFactor = _a[1];
-    var styles = (0, useThemeStyles_1.default)();
-    var onLayout = function (e) {
-        var width = e.nativeEvent.layout.width;
+    const [scaleFactor, setScaleFactor] = (0, react_1.useState)(0);
+    const styles = (0, useThemeStyles_1.default)();
+    const onLayout = (e) => {
+        const { width } = e.nativeEvent.layout;
         setScaleFactor(width / variables_1.default.eReceiptBGHWidth);
     };
     return scaleFactor ? (<react_native_1.View style={[styles.overflowHidden, styles.w100, styles.h100, styles.userSelectNone]}>
@@ -20,7 +20,7 @@ function EReceiptWithSizeCalculation(props) {
     style={[
             styles.w100,
             styles.h100,
-            { transform: "scale(".concat(scaleFactor, ") ").concat(styles.translateZ0.transform), transformOrigin: 'top left' },
+            { transform: `scale(${scaleFactor}) ${styles.translateZ0.transform}`, transformOrigin: 'top left' },
             props.shouldUseAspectRatio && { aspectRatio: eReceiptAspectRatio },
         ]}>
                 <EReceipt_1.default 

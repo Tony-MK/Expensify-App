@@ -1,115 +1,112 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useSearchTypeMenu;
-var react_1 = require("react");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var ThreeDotsMenu_1 = require("@components/ThreeDotsMenu");
-var Search_1 = require("@libs/actions/Search");
-var CardUtils_1 = require("@libs/CardUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
-var SearchUIUtils_1 = require("@libs/SearchUIUtils");
-var variables_1 = require("@styles/variables");
-var Expensicons = require("@src/components/Icon/Expensicons");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var useDeleteSavedSearch_1 = require("./useDeleteSavedSearch");
-var useLocalize_1 = require("./useLocalize");
-var useOnyx_1 = require("./useOnyx");
-var useSearchTypeMenuSections_1 = require("./useSearchTypeMenuSections");
-var useSingleExecution_1 = require("./useSingleExecution");
-var useTheme_1 = require("./useTheme");
-var useThemeStyles_1 = require("./useThemeStyles");
-var useWindowDimensions_1 = require("./useWindowDimensions");
+const react_1 = require("react");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const ThreeDotsMenu_1 = require("@components/ThreeDotsMenu");
+const Search_1 = require("@libs/actions/Search");
+const CardUtils_1 = require("@libs/CardUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
+const SearchUIUtils_1 = require("@libs/SearchUIUtils");
+const variables_1 = require("@styles/variables");
+const Expensicons = require("@src/components/Icon/Expensicons");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const useDeleteSavedSearch_1 = require("./useDeleteSavedSearch");
+const useLocalize_1 = require("./useLocalize");
+const useOnyx_1 = require("./useOnyx");
+const useSearchTypeMenuSections_1 = require("./useSearchTypeMenuSections");
+const useSingleExecution_1 = require("./useSingleExecution");
+const useTheme_1 = require("./useTheme");
+const useThemeStyles_1 = require("./useThemeStyles");
+const useWindowDimensions_1 = require("./useWindowDimensions");
 function useSearchTypeMenu(queryJSON) {
-    var hash = queryJSON.hash, similarSearchHash = queryJSON.similarSearchHash;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var singleExecution = (0, useSingleExecution_1.default)().singleExecution;
-    var windowHeight = (0, useWindowDimensions_1.default)().windowHeight;
-    var translate = (0, useLocalize_1.default)().translate;
-    var typeMenuSections = (0, useSearchTypeMenuSections_1.default)().typeMenuSections;
-    var _a = (0, useDeleteSavedSearch_1.default)(), showDeleteModal = _a.showDeleteModal, DeleteConfirmModal = _a.DeleteConfirmModal;
-    var allPolicies = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true })[0];
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var _b = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: true })[0], reports = _b === void 0 ? (0, EmptyObject_1.getEmptyObject)() : _b;
-    var taxRates = (0, PolicyUtils_1.getAllTaxRates)();
-    var userCardList = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: true })[0];
-    var workspaceCardFeeds = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: true })[0];
-    var savedSearches = (0, useOnyx_1.default)(ONYXKEYS_1.default.SAVED_SEARCHES, { canBeMissing: true })[0];
-    var _c = (0, react_1.useState)(false), isPopoverVisible = _c[0], setIsPopoverVisible = _c[1];
-    var allCards = (0, react_1.useMemo)(function () { return (0, CardUtils_1.mergeCardListWithWorkspaceFeeds)(workspaceCardFeeds !== null && workspaceCardFeeds !== void 0 ? workspaceCardFeeds : CONST_1.default.EMPTY_OBJECT, userCardList); }, [userCardList, workspaceCardFeeds]);
-    var allFeeds = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER, { canBeMissing: true })[0];
+    const { hash, similarSearchHash } = queryJSON;
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { singleExecution } = (0, useSingleExecution_1.default)();
+    const { windowHeight } = (0, useWindowDimensions_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { typeMenuSections } = (0, useSearchTypeMenuSections_1.default)();
+    const { showDeleteModal, DeleteConfirmModal } = (0, useDeleteSavedSearch_1.default)();
+    const [allPolicies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true });
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const [reports = (0, EmptyObject_1.getEmptyObject)()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: true });
+    const taxRates = (0, PolicyUtils_1.getAllTaxRates)();
+    const [userCardList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: true });
+    const [workspaceCardFeeds] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: true });
+    const [savedSearches] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SAVED_SEARCHES, { canBeMissing: true });
+    const [isPopoverVisible, setIsPopoverVisible] = (0, react_1.useState)(false);
+    const allCards = (0, react_1.useMemo)(() => (0, CardUtils_1.mergeCardListWithWorkspaceFeeds)(workspaceCardFeeds ?? CONST_1.default.EMPTY_OBJECT, userCardList), [userCardList, workspaceCardFeeds]);
+    const [allFeeds] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER, { canBeMissing: true });
     // this is a performance fix, rendering popover menu takes a lot of time and we don't need this component initially, that's why we postpone rendering it until everything else is rendered
-    var _d = (0, react_1.useState)(true), delayPopoverMenuFirstRender = _d[0], setDelayPopoverMenuFirstRender = _d[1];
-    (0, react_1.useEffect)(function () {
-        setTimeout(function () {
+    const [delayPopoverMenuFirstRender, setDelayPopoverMenuFirstRender] = (0, react_1.useState)(true);
+    (0, react_1.useEffect)(() => {
+        setTimeout(() => {
             setDelayPopoverMenuFirstRender(false);
         }, 100);
     }, []);
-    var closeMenu = (0, react_1.useCallback)(function () {
+    const closeMenu = (0, react_1.useCallback)(() => {
         setIsPopoverVisible(false);
     }, []);
-    var getOverflowMenu = (0, react_1.useCallback)(function (itemName, itemHash, itemQuery) { return (0, SearchUIUtils_1.getOverflowMenu)(itemName, itemHash, itemQuery, showDeleteModal, true, closeMenu); }, [showDeleteModal, closeMenu]);
-    var _e = (0, react_1.useMemo)(function () {
-        var savedSearchFocused = false;
+    const getOverflowMenu = (0, react_1.useCallback)((itemName, itemHash, itemQuery) => (0, SearchUIUtils_1.getOverflowMenu)(itemName, itemHash, itemQuery, showDeleteModal, true, closeMenu), [showDeleteModal, closeMenu]);
+    const { savedSearchesMenuItems, isSavedSearchActive } = (0, react_1.useMemo)(() => {
+        let savedSearchFocused = false;
         if (!savedSearches) {
             return {
                 isSavedSearchActive: false,
                 savedSearchesMenuItems: [],
             };
         }
-        var menuItems = Object.entries(savedSearches).map(function (_a, index) {
-            var _b, _c, _d, _e, _f;
-            var key = _a[0], item = _a[1];
-            var savedSearchTitle = item.name;
+        const menuItems = Object.entries(savedSearches).map(([key, item], index) => {
+            let savedSearchTitle = item.name;
             if (savedSearchTitle === item.query) {
-                var jsonQuery = (_b = (0, SearchQueryUtils_1.buildSearchQueryJSON)(item.query)) !== null && _b !== void 0 ? _b : {};
+                const jsonQuery = (0, SearchQueryUtils_1.buildSearchQueryJSON)(item.query) ?? {};
                 savedSearchTitle = (0, SearchQueryUtils_1.buildUserReadableQueryString)(jsonQuery, personalDetails, reports, taxRates, allCards, allFeeds, allPolicies);
             }
-            var isItemFocused = Number(key) === hash;
-            var baseMenuItem = (0, SearchUIUtils_1.createBaseSavedSearchMenuItem)(item, key, index, savedSearchTitle, isItemFocused);
+            const isItemFocused = Number(key) === hash;
+            const baseMenuItem = (0, SearchUIUtils_1.createBaseSavedSearchMenuItem)(item, key, index, savedSearchTitle, isItemFocused);
             savedSearchFocused || (savedSearchFocused = isItemFocused);
-            return __assign(__assign({}, baseMenuItem), { onSelected: function () {
-                    var _a;
+            return {
+                ...baseMenuItem,
+                onSelected: () => {
                     (0, Search_1.clearAllFilters)();
-                    Navigation_1.default.navigate(ROUTES_1.default.SEARCH_ROOT.getRoute({ query: (_a = item === null || item === void 0 ? void 0 : item.query) !== null && _a !== void 0 ? _a : '', name: item === null || item === void 0 ? void 0 : item.name }));
-                }, rightComponent: (<ThreeDotsMenu_1.default menuItems={getOverflowMenu((_c = baseMenuItem.title) !== null && _c !== void 0 ? _c : '', Number((_d = baseMenuItem.hash) !== null && _d !== void 0 ? _d : ''), (_e = item.query) !== null && _e !== void 0 ? _e : '')} anchorPosition={{ horizontal: 0, vertical: 380 }} anchorAlignment={{
+                    Navigation_1.default.navigate(ROUTES_1.default.SEARCH_ROOT.getRoute({ query: item?.query ?? '', name: item?.name }));
+                },
+                rightComponent: (<ThreeDotsMenu_1.default menuItems={getOverflowMenu(baseMenuItem.title ?? '', Number(baseMenuItem.hash ?? ''), item.query ?? '')} anchorPosition={{ horizontal: 0, vertical: 380 }} anchorAlignment={{
                         horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.RIGHT,
                         vertical: CONST_1.default.MODAL.ANCHOR_ORIGIN_VERTICAL.TOP,
-                    }} disabled={item.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE}/>), isSelected: false, shouldCallAfterModalHide: true, icon: Expensicons.Bookmark, iconWidth: variables_1.default.iconSizeNormal, iconHeight: variables_1.default.iconSizeNormal, shouldIconUseAutoWidthStyle: false, text: (_f = baseMenuItem.title) !== null && _f !== void 0 ? _f : '' });
+                    }} disabled={item.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE}/>),
+                isSelected: false,
+                shouldCallAfterModalHide: true,
+                icon: Expensicons.Bookmark,
+                iconWidth: variables_1.default.iconSizeNormal,
+                iconHeight: variables_1.default.iconSizeNormal,
+                shouldIconUseAutoWidthStyle: false,
+                text: baseMenuItem.title ?? '',
+            };
         });
         return {
             savedSearchesMenuItems: menuItems,
             isSavedSearchActive: savedSearchFocused,
         };
-    }, [savedSearches, hash, getOverflowMenu, personalDetails, reports, taxRates, allCards, allFeeds, allPolicies]), savedSearchesMenuItems = _e.savedSearchesMenuItems, isSavedSearchActive = _e.isSavedSearchActive;
-    var activeItemIndex = (0, react_1.useMemo)(function () {
+    }, [savedSearches, hash, getOverflowMenu, personalDetails, reports, taxRates, allCards, allFeeds, allPolicies]);
+    const activeItemIndex = (0, react_1.useMemo)(() => {
         // If we have a suggested search, then none of the menu items are active
         if (isSavedSearchActive) {
             return -1;
         }
-        var flattenedMenuItems = typeMenuSections.map(function (section) { return section.menuItems; }).flat();
-        return flattenedMenuItems.findIndex(function (item) { return item.similarSearchHash === similarSearchHash; });
+        const flattenedMenuItems = typeMenuSections.map((section) => section.menuItems).flat();
+        return flattenedMenuItems.findIndex((item) => item.similarSearchHash === similarSearchHash);
     }, [similarSearchHash, isSavedSearchActive, typeMenuSections]);
-    var popoverMenuItems = (0, react_1.useMemo)(function () {
+    const popoverMenuItems = (0, react_1.useMemo)(() => {
         return typeMenuSections
-            .map(function (section, sectionIndex) {
-            var sectionItems = [
+            .map((section, sectionIndex) => {
+            const sectionItems = [
                 {
                     shouldShowBasicTitle: true,
                     text: translate(section.translationPath),
@@ -120,35 +117,46 @@ function useSearchTypeMenu(queryJSON) {
                 },
             ];
             if (section.translationPath === 'search.savedSearchesMenuItemTitle') {
-                sectionItems.push.apply(sectionItems, savedSearchesMenuItems);
+                sectionItems.push(...savedSearchesMenuItems);
             }
             else {
-                section.menuItems.forEach(function (item, itemIndex) {
-                    var previousItemCount = typeMenuSections.slice(0, sectionIndex).reduce(function (acc, sec) { return acc + sec.menuItems.length; }, 0);
-                    var flattenedIndex = previousItemCount + itemIndex;
-                    var isSelected = flattenedIndex === activeItemIndex;
-                    sectionItems.push(__assign(__assign({ text: translate(item.translationPath), isSelected: isSelected, icon: item.icon }, (isSelected ? { iconFill: theme.iconSuccessFill } : {})), { iconRight: Expensicons.Checkmark, shouldShowRightIcon: isSelected, success: isSelected, containerStyle: isSelected ? [{ backgroundColor: theme.border }] : undefined, shouldCallAfterModalHide: true, onSelected: singleExecution(function () {
+                section.menuItems.forEach((item, itemIndex) => {
+                    const previousItemCount = typeMenuSections.slice(0, sectionIndex).reduce((acc, sec) => acc + sec.menuItems.length, 0);
+                    const flattenedIndex = previousItemCount + itemIndex;
+                    const isSelected = flattenedIndex === activeItemIndex;
+                    sectionItems.push({
+                        text: translate(item.translationPath),
+                        isSelected,
+                        icon: item.icon,
+                        ...(isSelected ? { iconFill: theme.iconSuccessFill } : {}),
+                        iconRight: Expensicons.Checkmark,
+                        shouldShowRightIcon: isSelected,
+                        success: isSelected,
+                        containerStyle: isSelected ? [{ backgroundColor: theme.border }] : undefined,
+                        shouldCallAfterModalHide: true,
+                        onSelected: singleExecution(() => {
                             (0, Search_1.clearAllFilters)();
                             Navigation_1.default.navigate(ROUTES_1.default.SEARCH_ROOT.getRoute({ query: item.searchQuery }));
-                        }) }));
+                        }),
+                    });
                 });
             }
             return sectionItems;
         })
             .flat();
     }, [typeMenuSections, savedSearchesMenuItems, translate, styles.textSupporting, activeItemIndex, theme.iconSuccessFill, theme.border, singleExecution]);
-    var openMenu = (0, react_1.useCallback)(function () {
+    const openMenu = (0, react_1.useCallback)(() => {
         setIsPopoverVisible(true);
     }, []);
     return {
-        isPopoverVisible: isPopoverVisible,
-        delayPopoverMenuFirstRender: delayPopoverMenuFirstRender,
-        openMenu: openMenu,
-        closeMenu: closeMenu,
+        isPopoverVisible,
+        delayPopoverMenuFirstRender,
+        openMenu,
+        closeMenu,
         allMenuItems: popoverMenuItems,
-        DeleteConfirmModal: DeleteConfirmModal,
-        theme: theme,
-        styles: styles,
-        windowHeight: windowHeight,
+        DeleteConfirmModal,
+        theme,
+        styles,
+        windowHeight,
     };
 }

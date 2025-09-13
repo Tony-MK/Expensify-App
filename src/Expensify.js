@@ -1,61 +1,60 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_hybrid_app_1 = require("@expensify/react-native-hybrid-app");
-var expo_av_1 = require("expo-av");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var ConfirmModal_1 = require("./components/ConfirmModal");
-var DeeplinkWrapper_1 = require("./components/DeeplinkWrapper");
-var EmojiPicker_1 = require("./components/EmojiPicker/EmojiPicker");
-var GrowlNotification_1 = require("./components/GrowlNotification");
-var InitialURLContextProvider_1 = require("./components/InitialURLContextProvider");
-var AppleAuthWrapper_1 = require("./components/SignInButtons/AppleAuthWrapper");
-var SplashScreenHider_1 = require("./components/SplashScreenHider");
-var UpdateAppModal_1 = require("./components/UpdateAppModal");
-var CONFIG_1 = require("./CONFIG");
-var CONST_1 = require("./CONST");
-var useDebugShortcut_1 = require("./hooks/useDebugShortcut");
-var useIsAuthenticated_1 = require("./hooks/useIsAuthenticated");
-var useLocalize_1 = require("./hooks/useLocalize");
-var useOnyx_1 = require("./hooks/useOnyx");
-var usePriorityChange_1 = require("./hooks/usePriorityChange");
-var App_1 = require("./libs/actions/App");
-var Delegate_1 = require("./libs/actions/Delegate");
-var EmojiPickerAction = require("./libs/actions/EmojiPickerAction");
-var Report = require("./libs/actions/Report");
-var User = require("./libs/actions/User");
-var ActiveClientManager = require("./libs/ActiveClientManager");
-var Browser_1 = require("./libs/Browser");
-var Environment = require("./libs/Environment/Environment");
-var Fullstory_1 = require("./libs/Fullstory");
-var Growl_1 = require("./libs/Growl");
-var Log_1 = require("./libs/Log");
-var migrateOnyx_1 = require("./libs/migrateOnyx");
-var Navigation_1 = require("./libs/Navigation/Navigation");
-var NavigationRoot_1 = require("./libs/Navigation/NavigationRoot");
-var NetworkConnection_1 = require("./libs/NetworkConnection");
-var PushNotification_1 = require("./libs/Notification/PushNotification");
+const react_native_hybrid_app_1 = require("@expensify/react-native-hybrid-app");
+const expo_av_1 = require("expo-av");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const ConfirmModal_1 = require("./components/ConfirmModal");
+const DeeplinkWrapper_1 = require("./components/DeeplinkWrapper");
+const EmojiPicker_1 = require("./components/EmojiPicker/EmojiPicker");
+const GrowlNotification_1 = require("./components/GrowlNotification");
+const InitialURLContextProvider_1 = require("./components/InitialURLContextProvider");
+const AppleAuthWrapper_1 = require("./components/SignInButtons/AppleAuthWrapper");
+const SplashScreenHider_1 = require("./components/SplashScreenHider");
+const UpdateAppModal_1 = require("./components/UpdateAppModal");
+const CONFIG_1 = require("./CONFIG");
+const CONST_1 = require("./CONST");
+const useDebugShortcut_1 = require("./hooks/useDebugShortcut");
+const useIsAuthenticated_1 = require("./hooks/useIsAuthenticated");
+const useLocalize_1 = require("./hooks/useLocalize");
+const useOnyx_1 = require("./hooks/useOnyx");
+const usePriorityChange_1 = require("./hooks/usePriorityChange");
+const App_1 = require("./libs/actions/App");
+const Delegate_1 = require("./libs/actions/Delegate");
+const EmojiPickerAction = require("./libs/actions/EmojiPickerAction");
+const Report = require("./libs/actions/Report");
+const User = require("./libs/actions/User");
+const ActiveClientManager = require("./libs/ActiveClientManager");
+const Browser_1 = require("./libs/Browser");
+const Environment = require("./libs/Environment/Environment");
+const Fullstory_1 = require("./libs/Fullstory");
+const Growl_1 = require("./libs/Growl");
+const Log_1 = require("./libs/Log");
+const migrateOnyx_1 = require("./libs/migrateOnyx");
+const Navigation_1 = require("./libs/Navigation/Navigation");
+const NavigationRoot_1 = require("./libs/Navigation/NavigationRoot");
+const NetworkConnection_1 = require("./libs/NetworkConnection");
+const PushNotification_1 = require("./libs/Notification/PushNotification");
 require("./libs/Notification/PushNotification/subscribeToPushNotifications");
-var setCrashlyticsUserId_1 = require("./libs/setCrashlyticsUserId");
-var StartupTimer_1 = require("./libs/StartupTimer");
+const setCrashlyticsUserId_1 = require("./libs/setCrashlyticsUserId");
+const StartupTimer_1 = require("./libs/StartupTimer");
 // This lib needs to be imported, but it has nothing to export since all it contains is an Onyx connection
 require("./libs/UnreadIndicatorUpdater");
-var Visibility_1 = require("./libs/Visibility");
-var ONYXKEYS_1 = require("./ONYXKEYS");
-var PopoverReportActionContextMenu_1 = require("./pages/home/report/ContextMenu/PopoverReportActionContextMenu");
-var ReportActionContextMenu = require("./pages/home/report/ContextMenu/ReportActionContextMenu");
-var SplashScreenStateContext_1 = require("./SplashScreenStateContext");
-react_native_onyx_1.default.registerLogger(function (_a) {
-    var level = _a.level, message = _a.message, parameters = _a.parameters;
+const Visibility_1 = require("./libs/Visibility");
+const ONYXKEYS_1 = require("./ONYXKEYS");
+const PopoverReportActionContextMenu_1 = require("./pages/home/report/ContextMenu/PopoverReportActionContextMenu");
+const ReportActionContextMenu = require("./pages/home/report/ContextMenu/ReportActionContextMenu");
+const SplashScreenStateContext_1 = require("./SplashScreenStateContext");
+react_native_onyx_1.default.registerLogger(({ level, message, parameters }) => {
     if (level === 'alert') {
         Log_1.default.alert(message, parameters);
         console.error(message);
         // useOnyx() calls with "canBeMissing" config set to false will display a visual alert in dev environment
         // when they don't return data.
-        var shouldShowAlert = typeof parameters === 'object' && !Array.isArray(parameters) && 'showAlert' in parameters && 'key' in parameters;
+        const shouldShowAlert = typeof parameters === 'object' && !Array.isArray(parameters) && 'showAlert' in parameters && 'key' in parameters;
         if (Environment.isDevelopment() && shouldShowAlert) {
-            Growl_1.default.error("".concat(message, " Key: ").concat(parameters.key), 10000);
+            Growl_1.default.error(`${message} Key: ${parameters.key}`, 10000);
         }
     }
     else if (level === 'hmmm') {
@@ -66,51 +65,50 @@ react_native_onyx_1.default.registerLogger(function (_a) {
     }
 });
 function Expensify() {
-    var _a, _b;
-    var appStateChangeListener = (0, react_1.useRef)(null);
-    var _c = (0, react_1.useState)(false), isNavigationReady = _c[0], setIsNavigationReady = _c[1];
-    var _d = (0, react_1.useState)(false), isOnyxMigrated = _d[0], setIsOnyxMigrated = _d[1];
-    var _e = (0, react_1.useContext)(SplashScreenStateContext_1.default), splashScreenState = _e.splashScreenState, setSplashScreenState = _e.setSplashScreenState;
-    var _f = (0, react_1.useState)(false), hasAttemptedToOpenPublicRoom = _f[0], setAttemptedToOpenPublicRoom = _f[1];
-    var _g = (0, useLocalize_1.default)(), translate = _g.translate, preferredLocale = _g.preferredLocale;
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true })[0];
-    var lastRoute = (0, useOnyx_1.default)(ONYXKEYS_1.default.LAST_ROUTE, { canBeMissing: true })[0];
-    var userMetadata = (0, useOnyx_1.default)(ONYXKEYS_1.default.USER_METADATA, { canBeMissing: true })[0];
-    var _h = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_CHECKING_PUBLIC_ROOM, { initWithStoredValues: false, canBeMissing: true })[0], isCheckingPublicRoom = _h === void 0 ? true : _h;
-    var updateAvailable = (0, useOnyx_1.default)(ONYXKEYS_1.default.UPDATE_AVAILABLE, { initWithStoredValues: false, canBeMissing: true })[0];
-    var updateRequired = (0, useOnyx_1.default)(ONYXKEYS_1.default.UPDATE_REQUIRED, { initWithStoredValues: false, canBeMissing: true })[0];
-    var isSidebarLoaded = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SIDEBAR_LOADED, { canBeMissing: true })[0];
-    var screenShareRequest = (0, useOnyx_1.default)(ONYXKEYS_1.default.SCREEN_SHARE_REQUEST, { canBeMissing: true })[0];
-    var lastVisitedPath = (0, useOnyx_1.default)(ONYXKEYS_1.default.LAST_VISITED_PATH, { canBeMissing: true })[0];
-    var currentOnboardingPurposeSelected = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true })[0];
-    var currentOnboardingCompanySize = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_COMPANY_SIZE, { canBeMissing: true })[0];
-    var onboardingInitialPath = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_LAST_VISITED_PATH, { canBeMissing: true })[0];
-    var allReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false })[0];
+    const appStateChangeListener = (0, react_1.useRef)(null);
+    const [isNavigationReady, setIsNavigationReady] = (0, react_1.useState)(false);
+    const [isOnyxMigrated, setIsOnyxMigrated] = (0, react_1.useState)(false);
+    const { splashScreenState, setSplashScreenState } = (0, react_1.useContext)(SplashScreenStateContext_1.default);
+    const [hasAttemptedToOpenPublicRoom, setAttemptedToOpenPublicRoom] = (0, react_1.useState)(false);
+    const { translate, preferredLocale } = (0, useLocalize_1.default)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: true });
+    const [lastRoute] = (0, useOnyx_1.default)(ONYXKEYS_1.default.LAST_ROUTE, { canBeMissing: true });
+    const [userMetadata] = (0, useOnyx_1.default)(ONYXKEYS_1.default.USER_METADATA, { canBeMissing: true });
+    const [isCheckingPublicRoom = true] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_CHECKING_PUBLIC_ROOM, { initWithStoredValues: false, canBeMissing: true });
+    const [updateAvailable] = (0, useOnyx_1.default)(ONYXKEYS_1.default.UPDATE_AVAILABLE, { initWithStoredValues: false, canBeMissing: true });
+    const [updateRequired] = (0, useOnyx_1.default)(ONYXKEYS_1.default.UPDATE_REQUIRED, { initWithStoredValues: false, canBeMissing: true });
+    const [isSidebarLoaded] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SIDEBAR_LOADED, { canBeMissing: true });
+    const [screenShareRequest] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SCREEN_SHARE_REQUEST, { canBeMissing: true });
+    const [lastVisitedPath] = (0, useOnyx_1.default)(ONYXKEYS_1.default.LAST_VISITED_PATH, { canBeMissing: true });
+    const [currentOnboardingPurposeSelected] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true });
+    const [currentOnboardingCompanySize] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_COMPANY_SIZE, { canBeMissing: true });
+    const [onboardingInitialPath] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_LAST_VISITED_PATH, { canBeMissing: true });
+    const [allReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false });
     (0, useDebugShortcut_1.default)();
     (0, usePriorityChange_1.default)();
-    var _j = (0, react_1.useState)(null), initialUrl = _j[0], setInitialUrl = _j[1];
-    var setIsAuthenticatedAtStartup = (0, react_1.useContext)(InitialURLContextProvider_1.InitialURLContext).setIsAuthenticatedAtStartup;
-    (0, react_1.useEffect)(function () {
+    const [initialUrl, setInitialUrl] = (0, react_1.useState)(null);
+    const { setIsAuthenticatedAtStartup } = (0, react_1.useContext)(InitialURLContextProvider_1.InitialURLContext);
+    (0, react_1.useEffect)(() => {
         if (isCheckingPublicRoom) {
             return;
         }
         setAttemptedToOpenPublicRoom(true);
     }, [isCheckingPublicRoom]);
-    var isAuthenticated = (0, useIsAuthenticated_1.default)();
-    var autoAuthState = (0, react_1.useMemo)(function () { var _a; return (_a = session === null || session === void 0 ? void 0 : session.autoAuthState) !== null && _a !== void 0 ? _a : ''; }, [session]);
-    var isSplashReadyToBeHidden = splashScreenState === CONST_1.default.BOOT_SPLASH_STATE.READY_TO_BE_HIDDEN;
-    var isSplashVisible = splashScreenState === CONST_1.default.BOOT_SPLASH_STATE.VISIBLE;
-    var shouldInit = isNavigationReady && hasAttemptedToOpenPublicRoom && !!preferredLocale;
-    var shouldHideSplash = shouldInit && (CONFIG_1.default.IS_HYBRID_APP ? isSplashReadyToBeHidden : isSplashVisible);
-    (0, react_1.useEffect)(function () {
+    const isAuthenticated = (0, useIsAuthenticated_1.default)();
+    const autoAuthState = (0, react_1.useMemo)(() => session?.autoAuthState ?? '', [session]);
+    const isSplashReadyToBeHidden = splashScreenState === CONST_1.default.BOOT_SPLASH_STATE.READY_TO_BE_HIDDEN;
+    const isSplashVisible = splashScreenState === CONST_1.default.BOOT_SPLASH_STATE.VISIBLE;
+    const shouldInit = isNavigationReady && hasAttemptedToOpenPublicRoom && !!preferredLocale;
+    const shouldHideSplash = shouldInit && (CONFIG_1.default.IS_HYBRID_APP ? isSplashReadyToBeHidden : isSplashVisible);
+    (0, react_1.useEffect)(() => {
         if (!shouldInit || splashScreenState !== CONST_1.default.BOOT_SPLASH_STATE.HIDDEN) {
             return;
         }
         // Clears OldDot UI after sign-out, if there's no OldDot UI left it has no effect.
         react_native_hybrid_app_1.default.clearOldDotAfterSignOut();
     }, [shouldInit, splashScreenState]);
-    var initializeClient = function () {
+    const initializeClient = () => {
         if (!Visibility_1.default.isVisible()) {
             return;
         }
@@ -124,51 +122,51 @@ function Expensify() {
             ActiveClientManager.init();
         }
     };
-    var setNavigationReady = (0, react_1.useCallback)(function () {
+    const setNavigationReady = (0, react_1.useCallback)(() => {
         setIsNavigationReady(true);
         // Navigate to any pending routes now that the NavigationContainer is ready
         Navigation_1.default.setIsNavigationReady();
     }, []);
-    var onSplashHide = (0, react_1.useCallback)(function () {
+    const onSplashHide = (0, react_1.useCallback)(() => {
         setSplashScreenState(CONST_1.default.BOOT_SPLASH_STATE.HIDDEN);
     }, [setSplashScreenState]);
-    (0, react_1.useLayoutEffect)(function () {
+    (0, react_1.useLayoutEffect)(() => {
         // Initialize this client as being an active client
         ActiveClientManager.init();
         // Used for the offline indicator appearing when someone is offline
-        var unsubscribeNetInfo = NetworkConnection_1.default.subscribeToNetInfo(session === null || session === void 0 ? void 0 : session.accountID);
+        const unsubscribeNetInfo = NetworkConnection_1.default.subscribeToNetInfo(session?.accountID);
         return unsubscribeNetInfo;
-    }, [session === null || session === void 0 ? void 0 : session.accountID]);
-    (0, react_1.useEffect)(function () {
+    }, [session?.accountID]);
+    (0, react_1.useEffect)(() => {
         // Initialize Fullstory lib
         Fullstory_1.default.init(userMetadata);
     }, [userMetadata]);
     // Log the platform and config to debug .env issues
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         Log_1.default.info('App launched', false, { Platform: react_native_1.Platform, CONFIG: CONFIG_1.default });
     }, []);
-    (0, react_1.useEffect)(function () {
-        setTimeout(function () {
-            var appState = react_native_1.AppState.currentState;
-            Log_1.default.info('[BootSplash] splash screen status', false, { appState: appState, splashScreenState: splashScreenState });
+    (0, react_1.useEffect)(() => {
+        setTimeout(() => {
+            const appState = react_native_1.AppState.currentState;
+            Log_1.default.info('[BootSplash] splash screen status', false, { appState, splashScreenState });
             if (splashScreenState === CONST_1.default.BOOT_SPLASH_STATE.VISIBLE) {
-                var propsToLog = {
-                    isCheckingPublicRoom: isCheckingPublicRoom,
-                    updateRequired: updateRequired,
-                    updateAvailable: updateAvailable,
-                    isSidebarLoaded: isSidebarLoaded,
-                    screenShareRequest: screenShareRequest,
-                    isAuthenticated: isAuthenticated,
-                    lastVisitedPath: lastVisitedPath,
+                const propsToLog = {
+                    isCheckingPublicRoom,
+                    updateRequired,
+                    updateAvailable,
+                    isSidebarLoaded,
+                    screenShareRequest,
+                    isAuthenticated,
+                    lastVisitedPath,
                 };
-                Log_1.default.alert('[BootSplash] splash screen is still visible', { propsToLog: propsToLog }, false);
+                Log_1.default.alert('[BootSplash] splash screen is still visible', { propsToLog }, false);
             }
         }, 30 * 1000);
         // This timer is set in the native layer when launching the app and we stop it here so we can measure how long
         // it took for the main app itself to load.
         StartupTimer_1.default.stop();
         // Run any Onyx schema migrations and then continue loading the main app
-        (0, migrateOnyx_1.default)().then(function () {
+        (0, migrateOnyx_1.default)().then(() => {
             // In case of a crash that led to disconnection, we want to remove all the push notifications.
             if (!isAuthenticated) {
                 PushNotification_1.default.clearNotifications();
@@ -178,18 +176,18 @@ function Expensify() {
         appStateChangeListener.current = react_native_1.AppState.addEventListener('change', initializeClient);
         setIsAuthenticatedAtStartup(isAuthenticated);
         // If the app is opened from a deep link, get the reportID (if exists) from the deep link and navigate to the chat report
-        react_native_1.Linking.getInitialURL().then(function (url) {
+        react_native_1.Linking.getInitialURL().then((url) => {
             setInitialUrl(url);
-            Report.openReportFromDeepLink(url !== null && url !== void 0 ? url : '', currentOnboardingPurposeSelected, currentOnboardingCompanySize, onboardingInitialPath, allReports);
+            Report.openReportFromDeepLink(url ?? '', currentOnboardingPurposeSelected, currentOnboardingCompanySize, onboardingInitialPath, allReports);
         });
         // Open chat report from a deep link (only mobile native)
-        react_native_1.Linking.addEventListener('url', function (state) {
+        react_native_1.Linking.addEventListener('url', (state) => {
             Report.openReportFromDeepLink(state.url, currentOnboardingPurposeSelected, currentOnboardingCompanySize, onboardingInitialPath, allReports);
         });
         if (CONFIG_1.default.IS_HYBRID_APP) {
             react_native_hybrid_app_1.default.onURLListenerAdded();
         }
-        return function () {
+        return () => {
             if (!appStateChangeListener.current) {
                 return;
             }
@@ -198,10 +196,10 @@ function Expensify() {
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- we don't want this effect to run again
     }, []);
     // This is being done since we want to play sound even when iOS device is on silent mode, to align with other platforms.
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         expo_av_1.Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
     }, []);
-    (0, react_1.useLayoutEffect)(function () {
+    (0, react_1.useLayoutEffect)(() => {
         if (!isNavigationReady || !lastRoute) {
             return;
         }
@@ -210,23 +208,21 @@ function Expensify() {
         // Disabling this rule because we only want it to run on the first render.
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, [isNavigationReady]);
-    (0, react_1.useEffect)(function () {
-        var _a;
+    (0, react_1.useEffect)(() => {
         if (!isAuthenticated) {
             return;
         }
-        (0, setCrashlyticsUserId_1.default)((_a = session === null || session === void 0 ? void 0 : session.accountID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID);
-    }, [isAuthenticated, session === null || session === void 0 ? void 0 : session.accountID]);
-    (0, react_1.useEffect)(function () {
-        var _a, _b, _c;
-        if (!((_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegate)) {
+        (0, setCrashlyticsUserId_1.default)(session?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID);
+    }, [isAuthenticated, session?.accountID]);
+    (0, react_1.useEffect)(() => {
+        if (!account?.delegatedAccess?.delegate) {
             return;
         }
-        if ((_c = (_b = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _b === void 0 ? void 0 : _b.delegates) === null || _c === void 0 ? void 0 : _c.some(function (d) { var _a; return d.email === ((_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegate); })) {
+        if (account?.delegatedAccess?.delegates?.some((d) => d.email === account?.delegatedAccess?.delegate)) {
             return;
         }
         (0, Delegate_1.disconnect)();
-    }, [(_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegates, (_b = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _b === void 0 ? void 0 : _b.delegate]);
+    }, [account?.delegatedAccess?.delegates, account?.delegatedAccess?.delegate]);
     // Display a blank page until the onyx migration completes
     if (!isOnyxMigrated) {
         return null;
@@ -234,14 +230,14 @@ function Expensify() {
     if (updateRequired) {
         throw new Error(CONST_1.default.ERROR.UPDATE_REQUIRED);
     }
-    return (<DeeplinkWrapper_1.default isAuthenticated={isAuthenticated} autoAuthState={autoAuthState} initialUrl={initialUrl !== null && initialUrl !== void 0 ? initialUrl : ''}>
+    return (<DeeplinkWrapper_1.default isAuthenticated={isAuthenticated} autoAuthState={autoAuthState} initialUrl={initialUrl ?? ''}>
             {shouldInit && (<>
                     <GrowlNotification_1.default ref={Growl_1.growlRef}/>
                     <PopoverReportActionContextMenu_1.default ref={ReportActionContextMenu.contextMenuRef}/>
                     <EmojiPicker_1.default ref={EmojiPickerAction.emojiPickerRef}/>
                     {/* We include the modal for showing a new update at the top level so the option is always present. */}
                     {updateAvailable && !updateRequired ? <UpdateAppModal_1.default /> : null}
-                    {screenShareRequest ? (<ConfirmModal_1.default title={translate('guides.screenShare')} onConfirm={function () { return User.joinScreenShare(screenShareRequest.accessToken, screenShareRequest.roomName); }} onCancel={User.clearScreenShareRequest} prompt={translate('guides.screenShareRequest')} confirmText={translate('common.join')} cancelText={translate('common.decline')} isVisible/>) : null}
+                    {screenShareRequest ? (<ConfirmModal_1.default title={translate('guides.screenShare')} onConfirm={() => User.joinScreenShare(screenShareRequest.accessToken, screenShareRequest.roomName)} onCancel={User.clearScreenShareRequest} prompt={translate('guides.screenShareRequest')} confirmText={translate('common.join')} cancelText={translate('common.decline')} isVisible/>) : null}
                 </>)}
 
             <AppleAuthWrapper_1.default />

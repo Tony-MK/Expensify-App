@@ -1,46 +1,44 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var DotIndicatorMessage_1 = require("@components/DotIndicatorMessage");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var BankAccounts_1 = require("@userActions/BankAccounts");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function HangTight(_a) {
-    var _b, _c, _d, _e;
-    var policyID = _a.policyID, bankAccountID = _a.bankAccountID;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var safeAreaInsetPaddingBottom = (0, useSafeAreaPaddings_1.default)().paddingBottom;
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false })[0];
-    var signerEmail = (_c = (_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.corpay) === null || _c === void 0 ? void 0 : _c.signerEmail;
-    var secondSignerEmail = (_e = (_d = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _d === void 0 ? void 0 : _d.corpay) === null || _e === void 0 ? void 0 : _e.secondSignerEmail;
-    var error = (0, ErrorUtils_1.getLatestErrorMessage)(reimbursementAccount);
-    var handleSendReminder = function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const DotIndicatorMessage_1 = require("@components/DotIndicatorMessage");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const BankAccounts_1 = require("@userActions/BankAccounts");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function HangTight({ policyID, bankAccountID }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { paddingBottom: safeAreaInsetPaddingBottom } = (0, useSafeAreaPaddings_1.default)();
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false });
+    const signerEmail = reimbursementAccount?.achData?.corpay?.signerEmail;
+    const secondSignerEmail = reimbursementAccount?.achData?.corpay?.secondSignerEmail;
+    const error = (0, ErrorUtils_1.getLatestErrorMessage)(reimbursementAccount);
+    const handleSendReminder = () => {
         if (!signerEmail || !policyID) {
             return;
         }
-        (0, BankAccounts_1.sendReminderForCorpaySignerInformation)({ policyID: policyID, bankAccountID: bankAccountID, signerEmail: signerEmail, secondSignerEmail: secondSignerEmail });
+        (0, BankAccounts_1.sendReminderForCorpaySignerInformation)({ policyID, bankAccountID, signerEmail, secondSignerEmail });
     };
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        if ((reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.errors) || (reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSendingReminderForCorpaySignerInformation) || !(reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSuccess)) {
+        if (reimbursementAccount?.errors || reimbursementAccount?.isSendingReminderForCorpaySignerInformation || !reimbursementAccount?.isSuccess) {
             return;
         }
-        if (reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSuccess) {
+        if (reimbursementAccount?.isSuccess) {
             (0, BankAccounts_1.clearReimbursementAccountSendReminderForCorpaySignerInformation)();
         }
-        return function () {
+        return () => {
             (0, BankAccounts_1.clearReimbursementAccountSendReminderForCorpaySignerInformation)();
         };
     }, [reimbursementAccount]);
@@ -53,8 +51,8 @@ function HangTight(_a) {
                 <Text_1.default style={[styles.textAlignCenter, styles.mutedTextLabel, styles.mh5]}>{translate('signerInfoStep.weAreWaiting')}</Text_1.default>
             </react_native_1.View>
             <react_native_1.View style={[styles.ph5, styles.flexGrow1, styles.justifyContentEnd]}>
-                {!!error && error.length > 0 && (<DotIndicatorMessage_1.default textStyles={[styles.formError]} type="error" messages={{ error: error }}/>)}
-                <Button_1.default success style={[styles.w100]} onPress={handleSendReminder} large icon={(reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSendingReminderForCorpaySignerInformation) ? undefined : Expensicons.Bell} text={translate('signerInfoStep.sendReminder')} isLoading={reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSendingReminderForCorpaySignerInformation}/>
+                {!!error && error.length > 0 && (<DotIndicatorMessage_1.default textStyles={[styles.formError]} type="error" messages={{ error }}/>)}
+                <Button_1.default success style={[styles.w100]} onPress={handleSendReminder} large icon={reimbursementAccount?.isSendingReminderForCorpaySignerInformation ? undefined : Expensicons.Bell} text={translate('signerInfoStep.sendReminder')} isLoading={reimbursementAccount?.isSendingReminderForCorpaySignerInformation}/>
             </react_native_1.View>
         </ScrollView_1.default>);
 }

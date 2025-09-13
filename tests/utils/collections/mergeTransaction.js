@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = createRandomMergeTransaction;
-var falso_1 = require("@ngneat/falso");
-var date_fns_1 = require("date-fns");
-var CONST_1 = require("@src/CONST");
-var transaction_1 = require("./transaction");
+const falso_1 = require("@ngneat/falso");
+const date_fns_1 = require("date-fns");
+const CONST_1 = require("@src/CONST");
+const transaction_1 = require("./transaction");
 function createRandomMergeTransaction(index) {
     return {
         targetTransactionID: index.toString(),

@@ -1,30 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var ReportActionsSkeletonView_1 = require("@components/ReportActionsSkeletonView");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-function ListBoundaryLoader(_a) {
-    var type = _a.type, _b = _a.isLoadingOlderReportActions, isLoadingOlderReportActions = _b === void 0 ? false : _b, _c = _a.isLoadingInitialReportActions, isLoadingInitialReportActions = _c === void 0 ? false : _c, _d = _a.lastReportActionName, lastReportActionName = _d === void 0 ? '' : _d, _e = _a.isLoadingNewerReportActions, isLoadingNewerReportActions = _e === void 0 ? false : _e, _f = _a.hasError, hasError = _f === void 0 ? false : _f, onRetry = _a.onRetry;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var translate = (0, useLocalize_1.default)().translate;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const ReportActionsSkeletonView_1 = require("@components/ReportActionsSkeletonView");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+function ListBoundaryLoader({ type, isLoadingOlderReportActions = false, isLoadingInitialReportActions = false, lastReportActionName = '', isLoadingNewerReportActions = false, hasError = false, onRetry, }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     // When retrying we want to show the loading state in the retry button so we
     // have this separate state to handle that.
-    var _g = react_1.default.useState(false), isRetrying = _g[0], setIsRetrying = _g[1];
-    var retry = function () {
+    const [isRetrying, setIsRetrying] = react_1.default.useState(false);
+    const retry = () => {
         setIsRetrying(true);
-        onRetry === null || onRetry === void 0 ? void 0 : onRetry();
+        onRetry?.();
     };
     // Reset the retrying state once loading is done.
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (isLoadingNewerReportActions || isLoadingOlderReportActions) {
             return;
         }
@@ -45,8 +44,8 @@ function ListBoundaryLoader(_a) {
          Additionally, if we are offline and the report is not loaded until the beginning, we assume there are more actions to load;
          Therefore, show the skeleton view even though the actions are not actually loading.
         */
-        var isReportLoadedUntilBeginning = lastReportActionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED;
-        var mayLoadMoreActions = !isReportLoadedUntilBeginning && (isLoadingInitialReportActions || isOffline);
+        const isReportLoadedUntilBeginning = lastReportActionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED;
+        const mayLoadMoreActions = !isReportLoadedUntilBeginning && (isLoadingInitialReportActions || isOffline);
         if (isLoadingOlderReportActions || mayLoadMoreActions) {
             return <ReportActionsSkeletonView_1.default />;
         }

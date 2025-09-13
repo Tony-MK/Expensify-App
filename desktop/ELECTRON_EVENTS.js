@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ELECTRON_EVENTS = {
+const ELECTRON_EVENTS = {
     BLUR: 'blur',
     FOCUS: 'focus',
     LOCALE_UPDATED: 'locale-updated',

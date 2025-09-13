@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var RenderHTML_1 = require("@components/RenderHTML");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Card_1 = require("@libs/actions/Card");
-var CompanyCards_1 = require("@libs/actions/CompanyCards");
-var CardUtils_1 = require("@libs/CardUtils");
-var Parser_1 = require("@libs/Parser");
-var Navigation_1 = require("@navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const RenderHTML_1 = require("@components/RenderHTML");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Card_1 = require("@libs/actions/Card");
+const CompanyCards_1 = require("@libs/actions/CompanyCards");
+const CardUtils_1 = require("@libs/CardUtils");
+const Parser_1 = require("@libs/Parser");
+const Navigation_1 = require("@navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function getCardInstructionHeader(feedProvider) {
     if (feedProvider === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA) {
         return 'workspace.companyCards.addNewCard.enableFeed.visa';
@@ -29,23 +29,21 @@ function getCardInstructionHeader(feedProvider) {
     }
     return 'workspace.companyCards.addNewCard.enableFeed.heading';
 }
-function CardInstructionsStep(_a) {
-    var _b;
-    var policyID = _a.policyID;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var addNewCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true })[0];
-    var data = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data;
-    var feedProvider = (_b = data === null || data === void 0 ? void 0 : data.feedType) !== null && _b !== void 0 ? _b : CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA;
-    var bank = data === null || data === void 0 ? void 0 : data.selectedBank;
-    var isStripeFeedProvider = feedProvider === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE;
-    var isAmexFeedProvider = feedProvider === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX;
-    var isOtherBankSelected = bank === CONST_1.default.COMPANY_CARDS.BANKS.OTHER;
-    var translationKey = getCardInstructionHeader(feedProvider);
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var buttonTranslation = isStripeFeedProvider ? translate('common.submit') : translate('common.next');
-    var submit = function () {
+function CardInstructionsStep({ policyID }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [addNewCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true });
+    const data = addNewCard?.data;
+    const feedProvider = data?.feedType ?? CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.VISA;
+    const bank = data?.selectedBank;
+    const isStripeFeedProvider = feedProvider === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.STRIPE;
+    const isAmexFeedProvider = feedProvider === CONST_1.default.COMPANY_CARD.FEED_BANK_NAME.AMEX;
+    const isOtherBankSelected = bank === CONST_1.default.COMPANY_CARDS.BANKS.OTHER;
+    const translationKey = getCardInstructionHeader(feedProvider);
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const buttonTranslation = isStripeFeedProvider ? translate('common.submit') : translate('common.next');
+    const submit = () => {
         if (isStripeFeedProvider && policyID) {
             (0, Card_1.updateSelectedFeed)(feedProvider, policyID);
             Navigation_1.default.goBack();
@@ -61,7 +59,7 @@ function CardInstructionsStep(_a) {
             step: CONST_1.default.COMPANY_CARDS.STEP.CARD_DETAILS,
         });
     };
-    var handleBackButtonPress = function () {
+    const handleBackButtonPress = () => {
         if (isAmexFeedProvider && !isBetaEnabled(CONST_1.default.BETAS.PLAID_COMPANY_CARDS)) {
             (0, CompanyCards_1.setAddNewCompanyCardStepAndData)({
                 step: CONST_1.default.COMPANY_CARDS.STEP.AMEX_CUSTOM_FEED,
@@ -82,7 +80,7 @@ function CardInstructionsStep(_a) {
                 </Text_1.default>
                 <Text_1.default style={[styles.ph5, styles.mb3]}>{translate(translationKey)}</Text_1.default>
                 <react_native_1.View style={[styles.ph5]}>
-                    <RenderHTML_1.default html={Parser_1.default.replace(feedProvider ? translate("workspace.companyCards.addNewCard.enableFeed.".concat(feedProvider)) : '')}/>
+                    <RenderHTML_1.default html={Parser_1.default.replace(feedProvider ? translate(`workspace.companyCards.addNewCard.enableFeed.${feedProvider}`) : '')}/>
                 </react_native_1.View>
                 <react_native_1.View style={[styles.mh5, styles.pb5, styles.mt3, styles.flexGrow1, styles.justifyContentEnd]}>
                     <Button_1.default isDisabled={isOffline} success large style={[styles.w100]} onPress={submit} text={buttonTranslation}/>

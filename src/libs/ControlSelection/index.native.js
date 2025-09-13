@@ -4,10 +4,10 @@ function block() { }
 function unblock() { }
 function blockElement() { }
 function unblockElement() { }
-var ControlSelection = {
-    block: block,
-    unblock: unblock,
-    blockElement: blockElement,
-    unblockElement: unblockElement,
+const ControlSelection = {
+    block,
+    unblock,
+    blockElement,
+    unblockElement,
 };
 exports.default = ControlSelection;

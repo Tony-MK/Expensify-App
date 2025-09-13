@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Session = require("@userActions/Session");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Session = require("@userActions/Session");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
 /** Div IDs for styling the two different Google Sign-In buttons. */
-var mainId = 'google-sign-in-main';
-var desktopId = 'google-sign-in-desktop';
-var signIn = function (response) {
+const mainId = 'google-sign-in-main';
+const desktopId = 'google-sign-in-desktop';
+const signIn = (response) => {
     Session.beginGoogleSignIn(response.credential);
 };
 /**
@@ -18,12 +18,11 @@ var signIn = function (response) {
  * We have to load the gis script and then determine if the page is focused before rendering the button.
  * @returns {React.Component}
  */
-function GoogleSignIn(_a) {
-    var _b = _a.isDesktopFlow, isDesktopFlow = _b === void 0 ? false : _b, onPointerDown = _a.onPointerDown;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var loadScript = (0, react_1.useCallback)(function () {
-        var google = window.google;
+function GoogleSignIn({ isDesktopFlow = false, onPointerDown }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const loadScript = (0, react_1.useCallback)(() => {
+        const google = window.google;
         if (google) {
             google.accounts.id.initialize({
                 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -46,13 +45,13 @@ function GoogleSignIn(_a) {
             });
         }
     }, []);
-    react_1.default.useEffect(function () {
-        var script = document.createElement('script');
+    react_1.default.useEffect(() => {
+        const script = document.createElement('script');
         script.src = 'https://accounts.google.com/gsi/client';
         script.addEventListener('load', loadScript);
         script.async = true;
         document.body.appendChild(script);
-        return function () {
+        return () => {
             script.removeEventListener('load', loadScript);
             document.body.removeChild(script);
         };

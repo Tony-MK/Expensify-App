@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
 // Returns an SVG icon indicating that the user should attach a receipt
-function ReceiptEmptyState(_a) {
-    var onPress = _a.onPress, _b = _a.disabled, disabled = _b === void 0 ? false : _b, _c = _a.isThumbnail, isThumbnail = _c === void 0 ? false : _c, _d = _a.isInMoneyRequestView, isInMoneyRequestView = _d === void 0 ? false : _d, _e = _a.shouldUseFullHeight, shouldUseFullHeight = _e === void 0 ? false : _e, style = _a.style;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var theme = (0, useTheme_1.default)();
-    var Wrapper = onPress ? PressableWithoutFeedback_1.default : react_native_1.View;
-    var containerStyle = [
+function ReceiptEmptyState({ onPress, disabled = false, isThumbnail = false, isInMoneyRequestView = false, shouldUseFullHeight = false, style }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const Wrapper = onPress ? PressableWithoutFeedback_1.default : react_native_1.View;
+    const containerStyle = [
         styles.alignItemsCenter,
         styles.justifyContentCenter,
         styles.moneyRequestViewImage,

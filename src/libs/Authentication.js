@@ -2,36 +2,36 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reauthenticate = reauthenticate;
 exports.Authenticate = Authenticate;
-var react_native_onyx_1 = require("react-native-onyx");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var Delegate_1 = require("./actions/Delegate");
-var updateSessionAuthTokens_1 = require("./actions/Session/updateSessionAuthTokens");
-var SignInRedirect_1 = require("./actions/SignInRedirect");
-var ErrorUtils_1 = require("./ErrorUtils");
-var Log_1 = require("./Log");
-var Network_1 = require("./Network");
-var NetworkStore_1 = require("./Network/NetworkStore");
-var requireParameters_1 = require("./requireParameters");
-var isAuthenticatingWithShortLivedToken = false;
-var isSupportAuthTokenUsed = false;
+const react_native_onyx_1 = require("react-native-onyx");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const Delegate_1 = require("./actions/Delegate");
+const updateSessionAuthTokens_1 = require("./actions/Session/updateSessionAuthTokens");
+const SignInRedirect_1 = require("./actions/SignInRedirect");
+const ErrorUtils_1 = require("./ErrorUtils");
+const Log_1 = require("./Log");
+const Network_1 = require("./Network");
+const NetworkStore_1 = require("./Network/NetworkStore");
+const requireParameters_1 = require("./requireParameters");
+let isAuthenticatingWithShortLivedToken = false;
+let isSupportAuthTokenUsed = false;
 // These session values are only used to help the user authentication with the API.
 // Since they aren't connected to a UI anywhere, it's OK to use connectWithoutView()
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (value) {
-        isAuthenticatingWithShortLivedToken = !!(value === null || value === void 0 ? void 0 : value.isAuthenticatingWithShortLivedToken);
-        isSupportAuthTokenUsed = !!(value === null || value === void 0 ? void 0 : value.isSupportAuthTokenUsed);
+    callback: (value) => {
+        isAuthenticatingWithShortLivedToken = !!value?.isAuthenticatingWithShortLivedToken;
+        isSupportAuthTokenUsed = !!value?.isSupportAuthTokenUsed;
     },
 });
 function Authenticate(parameters) {
-    var commandName = 'Authenticate';
+    const commandName = 'Authenticate';
     try {
         (0, requireParameters_1.default)(['partnerName', 'partnerPassword', 'partnerUserID', 'partnerUserSecret'], parameters, commandName);
     }
     catch (error) {
-        var errorMessage = error.message;
+        const errorMessage = error.message;
         Log_1.default.hmmm('Redirecting to Sign In because we failed to reauthenticate', {
             error: errorMessage,
         });
@@ -61,48 +61,46 @@ function Authenticate(parameters) {
  * @param [command] command name for logging purposes
  * @return returns true if reauthentication was successful, false otherwise.
  */
-function reauthenticate(command) {
-    if (command === void 0) { command = ''; }
+function reauthenticate(command = '') {
     Log_1.default.hmmm('Reauthenticate - Attempting re-authentication', {
-        command: command,
+        command,
     });
     // Prevent re-authentication if authentication with shortLiveToken is in progress
     if (isAuthenticatingWithShortLivedToken) {
         Log_1.default.hmmm('Reauthenticate - Authentication with shortLivedToken is in progress. Re-authentication aborted.', {
-            command: command,
-            isSupportAuthTokenUsed: isSupportAuthTokenUsed,
+            command,
+            isSupportAuthTokenUsed,
         });
         return Promise.resolve(false);
     }
     // Prevent any more requests from being processed while authentication happens
     (0, NetworkStore_1.setIsAuthenticating)(true);
     Log_1.default.hmmm('Reauthenticate - Waiting for credentials', {
-        command: command,
+        command,
     });
     return (0, NetworkStore_1.hasReadRequiredDataFromStorage)()
         .then(NetworkStore_1.hasReadShouldUseNewPartnerNameFromStorage)
-        .then(function () {
-        var credentials = (0, NetworkStore_1.getCredentials)();
-        var shouldUseNewPartnerName = (0, NetworkStore_1.getShouldUseNewPartnerName)();
-        var partnerName = shouldUseNewPartnerName ? CONFIG_1.default.EXPENSIFY.PARTNER_NAME : CONFIG_1.default.EXPENSIFY.LEGACY_PARTNER_NAME;
-        var partnerPassword = shouldUseNewPartnerName ? CONFIG_1.default.EXPENSIFY.PARTNER_PASSWORD : CONFIG_1.default.EXPENSIFY.LEGACY_PARTNER_PASSWORD;
-        Log_1.default.info("Reauthenticate - re-authenticating with ".concat(shouldUseNewPartnerName ? 'new' : 'old', " partner name"));
+        .then(() => {
+        const credentials = (0, NetworkStore_1.getCredentials)();
+        const shouldUseNewPartnerName = (0, NetworkStore_1.getShouldUseNewPartnerName)();
+        const partnerName = shouldUseNewPartnerName ? CONFIG_1.default.EXPENSIFY.PARTNER_NAME : CONFIG_1.default.EXPENSIFY.LEGACY_PARTNER_NAME;
+        const partnerPassword = shouldUseNewPartnerName ? CONFIG_1.default.EXPENSIFY.PARTNER_PASSWORD : CONFIG_1.default.EXPENSIFY.LEGACY_PARTNER_PASSWORD;
+        Log_1.default.info(`Reauthenticate - re-authenticating with ${shouldUseNewPartnerName ? 'new' : 'old'} partner name`);
         Log_1.default.hmmm('Reauthenticate - Starting authentication process', {
-            command: command,
+            command,
         });
         return Authenticate({
             useExpensifyLogin: false,
-            partnerName: partnerName,
-            partnerPassword: partnerPassword,
-            partnerUserID: credentials === null || credentials === void 0 ? void 0 : credentials.autoGeneratedLogin,
-            partnerUserSecret: credentials === null || credentials === void 0 ? void 0 : credentials.autoGeneratedPassword,
-        }).then(function (response) {
-            var _a;
+            partnerName,
+            partnerPassword,
+            partnerUserID: credentials?.autoGeneratedLogin,
+            partnerUserSecret: credentials?.autoGeneratedPassword,
+        }).then((response) => {
             if (!response) {
                 return false;
             }
             Log_1.default.hmmm('Reauthenticate - Processing authentication result', {
-                command: command,
+                command,
             });
             if (response.jsonCode === CONST_1.default.JSON_CODE.UNABLE_TO_RETRY) {
                 // When a fetch() fails due to a network issue and an error is thrown we won't log the user out. Most likely they
@@ -111,10 +109,10 @@ function reauthenticate(command) {
             }
             // If authentication fails and we are online then log the user out
             if (response.jsonCode !== 200) {
-                var errorMessage = (0, ErrorUtils_1.getAuthenticateErrorMessage)(response);
+                const errorMessage = (0, ErrorUtils_1.getAuthenticateErrorMessage)(response);
                 (0, NetworkStore_1.setIsAuthenticating)(false);
                 Log_1.default.hmmm('Redirecting to Sign In because we failed to reauthenticate', {
-                    command: command,
+                    command,
                     error: errorMessage,
                 });
                 (0, SignInRedirect_1.default)(errorMessage);
@@ -132,11 +130,11 @@ function reauthenticate(command) {
             // Note: It is important to manually set the authToken that is in the store here since any requests that are hooked into
             // reauthenticate .then() will immediate post and use the local authToken. Onyx updates subscribers lately so it is not
             // enough to do the updateSessionAuthTokens() call above.
-            (0, NetworkStore_1.setAuthToken)((_a = response.authToken) !== null && _a !== void 0 ? _a : null);
+            (0, NetworkStore_1.setAuthToken)(response.authToken ?? null);
             // The authentication process is finished so the network can be unpaused to continue processing requests
             (0, NetworkStore_1.setIsAuthenticating)(false);
             Log_1.default.hmmm('Reauthenticate - Re-authentication successful', {
-                command: command,
+                command,
             });
             return true;
         });

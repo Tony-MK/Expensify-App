@@ -1,33 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Web and desktop implementation only. Do not import for direct use. Use LocalNotification.
-var expensify_common_1 = require("expensify-common");
-var expensify_logo_round_clearspace_png_1 = require("@assets/images/expensify-logo-round-clearspace.png");
-var AppUpdate = require("@libs/actions/AppUpdate");
-var ModifiedExpenseMessage_1 = require("@libs/ModifiedExpenseMessage");
-var ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
-var ReportUtils = require("@libs/ReportUtils");
-var Sound_1 = require("@libs/Sound");
-var focusApp_1 = require("./focusApp");
-var notificationCache = {};
+const expensify_common_1 = require("expensify-common");
+const expensify_logo_round_clearspace_png_1 = require("@assets/images/expensify-logo-round-clearspace.png");
+const AppUpdate = require("@libs/actions/AppUpdate");
+const ModifiedExpenseMessage_1 = require("@libs/ModifiedExpenseMessage");
+const ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
+const ReportUtils = require("@libs/ReportUtils");
+const Sound_1 = require("@libs/Sound");
+const focusApp_1 = require("./focusApp");
+const notificationCache = {};
 /**
  * Checks if the user has granted permission to show browser notifications
  */
 function canUseBrowserNotifications() {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         // They have no browser notifications so we can't use this feature
         if (!window.Notification) {
             resolve(false);
             return;
         }
         // Check if they previously granted or denied us access to send a notification
-        var permissionGranted = Notification.permission === 'granted';
+        const permissionGranted = Notification.permission === 'granted';
         if (permissionGranted || Notification.permission === 'denied') {
             resolve(permissionGranted);
             return;
         }
         // Check their global preferences for browser notifications and ask permission if they have none
-        Notification.requestPermission().then(function (status) {
+        Notification.requestPermission().then((status) => {
             resolve(status === 'granted');
         });
     });
@@ -39,37 +39,31 @@ function canUseBrowserNotifications() {
  * @param icon Path to icon
  * @param data extra data to attach to the notification
  */
-function push(title, body, icon, data, onClick, silent, tag) {
-    if (body === void 0) { body = ''; }
-    if (icon === void 0) { icon = ''; }
-    if (data === void 0) { data = {}; }
-    if (onClick === void 0) { onClick = function () { }; }
-    if (silent === void 0) { silent = false; }
-    if (tag === void 0) { tag = ''; }
-    canUseBrowserNotifications().then(function (canUseNotifications) {
+function push(title, body = '', icon = '', data = {}, onClick = () => { }, silent = false, tag = '') {
+    canUseBrowserNotifications().then((canUseNotifications) => {
         if (!canUseNotifications) {
             return;
         }
         // We cache these notifications so that we can clear them later
-        var notificationID = expensify_common_1.Str.guid();
+        const notificationID = expensify_common_1.Str.guid();
         notificationCache[notificationID] = new Notification(title, {
-            body: body,
+            body,
             icon: String(icon),
-            data: data,
+            data,
             silent: true,
-            tag: tag,
+            tag,
         });
         if (!silent) {
             (0, Sound_1.default)(Sound_1.SOUNDS.RECEIVE);
         }
-        notificationCache[notificationID].onclick = function () {
+        notificationCache[notificationID].onclick = () => {
             onClick();
             window.parent.focus();
             window.focus();
             (0, focusApp_1.default)();
             notificationCache[notificationID].close();
         };
-        notificationCache[notificationID].onclose = function () {
+        notificationCache[notificationID].onclose = () => {
             delete notificationCache[notificationID];
         };
     });
@@ -84,49 +78,45 @@ exports.default = {
      *
      * @param usesIcon true if notification uses right circular icon
      */
-    pushReportCommentNotification: function (report, reportAction, onClick, usesIcon) {
-        var _a, _b;
-        if (usesIcon === void 0) { usesIcon = false; }
-        var title;
-        var body;
-        var icon = usesIcon ? expensify_logo_round_clearspace_png_1.default : '';
-        var isRoomOrGroupChat = ReportUtils.isChatRoom(report) || ReportUtils.isPolicyExpenseChat(report) || ReportUtils.isGroupChat(report);
-        var person = reportAction.person, message = reportAction.message;
-        var plainTextPerson = (_a = person === null || person === void 0 ? void 0 : person.map(function (f) { var _a; return expensify_common_1.Str.removeSMSDomain((_a = f.text) !== null && _a !== void 0 ? _a : ''); }).join()) !== null && _a !== void 0 ? _a : '';
+    pushReportCommentNotification(report, reportAction, onClick, usesIcon = false) {
+        let title;
+        let body;
+        const icon = usesIcon ? expensify_logo_round_clearspace_png_1.default : '';
+        const isRoomOrGroupChat = ReportUtils.isChatRoom(report) || ReportUtils.isPolicyExpenseChat(report) || ReportUtils.isGroupChat(report);
+        const { person, message } = reportAction;
+        const plainTextPerson = person?.map((f) => expensify_common_1.Str.removeSMSDomain(f.text ?? '')).join() ?? '';
         // Specifically target the comment part of the message
-        var plainTextMessage = '';
+        let plainTextMessage = '';
         if (Array.isArray(message)) {
-            plainTextMessage = (0, ReportActionsUtils_1.getTextFromHtml)((_b = message === null || message === void 0 ? void 0 : message.find(function (f) { return (f === null || f === void 0 ? void 0 : f.type) === 'COMMENT'; })) === null || _b === void 0 ? void 0 : _b.html);
+            plainTextMessage = (0, ReportActionsUtils_1.getTextFromHtml)(message?.find((f) => f?.type === 'COMMENT')?.html);
         }
         else {
-            plainTextMessage = (message === null || message === void 0 ? void 0 : message.type) === 'COMMENT' ? (0, ReportActionsUtils_1.getTextFromHtml)(message === null || message === void 0 ? void 0 : message.html) : '';
+            plainTextMessage = message?.type === 'COMMENT' ? (0, ReportActionsUtils_1.getTextFromHtml)(message?.html) : '';
         }
         if (isRoomOrGroupChat) {
-            var roomName = ReportUtils.getReportName(report);
+            const roomName = ReportUtils.getReportName(report);
             title = roomName;
-            body = "".concat(plainTextPerson, ": ").concat(plainTextMessage);
+            body = `${plainTextPerson}: ${plainTextMessage}`;
         }
         else {
             title = plainTextPerson;
             body = plainTextMessage;
         }
-        var data = {
+        const data = {
             reportID: report.reportID,
         };
         push(title, body, icon, data, onClick);
     },
-    pushModifiedExpenseNotification: function (_a) {
-        var _b, _c;
-        var report = _a.report, reportAction = _a.reportAction, movedFromReport = _a.movedFromReport, movedToReport = _a.movedToReport, onClick = _a.onClick, _d = _a.usesIcon, usesIcon = _d === void 0 ? false : _d;
-        var title = (_c = (_b = reportAction.person) === null || _b === void 0 ? void 0 : _b.map(function (f) { return f.text; }).join(', ')) !== null && _c !== void 0 ? _c : '';
-        var body = (0, ModifiedExpenseMessage_1.getForReportAction)({
-            reportAction: reportAction,
+    pushModifiedExpenseNotification({ report, reportAction, movedFromReport, movedToReport, onClick, usesIcon = false }) {
+        const title = reportAction.person?.map((f) => f.text).join(', ') ?? '';
+        const body = (0, ModifiedExpenseMessage_1.getForReportAction)({
+            reportAction,
             policyID: report.policyID,
-            movedFromReport: movedFromReport,
-            movedToReport: movedToReport,
+            movedFromReport,
+            movedToReport,
         });
-        var icon = usesIcon ? expensify_logo_round_clearspace_png_1.default : '';
-        var data = {
+        const icon = usesIcon ? expensify_logo_round_clearspace_png_1.default : '';
+        const data = {
             reportID: report.reportID,
         };
         push(title, body, icon, data, onClick);
@@ -134,8 +124,8 @@ exports.default = {
     /**
      * Create a notification to indicate that an update is available.
      */
-    pushUpdateAvailableNotification: function () {
-        push('Update available', 'A new version of this app is available!', '', {}, function () {
+    pushUpdateAvailableNotification() {
+        push('Update available', 'A new version of this app is available!', '', {}, () => {
             AppUpdate.triggerUpdateAvailable();
         }, false, 'UpdateAvailable');
     },
@@ -144,9 +134,9 @@ exports.default = {
      *
      * @param shouldClearNotification a function that receives notification.data and returns true/false if the notification should be cleared
      */
-    clearNotifications: function (shouldClearNotification) {
+    clearNotifications(shouldClearNotification) {
         Object.values(notificationCache)
-            .filter(function (notification) { return shouldClearNotification(notification.data); })
-            .forEach(function (notification) { return notification.close(); });
+            .filter((notification) => shouldClearNotification(notification.data))
+            .forEach((notification) => notification.close());
     },
 };

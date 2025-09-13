@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param isLoading Indicates whether the button should be disabled and in the loading state
  * @return Returns `true` if the shortcut should be triggered
  */
-var validateSubmitShortcut = function (isDisabled, isLoading) {
+const validateSubmitShortcut = (isDisabled, isLoading) => {
     if (isDisabled || isLoading) {
         return false;
     }

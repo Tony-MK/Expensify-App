@@ -18,16 +18,15 @@ exports.default = hash;
  * const email = 'someone@gmail.com';
  * const defaultAvatarForEmail = avatars[StringUtils.hash(email, avatars.length)];
  */
-function hash(str, max) {
-    if (max === void 0) { max = Math.pow(2, 32); }
+function hash(str, max = 2 ** 32) {
     if (max <= 0) {
         throw new Error('max must be a positive integer');
     }
     // Create a rolling hash from the characters
-    var hashCode = 0;
-    for (var i = 0; i < str.length; i++) {
+    let hashCode = 0;
+    for (let i = 0; i < str.length; i++) {
         // Char code, weighted by position in the string (this way "act" and "cat" will produce different hashes)
-        var charCode = str.charCodeAt(i) * (i + 1);
+        const charCode = str.charCodeAt(i) * (i + 1);
         // Multiplied and offset by prime numbers for more even distribution.
         hashCode *= 31;
         hashCode += charCode + 7;

@@ -15,7 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ContactsNitroModule = void 0;
-var react_native_nitro_modules_1 = require("react-native-nitro-modules");
-var ContactsNitroModule = react_native_nitro_modules_1.NitroModules.createHybridObject('ContactsModule');
+const react_native_nitro_modules_1 = require("react-native-nitro-modules");
+const ContactsNitroModule = react_native_nitro_modules_1.NitroModules.createHybridObject('ContactsModule');
 exports.ContactsNitroModule = ContactsNitroModule;
 __exportStar(require("./specs/ContactsModule.nitro"), exports);

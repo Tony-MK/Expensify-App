@@ -1,65 +1,42 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.apply = apply;
 exports.doesClientNeedToBeUpdated = doesClientNeedToBeUpdated;
 exports.saveUpdateInformation = saveUpdateInformation;
 exports.INTERNAL_DO_NOT_USE_applyHTTPSOnyxUpdates = applyHTTPSOnyxUpdates;
-var react_native_onyx_1 = require("react-native-onyx");
-var types_1 = require("@libs/API/types");
-var Log_1 = require("@libs/Log");
-var Performance_1 = require("@libs/Performance");
-var PusherUtils_1 = require("@libs/PusherUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var QueuedOnyxUpdates_1 = require("./QueuedOnyxUpdates");
+const react_native_onyx_1 = require("react-native-onyx");
+const types_1 = require("@libs/API/types");
+const Log_1 = require("@libs/Log");
+const Performance_1 = require("@libs/Performance");
+const PusherUtils_1 = require("@libs/PusherUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const QueuedOnyxUpdates_1 = require("./QueuedOnyxUpdates");
 // This key needs to be separate from ONYXKEYS.ONYX_UPDATES_FROM_SERVER so that it can be updated without triggering the callback when the server IDs are updated. If that
 // callback were triggered it would lead to duplicate processing of server updates.
-var lastUpdateIDAppliedToClient = 0;
+let lastUpdateIDAppliedToClient = 0;
 // We have used `connectWithoutView` here because OnyxUpdates is not connected to any UI
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.ONYX_UPDATES_LAST_UPDATE_ID_APPLIED_TO_CLIENT,
-    callback: function (val) { return (lastUpdateIDAppliedToClient = val); },
+    callback: (val) => (lastUpdateIDAppliedToClient = val),
 });
 // This promise is used to ensure pusher events are always processed in the order they are received,
 // even when such events are received over multiple separate pusher updates.
-var pusherEventsPromise = Promise.resolve();
-var airshipEventsPromise = Promise.resolve();
+let pusherEventsPromise = Promise.resolve();
+let airshipEventsPromise = Promise.resolve();
 function applyHTTPSOnyxUpdates(request, response, lastUpdateID) {
-    var _a;
     Performance_1.default.markStart(CONST_1.default.TIMING.APPLY_HTTPS_UPDATES);
-    Log_1.default.info('[OnyxUpdateManager] Applying https update', false, { lastUpdateID: lastUpdateID });
+    Log_1.default.info('[OnyxUpdateManager] Applying https update', false, { lastUpdateID });
     // For most requests we can immediately update Onyx. For write requests we queue the updates and apply them after the sequential queue has flushed to prevent a replay effect in
     // the UI. See https://github.com/Expensify/App/issues/12775 for more info.
-    var updateHandler = ((_a = request === null || request === void 0 ? void 0 : request.data) === null || _a === void 0 ? void 0 : _a.apiRequestType) === CONST_1.default.API_REQUEST_TYPE.WRITE ? QueuedOnyxUpdates_1.queueOnyxUpdates : react_native_onyx_1.default.update;
+    const updateHandler = request?.data?.apiRequestType === CONST_1.default.API_REQUEST_TYPE.WRITE ? QueuedOnyxUpdates_1.queueOnyxUpdates : react_native_onyx_1.default.update;
     // First apply any onyx data updates that are being sent back from the API. We wait for this to complete and then
     // apply successData or failureData. This ensures that we do not update any pending, loading, or other UI states contained
     // in successData/failureData until after the component has received and API data.
-    var onyxDataUpdatePromise = response.onyxData ? updateHandler(response.onyxData) : Promise.resolve();
+    const onyxDataUpdatePromise = response.onyxData ? updateHandler(response.onyxData) : Promise.resolve();
     return onyxDataUpdatePromise
-        .then(function () {
+        .then(() => {
         // Handle the request's success/failure data (client-side data)
         if (response.jsonCode === 200 && request.successData) {
             return updateHandler(request.successData);
@@ -77,55 +54,53 @@ function applyHTTPSOnyxUpdates(request, response, lastUpdateID) {
         }
         return Promise.resolve();
     })
-        .then(function () {
+        .then(() => {
         if (request.finallyData) {
             return updateHandler(request.finallyData);
         }
         return Promise.resolve();
     })
-        .then(function () {
+        .then(() => {
         Performance_1.default.markEnd(CONST_1.default.TIMING.APPLY_HTTPS_UPDATES);
-        Log_1.default.info('[OnyxUpdateManager] Done applying HTTPS update', false, { lastUpdateID: lastUpdateID });
+        Log_1.default.info('[OnyxUpdateManager] Done applying HTTPS update', false, { lastUpdateID });
         return Promise.resolve(response);
     });
 }
 function applyPusherOnyxUpdates(updates, lastUpdateID) {
     Performance_1.default.markStart(CONST_1.default.TIMING.APPLY_PUSHER_UPDATES);
-    pusherEventsPromise = pusherEventsPromise.then(function () {
-        Log_1.default.info('[OnyxUpdateManager] Applying pusher update', false, { lastUpdateID: lastUpdateID });
+    pusherEventsPromise = pusherEventsPromise.then(() => {
+        Log_1.default.info('[OnyxUpdateManager] Applying pusher update', false, { lastUpdateID });
     });
     pusherEventsPromise = updates
-        .reduce(function (promise, update) { return promise.then(function () { return PusherUtils_1.default.triggerMultiEventHandler(update.eventType, update.data); }); }, pusherEventsPromise)
-        .then(function () {
+        .reduce((promise, update) => promise.then(() => PusherUtils_1.default.triggerMultiEventHandler(update.eventType, update.data)), pusherEventsPromise)
+        .then(() => {
         Performance_1.default.markEnd(CONST_1.default.TIMING.APPLY_PUSHER_UPDATES);
-        Log_1.default.info('[OnyxUpdateManager] Done applying Pusher update', false, { lastUpdateID: lastUpdateID });
+        Log_1.default.info('[OnyxUpdateManager] Done applying Pusher update', false, { lastUpdateID });
     });
     return pusherEventsPromise;
 }
 function applyAirshipOnyxUpdates(updates, lastUpdateID) {
     Performance_1.default.markStart(CONST_1.default.TIMING.APPLY_AIRSHIP_UPDATES);
-    airshipEventsPromise = airshipEventsPromise.then(function () {
-        Log_1.default.info('[OnyxUpdateManager] Applying Airship updates', false, { lastUpdateID: lastUpdateID });
+    airshipEventsPromise = airshipEventsPromise.then(() => {
+        Log_1.default.info('[OnyxUpdateManager] Applying Airship updates', false, { lastUpdateID });
     });
     airshipEventsPromise = updates
-        .reduce(function (promise, update) { return promise.then(function () { return react_native_onyx_1.default.update(update.data); }); }, airshipEventsPromise)
-        .then(function () {
+        .reduce((promise, update) => promise.then(() => react_native_onyx_1.default.update(update.data)), airshipEventsPromise)
+        .then(() => {
         Performance_1.default.markEnd(CONST_1.default.TIMING.APPLY_AIRSHIP_UPDATES);
-        Log_1.default.info('[OnyxUpdateManager] Done applying Airship updates', false, { lastUpdateID: lastUpdateID });
+        Log_1.default.info('[OnyxUpdateManager] Done applying Airship updates', false, { lastUpdateID });
     });
     return airshipEventsPromise;
 }
-function apply(_a) {
-    var _b;
-    var lastUpdateID = _a.lastUpdateID, type = _a.type, request = _a.request, response = _a.response, updates = _a.updates;
-    Log_1.default.info("[OnyxUpdateManager] Applying update type: ".concat(type, " with lastUpdateID: ").concat(lastUpdateID), false, { command: request === null || request === void 0 ? void 0 : request.command });
-    var isUpdateOld = lastUpdateID && lastUpdateIDAppliedToClient && Number(lastUpdateID) <= lastUpdateIDAppliedToClient;
-    var isOpenAppRequest = (request === null || request === void 0 ? void 0 : request.command) === types_1.WRITE_COMMANDS.OPEN_APP;
-    var isFullReconnectRequest = (request === null || request === void 0 ? void 0 : request.command) === types_1.SIDE_EFFECT_REQUEST_COMMANDS.RECONNECT_APP && !((_b = request === null || request === void 0 ? void 0 : request.data) === null || _b === void 0 ? void 0 : _b.updateIDFrom);
+function apply({ lastUpdateID, type, request, response, updates }) {
+    Log_1.default.info(`[OnyxUpdateManager] Applying update type: ${type} with lastUpdateID: ${lastUpdateID}`, false, { command: request?.command });
+    const isUpdateOld = lastUpdateID && lastUpdateIDAppliedToClient && Number(lastUpdateID) <= lastUpdateIDAppliedToClient;
+    const isOpenAppRequest = request?.command === types_1.WRITE_COMMANDS.OPEN_APP;
+    const isFullReconnectRequest = request?.command === types_1.SIDE_EFFECT_REQUEST_COMMANDS.RECONNECT_APP && !request?.data?.updateIDFrom;
     if (isUpdateOld && !isOpenAppRequest && !isFullReconnectRequest) {
         Log_1.default.info('[OnyxUpdateManager] Update received was older than or the same as current state, returning without applying the updates other than successData and failureData', false, {
-            lastUpdateID: lastUpdateID,
-            lastUpdateIDAppliedToClient: lastUpdateIDAppliedToClient,
+            lastUpdateID,
+            lastUpdateIDAppliedToClient,
         });
         // In this case, we're already received the OnyxUpdate included in the response, so we don't need to apply it again.
         // However, we do need to apply the successData and failureData from the request
@@ -135,7 +110,7 @@ function apply(_a) {
             (!(0, EmptyObject_1.isEmptyObject)(request.successData) || !(0, EmptyObject_1.isEmptyObject)(request.failureData) || !(0, EmptyObject_1.isEmptyObject)(request.finallyData))) {
             Log_1.default.info('[OnyxUpdateManager] Applying success or failure data from request without onyxData from response');
             // We use a spread here instead of delete because we don't want to change the response for other middlewares
-            var onyxData = response.onyxData, responseWithoutOnyxData = __rest(response, ["onyxData"]);
+            const { onyxData, ...responseWithoutOnyxData } = response;
             return applyHTTPSOnyxUpdates(request, responseWithoutOnyxData, Number(lastUpdateID));
         }
         return Promise.resolve();
@@ -159,12 +134,11 @@ function apply(_a) {
  * @param [updateParams.updates] Exists if updateParams.type === 'pusher'
  */
 function saveUpdateInformation(updateParams) {
-    var _a, _b;
-    var modifiedUpdateParams = updateParams;
+    let modifiedUpdateParams = updateParams;
     // We don't want to store the data in the updateParams if it's a HTTPS update since it is useless anyways
     // and it causes serialization issues when storing in Onyx
     if (updateParams.type === CONST_1.default.ONYX_UPDATE_TYPES.HTTPS && updateParams.request) {
-        modifiedUpdateParams = __assign(__assign({}, modifiedUpdateParams), { request: __assign(__assign({}, updateParams.request), { data: { apiRequestType: (_b = (_a = updateParams.request) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.apiRequestType } }) });
+        modifiedUpdateParams = { ...modifiedUpdateParams, request: { ...updateParams.request, data: { apiRequestType: updateParams.request?.data?.apiRequestType } } };
     }
     // Always use set() here so that the updateParams are never merged and always unique to the request that came in
     react_native_onyx_1.default.set(ONYXKEYS_1.default.ONYX_UPDATES_FROM_SERVER, modifiedUpdateParams);
@@ -175,20 +149,19 @@ function saveUpdateInformation(updateParams) {
  * @param previousUpdateID The previousUpdateID contained in the response object
  * @param clientLastUpdateID an optional override for the lastUpdateIDAppliedToClient
  */
-function doesClientNeedToBeUpdated(_a) {
-    var previousUpdateID = _a.previousUpdateID, clientLastUpdateID = _a.clientLastUpdateID;
+function doesClientNeedToBeUpdated({ previousUpdateID, clientLastUpdateID }) {
     // If no previousUpdateID is sent, this is not a WRITE request so we don't need to update our current state
     if (!previousUpdateID) {
         return false;
     }
-    var lastUpdateIDFromClient = clientLastUpdateID !== null && clientLastUpdateID !== void 0 ? clientLastUpdateID : lastUpdateIDAppliedToClient;
+    const lastUpdateIDFromClient = clientLastUpdateID ?? lastUpdateIDAppliedToClient;
     // If we don't have any value in lastUpdateIDFromClient, this is the first time we're receiving anything, so we need to do a last reconnectApp
     if (!lastUpdateIDFromClient) {
         Log_1.default.info('We do not have lastUpdateIDFromClient, client needs updating');
         return true;
     }
     if (lastUpdateIDFromClient < previousUpdateID) {
-        Log_1.default.info('lastUpdateIDFromClient is less than the previousUpdateID received, client needs updating', false, { lastUpdateIDFromClient: lastUpdateIDFromClient, previousUpdateID: previousUpdateID });
+        Log_1.default.info('lastUpdateIDFromClient is less than the previousUpdateID received, client needs updating', false, { lastUpdateIDFromClient, previousUpdateID });
         return true;
     }
     return false;

@@ -1,21 +1,10 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /* cspell:disable */
-var TripReservationUtils_1 = require("@libs/TripReservationUtils");
-var CONST_1 = require("@src/CONST");
-var reports_1 = require("../utils/collections/reports");
-var basicTripData = {
+const TripReservationUtils_1 = require("@libs/TripReservationUtils");
+const CONST_1 = require("@src/CONST");
+const reports_1 = require("../utils/collections/reports");
+const basicTripData = {
     pnrs: [],
     tripPaymentInfo: {
         totalFare: {
@@ -25,7 +14,7 @@ var basicTripData = {
     },
 };
 // PNR data for all types
-var airPnrDirect = {
+const airPnrDirect = {
     pnrId: 'PNR_AIR_789',
     data: {
         airPnr: {
@@ -338,7 +327,7 @@ var airPnrDirect = {
     },
 };
 // airPnrConnecting
-var airPnrConnecting = {
+const airPnrConnecting = {
     pnrId: 'PNR_AIR_CONNECTING_789',
     data: {
         additionalMetadata: {
@@ -1655,7 +1644,7 @@ var airPnrConnecting = {
         suspendReason: '',
     },
 };
-var railPnr = {
+const railPnr = {
     pnrId: 'PNR_RAIL_789',
     data: {
         railPnr: {
@@ -1878,7 +1867,7 @@ var railPnr = {
         },
     },
 };
-var carPnr = {
+const carPnr = {
     pnrId: 'PNR_CAR_789',
     data: {
         carPnr: {
@@ -2030,7 +2019,7 @@ var carPnr = {
         },
     },
 };
-var hotelPnr = {
+const hotelPnr = {
     pnrId: 'PNR_HOTEL_789',
     data: {
         hotelPnr: {
@@ -2265,76 +2254,83 @@ var hotelPnr = {
     },
 };
 // Trip containing all types of reservations
-var tripWithAllReservations = __assign(__assign({}, basicTripData), { pnrs: [airPnrDirect, airPnrConnecting, railPnr, carPnr, hotelPnr] });
-describe('TripReservationUtils', function () {
-    describe('getReservationsFromTripReport', function () {
-        it('should return an empty array when there are no transactions and trip payload', function () {
-            var report = (0, reports_1.createRandomReport)(1);
-            var result = (0, TripReservationUtils_1.getReservationsFromTripReport)(report, []);
+const tripWithAllReservations = {
+    ...basicTripData,
+    pnrs: [airPnrDirect, airPnrConnecting, railPnr, carPnr, hotelPnr],
+};
+describe('TripReservationUtils', () => {
+    describe('getReservationsFromTripReport', () => {
+        it('should return an empty array when there are no transactions and trip payload', () => {
+            const report = (0, reports_1.createRandomReport)(1);
+            const result = (0, TripReservationUtils_1.getReservationsFromTripReport)(report, []);
             expect(result).toEqual([]);
         });
-        it('should return reservations from tripPayload', function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j;
-            var report = (0, reports_1.createRandomReport)(1);
+        it('should return reservations from tripPayload', () => {
+            const report = (0, reports_1.createRandomReport)(1);
             report.tripData = {
                 tripID: 'trip123',
                 payload: tripWithAllReservations,
             };
-            var result = (0, TripReservationUtils_1.getReservationsFromTripReport)(report, []);
+            const result = (0, TripReservationUtils_1.getReservationsFromTripReport)(report, []);
             expect(result).toHaveLength(7);
-            expect((_a = result.at(0)) === null || _a === void 0 ? void 0 : _a.reservation.reservationID).toEqual('PNR_AIR_789');
-            expect((_b = result.at(1)) === null || _b === void 0 ? void 0 : _b.reservation.reservationID).toEqual('PNR_RAIL_789');
-            expect((_c = result.at(2)) === null || _c === void 0 ? void 0 : _c.reservation.reservationID).toEqual('PNR_CAR_789');
-            expect((_d = result.at(3)) === null || _d === void 0 ? void 0 : _d.reservation.reservationID).toEqual('PNR_HOTEL_789');
-            expect((_e = result.at(4)) === null || _e === void 0 ? void 0 : _e.reservation.reservationID).toEqual('PNR_AIR_CONNECTING_789');
-            expect((_f = result.at(5)) === null || _f === void 0 ? void 0 : _f.reservation.reservationID).toEqual('PNR_AIR_CONNECTING_789');
-            expect((_g = result.at(6)) === null || _g === void 0 ? void 0 : _g.reservation.reservationID).toEqual('PNR_AIR_CONNECTING_789');
+            expect(result.at(0)?.reservation.reservationID).toEqual('PNR_AIR_789');
+            expect(result.at(1)?.reservation.reservationID).toEqual('PNR_RAIL_789');
+            expect(result.at(2)?.reservation.reservationID).toEqual('PNR_CAR_789');
+            expect(result.at(3)?.reservation.reservationID).toEqual('PNR_HOTEL_789');
+            expect(result.at(4)?.reservation.reservationID).toEqual('PNR_AIR_CONNECTING_789');
+            expect(result.at(5)?.reservation.reservationID).toEqual('PNR_AIR_CONNECTING_789');
+            expect(result.at(6)?.reservation.reservationID).toEqual('PNR_AIR_CONNECTING_789');
             report.tripData = {
                 tripID: 'trip123',
-                payload: __assign(__assign({}, basicTripData), { pnrs: [hotelPnr] }),
+                payload: {
+                    ...basicTripData,
+                    pnrs: [hotelPnr],
+                },
             };
-            var resultWithSingleReservation = (0, TripReservationUtils_1.getReservationsFromTripReport)(report, []);
+            const resultWithSingleReservation = (0, TripReservationUtils_1.getReservationsFromTripReport)(report, []);
             expect(resultWithSingleReservation).toHaveLength(1);
-            expect((_h = resultWithSingleReservation.at(0)) === null || _h === void 0 ? void 0 : _h.reservation.reservationID).toEqual('PNR_HOTEL_789');
-            expect((_j = resultWithSingleReservation.at(0)) === null || _j === void 0 ? void 0 : _j.reservation.type).toEqual(CONST_1.default.RESERVATION_TYPE.HOTEL);
+            expect(resultWithSingleReservation.at(0)?.reservation.reservationID).toEqual('PNR_HOTEL_789');
+            expect(resultWithSingleReservation.at(0)?.reservation.type).toEqual(CONST_1.default.RESERVATION_TYPE.HOTEL);
         });
     });
-    describe('getPNRReservationDataFromTripReport', function () {
-        it('should return an empty array when there are no transactions and trip payload', function () {
-            var report = (0, reports_1.createRandomReport)(1);
-            var result = (0, TripReservationUtils_1.getPNRReservationDataFromTripReport)(report, []);
+    describe('getPNRReservationDataFromTripReport', () => {
+        it('should return an empty array when there are no transactions and trip payload', () => {
+            const report = (0, reports_1.createRandomReport)(1);
+            const result = (0, TripReservationUtils_1.getPNRReservationDataFromTripReport)(report, []);
             expect(result).toEqual([]);
         });
-        it('should return PNR reservation data from tripPayload', function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
-            var report = (0, reports_1.createRandomReport)(1);
+        it('should return PNR reservation data from tripPayload', () => {
+            const report = (0, reports_1.createRandomReport)(1);
             report.tripData = {
                 tripID: 'trip123',
                 payload: tripWithAllReservations,
             };
-            var result = (0, TripReservationUtils_1.getPNRReservationDataFromTripReport)(report, []);
+            const result = (0, TripReservationUtils_1.getPNRReservationDataFromTripReport)(report, []);
             expect(result).toHaveLength(5);
-            expect((_a = result.at(0)) === null || _a === void 0 ? void 0 : _a.pnrID).toEqual('PNR_AIR_789');
-            expect((_b = result.at(1)) === null || _b === void 0 ? void 0 : _b.pnrID).toEqual('PNR_RAIL_789');
-            expect((_c = result.at(2)) === null || _c === void 0 ? void 0 : _c.pnrID).toEqual('PNR_CAR_789');
-            expect((_d = result.at(3)) === null || _d === void 0 ? void 0 : _d.pnrID).toEqual('PNR_HOTEL_789');
-            expect((_e = result.at(4)) === null || _e === void 0 ? void 0 : _e.pnrID).toEqual('PNR_AIR_CONNECTING_789');
+            expect(result.at(0)?.pnrID).toEqual('PNR_AIR_789');
+            expect(result.at(1)?.pnrID).toEqual('PNR_RAIL_789');
+            expect(result.at(2)?.pnrID).toEqual('PNR_CAR_789');
+            expect(result.at(3)?.pnrID).toEqual('PNR_HOTEL_789');
+            expect(result.at(4)?.pnrID).toEqual('PNR_AIR_CONNECTING_789');
             report.tripData = {
                 tripID: 'trip123',
-                payload: __assign(__assign({}, basicTripData), { pnrs: [airPnrConnecting] }),
+                payload: {
+                    ...basicTripData,
+                    pnrs: [airPnrConnecting],
+                },
             };
-            var resultWithSingleReservation = (0, TripReservationUtils_1.getPNRReservationDataFromTripReport)(report, []);
+            const resultWithSingleReservation = (0, TripReservationUtils_1.getPNRReservationDataFromTripReport)(report, []);
             expect(resultWithSingleReservation).toHaveLength(1);
-            expect((_f = resultWithSingleReservation.at(0)) === null || _f === void 0 ? void 0 : _f.pnrID).toEqual('PNR_AIR_CONNECTING_789');
-            expect((_g = resultWithSingleReservation.at(0)) === null || _g === void 0 ? void 0 : _g.reservations).toHaveLength(3);
-            var pnrReservation = resultWithSingleReservation.at(0);
+            expect(resultWithSingleReservation.at(0)?.pnrID).toEqual('PNR_AIR_CONNECTING_789');
+            expect(resultWithSingleReservation.at(0)?.reservations).toHaveLength(3);
+            const pnrReservation = resultWithSingleReservation.at(0);
             // Test the order of reservations
-            expect((_k = (_j = (_h = pnrReservation === null || pnrReservation === void 0 ? void 0 : pnrReservation.reservations.at(0)) === null || _h === void 0 ? void 0 : _h.reservation) === null || _j === void 0 ? void 0 : _j.start) === null || _k === void 0 ? void 0 : _k.shortName).toEqual('EWR');
-            expect((_o = (_m = (_l = pnrReservation === null || pnrReservation === void 0 ? void 0 : pnrReservation.reservations.at(0)) === null || _l === void 0 ? void 0 : _l.reservation) === null || _m === void 0 ? void 0 : _m.end) === null || _o === void 0 ? void 0 : _o.shortName).toEqual('LAX');
-            expect((_r = (_q = (_p = pnrReservation === null || pnrReservation === void 0 ? void 0 : pnrReservation.reservations.at(1)) === null || _p === void 0 ? void 0 : _p.reservation) === null || _q === void 0 ? void 0 : _q.start) === null || _r === void 0 ? void 0 : _r.shortName).toEqual('LAX');
-            expect((_u = (_t = (_s = pnrReservation === null || pnrReservation === void 0 ? void 0 : pnrReservation.reservations.at(1)) === null || _s === void 0 ? void 0 : _s.reservation) === null || _t === void 0 ? void 0 : _t.end) === null || _u === void 0 ? void 0 : _u.shortName).toEqual('MSP');
-            expect((_x = (_w = (_v = pnrReservation === null || pnrReservation === void 0 ? void 0 : pnrReservation.reservations.at(2)) === null || _v === void 0 ? void 0 : _v.reservation) === null || _w === void 0 ? void 0 : _w.start) === null || _x === void 0 ? void 0 : _x.shortName).toEqual('MSP');
-            expect((_0 = (_z = (_y = pnrReservation === null || pnrReservation === void 0 ? void 0 : pnrReservation.reservations.at(2)) === null || _y === void 0 ? void 0 : _y.reservation) === null || _z === void 0 ? void 0 : _z.end) === null || _0 === void 0 ? void 0 : _0.shortName).toEqual('EWR');
+            expect(pnrReservation?.reservations.at(0)?.reservation?.start?.shortName).toEqual('EWR');
+            expect(pnrReservation?.reservations.at(0)?.reservation?.end?.shortName).toEqual('LAX');
+            expect(pnrReservation?.reservations.at(1)?.reservation?.start?.shortName).toEqual('LAX');
+            expect(pnrReservation?.reservations.at(1)?.reservation?.end?.shortName).toEqual('MSP');
+            expect(pnrReservation?.reservations.at(2)?.reservation?.start?.shortName).toEqual('MSP');
+            expect(pnrReservation?.reservations.at(2)?.reservation?.end?.shortName).toEqual('EWR');
         });
     });
 });

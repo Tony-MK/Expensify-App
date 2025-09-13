@@ -7,8 +7,8 @@ exports.isActiveReportAction = isActiveReportAction;
 exports.clearActiveReportAction = clearActiveReportAction;
 exports.showDeleteModal = showDeleteModal;
 exports.hideDeleteModal = hideDeleteModal;
-var react_1 = require("react");
-var contextMenuRef = react_1.default.createRef();
+const react_1 = require("react");
+const contextMenuRef = react_1.default.createRef();
 exports.contextMenuRef = contextMenuRef;
 /**
  * Hide the ReportActionContextMenu modal popover.
@@ -16,8 +16,7 @@ exports.contextMenuRef = contextMenuRef;
  * @param [shouldDelay] - whether the menu should close after a delay
  * @param [onHideCallback] - Callback to be called after Context Menu is completely hidden
  */
-function hideContextMenu(shouldDelay, onHideCallback) {
-    if (onHideCallback === void 0) { onHideCallback = function () { }; }
+function hideContextMenu(shouldDelay, onHideCallback = () => { }) {
     if (!contextMenuRef.current) {
         return;
     }
@@ -28,10 +27,9 @@ function hideContextMenu(shouldDelay, onHideCallback) {
     // Save the active instanceID for which hide action was called.
     // If menu is being closed with a delay, check that whether the same instance exists or a new was created.
     // If instance is not same, cancel the hide action
-    var instanceID = contextMenuRef.current.instanceIDRef.current;
-    setTimeout(function () {
-        var _a;
-        if (((_a = contextMenuRef.current) === null || _a === void 0 ? void 0 : _a.instanceIDRef.current) !== instanceID) {
+    const instanceID = contextMenuRef.current.instanceIDRef.current;
+    setTimeout(() => {
+        if (contextMenuRef.current?.instanceIDRef.current !== instanceID) {
             return;
         }
         contextMenuRef.current.hideContextMenu(onHideCallback);
@@ -59,9 +57,8 @@ function showContextMenu(showContextMenuParams) {
     if (!contextMenuRef.current) {
         return;
     }
-    var show = function () {
-        var _a;
-        (_a = contextMenuRef.current) === null || _a === void 0 ? void 0 : _a.showContextMenu(showContextMenuParams);
+    const show = () => {
+        contextMenuRef.current?.showContextMenu(showContextMenuParams);
     };
     // If there is an already open context menu, close it first before opening
     // a new one.

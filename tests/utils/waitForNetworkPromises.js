@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var waitForBatchedUpdates_1 = require("./waitForBatchedUpdates");
+const waitForBatchedUpdates_1 = require("./waitForBatchedUpdates");
 /**
  * Method flushes microtasks and pending timers twice. Because we batch onyx updates
  * Network requests takes 2 microtask cycles to resolve
@@ -10,5 +10,5 @@ var waitForBatchedUpdates_1 = require("./waitForBatchedUpdates");
  *  ❌  Onyx.merge(...)
  *      waitForBatchedUpdates().then(...)
  */
-var waitForNetworkPromises = function () { return (0, waitForBatchedUpdates_1.default)().then(waitForBatchedUpdates_1.default); };
+const waitForNetworkPromises = () => (0, waitForBatchedUpdates_1.default)().then(waitForBatchedUpdates_1.default);
 exports.default = waitForNetworkPromises;

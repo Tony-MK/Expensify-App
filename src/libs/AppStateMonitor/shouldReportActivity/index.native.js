@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var shouldReportActivity = true;
+const shouldReportActivity = true;
 exports.default = shouldReportActivity;

@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var EmojiWithTooltip_1 = require("@components/EmojiWithTooltip");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-function EmojiRenderer(_a) {
-    var tnode = _a.tnode, styleProp = _a.style;
-    var styles = (0, useThemeStyles_1.default)();
-    var style = (0, react_1.useMemo)(function () {
+const react_1 = require("react");
+const EmojiWithTooltip_1 = require("@components/EmojiWithTooltip");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+function EmojiRenderer({ tnode, style: styleProp }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const style = (0, react_1.useMemo)(() => {
         if ('islarge' in tnode.attributes) {
             return [styleProp, styles.onlyEmojisText];
         }

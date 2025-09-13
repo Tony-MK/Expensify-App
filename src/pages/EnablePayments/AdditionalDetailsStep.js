@@ -1,30 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var date_fns_1 = require("date-fns");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var DatePicker_1 = require("@components/DatePicker");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var TextLink_1 = require("@components/TextLink");
-var withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
-var PhoneNumber_1 = require("@libs/PhoneNumber");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var AddressFormFields_1 = require("@pages/ReimbursementAccount/AddressFormFields");
-var Wallet_1 = require("@userActions/Wallet");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var AdditionalDetailStepForm_1 = require("@src/types/form/AdditionalDetailStepForm");
-var IdologyQuestions_1 = require("./IdologyQuestions");
-var DEFAULT_WALLET_ADDITIONAL_DETAILS = {
+const date_fns_1 = require("date-fns");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const DatePicker_1 = require("@components/DatePicker");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const TextLink_1 = require("@components/TextLink");
+const withCurrentUserPersonalDetails_1 = require("@components/withCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
+const PhoneNumber_1 = require("@libs/PhoneNumber");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const AddressFormFields_1 = require("@pages/ReimbursementAccount/AddressFormFields");
+const Wallet_1 = require("@userActions/Wallet");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const AdditionalDetailStepForm_1 = require("@src/types/form/AdditionalDetailStepForm");
+const IdologyQuestions_1 = require("./IdologyQuestions");
+const DEFAULT_WALLET_ADDITIONAL_DETAILS = {
     errorFields: {},
     isLoading: false,
     errors: {},
@@ -32,7 +32,7 @@ var DEFAULT_WALLET_ADDITIONAL_DETAILS = {
     idNumber: '',
     errorCode: '',
 };
-var fieldNameTranslationKeys = {
+const fieldNameTranslationKeys = {
     legalFirstName: 'additionalDetailsStep.legalFirstNameLabel',
     legalLastName: 'additionalDetailsStep.legalLastNameLabel',
     addressStreet: 'common.personalAddress',
@@ -41,7 +41,7 @@ var fieldNameTranslationKeys = {
     ssn: 'common.ssnLast4',
     ssnFull9: 'common.ssnFull9',
 };
-var STEP_FIELDS = [
+const STEP_FIELDS = [
     AdditionalDetailStepForm_1.default.LEGAL_FIRST_NAME,
     AdditionalDetailStepForm_1.default.LEGAL_LAST_NAME,
     AdditionalDetailStepForm_1.default.ADDRESS_STREET,
@@ -52,18 +52,16 @@ var STEP_FIELDS = [
     AdditionalDetailStepForm_1.default.ADDRESS_STATE,
     AdditionalDetailStepForm_1.default.SSN,
 ];
-function AdditionalDetailsStep(_a) {
-    var _b;
-    var currentUserPersonalDetails = _a.currentUserPersonalDetails;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var _c = (0, useOnyx_1.default)(ONYXKEYS_1.default.WALLET_ADDITIONAL_DETAILS)[0], walletAdditionalDetails = _c === void 0 ? DEFAULT_WALLET_ADDITIONAL_DETAILS : _c;
-    var currentDate = new Date();
-    var minDate = (0, date_fns_1.subYears)(currentDate, CONST_1.default.DATE_BIRTH.MAX_AGE);
-    var maxDate = (0, date_fns_1.subYears)(currentDate, CONST_1.default.DATE_BIRTH.MIN_AGE_FOR_PAYMENT);
-    var shouldAskForFullSSN = (walletAdditionalDetails === null || walletAdditionalDetails === void 0 ? void 0 : walletAdditionalDetails.errorCode) === CONST_1.default.WALLET.ERROR.SSN;
-    var validate = function (values) {
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, STEP_FIELDS);
+function AdditionalDetailsStep({ currentUserPersonalDetails }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [walletAdditionalDetails = DEFAULT_WALLET_ADDITIONAL_DETAILS] = (0, useOnyx_1.default)(ONYXKEYS_1.default.WALLET_ADDITIONAL_DETAILS);
+    const currentDate = new Date();
+    const minDate = (0, date_fns_1.subYears)(currentDate, CONST_1.default.DATE_BIRTH.MAX_AGE);
+    const maxDate = (0, date_fns_1.subYears)(currentDate, CONST_1.default.DATE_BIRTH.MIN_AGE_FOR_PAYMENT);
+    const shouldAskForFullSSN = walletAdditionalDetails?.errorCode === CONST_1.default.WALLET.ERROR.SSN;
+    const validate = (values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, STEP_FIELDS);
         if (values.dob) {
             if (!(0, ValidationUtils_1.isValidPastDate)(values.dob) || !(0, ValidationUtils_1.meetsMaximumAgeRequirement)(values.dob)) {
                 errors.dob = translate('bankAccount.error.dob');
@@ -83,7 +81,7 @@ function AdditionalDetailsStep(_a) {
         }
         // walletAdditionalDetails stores errors returned by the server. If the server returns an SSN error
         // then the user needs to provide the full 9 digit SSN.
-        if ((walletAdditionalDetails === null || walletAdditionalDetails === void 0 ? void 0 : walletAdditionalDetails.errorCode) === CONST_1.default.WALLET.ERROR.SSN) {
+        if (walletAdditionalDetails?.errorCode === CONST_1.default.WALLET.ERROR.SSN) {
             if (values.ssn && !(0, ValidationUtils_1.isValidSSNFullNine)(values.ssn)) {
                 errors.ssn = translate('additionalDetailsStep.ssnFull9Error');
             }
@@ -93,26 +91,25 @@ function AdditionalDetailsStep(_a) {
         }
         return errors;
     };
-    var activateWallet = function (values) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-        var personalDetails = {
-            phoneNumber: (_b = (values.phoneNumber && ((_a = (0, PhoneNumber_1.parsePhoneNumber)(values.phoneNumber, { regionCode: CONST_1.default.COUNTRY.US }).number) === null || _a === void 0 ? void 0 : _a.significant))) !== null && _b !== void 0 ? _b : '',
-            legalFirstName: (_c = values.legalFirstName) !== null && _c !== void 0 ? _c : '',
-            legalLastName: (_d = values.legalLastName) !== null && _d !== void 0 ? _d : '',
-            addressStreet: (_e = values.addressStreet) !== null && _e !== void 0 ? _e : '',
-            addressCity: (_f = values.addressCity) !== null && _f !== void 0 ? _f : '',
-            addressState: (_g = values.addressState) !== null && _g !== void 0 ? _g : '',
-            addressZip: (_h = values.addressZipCode) !== null && _h !== void 0 ? _h : '',
-            dob: (_j = values.dob) !== null && _j !== void 0 ? _j : '',
-            ssn: (_k = values.ssn) !== null && _k !== void 0 ? _k : '',
+    const activateWallet = (values) => {
+        const personalDetails = {
+            phoneNumber: (values.phoneNumber && (0, PhoneNumber_1.parsePhoneNumber)(values.phoneNumber, { regionCode: CONST_1.default.COUNTRY.US }).number?.significant) ?? '',
+            legalFirstName: values.legalFirstName ?? '',
+            legalLastName: values.legalLastName ?? '',
+            addressStreet: values.addressStreet ?? '',
+            addressCity: values.addressCity ?? '',
+            addressState: values.addressState ?? '',
+            addressZip: values.addressZipCode ?? '',
+            dob: values.dob ?? '',
+            ssn: values.ssn ?? '',
         };
         // Attempt to set the personal details
         (0, Wallet_1.updatePersonalDetails)(personalDetails);
     };
-    if ((walletAdditionalDetails === null || walletAdditionalDetails === void 0 ? void 0 : walletAdditionalDetails.questions) && walletAdditionalDetails.questions.length > 0) {
+    if (walletAdditionalDetails?.questions && walletAdditionalDetails.questions.length > 0) {
         return (<ScreenWrapper_1.default shouldShowOfflineIndicator={false} style={[styles.flex1, styles.pt0]} keyboardAvoidingViewBehavior="height" testID={AdditionalDetailsStep.displayName}>
-                <HeaderWithBackButton_1.default title={translate('additionalDetailsStep.headerTitle')} onBackButtonPress={function () { return (0, Wallet_1.setAdditionalDetailsQuestions)(null); }}/>
-                <IdologyQuestions_1.default questions={walletAdditionalDetails.questions} idNumber={(_b = walletAdditionalDetails.idNumber) !== null && _b !== void 0 ? _b : ''}/>
+                <HeaderWithBackButton_1.default title={translate('additionalDetailsStep.headerTitle')} onBackButtonPress={() => (0, Wallet_1.setAdditionalDetailsQuestions)(null)}/>
+                <IdologyQuestions_1.default questions={walletAdditionalDetails.questions} idNumber={walletAdditionalDetails.idNumber ?? ''}/>
             </ScreenWrapper_1.default>);
     }
     return (<>

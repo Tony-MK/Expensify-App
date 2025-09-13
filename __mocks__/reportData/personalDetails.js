@@ -1,9 +1,8 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var usersIDs = [15593135, 51760358, 26502375];
-var personalDetails = (_a = {},
-    _a[usersIDs[0]] = {
+const usersIDs = [15593135, 51760358, 26502375];
+const personalDetails = {
+    [usersIDs[0]]: {
         accountID: usersIDs[0],
         avatar: '@assets/images/avatars/user/default-avatar_1.svg',
         firstName: 'John',
@@ -23,7 +22,7 @@ var personalDetails = (_a = {},
         phoneNumber: '11111111',
         validated: true,
     },
-    _a[usersIDs[1]] = {
+    [usersIDs[1]]: {
         accountID: usersIDs[1],
         avatar: '@assets/images/avatars/user/default-avatar_2.svg',
         firstName: 'Ted',
@@ -43,7 +42,7 @@ var personalDetails = (_a = {},
         phoneNumber: '22222222',
         validated: true,
     },
-    _a[usersIDs[2]] = {
+    [usersIDs[2]]: {
         accountID: usersIDs[2],
         avatar: '@assets/images/avatars/user/default-avatar_3.svg',
         firstName: 'Jane',
@@ -63,5 +62,5 @@ var personalDetails = (_a = {},
         phoneNumber: '33333333',
         validated: true,
     },
-    _a);
+};
 exports.default = personalDetails;

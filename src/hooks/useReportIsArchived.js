@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ReportUtils_1 = require("@libs/ReportUtils");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var useOnyx_1 = require("./useOnyx");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const useOnyx_1 = require("./useOnyx");
 function useReportIsArchived(reportID) {
-    var reportNameValuePairs = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(reportID), { canBeMissing: true })[0];
-    var isReportArchived = (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs);
+    const [reportNameValuePairs] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${reportID}`, { canBeMissing: true });
+    const isReportArchived = (0, ReportUtils_1.isArchivedReport)(reportNameValuePairs);
     return isReportArchived;
 }
 exports.default = useReportIsArchived;

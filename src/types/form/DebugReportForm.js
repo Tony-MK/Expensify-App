@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     CHAT_TYPE: 'chatType',
     CURRENCY: 'currency',
     DESCRIPTION: 'description',

@@ -1,39 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var CurrencySelectionList_1 = require("@components/CurrencySelectionList");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Onboarding_1 = require("@libs/actions/Onboarding");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function BaseOnboardingWorkspaceCurrency(_a) {
-    var _b, _c, _d;
-    var route = _a.route, shouldUseNativeStyles = _a.shouldUseNativeStyles;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var onboardingIsMediumOrLargerScreenWidth = (0, useResponsiveLayout_1.default)().onboardingIsMediumOrLargerScreenWidth;
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var draftValues = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORKSPACE_DETAILS_FORM_DRAFT, { canBeMissing: true })[0];
-    var value = (_c = (_b = draftValues === null || draftValues === void 0 ? void 0 : draftValues.currency) !== null && _b !== void 0 ? _b : currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.localCurrencyCode) !== null && _c !== void 0 ? _c : CONST_1.default.CURRENCY.USD;
-    var goBack = (0, react_1.useCallback)(function () {
-        var _a;
-        var backTo = (_a = route === null || route === void 0 ? void 0 : route.params) === null || _a === void 0 ? void 0 : _a.backTo;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const CurrencySelectionList_1 = require("@components/CurrencySelectionList");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Onboarding_1 = require("@libs/actions/Onboarding");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function BaseOnboardingWorkspaceCurrency({ route, shouldUseNativeStyles }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { onboardingIsMediumOrLargerScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const [draftValues] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORKSPACE_DETAILS_FORM_DRAFT, { canBeMissing: true });
+    const value = draftValues?.currency ?? currentUserPersonalDetails?.localCurrencyCode ?? CONST_1.default.CURRENCY.USD;
+    const goBack = (0, react_1.useCallback)(() => {
+        const backTo = route?.params?.backTo;
         if (backTo) {
             Navigation_1.default.goBack(backTo);
             return;
         }
         Navigation_1.default.goBack();
-    }, [(_d = route === null || route === void 0 ? void 0 : route.params) === null || _d === void 0 ? void 0 : _d.backTo]);
-    var updateInput = (0, react_1.useCallback)(function (item) {
+    }, [route?.params?.backTo]);
+    const updateInput = (0, react_1.useCallback)((item) => {
         (0, Onboarding_1.setWorkspaceCurrency)(item.currencyCode);
         goBack();
     }, [goBack]);

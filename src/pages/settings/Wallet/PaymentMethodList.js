@@ -1,62 +1,41 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var flash_list_1 = require("@shopify/flash-list");
-var sortBy_1 = require("lodash/sortBy");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var FormAlertWrapper_1 = require("@components/FormAlertWrapper");
-var Expensicons = require("@components/Icon/Expensicons");
-var MenuItem_1 = require("@components/MenuItem");
-var OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeIllustrations_1 = require("@hooks/useThemeIllustrations");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var PaymentMethods_1 = require("@libs/actions/PaymentMethods");
-var CardUtils_1 = require("@libs/CardUtils");
-var Log_1 = require("@libs/Log");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PaymentUtils_1 = require("@libs/PaymentUtils");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+const flash_list_1 = require("@shopify/flash-list");
+const sortBy_1 = require("lodash/sortBy");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const FormAlertWrapper_1 = require("@components/FormAlertWrapper");
+const Expensicons = require("@components/Icon/Expensicons");
+const MenuItem_1 = require("@components/MenuItem");
+const OfflineWithFeedback_1 = require("@components/OfflineWithFeedback");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeIllustrations_1 = require("@hooks/useThemeIllustrations");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const PaymentMethods_1 = require("@libs/actions/PaymentMethods");
+const CardUtils_1 = require("@libs/CardUtils");
+const Log_1 = require("@libs/Log");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PaymentUtils_1 = require("@libs/PaymentUtils");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
 function dismissError(item) {
-    var _a, _b;
     if (item.cardID) {
         (0, PaymentMethods_1.clearDeletePaymentMethodError)(ONYXKEYS_1.default.CARD_LIST, item.cardID);
         return;
     }
-    var isBankAccount = item.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT;
-    var paymentList = isBankAccount ? ONYXKEYS_1.default.BANK_ACCOUNT_LIST : ONYXKEYS_1.default.FUND_LIST;
-    var paymentID = isBankAccount ? (_a = item.accountData) === null || _a === void 0 ? void 0 : _a.bankAccountID : (_b = item.accountData) === null || _b === void 0 ? void 0 : _b.fundID;
+    const isBankAccount = item.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT;
+    const paymentList = isBankAccount ? ONYXKEYS_1.default.BANK_ACCOUNT_LIST : ONYXKEYS_1.default.FUND_LIST;
+    const paymentID = isBankAccount ? item.accountData?.bankAccountID : item.accountData?.fundID;
     if (!paymentID) {
         Log_1.default.info('Unable to clear payment method error: ', undefined, item);
         return;
@@ -74,97 +53,91 @@ function dismissError(item) {
         }
     }
 }
-function shouldShowDefaultBadge(filteredPaymentMethods, isDefault) {
-    if (isDefault === void 0) { isDefault = false; }
+function shouldShowDefaultBadge(filteredPaymentMethods, isDefault = false) {
     if (!isDefault) {
         return false;
     }
-    var defaultPaymentMethodCount = filteredPaymentMethods.filter(function (method) { return method.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT || method.accountType === CONST_1.default.PAYMENT_METHODS.DEBIT_CARD; }).length;
+    const defaultPaymentMethodCount = filteredPaymentMethods.filter((method) => method.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT || method.accountType === CONST_1.default.PAYMENT_METHODS.DEBIT_CARD).length;
     return defaultPaymentMethodCount > 1;
 }
 function isPaymentMethodActive(actionPaymentMethodType, activePaymentMethodID, paymentMethod) {
     return paymentMethod.accountType === actionPaymentMethodType && paymentMethod.methodID === activePaymentMethodID;
 }
 function keyExtractor(item) {
-    var _a;
     if (typeof item === 'string') {
         return item;
     }
-    return (_a = item.key) !== null && _a !== void 0 ? _a : '';
+    return item.key ?? '';
 }
-function PaymentMethodList(_a) {
-    var _b = _a.actionPaymentMethodType, actionPaymentMethodType = _b === void 0 ? '' : _b, _c = _a.activePaymentMethodID, activePaymentMethodID = _c === void 0 ? '' : _c, _d = _a.buttonRef, buttonRef = _d === void 0 ? function () { } : _d, _e = _a.filterType, filterType = _e === void 0 ? '' : _e, listHeaderComponent = _a.listHeaderComponent, onPress = _a.onPress, _f = _a.shouldShowSelectedState, shouldShowSelectedState = _f === void 0 ? false : _f, _g = _a.shouldShowAddPaymentMethodButton, shouldShowAddPaymentMethodButton = _g === void 0 ? true : _g, _h = _a.shouldShowAddBankAccountButton, shouldShowAddBankAccountButton = _h === void 0 ? false : _h, _j = _a.shouldShowAddBankAccount, shouldShowAddBankAccount = _j === void 0 ? true : _j, _k = _a.shouldShowEmptyListMessage, shouldShowEmptyListMessage = _k === void 0 ? true : _k, _l = _a.shouldShowAssignedCards, shouldShowAssignedCards = _l === void 0 ? false : _l, _m = _a.selectedMethodID, selectedMethodID = _m === void 0 ? '' : _m, _o = _a.onListContentSizeChange, onListContentSizeChange = _o === void 0 ? function () { } : _o, _p = _a.style, style = _p === void 0 ? {} : _p, _q = _a.listItemStyle, listItemStyle = _q === void 0 ? {} : _q, _r = _a.shouldShowRightIcon, shouldShowRightIcon = _r === void 0 ? true : _r, invoiceTransferBankAccountID = _a.invoiceTransferBankAccountID, _s = _a.shouldShowBankAccountSections, shouldShowBankAccountSections = _s === void 0 ? false : _s;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var illustrations = (0, useThemeIllustrations_1.default)();
-    var isUserValidated = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: function (account) { return account === null || account === void 0 ? void 0 : account.validated; }, canBeMissing: true })[0];
-    var _t = (0, useOnyx_1.default)(ONYXKEYS_1.default.BANK_ACCOUNT_LIST, { canBeMissing: true }), _u = _t[0], bankAccountList = _u === void 0 ? (0, EmptyObject_1.getEmptyObject)() : _u, bankAccountListResult = _t[1];
-    var userWallet = (0, useOnyx_1.default)(ONYXKEYS_1.default.USER_WALLET, { canBeMissing: true })[0];
-    var isLoadingBankAccountList = (0, isLoadingOnyxValue_1.default)(bankAccountListResult);
-    var _v = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: true }), _w = _v[0], cardList = _w === void 0 ? (0, EmptyObject_1.getEmptyObject)() : _w, cardListResult = _v[1];
-    var isLoadingCardList = (0, isLoadingOnyxValue_1.default)(cardListResult);
+function PaymentMethodList({ actionPaymentMethodType = '', activePaymentMethodID = '', buttonRef = () => { }, filterType = '', listHeaderComponent, onPress, shouldShowSelectedState = false, shouldShowAddPaymentMethodButton = true, shouldShowAddBankAccountButton = false, shouldShowAddBankAccount = true, shouldShowEmptyListMessage = true, shouldShowAssignedCards = false, selectedMethodID = '', onListContentSizeChange = () => { }, style = {}, listItemStyle = {}, shouldShowRightIcon = true, invoiceTransferBankAccountID, shouldShowBankAccountSections = false, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const illustrations = (0, useThemeIllustrations_1.default)();
+    const [isUserValidated] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: (account) => account?.validated, canBeMissing: true });
+    const [bankAccountList = (0, EmptyObject_1.getEmptyObject)(), bankAccountListResult] = (0, useOnyx_1.default)(ONYXKEYS_1.default.BANK_ACCOUNT_LIST, { canBeMissing: true });
+    const [userWallet] = (0, useOnyx_1.default)(ONYXKEYS_1.default.USER_WALLET, { canBeMissing: true });
+    const isLoadingBankAccountList = (0, isLoadingOnyxValue_1.default)(bankAccountListResult);
+    const [cardList = (0, EmptyObject_1.getEmptyObject)(), cardListResult] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: true });
+    const isLoadingCardList = (0, isLoadingOnyxValue_1.default)(cardListResult);
     // Temporarily disabled because P2P debit cards are disabled.
     // const [fundList = getEmptyObject<FundList>()] = useOnyx(ONYXKEYS.FUND_LIST);
-    var _x = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_PAYMENT_METHODS, { canBeMissing: true }), _y = _x[0], isLoadingPaymentMethods = _y === void 0 ? true : _y, isLoadingPaymentMethodsResult = _x[1];
-    var isLoadingPaymentMethodsOnyx = (0, isLoadingOnyxValue_1.default)(isLoadingPaymentMethodsResult);
-    var filteredPaymentMethods = (0, react_1.useMemo)(function () {
+    const [isLoadingPaymentMethods = true, isLoadingPaymentMethodsResult] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_PAYMENT_METHODS, { canBeMissing: true });
+    const isLoadingPaymentMethodsOnyx = (0, isLoadingOnyxValue_1.default)(isLoadingPaymentMethodsResult);
+    const filteredPaymentMethods = (0, react_1.useMemo)(() => {
         if (shouldShowAssignedCards) {
-            var assignedCards = Object.values(isLoadingCardList ? {} : (cardList !== null && cardList !== void 0 ? cardList : {}))
+            const assignedCards = Object.values(isLoadingCardList ? {} : (cardList ?? {}))
                 // Filter by active cards associated with a domain
-                .filter(function (card) { var _a; return !!card.domainName && CONST_1.default.EXPENSIFY_CARD.ACTIVE_STATES.includes((_a = card.state) !== null && _a !== void 0 ? _a : 0); });
-            var assignedCardsSorted = (0, sortBy_1.default)(assignedCards, CardUtils_1.getAssignedCardSortKey);
-            var assignedCardsGrouped_1 = [];
-            assignedCardsSorted.forEach(function (card) {
-                var _a, _b, _c, _d, _e, _f, _g;
-                var isDisabled = card.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE || !!card.errors;
-                var icon = (0, CardUtils_1.getCardFeedIcon)(card.bank, illustrations);
+                .filter((card) => !!card.domainName && CONST_1.default.EXPENSIFY_CARD.ACTIVE_STATES.includes(card.state ?? 0));
+            const assignedCardsSorted = (0, sortBy_1.default)(assignedCards, CardUtils_1.getAssignedCardSortKey);
+            const assignedCardsGrouped = [];
+            assignedCardsSorted.forEach((card) => {
+                const isDisabled = card.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE || !!card.errors;
+                const icon = (0, CardUtils_1.getCardFeedIcon)(card.bank, illustrations);
                 if (!(0, CardUtils_1.isExpensifyCard)(card)) {
-                    var pressHandler_1 = onPress;
-                    var lastFourPAN = (0, CardUtils_1.lastFourNumbersFromCardName)(card.cardName);
-                    var plaidUrl = (0, CardUtils_1.getPlaidInstitutionIconUrl)(card.bank);
-                    assignedCardsGrouped_1.push({
+                    const pressHandler = onPress;
+                    const lastFourPAN = (0, CardUtils_1.lastFourNumbersFromCardName)(card.cardName);
+                    const plaidUrl = (0, CardUtils_1.getPlaidInstitutionIconUrl)(card.bank);
+                    assignedCardsGrouped.push({
                         key: card.cardID.toString(),
-                        plaidUrl: plaidUrl,
+                        plaidUrl,
                         title: (0, CardUtils_1.maskCardNumber)(card.cardName, card.bank),
                         description: lastFourPAN
-                            ? "".concat(lastFourPAN, " ").concat(CONST_1.default.DOT_SEPARATOR, " ").concat((0, PolicyUtils_1.getDescriptionForPolicyDomainCard)(card.domainName))
+                            ? `${lastFourPAN} ${CONST_1.default.DOT_SEPARATOR} ${(0, PolicyUtils_1.getDescriptionForPolicyDomainCard)(card.domainName)}`
                             : (0, PolicyUtils_1.getDescriptionForPolicyDomainCard)(card.domainName),
                         interactive: !isDisabled,
                         disabled: isDisabled,
                         canDismissError: false,
-                        shouldShowRightIcon: shouldShowRightIcon,
+                        shouldShowRightIcon,
                         errors: card.errors,
                         pendingAction: card.pendingAction,
                         brickRoadIndicator: card.fraud === CONST_1.default.EXPENSIFY_CARD.FRAUD_TYPES.DOMAIN || card.fraud === CONST_1.default.EXPENSIFY_CARD.FRAUD_TYPES.INDIVIDUAL
                             ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR
                             : undefined,
-                        icon: icon,
+                        icon,
                         iconStyles: [styles.cardIcon],
                         iconWidth: variables_1.default.cardIconWidth,
                         iconHeight: variables_1.default.cardIconHeight,
                         iconRight: Expensicons.ThreeDots,
                         isMethodActive: activePaymentMethodID === card.cardID,
-                        onPress: function (e) {
-                            return pressHandler_1(e, card, {
-                                icon: icon,
-                                iconStyles: [styles.cardIcon],
-                                iconWidth: variables_1.default.cardIconWidth,
-                                iconHeight: variables_1.default.cardIconHeight,
-                            }, card.cardID);
-                        },
+                        onPress: (e) => pressHandler(e, card, {
+                            icon,
+                            iconStyles: [styles.cardIcon],
+                            iconWidth: variables_1.default.cardIconWidth,
+                            iconHeight: variables_1.default.cardIconHeight,
+                        }, card.cardID),
                     });
                     return;
                 }
-                var isAdminIssuedVirtualCard = !!((_a = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _a === void 0 ? void 0 : _a.issuedBy) && !!((_b = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _b === void 0 ? void 0 : _b.isVirtual);
-                var isTravelCard = !!((_c = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _c === void 0 ? void 0 : _c.isVirtual) && !!((_d = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _d === void 0 ? void 0 : _d.isTravelCard);
+                const isAdminIssuedVirtualCard = !!card?.nameValuePairs?.issuedBy && !!card?.nameValuePairs?.isVirtual;
+                const isTravelCard = !!card?.nameValuePairs?.isVirtual && !!card?.nameValuePairs?.isTravelCard;
                 // The card should be grouped to a specific domain and such domain already exists in a assignedCardsGrouped
-                if (assignedCardsGrouped_1.some(function (item) { return item.isGroupedCardDomain && item.description === card.domainName; }) && !isAdminIssuedVirtualCard && !isTravelCard) {
-                    var domainGroupIndex = assignedCardsGrouped_1.findIndex(function (item) { return item.isGroupedCardDomain && item.description === card.domainName; });
-                    var assignedCardsGroupedItem = assignedCardsGrouped_1.at(domainGroupIndex);
+                if (assignedCardsGrouped.some((item) => item.isGroupedCardDomain && item.description === card.domainName) && !isAdminIssuedVirtualCard && !isTravelCard) {
+                    const domainGroupIndex = assignedCardsGrouped.findIndex((item) => item.isGroupedCardDomain && item.description === card.domainName);
+                    const assignedCardsGroupedItem = assignedCardsGrouped.at(domainGroupIndex);
                     if (domainGroupIndex >= 0 && assignedCardsGroupedItem) {
-                        assignedCardsGroupedItem.errors = __assign(__assign({}, (_e = assignedCardsGrouped_1.at(domainGroupIndex)) === null || _e === void 0 ? void 0 : _e.errors), card.errors);
+                        assignedCardsGroupedItem.errors = { ...assignedCardsGrouped.at(domainGroupIndex)?.errors, ...card.errors };
                         if (card.fraud === CONST_1.default.EXPENSIFY_CARD.FRAUD_TYPES.DOMAIN || card.fraud === CONST_1.default.EXPENSIFY_CARD.FRAUD_TYPES.INDIVIDUAL) {
                             assignedCardsGroupedItem.brickRoadIndicator = CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR;
                         }
@@ -172,15 +145,15 @@ function PaymentMethodList(_a) {
                     return;
                 }
                 // The card shouldn't be grouped or it's domain group doesn't exist yet
-                var cardDescription = ((_f = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _f === void 0 ? void 0 : _f.issuedBy) && (card === null || card === void 0 ? void 0 : card.lastFourPAN)
-                    ? "".concat(card === null || card === void 0 ? void 0 : card.lastFourPAN, " ").concat(CONST_1.default.DOT_SEPARATOR, " ").concat((0, PolicyUtils_1.getDescriptionForPolicyDomainCard)(card.domainName))
+                const cardDescription = card?.nameValuePairs?.issuedBy && card?.lastFourPAN
+                    ? `${card?.lastFourPAN} ${CONST_1.default.DOT_SEPARATOR} ${(0, PolicyUtils_1.getDescriptionForPolicyDomainCard)(card.domainName)}`
                     : (0, PolicyUtils_1.getDescriptionForPolicyDomainCard)(card.domainName);
-                assignedCardsGrouped_1.push({
+                assignedCardsGrouped.push({
                     key: card.cardID.toString(),
                     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-                    title: isTravelCard ? translate('cardPage.expensifyTravelCard') : ((_g = card === null || card === void 0 ? void 0 : card.nameValuePairs) === null || _g === void 0 ? void 0 : _g.cardTitle) || card.bank,
+                    title: isTravelCard ? translate('cardPage.expensifyTravelCard') : card?.nameValuePairs?.cardTitle || card.bank,
                     description: isTravelCard ? translate('cardPage.expensifyTravelCard') : cardDescription,
-                    onPress: function () { return Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_WALLET_DOMAIN_CARD.getRoute(String(card.cardID))); },
+                    onPress: () => Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_WALLET_DOMAIN_CARD.getRoute(String(card.cardID))),
                     cardID: card.cardID,
                     isGroupedCardDomain: !isAdminIssuedVirtualCard && !isTravelCard,
                     shouldShowRightIcon: true,
@@ -192,38 +165,44 @@ function PaymentMethodList(_a) {
                     brickRoadIndicator: card.fraud === CONST_1.default.EXPENSIFY_CARD.FRAUD_TYPES.DOMAIN || card.fraud === CONST_1.default.EXPENSIFY_CARD.FRAUD_TYPES.INDIVIDUAL
                         ? CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR
                         : undefined,
-                    icon: icon,
+                    icon,
                     iconStyles: [styles.cardIcon],
                     iconWidth: variables_1.default.cardIconWidth,
                     iconHeight: variables_1.default.cardIconHeight,
                 });
             });
-            return assignedCardsGrouped_1;
+            return assignedCardsGrouped;
         }
         // Hide any billing cards that are not P2P debit cards for now because you cannot make them your default method, or delete them
         // All payment cards are temporarily disabled for use as a payment method
         // const paymentCardList = fundList ?? {};
         // const filteredCardList = Object.values(paymentCardList).filter((card) => !!card.accountData?.additionalData?.isP2PDebitCard);
-        var filteredCardList = {};
-        var combinedPaymentMethods = (0, PaymentUtils_1.formatPaymentMethods)(isLoadingBankAccountList ? {} : (bankAccountList !== null && bankAccountList !== void 0 ? bankAccountList : {}), filteredCardList, styles);
+        const filteredCardList = {};
+        let combinedPaymentMethods = (0, PaymentUtils_1.formatPaymentMethods)(isLoadingBankAccountList ? {} : (bankAccountList ?? {}), filteredCardList, styles);
         if (filterType !== '') {
-            combinedPaymentMethods = combinedPaymentMethods.filter(function (paymentMethod) { return paymentMethod.accountType === filterType; });
+            combinedPaymentMethods = combinedPaymentMethods.filter((paymentMethod) => paymentMethod.accountType === filterType);
         }
         if (!isOffline) {
-            combinedPaymentMethods = combinedPaymentMethods.filter(function (paymentMethod) { return paymentMethod.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE || !(0, EmptyObject_1.isEmptyObject)(paymentMethod.errors); });
+            combinedPaymentMethods = combinedPaymentMethods.filter((paymentMethod) => paymentMethod.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE || !(0, EmptyObject_1.isEmptyObject)(paymentMethod.errors));
         }
-        combinedPaymentMethods = combinedPaymentMethods.map(function (paymentMethod) {
-            var pressHandler = onPress;
-            var isMethodActive = isPaymentMethodActive(actionPaymentMethodType, activePaymentMethodID, paymentMethod);
-            return __assign(__assign({}, paymentMethod), { onPress: function (e) {
-                    return pressHandler(e, paymentMethod.accountType, paymentMethod.accountData, {
-                        icon: paymentMethod.icon,
-                        iconHeight: paymentMethod === null || paymentMethod === void 0 ? void 0 : paymentMethod.iconHeight,
-                        iconWidth: paymentMethod === null || paymentMethod === void 0 ? void 0 : paymentMethod.iconWidth,
-                        iconStyles: paymentMethod === null || paymentMethod === void 0 ? void 0 : paymentMethod.iconStyles,
-                        iconSize: paymentMethod === null || paymentMethod === void 0 ? void 0 : paymentMethod.iconSize,
-                    }, paymentMethod.isDefault, paymentMethod.methodID, paymentMethod.description);
-                }, wrapperStyle: isMethodActive ? [StyleUtils.getButtonBackgroundColorStyle(CONST_1.default.BUTTON_STATES.PRESSED)] : null, disabled: paymentMethod.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE, isMethodActive: isMethodActive, iconRight: Expensicons.ThreeDots, shouldShowRightIcon: shouldShowRightIcon });
+        combinedPaymentMethods = combinedPaymentMethods.map((paymentMethod) => {
+            const pressHandler = onPress;
+            const isMethodActive = isPaymentMethodActive(actionPaymentMethodType, activePaymentMethodID, paymentMethod);
+            return {
+                ...paymentMethod,
+                onPress: (e) => pressHandler(e, paymentMethod.accountType, paymentMethod.accountData, {
+                    icon: paymentMethod.icon,
+                    iconHeight: paymentMethod?.iconHeight,
+                    iconWidth: paymentMethod?.iconWidth,
+                    iconStyles: paymentMethod?.iconStyles,
+                    iconSize: paymentMethod?.iconSize,
+                }, paymentMethod.isDefault, paymentMethod.methodID, paymentMethod.description),
+                wrapperStyle: isMethodActive ? [StyleUtils.getButtonBackgroundColorStyle(CONST_1.default.BUTTON_STATES.PRESSED)] : null,
+                disabled: paymentMethod.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE,
+                isMethodActive,
+                iconRight: Expensicons.ThreeDots,
+                shouldShowRightIcon,
+            };
         });
         return combinedPaymentMethods;
     }, [
@@ -246,46 +225,43 @@ function PaymentMethodList(_a) {
     /**
      * Render placeholder when there are no payments methods
      */
-    var renderListEmptyComponent = function () { return <Text_1.default style={styles.popoverMenuItem}>{translate('paymentMethodList.addFirstPaymentMethod')}</Text_1.default>; };
-    var onPressItem = (0, react_1.useCallback)(function () {
+    const renderListEmptyComponent = () => <Text_1.default style={styles.popoverMenuItem}>{translate('paymentMethodList.addFirstPaymentMethod')}</Text_1.default>;
+    const onPressItem = (0, react_1.useCallback)(() => {
         if (!isUserValidated) {
             Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_CONTACT_METHOD_VERIFY_ACCOUNT.getRoute(Navigation_1.default.getActiveRoute(), ROUTES_1.default.SETTINGS_ADD_BANK_ACCOUNT.route));
             return;
         }
         onPress();
     }, [isUserValidated, onPress]);
-    var renderListFooterComponent = (0, react_1.useCallback)(function () {
-        return shouldShowAddBankAccountButton ? (<Button_1.default ref={buttonRef} key="addBankAccountButton" text={translate('bankAccount.addBankAccount')} large success onPress={onPress}/>) : (<MenuItem_1.default onPress={onPressItem} title={translate('bankAccount.addBankAccount')} icon={Expensicons.Plus} wrapperStyle={[styles.paymentMethod, listItemStyle]} ref={buttonRef}/>);
-    }, [shouldShowAddBankAccountButton, onPressItem, translate, onPress, buttonRef, styles.paymentMethod, listItemStyle]);
-    var itemsToRender = (0, react_1.useMemo)(function () {
+    const renderListFooterComponent = (0, react_1.useCallback)(() => shouldShowAddBankAccountButton ? (<Button_1.default ref={buttonRef} key="addBankAccountButton" text={translate('bankAccount.addBankAccount')} large success onPress={onPress}/>) : (<MenuItem_1.default onPress={onPressItem} title={translate('bankAccount.addBankAccount')} icon={Expensicons.Plus} wrapperStyle={[styles.paymentMethod, listItemStyle]} ref={buttonRef}/>), [shouldShowAddBankAccountButton, onPressItem, translate, onPress, buttonRef, styles.paymentMethod, listItemStyle]);
+    const itemsToRender = (0, react_1.useMemo)(() => {
         if (!shouldShowBankAccountSections) {
             return filteredPaymentMethods;
         }
-        if (filteredPaymentMethods.find(function (method) { var _a; return ((_a = method.accountData) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.BANK_ACCOUNT.TYPE.PERSONAL; }) &&
-            filteredPaymentMethods.find(function (method) { var _a; return ((_a = method.accountData) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS; })) {
-            return __spreadArray(__spreadArray(__spreadArray([
-                translate('walletPage.personalBankAccounts')
-            ], filteredPaymentMethods.filter(function (method) { var _a; return ((_a = method.accountData) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.BANK_ACCOUNT.TYPE.PERSONAL; }), true), [
-                translate('walletPage.businessBankAccounts')
-            ], false), filteredPaymentMethods.filter(function (method) { var _a; return ((_a = method.accountData) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS; }), true);
+        if (filteredPaymentMethods.find((method) => method.accountData?.type === CONST_1.default.BANK_ACCOUNT.TYPE.PERSONAL) &&
+            filteredPaymentMethods.find((method) => method.accountData?.type === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS)) {
+            return [
+                translate('walletPage.personalBankAccounts'),
+                ...filteredPaymentMethods.filter((method) => method.accountData?.type === CONST_1.default.BANK_ACCOUNT.TYPE.PERSONAL),
+                translate('walletPage.businessBankAccounts'),
+                ...filteredPaymentMethods.filter((method) => method.accountData?.type === CONST_1.default.BANK_ACCOUNT.TYPE.BUSINESS),
+            ];
         }
         return filteredPaymentMethods;
     }, [filteredPaymentMethods, shouldShowBankAccountSections, translate]);
     /**
      * Create a menuItem for each passed paymentMethod
      */
-    var renderItem = (0, react_1.useCallback)(function (_a) {
-        var _b, _c, _d;
-        var item = _a.item, index = _a.index;
+    const renderItem = (0, react_1.useCallback)(({ item, index }) => {
         if (typeof item === 'string') {
             return (<react_native_1.View style={[listItemStyle, index === 0 ? styles.mt4 : styles.mt6, styles.mb1]}>
                         <Text_1.default style={[styles.textLabel, styles.colorMuted]}>{item}</Text_1.default>
                     </react_native_1.View>);
         }
-        return (<OfflineWithFeedback_1.default onClose={function () { return dismissError(item); }} pendingAction={item.pendingAction} errors={item.errors} errorRowStyles={styles.ph6} canDismissError={item.canDismissError}>
-                    <MenuItem_1.default onPress={item.onPress} title={item.title} description={item.description} icon={item.icon} plaidUrl={item.plaidUrl} disabled={item.disabled} iconType={item.plaidUrl ? CONST_1.default.ICON_TYPE_PLAID : CONST_1.default.ICON_TYPE_ICON} displayInDefaultIconColor iconHeight={(_b = item.iconHeight) !== null && _b !== void 0 ? _b : item.iconSize} iconWidth={(_c = item.iconWidth) !== null && _c !== void 0 ? _c : item.iconSize} iconStyles={item.iconStyles} badgeText={shouldShowDefaultBadge(filteredPaymentMethods, invoiceTransferBankAccountID ? invoiceTransferBankAccountID === item.methodID : item.methodID === (userWallet === null || userWallet === void 0 ? void 0 : userWallet.walletLinkedAccountID))
+        return (<OfflineWithFeedback_1.default onClose={() => dismissError(item)} pendingAction={item.pendingAction} errors={item.errors} errorRowStyles={styles.ph6} canDismissError={item.canDismissError}>
+                    <MenuItem_1.default onPress={item.onPress} title={item.title} description={item.description} icon={item.icon} plaidUrl={item.plaidUrl} disabled={item.disabled} iconType={item.plaidUrl ? CONST_1.default.ICON_TYPE_PLAID : CONST_1.default.ICON_TYPE_ICON} displayInDefaultIconColor iconHeight={item.iconHeight ?? item.iconSize} iconWidth={item.iconWidth ?? item.iconSize} iconStyles={item.iconStyles} badgeText={shouldShowDefaultBadge(filteredPaymentMethods, invoiceTransferBankAccountID ? invoiceTransferBankAccountID === item.methodID : item.methodID === userWallet?.walletLinkedAccountID)
                 ? translate('paymentMethodList.defaultPaymentMethod')
-                : undefined} wrapperStyle={[styles.paymentMethod, listItemStyle]} iconRight={item.iconRight} badgeStyle={styles.badgeBordered} shouldShowRightIcon={item.shouldShowRightIcon} shouldShowSelectedState={shouldShowSelectedState} isSelected={selectedMethodID.toString() === ((_d = item.methodID) === null || _d === void 0 ? void 0 : _d.toString())} interactive={item.interactive} brickRoadIndicator={item.brickRoadIndicator} success={item.isMethodActive}/>
+                : undefined} wrapperStyle={[styles.paymentMethod, listItemStyle]} iconRight={item.iconRight} badgeStyle={styles.badgeBordered} shouldShowRightIcon={item.shouldShowRightIcon} shouldShowSelectedState={shouldShowSelectedState} isSelected={selectedMethodID.toString() === item.methodID?.toString()} interactive={item.interactive} brickRoadIndicator={item.brickRoadIndicator} success={item.isMethodActive}/>
                 </OfflineWithFeedback_1.default>);
     }, [
         styles.ph6,
@@ -298,7 +274,7 @@ function PaymentMethodList(_a) {
         styles.colorMuted,
         filteredPaymentMethods,
         invoiceTransferBankAccountID,
-        userWallet === null || userWallet === void 0 ? void 0 : userWallet.walletLinkedAccountID,
+        userWallet?.walletLinkedAccountID,
         translate,
         listItemStyle,
         shouldShowSelectedState,
@@ -310,9 +286,9 @@ function PaymentMethodList(_a) {
                 {shouldShowAddBankAccount && renderListFooterComponent()}
             </react_native_1.View>
             {shouldShowAddPaymentMethodButton && (<FormAlertWrapper_1.default>
-                    {function (isFormOffline) { return (<Button_1.default text={translate('paymentMethodList.addPaymentMethod')} icon={Expensicons.CreditCard} onPress={onPress} 
+                    {(isFormOffline) => (<Button_1.default text={translate('paymentMethodList.addPaymentMethod')} icon={Expensicons.CreditCard} onPress={onPress} 
             // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            isDisabled={isLoadingPaymentMethods || isFormOffline || isLoadingPaymentMethodsOnyx} style={[styles.mh4, styles.buttonCTA]} key="addPaymentMethodButton" success shouldShowRightIcon large ref={buttonRef}/>); }}
+            isDisabled={isLoadingPaymentMethods || isFormOffline || isLoadingPaymentMethodsOnyx} style={[styles.mh4, styles.buttonCTA]} key="addPaymentMethodButton" success shouldShowRightIcon large ref={buttonRef}/>)}
                 </FormAlertWrapper_1.default>)}
         </>);
 }

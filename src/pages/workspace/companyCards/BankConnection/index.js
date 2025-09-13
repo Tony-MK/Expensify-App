@@ -1,69 +1,67 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var BlockingView_1 = require("@components/BlockingViews/BlockingView");
-var FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Illustrations_1 = require("@components/Icon/Illustrations");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useCardFeeds_1 = require("@hooks/useCardFeeds");
-var useImportPlaidAccounts_1 = require("@hooks/useImportPlaidAccounts");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePermissions_1 = require("@hooks/usePermissions");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useUpdateFeedBrokenConnection_1 = require("@hooks/useUpdateFeedBrokenConnection");
-var CompanyCards_1 = require("@libs/actions/CompanyCards");
-var CardUtils_1 = require("@libs/CardUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Card_1 = require("@userActions/Card");
-var CompanyCards_2 = require("@userActions/CompanyCards");
-var getCompanyCardBankConnection_1 = require("@userActions/getCompanyCardBankConnection");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var openBankConnection_1 = require("./openBankConnection");
-var customWindow = null;
-function BankConnection(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
-    var policyIDFromProps = _a.policyID, feed = _a.feed, route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var addNewCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true })[0];
-    var assignCard = (0, useOnyx_1.default)(ONYXKEYS_1.default.ASSIGN_CARD, { canBeMissing: true })[0];
-    var theme = (0, useTheme_1.default)();
-    var _s = (_b = route === null || route === void 0 ? void 0 : route.params) !== null && _b !== void 0 ? _b : {}, bankNameFromRoute = _s.bankName, backTo = _s.backTo, policyIDFromRoute = _s.policyID;
-    var policyID = policyIDFromProps !== null && policyIDFromProps !== void 0 ? policyIDFromProps : policyIDFromRoute;
-    var cardFeeds = (0, useCardFeeds_1.default)(policyID)[0];
-    var prevFeedsData = (0, usePrevious_1.default)((_c = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _c === void 0 ? void 0 : _c.oAuthAccountDetails);
-    var _t = (0, react_1.useState)(false), shouldBlockWindowOpen = _t[0], setShouldBlockWindowOpen = _t[1];
-    var selectedBank = (_d = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _d === void 0 ? void 0 : _d.selectedBank;
-    var bankName = feed ? (0, CardUtils_1.getBankName)(feed) : ((_f = bankNameFromRoute !== null && bankNameFromRoute !== void 0 ? bankNameFromRoute : (_e = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _e === void 0 ? void 0 : _e.plaidConnectedFeed) !== null && _f !== void 0 ? _f : selectedBank);
-    var _u = (0, react_1.useMemo)(function () { var _a, _b, _c; return (0, CardUtils_1.checkIfNewFeedConnected)(prevFeedsData !== null && prevFeedsData !== void 0 ? prevFeedsData : {}, (_b = (_a = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _a === void 0 ? void 0 : _a.oAuthAccountDetails) !== null && _b !== void 0 ? _b : {}, (_c = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _c === void 0 ? void 0 : _c.plaidConnectedFeed); }, [(_g = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _g === void 0 ? void 0 : _g.plaidConnectedFeed, (_h = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _h === void 0 ? void 0 : _h.oAuthAccountDetails, prevFeedsData]), isNewFeedConnected = _u.isNewFeedConnected, newFeed = _u.newFeed;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var plaidToken = (_k = (_j = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _j === void 0 ? void 0 : _j.publicToken) !== null && _k !== void 0 ? _k : (_l = assignCard === null || assignCard === void 0 ? void 0 : assignCard.data) === null || _l === void 0 ? void 0 : _l.plaidAccessToken;
-    var _v = (0, useUpdateFeedBrokenConnection_1.default)({ policyID: policyID, feed: feed }), updateBrokenConnection = _v.updateBrokenConnection, isFeedConnectionBroken = _v.isFeedConnectionBroken;
-    var isBetaEnabled = (0, usePermissions_1.default)().isBetaEnabled;
-    var isPlaid = isBetaEnabled(CONST_1.default.BETAS.PLAID_COMPANY_CARDS) && !!plaidToken;
-    var url = (0, getCompanyCardBankConnection_1.getCompanyCardBankConnection)(policyID, bankName);
-    var isFeedExpired = feed ? (0, CardUtils_1.isSelectedFeedExpired)((_o = (_m = cardFeeds === null || cardFeeds === void 0 ? void 0 : cardFeeds.settings) === null || _m === void 0 ? void 0 : _m.oAuthAccountDetails) === null || _o === void 0 ? void 0 : _o[feed]) : false;
-    var headerTitleAddCards = !backTo ? translate('workspace.companyCards.addCards') : undefined;
-    var headerTitle = feed ? translate('workspace.companyCards.assignCard') : headerTitleAddCards;
-    var onImportPlaidAccounts = (0, useImportPlaidAccounts_1.default)(policyID);
-    var onOpenBankConnectionFlow = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const BlockingView_1 = require("@components/BlockingViews/BlockingView");
+const FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Illustrations_1 = require("@components/Icon/Illustrations");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useCardFeeds_1 = require("@hooks/useCardFeeds");
+const useImportPlaidAccounts_1 = require("@hooks/useImportPlaidAccounts");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePermissions_1 = require("@hooks/usePermissions");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useUpdateFeedBrokenConnection_1 = require("@hooks/useUpdateFeedBrokenConnection");
+const CompanyCards_1 = require("@libs/actions/CompanyCards");
+const CardUtils_1 = require("@libs/CardUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Card_1 = require("@userActions/Card");
+const CompanyCards_2 = require("@userActions/CompanyCards");
+const getCompanyCardBankConnection_1 = require("@userActions/getCompanyCardBankConnection");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const openBankConnection_1 = require("./openBankConnection");
+let customWindow = null;
+function BankConnection({ policyID: policyIDFromProps, feed, route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [addNewCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ADD_NEW_COMPANY_CARD, { canBeMissing: true });
+    const [assignCard] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ASSIGN_CARD, { canBeMissing: true });
+    const theme = (0, useTheme_1.default)();
+    const { bankName: bankNameFromRoute, backTo, policyID: policyIDFromRoute } = route?.params ?? {};
+    const policyID = policyIDFromProps ?? policyIDFromRoute;
+    const [cardFeeds] = (0, useCardFeeds_1.default)(policyID);
+    const prevFeedsData = (0, usePrevious_1.default)(cardFeeds?.settings?.oAuthAccountDetails);
+    const [shouldBlockWindowOpen, setShouldBlockWindowOpen] = (0, react_1.useState)(false);
+    const selectedBank = addNewCard?.data?.selectedBank;
+    const bankName = feed ? (0, CardUtils_1.getBankName)(feed) : (bankNameFromRoute ?? addNewCard?.data?.plaidConnectedFeed ?? selectedBank);
+    const { isNewFeedConnected, newFeed } = (0, react_1.useMemo)(() => (0, CardUtils_1.checkIfNewFeedConnected)(prevFeedsData ?? {}, cardFeeds?.settings?.oAuthAccountDetails ?? {}, addNewCard?.data?.plaidConnectedFeed), [addNewCard?.data?.plaidConnectedFeed, cardFeeds?.settings?.oAuthAccountDetails, prevFeedsData]);
+    const { isOffline } = (0, useNetwork_1.default)();
+    const plaidToken = addNewCard?.data?.publicToken ?? assignCard?.data?.plaidAccessToken;
+    const { updateBrokenConnection, isFeedConnectionBroken } = (0, useUpdateFeedBrokenConnection_1.default)({ policyID, feed });
+    const { isBetaEnabled } = (0, usePermissions_1.default)();
+    const isPlaid = isBetaEnabled(CONST_1.default.BETAS.PLAID_COMPANY_CARDS) && !!plaidToken;
+    const url = (0, getCompanyCardBankConnection_1.getCompanyCardBankConnection)(policyID, bankName);
+    const isFeedExpired = feed ? (0, CardUtils_1.isSelectedFeedExpired)(cardFeeds?.settings?.oAuthAccountDetails?.[feed]) : false;
+    const headerTitleAddCards = !backTo ? translate('workspace.companyCards.addCards') : undefined;
+    const headerTitle = feed ? translate('workspace.companyCards.assignCard') : headerTitleAddCards;
+    const onImportPlaidAccounts = (0, useImportPlaidAccounts_1.default)(policyID);
+    const onOpenBankConnectionFlow = (0, react_1.useCallback)(() => {
         if (!url) {
             return;
         }
         customWindow = (0, openBankConnection_1.default)(url);
     }, [url]);
-    var handleBackButtonPress = function () {
-        customWindow === null || customWindow === void 0 ? void 0 : customWindow.close();
+    const handleBackButtonPress = () => {
+        customWindow?.close();
         // Handle assign card flow
         if (feed) {
             Navigation_1.default.goBack();
@@ -84,29 +82,28 @@ function BankConnection(_a) {
         }
         (0, CompanyCards_2.setAddNewCompanyCardStepAndData)({ step: CONST_1.default.COMPANY_CARDS.STEP.SELECT_FEED_TYPE });
     };
-    var CustomSubtitle = (<Text_1.default style={[styles.textAlignCenter, styles.textSupporting]}>
+    const CustomSubtitle = (<Text_1.default style={[styles.textAlignCenter, styles.textSupporting]}>
             {bankName &&
-            translate("workspace.moreFeatures.companyCards.pendingBankDescription", {
-                bankName: (_q = (_p = addNewCard === null || addNewCard === void 0 ? void 0 : addNewCard.data) === null || _p === void 0 ? void 0 : _p.plaidConnectedFeedName) !== null && _q !== void 0 ? _q : bankName,
+            translate(`workspace.moreFeatures.companyCards.pendingBankDescription`, {
+                bankName: addNewCard?.data?.plaidConnectedFeedName ?? bankName,
             })}
             <TextLink_1.default onPress={onOpenBankConnectionFlow}>{translate('workspace.moreFeatures.companyCards.pendingBankLink')}</TextLink_1.default>.
         </Text_1.default>);
-    (0, react_1.useEffect)(function () {
-        var _a;
+    (0, react_1.useEffect)(() => {
         if ((!url && !isPlaid) || isOffline) {
             return;
         }
         // Handle assign card flow
         if (feed) {
             if (!isFeedExpired) {
-                customWindow === null || customWindow === void 0 ? void 0 : customWindow.close();
+                customWindow?.close();
                 if (isFeedConnectionBroken) {
                     updateBrokenConnection();
                     Navigation_1.default.closeRHPFlow();
                     return;
                 }
                 (0, CompanyCards_1.setAssignCardStepAndData)({
-                    currentStep: ((_a = assignCard === null || assignCard === void 0 ? void 0 : assignCard.data) === null || _a === void 0 ? void 0 : _a.dateOption) ? CONST_1.default.COMPANY_CARD.STEP.CONFIRMATION : CONST_1.default.COMPANY_CARD.STEP.ASSIGNEE,
+                    currentStep: assignCard?.data?.dateOption ? CONST_1.default.COMPANY_CARD.STEP.CONFIRMATION : CONST_1.default.COMPANY_CARD.STEP.ASSIGNEE,
                     isEditing: false,
                 });
                 return;
@@ -122,7 +119,7 @@ function BankConnection(_a) {
         // Handle add new card flow
         if (isNewFeedConnected) {
             setShouldBlockWindowOpen(true);
-            customWindow === null || customWindow === void 0 ? void 0 : customWindow.close();
+            customWindow?.close();
             if (newFeed) {
                 (0, Card_1.updateSelectedFeed)(newFeed, policyID);
             }
@@ -156,7 +153,7 @@ function BankConnection(_a) {
         feed,
         isFeedExpired,
         isOffline,
-        (_r = assignCard === null || assignCard === void 0 ? void 0 : assignCard.data) === null || _r === void 0 ? void 0 : _r.dateOption,
+        assignCard?.data?.dateOption,
         isPlaid,
         onImportPlaidAccounts,
         isFeedConnectionBroken,

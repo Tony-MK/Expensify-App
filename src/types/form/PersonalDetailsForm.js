@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     LEGAL_FIRST_NAME: 'legalFirstName',
     LEGAL_LAST_NAME: 'legalLastName',
     DATE_OF_BIRTH: 'dob',

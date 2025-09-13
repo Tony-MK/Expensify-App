@@ -16,5 +16,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getWorkletRuntime = void 0;
 __exportStar(require("@expensify/react-native-live-markdown/mock"), exports);
-var getWorkletRuntime = function () { return ({}); };
+const getWorkletRuntime = () => ({});
 exports.getWorkletRuntime = getWorkletRuntime;

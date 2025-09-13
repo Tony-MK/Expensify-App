@@ -16,12 +16,11 @@ function deepReplaceKeysAndValues(target, oldVal, newVal) {
         return target;
     }
     if (Array.isArray(target)) {
-        return target.map(function (item) { return deepReplaceKeysAndValues(item, oldVal, newVal); });
+        return target.map((item) => deepReplaceKeysAndValues(item, oldVal, newVal));
     }
-    var newObj = {};
-    Object.entries(target).forEach(function (_a) {
-        var key = _a[0], val = _a[1];
-        var newKey = key.replace(oldVal, newVal);
+    const newObj = {};
+    Object.entries(target).forEach(([key, val]) => {
+        const newKey = key.replace(oldVal, newVal);
         if (val instanceof File || val instanceof Blob) {
             newObj[newKey] = val;
             return;

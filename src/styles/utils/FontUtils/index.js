@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fontFamily_1 = require("./fontFamily");
-var multiFontFamily_1 = require("./fontFamily/multiFontFamily");
-var singleFontFamily_1 = require("./fontFamily/singleFontFamily");
-var fontWeight_1 = require("./fontWeight");
-var FontUtils = {
+const fontFamily_1 = require("./fontFamily");
+const multiFontFamily_1 = require("./fontFamily/multiFontFamily");
+const singleFontFamily_1 = require("./fontFamily/singleFontFamily");
+const fontWeight_1 = require("./fontWeight");
+const FontUtils = {
     fontFamily: {
         /**
          * Set of font families that can either have fallback fonts (if web / desktop) or not (if native).

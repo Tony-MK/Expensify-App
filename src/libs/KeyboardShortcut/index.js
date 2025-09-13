@@ -1,37 +1,27 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var KeyCommand = require("react-native-key-command");
-var getOperatingSystem_1 = require("@libs/getOperatingSystem");
-var CONST_1 = require("@src/CONST");
-var bindHandlerToKeydownEvent_1 = require("./bindHandlerToKeydownEvent");
-var operatingSystem = (0, getOperatingSystem_1.default)();
+const expensify_common_1 = require("expensify-common");
+const KeyCommand = require("react-native-key-command");
+const getOperatingSystem_1 = require("@libs/getOperatingSystem");
+const CONST_1 = require("@src/CONST");
+const bindHandlerToKeydownEvent_1 = require("./bindHandlerToKeydownEvent");
+const operatingSystem = (0, getOperatingSystem_1.default)();
 // Handlers for the various keyboard listeners we set up
-var eventHandlers = {};
+const eventHandlers = {};
 // Documentation information for keyboard shortcuts that are displayed in the keyboard shortcuts informational modal
-var documentedShortcuts = {};
-var keyInputEnter = (_c = (_b = (_a = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _a === void 0 ? void 0 : _a.keyInputEnter) === null || _b === void 0 ? void 0 : _b.toString()) !== null && _c !== void 0 ? _c : 'keyInputEnter';
-var keyInputEscape = (_f = (_e = (_d = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _d === void 0 ? void 0 : _d.keyInputEscape) === null || _e === void 0 ? void 0 : _e.toString()) !== null && _f !== void 0 ? _f : 'keyInputEscape';
-var keyInputUpArrow = (_j = (_h = (_g = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _g === void 0 ? void 0 : _g.keyInputUpArrow) === null || _h === void 0 ? void 0 : _h.toString()) !== null && _j !== void 0 ? _j : 'keyInputUpArrow';
-var keyInputDownArrow = (_m = (_l = (_k = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _k === void 0 ? void 0 : _k.keyInputDownArrow) === null || _l === void 0 ? void 0 : _l.toString()) !== null && _m !== void 0 ? _m : 'keyInputDownArrow';
-var keyInputLeftArrow = (_q = (_p = (_o = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _o === void 0 ? void 0 : _o.keyInputLeftArrow) === null || _p === void 0 ? void 0 : _p.toString()) !== null && _q !== void 0 ? _q : 'keyInputLeftArrow';
-var keyInputRightArrow = (_t = (_s = (_r = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _r === void 0 ? void 0 : _r.keyInputRightArrow) === null || _s === void 0 ? void 0 : _s.toString()) !== null && _t !== void 0 ? _t : 'keyInputRightArrow';
-var keyInputSpace = ' ';
+const documentedShortcuts = {};
+const keyInputEnter = KeyCommand?.constants?.keyInputEnter?.toString() ?? 'keyInputEnter';
+const keyInputEscape = KeyCommand?.constants?.keyInputEscape?.toString() ?? 'keyInputEscape';
+const keyInputUpArrow = KeyCommand?.constants?.keyInputUpArrow?.toString() ?? 'keyInputUpArrow';
+const keyInputDownArrow = KeyCommand?.constants?.keyInputDownArrow?.toString() ?? 'keyInputDownArrow';
+const keyInputLeftArrow = KeyCommand?.constants?.keyInputLeftArrow?.toString() ?? 'keyInputLeftArrow';
+const keyInputRightArrow = KeyCommand?.constants?.keyInputRightArrow?.toString() ?? 'keyInputRightArrow';
+const keyInputSpace = ' ';
 /**
  * Generates the normalized display name for keyboard shortcuts.
  */
 function getDisplayName(key, modifiers) {
-    var displayName = (function () {
+    let displayName = (() => {
         // Type of key is string and the type of KeyCommand.constants.* is number | string.
         if (key.toLowerCase() === keyInputEnter.toLowerCase()) {
             return ['ENTER'];
@@ -60,27 +50,25 @@ function getDisplayName(key, modifiers) {
         displayName.unshift(modifiers);
     }
     else if (Array.isArray(modifiers)) {
-        displayName = __spreadArray(__spreadArray([], modifiers.sort(), true), displayName, true);
+        displayName = [...modifiers.sort(), ...displayName];
     }
-    displayName = displayName.map(function (modifier) { var _a; return (_a = CONST_1.default.KEYBOARD_SHORTCUT_KEY_DISPLAY_NAME[modifier.toUpperCase()]) !== null && _a !== void 0 ? _a : modifier; });
+    displayName = displayName.map((modifier) => CONST_1.default.KEYBOARD_SHORTCUT_KEY_DISPLAY_NAME[modifier.toUpperCase()] ?? modifier);
     return displayName.join(' + ');
 }
-Object.values(CONST_1.default.KEYBOARD_SHORTCUTS).forEach(function (shortcut) {
-    var _a;
+Object.values(CONST_1.default.KEYBOARD_SHORTCUTS).forEach((shortcut) => {
     // If there is no trigger for the current OS nor a default trigger, then we don't need to do anything
     if (!('trigger' in shortcut)) {
         return;
     }
-    var shortcutTrigger = (_a = (operatingSystem && shortcut.trigger[operatingSystem])) !== null && _a !== void 0 ? _a : shortcut.trigger.DEFAULT;
-    KeyCommand.addListener(shortcutTrigger, function (keyCommandEvent, event) { return (0, bindHandlerToKeydownEvent_1.default)(getDisplayName, eventHandlers, keyCommandEvent, event); });
+    const shortcutTrigger = (operatingSystem && shortcut.trigger[operatingSystem]) ?? shortcut.trigger.DEFAULT;
+    KeyCommand.addListener(shortcutTrigger, (keyCommandEvent, event) => (0, bindHandlerToKeydownEvent_1.default)(getDisplayName, eventHandlers, keyCommandEvent, event));
 });
 /**
  * Unsubscribes a keyboard event handler.
  */
 function unsubscribe(displayName, callbackID) {
-    var _a;
-    eventHandlers[displayName] = eventHandlers[displayName].filter(function (callback) { return callback.id !== callbackID; });
-    if (((_a = eventHandlers[displayName]) === null || _a === void 0 ? void 0 : _a.length) === 0) {
+    eventHandlers[displayName] = eventHandlers[displayName].filter((callback) => callback.id !== callbackID);
+    if (eventHandlers[displayName]?.length === 0) {
         delete documentedShortcuts[displayName];
     }
 }
@@ -88,13 +76,12 @@ function unsubscribe(displayName, callbackID) {
  * Return platform specific modifiers for keys like Control (CMD on macOS)
  */
 function getPlatformEquivalentForKeys(keys) {
-    return keys.map(function (key) {
-        var _a, _b;
+    return keys.map((key) => {
         if (!(key in CONST_1.default.PLATFORM_SPECIFIC_KEYS)) {
             return key;
         }
-        var platformModifiers = CONST_1.default.PLATFORM_SPECIFIC_KEYS[key];
-        return (_b = (_a = platformModifiers === null || platformModifiers === void 0 ? void 0 : platformModifiers[operatingSystem]) !== null && _a !== void 0 ? _a : platformModifiers.DEFAULT) !== null && _b !== void 0 ? _b : key;
+        const platformModifiers = CONST_1.default.PLATFORM_SPECIFIC_KEYS[key];
+        return platformModifiers?.[operatingSystem] ?? platformModifiers.DEFAULT ?? key;
     });
 }
 /**
@@ -110,38 +97,31 @@ function getPlatformEquivalentForKeys(keys) {
  * @param [excludedNodes] Do not capture key events targeting excluded nodes (i.e. do not prevent default and let the event bubble)
  * @returns clean up method
  */
-function subscribe(key, callback, descriptionKey, modifiers, captureOnInputs, shouldBubble, priority, shouldPreventDefault, excludedNodes, shouldStopPropagation) {
-    if (modifiers === void 0) { modifiers = ['CTRL']; }
-    if (captureOnInputs === void 0) { captureOnInputs = false; }
-    if (shouldBubble === void 0) { shouldBubble = false; }
-    if (priority === void 0) { priority = 0; }
-    if (shouldPreventDefault === void 0) { shouldPreventDefault = true; }
-    if (excludedNodes === void 0) { excludedNodes = []; }
-    if (shouldStopPropagation === void 0) { shouldStopPropagation = false; }
-    var platformAdjustedModifiers = getPlatformEquivalentForKeys(modifiers);
-    var displayName = getDisplayName(key, platformAdjustedModifiers);
+function subscribe(key, callback, descriptionKey, modifiers = ['CTRL'], captureOnInputs = false, shouldBubble = false, priority = 0, shouldPreventDefault = true, excludedNodes = [], shouldStopPropagation = false) {
+    const platformAdjustedModifiers = getPlatformEquivalentForKeys(modifiers);
+    const displayName = getDisplayName(key, platformAdjustedModifiers);
     if (!eventHandlers[displayName]) {
         eventHandlers[displayName] = [];
     }
-    var callbackID = expensify_common_1.Str.guid();
+    const callbackID = expensify_common_1.Str.guid();
     eventHandlers[displayName].splice(priority, 0, {
         id: callbackID,
-        callback: callback,
-        captureOnInputs: captureOnInputs,
-        shouldPreventDefault: shouldPreventDefault,
-        shouldBubble: shouldBubble,
-        excludedNodes: excludedNodes,
-        shouldStopPropagation: shouldStopPropagation,
+        callback,
+        captureOnInputs,
+        shouldPreventDefault,
+        shouldBubble,
+        excludedNodes,
+        shouldStopPropagation,
     });
     if (descriptionKey) {
         documentedShortcuts[displayName] = {
             shortcutKey: key,
-            descriptionKey: descriptionKey,
-            displayName: displayName,
-            modifiers: modifiers,
+            descriptionKey,
+            displayName,
+            modifiers,
         };
     }
-    return function () { return unsubscribe(displayName, callbackID); };
+    return () => unsubscribe(displayName, callbackID);
 }
 /**
  * This module configures a global keyboard event handler.
@@ -158,9 +138,9 @@ function subscribe(key, callback, descriptionKey, modifiers, captureOnInputs, sh
  *   - Each handler has a unique callbackID, so calling the `unsubscribe` function (returned from `subscribe`) will unsubscribe the expected handler,
  *     regardless of its position in the stack.
  */
-var KeyboardShortcut = {
-    subscribe: subscribe,
-    getDisplayName: getDisplayName,
-    getPlatformEquivalentForKeys: getPlatformEquivalentForKeys,
+const KeyboardShortcut = {
+    subscribe,
+    getDisplayName,
+    getPlatformEquivalentForKeys,
 };
 exports.default = KeyboardShortcut;

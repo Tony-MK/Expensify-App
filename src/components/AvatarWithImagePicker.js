@@ -1,87 +1,80 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var usePopoverPosition_1 = require("@hooks/usePopoverPosition");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Browser_1 = require("@libs/Browser");
-var FileUtils_1 = require("@libs/fileDownload/FileUtils");
-var getImageResolution_1 = require("@libs/fileDownload/getImageResolution");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var AttachmentModal_1 = require("./AttachmentModal");
-var AttachmentPicker_1 = require("./AttachmentPicker");
-var Avatar_1 = require("./Avatar");
-var AvatarCropModal_1 = require("./AvatarCropModal/AvatarCropModal");
-var DotIndicatorMessage_1 = require("./DotIndicatorMessage");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var OfflineWithFeedback_1 = require("./OfflineWithFeedback");
-var PopoverMenu_1 = require("./PopoverMenu");
-var PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
-var Tooltip_1 = require("./Tooltip");
-var anchorAlignment = { horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.CENTER, vertical: CONST_1.default.MODAL.ANCHOR_ORIGIN_VERTICAL.TOP };
-function AvatarWithImagePicker(_a) {
-    var _b = _a.DefaultAvatar, DefaultAvatar = _b === void 0 ? function () { return null; } : _b, style = _a.style, disabledStyle = _a.disabledStyle, editIconStyle = _a.editIconStyle, pendingAction = _a.pendingAction, errors = _a.errors, errorRowStyles = _a.errorRowStyles, _c = _a.onErrorClose, onErrorClose = _c === void 0 ? function () { } : _c, _d = _a.source, source = _d === void 0 ? '' : _d, avatarID = _a.avatarID, _e = _a.fallbackIcon, fallbackIcon = _e === void 0 ? Expensicons.FallbackAvatar : _e, _f = _a.size, size = _f === void 0 ? CONST_1.default.AVATAR_SIZE.DEFAULT : _f, _g = _a.type, type = _g === void 0 ? CONST_1.default.ICON_TYPE_AVATAR : _g, _h = _a.headerTitle, headerTitle = _h === void 0 ? '' : _h, _j = _a.previewSource, previewSource = _j === void 0 ? '' : _j, _k = _a.originalFileName, originalFileName = _k === void 0 ? '' : _k, _l = _a.isUsingDefaultAvatar, isUsingDefaultAvatar = _l === void 0 ? false : _l, _m = _a.onImageSelected, onImageSelected = _m === void 0 ? function () { } : _m, _o = _a.onImageRemoved, onImageRemoved = _o === void 0 ? function () { } : _o, editorMaskImage = _a.editorMaskImage, avatarStyle = _a.avatarStyle, _p = _a.disabled, disabled = _p === void 0 ? false : _p, onViewPhotoPress = _a.onViewPhotoPress, _q = _a.enablePreview, enablePreview = _q === void 0 ? false : _q, _r = _a.shouldDisableViewPhoto, shouldDisableViewPhoto = _r === void 0 ? false : _r, _s = _a.editIcon, editIcon = _s === void 0 ? Expensicons.Pencil : _s;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var isFocused = (0, native_1.useIsFocused)();
-    var _t = (0, react_1.useState)({ horizontal: 0, vertical: 0 }), popoverPosition = _t[0], setPopoverPosition = _t[1];
-    var _u = (0, react_1.useState)(false), isMenuVisible = _u[0], setIsMenuVisible = _u[1];
-    var _v = (0, react_1.useState)({ validationError: null, phraseParam: {} }), errorData = _v[0], setErrorData = _v[1];
-    var _w = (0, react_1.useState)(false), isAvatarCropModalOpen = _w[0], setIsAvatarCropModalOpen = _w[1];
-    var _x = (0, react_1.useState)({
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const usePopoverPosition_1 = require("@hooks/usePopoverPosition");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Browser_1 = require("@libs/Browser");
+const FileUtils_1 = require("@libs/fileDownload/FileUtils");
+const getImageResolution_1 = require("@libs/fileDownload/getImageResolution");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const AttachmentModal_1 = require("./AttachmentModal");
+const AttachmentPicker_1 = require("./AttachmentPicker");
+const Avatar_1 = require("./Avatar");
+const AvatarCropModal_1 = require("./AvatarCropModal/AvatarCropModal");
+const DotIndicatorMessage_1 = require("./DotIndicatorMessage");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const OfflineWithFeedback_1 = require("./OfflineWithFeedback");
+const PopoverMenu_1 = require("./PopoverMenu");
+const PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
+const Tooltip_1 = require("./Tooltip");
+const anchorAlignment = { horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.CENTER, vertical: CONST_1.default.MODAL.ANCHOR_ORIGIN_VERTICAL.TOP };
+function AvatarWithImagePicker({ DefaultAvatar = () => null, style, disabledStyle, editIconStyle, pendingAction, errors, errorRowStyles, onErrorClose = () => { }, source = '', avatarID, fallbackIcon = Expensicons.FallbackAvatar, size = CONST_1.default.AVATAR_SIZE.DEFAULT, type = CONST_1.default.ICON_TYPE_AVATAR, headerTitle = '', previewSource = '', originalFileName = '', isUsingDefaultAvatar = false, onImageSelected = () => { }, onImageRemoved = () => { }, editorMaskImage, avatarStyle, disabled = false, onViewPhotoPress, enablePreview = false, shouldDisableViewPhoto = false, editIcon = Expensicons.Pencil, }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const isFocused = (0, native_1.useIsFocused)();
+    const [popoverPosition, setPopoverPosition] = (0, react_1.useState)({ horizontal: 0, vertical: 0 });
+    const [isMenuVisible, setIsMenuVisible] = (0, react_1.useState)(false);
+    const [errorData, setErrorData] = (0, react_1.useState)({ validationError: null, phraseParam: {} });
+    const [isAvatarCropModalOpen, setIsAvatarCropModalOpen] = (0, react_1.useState)(false);
+    const [imageData, setImageData] = (0, react_1.useState)({
         uri: '',
         name: '',
         type: '',
-    }), imageData = _x[0], setImageData = _x[1];
-    var calculatePopoverPosition = (0, usePopoverPosition_1.default)().calculatePopoverPosition;
-    var anchorRef = (0, react_1.useRef)(null);
-    var translate = (0, useLocalize_1.default)().translate;
-    var setError = function (error, phraseParam) {
+    });
+    const { calculatePopoverPosition } = (0, usePopoverPosition_1.default)();
+    const anchorRef = (0, react_1.useRef)(null);
+    const { translate } = (0, useLocalize_1.default)();
+    const setError = (error, phraseParam) => {
         setErrorData({
             validationError: error,
-            phraseParam: phraseParam,
+            phraseParam,
         });
     };
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (isFocused) {
             return;
         }
         // Reset the error if the component is no longer focused.
         setError(null, {});
     }, [isFocused]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         setError(null, {});
     }, [source, avatarID]);
     /**
      * Check if the attachment extension is allowed.
      */
-    var isValidExtension = (0, react_1.useCallback)(function (image) {
-        var _a;
-        var fileExtension = (0, FileUtils_1.splitExtensionFromFileName)((_a = image === null || image === void 0 ? void 0 : image.name) !== null && _a !== void 0 ? _a : '').fileExtension;
-        return CONST_1.default.AVATAR_ALLOWED_EXTENSIONS.some(function (extension) { return extension === fileExtension.toLowerCase(); });
+    const isValidExtension = (0, react_1.useCallback)((image) => {
+        const { fileExtension } = (0, FileUtils_1.splitExtensionFromFileName)(image?.name ?? '');
+        return CONST_1.default.AVATAR_ALLOWED_EXTENSIONS.some((extension) => extension === fileExtension.toLowerCase());
     }, []);
     /**
      * Check if the attachment size is less than allowed size.
      */
-    var isValidSize = (0, react_1.useCallback)(function (image) { var _a; return ((_a = image === null || image === void 0 ? void 0 : image.size) !== null && _a !== void 0 ? _a : 0) < CONST_1.default.AVATAR_MAX_ATTACHMENT_SIZE; }, []);
+    const isValidSize = (0, react_1.useCallback)((image) => (image?.size ?? 0) < CONST_1.default.AVATAR_MAX_ATTACHMENT_SIZE, []);
     /**
      * Check if the attachment resolution matches constraints.
      */
-    var isValidResolution = function (image) {
-        return (0, getImageResolution_1.default)(image).then(function (_a) {
-            var height = _a.height, width = _a.width;
-            return height >= CONST_1.default.AVATAR_MIN_HEIGHT_PX && width >= CONST_1.default.AVATAR_MIN_WIDTH_PX && height <= CONST_1.default.AVATAR_MAX_HEIGHT_PX && width <= CONST_1.default.AVATAR_MAX_WIDTH_PX;
-        });
-    };
+    const isValidResolution = (image) => (0, getImageResolution_1.default)(image).then(({ height, width }) => height >= CONST_1.default.AVATAR_MIN_HEIGHT_PX && width >= CONST_1.default.AVATAR_MIN_WIDTH_PX && height <= CONST_1.default.AVATAR_MAX_HEIGHT_PX && width <= CONST_1.default.AVATAR_MAX_WIDTH_PX);
     /**
      * Validates if an image has a valid resolution and opens an avatar crop modal
      */
-    var showAvatarCropModal = (0, react_1.useCallback)(function (image) {
+    const showAvatarCropModal = (0, react_1.useCallback)((image) => {
         if (!isValidExtension(image)) {
             setError('avatarWithImagePicker.notAllowedExtension', { allowedExtensions: CONST_1.default.AVATAR_ALLOWED_EXTENSIONS });
             return;
@@ -91,9 +84,8 @@ function AvatarWithImagePicker(_a) {
             return;
         }
         (0, FileUtils_1.validateImageForCorruption)(image)
-            .then(function () { return isValidResolution(image); })
-            .then(function (isValid) {
-            var _a, _b, _c;
+            .then(() => isValidResolution(image))
+            .then((isValid) => {
             if (!isValid) {
                 setError('avatarWithImagePicker.resolutionConstraints', {
                     minHeightInPx: CONST_1.default.AVATAR_MIN_HEIGHT_PX,
@@ -107,32 +99,32 @@ function AvatarWithImagePicker(_a) {
             setError(null, {});
             setIsMenuVisible(false);
             setImageData({
-                uri: (_a = image.uri) !== null && _a !== void 0 ? _a : '',
-                name: (_b = image.name) !== null && _b !== void 0 ? _b : '',
-                type: (_c = image.type) !== null && _c !== void 0 ? _c : '',
+                uri: image.uri ?? '',
+                name: image.name ?? '',
+                type: image.type ?? '',
             });
         })
-            .catch(function () {
+            .catch(() => {
             setError('attachmentPicker.errorWhileSelectingCorruptedAttachment', {});
         });
     }, [isValidExtension, isValidSize]);
-    var hideAvatarCropModal = function () {
+    const hideAvatarCropModal = () => {
         setIsAvatarCropModalOpen(false);
     };
     /**
      * Create menu items list for avatar menu
      */
-    var createMenuItems = function (openPicker) {
-        var menuItems = [
+    const createMenuItems = (openPicker) => {
+        const menuItems = [
             {
                 icon: Expensicons.Upload,
                 text: translate('avatarWithImagePicker.uploadPhoto'),
-                onSelected: function () {
+                onSelected: () => {
                     if ((0, Browser_1.isSafari)()) {
                         return;
                     }
                     openPicker({
-                        onPicked: function (data) { var _a; return showAvatarCropModal((_a = data.at(0)) !== null && _a !== void 0 ? _a : {}); },
+                        onPicked: (data) => showAvatarCropModal(data.at(0) ?? {}),
                     });
                 },
                 shouldCallAfterModalHide: true,
@@ -143,7 +135,7 @@ function AvatarWithImagePicker(_a) {
             menuItems.push({
                 icon: Expensicons.Trashcan,
                 text: translate('avatarWithImagePicker.removePhoto'),
-                onSelected: function () {
+                onSelected: () => {
                     setError(null, {});
                     onImageRemoved();
                 },
@@ -151,20 +143,20 @@ function AvatarWithImagePicker(_a) {
         }
         return menuItems;
     };
-    var onPressAvatar = (0, react_1.useCallback)(function (openPicker) {
+    const onPressAvatar = (0, react_1.useCallback)((openPicker) => {
         if (disabled && enablePreview && onViewPhotoPress) {
             onViewPhotoPress();
             return;
         }
         if (isUsingDefaultAvatar) {
             openPicker({
-                onPicked: function (data) { var _a; return showAvatarCropModal((_a = data.at(0)) !== null && _a !== void 0 ? _a : {}); },
+                onPicked: (data) => showAvatarCropModal(data.at(0) ?? {}),
             });
             return;
         }
-        setIsMenuVisible(function (prev) { return !prev; });
+        setIsMenuVisible((prev) => !prev);
     }, [disabled, enablePreview, isUsingDefaultAvatar, onViewPhotoPress, showAvatarCropModal]);
-    (0, react_1.useLayoutEffect)(function () {
+    (0, react_1.useLayoutEffect)(() => {
         if (!anchorRef.current || !isMenuVisible) {
             return;
         }
@@ -173,33 +165,30 @@ function AvatarWithImagePicker(_a) {
     return (<react_native_1.View style={[styles.w100, style]}>
             <react_native_1.View style={styles.w100}>
                 <AttachmentModal_1.default headerTitle={headerTitle} source={previewSource} originalFileName={originalFileName} fallbackSource={fallbackIcon} maybeIcon={isUsingDefaultAvatar}>
-                    {function (_a) {
-            var show = _a.show;
-            return (<AttachmentPicker_1.default type={CONST_1.default.ATTACHMENT_PICKER_TYPE.IMAGE} 
-            // We need to skip the validation in AttachmentPicker because it is handled in this component itself
-            shouldValidateImage={false}>
-                            {function (_a) {
-                    var openPicker = _a.openPicker;
-                    var menuItems = createMenuItems(openPicker);
-                    // If the current avatar isn't a default avatar and we are not overriding this behavior allow the "View Photo" option
-                    if (!shouldDisableViewPhoto && !isUsingDefaultAvatar) {
-                        menuItems.push({
-                            icon: Expensicons.Eye,
-                            text: translate('avatarWithImagePicker.viewPhoto'),
-                            onSelected: function () {
-                                if (typeof onViewPhotoPress !== 'function') {
-                                    show();
-                                    return;
-                                }
-                                onViewPhotoPress();
-                            },
-                            shouldCallAfterModalHide: true,
-                        });
-                    }
-                    return (<>
+                    {({ show }) => (<AttachmentPicker_1.default type={CONST_1.default.ATTACHMENT_PICKER_TYPE.IMAGE} 
+        // We need to skip the validation in AttachmentPicker because it is handled in this component itself
+        shouldValidateImage={false}>
+                            {({ openPicker }) => {
+                const menuItems = createMenuItems(openPicker);
+                // If the current avatar isn't a default avatar and we are not overriding this behavior allow the "View Photo" option
+                if (!shouldDisableViewPhoto && !isUsingDefaultAvatar) {
+                    menuItems.push({
+                        icon: Expensicons.Eye,
+                        text: translate('avatarWithImagePicker.viewPhoto'),
+                        onSelected: () => {
+                            if (typeof onViewPhotoPress !== 'function') {
+                                show();
+                                return;
+                            }
+                            onViewPhotoPress();
+                        },
+                        shouldCallAfterModalHide: true,
+                    });
+                }
+                return (<>
                                         <OfflineWithFeedback_1.default errors={errors} errorRowStyles={errorRowStyles} onClose={onErrorClose}>
                                             <Tooltip_1.default shouldRender={!disabled} text={translate('avatarWithImagePicker.editImage')}>
-                                                <PressableWithoutFeedback_1.default onPress={function () { return onPressAvatar(openPicker); }} accessibilityRole={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('avatarWithImagePicker.editImage')} disabled={isAvatarCropModalOpen || (disabled && !enablePreview)} disabledStyle={disabledStyle} style={[styles.pRelative, type === CONST_1.default.ICON_TYPE_AVATAR && styles.alignSelfCenter, avatarStyle]} ref={anchorRef}>
+                                                <PressableWithoutFeedback_1.default onPress={() => onPressAvatar(openPicker)} accessibilityRole={CONST_1.default.ROLE.BUTTON} accessibilityLabel={translate('avatarWithImagePicker.editImage')} disabled={isAvatarCropModalOpen || (disabled && !enablePreview)} disabledStyle={disabledStyle} style={[styles.pRelative, type === CONST_1.default.ICON_TYPE_AVATAR && styles.alignSelfCenter, avatarStyle]} ref={anchorRef}>
                                                     <OfflineWithFeedback_1.default pendingAction={pendingAction}>
                                                         {source ? (<Avatar_1.default containerStyles={avatarStyle} imageStyles={[styles.alignSelfCenter, avatarStyle]} source={source} avatarID={avatarID} fallbackIcon={fallbackIcon} size={size} type={type}/>) : (<DefaultAvatar />)}
                                                     </OfflineWithFeedback_1.default>
@@ -209,21 +198,20 @@ function AvatarWithImagePicker(_a) {
                                                 </PressableWithoutFeedback_1.default>
                                             </Tooltip_1.default>
                                         </OfflineWithFeedback_1.default>
-                                        <PopoverMenu_1.default anchorPosition={popoverPosition} isVisible={isMenuVisible} onClose={function () { return setIsMenuVisible(false); }} onItemSelected={function (item, index) {
-                            setIsMenuVisible(false);
-                            // In order for the file picker to open dynamically, the click
-                            // function must be called from within an event handler that was initiated
-                            // by the user on Safari.
-                            if (index === 0 && (0, Browser_1.isSafari)()) {
-                                openPicker({
-                                    onPicked: function (data) { var _a; return showAvatarCropModal((_a = data.at(0)) !== null && _a !== void 0 ? _a : {}); },
-                                });
-                            }
-                        }} menuItems={menuItems} anchorAlignment={anchorAlignment} anchorRef={anchorRef}/>
+                                        <PopoverMenu_1.default anchorPosition={popoverPosition} isVisible={isMenuVisible} onClose={() => setIsMenuVisible(false)} onItemSelected={(item, index) => {
+                        setIsMenuVisible(false);
+                        // In order for the file picker to open dynamically, the click
+                        // function must be called from within an event handler that was initiated
+                        // by the user on Safari.
+                        if (index === 0 && (0, Browser_1.isSafari)()) {
+                            openPicker({
+                                onPicked: (data) => showAvatarCropModal(data.at(0) ?? {}),
+                            });
+                        }
+                    }} menuItems={menuItems} anchorAlignment={anchorAlignment} anchorRef={anchorRef}/>
                                     </>);
-                }}
-                        </AttachmentPicker_1.default>);
-        }}
+            }}
+                        </AttachmentPicker_1.default>)}
                 </AttachmentModal_1.default>
             </react_native_1.View>
             {!!errorData.validationError && (<DotIndicatorMessage_1.default style={[styles.mt6]} 

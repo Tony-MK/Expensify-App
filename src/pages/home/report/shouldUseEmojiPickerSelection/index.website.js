@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Browser = require("@libs/Browser");
-var isMobileChrome = Browser.isMobileChrome();
-var shouldUseEmojiPickerSelection = function () { return isMobileChrome; };
+const Browser = require("@libs/Browser");
+const isMobileChrome = Browser.isMobileChrome();
+const shouldUseEmojiPickerSelection = () => isMobileChrome;
 exports.default = shouldUseEmojiPickerSelection;

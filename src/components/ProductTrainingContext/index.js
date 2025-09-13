@@ -1,117 +1,103 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useProductTrainingContext = void 0;
 exports.ProductTrainingContextProvider = ProductTrainingContextProvider;
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var RenderHTML_1 = require("@components/RenderHTML");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useSidePanel_1 = require("@hooks/useSidePanel");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var onboardingSelectors_1 = require("@libs/onboardingSelectors");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var TooltipUtils_1 = require("@libs/TooltipUtils");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
-var createPressHandler_1 = require("./createPressHandler");
-var TOOLTIPS_1 = require("./TOOLTIPS");
-var ProductTrainingContext = (0, react_1.createContext)({
-    shouldRenderTooltip: function () { return false; },
-    registerTooltip: function () { },
-    unregisterTooltip: function () { },
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const RenderHTML_1 = require("@components/RenderHTML");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useSidePanel_1 = require("@hooks/useSidePanel");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const onboardingSelectors_1 = require("@libs/onboardingSelectors");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const TooltipUtils_1 = require("@libs/TooltipUtils");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+const createPressHandler_1 = require("./createPressHandler");
+const TOOLTIPS_1 = require("./TOOLTIPS");
+const ProductTrainingContext = (0, react_1.createContext)({
+    shouldRenderTooltip: () => false,
+    registerTooltip: () => { },
+    unregisterTooltip: () => { },
 });
-function ProductTrainingContextProvider(_a) {
-    var _b;
-    var children = _a.children;
-    var _c = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true })[0], isLoadingApp = _c === void 0 ? true : _c;
-    var tryNewDot = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_TRY_NEW_DOT, { canBeMissing: true })[0];
-    var hasBeenAddedToNudgeMigration = !!((_b = tryNewDot === null || tryNewDot === void 0 ? void 0 : tryNewDot.nudgeMigration) === null || _b === void 0 ? void 0 : _b.timestamp);
-    var _d = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, {
+function ProductTrainingContextProvider({ children }) {
+    const [isLoadingApp = true] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true });
+    const [tryNewDot] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_TRY_NEW_DOT, { canBeMissing: true });
+    const hasBeenAddedToNudgeMigration = !!tryNewDot?.nudgeMigration?.timestamp;
+    const [isOnboardingCompleted = true, isOnboardingCompletedMetadata] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_ONBOARDING, {
         selector: onboardingSelectors_1.hasCompletedGuidedSetupFlowSelector,
         canBeMissing: true,
-    }), _e = _d[0], isOnboardingCompleted = _e === void 0 ? true : _e, isOnboardingCompletedMetadata = _d[1];
-    var _f = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true }), allPolicies = _f[0], allPoliciesMetadata = _f[1];
-    var _g = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: function (session) { return session === null || session === void 0 ? void 0 : session.email; }, canBeMissing: true }), currentUserLogin = _g[0], currentUserLoginMetadata = _g[1];
-    var isActingAsDelegate = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: function (account) { var _a; return !!((_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegate); }, canBeMissing: true })[0];
-    var isUserPolicyEmployee = (0, react_1.useMemo)(function () {
+    });
+    const [allPolicies, allPoliciesMetadata] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true });
+    const [currentUserLogin, currentUserLoginMetadata] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: (session) => session?.email, canBeMissing: true });
+    const [isActingAsDelegate] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: (account) => !!account?.delegatedAccess?.delegate, canBeMissing: true });
+    const isUserPolicyEmployee = (0, react_1.useMemo)(() => {
         if (!allPolicies || !currentUserLogin || (0, isLoadingOnyxValue_1.default)(allPoliciesMetadata, currentUserLoginMetadata)) {
             return false;
         }
         return (0, PolicyUtils_1.getActiveEmployeeWorkspaces)(allPolicies, currentUserLogin).length > 0;
     }, [allPolicies, currentUserLogin, allPoliciesMetadata, currentUserLoginMetadata]);
-    var isUserPolicyAdmin = (0, react_1.useMemo)(function () {
+    const isUserPolicyAdmin = (0, react_1.useMemo)(() => {
         if (!allPolicies || !currentUserLogin || (0, isLoadingOnyxValue_1.default)(allPoliciesMetadata, currentUserLoginMetadata)) {
             return false;
         }
         return (0, PolicyUtils_1.getActiveAdminWorkspaces)(allPolicies, currentUserLogin).length > 0;
     }, [allPolicies, currentUserLogin, allPoliciesMetadata, currentUserLoginMetadata]);
-    var dismissedProductTraining = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_DISMISSED_PRODUCT_TRAINING, { canBeMissing: true })[0];
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var modal = (0, useOnyx_1.default)(ONYXKEYS_1.default.MODAL, { canBeMissing: true })[0];
+    const [dismissedProductTraining] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_DISMISSED_PRODUCT_TRAINING, { canBeMissing: true });
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const [modal] = (0, useOnyx_1.default)(ONYXKEYS_1.default.MODAL, { canBeMissing: true });
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var isModalVisible = (modal === null || modal === void 0 ? void 0 : modal.isVisible) || (modal === null || modal === void 0 ? void 0 : modal.willAlertModalBecomeVisible);
-    var _h = (0, react_1.useState)(new Set()), activeTooltips = _h[0], setActiveTooltips = _h[1];
-    var unregisterTooltip = (0, react_1.useCallback)(function (tooltipName) {
-        setActiveTooltips(function (prev) {
-            var next = new Set(prev);
+    const isModalVisible = modal?.isVisible || modal?.willAlertModalBecomeVisible;
+    const [activeTooltips, setActiveTooltips] = (0, react_1.useState)(new Set());
+    const unregisterTooltip = (0, react_1.useCallback)((tooltipName) => {
+        setActiveTooltips((prev) => {
+            const next = new Set(prev);
             next.delete(tooltipName);
             return next;
         });
     }, [setActiveTooltips]);
-    var determineVisibleTooltip = (0, react_1.useCallback)(function () {
+    const determineVisibleTooltip = (0, react_1.useCallback)(() => {
         if (activeTooltips.size === 0) {
             return null;
         }
-        var sortedTooltips = Array.from(activeTooltips)
-            .map(function (name) {
-            var _a, _b;
-            return ({
-                name: name,
-                priority: (_b = (_a = TOOLTIPS_1.default[name]) === null || _a === void 0 ? void 0 : _a.priority) !== null && _b !== void 0 ? _b : 0,
-            });
-        })
-            .sort(function (a, b) { return b.priority - a.priority; });
-        var highestPriorityTooltip = sortedTooltips.at(0);
+        const sortedTooltips = Array.from(activeTooltips)
+            .map((name) => ({
+            name,
+            priority: TOOLTIPS_1.default[name]?.priority ?? 0,
+        }))
+            .sort((a, b) => b.priority - a.priority);
+        const highestPriorityTooltip = sortedTooltips.at(0);
         if (!highestPriorityTooltip) {
             return null;
         }
         return highestPriorityTooltip.name;
     }, [activeTooltips]);
-    var isUserInPaidPolicy = (0, react_1.useMemo)(function () {
+    const isUserInPaidPolicy = (0, react_1.useMemo)(() => {
         if (!allPolicies || !currentUserLogin || (0, isLoadingOnyxValue_1.default)(allPoliciesMetadata, currentUserLoginMetadata)) {
             return false;
         }
         return (0, PolicyUtils_1.getGroupPaidPoliciesWithExpenseChatEnabled)(allPolicies).length > 0;
     }, [allPolicies, currentUserLogin, allPoliciesMetadata, currentUserLoginMetadata]);
-    var shouldTooltipBeVisible = (0, react_1.useCallback)(function (tooltipName) {
+    const shouldTooltipBeVisible = (0, react_1.useCallback)((tooltipName) => {
         if ((0, isLoadingOnyxValue_1.default)(isOnboardingCompletedMetadata) || isLoadingApp) {
             return false;
         }
-        var isDismissed = (0, TooltipUtils_1.default)(tooltipName, dismissedProductTraining);
+        const isDismissed = (0, TooltipUtils_1.default)(tooltipName, dismissedProductTraining);
         if (isDismissed) {
             return false;
         }
-        var tooltipConfig = TOOLTIPS_1.default[tooltipName];
+        const tooltipConfig = TOOLTIPS_1.default[tooltipName];
         // if hasBeenAddedToNudgeMigration is true, and welcome modal is not dismissed, don't show tooltip
-        if (hasBeenAddedToNudgeMigration && !(dismissedProductTraining === null || dismissedProductTraining === void 0 ? void 0 : dismissedProductTraining[CONST_1.default.MIGRATED_USER_WELCOME_MODAL])) {
+        if (hasBeenAddedToNudgeMigration && !dismissedProductTraining?.[CONST_1.default.MIGRATED_USER_WELCOME_MODAL]) {
             return false;
         }
         if (isOnboardingCompleted === false) {
@@ -126,11 +112,11 @@ function ProductTrainingContextProvider(_a) {
             return false;
         }
         return tooltipConfig.shouldShow({
-            shouldUseNarrowLayout: shouldUseNarrowLayout,
-            isUserPolicyEmployee: isUserPolicyEmployee,
-            isUserPolicyAdmin: isUserPolicyAdmin,
-            hasBeenAddedToNudgeMigration: hasBeenAddedToNudgeMigration,
-            isUserInPaidPolicy: isUserInPaidPolicy,
+            shouldUseNarrowLayout,
+            isUserPolicyEmployee,
+            isUserPolicyAdmin,
+            hasBeenAddedToNudgeMigration,
+            isUserInPaidPolicy,
         });
     }, [
         isOnboardingCompletedMetadata,
@@ -144,77 +130,74 @@ function ProductTrainingContextProvider(_a) {
         isUserPolicyAdmin,
         isUserInPaidPolicy,
     ]);
-    var registerTooltip = (0, react_1.useCallback)(function (tooltipName) {
-        var shouldRegister = shouldTooltipBeVisible(tooltipName);
+    const registerTooltip = (0, react_1.useCallback)((tooltipName) => {
+        const shouldRegister = shouldTooltipBeVisible(tooltipName);
         if (!shouldRegister) {
             return;
         }
-        setActiveTooltips(function (prev) { return new Set(__spreadArray(__spreadArray([], prev, true), [tooltipName], false)); });
+        setActiveTooltips((prev) => new Set([...prev, tooltipName]));
     }, [shouldTooltipBeVisible]);
-    var shouldRenderTooltip = (0, react_1.useCallback)(function (tooltipName) {
+    const shouldRenderTooltip = (0, react_1.useCallback)((tooltipName) => {
         // If the user is acting as a copilot, don't show any tooltips
         if (isActingAsDelegate) {
             return false;
         }
         // First check base conditions
-        var shouldShow = shouldTooltipBeVisible(tooltipName);
+        const shouldShow = shouldTooltipBeVisible(tooltipName);
         if (!shouldShow) {
             return false;
         }
-        var visibleTooltip = determineVisibleTooltip();
+        const visibleTooltip = determineVisibleTooltip();
         // If this is the highest priority visible tooltip, show it
         if (tooltipName === visibleTooltip) {
             return true;
         }
         return false;
     }, [isActingAsDelegate, shouldTooltipBeVisible, determineVisibleTooltip]);
-    var contextValue = (0, react_1.useMemo)(function () { return ({
-        shouldRenderTooltip: shouldRenderTooltip,
-        registerTooltip: registerTooltip,
-        unregisterTooltip: unregisterTooltip,
-    }); }, [shouldRenderTooltip, registerTooltip, unregisterTooltip]);
+    const contextValue = (0, react_1.useMemo)(() => ({
+        shouldRenderTooltip,
+        registerTooltip,
+        unregisterTooltip,
+    }), [shouldRenderTooltip, registerTooltip, unregisterTooltip]);
     return <ProductTrainingContext.Provider value={contextValue}>{children}</ProductTrainingContext.Provider>;
 }
-var useProductTrainingContext = function (tooltipName, shouldShow, config) {
-    if (shouldShow === void 0) { shouldShow = true; }
-    if (config === void 0) { config = {}; }
-    var context = (0, react_1.useContext)(ProductTrainingContext);
-    var styles = (0, useThemeStyles_1.default)();
-    var theme = (0, useTheme_1.default)();
-    var shouldHideToolTip = (0, useSidePanel_1.default)().shouldHideToolTip;
-    var translate = (0, useLocalize_1.default)().translate;
+const useProductTrainingContext = (tooltipName, shouldShow = true, config = {}) => {
+    const context = (0, react_1.useContext)(ProductTrainingContext);
+    const styles = (0, useThemeStyles_1.default)();
+    const theme = (0, useTheme_1.default)();
+    const { shouldHideToolTip } = (0, useSidePanel_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     if (!context) {
         throw new Error('useProductTourContext must be used within a ProductTourProvider');
     }
-    var shouldRenderTooltip = context.shouldRenderTooltip, registerTooltip = context.registerTooltip, unregisterTooltip = context.unregisterTooltip;
-    (0, react_1.useEffect)(function () {
+    const { shouldRenderTooltip, registerTooltip, unregisterTooltip } = context;
+    (0, react_1.useEffect)(() => {
         if (!shouldShow) {
             return;
         }
         registerTooltip(tooltipName);
-        return function () {
+        return () => {
             unregisterTooltip(tooltipName);
         };
     }, [tooltipName, registerTooltip, unregisterTooltip, shouldShow]);
-    var shouldShowProductTrainingTooltip = (0, react_1.useMemo)(function () {
+    const shouldShowProductTrainingTooltip = (0, react_1.useMemo)(() => {
         return shouldShow && shouldRenderTooltip(tooltipName) && !shouldHideToolTip;
     }, [shouldRenderTooltip, tooltipName, shouldShow, shouldHideToolTip]);
-    var hideTooltip = (0, react_1.useCallback)(function (isDismissedUsingCloseButton) {
-        if (isDismissedUsingCloseButton === void 0) { isDismissedUsingCloseButton = false; }
+    const hideTooltip = (0, react_1.useCallback)((isDismissedUsingCloseButton = false) => {
         if (!shouldShowProductTrainingTooltip) {
             return;
         }
-        var tooltip = TOOLTIPS_1.default[tooltipName];
+        const tooltip = TOOLTIPS_1.default[tooltipName];
         tooltip.onHideTooltip(isDismissedUsingCloseButton);
         unregisterTooltip(tooltipName);
     }, [tooltipName, shouldShowProductTrainingTooltip, unregisterTooltip]);
-    var renderProductTrainingTooltip = (0, react_1.useCallback)(function () {
-        var tooltip = TOOLTIPS_1.default[tooltipName];
+    const renderProductTrainingTooltip = (0, react_1.useCallback)(() => {
+        const tooltip = TOOLTIPS_1.default[tooltipName];
         return (<react_native_1.View fsClass={CONST_1.default.FULLSTORY.CLASS.UNMASK}>
                 <react_native_1.View style={[
                 styles.alignItemsCenter,
                 styles.flexRow,
-                (tooltip === null || tooltip === void 0 ? void 0 : tooltip.shouldRenderActionButtons) ? styles.justifyContentStart : styles.justifyContentCenter,
+                tooltip?.shouldRenderActionButtons ? styles.justifyContentStart : styles.justifyContentCenter,
                 styles.textAlignCenter,
                 styles.gap3,
                 styles.pv2,
@@ -224,13 +207,13 @@ var useProductTrainingContext = function (tooltipName, shouldShow, config) {
                     <react_native_1.View style={[styles.renderHTML, styles.dFlex, styles.flexShrink1]}>
                         <RenderHTML_1.default html={translate(tooltip.content)}/>
                     </react_native_1.View>
-                    {!(tooltip === null || tooltip === void 0 ? void 0 : tooltip.shouldRenderActionButtons) && (<PressableWithoutFeedback_1.default shouldUseAutoHitSlop accessibilityLabel={translate('productTrainingTooltip.scanTestTooltip.noThanks')} role={CONST_1.default.ROLE.BUTTON} 
+                    {!tooltip?.shouldRenderActionButtons && (<PressableWithoutFeedback_1.default shouldUseAutoHitSlop accessibilityLabel={translate('productTrainingTooltip.scanTestTooltip.noThanks')} role={CONST_1.default.ROLE.BUTTON} 
             // eslint-disable-next-line react/jsx-props-no-spreading
-            {...(0, createPressHandler_1.default)(function () { return hideTooltip(true); })}>
+            {...(0, createPressHandler_1.default)(() => hideTooltip(true))}>
                             <Icon_1.default src={Expensicons.Close} fill={theme.icon} width={variables_1.default.iconSizeSemiSmall} height={variables_1.default.iconSizeSemiSmall}/>
                         </PressableWithoutFeedback_1.default>)}
                 </react_native_1.View>
-                {!!(tooltip === null || tooltip === void 0 ? void 0 : tooltip.shouldRenderActionButtons) && (<react_native_1.View style={[styles.alignItemsCenter, styles.justifyContentBetween, styles.flexRow, styles.ph2, styles.pv2, styles.gap2]}>
+                {!!tooltip?.shouldRenderActionButtons && (<react_native_1.View style={[styles.alignItemsCenter, styles.justifyContentBetween, styles.flexRow, styles.ph2, styles.pv2, styles.gap2]}>
                         <Button_1.default success text={translate('productTrainingTooltip.scanTestTooltip.tryItOut')} style={[styles.flex1]} 
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...(0, createPressHandler_1.default)(config.onConfirm)}/>
@@ -262,13 +245,13 @@ var useProductTrainingContext = function (tooltipName, shouldShow, config) {
         config.onDismiss,
         hideTooltip,
     ]);
-    var hideProductTrainingTooltip = (0, react_1.useCallback)(function () {
+    const hideProductTrainingTooltip = (0, react_1.useCallback)(() => {
         hideTooltip(false);
     }, [hideTooltip]);
     return {
-        renderProductTrainingTooltip: renderProductTrainingTooltip,
-        hideProductTrainingTooltip: hideProductTrainingTooltip,
-        shouldShowProductTrainingTooltip: shouldShowProductTrainingTooltip,
+        renderProductTrainingTooltip,
+        hideProductTrainingTooltip,
+        shouldShowProductTrainingTooltip,
     };
 };
 exports.useProductTrainingContext = useProductTrainingContext;

@@ -9,11 +9,11 @@ exports.cancelResetBankAccount = cancelResetBankAccount;
 exports.clearReimbursementAccountDraft = clearReimbursementAccountDraft;
 exports.setBankAccountState = setBankAccountState;
 exports.setReimbursementAccountOptionPressed = setReimbursementAccountOptionPressed;
-var react_native_onyx_1 = require("react-native-onyx");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var resetNonUSDBankAccount_1 = require("./resetNonUSDBankAccount");
+const react_native_onyx_1 = require("react-native-onyx");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const resetNonUSDBankAccount_1 = require("./resetNonUSDBankAccount");
 exports.resetNonUSDBankAccount = resetNonUSDBankAccount_1.default;
-var resetUSDBankAccount_1 = require("./resetUSDBankAccount");
+const resetUSDBankAccount_1 = require("./resetUSDBankAccount");
 exports.resetUSDBankAccount = resetUSDBankAccount_1.default;
 var navigation_1 = require("./navigation");
 Object.defineProperty(exports, "goToWithdrawalAccountSetupStep", { enumerable: true, get: function () { return navigation_1.goToWithdrawalAccountSetupStep; } });
@@ -28,10 +28,10 @@ Object.defineProperty(exports, "resetReimbursementAccount", { enumerable: true, 
  * - CONST.BANK_ACCOUNT.SETUP_TYPE.PLAID to ask them to login to their bank via Plaid
  */
 function setBankAccountSubStep(subStep) {
-    return react_native_onyx_1.default.merge(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { achData: { subStep: subStep } });
+    return react_native_onyx_1.default.merge(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { achData: { subStep } });
 }
 function setBankAccountState(state) {
-    return react_native_onyx_1.default.merge(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { achData: { state: state } });
+    return react_native_onyx_1.default.merge(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { achData: { state } });
 }
 function hideBankAccountErrors() {
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { error: '', errors: null });

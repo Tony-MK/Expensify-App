@@ -1,24 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var Icon_1 = require("@components/Icon");
-var Expensicons = require("@components/Icon/Expensicons");
-var utils_1 = require("@components/Modal/ReanimatedModal/utils");
-var Pressable_1 = require("@components/Pressable");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-function AnimatedCollapsible(_a) {
-    var isExpanded = _a.isExpanded, children = _a.children, header = _a.header, _b = _a.duration, duration = _b === void 0 ? 300 : _b, style = _a.style, headerStyle = _a.headerStyle, contentStyle = _a.contentStyle, expandButtonStyle = _a.expandButtonStyle, onPress = _a.onPress, _c = _a.disabled, disabled = _c === void 0 ? false : _c;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var contentHeight = (0, react_native_reanimated_1.useSharedValue)(0);
-    var isAnimating = (0, react_native_reanimated_1.useSharedValue)(false);
-    var hasExpanded = (0, react_native_reanimated_1.useSharedValue)(false);
-    var isExpandedFirstTime = (0, react_1.useRef)(false);
-    (0, react_1.useEffect)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const Icon_1 = require("@components/Icon");
+const Expensicons = require("@components/Icon/Expensicons");
+const utils_1 = require("@components/Modal/ReanimatedModal/utils");
+const Pressable_1 = require("@components/Pressable");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+function AnimatedCollapsible({ isExpanded, children, header, duration = 300, style, headerStyle, contentStyle, expandButtonStyle, onPress, disabled = false }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const contentHeight = (0, react_native_reanimated_1.useSharedValue)(0);
+    const isAnimating = (0, react_native_reanimated_1.useSharedValue)(false);
+    const hasExpanded = (0, react_native_reanimated_1.useSharedValue)(false);
+    const isExpandedFirstTime = (0, react_1.useRef)(false);
+    (0, react_1.useEffect)(() => {
         if (!isExpanded && !isExpandedFirstTime.current) {
             return;
         }
@@ -30,27 +29,27 @@ function AnimatedCollapsible(_a) {
         }
     }, [hasExpanded, isExpanded]);
     // Animation for content height and opacity
-    var derivedHeight = (0, react_native_reanimated_1.useDerivedValue)(function () {
-        var targetHeight = isExpanded ? contentHeight.get() : 0;
+    const derivedHeight = (0, react_native_reanimated_1.useDerivedValue)(() => {
+        const targetHeight = isExpanded ? contentHeight.get() : 0;
         return (0, react_native_reanimated_1.withTiming)(targetHeight, {
-            duration: duration,
+            duration,
             easing: utils_1.easing,
-        }, function (finished) {
+        }, (finished) => {
             if (!finished) {
                 return;
             }
             isAnimating.set(false);
         });
     });
-    var derivedOpacity = (0, react_native_reanimated_1.useDerivedValue)(function () {
-        var targetOpacity = isExpanded ? 1 : 0;
+    const derivedOpacity = (0, react_native_reanimated_1.useDerivedValue)(() => {
+        const targetOpacity = isExpanded ? 1 : 0;
         isAnimating.set(true);
         return (0, react_native_reanimated_1.withTiming)(targetOpacity, {
-            duration: duration,
+            duration,
             easing: utils_1.easing,
         });
     });
-    var contentAnimatedStyle = (0, react_native_reanimated_1.useAnimatedStyle)(function () {
+    const contentAnimatedStyle = (0, react_native_reanimated_1.useAnimatedStyle)(() => {
         if (!isExpanded && !hasExpanded.get()) {
             return {
                 height: 0,
@@ -68,14 +67,11 @@ function AnimatedCollapsible(_a) {
             <react_native_1.View style={[headerStyle, styles.flexRow, styles.alignItemsCenter]}>
                 <react_native_1.View style={[styles.flex1]}>{header}</react_native_1.View>
                 <Pressable_1.PressableWithFeedback onPress={onPress} disabled={disabled} style={[styles.p3, styles.justifyContentCenter, styles.alignItemsCenter, styles.pl0, expandButtonStyle]} accessibilityRole={CONST_1.default.ROLE.BUTTON} accessibilityLabel={isExpanded ? 'Collapse' : 'Expand'}>
-                    {function (_a) {
-            var hovered = _a.hovered;
-            return (<Icon_1.default src={isExpanded ? Expensicons.UpArrow : Expensicons.DownArrow} fill={hovered ? theme.textSupporting : theme.icon} small/>);
-        }}
+                    {({ hovered }) => (<Icon_1.default src={isExpanded ? Expensicons.UpArrow : Expensicons.DownArrow} fill={hovered ? theme.textSupporting : theme.icon} small/>)}
                 </Pressable_1.PressableWithFeedback>
             </react_native_1.View>
             <react_native_reanimated_1.default.View style={[contentAnimatedStyle, contentStyle]}>
-                <react_native_1.View onLayout={function (e) {
+                <react_native_1.View onLayout={(e) => {
             if (!e.nativeEvent.layout.height) {
                 return;
             }

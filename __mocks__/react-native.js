@@ -1,75 +1,82 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 // eslint-disable-next-line no-restricted-imports
-var ReactNative = require("react-native");
-var BootSplash = ReactNative.NativeModules.BootSplash;
-jest.doMock('react-native', function () {
-    var url = 'https://new.expensify.com/';
-    var getInitialURL = function () { return Promise.resolve(url); };
-    var appState = 'active';
-    var count = 0;
-    var changeListeners = {};
+const ReactNative = require("react-native");
+const { BootSplash } = ReactNative.NativeModules;
+jest.doMock('react-native', () => {
+    let url = 'https://new.expensify.com/';
+    const getInitialURL = () => Promise.resolve(url);
+    let appState = 'active';
+    let count = 0;
+    const changeListeners = {};
     // Tests will run with the app in a typical small screen size by default. We do this since the react-native test renderer
     // runs against index.native.js source and so anything that is testing a component reliant on withWindowDimensions()
     // would be most commonly assumed to be on a mobile phone vs. a tablet or desktop style view. This behavior can be
     // overridden by explicitly setting the dimensions inside a test via Dimensions.set()
-    var dimensions = {
+    let dimensions = {
         width: 300,
         height: 700,
         scale: 1,
         fontScale: 1,
     };
-    var reactNativeMock = Object.setPrototypeOf({
-        NativeModules: __assign(__assign({}, ReactNative.NativeModules), { BootSplash: {
+    const reactNativeMock = Object.setPrototypeOf({
+        NativeModules: {
+            ...ReactNative.NativeModules,
+            BootSplash: {
                 hide: jest.fn(),
                 logoSizeRatio: 1,
                 navigationBarHeight: 0,
-            }, StartupTimer: { stop: jest.fn() } }),
-        Linking: __assign(__assign({}, ReactNative.Linking), { getInitialURL: getInitialURL, setInitialURL: function (newUrl) {
+            },
+            StartupTimer: { stop: jest.fn() },
+        },
+        Linking: {
+            ...ReactNative.Linking,
+            getInitialURL,
+            setInitialURL(newUrl) {
                 url = newUrl;
-            } }),
-        AppState: __assign(__assign({}, ReactNative.AppState), { get currentState() {
+            },
+        },
+        AppState: {
+            ...ReactNative.AppState,
+            get currentState() {
                 return appState;
-            }, emitCurrentTestState: function (state) {
+            },
+            emitCurrentTestState(state) {
                 appState = state;
-                Object.entries(changeListeners).forEach(function (_a) {
-                    var listener = _a[1];
-                    return listener(appState);
-                });
-            }, addEventListener: function (type, listener) {
+                Object.entries(changeListeners).forEach(([, listener]) => listener(appState));
+            },
+            addEventListener(type, listener) {
                 if (type === 'change') {
-                    var originalCount_1 = count;
-                    changeListeners[originalCount_1] = listener;
+                    const originalCount = count;
+                    changeListeners[originalCount] = listener;
                     ++count;
                     return {
-                        remove: function () {
-                            delete changeListeners[originalCount_1];
+                        remove: () => {
+                            delete changeListeners[originalCount];
                         },
                     };
                 }
                 return ReactNative.AppState.addEventListener(type, listener);
-            } }),
-        Dimensions: __assign(__assign({}, ReactNative.Dimensions), { addEventListener: jest.fn(function () { return ({ remove: jest.fn() }); }), get: function () { return dimensions; }, set: function (newDimensions) {
+            },
+        },
+        Dimensions: {
+            ...ReactNative.Dimensions,
+            addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+            get: () => dimensions,
+            set: (newDimensions) => {
                 dimensions = newDimensions;
-            } }),
+            },
+        },
         // `runAfterInteractions` method would normally be triggered after the native animation is completed,
         // we would have to mock waiting for the animation end and more state changes,
         // so it seems easier to just run the callback immediately in tests.
-        InteractionManager: __assign(__assign({}, ReactNative.InteractionManager), { runAfterInteractions: function (callback) {
+        InteractionManager: {
+            ...ReactNative.InteractionManager,
+            runAfterInteractions: (callback) => {
                 callback();
-                return { cancel: function () { } };
-            } }),
+                return { cancel: () => { } };
+            },
+        },
     }, ReactNative);
     return reactNativeMock;
 });

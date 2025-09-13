@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     PERSONAL_INFO_STEP: {
         FIRST_NAME: 'legalFirstName',
         LAST_NAME: 'legalLastName',

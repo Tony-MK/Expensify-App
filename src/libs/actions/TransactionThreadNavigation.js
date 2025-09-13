@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setActiveTransactionThreadIDs = setActiveTransactionThreadIDs;
 exports.clearActiveTransactionThreadIDs = clearActiveTransactionThreadIDs;
-var react_native_onyx_1 = require("react-native-onyx");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
  * When a single transaction report is displayed in RHP it may need extra context in case user navigated to it from MoneyRequestReportView or Reports
  * This context is the list of "sibling" transaction report ids.

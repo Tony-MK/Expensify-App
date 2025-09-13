@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var variables_1 = require("@styles/variables");
-var ITEM_HEIGHTS = {
+const variables_1 = require("@styles/variables");
+const ITEM_HEIGHTS = {
     // Constants for wide screen layout
     WIDE: {
         STANDARD: variables_1.default.optionRowWideItemHeight + variables_1.default.optionRowListItemPadding,

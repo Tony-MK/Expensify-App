@@ -1,40 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useCardFeeds_1 = require("@hooks/useCardFeeds");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CardUtils_1 = require("@libs/CardUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
-var Policy_1 = require("@src/libs/actions/Policy/Policy");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var DowngradeConfirmation_1 = require("./DowngradeConfirmation");
-var DowngradeIntro_1 = require("./DowngradeIntro");
-function WorkspaceDowngradePage(_a) {
-    var _b;
-    var route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var policyID = (_b = route.params) === null || _b === void 0 ? void 0 : _b.policyID;
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { canBeMissing: false })[0];
-    var cardFeeds = (0, useCardFeeds_1.default)(policyID)[0];
-    var companyFeeds = (0, CardUtils_1.getCompanyFeeds)(cardFeeds);
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var _c = (0, react_1.useState)(false), isDowngradeWarningModalOpen = _c[0], setIsDowngradeWarningModalOpen = _c[1];
-    var canPerformDowngrade = (0, react_1.useMemo)(function () { return (0, PolicyUtils_1.canModifyPlan)(policyID); }, [policyID]);
-    var isDowngraded = (0, react_1.useMemo)(function () { return (0, PolicyUtils_1.isCollectPolicy)(policy); }, [policy]);
-    var onDowngradeToTeam = function () {
+const react_1 = require("react");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useCardFeeds_1 = require("@hooks/useCardFeeds");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CardUtils_1 = require("@libs/CardUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
+const Policy_1 = require("@src/libs/actions/Policy/Policy");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const DowngradeConfirmation_1 = require("./DowngradeConfirmation");
+const DowngradeIntro_1 = require("./DowngradeIntro");
+function WorkspaceDowngradePage({ route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const policyID = route.params?.policyID;
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { canBeMissing: false });
+    const [cardFeeds] = (0, useCardFeeds_1.default)(policyID);
+    const companyFeeds = (0, CardUtils_1.getCompanyFeeds)(cardFeeds);
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [isDowngradeWarningModalOpen, setIsDowngradeWarningModalOpen] = (0, react_1.useState)(false);
+    const canPerformDowngrade = (0, react_1.useMemo)(() => (0, PolicyUtils_1.canModifyPlan)(policyID), [policyID]);
+    const isDowngraded = (0, react_1.useMemo)(() => (0, PolicyUtils_1.isCollectPolicy)(policy), [policy]);
+    const onDowngradeToTeam = () => {
         if (!canPerformDowngrade || !policy) {
             return;
         }
@@ -44,11 +42,11 @@ function WorkspaceDowngradePage(_a) {
         }
         (0, Policy_1.downgradeToTeam)(policy.id);
     };
-    var onClose = function () {
+    const onClose = () => {
         setIsDowngradeWarningModalOpen(false);
         Navigation_1.default.dismissModal();
     };
-    var onMoveToCompanyCardFeeds = function () {
+    const onMoveToCompanyCardFeeds = () => {
         if (!policyID) {
             return;
         }
@@ -60,7 +58,7 @@ function WorkspaceDowngradePage(_a) {
         return <NotFoundPage_1.default />;
     }
     return (<ScreenWrapper_1.default shouldShowOfflineIndicator testID="workspaceDowngradePage" offlineIndicatorStyle={styles.mtAuto}>
-            <HeaderWithBackButton_1.default title={translate('common.downgradeWorkspace')} onBackButtonPress={function () {
+            <HeaderWithBackButton_1.default title={translate('common.downgradeWorkspace')} onBackButtonPress={() => {
             if (isDowngraded) {
                 Navigation_1.default.dismissModal();
             }
@@ -69,10 +67,10 @@ function WorkspaceDowngradePage(_a) {
             }
         }}/>
             <ScrollView_1.default contentContainerStyle={styles.flexGrow1}>
-                {isDowngraded && !!policyID && (<DowngradeConfirmation_1.default onConfirmDowngrade={function () {
+                {isDowngraded && !!policyID && (<DowngradeConfirmation_1.default onConfirmDowngrade={() => {
                 Navigation_1.default.dismissModal();
             }} policyID={policyID}/>)}
-                {!isDowngraded && (<DowngradeIntro_1.default policyID={policyID} onDowngrade={onDowngradeToTeam} buttonDisabled={isOffline} loading={policy === null || policy === void 0 ? void 0 : policy.isPendingDowngrade} backTo={route.params.backTo}/>)}
+                {!isDowngraded && (<DowngradeIntro_1.default policyID={policyID} onDowngrade={onDowngradeToTeam} buttonDisabled={isOffline} loading={policy?.isPendingDowngrade} backTo={route.params.backTo}/>)}
             </ScrollView_1.default>
             <ConfirmModal_1.default title={translate('workspace.moreFeatures.companyCards.downgradeTitle')} isVisible={isDowngradeWarningModalOpen} onConfirm={onClose} shouldShowCancelButton={false} onCancel={onClose} prompt={<Text_1.default>
                         {translate('workspace.moreFeatures.companyCards.downgradeSubTitleFirstPart')}{' '}

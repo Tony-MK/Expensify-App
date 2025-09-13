@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = sanitizeJSONStringValues;
 function sanitizeJSONStringValues(inputString) {
     function replacer(str) {
-        var _a;
-        return ((_a = {
+        return ({
             // eslint-disable-next-line @typescript-eslint/naming-convention
             '\\': '\\\\',
             // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -17,29 +16,28 @@ function sanitizeJSONStringValues(inputString) {
             '\f': '\\f',
             // eslint-disable-next-line @typescript-eslint/naming-convention
             '"': '\\"',
-        }[str]) !== null && _a !== void 0 ? _a : '');
+        }[str] ?? '');
     }
     try {
-        var parsed = JSON.parse(inputString);
+        const parsed = JSON.parse(inputString);
         // Function to recursively sanitize string values in an object
-        var sanitizeValues_1 = function (obj) {
+        const sanitizeValues = (obj) => {
             if (typeof obj === 'string') {
                 return obj.replace(/\\|\t|\n|\r|\f|"/g, replacer);
             }
             if (Array.isArray(obj)) {
-                return obj.map(function (item) { return sanitizeValues_1(item); });
+                return obj.map((item) => sanitizeValues(item));
             }
             if (obj && typeof obj === 'object') {
-                var result = {};
-                for (var _i = 0, _a = Object.keys(obj); _i < _a.length; _i++) {
-                    var key = _a[_i];
-                    result[key] = sanitizeValues_1(obj[key]);
+                const result = {};
+                for (const key of Object.keys(obj)) {
+                    result[key] = sanitizeValues(obj[key]);
                 }
                 return result;
             }
             return obj;
         };
-        return JSON.stringify(sanitizeValues_1(parsed));
+        return JSON.stringify(sanitizeValues(parsed));
     }
     catch (e) {
         throw new Error('Invalid JSON input.');

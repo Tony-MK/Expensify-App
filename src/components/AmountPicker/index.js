@@ -1,37 +1,25 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
-var blurActiveElement_1 = require("@libs/Accessibility/blurActiveElement");
-var CONST_1 = require("@src/CONST");
-var callOrReturn_1 = require("@src/types/utils/callOrReturn");
-var AmountSelectorModal_1 = require("./AmountSelectorModal");
-function AmountPicker(_a, forwardedRef) {
-    var value = _a.value, description = _a.description, title = _a.title, _b = _a.errorText, errorText = _b === void 0 ? '' : _b, onInputChange = _a.onInputChange, furtherDetails = _a.furtherDetails, rightLabel = _a.rightLabel, rest = __rest(_a, ["value", "description", "title", "errorText", "onInputChange", "furtherDetails", "rightLabel"]);
-    var _c = (0, react_1.useState)(false), isPickerVisible = _c[0], setIsPickerVisible = _c[1];
-    var showPickerModal = function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const MenuItemWithTopDescription_1 = require("@components/MenuItemWithTopDescription");
+const blurActiveElement_1 = require("@libs/Accessibility/blurActiveElement");
+const CONST_1 = require("@src/CONST");
+const callOrReturn_1 = require("@src/types/utils/callOrReturn");
+const AmountSelectorModal_1 = require("./AmountSelectorModal");
+function AmountPicker({ value, description, title, errorText = '', onInputChange, furtherDetails, rightLabel, ...rest }, forwardedRef) {
+    const [isPickerVisible, setIsPickerVisible] = (0, react_1.useState)(false);
+    const showPickerModal = () => {
         setIsPickerVisible(true);
     };
-    var hidePickerModal = function () {
+    const hidePickerModal = () => {
         setIsPickerVisible(false);
         (0, blurActiveElement_1.default)();
     };
-    var updateInput = function (updatedValue) {
+    const updateInput = (updatedValue) => {
         if (updatedValue !== value) {
             // We cast the updatedValue to a number and then back to a string to remove any leading zeros and separating commas
-            onInputChange === null || onInputChange === void 0 ? void 0 : onInputChange(String(Number(updatedValue)));
+            onInputChange?.(String(Number(updatedValue)));
         }
         hidePickerModal();
     };

@@ -1,39 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var CheckboxWithLabel_1 = require("@components/CheckboxWithLabel");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var RenderHTML_1 = require("@components/RenderHTML");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var requiresDocusignStep_1 = require("@pages/ReimbursementAccount/NonUSD/utils/requiresDocusignStep");
+const react_1 = require("react");
+const CheckboxWithLabel_1 = require("@components/CheckboxWithLabel");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const RenderHTML_1 = require("@components/RenderHTML");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const requiresDocusignStep_1 = require("@pages/ReimbursementAccount/NonUSD/utils/requiresDocusignStep");
 function IsAuthorizedToUseBankAccountLabel() {
-    var translate = (0, useLocalize_1.default)().translate;
+    const { translate } = (0, useLocalize_1.default)();
     return <Text_1.default>{translate('agreementsStep.iAmAuthorized')}</Text_1.default>;
 }
 function CertifyTrueAndAccurateLabel() {
-    var translate = (0, useLocalize_1.default)().translate;
+    const { translate } = (0, useLocalize_1.default)();
     return <Text_1.default>{translate('agreementsStep.iCertify')}</Text_1.default>;
 }
 function TermsAndConditionsLabel() {
-    var translate = (0, useLocalize_1.default)().translate;
+    const { translate } = (0, useLocalize_1.default)();
     return <RenderHTML_1.default html={translate('agreementsStep.iAcceptTheTermsAndConditions')}/>;
 }
 function ConsentToPrivacyNoticeLabel() {
-    var translate = (0, useLocalize_1.default)().translate;
+    const { translate } = (0, useLocalize_1.default)();
     return <RenderHTML_1.default html={translate('agreementsStep.iConsentToThePrivacyNotice')}/>;
 }
-function Confirmation(_a) {
-    var defaultValues = _a.defaultValues, formID = _a.formID, inputIDs = _a.inputIDs, isLoading = _a.isLoading, onNext = _a.onNext, currency = _a.currency;
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var isDocusignStepRequired = (0, requiresDocusignStep_1.default)(currency);
-    var stepFields = (0, react_1.useMemo)(function () { return [inputIDs.authorizedToBindClientToAgreement, inputIDs.provideTruthfulInformation, inputIDs.agreeToTermsAndConditions, inputIDs.consentToPrivacyNotice]; }, [inputIDs]);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, stepFields);
+function Confirmation({ defaultValues, formID, inputIDs, isLoading, onNext, currency }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const isDocusignStepRequired = (0, requiresDocusignStep_1.default)(currency);
+    const stepFields = (0, react_1.useMemo)(() => [inputIDs.authorizedToBindClientToAgreement, inputIDs.provideTruthfulInformation, inputIDs.agreeToTermsAndConditions, inputIDs.consentToPrivacyNotice], [inputIDs]);
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = (0, ValidationUtils_1.getFieldRequiredErrors)(values, stepFields);
         if (!(0, ValidationUtils_1.isRequiredFulfilled)(values[inputIDs.authorizedToBindClientToAgreement])) {
             errors[inputIDs.authorizedToBindClientToAgreement] = translate('agreementsStep.error.authorized');
         }

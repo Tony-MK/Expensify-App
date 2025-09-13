@@ -1,22 +1,11 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.serializeLoggingData = serializeLoggingData;
-var types_1 = require("@libs/API/types");
-var Log_1 = require("@libs/Log");
-var CONST_1 = require("@src/CONST");
+const types_1 = require("@libs/API/types");
+const Log_1 = require("@libs/Log");
+const CONST_1 = require("@src/CONST");
 function getCircularReplacer() {
-    var ancestors = [];
+    const ancestors = [];
     return function (key, value) {
         if (typeof value !== 'object' || value === null) {
             return value;
@@ -38,25 +27,24 @@ function serializeLoggingData(logData) {
         return JSON.parse(JSON.stringify(logData, getCircularReplacer()));
     }
     catch (error) {
-        Log_1.default.hmmm('Failed to serialize log data', { error: error });
+        Log_1.default.hmmm('Failed to serialize log data', { error });
         return null;
     }
 }
 function logRequestDetails(message, request, response) {
-    var _a, _b;
     // Don't log about log or else we'd cause an infinite loop
     if (request.command === 'Log') {
         return;
     }
-    var logParams = {
+    const logParams = {
         command: request.command,
         shouldUseSecure: request.shouldUseSecure,
     };
-    var returnValueList = (_a = request === null || request === void 0 ? void 0 : request.data) === null || _a === void 0 ? void 0 : _a.returnValueList;
+    const returnValueList = request?.data?.returnValueList;
     if (returnValueList) {
         logParams.returnValueList = returnValueList;
     }
-    var nvpNames = (_b = request === null || request === void 0 ? void 0 : request.data) === null || _b === void 0 ? void 0 : _b.nvpNames;
+    const nvpNames = request?.data?.nvpNames;
     if (nvpNames) {
         logParams.nvpNames = nvpNames;
     }
@@ -64,31 +52,34 @@ function logRequestDetails(message, request, response) {
         logParams.jsonCode = response.jsonCode;
         logParams.requestID = response.requestID;
     }
-    var extraData = {};
+    const extraData = {};
     /**
      * We don't want to log the request and response data for AuthenticatePusher
      * requests because they contain sensitive information.
      */
     if (request.command !== 'AuthenticatePusher') {
-        extraData.request = __assign(__assign({}, request), { data: serializeLoggingData(request.data) });
+        extraData.request = {
+            ...request,
+            data: serializeLoggingData(request.data),
+        };
         extraData.response = response;
     }
     Log_1.default.info(message, false, logParams, false, extraData);
 }
-var Logging = function (response, request) {
-    var startTime = Date.now();
+const Logging = (response, request) => {
+    const startTime = Date.now();
     logRequestDetails('[Network] Making API request', request);
     return response
-        .then(function (data) {
-        logRequestDetails("[Network] Finished API request in ".concat(Date.now() - startTime, "ms"), request, data);
+        .then((data) => {
+        logRequestDetails(`[Network] Finished API request in ${Date.now() - startTime}ms`, request, data);
         return data;
     })
-        .catch(function (error) {
-        var logParams = {
+        .catch((error) => {
+        const logParams = {
             message: error.message,
             status: error.status,
             title: error.title,
-            request: request,
+            request,
         };
         if (error.name === CONST_1.default.ERROR.REQUEST_CANCELLED) {
             // Cancelled requests are normal and can happen when a user logs out.
@@ -110,12 +101,12 @@ var Logging = function (response, request) {
             CONST_1.default.ERROR.IOS_NETWORK_CONNECTION_LOST_RUSSIAN,
             CONST_1.default.ERROR.IOS_NETWORK_CONNECTION_LOST_SWEDISH,
             CONST_1.default.ERROR.IOS_NETWORK_CONNECTION_LOST_SPANISH,
-        ].some(function (message) { return message === error.message; })) {
+        ].some((message) => message === error.message)) {
             // These errors seem to happen for native devices with interrupted connections. Often we will see logs about Pusher disconnecting together with these.
             // This type of error may also indicate a problem with SSL certs.
             Log_1.default.hmmm('[Network] API request error: Connection interruption likely', logParams);
         }
-        else if ([CONST_1.default.ERROR.FIREFOX_DOCUMENT_LOAD_ABORTED, CONST_1.default.ERROR.SAFARI_DOCUMENT_LOAD_ABORTED].some(function (message) { return message === error.message; })) {
+        else if ([CONST_1.default.ERROR.FIREFOX_DOCUMENT_LOAD_ABORTED, CONST_1.default.ERROR.SAFARI_DOCUMENT_LOAD_ABORTED].some((message) => message === error.message)) {
             // This message can be observed page load is interrupted (closed or navigated away).
             Log_1.default.hmmm('[Network] API request error: User likely navigated away from or closed browser', logParams);
         }
@@ -153,7 +144,7 @@ var Logging = function (response, request) {
         }
         else {
             // If we get any error that is not known log an alert so we can learn more about it and document it here.
-            Log_1.default.alert("".concat(CONST_1.default.ERROR.ENSURE_BUG_BOT, " unknown API request error caught while processing request"), logParams, false);
+            Log_1.default.alert(`${CONST_1.default.ERROR.ENSURE_BUG_BOT} unknown API request error caught while processing request`, logParams, false);
         }
         // Re-throw this error so the next handler can manage it
         throw error;

@@ -1,51 +1,50 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_picker_select_1 = require("react-native-picker-select");
-var InputBlurContext_1 = require("@components/InputBlurContext");
-var KeyboardAvoidingView_1 = require("@components/KeyboardAvoidingView");
-var ModalContext_1 = require("@components/Modal/ModalContext");
-var useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
-var useInitialWindowDimensions_1 = require("@hooks/useInitialWindowDimensions");
-var useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
-var useTackInputFocus_1 = require("@hooks/useTackInputFocus");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var Browser_1 = require("@libs/Browser");
-var VisualViewport_1 = require("@libs/VisualViewport");
-var TestTool_1 = require("@userActions/TestTool");
-var CONST_1 = require("@src/CONST");
-function ScreenWrapperContainer(_a) {
-    var children = _a.children, style = _a.style, testID = _a.testID, bottomContent = _a.bottomContent, bottomContentStyleProp = _a.bottomContentStyle, _b = _a.keyboardAvoidingViewBehavior, keyboardAvoidingViewBehavior = _b === void 0 ? 'padding' : _b, keyboardVerticalOffset = _a.keyboardVerticalOffset, _c = _a.shouldEnableKeyboardAvoidingView, shouldEnableKeyboardAvoidingView = _c === void 0 ? true : _c, _d = _a.shouldEnableMaxHeight, shouldEnableMaxHeight = _d === void 0 ? false : _d, _f = _a.shouldEnableMinHeight, shouldEnableMinHeight = _f === void 0 ? false : _f, _g = _a.shouldEnablePickerAvoiding, shouldEnablePickerAvoiding = _g === void 0 ? true : _g, _h = _a.shouldDismissKeyboardBeforeClose, shouldDismissKeyboardBeforeClose = _h === void 0 ? true : _h, _j = _a.shouldAvoidScrollOnVirtualViewport, shouldAvoidScrollOnVirtualViewport = _j === void 0 ? true : _j, _k = _a.shouldUseCachedViewportHeight, shouldUseCachedViewportHeight = _k === void 0 ? false : _k, shouldKeyboardOffsetBottomSafeAreaPaddingProp = _a.shouldKeyboardOffsetBottomSafeAreaPadding, enableEdgeToEdgeBottomSafeAreaPadding = _a.enableEdgeToEdgeBottomSafeAreaPadding, _l = _a.includePaddingTop, includePaddingTop = _l === void 0 ? true : _l, _m = _a.includeSafeAreaPaddingBottom, includeSafeAreaPaddingBottom = _m === void 0 ? false : _m, _o = _a.isFocused, isFocused = _o === void 0 ? true : _o, ref = _a.ref, forwardedFSClass = _a.forwardedFSClass;
-    var windowHeight = (0, useWindowDimensions_1.default)(shouldUseCachedViewportHeight).windowHeight;
-    var initialHeight = (0, useInitialWindowDimensions_1.default)().initialHeight;
-    var styles = (0, useThemeStyles_1.default)();
-    var maxHeight = shouldEnableMaxHeight ? windowHeight : undefined;
-    var minHeight = shouldEnableMinHeight && !(0, Browser_1.isSafari)() ? initialHeight : undefined;
-    var _p = (0, InputBlurContext_1.useInputBlurContext)(), isBlurred = _p.isBlurred, setIsBlurred = _p.setIsBlurred;
-    var isAvoidingViewportScroll = (0, useTackInputFocus_1.default)(isFocused && shouldEnableMaxHeight && shouldAvoidScrollOnVirtualViewport && (0, Browser_1.isMobileWebKit)());
-    var isUsingEdgeToEdgeMode = enableEdgeToEdgeBottomSafeAreaPadding !== undefined;
-    var shouldKeyboardOffsetBottomSafeAreaPadding = shouldKeyboardOffsetBottomSafeAreaPaddingProp !== null && shouldKeyboardOffsetBottomSafeAreaPaddingProp !== void 0 ? shouldKeyboardOffsetBottomSafeAreaPaddingProp : isUsingEdgeToEdgeMode;
-    var _q = (0, useSafeAreaPaddings_1.default)(isUsingEdgeToEdgeMode), paddingTop = _q.paddingTop, paddingBottom = _q.paddingBottom, unmodifiedPaddings = _q.unmodifiedPaddings;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_picker_select_1 = require("react-native-picker-select");
+const InputBlurContext_1 = require("@components/InputBlurContext");
+const KeyboardAvoidingView_1 = require("@components/KeyboardAvoidingView");
+const ModalContext_1 = require("@components/Modal/ModalContext");
+const useBottomSafeSafeAreaPaddingStyle_1 = require("@hooks/useBottomSafeSafeAreaPaddingStyle");
+const useInitialWindowDimensions_1 = require("@hooks/useInitialWindowDimensions");
+const useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
+const useTackInputFocus_1 = require("@hooks/useTackInputFocus");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const Browser_1 = require("@libs/Browser");
+const VisualViewport_1 = require("@libs/VisualViewport");
+const TestTool_1 = require("@userActions/TestTool");
+const CONST_1 = require("@src/CONST");
+function ScreenWrapperContainer({ children, style, testID, bottomContent, bottomContentStyle: bottomContentStyleProp, keyboardAvoidingViewBehavior = 'padding', keyboardVerticalOffset, shouldEnableKeyboardAvoidingView = true, shouldEnableMaxHeight = false, shouldEnableMinHeight = false, shouldEnablePickerAvoiding = true, shouldDismissKeyboardBeforeClose = true, shouldAvoidScrollOnVirtualViewport = true, shouldUseCachedViewportHeight = false, shouldKeyboardOffsetBottomSafeAreaPadding: shouldKeyboardOffsetBottomSafeAreaPaddingProp, enableEdgeToEdgeBottomSafeAreaPadding, includePaddingTop = true, includeSafeAreaPaddingBottom = false, isFocused = true, ref, forwardedFSClass, }) {
+    const { windowHeight } = (0, useWindowDimensions_1.default)(shouldUseCachedViewportHeight);
+    const { initialHeight } = (0, useInitialWindowDimensions_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const maxHeight = shouldEnableMaxHeight ? windowHeight : undefined;
+    const minHeight = shouldEnableMinHeight && !(0, Browser_1.isSafari)() ? initialHeight : undefined;
+    const { isBlurred, setIsBlurred } = (0, InputBlurContext_1.useInputBlurContext)();
+    const isAvoidingViewportScroll = (0, useTackInputFocus_1.default)(isFocused && shouldEnableMaxHeight && shouldAvoidScrollOnVirtualViewport && (0, Browser_1.isMobileWebKit)());
+    const isUsingEdgeToEdgeMode = enableEdgeToEdgeBottomSafeAreaPadding !== undefined;
+    const shouldKeyboardOffsetBottomSafeAreaPadding = shouldKeyboardOffsetBottomSafeAreaPaddingProp ?? isUsingEdgeToEdgeMode;
+    const { paddingTop, paddingBottom, unmodifiedPaddings } = (0, useSafeAreaPaddings_1.default)(isUsingEdgeToEdgeMode);
     // since Modals are drawn in separate native view hierarchy we should always add paddings
-    var ignoreInsetsConsumption = !(0, react_1.useContext)(ModalContext_1.default).default;
-    var paddingTopStyle = (0, react_1.useMemo)(function () {
+    const ignoreInsetsConsumption = !(0, react_1.useContext)(ModalContext_1.default).default;
+    const paddingTopStyle = (0, react_1.useMemo)(() => {
         if (!includePaddingTop) {
             return {};
         }
         if (isUsingEdgeToEdgeMode) {
-            return { paddingTop: paddingTop };
+            return { paddingTop };
         }
         if (ignoreInsetsConsumption) {
             return { paddingTop: unmodifiedPaddings.top };
         }
-        return { paddingTop: paddingTop };
+        return { paddingTop };
     }, [isUsingEdgeToEdgeMode, ignoreInsetsConsumption, includePaddingTop, paddingTop, unmodifiedPaddings.top]);
-    var showBottomContent = isUsingEdgeToEdgeMode ? !!bottomContent : true;
-    var edgeToEdgeBottomContentStyle = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({ addBottomSafeAreaPadding: true, addOfflineIndicatorBottomSafeAreaPadding: false });
-    var legacyBottomContentStyle = (0, react_1.useMemo)(function () {
-        var shouldUseUnmodifiedPaddings = includeSafeAreaPaddingBottom && ignoreInsetsConsumption;
+    const showBottomContent = isUsingEdgeToEdgeMode ? !!bottomContent : true;
+    const edgeToEdgeBottomContentStyle = (0, useBottomSafeSafeAreaPaddingStyle_1.default)({ addBottomSafeAreaPadding: true, addOfflineIndicatorBottomSafeAreaPadding: false });
+    const legacyBottomContentStyle = (0, react_1.useMemo)(() => {
+        const shouldUseUnmodifiedPaddings = includeSafeAreaPaddingBottom && ignoreInsetsConsumption;
         if (shouldUseUnmodifiedPaddings) {
             return {
                 paddingBottom: unmodifiedPaddings.bottom,
@@ -56,34 +55,34 @@ function ScreenWrapperContainer(_a) {
             paddingBottom: includeSafeAreaPaddingBottom ? paddingBottom : undefined,
         };
     }, [ignoreInsetsConsumption, includeSafeAreaPaddingBottom, paddingBottom, unmodifiedPaddings.bottom]);
-    var bottomContentStyle = (0, react_1.useMemo)(function () { return [isUsingEdgeToEdgeMode ? edgeToEdgeBottomContentStyle : legacyBottomContentStyle, bottomContentStyleProp]; }, [isUsingEdgeToEdgeMode, edgeToEdgeBottomContentStyle, legacyBottomContentStyle, bottomContentStyleProp]);
-    var panResponder = (0, react_1.useRef)(react_native_1.PanResponder.create({
-        onStartShouldSetPanResponderCapture: function (_e, gestureState) { return gestureState.numberActiveTouches === CONST_1.default.TEST_TOOL.NUMBER_OF_TAPS; },
+    const bottomContentStyle = (0, react_1.useMemo)(() => [isUsingEdgeToEdgeMode ? edgeToEdgeBottomContentStyle : legacyBottomContentStyle, bottomContentStyleProp], [isUsingEdgeToEdgeMode, edgeToEdgeBottomContentStyle, legacyBottomContentStyle, bottomContentStyleProp]);
+    const panResponder = (0, react_1.useRef)(react_native_1.PanResponder.create({
+        onStartShouldSetPanResponderCapture: (_e, gestureState) => gestureState.numberActiveTouches === CONST_1.default.TEST_TOOL.NUMBER_OF_TAPS,
         onPanResponderRelease: TestTool_1.default,
     })).current;
-    var keyboardDismissPanResponder = (0, react_1.useRef)(react_native_1.PanResponder.create({
-        onMoveShouldSetPanResponderCapture: function (_e, gestureState) {
-            var isHorizontalSwipe = Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
-            var shouldDismissKeyboard = shouldDismissKeyboardBeforeClose && react_native_1.Keyboard.isVisible() && (0, Browser_1.isMobile)();
+    const keyboardDismissPanResponder = (0, react_1.useRef)(react_native_1.PanResponder.create({
+        onMoveShouldSetPanResponderCapture: (_e, gestureState) => {
+            const isHorizontalSwipe = Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+            const shouldDismissKeyboard = shouldDismissKeyboardBeforeClose && react_native_1.Keyboard.isVisible() && (0, Browser_1.isMobile)();
             return isHorizontalSwipe && shouldDismissKeyboard;
         },
         onPanResponderGrant: react_native_1.Keyboard.dismiss,
     })).current;
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         /**
          * Handler to manage viewport resize events specific to Safari.
          * Disables the blur state when Safari is detected.
          */
-        var handleViewportResize = function () {
+        const handleViewportResize = () => {
             if (!(0, Browser_1.isSafari)()) {
                 return; // Exit early if not Safari
             }
             setIsBlurred(false); // Disable blur state for Safari
         };
         // Add the viewport resize listener
-        var removeResizeListener = (0, VisualViewport_1.default)(handleViewportResize);
+        const removeResizeListener = (0, VisualViewport_1.default)(handleViewportResize);
         // Cleanup function to remove the listener
-        return function () {
+        return () => {
             removeResizeListener();
         };
     }, [setIsBlurred]);
@@ -97,7 +96,7 @@ function ScreenWrapperContainer(_a) {
     style={[style, paddingTopStyle]} 
     // eslint-disable-next-line react/jsx-props-no-spreading, react-compiler/react-compiler
     {...keyboardDismissPanResponder.panHandlers}>
-                <KeyboardAvoidingView_1.default style={[styles.w100, styles.h100, !isBlurred ? { maxHeight: maxHeight } : undefined, isAvoidingViewportScroll ? [styles.overflowAuto, styles.overscrollBehaviorContain] : {}]} behavior={keyboardAvoidingViewBehavior} enabled={shouldEnableKeyboardAvoidingView} 
+                <KeyboardAvoidingView_1.default style={[styles.w100, styles.h100, !isBlurred ? { maxHeight } : undefined, isAvoidingViewportScroll ? [styles.overflowAuto, styles.overscrollBehaviorContain] : {}]} behavior={keyboardAvoidingViewBehavior} enabled={shouldEnableKeyboardAvoidingView} 
     // Whether the mobile offline indicator or the content in general
     // should be offset by the bottom safe area padding when the keyboard is open.
     shouldOffsetBottomSafeAreaPadding={shouldKeyboardOffsetBottomSafeAreaPadding} keyboardVerticalOffset={keyboardVerticalOffset}>

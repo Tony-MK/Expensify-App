@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var Composer = require("@userActions/Composer");
-var keyboardEventListener = null;
-var setShouldShowComposeInputKeyboardAwareBuilder = function (keyboardEvent) { return function (shouldShow) {
+const react_native_1 = require("react-native");
+const Composer = require("@userActions/Composer");
+let keyboardEventListener = null;
+const setShouldShowComposeInputKeyboardAwareBuilder = (keyboardEvent) => (shouldShow) => {
     if (keyboardEventListener) {
         keyboardEventListener.remove();
         keyboardEventListener = null;
@@ -17,9 +17,9 @@ var setShouldShowComposeInputKeyboardAwareBuilder = function (keyboardEvent) { r
         Composer.setShouldShowComposeInput(true);
         return;
     }
-    keyboardEventListener = react_native_1.Keyboard.addListener(keyboardEvent, function () {
+    keyboardEventListener = react_native_1.Keyboard.addListener(keyboardEvent, () => {
         Composer.setShouldShowComposeInput(true);
-        keyboardEventListener === null || keyboardEventListener === void 0 ? void 0 : keyboardEventListener.remove();
+        keyboardEventListener?.remove();
     });
-}; };
+};
 exports.default = setShouldShowComposeInputKeyboardAwareBuilder;

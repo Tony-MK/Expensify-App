@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var canUseTouchScreen = function () { return true; };
+const canUseTouchScreen = () => true;
 exports.default = canUseTouchScreen;

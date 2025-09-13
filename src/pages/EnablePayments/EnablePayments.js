@@ -1,34 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Wallet_1 = require("@userActions/Wallet");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var AddBankAccount_1 = require("./AddBankAccount/AddBankAccount");
-var FailedKYC_1 = require("./FailedKYC");
-var FeesAndTerms_1 = require("./FeesAndTerms/FeesAndTerms");
-var PersonalInfo_1 = require("./PersonalInfo/PersonalInfo");
-var VerifyIdentity_1 = require("./VerifyIdentity/VerifyIdentity");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const DelegateNoAccessWrapper_1 = require("@components/DelegateNoAccessWrapper");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Wallet_1 = require("@userActions/Wallet");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const AddBankAccount_1 = require("./AddBankAccount/AddBankAccount");
+const FailedKYC_1 = require("./FailedKYC");
+const FeesAndTerms_1 = require("./FeesAndTerms/FeesAndTerms");
+const PersonalInfo_1 = require("./PersonalInfo/PersonalInfo");
+const VerifyIdentity_1 = require("./VerifyIdentity/VerifyIdentity");
 function EnablePaymentsPage() {
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var userWallet = (0, useOnyx_1.default)(ONYXKEYS_1.default.USER_WALLET, { canBeMissing: true })[0];
-    var bankAccountList = (0, useOnyx_1.default)(ONYXKEYS_1.default.BANK_ACCOUNT_LIST, { canBeMissing: true })[0];
-    var isActingAsDelegate = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: function (account) { var _a; return !!((_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.delegate); }, canBeMissing: true })[0];
-    (0, react_1.useEffect)(function () {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const [userWallet] = (0, useOnyx_1.default)(ONYXKEYS_1.default.USER_WALLET, { canBeMissing: true });
+    const [bankAccountList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.BANK_ACCOUNT_LIST, { canBeMissing: true });
+    const [isActingAsDelegate] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { selector: (account) => !!account?.delegatedAccess?.delegate, canBeMissing: true });
+    (0, react_1.useEffect)(() => {
         if (isOffline) {
             return;
         }
@@ -44,14 +44,14 @@ function EnablePaymentsPage() {
     if ((0, EmptyObject_1.isEmptyObject)(userWallet)) {
         return <FullscreenLoadingIndicator_1.default />;
     }
-    if ((userWallet === null || userWallet === void 0 ? void 0 : userWallet.errorCode) === CONST_1.default.WALLET.ERROR.KYC) {
+    if (userWallet?.errorCode === CONST_1.default.WALLET.ERROR.KYC) {
         return (<ScreenWrapper_1.default testID={EnablePaymentsPage.displayName} includeSafeAreaPaddingBottom={false} shouldEnablePickerAvoiding={false}>
-                <HeaderWithBackButton_1.default title={translate('personalInfoStep.personalInfo')} onBackButtonPress={function () { return Navigation_1.default.goBack(ROUTES_1.default.SETTINGS_WALLET); }}/>
+                <HeaderWithBackButton_1.default title={translate('personalInfoStep.personalInfo')} onBackButtonPress={() => Navigation_1.default.goBack(ROUTES_1.default.SETTINGS_WALLET)}/>
                 <FailedKYC_1.default />
             </ScreenWrapper_1.default>);
     }
-    var enablePaymentsStep = (0, EmptyObject_1.isEmptyObject)(bankAccountList) ? CONST_1.default.WALLET.STEP.ADD_BANK_ACCOUNT : (userWallet === null || userWallet === void 0 ? void 0 : userWallet.currentStep) || CONST_1.default.WALLET.STEP.ADDITIONAL_DETAILS;
-    var CurrentStep;
+    const enablePaymentsStep = (0, EmptyObject_1.isEmptyObject)(bankAccountList) ? CONST_1.default.WALLET.STEP.ADD_BANK_ACCOUNT : userWallet?.currentStep || CONST_1.default.WALLET.STEP.ADDITIONAL_DETAILS;
+    let CurrentStep;
     switch (enablePaymentsStep) {
         case CONST_1.default.WALLET.STEP.ADD_BANK_ACCOUNT:
             CurrentStep = <AddBankAccount_1.default />;

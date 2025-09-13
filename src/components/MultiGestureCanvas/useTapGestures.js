@@ -1,63 +1,62 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable no-param-reassign */
-var react_1 = require("react");
-var react_native_gesture_handler_1 = require("react-native-gesture-handler");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var constants_1 = require("./constants");
-var MultiGestureCanvasUtils = require("./utils");
-var useTapGestures = function (_a) {
-    var canvasSize = _a.canvasSize, contentSize = _a.contentSize, minContentScale = _a.minContentScale, maxContentScale = _a.maxContentScale, offsetX = _a.offsetX, offsetY = _a.offsetY, pinchScale = _a.pinchScale, zoomScale = _a.zoomScale, reset = _a.reset, stopAnimation = _a.stopAnimation, shouldDisableTransformationGestures = _a.shouldDisableTransformationGestures, onScaleChanged = _a.onScaleChanged, onTap = _a.onTap;
+const react_1 = require("react");
+const react_native_gesture_handler_1 = require("react-native-gesture-handler");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const constants_1 = require("./constants");
+const MultiGestureCanvasUtils = require("./utils");
+const useTapGestures = ({ canvasSize, contentSize, minContentScale, maxContentScale, offsetX, offsetY, pinchScale, zoomScale, reset, stopAnimation, shouldDisableTransformationGestures, onScaleChanged, onTap, }) => {
     // The content size after scaling it with minimum scale to fit the content into the canvas
-    var scaledContentWidth = (0, react_1.useMemo)(function () { return contentSize.width * minContentScale; }, [contentSize.width, minContentScale]);
-    var scaledContentHeight = (0, react_1.useMemo)(function () { return contentSize.height * minContentScale; }, [contentSize.height, minContentScale]);
+    const scaledContentWidth = (0, react_1.useMemo)(() => contentSize.width * minContentScale, [contentSize.width, minContentScale]);
+    const scaledContentHeight = (0, react_1.useMemo)(() => contentSize.height * minContentScale, [contentSize.height, minContentScale]);
     // On double tap the content should be zoomed to fill, but at least zoomed by DOUBLE_TAP_SCALE
-    var doubleTapScale = (0, react_1.useMemo)(function () { return Math.max(constants_1.DOUBLE_TAP_SCALE, maxContentScale / minContentScale); }, [maxContentScale, minContentScale]);
-    var zoomToCoordinates = (0, react_1.useCallback)(function (focalX, focalY, callback) {
+    const doubleTapScale = (0, react_1.useMemo)(() => Math.max(constants_1.DOUBLE_TAP_SCALE, maxContentScale / minContentScale), [maxContentScale, minContentScale]);
+    const zoomToCoordinates = (0, react_1.useCallback)((focalX, focalY, callback) => {
         'worklet';
         stopAnimation();
         // By how much the canvas is bigger than the content horizontally and vertically per side
-        var horizontalCanvasOffset = Math.max(0, (canvasSize.width - scaledContentWidth) / 2);
-        var verticalCanvasOffset = Math.max(0, (canvasSize.height - scaledContentHeight) / 2);
+        const horizontalCanvasOffset = Math.max(0, (canvasSize.width - scaledContentWidth) / 2);
+        const verticalCanvasOffset = Math.max(0, (canvasSize.height - scaledContentHeight) / 2);
         // We need to adjust the focal point to take into account the canvas offset
         // The focal point cannot be outside of the content's bounds
-        var adjustedFocalPoint = {
+        const adjustedFocalPoint = {
             x: MultiGestureCanvasUtils.clamp(focalX - horizontalCanvasOffset, 0, scaledContentWidth),
             y: MultiGestureCanvasUtils.clamp(focalY - verticalCanvasOffset, 0, scaledContentHeight),
         };
         // The center of the canvas
-        var canvasCenter = {
+        const canvasCenter = {
             x: canvasSize.width / 2,
             y: canvasSize.height / 2,
         };
         // The center of the content before zooming
-        var originalContentCenter = {
+        const originalContentCenter = {
             x: scaledContentWidth / 2,
             y: scaledContentHeight / 2,
         };
         // The size of the content after zooming
-        var zoomedContentSize = {
+        const zoomedContentSize = {
             width: scaledContentWidth * doubleTapScale,
             height: scaledContentHeight * doubleTapScale,
         };
         // The center of the zoomed content
-        var zoomedContentCenter = {
+        const zoomedContentCenter = {
             x: zoomedContentSize.width / 2,
             y: zoomedContentSize.height / 2,
         };
         // By how much the zoomed content is bigger/smaller than the canvas.
-        var zoomedContentOffset = {
+        const zoomedContentOffset = {
             x: zoomedContentCenter.x - canvasCenter.x,
             y: zoomedContentCenter.y - canvasCenter.y,
         };
         // How much the content needs to be shifted based on the focal point
-        var shiftingFactor = {
+        const shiftingFactor = {
             x: adjustedFocalPoint.x / originalContentCenter.x - 1,
             y: adjustedFocalPoint.y / originalContentCenter.y - 1,
         };
         // The offset after applying the focal point adjusted shift.
         // We need to invert the shift, because the content is moving in the opposite direction (* -1)
-        var offsetAfterZooming = {
+        const offsetAfterZooming = {
             x: zoomedContentOffset.x * (shiftingFactor.x * -1),
             y: zoomedContentOffset.y * (shiftingFactor.y * -1),
         };
@@ -70,9 +69,9 @@ var useTapGestures = function (_a) {
         zoomScale.set((0, react_native_reanimated_1.withSpring)(doubleTapScale, constants_1.SPRING_CONFIG, callback));
         pinchScale.set(doubleTapScale);
     }, [stopAnimation, canvasSize.width, canvasSize.height, scaledContentWidth, scaledContentHeight, doubleTapScale, offsetX, offsetY, zoomScale, pinchScale]);
-    var doubleTapGesture = react_native_gesture_handler_1.Gesture.Tap()
+    const doubleTapGesture = react_native_gesture_handler_1.Gesture.Tap()
         // The first argument is not used, but must be defined
-        .onTouchesDown(function (_evt, state) {
+        .onTouchesDown((_evt, state) => {
         'worklet';
         if (!shouldDisableTransformationGestures.get()) {
             return;
@@ -82,9 +81,9 @@ var useTapGestures = function (_a) {
         .numberOfTaps(2)
         .maxDelay(150)
         .maxDistance(20)
-        .onEnd(function (evt) {
+        .onEnd((evt) => {
         'worklet';
-        var triggerScaleChangedEvent = function () {
+        const triggerScaleChangedEvent = () => {
             'worklet';
             if (onScaleChanged != null) {
                 (0, react_native_reanimated_1.runOnJS)(onScaleChanged)(zoomScale.get());
@@ -99,20 +98,20 @@ var useTapGestures = function (_a) {
             zoomToCoordinates(evt.x, evt.y, triggerScaleChangedEvent);
         }
     });
-    var singleTapGesture = react_native_gesture_handler_1.Gesture.Tap()
+    const singleTapGesture = react_native_gesture_handler_1.Gesture.Tap()
         .numberOfTaps(1)
         .maxDuration(125)
-        .onBegin(function () {
+        .onBegin(() => {
         'worklet';
         stopAnimation();
     })
-        .onFinalize(function (_evt, success) {
+        .onFinalize((_evt, success) => {
         'worklet';
         if (!success || onTap === undefined) {
             return;
         }
         (0, react_native_reanimated_1.runOnJS)(onTap)();
     });
-    return { singleTapGesture: singleTapGesture, doubleTapGesture: doubleTapGesture };
+    return { singleTapGesture, doubleTapGesture };
 };
 exports.default = useTapGestures;

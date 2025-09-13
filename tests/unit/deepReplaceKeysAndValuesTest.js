@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention */
-var deepReplaceKeysAndValues_1 = require("@libs/deepReplaceKeysAndValues");
-describe('deepReplaceKeysAndValues', function () {
+const deepReplaceKeysAndValues_1 = require("@libs/deepReplaceKeysAndValues");
+describe('deepReplaceKeysAndValues', () => {
     test.each([
         [undefined, undefined],
         [null, null],
@@ -123,7 +123,7 @@ describe('deepReplaceKeysAndValues', function () {
                 someOtherKey: 2,
             },
         ],
-    ])('deepReplaceKeysAndValues(%s)', function (input, expected) {
+    ])('deepReplaceKeysAndValues(%s)', (input, expected) => {
         expect((0, deepReplaceKeysAndValues_1.default)(input, 'oldVal', 'newVal')).toStrictEqual(expected);
     });
 });

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var defaultScreenOptions = {
+const defaultScreenOptions = {
     headerShown: false,
     animationTypeForReplace: 'push',
     web: {

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var variables_1 = require("@styles/variables");
-var getDefaultWrapperStyle = function (theme) { return ({
+const variables_1 = require("@styles/variables");
+const getDefaultWrapperStyle = (theme) => ({
     backgroundColor: theme.componentBG,
-}); };
-var getMiniWrapperStyle = function (theme, styles) { return [
+});
+const getMiniWrapperStyle = (theme, styles) => [
     styles.flexRow,
     getDefaultWrapperStyle(theme),
     {
@@ -16,7 +16,7 @@ var getMiniWrapperStyle = function (theme, styles) { return [
         borderWidth: 1,
         borderColor: theme.border,
     },
-]; };
+];
 /**
  * Generate the wrapper styles for the ReportActionContextMenu.
  *
@@ -24,20 +24,17 @@ var getMiniWrapperStyle = function (theme, styles) { return [
  * @param isSmallScreenWidth
  * @param theme
  */
-var createReportActionContextMenuStyleUtils = function (_a) {
-    var theme = _a.theme, styles = _a.styles;
-    return ({
-        getReportActionContextMenuStyles: function (isMini, isSmallScreenWidth) {
-            if (isMini) {
-                return getMiniWrapperStyle(theme, styles);
-            }
-            return [
-                styles.flexColumn,
-                getDefaultWrapperStyle(theme),
-                // Small screens use a bottom-docked modal that already has vertical padding.
-                isSmallScreenWidth ? {} : styles.pv4,
-            ];
-        },
-    });
-};
+const createReportActionContextMenuStyleUtils = ({ theme, styles }) => ({
+    getReportActionContextMenuStyles: (isMini, isSmallScreenWidth) => {
+        if (isMini) {
+            return getMiniWrapperStyle(theme, styles);
+        }
+        return [
+            styles.flexColumn,
+            getDefaultWrapperStyle(theme),
+            // Small screens use a bottom-docked modal that already has vertical padding.
+            isSmallScreenWidth ? {} : styles.pv4,
+        ];
+    },
+});
 exports.default = createReportActionContextMenuStyleUtils;

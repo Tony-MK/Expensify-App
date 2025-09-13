@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transactionR98765 = exports.transactionR14932 = void 0;
-var CONST_1 = require("@src/CONST");
-var amount = 10402;
-var currency = CONST_1.default.CURRENCY.USD;
-var REPORT_ID_R14932 = 'REPORT_ID_R14932';
-var TRANSACTION_ID_R14932 = 'TRANSACTION_ID_R14932';
-var REPORT_ID_R98765 = 'REPORT_ID_R98765';
-var TRANSACTION_ID_R98765 = 'TRANSACTION_ID_R98765';
-var receiptR14932 = {
+const CONST_1 = require("@src/CONST");
+const amount = 10402;
+const currency = CONST_1.default.CURRENCY.USD;
+const REPORT_ID_R14932 = 'REPORT_ID_R14932';
+const TRANSACTION_ID_R14932 = 'TRANSACTION_ID_R14932';
+const REPORT_ID_R98765 = 'REPORT_ID_R98765';
+const TRANSACTION_ID_R98765 = 'TRANSACTION_ID_R98765';
+const receiptR14932 = {
     state: CONST_1.default.IOU.RECEIPT_STATE.OPEN,
     source: 'mockData/eReceiptBGs/eReceiptBG_pink.png',
 };
-var transactionR14932 = {
-    amount: amount,
-    currency: currency,
+const transactionR14932 = {
+    amount,
+    currency,
     cardName: CONST_1.default.EXPENSE.TYPE.CASH_CARD_NAME,
     transactionID: TRANSACTION_ID_R14932,
     reportID: REPORT_ID_R14932,
@@ -44,9 +44,9 @@ var transactionR14932 = {
     tag: '',
 };
 exports.transactionR14932 = transactionR14932;
-var transactionR98765 = {
-    currency: currency,
-    amount: amount,
+const transactionR98765 = {
+    currency,
+    amount,
     transactionID: TRANSACTION_ID_R98765,
     reportID: REPORT_ID_R98765,
     status: CONST_1.default.TRANSACTION.STATUS.POSTED,

@@ -1,73 +1,71 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ConfirmationStep_1 = require("@components/SubStepForms/ConfirmationStep");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var getValuesForSignerInfo_1 = require("@pages/ReimbursementAccount/NonUSD/utils/getValuesForSignerInfo");
-var getNeededDocumentsStatusForSignerInfo_1 = require("@pages/ReimbursementAccount/utils/getNeededDocumentsStatusForSignerInfo");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
-var OWNS_MORE_THAN_25_PERCENT = ReimbursementAccountForm_1.default.ADDITIONAL_DATA.CORPAY.OWNS_MORE_THAN_25_PERCENT;
-function Confirmation(_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-    var onNext = _a.onNext, onMove = _a.onMove, isEditing = _a.isEditing;
-    var translate = (0, useLocalize_1.default)().translate;
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false })[0];
-    var reimbursementAccountDraft = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT, { canBeMissing: true })[0];
-    var isUserOwner = (_e = (_d = (_c = (_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.corpay) === null || _c === void 0 ? void 0 : _c[OWNS_MORE_THAN_25_PERCENT]) !== null && _d !== void 0 ? _d : reimbursementAccountDraft === null || reimbursementAccountDraft === void 0 ? void 0 : reimbursementAccountDraft[OWNS_MORE_THAN_25_PERCENT]) !== null && _e !== void 0 ? _e : false;
-    var values = (0, react_1.useMemo)(function () { return (0, getValuesForSignerInfo_1.default)(reimbursementAccountDraft); }, [reimbursementAccountDraft]);
-    var policyID = (_f = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _f === void 0 ? void 0 : _f.policyID;
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { canBeMissing: true })[0];
-    var currency = (_g = policy === null || policy === void 0 ? void 0 : policy.outputCurrency) !== null && _g !== void 0 ? _g : '';
-    var countryStepCountryValue = (_j = (_h = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _h === void 0 ? void 0 : _h[ReimbursementAccountForm_1.default.ADDITIONAL_DATA.COUNTRY]) !== null && _j !== void 0 ? _j : '';
-    var isDocumentNeededStatus = (0, getNeededDocumentsStatusForSignerInfo_1.default)(currency, countryStepCountryValue);
-    var summaryItems = [
+const react_1 = require("react");
+const ConfirmationStep_1 = require("@components/SubStepForms/ConfirmationStep");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const getValuesForSignerInfo_1 = require("@pages/ReimbursementAccount/NonUSD/utils/getValuesForSignerInfo");
+const getNeededDocumentsStatusForSignerInfo_1 = require("@pages/ReimbursementAccount/utils/getNeededDocumentsStatusForSignerInfo");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ReimbursementAccountForm_1 = require("@src/types/form/ReimbursementAccountForm");
+const { OWNS_MORE_THAN_25_PERCENT } = ReimbursementAccountForm_1.default.ADDITIONAL_DATA.CORPAY;
+function Confirmation({ onNext, onMove, isEditing }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false });
+    const [reimbursementAccountDraft] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT, { canBeMissing: true });
+    const isUserOwner = reimbursementAccount?.achData?.corpay?.[OWNS_MORE_THAN_25_PERCENT] ?? reimbursementAccountDraft?.[OWNS_MORE_THAN_25_PERCENT] ?? false;
+    const values = (0, react_1.useMemo)(() => (0, getValuesForSignerInfo_1.default)(reimbursementAccountDraft), [reimbursementAccountDraft]);
+    const policyID = reimbursementAccount?.achData?.policyID;
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { canBeMissing: true });
+    const currency = policy?.outputCurrency ?? '';
+    const countryStepCountryValue = reimbursementAccount?.achData?.[ReimbursementAccountForm_1.default.ADDITIONAL_DATA.COUNTRY] ?? '';
+    const isDocumentNeededStatus = (0, getNeededDocumentsStatusForSignerInfo_1.default)(currency, countryStepCountryValue);
+    const summaryItems = [
         {
             title: values.jobTitle,
             description: translate('signerInfoStep.jobTitle'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(1);
             },
         },
     ];
     if (isDocumentNeededStatus.isCopyOfIDNeeded && values.copyOfId.length > 0) {
         summaryItems.push({
-            title: values.copyOfId.map(function (id) { return id.name; }).join(', '),
+            title: values.copyOfId.map((id) => id.name).join(', '),
             description: translate('signerInfoStep.id'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(4);
             },
         });
     }
     if (isDocumentNeededStatus.isAddressProofNeeded && values.addressProof.length > 0) {
         summaryItems.push({
-            title: values.addressProof.map(function (proof) { return proof.name; }).join(', '),
+            title: values.addressProof.map((proof) => proof.name).join(', '),
             description: translate('signerInfoStep.proofOf'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(4);
             },
         });
     }
     if (isDocumentNeededStatus.isProofOfDirectorsNeeded && values.proofOfDirectors.length > 0) {
         summaryItems.push({
-            title: values.proofOfDirectors.map(function (proof) { return proof.name; }).join(', '),
+            title: values.proofOfDirectors.map((proof) => proof.name).join(', '),
             description: translate('signerInfoStep.proofOfDirectors'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(4);
             },
         });
     }
     if (isDocumentNeededStatus.isCodiceFiscaleNeeded && values.codiceFiscale.length > 0) {
         summaryItems.push({
-            title: values.codiceFiscale.map(function (fiscale) { return fiscale.name; }).join(', '),
+            title: values.codiceFiscale.map((fiscale) => fiscale.name).join(', '),
             description: translate('signerInfoStep.codiceFiscale'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(4);
             },
         });
@@ -77,7 +75,7 @@ function Confirmation(_a) {
             title: values.fullName,
             description: translate('signerInfoStep.legalName'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(0);
             },
         });
@@ -85,20 +83,20 @@ function Confirmation(_a) {
             title: values.dateOfBirth,
             description: translate('common.dob'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(2);
             },
         });
         summaryItems.splice(3, 0, {
-            title: "".concat(values.street, ", ").concat(values.city, ", ").concat(values.state, ", ").concat(values.zipCode),
+            title: `${values.street}, ${values.city}, ${values.state}, ${values.zipCode}`,
             description: translate('ownershipInfoStep.address'),
             shouldShowRightIcon: true,
-            onPress: function () {
+            onPress: () => {
                 onMove(3);
             },
         });
     }
-    return (<ConfirmationStep_1.default isEditing={isEditing} onNext={onNext} onMove={onMove} pageTitle={translate('signerInfoStep.letsDoubleCheck')} summaryItems={summaryItems} showOnfidoLinks={false} isLoading={reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.isSavingCorpayOnboardingDirectorInformation} error={(_l = Object.values((_k = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.errors) !== null && _k !== void 0 ? _k : []).at(0)) !== null && _l !== void 0 ? _l : ''}/>);
+    return (<ConfirmationStep_1.default isEditing={isEditing} onNext={onNext} onMove={onMove} pageTitle={translate('signerInfoStep.letsDoubleCheck')} summaryItems={summaryItems} showOnfidoLinks={false} isLoading={reimbursementAccount?.isSavingCorpayOnboardingDirectorInformation} error={Object.values(reimbursementAccount?.errors ?? []).at(0) ?? ''}/>);
 }
 Confirmation.displayName = 'Confirmation';
 exports.default = Confirmation;

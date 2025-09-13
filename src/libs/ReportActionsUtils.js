@@ -1,24 +1,4 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isIOUActionMatchingTransactionList = void 0;
 exports.doesReportHaveVisibleActions = doesReportHaveVisibleActions;
@@ -196,100 +176,99 @@ exports.getReceiptScanFailedMessage = getReceiptScanFailedMessage;
 exports.getChangedApproverActionMessage = getChangedApproverActionMessage;
 exports.getDelegateAccountIDFromReportAction = getDelegateAccountIDFromReportAction;
 exports.isPendingHide = isPendingHide;
-var date_fns_1 = require("date-fns");
-var expensify_common_1 = require("expensify-common");
-var clone_1 = require("lodash/clone");
-var findLast_1 = require("lodash/findLast");
-var isEmpty_1 = require("lodash/isEmpty");
-var react_native_onyx_1 = require("react-native-onyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var CONST_1 = require("@src/CONST");
-var IntlStore_1 = require("@src/languages/IntlStore");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var CurrencyUtils_1 = require("./CurrencyUtils");
-var Environment_1 = require("./Environment/Environment");
-var getBase62ReportID_1 = require("./getBase62ReportID");
-var isReportMessageAttachment_1 = require("./isReportMessageAttachment");
-var LocaleDigitUtils_1 = require("./LocaleDigitUtils");
-var LocalePhoneNumber_1 = require("./LocalePhoneNumber");
-var Localize_1 = require("./Localize");
-var Log_1 = require("./Log");
-var Parser_1 = require("./Parser");
-var PersonalDetailsUtils_1 = require("./PersonalDetailsUtils");
-var PolicyUtils_1 = require("./PolicyUtils");
-var StringUtils_1 = require("./StringUtils");
-var TransactionUtils_1 = require("./TransactionUtils");
-var WorkspaceReportFieldUtils_1 = require("./WorkspaceReportFieldUtils");
-var allReportActions;
+const date_fns_1 = require("date-fns");
+const expensify_common_1 = require("expensify-common");
+const clone_1 = require("lodash/clone");
+const findLast_1 = require("lodash/findLast");
+const isEmpty_1 = require("lodash/isEmpty");
+const react_native_onyx_1 = require("react-native-onyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const CONST_1 = require("@src/CONST");
+const IntlStore_1 = require("@src/languages/IntlStore");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const CurrencyUtils_1 = require("./CurrencyUtils");
+const Environment_1 = require("./Environment/Environment");
+const getBase62ReportID_1 = require("./getBase62ReportID");
+const isReportMessageAttachment_1 = require("./isReportMessageAttachment");
+const LocaleDigitUtils_1 = require("./LocaleDigitUtils");
+const LocalePhoneNumber_1 = require("./LocalePhoneNumber");
+const Localize_1 = require("./Localize");
+const Log_1 = require("./Log");
+const Parser_1 = require("./Parser");
+const PersonalDetailsUtils_1 = require("./PersonalDetailsUtils");
+const PolicyUtils_1 = require("./PolicyUtils");
+const StringUtils_1 = require("./StringUtils");
+const TransactionUtils_1 = require("./TransactionUtils");
+const WorkspaceReportFieldUtils_1 = require("./WorkspaceReportFieldUtils");
+let allReportActions;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS,
     waitForCollectionCallback: true,
-    callback: function (actions) {
+    callback: (actions) => {
         if (!actions) {
             return;
         }
         allReportActions = actions;
     },
 });
-var allReports;
+let allReports;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.COLLECTION.REPORT,
     waitForCollectionCallback: true,
-    callback: function (value) {
+    callback: (value) => {
         allReports = value;
     },
 });
-var isNetworkOffline = false;
+let isNetworkOffline = false;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.NETWORK,
-    callback: function (val) { var _a; return (isNetworkOffline = (_a = val === null || val === void 0 ? void 0 : val.isOffline) !== null && _a !== void 0 ? _a : false); },
+    callback: (val) => (isNetworkOffline = val?.isOffline ?? false),
 });
-var currentUserAccountID;
-var currentEmail = '';
+let currentUserAccountID;
+let currentEmail = '';
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (value) {
-        var _a;
+    callback: (value) => {
         // When signed out, value is undefined
         if (!value) {
             return;
         }
         currentUserAccountID = value.accountID;
-        currentEmail = (_a = value === null || value === void 0 ? void 0 : value.email) !== null && _a !== void 0 ? _a : '';
+        currentEmail = value?.email ?? '';
     },
 });
-var privatePersonalDetails;
+let privatePersonalDetails;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.PRIVATE_PERSONAL_DETAILS,
-    callback: function (personalDetails) {
+    callback: (personalDetails) => {
         privatePersonalDetails = personalDetails;
     },
 });
-var environmentURL;
-(0, Environment_1.getEnvironmentURL)().then(function (url) { return (environmentURL = url); });
-var oldDotEnvironmentURL;
-(0, Environment_1.getOldDotEnvironmentURL)().then(function (url) { return (oldDotEnvironmentURL = url); });
+let environmentURL;
+(0, Environment_1.getEnvironmentURL)().then((url) => (environmentURL = url));
+let oldDotEnvironmentURL;
+(0, Environment_1.getOldDotEnvironmentURL)().then((url) => (oldDotEnvironmentURL = url));
 /*
  * Url to the Xero non reimbursable expenses list
  */
-var XERO_NON_REIMBURSABLE_EXPENSES_URL = 'https://go.xero.com/Bank/BankAccounts.aspx';
+const XERO_NON_REIMBURSABLE_EXPENSES_URL = 'https://go.xero.com/Bank/BankAccounts.aspx';
 /*
  * Url to the NetSuite global search, which should be suffixed with the reportID.
  */
-var NETSUITE_NON_REIMBURSABLE_EXPENSES_URL_PREFIX = 'https://system.netsuite.com/app/common/search/ubersearchresults.nl?quicksearch=T&searchtype=Uber&frame=be&Uber_NAMEtype=KEYWORDSTARTSWITH&Uber_NAME=';
+const NETSUITE_NON_REIMBURSABLE_EXPENSES_URL_PREFIX = 'https://system.netsuite.com/app/common/search/ubersearchresults.nl?quicksearch=T&searchtype=Uber&frame=be&Uber_NAMEtype=KEYWORDSTARTSWITH&Uber_NAME=';
 /*
  * Url prefix to any Salesforce transaction or transaction list.
  */
-var SALESFORCE_EXPENSES_URL_PREFIX = 'https://login.salesforce.com/';
+const SALESFORCE_EXPENSES_URL_PREFIX = 'https://login.salesforce.com/';
 /*
  * Url to the QBO expenses list
  */
-var QBO_EXPENSES_URL = 'https://qbo.intuit.com/app/expenses';
-var POLICY_CHANGE_LOG_ARRAY = new Set(Object.values(CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG));
-var ROOM_CHANGE_LOG_ARRAY = new Set(Object.values(CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG));
-var MEMBER_CHANGE_ARRAY = new Set([
+const QBO_EXPENSES_URL = 'https://qbo.intuit.com/app/expenses';
+const POLICY_CHANGE_LOG_ARRAY = new Set(Object.values(CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG));
+const ROOM_CHANGE_LOG_ARRAY = new Set(Object.values(CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG));
+const MEMBER_CHANGE_ARRAY = new Set([
     CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM,
     CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.REMOVE_FROM_ROOM,
     CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM,
@@ -297,25 +276,24 @@ var MEMBER_CHANGE_ARRAY = new Set([
     CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.LEAVE_POLICY,
 ]);
 function isCreatedAction(reportAction) {
-    return (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED;
+    return reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED;
 }
 function isDeletedAction(reportAction) {
-    var _a, _b, _c;
     if (isInviteOrRemovedAction(reportAction) || isActionableMentionWhisper(reportAction)) {
         return false;
     }
     // for report actions with this type we get an empty array as message by design
-    if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_DIRECTOR_INFORMATION_REQUIRED) {
+    if (reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_DIRECTOR_INFORMATION_REQUIRED) {
         return false;
     }
-    var message = (_a = reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) !== null && _a !== void 0 ? _a : [];
+    const message = reportAction?.message ?? [];
     if (!Array.isArray(message)) {
-        return (message === null || message === void 0 ? void 0 : message.html) === '' || !!(message === null || message === void 0 ? void 0 : message.deleted);
+        return message?.html === '' || !!message?.deleted;
     }
-    var originalMessage = getOriginalMessage(reportAction);
+    const originalMessage = getOriginalMessage(reportAction);
     // A legacy deleted comment has either an empty array or an object with html field with empty string as value
-    var isLegacyDeletedComment = message.length === 0 || ((_b = message.at(0)) === null || _b === void 0 ? void 0 : _b.html) === '';
-    return isLegacyDeletedComment || !!((_c = message.at(0)) === null || _c === void 0 ? void 0 : _c.deleted) || (!!originalMessage && 'deleted' in originalMessage && !!(originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.deleted));
+    const isLegacyDeletedComment = message.length === 0 || message.at(0)?.html === '';
+    return isLegacyDeletedComment || !!message.at(0)?.deleted || (!!originalMessage && 'deleted' in originalMessage && !!originalMessage?.deleted);
 }
 /**
  * This function will add attachment ID attribute on img and video HTML tags inside the passed html content
@@ -326,27 +304,23 @@ function getHtmlWithAttachmentID(html, reportActionID) {
     if (!reportActionID) {
         return html;
     }
-    var attachmentID = 0;
-    return html.replace(/<img |<video /g, function (m) { return m.concat("".concat(CONST_1.default.ATTACHMENT_ID_ATTRIBUTE, "=\"").concat(reportActionID, "_").concat(++attachmentID, "\" ")); });
+    let attachmentID = 0;
+    return html.replace(/<img |<video /g, (m) => m.concat(`${CONST_1.default.ATTACHMENT_ID_ATTRIBUTE}="${reportActionID}_${++attachmentID}" `));
 }
 function getReportActionMessage(reportAction) {
-    return Array.isArray(reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) ? reportAction.message.at(0) : reportAction === null || reportAction === void 0 ? void 0 : reportAction.message;
+    return Array.isArray(reportAction?.message) ? reportAction.message.at(0) : reportAction?.message;
 }
 function isDeletedParentAction(reportAction) {
-    var _a, _b, _c;
-    return ((_b = (_a = getReportActionMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.isDeletedParentAction) !== null && _b !== void 0 ? _b : false) && ((_c = reportAction === null || reportAction === void 0 ? void 0 : reportAction.childVisibleActionCount) !== null && _c !== void 0 ? _c : 0) > 0;
+    return (getReportActionMessage(reportAction)?.isDeletedParentAction ?? false) && (reportAction?.childVisibleActionCount ?? 0) > 0;
 }
 function isReversedTransaction(reportAction) {
-    var _a, _b, _c;
-    return ((_b = (_a = getReportActionMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.isReversedTransaction) !== null && _b !== void 0 ? _b : false) && ((_c = reportAction === null || reportAction === void 0 ? void 0 : reportAction.childVisibleActionCount) !== null && _c !== void 0 ? _c : 0) > 0;
+    return (getReportActionMessage(reportAction)?.isReversedTransaction ?? false) && (reportAction?.childVisibleActionCount ?? 0) > 0;
 }
 function isPendingRemove(reportAction) {
-    var _a, _b;
-    return ((_b = (_a = getReportActionMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.moderationDecision) === null || _b === void 0 ? void 0 : _b.decision) === CONST_1.default.MODERATION.MODERATOR_DECISION_PENDING_REMOVE;
+    return getReportActionMessage(reportAction)?.moderationDecision?.decision === CONST_1.default.MODERATION.MODERATOR_DECISION_PENDING_REMOVE;
 }
 function isPendingHide(reportAction) {
-    var _a, _b;
-    return ((_b = (_a = getReportActionMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.moderationDecision) === null || _b === void 0 ? void 0 : _b.decision) === CONST_1.default.MODERATION.MODERATOR_DECISION_PENDING_HIDE;
+    return getReportActionMessage(reportAction)?.moderationDecision?.decision === CONST_1.default.MODERATION.MODERATOR_DECISION_PENDING_HIDE;
 }
 function isMoneyRequestAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU);
@@ -361,8 +335,7 @@ function isSubmittedAndClosedAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.SUBMITTED_AND_CLOSED);
 }
 function isMarkAsClosedAction(reportAction) {
-    var _a;
-    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.CLOSED) && !!((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.amount);
+    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.CLOSED) && !!getOriginalMessage(reportAction)?.amount;
 }
 function isApprovedAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.APPROVED);
@@ -383,7 +356,7 @@ function isMovedAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.MOVED);
 }
 function isPolicyChangeLogAction(reportAction) {
-    return (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) ? POLICY_CHANGE_LOG_ARRAY.has(reportAction.actionName) : false;
+    return reportAction?.actionName ? POLICY_CHANGE_LOG_ARRAY.has(reportAction.actionName) : false;
 }
 function isChronosOOOListAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.CHRONOS_OOO_LIST);
@@ -392,8 +365,7 @@ function isAddCommentAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ADD_COMMENT);
 }
 function isCreatedTaskReportAction(reportAction) {
-    var _a;
-    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ADD_COMMENT) && !!((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.taskReportID);
+    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ADD_COMMENT) && !!getOriginalMessage(reportAction)?.taskReportID;
 }
 function isTripPreview(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.TRIP_PREVIEW);
@@ -402,13 +374,12 @@ function isReimbursementDirectionInformationRequiredAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_DIRECTOR_INFORMATION_REQUIRED);
 }
 function isActionOfType(action, actionName) {
-    return (action === null || action === void 0 ? void 0 : action.actionName) === actionName;
+    return action?.actionName === actionName;
 }
 function getOriginalMessage(reportAction) {
-    var _a;
-    if (!Array.isArray(reportAction === null || reportAction === void 0 ? void 0 : reportAction.message)) {
+    if (!Array.isArray(reportAction?.message)) {
         // eslint-disable-next-line deprecation/deprecation
-        return (_a = reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) !== null && _a !== void 0 ? _a : reportAction === null || reportAction === void 0 ? void 0 : reportAction.originalMessage;
+        return reportAction?.message ?? reportAction?.originalMessage;
     }
     // eslint-disable-next-line deprecation/deprecation
     return reportAction.originalMessage;
@@ -420,7 +391,7 @@ function getDelegateAccountIDFromReportAction(reportAction) {
     if (reportAction.delegateAccountID) {
         return reportAction.delegateAccountID;
     }
-    var originalMessage = getOriginalMessage(reportAction);
+    const originalMessage = getOriginalMessage(reportAction);
     if (!originalMessage) {
         return undefined;
     }
@@ -430,10 +401,10 @@ function getDelegateAccountIDFromReportAction(reportAction) {
     return undefined;
 }
 function isExportIntegrationAction(reportAction) {
-    return (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_INTEGRATION;
+    return reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_INTEGRATION;
 }
 function isIntegrationMessageAction(reportAction) {
-    return (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.INTEGRATIONS_MESSAGE;
+    return reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.INTEGRATIONS_MESSAGE;
 }
 function isTravelUpdate(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.TRAVEL_UPDATE);
@@ -443,25 +414,24 @@ function isTravelUpdate(reportAction) {
  * In the interim, we must check to see if we have an object or array for the reportAction.message, if we have an array we will use the originalMessage as this means we have not yet migrated.
  */
 function getWhisperedTo(reportAction) {
-    var _a, _b;
     if (!reportAction) {
         return [];
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var message = getReportActionMessage(reportAction);
+    const originalMessage = getOriginalMessage(reportAction);
+    const message = getReportActionMessage(reportAction);
     if (!(originalMessage && typeof originalMessage === 'object' && 'whisperedTo' in originalMessage) && !(message && typeof message === 'object' && 'whisperedTo' in message)) {
         return [];
     }
     if (message !== null && !Array.isArray(message) && typeof message === 'object' && 'whisperedTo' in message) {
-        return (_a = message === null || message === void 0 ? void 0 : message.whisperedTo) !== null && _a !== void 0 ? _a : [];
+        return message?.whisperedTo ?? [];
     }
     if (originalMessage && typeof originalMessage === 'object' && 'whisperedTo' in originalMessage) {
-        return (_b = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.whisperedTo) !== null && _b !== void 0 ? _b : [];
+        return originalMessage?.whisperedTo ?? [];
     }
     if (typeof originalMessage !== 'object') {
         Log_1.default.info('Original message is not an object for reportAction: ', true, {
-            reportActionID: reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID,
-            actionName: reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName,
+            reportActionID: reportAction?.reportActionID,
+            actionName: reportAction?.actionName,
         });
     }
     return [];
@@ -476,13 +446,13 @@ function isWhisperActionTargetedToOthers(reportAction) {
     if (!isWhisperAction(reportAction)) {
         return false;
     }
-    return !getWhisperedTo(reportAction).includes(currentUserAccountID !== null && currentUserAccountID !== void 0 ? currentUserAccountID : CONST_1.default.DEFAULT_NUMBER_ID);
+    return !getWhisperedTo(reportAction).includes(currentUserAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID);
 }
 function isReimbursementQueuedAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_QUEUED);
 }
 function isMemberChangeAction(reportAction) {
-    return (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) ? MEMBER_CHANGE_ARRAY.has(reportAction.actionName) : false;
+    return reportAction?.actionName ? MEMBER_CHANGE_ARRAY.has(reportAction.actionName) : false;
 }
 function isInviteMemberAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM) || isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM);
@@ -512,7 +482,7 @@ function isRetractedAction(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.RETRACTED);
 }
 function isRoomChangeLogAction(reportAction) {
-    return (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) ? ROOM_CHANGE_LOG_ARRAY.has(reportAction.actionName) : false;
+    return reportAction?.actionName ? ROOM_CHANGE_LOG_ARRAY.has(reportAction.actionName) : false;
 }
 function isInviteOrRemovedAction(reportAction) {
     return (isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM) ||
@@ -524,17 +494,16 @@ function isInviteOrRemovedAction(reportAction) {
  * Returns whether the comment is a thread parent message/the first message in a thread
  */
 function isThreadParentMessage(reportAction, reportID) {
-    var _a = reportAction !== null && reportAction !== void 0 ? reportAction : {}, childType = _a.childType, _b = _a.childVisibleActionCount, childVisibleActionCount = _b === void 0 ? 0 : _b, childReportID = _a.childReportID;
+    const { childType, childVisibleActionCount = 0, childReportID } = reportAction ?? {};
     return childType === CONST_1.default.REPORT.TYPE.CHAT && (childVisibleActionCount > 0 || String(childReportID) === reportID);
 }
 /**
  * Determines if the given report action is sent money report action by checking for 'pay' type and presence of IOUDetails object.
  */
 function isSentMoneyReportAction(reportAction) {
-    var _a, _b;
     return (isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU) &&
-        ((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY &&
-        !!((_b = getOriginalMessage(reportAction)) === null || _b === void 0 ? void 0 : _b.IOUDetails));
+        getOriginalMessage(reportAction)?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY &&
+        !!getOriginalMessage(reportAction)?.IOUDetails);
 }
 /**
  * Returns whether the thread is a transaction thread, which is any thread with IOU parent
@@ -544,23 +513,22 @@ function isTransactionThread(parentReportAction) {
     if ((0, EmptyObject_1.isEmptyObject)(parentReportAction) || !isMoneyRequestAction(parentReportAction)) {
         return false;
     }
-    var originalMessage = getOriginalMessage(parentReportAction);
-    return ((originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.CREATE ||
-        (originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK ||
-        ((originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY && !!(originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.IOUDetails)));
+    const originalMessage = getOriginalMessage(parentReportAction);
+    return (originalMessage?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.CREATE ||
+        originalMessage?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK ||
+        (originalMessage?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY && !!originalMessage?.IOUDetails));
 }
 /**
  * Sort an array of reportActions by their created timestamp first, and reportActionID second
  * This gives us a stable order even in the case of multiple reportActions created on the same millisecond
  *
  */
-function getSortedReportActions(reportActions, shouldSortInDescendingOrder) {
-    if (shouldSortInDescendingOrder === void 0) { shouldSortInDescendingOrder = false; }
+function getSortedReportActions(reportActions, shouldSortInDescendingOrder = false) {
     if (!Array.isArray(reportActions)) {
-        throw new Error("ReportActionsUtils.getSortedReportActions requires an array, received ".concat(typeof reportActions));
+        throw new Error(`ReportActionsUtils.getSortedReportActions requires an array, received ${typeof reportActions}`);
     }
-    var invertedMultiplier = shouldSortInDescendingOrder ? -1 : 1;
-    var sortedActions = reportActions === null || reportActions === void 0 ? void 0 : reportActions.filter(Boolean).sort(function (first, second) {
+    const invertedMultiplier = shouldSortInDescendingOrder ? -1 : 1;
+    const sortedActions = reportActions?.filter(Boolean).sort((first, second) => {
         // First sort by action type, ensuring that `CREATED` actions always come first if they have the same or even a later timestamp as another action type
         if ((first.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED || second.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED) && first.actionName !== second.actionName) {
             return (first.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED ? -1 : 1) * invertedMultiplier;
@@ -589,7 +557,7 @@ function getSortedReportActions(reportActions, shouldSortInDescendingOrder) {
  * transaction thread report in order to correctly display reportActions from both reports in the one-transaction report view.
  */
 function getCombinedReportActions(reportActions, transactionThreadReportID, transactionThreadReportActions, reportID) {
-    var isSentMoneyReport = reportActions.some(function (action) { return isSentMoneyReportAction(action); });
+    const isSentMoneyReport = reportActions.some((action) => isSentMoneyReportAction(action));
     // We don't want to combine report actions of transaction thread in iou report of send money request because we display the transaction report of send money request as a normal thread
     if ((0, isEmpty_1.default)(transactionThreadReportID) || isSentMoneyReport) {
         return reportActions;
@@ -597,25 +565,24 @@ function getCombinedReportActions(reportActions, transactionThreadReportID, tran
     // Usually, we filter out the created action from the transaction thread report actions, since we already have the parent report's created action in `reportActions`
     // However, in the case of moving track expense, the transaction thread will be created first in a track expense, thus we should keep the CREATED of the transaction thread and filter out CREATED action of the IOU
     // This makes sense because in a combined report action list, whichever CREATED is first need to be retained.
-    var transactionThreadCreatedAction = transactionThreadReportActions === null || transactionThreadReportActions === void 0 ? void 0 : transactionThreadReportActions.find(function (action) { return action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED; });
-    var parentReportCreatedAction = reportActions === null || reportActions === void 0 ? void 0 : reportActions.find(function (action) { return action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED; });
-    var filteredTransactionThreadReportActions = transactionThreadReportActions;
-    var filteredParentReportActions = reportActions;
+    const transactionThreadCreatedAction = transactionThreadReportActions?.find((action) => action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED);
+    const parentReportCreatedAction = reportActions?.find((action) => action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CREATED);
+    let filteredTransactionThreadReportActions = transactionThreadReportActions;
+    let filteredParentReportActions = reportActions;
     if (transactionThreadCreatedAction && parentReportCreatedAction && transactionThreadCreatedAction.created > parentReportCreatedAction.created) {
-        filteredTransactionThreadReportActions = transactionThreadReportActions === null || transactionThreadReportActions === void 0 ? void 0 : transactionThreadReportActions.filter(function (action) { return action.actionName !== CONST_1.default.REPORT.ACTIONS.TYPE.CREATED; });
+        filteredTransactionThreadReportActions = transactionThreadReportActions?.filter((action) => action.actionName !== CONST_1.default.REPORT.ACTIONS.TYPE.CREATED);
     }
     else if (transactionThreadCreatedAction) {
-        filteredParentReportActions = reportActions === null || reportActions === void 0 ? void 0 : reportActions.filter(function (action) { return action.actionName !== CONST_1.default.REPORT.ACTIONS.TYPE.CREATED; });
+        filteredParentReportActions = reportActions?.filter((action) => action.actionName !== CONST_1.default.REPORT.ACTIONS.TYPE.CREATED);
     }
-    var report = allReports === null || allReports === void 0 ? void 0 : allReports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(reportID)];
-    var isSelfDM = (report === null || report === void 0 ? void 0 : report.chatType) === CONST_1.default.REPORT.CHAT_TYPE.SELF_DM;
+    const report = allReports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${reportID}`];
+    const isSelfDM = report?.chatType === CONST_1.default.REPORT.CHAT_TYPE.SELF_DM;
     // Filter out request and send money request actions because we don't want to show any preview actions for one transaction reports
-    var filteredReportActions = __spreadArray(__spreadArray([], filteredParentReportActions, true), filteredTransactionThreadReportActions, true).filter(function (action) {
-        var _a, _b;
+    const filteredReportActions = [...filteredParentReportActions, ...filteredTransactionThreadReportActions].filter((action) => {
         if (!isMoneyRequestAction(action)) {
             return true;
         }
-        var actionType = (_b = (_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.type) !== null && _b !== void 0 ? _b : '';
+        const actionType = getOriginalMessage(action)?.type ?? '';
         if (isSelfDM) {
             return actionType !== CONST_1.default.IOU.REPORT_ACTION_TYPE.CREATE;
         }
@@ -623,44 +590,42 @@ function getCombinedReportActions(reportActions, transactionThreadReportID, tran
     });
     return getSortedReportActions(filteredReportActions, true);
 }
-var iouRequestTypes = [CONST_1.default.IOU.REPORT_ACTION_TYPE.CREATE, CONST_1.default.IOU.REPORT_ACTION_TYPE.SPLIT, CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK];
+const iouRequestTypes = [CONST_1.default.IOU.REPORT_ACTION_TYPE.CREATE, CONST_1.default.IOU.REPORT_ACTION_TYPE.SPLIT, CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK];
 // Get all IOU report actions for the report.
-var iouRequestTypesSet = new Set(__spreadArray(__spreadArray([], iouRequestTypes, true), [CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY], false));
+const iouRequestTypesSet = new Set([...iouRequestTypes, CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY]);
 /**
  * Finds most recent IOU request action ID.
  */
 function getMostRecentIOURequestActionID(reportActions) {
-    var _a, _b, _c;
     if (!Array.isArray(reportActions)) {
         return null;
     }
-    var iouRequestActions = (_a = reportActions === null || reportActions === void 0 ? void 0 : reportActions.filter(function (action) {
-        var _a;
+    const iouRequestActions = reportActions?.filter((action) => {
         if (!isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.IOU)) {
             return false;
         }
-        var actionType = (_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.type;
+        const actionType = getOriginalMessage(action)?.type;
         if (!actionType) {
             return false;
         }
         return iouRequestTypes.includes(actionType);
-    })) !== null && _a !== void 0 ? _a : [];
+    }) ?? [];
     if (iouRequestActions.length === 0) {
         return null;
     }
-    var sortedReportActions = getSortedReportActions(iouRequestActions);
-    return (_c = (_b = sortedReportActions.at(-1)) === null || _b === void 0 ? void 0 : _b.reportActionID) !== null && _c !== void 0 ? _c : null;
+    const sortedReportActions = getSortedReportActions(iouRequestActions);
+    return sortedReportActions.at(-1)?.reportActionID ?? null;
 }
 /**
  * Returns array of links inside a given report action
  */
 function extractLinksFromMessageHtml(reportAction) {
-    var htmlContent = getReportActionHtml(reportAction);
-    var regex = CONST_1.default.REGEX_LINK_IN_ANCHOR;
+    const htmlContent = getReportActionHtml(reportAction);
+    const regex = CONST_1.default.REGEX_LINK_IN_ANCHOR;
     if (!htmlContent) {
         return [];
     }
-    return __spreadArray([], htmlContent.matchAll(regex), true).map(function (match) { return match[1]; });
+    return [...htmlContent.matchAll(regex)].map((match) => match[1]);
 }
 /**
  * Returns the report action immediately before the specified index.
@@ -668,11 +633,10 @@ function extractLinksFromMessageHtml(reportAction) {
  * @param actionIndex - index of the action
  */
 function findPreviousAction(reportActions, actionIndex) {
-    var _a;
-    for (var i = actionIndex + 1; i < reportActions.length; i++) {
+    for (let i = actionIndex + 1; i < reportActions.length; i++) {
         // Find the next non-pending deletion report action, as the pending delete action means that it is not displayed in the UI, but still is in the report actions list.
         // If we are offline, all actions are pending but shown in the UI, so we take the previous action, even if it is a delete.
-        if (isNetworkOffline || ((_a = reportActions.at(i)) === null || _a === void 0 ? void 0 : _a.pendingAction) !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE) {
+        if (isNetworkOffline || reportActions.at(i)?.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE) {
             return reportActions.at(i);
         }
     }
@@ -684,11 +648,10 @@ function findPreviousAction(reportActions, actionIndex) {
  * @param actionIndex - index of the action
  */
 function findNextAction(reportActions, actionIndex) {
-    var _a;
-    for (var i = actionIndex - 1; i >= 0; i--) {
+    for (let i = actionIndex - 1; i >= 0; i--) {
         // Find the next non-pending deletion report action, as the pending delete action means that it is not displayed in the UI, but still is in the report actions list.
         // If we are offline, all actions are pending but shown in the UI, so we take the previous action, even if it is a delete.
-        if (isNetworkOffline || ((_a = reportActions.at(i)) === null || _a === void 0 ? void 0 : _a.pendingAction) !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE) {
+        if (isNetworkOffline || reportActions.at(i)?.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE) {
             return reportActions.at(i);
         }
     }
@@ -702,8 +665,8 @@ function findNextAction(reportActions, actionIndex) {
  * @param actionIndex - index of the comment item in state to check
  */
 function isConsecutiveActionMadeByPreviousActor(reportActions, actionIndex) {
-    var previousAction = findPreviousAction(reportActions, actionIndex);
-    var currentAction = reportActions.at(actionIndex);
+    const previousAction = findPreviousAction(reportActions, actionIndex);
+    const currentAction = reportActions.at(actionIndex);
     return canActionsBeGrouped(currentAction, previousAction);
 }
 /**
@@ -714,8 +677,8 @@ function isConsecutiveActionMadeByPreviousActor(reportActions, actionIndex) {
  * @param actionIndex - index of the comment item in state to check
  */
 function hasNextActionMadeBySameActor(reportActions, actionIndex) {
-    var currentAction = reportActions.at(actionIndex);
-    var nextAction = findNextAction(reportActions, actionIndex);
+    const currentAction = reportActions.at(actionIndex);
+    const nextAction = findNextAction(reportActions, actionIndex);
     if (actionIndex === 0) {
         return false;
     }
@@ -735,7 +698,7 @@ function canActionsBeGrouped(currentAction, adjacentAction) {
         return false;
     }
     // Comments are only grouped if they happen within 5 minutes of each adjacent
-    if (new Date(currentAction === null || currentAction === void 0 ? void 0 : currentAction.created).getTime() - new Date(adjacentAction.created).getTime() > CONST_1.default.REPORT.ACTIONS.MAX_GROUPING_TIME) {
+    if (new Date(currentAction?.created).getTime() - new Date(adjacentAction.created).getTime() > CONST_1.default.REPORT.ACTIONS.MAX_GROUPING_TIME) {
         return false;
     }
     // Do not group if adjacent action was a created action
@@ -755,7 +718,7 @@ function canActionsBeGrouped(currentAction, adjacentAction) {
         return false;
     }
     if (isSubmittedAction(currentAction)) {
-        var currentActionAdminAccountID = currentAction.adminAccountID;
+        const currentActionAdminAccountID = currentAction.adminAccountID;
         return typeof currentActionAdminAccountID === 'number'
             ? currentActionAdminAccountID === adjacentAction.actorAccountID
             : currentAction.actorAccountID === adjacentAction.actorAccountID;
@@ -768,8 +731,8 @@ function canActionsBeGrouped(currentAction, adjacentAction) {
     return currentAction.actorAccountID === adjacentAction.actorAccountID;
 }
 function isChronosAutomaticTimerAction(reportAction, isChronosReport) {
-    var isAutomaticStartTimerAction = function () { return /start(?:ed|ing)?(?:\snow)?/i.test(getReportActionText(reportAction)); };
-    var isAutomaticStopTimerAction = function () { return /stop(?:ped|ping)?(?:\snow)?/i.test(getReportActionText(reportAction)); };
+    const isAutomaticStartTimerAction = () => /start(?:ed|ing)?(?:\snow)?/i.test(getReportActionText(reportAction));
+    const isAutomaticStopTimerAction = () => /stop(?:ped|ping)?(?:\snow)?/i.test(getReportActionText(reportAction));
     return isChronosReport && (isAutomaticStartTimerAction() || isAutomaticStopTimerAction());
 }
 /**
@@ -777,8 +740,8 @@ function isChronosAutomaticTimerAction(reportAction, isChronosReport) {
  * then detect that and show each individually so that the user can easily see when they were sent.
  */
 function isConsecutiveChronosAutomaticTimerAction(reportActions, actionIndex, isChronosReport) {
-    var previousAction = findPreviousAction(reportActions, actionIndex);
-    var currentAction = reportActions === null || reportActions === void 0 ? void 0 : reportActions.at(actionIndex);
+    const previousAction = findPreviousAction(reportActions, actionIndex);
+    const currentAction = reportActions?.at(actionIndex);
     return isChronosAutomaticTimerAction(currentAction, isChronosReport) && isChronosAutomaticTimerAction(previousAction, isChronosReport);
 }
 /**
@@ -795,7 +758,7 @@ function isReportActionDeprecated(reportAction, key) {
         Log_1.default.info('Front-end filtered out reportAction keyed by sequenceNumber!', false, reportAction);
         return true;
     }
-    var deprecatedOldDotReportActions = [
+    const deprecatedOldDotReportActions = [
         CONST_1.default.REPORT.ACTIONS.TYPE.DELETED_ACCOUNT,
         CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_REQUESTED,
         CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_SETUP_REQUESTED,
@@ -843,23 +806,23 @@ function isActionableWhisper(reportAction) {
         isActionableReportMentionWhisper(reportAction) ||
         isActionableMentionInviteToSubmitExpenseConfirmWhisper(reportAction));
 }
-var _a = CONST_1.default.REPORT.ACTIONS.TYPE, policyChangelogTypes = _a.POLICY_CHANGE_LOG, roomChangeLogTypes = _a.ROOM_CHANGE_LOG, otherActionTypes = __rest(_a, ["POLICY_CHANGE_LOG", "ROOM_CHANGE_LOG"]);
-var supportedActionTypes = __spreadArray(__spreadArray(__spreadArray([], Object.values(otherActionTypes), true), Object.values(policyChangelogTypes), true), Object.values(roomChangeLogTypes), true);
+const { POLICY_CHANGE_LOG: policyChangelogTypes, ROOM_CHANGE_LOG: roomChangeLogTypes, ...otherActionTypes } = CONST_1.default.REPORT.ACTIONS.TYPE;
+const supportedActionTypes = [...Object.values(otherActionTypes), ...Object.values(policyChangelogTypes), ...Object.values(roomChangeLogTypes)];
 /**
  * Checks whether an action is actionable track expense and resolved.
  *
  */
 function isResolvedActionableWhisper(reportAction) {
-    var originalMessage = getOriginalMessage(reportAction);
-    var resolution = originalMessage && typeof originalMessage === 'object' && 'resolution' in originalMessage ? originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.resolution : null;
+    const originalMessage = getOriginalMessage(reportAction);
+    const resolution = originalMessage && typeof originalMessage === 'object' && 'resolution' in originalMessage ? originalMessage?.resolution : null;
     return !!resolution;
 }
 /**
  * Checks whether an action is concierge category options and resolved.
  */
 function isResolvedConciergeCategoryOptions(reportAction) {
-    var originalMessage = getOriginalMessage(reportAction);
-    var selectedCategory = originalMessage && typeof originalMessage === 'object' && 'selectedCategory' in originalMessage ? originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.selectedCategory : null;
+    const originalMessage = getOriginalMessage(reportAction);
+    const selectedCategory = originalMessage && typeof originalMessage === 'object' && 'selectedCategory' in originalMessage ? originalMessage?.selectedCategory : null;
     return !!selectedCategory;
 }
 /**
@@ -907,8 +870,8 @@ function shouldReportActionBeVisible(reportAction, key, canUserPerformWriteActio
         return false;
     }
     // All other actions are displayed except thread parents, deleted, or non-pending actions
-    var isDeleted = isDeletedAction(reportAction);
-    var isPending = !!reportAction.pendingAction;
+    const isDeleted = isDeletedAction(reportAction);
+    const isPending = !!reportAction.pendingAction;
     return !isDeleted || isPending || isDeletedParentAction(reportAction) || isReversedTransaction(reportAction);
 }
 /**
@@ -925,11 +888,10 @@ function shouldHideNewMarker(reportAction) {
  * it satisfies shouldReportActionBeVisible, it's not whisper action and not deleted.
  */
 function shouldReportActionBeVisibleAsLastAction(reportAction, canUserPerformWriteAction) {
-    var _a;
     if (!reportAction) {
         return false;
     }
-    if (Object.keys((_a = reportAction.errors) !== null && _a !== void 0 ? _a : {}).length > 0) {
+    if (Object.keys(reportAction.errors ?? {}).length > 0) {
         return false;
     }
     // If a whisper action is the REPORT_PREVIEW action, we are displaying it.
@@ -943,57 +905,49 @@ function shouldReportActionBeVisibleAsLastAction(reportAction, canUserPerformWri
  * which includes a baseURL placeholder that's replaced in the client.
  */
 function replaceBaseURLInPolicyChangeLogAction(reportAction) {
-    var _a;
-    if (!(reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) || !isPolicyChangeLogAction(reportAction)) {
+    if (!reportAction?.message || !isPolicyChangeLogAction(reportAction)) {
         return reportAction;
     }
-    var updatedReportAction = (0, clone_1.default)(reportAction);
+    const updatedReportAction = (0, clone_1.default)(reportAction);
     if (!updatedReportAction.message) {
         return updatedReportAction;
     }
     if (Array.isArray(updatedReportAction.message)) {
-        var message = updatedReportAction.message.at(0);
+        const message = updatedReportAction.message.at(0);
         if (message) {
-            message.html = (_a = getReportActionHtml(reportAction)) === null || _a === void 0 ? void 0 : _a.replace('%baseURL', environmentURL);
+            message.html = getReportActionHtml(reportAction)?.replace('%baseURL', environmentURL);
         }
     }
     return updatedReportAction;
 }
-function getLastVisibleAction(reportID, canUserPerformWriteAction, actionsToMerge, reportActionsParam) {
-    var _a, _b;
-    if (actionsToMerge === void 0) { actionsToMerge = {}; }
-    if (reportActionsParam === void 0) { reportActionsParam = allReportActions; }
-    var reportActions = [];
+function getLastVisibleAction(reportID, canUserPerformWriteAction, actionsToMerge = {}, reportActionsParam = allReportActions) {
+    let reportActions = [];
     if (!(0, isEmpty_1.default)(actionsToMerge)) {
-        reportActions = Object.values((0, expensify_common_1.fastMerge)((_a = reportActionsParam === null || reportActionsParam === void 0 ? void 0 : reportActionsParam["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID)]) !== null && _a !== void 0 ? _a : {}, actionsToMerge !== null && actionsToMerge !== void 0 ? actionsToMerge : {}, true));
+        reportActions = Object.values((0, expensify_common_1.fastMerge)(reportActionsParam?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`] ?? {}, actionsToMerge ?? {}, true));
     }
     else {
-        reportActions = Object.values((_b = allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID)]) !== null && _b !== void 0 ? _b : {});
+        reportActions = Object.values(allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`] ?? {});
     }
-    var visibleReportActions = reportActions.filter(function (action) { return shouldReportActionBeVisibleAsLastAction(action, canUserPerformWriteAction); });
-    var sortedReportActions = getSortedReportActions(visibleReportActions, true);
+    const visibleReportActions = reportActions.filter((action) => shouldReportActionBeVisibleAsLastAction(action, canUserPerformWriteAction));
+    const sortedReportActions = getSortedReportActions(visibleReportActions, true);
     if (sortedReportActions.length === 0) {
         return undefined;
     }
     return sortedReportActions.at(0);
 }
 function formatLastMessageText(lastMessageText) {
-    var _a, _b;
-    var trimmedMessage = String(lastMessageText).trim();
+    const trimmedMessage = String(lastMessageText).trim();
     // Add support for inline code containing only space characters
     // The message will appear as a blank space in the LHN
-    if ((trimmedMessage === '' && ((_a = lastMessageText === null || lastMessageText === void 0 ? void 0 : lastMessageText.length) !== null && _a !== void 0 ? _a : 0) > 0) ||
-        (trimmedMessage === '?\u2026' && ((_b = lastMessageText === null || lastMessageText === void 0 ? void 0 : lastMessageText.length) !== null && _b !== void 0 ? _b : 0) > CONST_1.default.REPORT.MIN_LENGTH_LAST_MESSAGE_WITH_ELLIPSIS)) {
+    if ((trimmedMessage === '' && (lastMessageText?.length ?? 0) > 0) ||
+        (trimmedMessage === '?\u2026' && (lastMessageText?.length ?? 0) > CONST_1.default.REPORT.MIN_LENGTH_LAST_MESSAGE_WITH_ELLIPSIS)) {
         return ' ';
     }
     return StringUtils_1.default.lineBreaksToSpaces(trimmedMessage).substring(0, CONST_1.default.REPORT.LAST_MESSAGE_TEXT_MAX_LENGTH).trim();
 }
-function getLastVisibleMessage(reportID, canUserPerformWriteAction, actionsToMerge, reportAction) {
-    var _a;
-    if (actionsToMerge === void 0) { actionsToMerge = {}; }
-    if (reportAction === void 0) { reportAction = undefined; }
-    var lastVisibleAction = reportAction !== null && reportAction !== void 0 ? reportAction : getLastVisibleAction(reportID, canUserPerformWriteAction, actionsToMerge);
-    var message = getReportActionMessage(lastVisibleAction);
+function getLastVisibleMessage(reportID, canUserPerformWriteAction, actionsToMerge = {}, reportAction = undefined) {
+    const lastVisibleAction = reportAction ?? getLastVisibleAction(reportID, canUserPerformWriteAction, actionsToMerge);
+    const message = getReportActionMessage(lastVisibleAction);
     if (message && (0, isReportMessageAttachment_1.isReportMessageAttachment)(message)) {
         return {
             lastMessageText: CONST_1.default.ATTACHMENT_MESSAGE_TEXT,
@@ -1005,7 +959,7 @@ function getLastVisibleMessage(reportID, canUserPerformWriteAction, actionsToMer
             lastMessageText: '',
         };
     }
-    var messageText = (_a = getReportActionMessageText(lastVisibleAction)) !== null && _a !== void 0 ? _a : '';
+    let messageText = getReportActionMessageText(lastVisibleAction) ?? '';
     if (messageText) {
         messageText = formatLastMessageText(messageText);
     }
@@ -1017,12 +971,9 @@ function getLastVisibleMessage(reportID, canUserPerformWriteAction, actionsToMer
  * A helper method to filter out report actions keyed by sequenceNumbers.
  */
 function filterOutDeprecatedReportActions(reportActions) {
-    return Object.entries(reportActions !== null && reportActions !== void 0 ? reportActions : {})
-        .filter(function (_a) {
-        var key = _a[0], reportAction = _a[1];
-        return !isReportActionDeprecated(reportAction, key);
-    })
-        .map(function (entry) { return entry[1]; });
+    return Object.entries(reportActions ?? {})
+        .filter(([key, reportAction]) => !isReportActionDeprecated(reportAction, key))
+        .map((entry) => entry[1]);
 }
 /**
  * Determines whether a report action should be visible in the report view.
@@ -1031,8 +982,8 @@ function filterOutDeprecatedReportActions(reportActions) {
  * - Money request with parent action deleted
  */
 function isVisiblePreviewOrMoneyRequest(action) {
-    var isDeletedMoneyRequest = isDeletedParentAction(action) && isMoneyRequestAction(action);
-    var isHiddenReportPreviewWithoutPendingAction = isReportPreviewAction(action) && action.pendingAction === undefined && !action.shouldShow;
+    const isDeletedMoneyRequest = isDeletedParentAction(action) && isMoneyRequestAction(action);
+    const isHiddenReportPreviewWithoutPendingAction = isReportPreviewAction(action) && action.pendingAction === undefined && !action.shouldShow;
     return !isDeletedMoneyRequest && !isHiddenReportPreviewWithoutPendingAction;
 }
 /**
@@ -1042,12 +993,12 @@ function isVisiblePreviewOrMoneyRequest(action) {
 function getFilteredReportActionsForReportView(actions) {
     // The free trial message can be duplicated due to this change https://github.com/Expensify/App/pull/68630 without the backend change
     // So we need to filter out the duplicate free trial message
-    var freeTrialMessages = actions.filter(function (action) {
-        var html = getReportActionHtml(action);
+    const freeTrialMessages = actions.filter((action) => {
+        const html = getReportActionHtml(action);
         return Parser_1.default.htmlToMarkdown(html) === CONST_1.default.FREE_TRIAL_MARKDOWN;
     });
-    var isDuplicateFreeTrialMessage = freeTrialMessages.length > 1;
-    return actions.filter(isVisiblePreviewOrMoneyRequest).filter(function (action) { var _a; return !isDuplicateFreeTrialMessage || action.reportActionID !== ((_a = freeTrialMessages.at(0)) === null || _a === void 0 ? void 0 : _a.reportActionID); });
+    const isDuplicateFreeTrialMessage = freeTrialMessages.length > 1;
+    return actions.filter(isVisiblePreviewOrMoneyRequest).filter((action) => !isDuplicateFreeTrialMessage || action.reportActionID !== freeTrialMessages.at(0)?.reportActionID);
 }
 /**
  * This method returns the report actions that are ready for display in the ReportActionsView.
@@ -1055,9 +1006,8 @@ function getFilteredReportActionsForReportView(actions) {
  * to ensure they will always be displayed in the same order (in case multiple actions have the same timestamp).
  * This is all handled with getSortedReportActions() which is used by several other methods to keep the code DRY.
  */
-function getSortedReportActionsForDisplay(reportActions, canUserPerformWriteAction, shouldIncludeInvisibleActions) {
-    if (shouldIncludeInvisibleActions === void 0) { shouldIncludeInvisibleActions = false; }
-    var filteredReportActions = [];
+function getSortedReportActionsForDisplay(reportActions, canUserPerformWriteAction, shouldIncludeInvisibleActions = false) {
+    let filteredReportActions = [];
     if (!reportActions) {
         return [];
     }
@@ -1066,16 +1016,10 @@ function getSortedReportActionsForDisplay(reportActions, canUserPerformWriteActi
     }
     else {
         filteredReportActions = Object.entries(reportActions)
-            .filter(function (_a) {
-            var key = _a[0], reportAction = _a[1];
-            return shouldReportActionBeVisible(reportAction, key, canUserPerformWriteAction);
-        })
-            .map(function (_a) {
-            var reportAction = _a[1];
-            return reportAction;
-        });
+            .filter(([key, reportAction]) => shouldReportActionBeVisible(reportAction, key, canUserPerformWriteAction))
+            .map(([, reportAction]) => reportAction);
     }
-    var baseURLAdjustedReportActions = filteredReportActions.map(function (reportAction) { return replaceBaseURLInPolicyChangeLogAction(reportAction); });
+    const baseURLAdjustedReportActions = filteredReportActions.map((reportAction) => replaceBaseURLInPolicyChangeLogAction(reportAction));
     return getSortedReportActions(baseURLAdjustedReportActions, true);
 }
 /**
@@ -1086,14 +1030,14 @@ function getSortedReportActionsForDisplay(reportActions, canUserPerformWriteActi
  */
 function getLastClosedReportAction(reportActions) {
     // If closed report action is not present, return early
-    if (!Object.values(reportActions !== null && reportActions !== void 0 ? reportActions : {}).some(function (action) {
-        return (action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.CLOSED;
+    if (!Object.values(reportActions ?? {}).some((action) => {
+        return action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CLOSED;
     })) {
         return undefined;
     }
-    var filteredReportActions = filterOutDeprecatedReportActions(reportActions);
-    var sortedReportActions = getSortedReportActions(filteredReportActions);
-    return (0, findLast_1.default)(sortedReportActions, function (action) { return action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CLOSED; });
+    const filteredReportActions = filterOutDeprecatedReportActions(reportActions);
+    const sortedReportActions = getSortedReportActions(filteredReportActions);
+    return (0, findLast_1.default)(sortedReportActions, (action) => action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CLOSED);
 }
 /**
  * The first visible action is the second last action in sortedReportActions which satisfy following conditions:
@@ -1103,83 +1047,73 @@ function getLastClosedReportAction(reportActions) {
  * 4. We will get the second last action from filtered actions because the last
  *    action is always the created action
  */
-function getFirstVisibleReportActionID(sortedReportActions, isOffline) {
-    var _a;
-    if (sortedReportActions === void 0) { sortedReportActions = []; }
-    if (isOffline === void 0) { isOffline = false; }
+function getFirstVisibleReportActionID(sortedReportActions = [], isOffline = false) {
     if (!Array.isArray(sortedReportActions)) {
         return '';
     }
-    var sortedFilterReportActions = sortedReportActions.filter(function (action) { var _a; return !isDeletedAction(action) || ((_a = action === null || action === void 0 ? void 0 : action.childVisibleActionCount) !== null && _a !== void 0 ? _a : 0) > 0 || isOffline; });
-    return sortedFilterReportActions.length > 1 ? (_a = sortedFilterReportActions.at(sortedFilterReportActions.length - 2)) === null || _a === void 0 ? void 0 : _a.reportActionID : undefined;
+    const sortedFilterReportActions = sortedReportActions.filter((action) => !isDeletedAction(action) || (action?.childVisibleActionCount ?? 0) > 0 || isOffline);
+    return sortedFilterReportActions.length > 1 ? sortedFilterReportActions.at(sortedFilterReportActions.length - 2)?.reportActionID : undefined;
 }
 /**
  * @returns The latest report action in the `onyxData` or `null` if one couldn't be found
  */
 function getLatestReportActionFromOnyxData(onyxData) {
-    var _a, _b;
-    var reportActionUpdate = onyxData === null || onyxData === void 0 ? void 0 : onyxData.find(function (onyxUpdate) { return onyxUpdate.key.startsWith(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS); });
+    const reportActionUpdate = onyxData?.find((onyxUpdate) => onyxUpdate.key.startsWith(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS));
     if (!reportActionUpdate) {
         return null;
     }
-    var reportActions = Object.values((_a = reportActionUpdate.value) !== null && _a !== void 0 ? _a : {});
-    var sortedReportActions = getSortedReportActions(reportActions);
-    return (_b = sortedReportActions.at(-1)) !== null && _b !== void 0 ? _b : null;
+    const reportActions = Object.values(reportActionUpdate.value ?? {});
+    const sortedReportActions = getSortedReportActions(reportActions);
+    return sortedReportActions.at(-1) ?? null;
 }
 /**
  * Find the transaction associated with this reportAction, if one exists.
  */
 function getLinkedTransactionID(reportActionOrID, reportID) {
-    var _a, _b;
-    var reportAction = typeof reportActionOrID === 'string' ? (_a = allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID)]) === null || _a === void 0 ? void 0 : _a[reportActionOrID] : reportActionOrID;
+    const reportAction = typeof reportActionOrID === 'string' ? allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`]?.[reportActionOrID] : reportActionOrID;
     if (!reportAction || !isMoneyRequestAction(reportAction)) {
         return undefined;
     }
-    return (_b = getOriginalMessage(reportAction)) === null || _b === void 0 ? void 0 : _b.IOUTransactionID;
+    return getOriginalMessage(reportAction)?.IOUTransactionID;
 }
 function getReportAction(reportID, reportActionID) {
-    var _a;
     if (!reportID || !reportActionID) {
         return undefined;
     }
-    return (_a = allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID)]) === null || _a === void 0 ? void 0 : _a[reportActionID];
+    return allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`]?.[reportActionID];
 }
 /**
  * @returns The report preview action or `null` if one couldn't be found
  */
 function getReportPreviewAction(chatReportID, iouReportID) {
-    var _a;
     if (!chatReportID || !iouReportID) {
         return;
     }
-    return Object.values((_a = allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(chatReportID)]) !== null && _a !== void 0 ? _a : {}).find(function (reportAction) { var _a; return reportAction && isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW) && ((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.linkedReportID) === iouReportID; });
+    return Object.values(allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${chatReportID}`] ?? {}).find((reportAction) => reportAction && isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW) && getOriginalMessage(reportAction)?.linkedReportID === iouReportID);
 }
 /**
  * Get the iouReportID for a given report action.
  */
 function getIOUReportIDFromReportActionPreview(reportAction) {
-    var _a;
-    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW) ? (_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.linkedReportID : undefined;
+    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW) ? getOriginalMessage(reportAction)?.linkedReportID : undefined;
 }
 /**
  * A helper method to identify if the message is deleted or not.
  */
 function isMessageDeleted(reportAction) {
-    var _a, _b;
-    return (_b = (_a = getReportActionMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.isDeletedParentAction) !== null && _b !== void 0 ? _b : false;
+    return getReportActionMessage(reportAction)?.isDeletedParentAction ?? false;
 }
 /**
  * Simple hook to check whether the PureReportActionItem should return item based on whether the ReportPreview was recently deleted and the PureReportActionItem has not yet unloaded
  */
-function useTableReportViewActionRenderConditionals(_a) {
-    var childMoneyRequestCount = _a.childMoneyRequestCount, childVisibleActionCount = _a.childVisibleActionCount, pendingAction = _a.pendingAction, actionName = _a.actionName;
-    var previousChildMoneyRequestCount = (0, usePrevious_1.default)(childMoneyRequestCount);
-    var isActionAReportPreview = actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW;
-    var isActionInUpdateState = pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE;
-    var reportsCount = childMoneyRequestCount;
-    var previousReportsCount = previousChildMoneyRequestCount !== null && previousChildMoneyRequestCount !== void 0 ? previousChildMoneyRequestCount : 0;
-    var commentsCount = childVisibleActionCount !== null && childVisibleActionCount !== void 0 ? childVisibleActionCount : 0;
-    var isEmptyPreviewWithComments = reportsCount === 0 && commentsCount > 0 && previousReportsCount > 0;
+function useTableReportViewActionRenderConditionals({ childMoneyRequestCount, childVisibleActionCount, pendingAction, actionName }) {
+    const previousChildMoneyRequestCount = (0, usePrevious_1.default)(childMoneyRequestCount);
+    const isActionAReportPreview = actionName === CONST_1.default.REPORT.ACTIONS.TYPE.REPORT_PREVIEW;
+    const isActionInUpdateState = pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE;
+    const reportsCount = childMoneyRequestCount;
+    const previousReportsCount = previousChildMoneyRequestCount ?? 0;
+    const commentsCount = childVisibleActionCount ?? 0;
+    const isEmptyPreviewWithComments = reportsCount === 0 && commentsCount > 0 && previousReportsCount > 0;
     // We only want to remove the item if the ReportPreview has comments but no reports, so we avoid having a PureReportActionItem with no ReportPreview but only comments
     return !(isActionAReportPreview && isActionInUpdateState && isEmptyPreviewWithComments);
 }
@@ -1187,28 +1121,23 @@ function useTableReportViewActionRenderConditionals(_a) {
  * Returns the number of expenses associated with a report preview
  */
 function getNumberOfMoneyRequests(reportPreviewAction) {
-    var _a;
-    return (_a = reportPreviewAction === null || reportPreviewAction === void 0 ? void 0 : reportPreviewAction.childMoneyRequestCount) !== null && _a !== void 0 ? _a : 0;
+    return reportPreviewAction?.childMoneyRequestCount ?? 0;
 }
 function isSplitBillAction(reportAction) {
-    var _a;
-    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU) && ((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.SPLIT;
+    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU) && getOriginalMessage(reportAction)?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.SPLIT;
 }
 function isIOURequestReportAction(reportAction) {
-    var _a;
-    var type = isMoneyRequestAction(reportAction) && ((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.type);
+    const type = isMoneyRequestAction(reportAction) && getOriginalMessage(reportAction)?.type;
     return !!type && iouRequestTypes.includes(type);
 }
 function isTrackExpenseAction(reportAction) {
-    var _a;
-    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU) && ((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK;
+    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU) && getOriginalMessage(reportAction)?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK;
 }
 function isPayAction(reportAction) {
-    var _a;
-    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU) && ((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY;
+    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.IOU) && getOriginalMessage(reportAction)?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY;
 }
 function isTaskAction(reportAction) {
-    var reportActionName = reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName;
+    const reportActionName = reportAction?.actionName;
     return (reportActionName === CONST_1.default.REPORT.ACTIONS.TYPE.TASK_COMPLETED ||
         reportActionName === CONST_1.default.REPORT.ACTIONS.TYPE.TASK_CANCELLED ||
         reportActionName === CONST_1.default.REPORT.ACTIONS.TYPE.TASK_REOPENED ||
@@ -1231,26 +1160,23 @@ function isTagModificationAction(actionName) {
  * In other reports, pay actions do not count as a transactions, but this is an exception to this rule.
  */
 function getSendMoneyFlowAction(actions, chatReport) {
-    var _a;
     if (!chatReport) {
         return undefined;
     }
-    var iouActions = Object.values(actions !== null && actions !== void 0 ? actions : {}).filter(isMoneyRequestAction);
+    const iouActions = Object.values(actions ?? {}).filter(isMoneyRequestAction);
     // sendMoneyFlow has only one IOU action...
     if (iouActions.length !== 1) {
         return undefined;
     }
     // ...which is 'pay'...
-    var isFirstActionPay = ((_a = getOriginalMessage(iouActions.at(0))) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY;
-    var type = chatReport.type, chatType = chatReport.chatType, parentReportID = chatReport.parentReportID, parentReportActionID = chatReport.parentReportActionID;
+    const isFirstActionPay = getOriginalMessage(iouActions.at(0))?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY;
+    const { type, chatType, parentReportID, parentReportActionID } = chatReport;
     // ...and can only be triggered on DM chats
-    var isDM = type === CONST_1.default.REPORT.TYPE.CHAT && !chatType && !(parentReportID && parentReportActionID);
+    const isDM = type === CONST_1.default.REPORT.TYPE.CHAT && !chatType && !(parentReportID && parentReportActionID);
     return isFirstActionPay && isDM ? iouActions.at(0) : undefined;
 }
 /** Whether action has no linked report by design */
-var isIOUActionTypeExcludedFromFiltering = function (type) {
-    return [CONST_1.default.IOU.REPORT_ACTION_TYPE.SPLIT, CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK, CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY].some(function (actionType) { return actionType === type; });
-};
+const isIOUActionTypeExcludedFromFiltering = (type) => [CONST_1.default.IOU.REPORT_ACTION_TYPE.SPLIT, CONST_1.default.IOU.REPORT_ACTION_TYPE.TRACK, CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY].some((actionType) => actionType === type);
 /**
  * Determines whether the given action is an IOU and, if a list of report transaction IDs is provided,
  * whether it corresponds to one of those transactions. This covers a rare case where IOU report actions was
@@ -1261,16 +1187,14 @@ var isIOUActionTypeExcludedFromFiltering = function (type) {
  * - If no `reportTransactionIDs` are provided, the function returns true if the action is an IOU.
  * - If `reportTransactionIDs` are provided, the function checks if the IOU transaction ID from the action matches any of them.
  */
-var isIOUActionMatchingTransactionList = function (action, reportTransactionIDs, defaultToFalseForNonIOU) {
-    var _a, _b;
-    if (defaultToFalseForNonIOU === void 0) { defaultToFalseForNonIOU = false; }
+const isIOUActionMatchingTransactionList = (action, reportTransactionIDs, defaultToFalseForNonIOU = false) => {
     if (!isMoneyRequestAction(action)) {
         return !defaultToFalseForNonIOU;
     }
-    if (isIOUActionTypeExcludedFromFiltering((_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.type) || reportTransactionIDs === undefined) {
+    if (isIOUActionTypeExcludedFromFiltering(getOriginalMessage(action)?.type) || reportTransactionIDs === undefined) {
         return true;
     }
-    var IOUTransactionID = ((_b = getOriginalMessage(action)) !== null && _b !== void 0 ? _b : {}).IOUTransactionID;
+    const { IOUTransactionID } = getOriginalMessage(action) ?? {};
     return !!IOUTransactionID && reportTransactionIDs.includes(IOUTransactionID);
 };
 exports.isIOUActionMatchingTransactionList = isIOUActionMatchingTransactionList;
@@ -1278,38 +1202,35 @@ exports.isIOUActionMatchingTransactionList = isIOUActionMatchingTransactionList;
  * Gets the report action for the transaction thread associated with a report by iterating over the reportActions and identifying the IOU report actions.
  * Returns a report action if there is exactly one transaction thread for the report, and undefined otherwise.
  */
-function getOneTransactionThreadReportAction(report, chatReport, reportActions, isOffline, reportTransactionIDs) {
-    var _a, _b, _c;
-    if (isOffline === void 0) { isOffline = undefined; }
+function getOneTransactionThreadReportAction(report, chatReport, reportActions, isOffline = undefined, reportTransactionIDs) {
     // If the report is not an IOU, Expense report, or Invoice, it shouldn't be treated as one-transaction report.
-    if ((report === null || report === void 0 ? void 0 : report.type) !== CONST_1.default.REPORT.TYPE.IOU && (report === null || report === void 0 ? void 0 : report.type) !== CONST_1.default.REPORT.TYPE.EXPENSE && (report === null || report === void 0 ? void 0 : report.type) !== CONST_1.default.REPORT.TYPE.INVOICE) {
+    if (report?.type !== CONST_1.default.REPORT.TYPE.IOU && report?.type !== CONST_1.default.REPORT.TYPE.EXPENSE && report?.type !== CONST_1.default.REPORT.TYPE.INVOICE) {
         return;
     }
-    var reportActionsArray = Array.isArray(reportActions) ? reportActions : Object.values(reportActions !== null && reportActions !== void 0 ? reportActions : {});
+    const reportActionsArray = Array.isArray(reportActions) ? reportActions : Object.values(reportActions ?? {});
     if (!reportActionsArray.length) {
         return;
     }
-    var sendMoneyFlow = getSendMoneyFlowAction(reportActions, chatReport);
-    if (sendMoneyFlow === null || sendMoneyFlow === void 0 ? void 0 : sendMoneyFlow.childReportID) {
+    const sendMoneyFlow = getSendMoneyFlowAction(reportActions, chatReport);
+    if (sendMoneyFlow?.childReportID) {
         return sendMoneyFlow;
     }
-    var iouRequestActions = [];
-    for (var _i = 0, reportActionsArray_1 = reportActionsArray; _i < reportActionsArray_1.length; _i++) {
-        var action = reportActionsArray_1[_i];
+    const iouRequestActions = [];
+    for (const action of reportActionsArray) {
         // If the original message is a 'pay' IOU without IOUDetails, it shouldn't be added to the transaction count.
         // However, it is excluded from the matching function in order to display it properly, so we need to compare the type here.
         if (!isIOUActionMatchingTransactionList(action, reportTransactionIDs, true) ||
-            (((_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.type) === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY && !((_b = getOriginalMessage(action)) === null || _b === void 0 ? void 0 : _b.IOUDetails))) {
+            (getOriginalMessage(action)?.type === CONST_1.default.IOU.REPORT_ACTION_TYPE.PAY && !getOriginalMessage(action)?.IOUDetails)) {
             continue;
         }
-        var originalMessage_1 = getOriginalMessage(action);
-        var actionType = originalMessage_1 === null || originalMessage_1 === void 0 ? void 0 : originalMessage_1.type;
+        const originalMessage = getOriginalMessage(action);
+        const actionType = originalMessage?.type;
         if (actionType &&
             iouRequestTypesSet.has(actionType) &&
             // Include deleted IOU reportActions if:
             // - they have an associated IOU transaction ID or
             // - the action is pending deletion and the user is offline
-            (!!(originalMessage_1 === null || originalMessage_1 === void 0 ? void 0 : originalMessage_1.IOUTransactionID) || (action.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE && (isOffline !== null && isOffline !== void 0 ? isOffline : isNetworkOffline)))) {
+            (!!originalMessage?.IOUTransactionID || (action.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE && (isOffline ?? isNetworkOffline)))) {
             iouRequestActions.push(action);
         }
     }
@@ -1317,11 +1238,11 @@ function getOneTransactionThreadReportAction(report, chatReport, reportActions, 
     if (!iouRequestActions.length || iouRequestActions.length > 1) {
         return;
     }
-    var singleAction = iouRequestActions.at(0);
-    var originalMessage = getOriginalMessage(singleAction);
+    const singleAction = iouRequestActions.at(0);
+    const originalMessage = getOriginalMessage(singleAction);
     // If there's only one IOU request action associated with the report but it's been deleted, then we don't consider this a oneTransaction report
     // and want to display it using the standard view
-    if ((((_c = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.deleted) !== null && _c !== void 0 ? _c : '') !== '' || isDeletedAction(singleAction)) && isMoneyRequestAction(singleAction)) {
+    if (((originalMessage?.deleted ?? '') !== '' || isDeletedAction(singleAction)) && isMoneyRequestAction(singleAction)) {
         return;
     }
     return singleAction;
@@ -1330,44 +1251,35 @@ function getOneTransactionThreadReportAction(report, chatReport, reportActions, 
  * Gets the reportID for the transaction thread associated with a report by iterating over the reportActions and identifying the IOU report actions.
  * Returns a reportID if there is exactly one transaction thread for the report, and undefined otherwise.
  */
-function getOneTransactionThreadReportID() {
-    var _a;
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var reportAction = getOneTransactionThreadReportAction.apply(void 0, args);
+function getOneTransactionThreadReportID(...args) {
+    const reportAction = getOneTransactionThreadReportAction(...args);
     if (reportAction) {
         // Since we don't always create transaction thread optimistically, we return CONST.FAKE_REPORT_ID
-        return (_a = reportAction.childReportID) !== null && _a !== void 0 ? _a : CONST_1.default.FAKE_REPORT_ID;
+        return reportAction.childReportID ?? CONST_1.default.FAKE_REPORT_ID;
     }
 }
 /**
  * When we delete certain reports, we want to check whether there are any visible actions left to display.
  * If there are no visible actions left (including system messages), we can hide the report from view entirely
  */
-function doesReportHaveVisibleActions(reportID, canUserPerformWriteAction, actionsToMerge) {
-    var _a;
-    if (actionsToMerge === void 0) { actionsToMerge = {}; }
-    var reportActions = Object.values((0, expensify_common_1.fastMerge)((_a = allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID)]) !== null && _a !== void 0 ? _a : {}, actionsToMerge, true));
-    var visibleReportActions = Object.values(reportActions !== null && reportActions !== void 0 ? reportActions : {}).filter(function (action) { return shouldReportActionBeVisibleAsLastAction(action, canUserPerformWriteAction); });
+function doesReportHaveVisibleActions(reportID, canUserPerformWriteAction, actionsToMerge = {}) {
+    const reportActions = Object.values((0, expensify_common_1.fastMerge)(allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`] ?? {}, actionsToMerge, true));
+    const visibleReportActions = Object.values(reportActions ?? {}).filter((action) => shouldReportActionBeVisibleAsLastAction(action, canUserPerformWriteAction));
     // Exclude the task system message and the created message
-    var visibleReportActionsWithoutTaskSystemMessage = visibleReportActions.filter(function (action) { return !isTaskAction(action) && !isCreatedAction(action); });
+    const visibleReportActionsWithoutTaskSystemMessage = visibleReportActions.filter((action) => !isTaskAction(action) && !isCreatedAction(action));
     return visibleReportActionsWithoutTaskSystemMessage.length > 0;
 }
 function getAllReportActions(reportID) {
-    var _a;
-    return (_a = allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID)]) !== null && _a !== void 0 ? _a : {};
+    return allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`] ?? {};
 }
 /**
  * Check whether a report action is an attachment (a file, such as an image or a zip).
  *
  */
 function isReportActionAttachment(reportAction) {
-    var _a, _b;
-    var message = getReportActionMessage(reportAction);
+    const message = getReportActionMessage(reportAction);
     if (reportAction && ('isAttachmentOnly' in reportAction || 'isAttachmentWithText' in reportAction)) {
-        return (_b = (_a = reportAction.isAttachmentOnly) !== null && _a !== void 0 ? _a : reportAction.isAttachmentWithText) !== null && _b !== void 0 ? _b : false;
+        return reportAction.isAttachmentOnly ?? reportAction.isAttachmentWithText ?? false;
     }
     if (message) {
         return (0, isReportMessageAttachment_1.isReportMessageAttachment)(message);
@@ -1376,37 +1288,35 @@ function isReportActionAttachment(reportAction) {
 }
 // We pass getReportName as a param to avoid cyclic dependency.
 function getMemberChangeMessageElements(reportAction, getReportNameCallback) {
-    var _a;
-    var isInviteAction = isInviteMemberAction(reportAction);
-    var isLeaveAction = isLeavePolicyAction(reportAction);
+    const isInviteAction = isInviteMemberAction(reportAction);
+    const isLeaveAction = isLeavePolicyAction(reportAction);
     if (!isMemberChangeAction(reportAction)) {
         return [];
     }
     // Currently, we only render messages when members are invited
-    var verb = (0, Localize_1.translateLocal)('workspace.invite.removed');
+    let verb = (0, Localize_1.translateLocal)('workspace.invite.removed');
     if (isInviteAction) {
         verb = (0, Localize_1.translateLocal)('workspace.invite.invited');
     }
     if (isLeaveAction) {
         verb = getPolicyChangeLogEmployeeLeftMessage(reportAction);
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var targetAccountIDs = (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.targetAccountIDs) !== null && _a !== void 0 ? _a : [];
-    var personalDetails = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: targetAccountIDs, currentUserAccountID: 0 });
-    var mentionElements = targetAccountIDs.map(function (accountID) {
-        var _a;
-        var personalDetail = personalDetails.find(function (personal) { return personal.accountID === accountID; });
-        var handleText = (_a = (0, PersonalDetailsUtils_1.getEffectiveDisplayName)(LocalePhoneNumber_1.formatPhoneNumber, personalDetail)) !== null && _a !== void 0 ? _a : (0, Localize_1.translateLocal)('common.hidden');
+    const originalMessage = getOriginalMessage(reportAction);
+    const targetAccountIDs = originalMessage?.targetAccountIDs ?? [];
+    const personalDetails = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: targetAccountIDs, currentUserAccountID: 0 });
+    const mentionElements = targetAccountIDs.map((accountID) => {
+        const personalDetail = personalDetails.find((personal) => personal.accountID === accountID);
+        const handleText = (0, PersonalDetailsUtils_1.getEffectiveDisplayName)(LocalePhoneNumber_1.formatPhoneNumber, personalDetail) ?? (0, Localize_1.translateLocal)('common.hidden');
         return {
             kind: 'userMention',
-            content: "@".concat(handleText),
-            accountID: accountID,
+            content: `@${handleText}`,
+            accountID,
         };
     });
-    var buildRoomElements = function () {
-        var roomName = getReportNameCallback(allReports === null || allReports === void 0 ? void 0 : allReports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.reportID)]) || (originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.roomName);
+    const buildRoomElements = () => {
+        const roomName = getReportNameCallback(allReports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${originalMessage?.reportID}`]) || originalMessage?.roomName;
         if (roomName && originalMessage) {
-            var preposition = isInviteAction ? " ".concat((0, Localize_1.translateLocal)('workspace.invite.to'), " ") : " ".concat((0, Localize_1.translateLocal)('workspace.invite.from'), " ");
+            const preposition = isInviteAction ? ` ${(0, Localize_1.translateLocal)('workspace.invite.to')} ` : ` ${(0, Localize_1.translateLocal)('workspace.invite.from')} `;
             if (originalMessage.reportID) {
                 return [
                     {
@@ -1415,7 +1325,7 @@ function getMemberChangeMessageElements(reportAction, getReportNameCallback) {
                     },
                     {
                         kind: 'roomReference',
-                        roomName: roomName,
+                        roomName,
                         roomID: originalMessage.reportID,
                         content: roomName,
                     },
@@ -1424,23 +1334,23 @@ function getMemberChangeMessageElements(reportAction, getReportNameCallback) {
         }
         return [];
     };
-    return __spreadArray(__spreadArray([
+    return [
         {
             kind: 'text',
-            content: "".concat(verb, " "),
-        }
-    ], (0, Localize_1.formatMessageElementList)(mentionElements), true), buildRoomElements(), true);
+            content: `${verb} `,
+        },
+        ...(0, Localize_1.formatMessageElementList)(mentionElements),
+        ...buildRoomElements(),
+    ];
 }
 function getReportActionHtml(reportAction) {
-    var _a, _b;
-    return (_b = (_a = getReportActionMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.html) !== null && _b !== void 0 ? _b : '';
+    return getReportActionMessage(reportAction)?.html ?? '';
 }
 function getReportActionText(reportAction) {
-    var _a;
-    var message = getReportActionMessage(reportAction);
+    const message = getReportActionMessage(reportAction);
     // Sometime html can be an empty string
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    var text = (_a = ((message === null || message === void 0 ? void 0 : message.html) || (message === null || message === void 0 ? void 0 : message.text))) !== null && _a !== void 0 ? _a : '';
+    const text = (message?.html || message?.text) ?? '';
     return text ? Parser_1.default.htmlToText(text) : '';
 }
 function getTextFromHtml(html) {
@@ -1453,7 +1363,7 @@ function isOldDotLegacyAction(action) {
         CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_QUICK_BOOKS,
         CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_REQUESTED,
         CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_SETUP,
-    ].some(function (oldDotActionName) { return oldDotActionName === (action === null || action === void 0 ? void 0 : action.actionName); });
+    ].some((oldDotActionName) => oldDotActionName === action?.actionName);
 }
 function isOldDotReportAction(action) {
     if (!action || !action.actionName) {
@@ -1482,54 +1392,51 @@ function isOldDotReportAction(action) {
         CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_QUICK_BOOKS,
         CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_REQUESTED,
         CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_SETUP,
-    ].some(function (oldDotActionName) { return oldDotActionName === action.actionName; });
+    ].some((oldDotActionName) => oldDotActionName === action.actionName);
 }
 function getMessageOfOldDotLegacyAction(legacyAction) {
-    var _a, _b;
-    if (!Array.isArray(legacyAction === null || legacyAction === void 0 ? void 0 : legacyAction.message)) {
+    if (!Array.isArray(legacyAction?.message)) {
         return getReportActionText(legacyAction);
     }
     if (legacyAction.message.length !== 0) {
         // Sometime html can be an empty string
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        return (_b = (_a = legacyAction === null || legacyAction === void 0 ? void 0 : legacyAction.message) === null || _a === void 0 ? void 0 : _a.map(function (element) { return getTextFromHtml((element === null || element === void 0 ? void 0 : element.html) || (element === null || element === void 0 ? void 0 : element.text)); }).join('')) !== null && _b !== void 0 ? _b : '';
+        return legacyAction?.message?.map((element) => getTextFromHtml(element?.html || element?.text)).join('') ?? '';
     }
     return '';
 }
 /**
  * Helper method to format message of OldDot Actions.
  */
-function getMessageOfOldDotReportAction(oldDotAction, withMarkdown) {
-    var _a, _b, _c, _d, _e, _f;
-    if (withMarkdown === void 0) { withMarkdown = true; }
+function getMessageOfOldDotReportAction(oldDotAction, withMarkdown = true) {
     if (isOldDotLegacyAction(oldDotAction)) {
         return getMessageOfOldDotLegacyAction(oldDotAction);
     }
-    var originalMessage = oldDotAction.originalMessage, actionName = oldDotAction.actionName;
+    const { originalMessage, actionName } = oldDotAction;
     switch (actionName) {
         case CONST_1.default.REPORT.ACTIONS.TYPE.CHANGE_FIELD: {
-            var oldValue = originalMessage.oldValue, newValue = originalMessage.newValue, fieldName = originalMessage.fieldName;
+            const { oldValue, newValue, fieldName } = originalMessage;
             if (!oldValue) {
-                return (0, Localize_1.translateLocal)('report.actions.type.changeFieldEmpty', { newValue: newValue, fieldName: fieldName });
+                return (0, Localize_1.translateLocal)('report.actions.type.changeFieldEmpty', { newValue, fieldName });
             }
-            return (0, Localize_1.translateLocal)('report.actions.type.changeField', { oldValue: oldValue, newValue: newValue, fieldName: fieldName });
+            return (0, Localize_1.translateLocal)('report.actions.type.changeField', { oldValue, newValue, fieldName });
         }
         case CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_CSV:
             return (0, Localize_1.translateLocal)('report.actions.type.exportedToCSV');
         case CONST_1.default.REPORT.ACTIONS.TYPE.INTEGRATIONS_MESSAGE: {
-            var result = originalMessage.result, label = originalMessage.label;
-            var errorMessage = (_b = (_a = result === null || result === void 0 ? void 0 : result.messages) === null || _a === void 0 ? void 0 : _a.join(', ')) !== null && _b !== void 0 ? _b : '';
-            var linkText = (_d = (_c = result === null || result === void 0 ? void 0 : result.link) === null || _c === void 0 ? void 0 : _c.text) !== null && _d !== void 0 ? _d : '';
-            var linkURL = (_f = (_e = result === null || result === void 0 ? void 0 : result.link) === null || _e === void 0 ? void 0 : _e.url) !== null && _f !== void 0 ? _f : '';
-            return (0, Localize_1.translateLocal)('report.actions.type.integrationsMessage', { errorMessage: errorMessage, label: label, linkText: linkText, linkURL: linkURL });
+            const { result, label } = originalMessage;
+            const errorMessage = result?.messages?.join(', ') ?? '';
+            const linkText = result?.link?.text ?? '';
+            const linkURL = result?.link?.url ?? '';
+            return (0, Localize_1.translateLocal)('report.actions.type.integrationsMessage', { errorMessage, label, linkText, linkURL });
         }
         case CONST_1.default.REPORT.ACTIONS.TYPE.MANAGER_ATTACH_RECEIPT:
             return (0, Localize_1.translateLocal)('report.actions.type.managerAttachReceipt');
         case CONST_1.default.REPORT.ACTIONS.TYPE.MANAGER_DETACH_RECEIPT:
             return (0, Localize_1.translateLocal)('report.actions.type.managerDetachReceipt');
         case CONST_1.default.REPORT.ACTIONS.TYPE.MARK_REIMBURSED_FROM_INTEGRATION: {
-            var amount = originalMessage.amount, currency = originalMessage.currency;
-            return (0, Localize_1.translateLocal)('report.actions.type.markedReimbursedFromIntegration', { amount: amount, currency: currency });
+            const { amount, currency } = originalMessage;
+            return (0, Localize_1.translateLocal)('report.actions.type.markedReimbursedFromIntegration', { amount, currency });
         }
         case CONST_1.default.REPORT.ACTIONS.TYPE.OUTDATED_BANK_ACCOUNT:
             return (0, Localize_1.translateLocal)('report.actions.type.outdatedBankAccount');
@@ -1542,7 +1449,7 @@ function getMessageOfOldDotReportAction(oldDotAction, withMarkdown) {
         case CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSEMENT_DELAYED:
             return (0, Localize_1.translateLocal)('report.actions.type.reimbursementDelayed');
         case CONST_1.default.REPORT.ACTIONS.TYPE.SELECTED_FOR_RANDOM_AUDIT:
-            return (0, Localize_1.translateLocal)("report.actions.type.selectedForRandomAudit".concat(withMarkdown ? 'Markdown' : ''));
+            return (0, Localize_1.translateLocal)(`report.actions.type.selectedForRandomAudit${withMarkdown ? 'Markdown' : ''}`);
         case CONST_1.default.REPORT.ACTIONS.TYPE.SHARE:
             return (0, Localize_1.translateLocal)('report.actions.type.share', { to: originalMessage.to });
         case CONST_1.default.REPORT.ACTIONS.TYPE.UNSHARE:
@@ -1554,71 +1461,70 @@ function getMessageOfOldDotReportAction(oldDotAction, withMarkdown) {
     }
 }
 function getTravelUpdateMessage(action, formatDate) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48;
-    var details = getOriginalMessage(action);
-    var formattedStartDate = (_b = formatDate === null || formatDate === void 0 ? void 0 : formatDate((_a = details === null || details === void 0 ? void 0 : details.start.date) !== null && _a !== void 0 ? _a : '', false)) !== null && _b !== void 0 ? _b : (0, date_fns_1.format)((_c = details === null || details === void 0 ? void 0 : details.start.date) !== null && _c !== void 0 ? _c : '', CONST_1.default.DATE.FNS_DATE_TIME_FORMAT_STRING);
-    switch (details === null || details === void 0 ? void 0 : details.operation) {
+    const details = getOriginalMessage(action);
+    const formattedStartDate = formatDate?.(details?.start.date ?? '', false) ?? (0, date_fns_1.format)(details?.start.date ?? '', CONST_1.default.DATE.FNS_DATE_TIME_FORMAT_STRING);
+    switch (details?.operation) {
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.BOOKING_TICKETED:
             return (0, Localize_1.translateLocal)('travel.updates.bookingTicketed', {
-                airlineCode: (_e = (_d = details.route) === null || _d === void 0 ? void 0 : _d.airlineCode) !== null && _e !== void 0 ? _e : '',
-                origin: (_f = details.start.shortName) !== null && _f !== void 0 ? _f : '',
-                destination: (_h = (_g = details.end) === null || _g === void 0 ? void 0 : _g.shortName) !== null && _h !== void 0 ? _h : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                origin: details.start.shortName ?? '',
+                destination: details.end?.shortName ?? '',
                 startDate: formattedStartDate,
-                confirmationID: (_k = (_j = details.confirmations) === null || _j === void 0 ? void 0 : _j.at(0)) === null || _k === void 0 ? void 0 : _k.value,
+                confirmationID: details.confirmations?.at(0)?.value,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.TICKET_VOIDED:
             return (0, Localize_1.translateLocal)('travel.updates.ticketVoided', {
-                airlineCode: (_m = (_l = details.route) === null || _l === void 0 ? void 0 : _l.airlineCode) !== null && _m !== void 0 ? _m : '',
-                origin: (_o = details.start.shortName) !== null && _o !== void 0 ? _o : '',
-                destination: (_q = (_p = details.end) === null || _p === void 0 ? void 0 : _p.shortName) !== null && _q !== void 0 ? _q : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                origin: details.start.shortName ?? '',
+                destination: details.end?.shortName ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.TICKET_REFUNDED:
             return (0, Localize_1.translateLocal)('travel.updates.ticketRefunded', {
-                airlineCode: (_s = (_r = details.route) === null || _r === void 0 ? void 0 : _r.airlineCode) !== null && _s !== void 0 ? _s : '',
-                origin: (_t = details.start.shortName) !== null && _t !== void 0 ? _t : '',
-                destination: (_v = (_u = details.end) === null || _u === void 0 ? void 0 : _u.shortName) !== null && _v !== void 0 ? _v : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                origin: details.start.shortName ?? '',
+                destination: details.end?.shortName ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_CANCELLED:
             return (0, Localize_1.translateLocal)('travel.updates.flightCancelled', {
-                airlineCode: (_x = (_w = details.route) === null || _w === void 0 ? void 0 : _w.airlineCode) !== null && _x !== void 0 ? _x : '',
-                origin: (_y = details.start.shortName) !== null && _y !== void 0 ? _y : '',
-                destination: (_0 = (_z = details.end) === null || _z === void 0 ? void 0 : _z.shortName) !== null && _0 !== void 0 ? _0 : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                origin: details.start.shortName ?? '',
+                destination: details.end?.shortName ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_SCHEDULE_CHANGE_PENDING:
             return (0, Localize_1.translateLocal)('travel.updates.flightScheduleChangePending', {
-                airlineCode: (_2 = (_1 = details.route) === null || _1 === void 0 ? void 0 : _1.airlineCode) !== null && _2 !== void 0 ? _2 : '',
+                airlineCode: details.route?.airlineCode ?? '',
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_SCHEDULE_CHANGE_CLOSED:
             return (0, Localize_1.translateLocal)('travel.updates.flightScheduleChangeClosed', {
-                airlineCode: (_4 = (_3 = details.route) === null || _3 === void 0 ? void 0 : _3.airlineCode) !== null && _4 !== void 0 ? _4 : '',
+                airlineCode: details.route?.airlineCode ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_CHANGED:
             return (0, Localize_1.translateLocal)('travel.updates.flightUpdated', {
-                airlineCode: (_6 = (_5 = details.route) === null || _5 === void 0 ? void 0 : _5.airlineCode) !== null && _6 !== void 0 ? _6 : '',
-                origin: (_7 = details.start.shortName) !== null && _7 !== void 0 ? _7 : '',
-                destination: (_9 = (_8 = details.end) === null || _8 === void 0 ? void 0 : _8.shortName) !== null && _9 !== void 0 ? _9 : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                origin: details.start.shortName ?? '',
+                destination: details.end?.shortName ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_CABIN_CHANGED:
             return (0, Localize_1.translateLocal)('travel.updates.flightCabinChanged', {
-                airlineCode: (_11 = (_10 = details.route) === null || _10 === void 0 ? void 0 : _10.airlineCode) !== null && _11 !== void 0 ? _11 : '',
-                cabinClass: (_13 = (_12 = details.route) === null || _12 === void 0 ? void 0 : _12.class) !== null && _13 !== void 0 ? _13 : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                cabinClass: details.route?.class ?? '',
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_SEAT_CONFIRMED:
             return (0, Localize_1.translateLocal)('travel.updates.flightSeatConfirmed', {
-                airlineCode: (_15 = (_14 = details.route) === null || _14 === void 0 ? void 0 : _14.airlineCode) !== null && _15 !== void 0 ? _15 : '',
+                airlineCode: details.route?.airlineCode ?? '',
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_SEAT_CHANGED:
             return (0, Localize_1.translateLocal)('travel.updates.flightSeatChanged', {
-                airlineCode: (_17 = (_16 = details.route) === null || _16 === void 0 ? void 0 : _16.airlineCode) !== null && _17 !== void 0 ? _17 : '',
+                airlineCode: details.route?.airlineCode ?? '',
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.FLIGHT_SEAT_CANCELLED:
             return (0, Localize_1.translateLocal)('travel.updates.flightSeatCancelled', {
-                airlineCode: (_19 = (_18 = details.route) === null || _18 === void 0 ? void 0 : _18.airlineCode) !== null && _19 !== void 0 ? _19 : '',
+                airlineCode: details.route?.airlineCode ?? '',
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.PAYMENT_DECLINED:
             return (0, Localize_1.translateLocal)('travel.updates.paymentDeclined');
@@ -1635,7 +1541,7 @@ function getTravelUpdateMessage(action, formatDate) {
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.BOOKING_REBOOKED:
             return (0, Localize_1.translateLocal)('travel.updates.bookingRebooked', {
                 type: details.type,
-                id: (_21 = (_20 = details.confirmations) === null || _20 === void 0 ? void 0 : _20.at(0)) === null || _21 === void 0 ? void 0 : _21.value,
+                id: details.confirmations?.at(0)?.value,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.BOOKING_UPDATED:
             return (0, Localize_1.translateLocal)('travel.updates.bookingUpdated', {
@@ -1649,15 +1555,15 @@ function getTravelUpdateMessage(action, formatDate) {
             }
             if (details.type === CONST_1.default.RESERVATION_TYPE.TRAIN) {
                 return (0, Localize_1.translateLocal)('travel.updates.railTicketUpdate', {
-                    origin: (_23 = (_22 = details.start.cityName) !== null && _22 !== void 0 ? _22 : details.start.shortName) !== null && _23 !== void 0 ? _23 : '',
-                    destination: (_25 = (_24 = details.end.cityName) !== null && _24 !== void 0 ? _24 : details.end.shortName) !== null && _25 !== void 0 ? _25 : '',
+                    origin: details.start.cityName ?? details.start.shortName ?? '',
+                    destination: details.end.cityName ?? details.end.shortName ?? '',
                     startDate: formattedStartDate,
                 });
             }
             return (0, Localize_1.translateLocal)('travel.updates.flightUpdated', {
-                airlineCode: (_27 = (_26 = details.route) === null || _26 === void 0 ? void 0 : _26.airlineCode) !== null && _27 !== void 0 ? _27 : '',
-                origin: (_28 = details.start.shortName) !== null && _28 !== void 0 ? _28 : '',
-                destination: (_30 = (_29 = details.end) === null || _29 === void 0 ? void 0 : _29.shortName) !== null && _30 !== void 0 ? _30 : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                origin: details.start.shortName ?? '',
+                destination: details.end?.shortName ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.BOOKING_OTHER_UPDATE:
@@ -1668,51 +1574,51 @@ function getTravelUpdateMessage(action, formatDate) {
             }
             if (details.type === CONST_1.default.RESERVATION_TYPE.TRAIN) {
                 return (0, Localize_1.translateLocal)('travel.updates.railTicketUpdate', {
-                    origin: (_32 = (_31 = details.start.cityName) !== null && _31 !== void 0 ? _31 : details.start.shortName) !== null && _32 !== void 0 ? _32 : '',
-                    destination: (_34 = (_33 = details.end.cityName) !== null && _33 !== void 0 ? _33 : details.end.shortName) !== null && _34 !== void 0 ? _34 : '',
+                    origin: details.start.cityName ?? details.start.shortName ?? '',
+                    destination: details.end.cityName ?? details.end.shortName ?? '',
                     startDate: formattedStartDate,
                 });
             }
             return (0, Localize_1.translateLocal)('travel.updates.flightUpdated', {
-                airlineCode: (_36 = (_35 = details.route) === null || _35 === void 0 ? void 0 : _35.airlineCode) !== null && _36 !== void 0 ? _36 : '',
-                origin: (_37 = details.start.shortName) !== null && _37 !== void 0 ? _37 : '',
-                destination: (_39 = (_38 = details.end) === null || _38 === void 0 ? void 0 : _38.shortName) !== null && _39 !== void 0 ? _39 : '',
+                airlineCode: details.route?.airlineCode ?? '',
+                origin: details.start.shortName ?? '',
+                destination: details.end?.shortName ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.REFUND:
             return (0, Localize_1.translateLocal)('travel.updates.railTicketRefund', {
-                origin: (_41 = (_40 = details.start.cityName) !== null && _40 !== void 0 ? _40 : details.start.shortName) !== null && _41 !== void 0 ? _41 : '',
-                destination: (_43 = (_42 = details.end.cityName) !== null && _42 !== void 0 ? _42 : details.end.shortName) !== null && _43 !== void 0 ? _43 : '',
+                origin: details.start.cityName ?? details.start.shortName ?? '',
+                destination: details.end.cityName ?? details.end.shortName ?? '',
                 startDate: formattedStartDate,
             });
         case CONST_1.default.TRAVEL.UPDATE_OPERATION_TYPE.EXCHANGE:
             return (0, Localize_1.translateLocal)('travel.updates.railTicketExchange', {
-                origin: (_45 = (_44 = details.start.cityName) !== null && _44 !== void 0 ? _44 : details.start.shortName) !== null && _45 !== void 0 ? _45 : '',
-                destination: (_47 = (_46 = details.end.cityName) !== null && _46 !== void 0 ? _46 : details.end.shortName) !== null && _47 !== void 0 ? _47 : '',
+                origin: details.start.cityName ?? details.start.shortName ?? '',
+                destination: details.end.cityName ?? details.end.shortName ?? '',
                 startDate: formattedStartDate,
             });
         default:
             return (0, Localize_1.translateLocal)('travel.updates.defaultUpdate', {
-                type: (_48 = details === null || details === void 0 ? void 0 : details.type) !== null && _48 !== void 0 ? _48 : '',
+                type: details?.type ?? '',
             });
     }
 }
 function getMemberChangeMessageFragment(reportAction, getReportNameCallback) {
-    var messageElements = getMemberChangeMessageElements(reportAction, getReportNameCallback);
-    var html = messageElements
-        .map(function (messageElement) {
+    const messageElements = getMemberChangeMessageElements(reportAction, getReportNameCallback);
+    const html = messageElements
+        .map((messageElement) => {
         switch (messageElement.kind) {
             case 'userMention':
-                return "<mention-user accountID=".concat(messageElement.accountID, ">").concat(messageElement.content, "</mention-user>");
+                return `<mention-user accountID=${messageElement.accountID}>${messageElement.content}</mention-user>`;
             case 'roomReference':
-                return "<a href=\"".concat(environmentURL, "/r/").concat(messageElement.roomID, "\" target=\"_blank\">").concat(messageElement.roomName, "</a>");
+                return `<a href="${environmentURL}/r/${messageElement.roomID}" target="_blank">${messageElement.roomName}</a>`;
             default:
                 return messageElement.content;
         }
     })
         .join('');
     return {
-        html: "<muted-text>".concat(html, "</muted-text>"),
+        html: `<muted-text>${html}</muted-text>`,
         text: getReportActionMessage(reportAction) ? getReportActionText(reportAction) : '',
         type: CONST_1.default.REPORT.MESSAGE.TYPE.COMMENT,
     };
@@ -1727,51 +1633,50 @@ function getReceiptScanFailedMessage() {
     return (0, Localize_1.translateLocal)('iou.receiptScanningFailed');
 }
 function getUpdateRoomDescriptionFragment(reportAction) {
-    var html = getUpdateRoomDescriptionMessage(reportAction);
+    const html = getUpdateRoomDescriptionMessage(reportAction);
     return {
-        html: "<muted-text>".concat(html, "</muted-text>"),
+        html: `<muted-text>${html}</muted-text>`,
         text: getReportActionMessage(reportAction) ? getReportActionText(reportAction) : '',
         type: CONST_1.default.REPORT.MESSAGE.TYPE.COMMENT,
     };
 }
 function getReportActionMessageFragments(action) {
-    var _a;
     if (isOldDotReportAction(action)) {
-        var oldDotMessage = getMessageOfOldDotReportAction(action);
-        var html = isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.SELECTED_FOR_RANDOM_AUDIT) ? Parser_1.default.replace(oldDotMessage) : oldDotMessage;
-        return [{ text: oldDotMessage, html: "<muted-text>".concat(html, "</muted-text>"), type: 'COMMENT' }];
+        const oldDotMessage = getMessageOfOldDotReportAction(action);
+        const html = isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.SELECTED_FOR_RANDOM_AUDIT) ? Parser_1.default.replace(oldDotMessage) : oldDotMessage;
+        return [{ text: oldDotMessage, html: `<muted-text>${html}</muted-text>`, type: 'COMMENT' }];
     }
     if (isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.UPDATE_ROOM_DESCRIPTION)) {
-        var message = getUpdateRoomDescriptionMessage(action);
-        return [{ text: message, html: "<muted-text>".concat(message, "</muted-text>"), type: 'COMMENT' }];
+        const message = getUpdateRoomDescriptionMessage(action);
+        return [{ text: message, html: `<muted-text>${message}</muted-text>`, type: 'COMMENT' }];
     }
     if (isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_DESCRIPTION)) {
-        var message = getWorkspaceDescriptionUpdatedMessage(action);
-        return [{ text: message, html: "<muted-text>".concat(message, "</muted-text>"), type: 'COMMENT' }];
+        const message = getWorkspaceDescriptionUpdatedMessage(action);
+        return [{ text: message, html: `<muted-text>${message}</muted-text>`, type: 'COMMENT' }];
     }
     if (isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.REIMBURSED)) {
-        var message = getReportActionMessageText(action);
-        return [{ text: message, html: "<muted-text>".concat(message, "</muted-text>"), type: 'COMMENT' }];
+        const message = getReportActionMessageText(action);
+        return [{ text: message, html: `<muted-text>${message}</muted-text>`, type: 'COMMENT' }];
     }
     if (isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.RETRACTED)) {
-        var message = getRetractedMessage();
-        return [{ text: message, html: "<muted-text>".concat(message, "</muted-text>"), type: 'COMMENT' }];
+        const message = getRetractedMessage();
+        return [{ text: message, html: `<muted-text>${message}</muted-text>`, type: 'COMMENT' }];
     }
     if (isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.REOPENED)) {
-        var message = getReopenedMessage();
-        return [{ text: message, html: "<muted-text>".concat(message, "</muted-text>"), type: 'COMMENT' }];
+        const message = getReopenedMessage();
+        return [{ text: message, html: `<muted-text>${message}</muted-text>`, type: 'COMMENT' }];
     }
     if (isActionOfType(action, CONST_1.default.REPORT.ACTIONS.TYPE.TRAVEL_UPDATE)) {
-        var message = getTravelUpdateMessage(action);
-        return [{ text: message, html: "<muted-text>".concat(message, "</muted-text>"), type: 'COMMENT' }];
+        const message = getTravelUpdateMessage(action);
+        return [{ text: message, html: `<muted-text>${message}</muted-text>`, type: 'COMMENT' }];
     }
     if (isConciergeCategoryOptions(action)) {
-        var message = getReportActionMessageText(action);
+        const message = getReportActionMessageText(action);
         return [{ text: message, html: message, type: 'COMMENT' }];
     }
-    var actionMessage = (_a = action.previousMessage) !== null && _a !== void 0 ? _a : action.message;
+    const actionMessage = action.previousMessage ?? action.message;
     if (Array.isArray(actionMessage)) {
-        return actionMessage.filter(function (item) { return !!item; });
+        return actionMessage.filter((item) => !!item);
     }
     return actionMessage ? [actionMessage] : [];
 }
@@ -1786,11 +1691,11 @@ function hasRequestFromCurrentAccount(reportID, currentAccountID) {
     if (!reportID) {
         return false;
     }
-    var reportActions = Object.values(getAllReportActions(reportID));
+    const reportActions = Object.values(getAllReportActions(reportID));
     if (reportActions.length === 0) {
         return false;
     }
-    return reportActions.some(function (action) { return action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU && action.actorAccountID === currentAccountID && !isDeletedAction(action); });
+    return reportActions.some((action) => action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU && action.actorAccountID === currentAccountID && !isDeletedAction(action));
 }
 /**
  * Constructs a message for an actionable mention whisper report action.
@@ -1798,23 +1703,22 @@ function hasRequestFromCurrentAccount(reportID, currentAccountID) {
  * @returns the actionable mention whisper message.
  */
 function getActionableMentionWhisperMessage(reportAction) {
-    var _a;
     if (!reportAction) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var targetAccountIDs = (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.inviteeAccountIDs) !== null && _a !== void 0 ? _a : [];
-    var personalDetails = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: targetAccountIDs, currentUserAccountID: 0 });
-    var mentionElements = targetAccountIDs.map(function (accountID) {
-        var personalDetail = personalDetails.find(function (personal) { return personal.accountID === accountID; });
-        var displayName = (0, PersonalDetailsUtils_1.getEffectiveDisplayName)(LocalePhoneNumber_1.formatPhoneNumber, personalDetail);
-        var handleText = (0, isEmpty_1.default)(displayName) ? (0, Localize_1.translateLocal)('common.hidden') : displayName;
-        return "<mention-user accountID=".concat(accountID, ">@").concat(handleText, "</mention-user>");
+    const originalMessage = getOriginalMessage(reportAction);
+    const targetAccountIDs = originalMessage?.inviteeAccountIDs ?? [];
+    const personalDetails = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: targetAccountIDs, currentUserAccountID: 0 });
+    const mentionElements = targetAccountIDs.map((accountID) => {
+        const personalDetail = personalDetails.find((personal) => personal.accountID === accountID);
+        const displayName = (0, PersonalDetailsUtils_1.getEffectiveDisplayName)(LocalePhoneNumber_1.formatPhoneNumber, personalDetail);
+        const handleText = (0, isEmpty_1.default)(displayName) ? (0, Localize_1.translateLocal)('common.hidden') : displayName;
+        return `<mention-user accountID=${accountID}>@${handleText}</mention-user>`;
     });
-    var preMentionsText = 'Heads up, ';
-    var mentions = mentionElements.join(', ').replace(/, ([^,]*)$/, ' and $1');
-    var postMentionsText = " ".concat(mentionElements.length > 1 ? "aren't members" : "isn't a member", " of this room.");
-    return "".concat(preMentionsText).concat(mentions).concat(postMentionsText);
+    const preMentionsText = 'Heads up, ';
+    const mentions = mentionElements.join(', ').replace(/, ([^,]*)$/, ' and $1');
+    const postMentionsText = ` ${mentionElements.length > 1 ? "aren't members" : "isn't a member"} of this room.`;
+    return `${preMentionsText}${mentions}${postMentionsText}`;
 }
 /**
  * Note: Prefer `ReportActionsUtils.isCurrentActionUnread` over this method, if applicable.
@@ -1831,14 +1735,13 @@ function isReportActionUnread(reportAction, lastReadTime) {
  *
  */
 function isCurrentActionUnread(report, reportAction, visibleReportActions) {
-    var _a;
-    var lastReadTime = (_a = report === null || report === void 0 ? void 0 : report.lastReadTime) !== null && _a !== void 0 ? _a : '';
-    var sortedReportActions = visibleReportActions !== null && visibleReportActions !== void 0 ? visibleReportActions : getSortedReportActions(Object.values(getAllReportActions(report === null || report === void 0 ? void 0 : report.reportID)));
-    var currentActionIndex = sortedReportActions.findIndex(function (action) { return action.reportActionID === reportAction.reportActionID; });
+    const lastReadTime = report?.lastReadTime ?? '';
+    const sortedReportActions = visibleReportActions ?? getSortedReportActions(Object.values(getAllReportActions(report?.reportID)));
+    const currentActionIndex = sortedReportActions.findIndex((action) => action.reportActionID === reportAction.reportActionID);
     if (currentActionIndex === -1) {
         return false;
     }
-    var prevReportAction = sortedReportActions.at(currentActionIndex - 1);
+    const prevReportAction = sortedReportActions.at(currentActionIndex - 1);
     return isReportActionUnread(reportAction, lastReadTime) && (currentActionIndex === 0 || !prevReportAction || !isReportActionUnread(prevReportAction, lastReadTime));
 }
 /**
@@ -1849,14 +1752,13 @@ function isActionableJoinRequest(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ACTIONABLE_JOIN_REQUEST);
 }
 function isActionableJoinRequestPendingReportAction(reportAction) {
-    var _a;
-    return isActionableJoinRequest(reportAction) && ((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.choice) === '';
+    return isActionableJoinRequest(reportAction) && getOriginalMessage(reportAction)?.choice === '';
 }
 function isConciergeCategoryOptions(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.CONCIERGE_CATEGORY_OPTIONS);
 }
 function getActionableJoinRequestPendingReportAction(reportID) {
-    var findPendingRequest = Object.values(getAllReportActions(reportID)).find(function (reportActionItem) { return isActionableJoinRequestPendingReportAction(reportActionItem); });
+    const findPendingRequest = Object.values(getAllReportActions(reportID)).find((reportActionItem) => isActionableJoinRequestPendingReportAction(reportActionItem));
     return findPendingRequest;
 }
 /**
@@ -1867,53 +1769,50 @@ function isActionableJoinRequestPending(reportID) {
     return !!getActionableJoinRequestPendingReportAction(reportID);
 }
 function isApprovedOrSubmittedReportAction(action) {
-    return [CONST_1.default.REPORT.ACTIONS.TYPE.APPROVED, CONST_1.default.REPORT.ACTIONS.TYPE.SUBMITTED].some(function (type) { return type === (action === null || action === void 0 ? void 0 : action.actionName); });
+    return [CONST_1.default.REPORT.ACTIONS.TYPE.APPROVED, CONST_1.default.REPORT.ACTIONS.TYPE.SUBMITTED].some((type) => type === action?.actionName);
 }
 /**
  * Gets the text version of the message in a report action
  */
 function getReportActionMessageText(reportAction) {
-    var _a, _b;
-    if (!Array.isArray(reportAction === null || reportAction === void 0 ? void 0 : reportAction.message)) {
+    if (!Array.isArray(reportAction?.message)) {
         return getReportActionText(reportAction);
     }
     // Sometime html can be an empty string
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return (_b = (_a = reportAction === null || reportAction === void 0 ? void 0 : reportAction.message) === null || _a === void 0 ? void 0 : _a.reduce(function (acc, curr) { return "".concat(acc).concat(getTextFromHtml((curr === null || curr === void 0 ? void 0 : curr.html) || (curr === null || curr === void 0 ? void 0 : curr.text))); }, '')) !== null && _b !== void 0 ? _b : '';
+    return reportAction?.message?.reduce((acc, curr) => `${acc}${getTextFromHtml(curr?.html || curr?.text)}`, '') ?? '';
 }
 function getDismissedViolationMessageText(originalMessage) {
-    var reason = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.reason;
-    var violationName = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.violationName;
-    return (0, Localize_1.translateLocal)("violationDismissal.".concat(violationName, ".").concat(reason));
+    const reason = originalMessage?.reason;
+    const violationName = originalMessage?.violationName;
+    return (0, Localize_1.translateLocal)(`violationDismissal.${violationName}.${reason}`);
 }
 /**
  * Check if the linked transaction is on hold
  */
 function isLinkedTransactionHeld(reportActionID, reportID) {
-    var linkedTransactionID = getLinkedTransactionID(reportActionID, reportID);
+    const linkedTransactionID = getLinkedTransactionID(reportActionID, reportID);
     return linkedTransactionID ? (0, TransactionUtils_1.isOnHoldByTransactionID)(linkedTransactionID) : false;
 }
 function getMentionedAccountIDsFromAction(reportAction) {
-    var _a, _b;
-    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ADD_COMMENT) ? ((_b = (_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.mentionedAccountIDs) !== null && _b !== void 0 ? _b : []) : [];
+    return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ADD_COMMENT) ? (getOriginalMessage(reportAction)?.mentionedAccountIDs ?? []) : [];
 }
 function getMentionedEmailsFromMessage(message) {
-    var mentionEmailRegex = /<mention-user>(.*?)<\/mention-user>/g;
-    var matches = __spreadArray([], message.matchAll(mentionEmailRegex), true);
-    return matches.map(function (match) { return expensify_common_1.Str.removeSMSDomain(match[1].substring(1)); });
+    const mentionEmailRegex = /<mention-user>(.*?)<\/mention-user>/g;
+    const matches = [...message.matchAll(mentionEmailRegex)];
+    return matches.map((match) => expensify_common_1.Str.removeSMSDomain(match[1].substring(1)));
 }
 function didMessageMentionCurrentUser(reportAction) {
-    var _a, _b;
-    var accountIDsFromMessage = getMentionedAccountIDsFromAction(reportAction);
-    var message = (_b = (_a = getReportActionMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.html) !== null && _b !== void 0 ? _b : '';
-    var emailsFromMessage = getMentionedEmailsFromMessage(message);
-    return accountIDsFromMessage.includes(currentUserAccountID !== null && currentUserAccountID !== void 0 ? currentUserAccountID : CONST_1.default.DEFAULT_NUMBER_ID) || emailsFromMessage.includes(currentEmail) || message.includes('<mention-here>');
+    const accountIDsFromMessage = getMentionedAccountIDsFromAction(reportAction);
+    const message = getReportActionMessage(reportAction)?.html ?? '';
+    const emailsFromMessage = getMentionedEmailsFromMessage(message);
+    return accountIDsFromMessage.includes(currentUserAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID) || emailsFromMessage.includes(currentEmail) || message.includes('<mention-here>');
 }
 /**
  * Check if the current user is the requestor of the action
  */
 function wasActionTakenByCurrentUser(reportAction) {
-    return currentUserAccountID === (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actorAccountID);
+    return currentUserAccountID === reportAction?.actorAccountID;
 }
 /**
  * Get IOU action for a reportID and transactionID
@@ -1922,16 +1821,15 @@ function getIOUActionForReportID(reportID, transactionID) {
     if (!reportID || !transactionID) {
         return undefined;
     }
-    var reportActions = getAllReportActions(reportID);
-    return getIOUActionForTransactionID(Object.values(reportActions !== null && reportActions !== void 0 ? reportActions : {}), transactionID);
+    const reportActions = getAllReportActions(reportID);
+    return getIOUActionForTransactionID(Object.values(reportActions ?? {}), transactionID);
 }
 /**
  * Get the IOU action for a transactionID from given reportActions
  */
 function getIOUActionForTransactionID(reportActions, transactionID) {
-    return reportActions.find(function (reportAction) {
-        var _a;
-        var IOUTransactionID = isMoneyRequestAction(reportAction) ? (_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.IOUTransactionID : undefined;
+    return reportActions.find((reportAction) => {
+        const IOUTransactionID = isMoneyRequestAction(reportAction) ? getOriginalMessage(reportAction)?.IOUTransactionID : undefined;
         return IOUTransactionID === transactionID;
     });
 }
@@ -1939,61 +1837,59 @@ function getIOUActionForTransactionID(reportActions, transactionID) {
  * Get the track expense actionable whisper of the corresponding track expense
  */
 function getTrackExpenseActionableWhisper(transactionID, chatReportID) {
-    var _a;
     if (!transactionID || !chatReportID) {
         return undefined;
     }
-    var chatReportActions = (_a = allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(chatReportID)]) !== null && _a !== void 0 ? _a : {};
-    return Object.values(chatReportActions).find(function (action) { var _a; return isActionableTrackExpense(action) && ((_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.transactionID) === transactionID; });
+    const chatReportActions = allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${chatReportID}`] ?? {};
+    return Object.values(chatReportActions).find((action) => isActionableTrackExpense(action) && getOriginalMessage(action)?.transactionID === transactionID);
 }
 /**
  * Checks if a given report action corresponds to a add payment card action.
  * @param reportAction
  */
 function isActionableAddPaymentCard(reportAction) {
-    return (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.ACTIONABLE_ADD_PAYMENT_CARD;
+    return reportAction?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.ACTIONABLE_ADD_PAYMENT_CARD;
 }
 function getExportIntegrationLastMessageText(reportAction) {
-    var fragments = getExportIntegrationActionFragments(reportAction);
-    return fragments.reduce(function (acc, fragment) { return "".concat(acc, " ").concat(fragment.text); }, '');
+    const fragments = getExportIntegrationActionFragments(reportAction);
+    return fragments.reduce((acc, fragment) => `${acc} ${fragment.text}`, '');
 }
 function getExportIntegrationMessageHTML(reportAction) {
-    var fragments = getExportIntegrationActionFragments(reportAction);
-    var htmlFragments = fragments.map(function (fragment) { return (fragment.url ? "<a href=\"".concat(fragment.url, "\">").concat(fragment.text, "</a>") : fragment.text); });
+    const fragments = getExportIntegrationActionFragments(reportAction);
+    const htmlFragments = fragments.map((fragment) => (fragment.url ? `<a href="${fragment.url}">${fragment.text}</a>` : fragment.text));
     return htmlFragments.join(' ');
 }
 function getExportIntegrationActionFragments(reportAction) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) !== CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_INTEGRATION) {
-        throw Error("received wrong action type. actionName: ".concat(reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName));
+    if (reportAction?.actionName !== CONST_1.default.REPORT.ACTIONS.TYPE.EXPORTED_TO_INTEGRATION) {
+        throw Error(`received wrong action type. actionName: ${reportAction?.actionName}`);
     }
-    var isPending = (reportAction === null || reportAction === void 0 ? void 0 : reportAction.pendingAction) === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD;
-    var originalMessage = ((_a = getOriginalMessage(reportAction)) !== null && _a !== void 0 ? _a : {});
-    var label = originalMessage.label, markedManually = originalMessage.markedManually, automaticAction = originalMessage.automaticAction;
-    var reimbursableUrls = (_b = originalMessage.reimbursableUrls) !== null && _b !== void 0 ? _b : [];
-    var nonReimbursableUrls = (_c = originalMessage.nonReimbursableUrls) !== null && _c !== void 0 ? _c : [];
-    var reportID = reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportID;
-    var wasExportedAfterBase62 = ((_d = reportAction === null || reportAction === void 0 ? void 0 : reportAction.created) !== null && _d !== void 0 ? _d : '') > '2022-11-14';
-    var base62ReportID = (0, getBase62ReportID_1.default)(Number(reportID));
-    var result = [];
+    const isPending = reportAction?.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD;
+    const originalMessage = (getOriginalMessage(reportAction) ?? {});
+    const { label, markedManually, automaticAction } = originalMessage;
+    const reimbursableUrls = originalMessage.reimbursableUrls ?? [];
+    const nonReimbursableUrls = originalMessage.nonReimbursableUrls ?? [];
+    const reportID = reportAction?.reportID;
+    const wasExportedAfterBase62 = (reportAction?.created ?? '') > '2022-11-14';
+    const base62ReportID = (0, getBase62ReportID_1.default)(Number(reportID));
+    const result = [];
     if (isPending) {
         result.push({
-            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.pending', { label: label }),
+            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.pending', { label }),
             url: '',
         });
     }
     else if (markedManually) {
         result.push({
-            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.manual', { label: label }),
+            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.manual', { label }),
             url: '',
         });
     }
     else if (automaticAction) {
         result.push({
-            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.automaticActionOne', { label: label }),
+            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.automaticActionOne', { label }),
             url: '',
         });
-        var url = CONST_1.default.HELP_DOC_LINKS[label];
+        const url = CONST_1.default.HELP_DOC_LINKS[label];
         result.push({
             text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.automaticActionTwo'),
             url: url || '',
@@ -2001,7 +1897,7 @@ function getExportIntegrationActionFragments(reportAction) {
     }
     else {
         result.push({
-            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.automatic', { label: label }),
+            text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.automatic', { label }),
             url: '',
         });
     }
@@ -2012,10 +1908,10 @@ function getExportIntegrationActionFragments(reportAction) {
         });
     }
     if (reimbursableUrls.length === 1) {
-        var shouldAddPeriod = nonReimbursableUrls.length === 0;
+        const shouldAddPeriod = nonReimbursableUrls.length === 0;
         result.push({
             text: (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.reimburseableLink') + (shouldAddPeriod ? '.' : ''),
-            url: (_e = reimbursableUrls.at(0)) !== null && _e !== void 0 ? _e : '',
+            url: reimbursableUrls.at(0) ?? '',
         });
     }
     if (reimbursableUrls.length === 1 && nonReimbursableUrls.length) {
@@ -2025,10 +1921,10 @@ function getExportIntegrationActionFragments(reportAction) {
         });
     }
     if (nonReimbursableUrls.length) {
-        var text = (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.nonReimbursableLink');
-        var url = '';
+        const text = (0, Localize_1.translateLocal)('report.actions.type.exportedToIntegration.nonReimbursableLink');
+        let url = '';
         if (nonReimbursableUrls.length === 1) {
-            url = (_f = nonReimbursableUrls.at(0)) !== null && _f !== void 0 ? _f : '';
+            url = nonReimbursableUrls.at(0) ?? '';
         }
         else {
             switch (label) {
@@ -2041,20 +1937,20 @@ function getExportIntegrationActionFragments(reportAction) {
                     break;
                 case CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY.financialForce:
                     // The first three characters in a Salesforce ID is the expense type
-                    url = (_h = (_g = nonReimbursableUrls.at(0)) === null || _g === void 0 ? void 0 : _g.substring(0, SALESFORCE_EXPENSES_URL_PREFIX.length + 3)) !== null && _h !== void 0 ? _h : '';
+                    url = nonReimbursableUrls.at(0)?.substring(0, SALESFORCE_EXPENSES_URL_PREFIX.length + 3) ?? '';
                     break;
                 default:
                     url = QBO_EXPENSES_URL;
             }
         }
-        result.push({ text: text, url: url });
+        result.push({ text, url });
     }
     return result;
 }
 function getUpdateRoomDescriptionMessage(reportAction) {
-    var originalMessage = getOriginalMessage(reportAction);
-    if (originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.description) {
-        return "".concat((0, Localize_1.translateLocal)('roomChangeLog.updateRoomDescription'), " ").concat(originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.description);
+    const originalMessage = getOriginalMessage(reportAction);
+    if (originalMessage?.description) {
+        return `${(0, Localize_1.translateLocal)('roomChangeLog.updateRoomDescription')} ${originalMessage?.description}`;
     }
     return (0, Localize_1.translateLocal)('roomChangeLog.clearRoomDescription');
 }
@@ -2065,91 +1961,81 @@ function isPolicyChangeLogAddEmployeeMessage(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_EMPLOYEE);
 }
 function getPolicyChangeLogAddEmployeeMessage(reportAction) {
-    var _a, _b;
     if (!isPolicyChangeLogAddEmployeeMessage(reportAction)) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var email = (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.email) !== null && _a !== void 0 ? _a : '';
-    var role = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: (_b = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.role) !== null && _b !== void 0 ? _b : '' }).toLowerCase();
-    var formattedEmail = (0, LocalePhoneNumber_1.formatPhoneNumber)(email);
-    return (0, Localize_1.translateLocal)('report.actions.type.addEmployee', { email: formattedEmail, role: role });
+    const originalMessage = getOriginalMessage(reportAction);
+    const email = originalMessage?.email ?? '';
+    const role = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: originalMessage?.role ?? '' }).toLowerCase();
+    const formattedEmail = (0, LocalePhoneNumber_1.formatPhoneNumber)(email);
+    return (0, Localize_1.translateLocal)('report.actions.type.addEmployee', { email: formattedEmail, role });
 }
 function isPolicyChangeLogChangeRoleMessage(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_EMPLOYEE);
 }
 function getPolicyChangeLogUpdateEmployee(reportAction) {
-    var _a;
     if (!isPolicyChangeLogChangeRoleMessage(reportAction)) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var email = (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.email) !== null && _a !== void 0 ? _a : '';
-    var field = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.field;
-    var customFieldType = Object.values(CONST_1.default.CUSTOM_FIELD_KEYS).find(function (value) { return value === field; });
+    const originalMessage = getOriginalMessage(reportAction);
+    const email = originalMessage?.email ?? '';
+    const field = originalMessage?.field;
+    const customFieldType = Object.values(CONST_1.default.CUSTOM_FIELD_KEYS).find((value) => value === field);
     if (customFieldType) {
-        var translationKey = field === CONST_1.default.CUSTOM_FIELD_KEYS.customField1 ? 'report.actions.type.updatedCustomField1' : 'report.actions.type.updatedCustomField2';
+        const translationKey = field === CONST_1.default.CUSTOM_FIELD_KEYS.customField1 ? 'report.actions.type.updatedCustomField1' : 'report.actions.type.updatedCustomField2';
         return (0, Localize_1.translateLocal)(translationKey, {
-            email: email,
-            newValue: typeof (originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.newValue) === 'string' ? originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.newValue : '',
-            previousValue: typeof (originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.oldValue) === 'string' ? originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.oldValue : '',
+            email,
+            newValue: typeof originalMessage?.newValue === 'string' ? originalMessage?.newValue : '',
+            previousValue: typeof originalMessage?.oldValue === 'string' ? originalMessage?.oldValue : '',
         });
     }
-    var newRole = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: typeof (originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.newValue) === 'string' ? originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.newValue : '' }).toLowerCase();
-    var oldRole = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: typeof (originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.oldValue) === 'string' ? originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.oldValue : '' }).toLowerCase();
-    return (0, Localize_1.translateLocal)('report.actions.type.updateRole', { email: email, newRole: newRole, currentRole: oldRole });
+    const newRole = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: typeof originalMessage?.newValue === 'string' ? originalMessage?.newValue : '' }).toLowerCase();
+    const oldRole = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: typeof originalMessage?.oldValue === 'string' ? originalMessage?.oldValue : '' }).toLowerCase();
+    return (0, Localize_1.translateLocal)('report.actions.type.updateRole', { email, newRole, currentRole: oldRole });
 }
-function getPolicyChangeLogEmployeeLeftMessage(reportAction, useName) {
-    var _a, _b;
-    if (useName === void 0) { useName = false; }
+function getPolicyChangeLogEmployeeLeftMessage(reportAction, useName = false) {
     if (!isLeavePolicyAction(reportAction)) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var personalDetails = (_a = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: reportAction.actorAccountID ? [reportAction.actorAccountID] : [], currentUserAccountID: 0 })) === null || _a === void 0 ? void 0 : _a.at(0);
+    const originalMessage = getOriginalMessage(reportAction);
+    const personalDetails = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({ accountIDs: reportAction.actorAccountID ? [reportAction.actorAccountID] : [], currentUserAccountID: 0 })?.at(0);
     if (!!originalMessage && !originalMessage.email) {
-        originalMessage.email = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails.login;
+        originalMessage.email = personalDetails?.login;
     }
-    var nameOrEmail = useName && !!(personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails.firstName) ? "".concat(personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails.firstName, ":") : ((_b = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.email) !== null && _b !== void 0 ? _b : '');
-    var formattedNameOrEmail = (0, LocalePhoneNumber_1.formatPhoneNumber)(nameOrEmail);
+    const nameOrEmail = useName && !!personalDetails?.firstName ? `${personalDetails?.firstName}:` : (originalMessage?.email ?? '');
+    const formattedNameOrEmail = (0, LocalePhoneNumber_1.formatPhoneNumber)(nameOrEmail);
     return (0, Localize_1.translateLocal)('report.actions.type.leftWorkspace', { nameOrEmail: formattedNameOrEmail });
 }
 function isPolicyChangeLogDeleteMemberMessage(reportAction) {
     return isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_EMPLOYEE);
 }
 function getWorkspaceDescriptionUpdatedMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldDescription = _b.oldDescription, newDescription = _b.newDescription;
-    var message = typeof oldDescription === 'string' && newDescription ? (0, Localize_1.translateLocal)('workspaceActions.updateWorkspaceDescription', { newDescription: newDescription, oldDescription: oldDescription }) : getReportActionText(action);
+    const { oldDescription, newDescription } = getOriginalMessage(action) ?? {};
+    const message = typeof oldDescription === 'string' && newDescription ? (0, Localize_1.translateLocal)('workspaceActions.updateWorkspaceDescription', { newDescription, oldDescription }) : getReportActionText(action);
     return message;
 }
 function getWorkspaceCurrencyUpdateMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldCurrency = _b.oldCurrency, newCurrency = _b.newCurrency;
-    var message = oldCurrency && newCurrency ? (0, Localize_1.translateLocal)('workspaceActions.updatedWorkspaceCurrencyAction', { oldCurrency: oldCurrency, newCurrency: newCurrency }) : getReportActionText(action);
+    const { oldCurrency, newCurrency } = getOriginalMessage(action) ?? {};
+    const message = oldCurrency && newCurrency ? (0, Localize_1.translateLocal)('workspaceActions.updatedWorkspaceCurrencyAction', { oldCurrency, newCurrency }) : getReportActionText(action);
     return message;
 }
-var getAutoReportingFrequencyDisplayNames = function () {
-    var _a;
-    return (_a = {},
-        _a[CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.MONTHLY] = (0, Localize_1.translateLocal)('workflowsPage.frequencies.monthly'),
-        _a[CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.IMMEDIATE] = (0, Localize_1.translateLocal)('workflowsPage.frequencies.daily'),
-        _a[CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.WEEKLY] = (0, Localize_1.translateLocal)('workflowsPage.frequencies.weekly'),
-        _a[CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.SEMI_MONTHLY] = (0, Localize_1.translateLocal)('workflowsPage.frequencies.twiceAMonth'),
-        _a[CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.TRIP] = (0, Localize_1.translateLocal)('workflowsPage.frequencies.byTrip'),
-        _a[CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.MANUAL] = (0, Localize_1.translateLocal)('workflowsPage.frequencies.manually'),
-        _a[CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.INSTANT] = (0, Localize_1.translateLocal)('workflowsPage.frequencies.instant'),
-        _a);
-};
+const getAutoReportingFrequencyDisplayNames = () => ({
+    [CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.MONTHLY]: (0, Localize_1.translateLocal)('workflowsPage.frequencies.monthly'),
+    [CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.IMMEDIATE]: (0, Localize_1.translateLocal)('workflowsPage.frequencies.daily'),
+    [CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.WEEKLY]: (0, Localize_1.translateLocal)('workflowsPage.frequencies.weekly'),
+    [CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.SEMI_MONTHLY]: (0, Localize_1.translateLocal)('workflowsPage.frequencies.twiceAMonth'),
+    [CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.TRIP]: (0, Localize_1.translateLocal)('workflowsPage.frequencies.byTrip'),
+    [CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.MANUAL]: (0, Localize_1.translateLocal)('workflowsPage.frequencies.manually'),
+    [CONST_1.default.POLICY.AUTO_REPORTING_FREQUENCIES.INSTANT]: (0, Localize_1.translateLocal)('workflowsPage.frequencies.instant'),
+});
 function getWorkspaceFrequencyUpdateMessage(action) {
-    var _a, _b, _c;
-    var _d = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldFrequency = _d.oldFrequency, newFrequency = _d.newFrequency;
+    const { oldFrequency, newFrequency } = getOriginalMessage(action) ?? {};
     if (!oldFrequency || !newFrequency) {
         return getReportActionText(action);
     }
-    var frequencyDisplayNames = getAutoReportingFrequencyDisplayNames();
-    var oldFrequencyTranslation = (_b = frequencyDisplayNames[oldFrequency]) === null || _b === void 0 ? void 0 : _b.toLowerCase();
-    var newFrequencyTranslation = (_c = frequencyDisplayNames[newFrequency]) === null || _c === void 0 ? void 0 : _c.toLowerCase();
+    const frequencyDisplayNames = getAutoReportingFrequencyDisplayNames();
+    const oldFrequencyTranslation = frequencyDisplayNames[oldFrequency]?.toLowerCase();
+    const newFrequencyTranslation = frequencyDisplayNames[newFrequency]?.toLowerCase();
     if (!oldFrequencyTranslation || !newFrequencyTranslation) {
         return getReportActionText(action);
     }
@@ -2159,16 +2045,15 @@ function getWorkspaceFrequencyUpdateMessage(action) {
     });
 }
 function getWorkspaceCategoryUpdateMessage(action, policy) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, categoryName = _b.categoryName, oldValue = _b.oldValue, newName = _b.newName, oldName = _b.oldName, updatedField = _b.updatedField, newValue = _b.newValue, currency = _b.currency;
+    const { categoryName, oldValue, newName, oldName, updatedField, newValue, currency } = getOriginalMessage(action) ?? {};
     if (action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_CATEGORY && categoryName) {
         return (0, Localize_1.translateLocal)('workspaceActions.addCategory', {
-            categoryName: categoryName,
+            categoryName,
         });
     }
     if (action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_CATEGORY && categoryName) {
         return (0, Localize_1.translateLocal)('workspaceActions.deleteCategory', {
-            categoryName: categoryName,
+            categoryName,
         });
     }
     if (action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_CATEGORY && categoryName) {
@@ -2176,63 +2061,63 @@ function getWorkspaceCategoryUpdateMessage(action, policy) {
             return (0, Localize_1.translateLocal)('workspaceActions.updatedDescriptionHint', {
                 oldValue: oldValue,
                 newValue: newValue,
-                categoryName: categoryName,
+                categoryName,
             });
         }
         if (updatedField === 'enabled') {
             return (0, Localize_1.translateLocal)('workspaceActions.updateCategory', {
                 oldValue: !!oldValue,
-                categoryName: categoryName,
+                categoryName,
             });
         }
         if (updatedField === 'areCommentsRequired' && typeof oldValue === 'boolean') {
             return (0, Localize_1.translateLocal)('workspaceActions.updateAreCommentsRequired', {
-                oldValue: oldValue,
-                categoryName: categoryName,
+                oldValue,
+                categoryName,
             });
         }
         if (updatedField === 'Payroll Code' && typeof oldValue === 'string' && typeof newValue === 'string') {
             return (0, Localize_1.translateLocal)('workspaceActions.updateCategoryPayrollCode', {
-                oldValue: oldValue,
-                categoryName: categoryName,
-                newValue: newValue,
+                oldValue,
+                categoryName,
+                newValue,
             });
         }
         if (updatedField === 'GL Code' && typeof oldValue === 'string' && typeof newValue === 'string') {
             return (0, Localize_1.translateLocal)('workspaceActions.updateCategoryGLCode', {
-                oldValue: oldValue,
-                categoryName: categoryName,
-                newValue: newValue,
+                oldValue,
+                categoryName,
+                newValue,
             });
         }
         if (updatedField === 'maxExpenseAmount' && (typeof oldValue === 'string' || typeof oldValue === 'number')) {
             return (0, Localize_1.translateLocal)('workspaceActions.updateCategoryMaxExpenseAmount', {
                 oldAmount: Number(oldValue) ? (0, CurrencyUtils_1.convertAmountToDisplayString)(Number(oldValue), currency) : undefined,
-                newAmount: Number(newValue !== null && newValue !== void 0 ? newValue : 0) ? (0, CurrencyUtils_1.convertAmountToDisplayString)(Number(newValue), currency) : undefined,
-                categoryName: categoryName,
+                newAmount: Number(newValue ?? 0) ? (0, CurrencyUtils_1.convertAmountToDisplayString)(Number(newValue), currency) : undefined,
+                categoryName,
             });
         }
         if (updatedField === 'expenseLimitType' && typeof newValue === 'string' && typeof oldValue === 'string') {
             return (0, Localize_1.translateLocal)('workspaceActions.updateCategoryExpenseLimitType', {
-                categoryName: categoryName,
-                oldValue: oldValue ? (0, Localize_1.translateLocal)("workspace.rules.categoryRules.expenseLimitTypes.".concat(oldValue)) : undefined,
-                newValue: (0, Localize_1.translateLocal)("workspace.rules.categoryRules.expenseLimitTypes.".concat(newValue)),
+                categoryName,
+                oldValue: oldValue ? (0, Localize_1.translateLocal)(`workspace.rules.categoryRules.expenseLimitTypes.${oldValue}`) : undefined,
+                newValue: (0, Localize_1.translateLocal)(`workspace.rules.categoryRules.expenseLimitTypes.${newValue}`),
             });
         }
         if (updatedField === 'maxAmountNoReceipt' && typeof oldValue !== 'boolean' && typeof newValue !== 'boolean') {
-            var maxExpenseAmountToDisplay_1 = (policy === null || policy === void 0 ? void 0 : policy.maxExpenseAmountNoReceipt) === CONST_1.default.DISABLED_MAX_EXPENSE_VALUE ? 0 : policy === null || policy === void 0 ? void 0 : policy.maxExpenseAmountNoReceipt;
-            var formatAmount_1 = function () { var _a; return (0, CurrencyUtils_1.convertToShortDisplayString)(maxExpenseAmountToDisplay_1, (_a = policy === null || policy === void 0 ? void 0 : policy.outputCurrency) !== null && _a !== void 0 ? _a : CONST_1.default.CURRENCY.USD); };
-            var getTranslation = function (value) {
+            const maxExpenseAmountToDisplay = policy?.maxExpenseAmountNoReceipt === CONST_1.default.DISABLED_MAX_EXPENSE_VALUE ? 0 : policy?.maxExpenseAmountNoReceipt;
+            const formatAmount = () => (0, CurrencyUtils_1.convertToShortDisplayString)(maxExpenseAmountToDisplay, policy?.outputCurrency ?? CONST_1.default.CURRENCY.USD);
+            const getTranslation = (value) => {
                 if (value === CONST_1.default.DISABLED_MAX_EXPENSE_VALUE) {
                     return (0, Localize_1.translateLocal)('workspace.rules.categoryRules.requireReceiptsOverList.never');
                 }
                 if (value === 0) {
                     return (0, Localize_1.translateLocal)('workspace.rules.categoryRules.requireReceiptsOverList.always');
                 }
-                return (0, Localize_1.translateLocal)('workspace.rules.categoryRules.requireReceiptsOverList.default', { defaultAmount: formatAmount_1() });
+                return (0, Localize_1.translateLocal)('workspace.rules.categoryRules.requireReceiptsOverList.default', { defaultAmount: formatAmount() });
             };
             return (0, Localize_1.translateLocal)('workspaceActions.updateCategoryMaxAmountNoReceipt', {
-                categoryName: categoryName,
+                categoryName,
                 oldValue: getTranslation(oldValue),
                 newValue: getTranslation(newValue),
             });
@@ -2240,233 +2125,223 @@ function getWorkspaceCategoryUpdateMessage(action, policy) {
     }
     if (action.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.SET_CATEGORY_NAME && oldName && newName) {
         return (0, Localize_1.translateLocal)('workspaceActions.setCategoryName', {
-            oldName: oldName,
-            newName: newName,
+            oldName,
+            newName,
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceTagUpdateMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, tagListName = _b.tagListName, tagName = _b.tagName, enabled = _b.enabled, newName = _b.newName, newValue = _b.newValue, oldName = _b.oldName, oldValue = _b.oldValue, updatedField = _b.updatedField, count = _b.count;
-    if ((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_TAG && tagListName && tagName) {
+    const { tagListName, tagName, enabled, newName, newValue, oldName, oldValue, updatedField, count } = getOriginalMessage(action) ?? {};
+    if (action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_TAG && tagListName && tagName) {
         return (0, Localize_1.translateLocal)('workspaceActions.addTag', {
-            tagListName: tagListName,
-            tagName: tagName,
+            tagListName,
+            tagName,
         });
     }
-    if ((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_TAG && tagListName && tagName) {
+    if (action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_TAG && tagListName && tagName) {
         return (0, Localize_1.translateLocal)('workspaceActions.deleteTag', {
-            tagListName: tagListName,
-            tagName: tagName,
+            tagListName,
+            tagName,
         });
     }
-    if ((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_MULTIPLE_TAGS && count && tagListName) {
+    if (action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_MULTIPLE_TAGS && count && tagListName) {
         return (0, Localize_1.translateLocal)('workspaceActions.deleteMultipleTags', {
-            count: count,
-            tagListName: tagListName,
+            count,
+            tagListName,
         });
     }
-    if ((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG_ENABLED && tagListName && tagName) {
+    if (action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG_ENABLED && tagListName && tagName) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateTagEnabled', {
-            tagListName: tagListName,
-            tagName: tagName,
-            enabled: enabled,
+            tagListName,
+            tagName,
+            enabled,
         });
     }
-    if ((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG_NAME && tagListName && newName && oldName) {
+    if (action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG_NAME && tagListName && newName && oldName) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateTagName', {
-            tagListName: tagListName,
-            newName: newName,
-            oldName: oldName,
+            tagListName,
+            newName,
+            oldName,
         });
     }
-    if ((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG &&
+    if (action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.UPDATE_TAG &&
         tagListName &&
         (typeof oldValue === 'string' || typeof oldValue === 'undefined') &&
         typeof newValue === 'string' &&
         tagName &&
         updatedField) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateTag', {
-            tagListName: tagListName,
-            oldValue: oldValue,
-            newValue: newValue,
-            tagName: tagName,
-            updatedField: updatedField,
+            tagListName,
+            oldValue,
+            newValue,
+            tagName,
+            updatedField,
         });
     }
     return getReportActionText(action);
 }
 function getTagListNameUpdatedMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldName = _b.oldName, newName = _b.newName;
+    const { oldName, newName } = getOriginalMessage(action) ?? {};
     if (newName && oldName) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateTagListName', {
-            oldName: oldName,
-            newName: newName,
+            oldName,
+            newName,
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceCustomUnitUpdatedMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldValue = _b.oldValue, newValue = _b.newValue, customUnitName = _b.customUnitName, updatedField = _b.updatedField;
+    const { oldValue, newValue, customUnitName, updatedField } = getOriginalMessage(action) ?? {};
     if (customUnitName === 'Distance' && updatedField === 'taxEnabled' && typeof newValue === 'boolean') {
         return (0, Localize_1.translateLocal)('workspaceActions.updateCustomUnitTaxEnabled', {
-            newValue: newValue,
+            newValue,
         });
     }
     if (customUnitName && typeof oldValue === 'string' && typeof newValue === 'string' && updatedField) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateCustomUnit', {
-            customUnitName: customUnitName,
-            newValue: newValue,
-            oldValue: oldValue,
-            updatedField: updatedField,
+            customUnitName,
+            newValue,
+            oldValue,
+            updatedField,
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceCustomUnitRateAddedMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, customUnitName = _b.customUnitName, rateName = _b.rateName;
+    const { customUnitName, rateName } = getOriginalMessage(action) ?? {};
     if (customUnitName && rateName) {
         return (0, Localize_1.translateLocal)('workspaceActions.addCustomUnitRate', {
-            customUnitName: customUnitName,
-            rateName: rateName,
+            customUnitName,
+            rateName,
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceCustomUnitRateUpdatedMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, customUnitName = _b.customUnitName, customUnitRateName = _b.customUnitRateName, updatedField = _b.updatedField, oldValue = _b.oldValue, newValue = _b.newValue, newTaxPercentage = _b.newTaxPercentage, oldTaxPercentage = _b.oldTaxPercentage;
+    const { customUnitName, customUnitRateName, updatedField, oldValue, newValue, newTaxPercentage, oldTaxPercentage } = getOriginalMessage(action) ?? {};
     if (customUnitName && customUnitRateName && updatedField === 'rate' && typeof oldValue === 'string' && typeof newValue === 'string') {
         return (0, Localize_1.translateLocal)('workspaceActions.updatedCustomUnitRate', {
-            customUnitName: customUnitName,
-            customUnitRateName: customUnitRateName,
-            updatedField: updatedField,
-            oldValue: oldValue,
-            newValue: newValue,
+            customUnitName,
+            customUnitRateName,
+            updatedField,
+            oldValue,
+            newValue,
         });
     }
     if (customUnitRateName && updatedField === 'taxRateExternalID' && typeof newValue === 'string' && newTaxPercentage) {
         return (0, Localize_1.translateLocal)('workspaceActions.updatedCustomUnitTaxRateExternalID', {
-            customUnitRateName: customUnitRateName,
-            newValue: newValue,
-            newTaxPercentage: newTaxPercentage,
-            oldTaxPercentage: oldTaxPercentage,
+            customUnitRateName,
+            newValue,
+            newTaxPercentage,
+            oldTaxPercentage,
             oldValue: oldValue,
         });
     }
     if (customUnitRateName && updatedField === 'taxClaimablePercentage' && typeof newValue === 'number' && customUnitRateName) {
         return (0, Localize_1.translateLocal)('workspaceActions.updatedCustomUnitTaxClaimablePercentage', {
-            customUnitRateName: customUnitRateName,
-            newValue: parseFloat(parseFloat(newValue !== null && newValue !== void 0 ? newValue : 0).toFixed(2)),
-            oldValue: typeof oldValue === 'number' ? parseFloat(parseFloat(oldValue !== null && oldValue !== void 0 ? oldValue : 0).toFixed(2)) : undefined,
+            customUnitRateName,
+            newValue: parseFloat(parseFloat(newValue ?? 0).toFixed(2)),
+            oldValue: typeof oldValue === 'number' ? parseFloat(parseFloat(oldValue ?? 0).toFixed(2)) : undefined,
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceCustomUnitRateDeletedMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, customUnitName = _b.customUnitName, rateName = _b.rateName;
+    const { customUnitName, rateName } = getOriginalMessage(action) ?? {};
     if (customUnitName && rateName) {
         return (0, Localize_1.translateLocal)('workspaceActions.deleteCustomUnitRate', {
-            customUnitName: customUnitName,
-            rateName: rateName,
+            customUnitName,
+            rateName,
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceReportFieldAddMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, fieldName = _b.fieldName, fieldType = _b.fieldType;
+    const { fieldName, fieldType } = getOriginalMessage(action) ?? {};
     if (fieldName && fieldType) {
         return (0, Localize_1.translateLocal)('workspaceActions.addedReportField', {
-            fieldName: fieldName,
+            fieldName,
             fieldType: (0, Localize_1.translateLocal)((0, WorkspaceReportFieldUtils_1.getReportFieldTypeTranslationKey)(fieldType)).toLowerCase(),
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceReportFieldUpdateMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, updateType = _b.updateType, fieldName = _b.fieldName, defaultValue = _b.defaultValue, optionName = _b.optionName, allEnabled = _b.allEnabled, optionEnabled = _b.optionEnabled, toggledOptionsCount = _b.toggledOptionsCount;
+    const { updateType, fieldName, defaultValue, optionName, allEnabled, optionEnabled, toggledOptionsCount } = getOriginalMessage(action) ?? {};
     if (updateType === 'updatedDefaultValue' && fieldName && defaultValue) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateReportFieldDefaultValue', {
-            fieldName: fieldName,
-            defaultValue: defaultValue,
+            fieldName,
+            defaultValue,
         });
     }
     if (updateType === 'addedOption' && fieldName && optionName) {
         return (0, Localize_1.translateLocal)('workspaceActions.addedReportFieldOption', {
-            fieldName: fieldName,
-            optionName: optionName,
+            fieldName,
+            optionName,
         });
     }
     if (updateType === 'changedOptionDisabled' && fieldName && optionName) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateReportFieldOptionDisabled', {
-            fieldName: fieldName,
-            optionName: optionName,
+            fieldName,
+            optionName,
             optionEnabled: !!optionEnabled,
         });
     }
     if (updateType === 'updatedAllDisabled' && fieldName && optionName) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateReportFieldAllOptionsDisabled', {
-            fieldName: fieldName,
-            optionName: optionName,
+            fieldName,
+            optionName,
             allEnabled: !!allEnabled,
-            toggledOptionsCount: toggledOptionsCount,
+            toggledOptionsCount,
         });
     }
     if (updateType === 'removedOption' && fieldName && optionName) {
         return (0, Localize_1.translateLocal)('workspaceActions.removedReportFieldOption', {
-            fieldName: fieldName,
-            optionName: optionName,
+            fieldName,
+            optionName,
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceReportFieldDeleteMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, fieldType = _b.fieldType, fieldName = _b.fieldName;
+    const { fieldType, fieldName } = getOriginalMessage(action) ?? {};
     if (fieldType && fieldName) {
         return (0, Localize_1.translateLocal)('workspaceActions.deleteReportField', {
-            fieldName: fieldName,
+            fieldName,
             fieldType: (0, Localize_1.translateLocal)((0, WorkspaceReportFieldUtils_1.getReportFieldTypeTranslationKey)(fieldType)).toLowerCase(),
         });
     }
     return getReportActionText(action);
 }
 function getWorkspaceUpdateFieldMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, newValue = _b.newValue, oldValue = _b.oldValue, updatedField = _b.updatedField;
-    var newValueTranslationKey = CONST_1.default.POLICY.APPROVAL_MODE_TRANSLATION_KEYS[newValue];
-    var oldValueTranslationKey = CONST_1.default.POLICY.APPROVAL_MODE_TRANSLATION_KEYS[oldValue];
+    const { newValue, oldValue, updatedField } = getOriginalMessage(action) ?? {};
+    const newValueTranslationKey = CONST_1.default.POLICY.APPROVAL_MODE_TRANSLATION_KEYS[newValue];
+    const oldValueTranslationKey = CONST_1.default.POLICY.APPROVAL_MODE_TRANSLATION_KEYS[oldValue];
     if (updatedField && updatedField === CONST_1.default.POLICY.COLLECTION_KEYS.APPROVAL_MODE && oldValueTranslationKey && newValueTranslationKey) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateApprovalMode', {
-            newValue: (0, Localize_1.translateLocal)("workspaceApprovalModes.".concat(newValueTranslationKey)),
-            oldValue: (0, Localize_1.translateLocal)("workspaceApprovalModes.".concat(oldValueTranslationKey)),
+            newValue: (0, Localize_1.translateLocal)(`workspaceApprovalModes.${newValueTranslationKey}`),
+            oldValue: (0, Localize_1.translateLocal)(`workspaceApprovalModes.${oldValueTranslationKey}`),
             fieldName: updatedField,
         });
     }
     if (updatedField && updatedField === CONST_1.default.POLICY.EXPENSE_REPORT_RULES.PREVENT_SELF_APPROVAL && typeof oldValue === 'string' && typeof newValue === 'string') {
         return (0, Localize_1.translateLocal)('workspaceActions.preventSelfApproval', {
-            oldValue: oldValue,
-            newValue: newValue,
+            oldValue,
+            newValue,
         });
     }
     if (updatedField && updatedField === CONST_1.default.POLICY.EXPENSE_REPORT_RULES.MAX_EXPENSE_AGE && typeof oldValue === 'string' && typeof newValue === 'string') {
         return (0, Localize_1.translateLocal)('workspaceActions.updateMaxExpenseAge', {
-            oldValue: oldValue,
-            newValue: newValue,
+            oldValue,
+            newValue,
         });
     }
     if (updatedField &&
         updatedField === CONST_1.default.POLICY.COLLECTION_KEYS.AUTOREPORTING_OFFSET &&
         (typeof oldValue === 'string' || typeof oldValue === 'number') &&
         (typeof newValue === 'string' || typeof newValue === 'number')) {
-        var getAutoReportingOffsetToDisplay = function (autoReportingOffset) {
+        const getAutoReportingOffsetToDisplay = (autoReportingOffset) => {
             if (autoReportingOffset === CONST_1.default.POLICY.AUTO_REPORTING_OFFSET.LAST_DAY_OF_MONTH) {
                 return (0, Localize_1.translateLocal)('workflowsPage.frequencies.lastDayOfMonth');
             }
@@ -2486,8 +2361,7 @@ function getWorkspaceUpdateFieldMessage(action) {
     return getReportActionText(action);
 }
 function getPolicyChangeLogMaxExpenseAmountNoReceiptMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldMaxExpenseAmountNoReceipt = _b.oldMaxExpenseAmountNoReceipt, newMaxExpenseAmountNoReceipt = _b.newMaxExpenseAmountNoReceipt, currency = _b.currency;
+    const { oldMaxExpenseAmountNoReceipt, newMaxExpenseAmountNoReceipt, currency } = getOriginalMessage(action) ?? {};
     if (typeof oldMaxExpenseAmountNoReceipt === 'number' && typeof newMaxExpenseAmountNoReceipt === 'number') {
         return (0, Localize_1.translateLocal)('workspaceActions.updateMaxExpenseAmountNoReceipt', {
             oldValue: (0, CurrencyUtils_1.convertToDisplayString)(oldMaxExpenseAmountNoReceipt, currency),
@@ -2497,8 +2371,7 @@ function getPolicyChangeLogMaxExpenseAmountNoReceiptMessage(action) {
     return getReportActionText(action);
 }
 function getPolicyChangeLogMaxExpenseAmountMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldMaxExpenseAmount = _b.oldMaxExpenseAmount, newMaxExpenseAmount = _b.newMaxExpenseAmount, currency = _b.currency;
+    const { oldMaxExpenseAmount, newMaxExpenseAmount, currency } = getOriginalMessage(action) ?? {};
     if (typeof oldMaxExpenseAmount === 'number' && typeof newMaxExpenseAmount === 'number') {
         return (0, Localize_1.translateLocal)('workspaceActions.updateMaxExpenseAmount', {
             oldValue: (0, CurrencyUtils_1.convertToDisplayString)(oldMaxExpenseAmount, currency),
@@ -2508,8 +2381,7 @@ function getPolicyChangeLogMaxExpenseAmountMessage(action) {
     return getReportActionText(action);
 }
 function getPolicyChangeLogDefaultBillableMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldDefaultBillable = _b.oldDefaultBillable, newDefaultBillable = _b.newDefaultBillable;
+    const { oldDefaultBillable, newDefaultBillable } = getOriginalMessage(action) ?? {};
     if (typeof oldDefaultBillable === 'string' && typeof newDefaultBillable === 'string') {
         return (0, Localize_1.translateLocal)('workspaceActions.updateDefaultBillable', {
             oldValue: oldDefaultBillable,
@@ -2519,8 +2391,7 @@ function getPolicyChangeLogDefaultBillableMessage(action) {
     return getReportActionText(action);
 }
 function getPolicyChangeLogDefaultReimbursableMessage(action) {
-    var _a;
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}, oldDefaultReimbursable = _b.oldDefaultReimbursable, newDefaultReimbursable = _b.newDefaultReimbursable;
+    const { oldDefaultReimbursable, newDefaultReimbursable } = getOriginalMessage(action) ?? {};
     if (typeof oldDefaultReimbursable === 'string' && typeof newDefaultReimbursable === 'string') {
         return (0, Localize_1.translateLocal)('workspaceActions.updateDefaultReimbursable', {
             oldValue: oldDefaultReimbursable,
@@ -2530,138 +2401,123 @@ function getPolicyChangeLogDefaultReimbursableMessage(action) {
     return getReportActionText(action);
 }
 function getPolicyChangeLogDefaultTitleEnforcedMessage(action) {
-    var _a;
-    var value = ((_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : {}).value;
+    const { value } = getOriginalMessage(action) ?? {};
     if (typeof value === 'boolean') {
         return (0, Localize_1.translateLocal)('workspaceActions.updateDefaultTitleEnforced', {
-            value: value,
+            value,
         });
     }
     return getReportActionText(action);
 }
 function getPolicyChangeLogDeleteMemberMessage(reportAction) {
-    var _a, _b;
     if (!isPolicyChangeLogDeleteMemberMessage(reportAction)) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var email = (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.email) !== null && _a !== void 0 ? _a : '';
-    var role = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: (_b = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.role) !== null && _b !== void 0 ? _b : '' }).toLowerCase();
-    return (0, Localize_1.translateLocal)('report.actions.type.removeMember', { email: email, role: role });
+    const originalMessage = getOriginalMessage(reportAction);
+    const email = originalMessage?.email ?? '';
+    const role = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: originalMessage?.role ?? '' }).toLowerCase();
+    return (0, Localize_1.translateLocal)('report.actions.type.removeMember', { email, role });
 }
 function getAddedConnectionMessage(reportAction) {
     if (!isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.ADD_INTEGRATION)) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var connectionName = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.connectionName;
-    return connectionName ? (0, Localize_1.translateLocal)('report.actions.type.addedConnection', { connectionName: connectionName }) : '';
+    const originalMessage = getOriginalMessage(reportAction);
+    const connectionName = originalMessage?.connectionName;
+    return connectionName ? (0, Localize_1.translateLocal)('report.actions.type.addedConnection', { connectionName }) : '';
 }
 function getRemovedConnectionMessage(reportAction) {
     if (!isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.DELETE_INTEGRATION)) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var connectionName = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.connectionName;
-    return connectionName ? (0, Localize_1.translateLocal)('report.actions.type.removedConnection', { connectionName: connectionName }) : '';
+    const originalMessage = getOriginalMessage(reportAction);
+    const connectionName = originalMessage?.connectionName;
+    return connectionName ? (0, Localize_1.translateLocal)('report.actions.type.removedConnection', { connectionName }) : '';
 }
 function getRenamedAction(reportAction, isExpenseReport, actorName) {
-    var _a, _b;
-    var originalMessage = getOriginalMessage(reportAction);
+    const originalMessage = getOriginalMessage(reportAction);
     return (0, Localize_1.translateLocal)('newRoomPage.renamedRoomAction', {
-        actorName: actorName,
-        isExpenseReport: isExpenseReport,
-        oldName: (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.oldName) !== null && _a !== void 0 ? _a : '',
-        newName: (_b = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.newName) !== null && _b !== void 0 ? _b : '',
+        actorName,
+        isExpenseReport,
+        oldName: originalMessage?.oldName ?? '',
+        newName: originalMessage?.newName ?? '',
     });
 }
 function getAddedApprovalRuleMessage(reportAction) {
-    var _a;
-    var _b = (_a = getOriginalMessage(reportAction)) !== null && _a !== void 0 ? _a : {}, name = _b.name, approverAccountID = _b.approverAccountID, approverEmail = _b.approverEmail, field = _b.field, approverName = _b.approverName;
+    const { name, approverAccountID, approverEmail, field, approverName } = getOriginalMessage(reportAction) ?? {};
     if (name && approverAccountID && approverEmail && field && approverName) {
         return (0, Localize_1.translateLocal)('workspaceActions.addApprovalRule', {
-            approverEmail: approverEmail,
-            approverName: approverName,
-            field: field,
-            name: name,
+            approverEmail,
+            approverName,
+            field,
+            name,
         });
     }
     return getReportActionText(reportAction);
 }
 function getDeletedApprovalRuleMessage(reportAction) {
-    var _a;
-    var _b = (_a = getOriginalMessage(reportAction)) !== null && _a !== void 0 ? _a : {}, name = _b.name, approverAccountID = _b.approverAccountID, approverEmail = _b.approverEmail, field = _b.field, approverName = _b.approverName;
+    const { name, approverAccountID, approverEmail, field, approverName } = getOriginalMessage(reportAction) ?? {};
     if (name && approverAccountID && approverEmail && field && approverName) {
         return (0, Localize_1.translateLocal)('workspaceActions.deleteApprovalRule', {
-            approverEmail: approverEmail,
-            approverName: approverName,
-            field: field,
-            name: name,
+            approverEmail,
+            approverName,
+            field,
+            name,
         });
     }
     return getReportActionText(reportAction);
 }
 function getUpdatedApprovalRuleMessage(reportAction) {
-    var _a;
-    var _b = (_a = getOriginalMessage(reportAction)) !== null && _a !== void 0 ? _a : {}, field = _b.field, oldApproverEmail = _b.oldApproverEmail, oldApproverName = _b.oldApproverName, newApproverEmail = _b.newApproverEmail, newApproverName = _b.newApproverName, name = _b.name;
+    const { field, oldApproverEmail, oldApproverName, newApproverEmail, newApproverName, name } = getOriginalMessage(reportAction) ?? {};
     if (field && oldApproverEmail && newApproverEmail && name) {
         return (0, Localize_1.translateLocal)('workspaceActions.updateApprovalRule', {
-            field: field,
-            name: name,
-            newApproverEmail: newApproverEmail,
-            newApproverName: newApproverName,
-            oldApproverEmail: oldApproverEmail,
-            oldApproverName: oldApproverName,
+            field,
+            name,
+            newApproverEmail,
+            newApproverName,
+            oldApproverEmail,
+            oldApproverName,
         });
     }
     return getReportActionText(reportAction);
 }
 function getRemovedFromApprovalChainMessage(reportAction) {
-    var _a;
-    var originalMessage = getOriginalMessage(reportAction);
-    var submittersNames = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({
-        accountIDs: (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.submittersAccountIDs) !== null && _a !== void 0 ? _a : [],
-        currentUserAccountID: currentUserAccountID !== null && currentUserAccountID !== void 0 ? currentUserAccountID : CONST_1.default.DEFAULT_NUMBER_ID,
-    }).map(function (_a) {
-        var _b;
-        var displayName = _a.displayName, login = _a.login;
-        return (_b = displayName !== null && displayName !== void 0 ? displayName : login) !== null && _b !== void 0 ? _b : 'Unknown Submitter';
-    });
-    return (0, Localize_1.translateLocal)('workspaceActions.removedFromApprovalWorkflow', { submittersNames: submittersNames, count: submittersNames.length });
+    const originalMessage = getOriginalMessage(reportAction);
+    const submittersNames = (0, PersonalDetailsUtils_1.getPersonalDetailsByIDs)({
+        accountIDs: originalMessage?.submittersAccountIDs ?? [],
+        currentUserAccountID: currentUserAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID,
+    }).map(({ displayName, login }) => displayName ?? login ?? 'Unknown Submitter');
+    return (0, Localize_1.translateLocal)('workspaceActions.removedFromApprovalWorkflow', { submittersNames, count: submittersNames.length });
 }
 function getDemotedFromWorkspaceMessage(reportAction) {
-    var _a;
-    var originalMessage = getOriginalMessage(reportAction);
-    var policyName = (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.policyName) !== null && _a !== void 0 ? _a : (0, Localize_1.translateLocal)('workspace.common.workspace');
-    var oldRole = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.oldRole }).toLowerCase();
-    return (0, Localize_1.translateLocal)('workspaceActions.demotedFromWorkspace', { policyName: policyName, oldRole: oldRole });
+    const originalMessage = getOriginalMessage(reportAction);
+    const policyName = originalMessage?.policyName ?? (0, Localize_1.translateLocal)('workspace.common.workspace');
+    const oldRole = (0, Localize_1.translateLocal)('workspace.common.roleName', { role: originalMessage?.oldRole }).toLowerCase();
+    return (0, Localize_1.translateLocal)('workspaceActions.demotedFromWorkspace', { policyName, oldRole });
 }
 function getUpdatedAuditRateMessage(reportAction) {
-    var _a;
-    var _b = (_a = getOriginalMessage(reportAction)) !== null && _a !== void 0 ? _a : {}, oldAuditRate = _b.oldAuditRate, newAuditRate = _b.newAuditRate;
+    const { oldAuditRate, newAuditRate } = getOriginalMessage(reportAction) ?? {};
     if (typeof oldAuditRate !== 'number' || typeof newAuditRate !== 'number') {
         return getReportActionText(reportAction);
     }
-    return (0, Localize_1.translateLocal)('workspaceActions.updatedAuditRate', { oldAuditRate: oldAuditRate, newAuditRate: newAuditRate });
+    return (0, Localize_1.translateLocal)('workspaceActions.updatedAuditRate', { oldAuditRate, newAuditRate });
 }
 function getUpdatedManualApprovalThresholdMessage(reportAction) {
-    var _a;
-    var _b = (_a = getOriginalMessage(reportAction)) !== null && _a !== void 0 ? _a : {}, oldLimit = _b.oldLimit, newLimit = _b.newLimit, _c = _b.currency, currency = _c === void 0 ? CONST_1.default.CURRENCY.USD : _c;
+    const { oldLimit, newLimit, currency = CONST_1.default.CURRENCY.USD, } = getOriginalMessage(reportAction) ?? {};
     if (typeof oldLimit !== 'number' || typeof oldLimit !== 'number') {
         return getReportActionText(reportAction);
     }
     return (0, Localize_1.translateLocal)('workspaceActions.updatedManualApprovalThreshold', { oldLimit: (0, CurrencyUtils_1.convertToDisplayString)(oldLimit, currency), newLimit: (0, CurrencyUtils_1.convertToDisplayString)(newLimit, currency) });
 }
 function getChangedApproverActionMessage(reportAction) {
-    var _a, _b;
-    var mentionedAccountIDs = ((_a = getOriginalMessage(reportAction)) !== null && _a !== void 0 ? _a : {}).mentionedAccountIDs;
+    const { mentionedAccountIDs } = getOriginalMessage(reportAction) ?? {};
     // If mentionedAccountIDs exists and has values, use the first one
-    if (mentionedAccountIDs === null || mentionedAccountIDs === void 0 ? void 0 : mentionedAccountIDs.length) {
-        return (0, Localize_1.translateLocal)('iou.changeApprover.changedApproverMessage', { managerID: (_b = mentionedAccountIDs.at(0)) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID });
+    if (mentionedAccountIDs?.length) {
+        return (0, Localize_1.translateLocal)('iou.changeApprover.changedApproverMessage', { managerID: mentionedAccountIDs.at(0) ?? CONST_1.default.DEFAULT_NUMBER_ID });
     }
     // Fallback: If mentionedAccountIDs is missing (common with OldDot take control actions),
     // use the actorAccountID (who performed the take control action) as the new approver
-    var actorAccountID = reportAction === null || reportAction === void 0 ? void 0 : reportAction.actorAccountID;
+    const actorAccountID = reportAction?.actorAccountID;
     if (!actorAccountID) {
         return '';
     }
@@ -2674,68 +2530,64 @@ function isCardIssuedAction(reportAction) {
         isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.CARD_ASSIGNED));
 }
 function shouldShowAddMissingDetails(actionName, card) {
-    var missingDetails = !(privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.legalFirstName) ||
-        !(privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.legalLastName) ||
-        !(privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.dob) ||
-        !(privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.phoneNumber) ||
-        (0, EmptyObject_1.isEmptyObject)(privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.addresses) ||
+    const missingDetails = !privatePersonalDetails?.legalFirstName ||
+        !privatePersonalDetails?.legalLastName ||
+        !privatePersonalDetails?.dob ||
+        !privatePersonalDetails?.phoneNumber ||
+        (0, EmptyObject_1.isEmptyObject)(privatePersonalDetails?.addresses) ||
         privatePersonalDetails.addresses.length === 0;
-    return actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CARD_MISSING_ADDRESS && ((card === null || card === void 0 ? void 0 : card.state) === CONST_1.default.EXPENSIFY_CARD.STATE.STATE_NOT_ISSUED || missingDetails);
+    return actionName === CONST_1.default.REPORT.ACTIONS.TYPE.CARD_MISSING_ADDRESS && (card?.state === CONST_1.default.EXPENSIFY_CARD.STATE.STATE_NOT_ISSUED || missingDetails);
 }
 function getJoinRequestMessage(reportAction) {
-    var _a, _b, _c, _d, _e, _f;
     // This will be fixed as part of https://github.com/Expensify/Expensify/issues/507850
     // eslint-disable-next-line deprecation/deprecation
-    var policy = (0, PolicyUtils_1.getPolicy)((_a = getOriginalMessage(reportAction)) === null || _a === void 0 ? void 0 : _a.policyID);
-    var userDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)((_c = (_b = getOriginalMessage(reportAction)) === null || _b === void 0 ? void 0 : _b.email) !== null && _c !== void 0 ? _c : '');
-    var userName = (userDetail === null || userDetail === void 0 ? void 0 : userDetail.firstName) ? "".concat(userDetail.displayName, " (").concat(userDetail.login, ")") : ((_d = userDetail === null || userDetail === void 0 ? void 0 : userDetail.login) !== null && _d !== void 0 ? _d : (_e = getOriginalMessage(reportAction)) === null || _e === void 0 ? void 0 : _e.email);
-    return (0, Localize_1.translateLocal)('workspace.inviteMessage.joinRequest', { user: userName !== null && userName !== void 0 ? userName : '', workspaceName: (_f = policy === null || policy === void 0 ? void 0 : policy.name) !== null && _f !== void 0 ? _f : '' });
+    const policy = (0, PolicyUtils_1.getPolicy)(getOriginalMessage(reportAction)?.policyID);
+    const userDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(getOriginalMessage(reportAction)?.email ?? '');
+    const userName = userDetail?.firstName ? `${userDetail.displayName} (${userDetail.login})` : (userDetail?.login ?? getOriginalMessage(reportAction)?.email);
+    return (0, Localize_1.translateLocal)('workspace.inviteMessage.joinRequest', { user: userName ?? '', workspaceName: policy?.name ?? '' });
 }
-function getCardIssuedMessage(_a) {
-    var _b, _c;
-    var reportAction = _a.reportAction, _d = _a.shouldRenderHTML, shouldRenderHTML = _d === void 0 ? false : _d, _e = _a.policyID, policyID = _e === void 0 ? '-1' : _e, expensifyCard = _a.expensifyCard, companyCard = _a.companyCard;
-    var cardIssuedActionOriginalMessage = isCardIssuedAction(reportAction) ? getOriginalMessage(reportAction) : undefined;
-    var assigneeAccountID = (_b = cardIssuedActionOriginalMessage === null || cardIssuedActionOriginalMessage === void 0 ? void 0 : cardIssuedActionOriginalMessage.assigneeAccountID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID;
-    var cardID = (_c = cardIssuedActionOriginalMessage === null || cardIssuedActionOriginalMessage === void 0 ? void 0 : cardIssuedActionOriginalMessage.cardID) !== null && _c !== void 0 ? _c : CONST_1.default.DEFAULT_NUMBER_ID;
+function getCardIssuedMessage({ reportAction, shouldRenderHTML = false, policyID = '-1', expensifyCard, companyCard, }) {
+    const cardIssuedActionOriginalMessage = isCardIssuedAction(reportAction) ? getOriginalMessage(reportAction) : undefined;
+    const assigneeAccountID = cardIssuedActionOriginalMessage?.assigneeAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const cardID = cardIssuedActionOriginalMessage?.cardID ?? CONST_1.default.DEFAULT_NUMBER_ID;
     // This will be fixed as part of https://github.com/Expensify/Expensify/issues/507850
     // eslint-disable-next-line deprecation/deprecation
-    var isPolicyAdmin = (0, PolicyUtils_1.isPolicyAdmin)((0, PolicyUtils_1.getPolicy)(policyID));
-    var assignee = shouldRenderHTML ? "<mention-user accountID=\"".concat(assigneeAccountID, "\"/>") : Parser_1.default.htmlToText("<mention-user accountID=\"".concat(assigneeAccountID, "\"/>"));
-    var navigateRoute = isPolicyAdmin ? ROUTES_1.default.EXPENSIFY_CARD_DETAILS.getRoute(policyID, String(cardID)) : ROUTES_1.default.SETTINGS_DOMAIN_CARD_DETAIL.getRoute(String(cardID));
-    var expensifyCardLink = shouldRenderHTML && !!expensifyCard ? "<a href='".concat(environmentURL, "/").concat(navigateRoute, "'>").concat((0, Localize_1.translateLocal)('cardPage.expensifyCard'), "</a>") : (0, Localize_1.translateLocal)('cardPage.expensifyCard');
-    var isAssigneeCurrentUser = currentUserAccountID === assigneeAccountID;
-    var companyCardLink = shouldRenderHTML && isAssigneeCurrentUser && companyCard
-        ? "<a href='".concat(environmentURL, "/").concat(ROUTES_1.default.SETTINGS_WALLET, "'>").concat((0, Localize_1.translateLocal)('workspace.companyCards.companyCard'), "</a>")
+    const isPolicyAdmin = (0, PolicyUtils_1.isPolicyAdmin)((0, PolicyUtils_1.getPolicy)(policyID));
+    const assignee = shouldRenderHTML ? `<mention-user accountID="${assigneeAccountID}"/>` : Parser_1.default.htmlToText(`<mention-user accountID="${assigneeAccountID}"/>`);
+    const navigateRoute = isPolicyAdmin ? ROUTES_1.default.EXPENSIFY_CARD_DETAILS.getRoute(policyID, String(cardID)) : ROUTES_1.default.SETTINGS_DOMAIN_CARD_DETAIL.getRoute(String(cardID));
+    const expensifyCardLink = shouldRenderHTML && !!expensifyCard ? `<a href='${environmentURL}/${navigateRoute}'>${(0, Localize_1.translateLocal)('cardPage.expensifyCard')}</a>` : (0, Localize_1.translateLocal)('cardPage.expensifyCard');
+    const isAssigneeCurrentUser = currentUserAccountID === assigneeAccountID;
+    const companyCardLink = shouldRenderHTML && isAssigneeCurrentUser && companyCard
+        ? `<a href='${environmentURL}/${ROUTES_1.default.SETTINGS_WALLET}'>${(0, Localize_1.translateLocal)('workspace.companyCards.companyCard')}</a>`
         : (0, Localize_1.translateLocal)('workspace.companyCards.companyCard');
-    var shouldShowAddMissingDetailsMessage = !isAssigneeCurrentUser || shouldShowAddMissingDetails(reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName, expensifyCard);
-    switch (reportAction === null || reportAction === void 0 ? void 0 : reportAction.actionName) {
+    const shouldShowAddMissingDetailsMessage = !isAssigneeCurrentUser || shouldShowAddMissingDetails(reportAction?.actionName, expensifyCard);
+    switch (reportAction?.actionName) {
         case CONST_1.default.REPORT.ACTIONS.TYPE.CARD_ISSUED:
-            return (0, Localize_1.translateLocal)('workspace.expensifyCard.issuedCard', { assignee: assignee });
+            return (0, Localize_1.translateLocal)('workspace.expensifyCard.issuedCard', { assignee });
         case CONST_1.default.REPORT.ACTIONS.TYPE.CARD_ISSUED_VIRTUAL:
-            return (0, Localize_1.translateLocal)('workspace.expensifyCard.issuedCardVirtual', { assignee: assignee, link: expensifyCardLink });
+            return (0, Localize_1.translateLocal)('workspace.expensifyCard.issuedCardVirtual', { assignee, link: expensifyCardLink });
         case CONST_1.default.REPORT.ACTIONS.TYPE.CARD_ASSIGNED:
-            return (0, Localize_1.translateLocal)('workspace.companyCards.assignedCard', { assignee: assignee, link: companyCardLink });
+            return (0, Localize_1.translateLocal)('workspace.companyCards.assignedCard', { assignee, link: companyCardLink });
         case CONST_1.default.REPORT.ACTIONS.TYPE.CARD_MISSING_ADDRESS:
-            return (0, Localize_1.translateLocal)("workspace.expensifyCard.".concat(shouldShowAddMissingDetailsMessage ? 'issuedCardNoShippingDetails' : 'addedShippingDetails'), { assignee: assignee });
+            return (0, Localize_1.translateLocal)(`workspace.expensifyCard.${shouldShowAddMissingDetailsMessage ? 'issuedCardNoShippingDetails' : 'addedShippingDetails'}`, { assignee });
         default:
             return '';
     }
 }
 function getRoomChangeLogMessage(reportAction) {
-    var _a;
     if (!isInviteOrRemovedAction(reportAction)) {
         return '';
     }
-    var originalMessage = getOriginalMessage(reportAction);
-    var targetAccountIDs = (_a = originalMessage === null || originalMessage === void 0 ? void 0 : originalMessage.targetAccountIDs) !== null && _a !== void 0 ? _a : [];
-    var actionText = isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM) || isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM)
+    const originalMessage = getOriginalMessage(reportAction);
+    const targetAccountIDs = originalMessage?.targetAccountIDs ?? [];
+    const actionText = isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.ROOM_CHANGE_LOG.INVITE_TO_ROOM) || isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.POLICY_CHANGE_LOG.INVITE_TO_ROOM)
         ? (0, Localize_1.translateLocal)('workspace.invite.invited')
         : (0, Localize_1.translateLocal)('workspace.invite.removed');
-    var userText = (targetAccountIDs.length === 1 ? (0, Localize_1.translateLocal)('common.member') : (0, Localize_1.translateLocal)('common.members')).toLowerCase();
-    return "".concat(actionText, " ").concat(targetAccountIDs.length, " ").concat(userText);
+    const userText = (targetAccountIDs.length === 1 ? (0, Localize_1.translateLocal)('common.member') : (0, Localize_1.translateLocal)('common.members')).toLowerCase();
+    return `${actionText} ${targetAccountIDs.length} ${userText}`;
 }
 function getReportActions(report) {
-    return allReportActions === null || allReportActions === void 0 ? void 0 : allReportActions["".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(report.reportID)];
+    return allReportActions?.[`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${report.reportID}`];
 }
 /**
  * @private
@@ -2745,7 +2597,7 @@ function wasActionCreatedWhileOffline(action, isOffline, lastOfflineAt, lastOnli
     if (!lastOfflineAt || !lastOnlineAt) {
         return false;
     }
-    var actionCreatedAt = getLocalDateFromDatetime(action.created);
+    const actionCreatedAt = getLocalDateFromDatetime(action.created);
     // The action was created before the user went offline.
     if (actionCreatedAt <= lastOfflineAt) {
         return false;
@@ -2761,49 +2613,44 @@ function wasActionCreatedWhileOffline(action, isOffline, lastOfflineAt, lastOnli
  * Whether a message is NOT from the active user, and it was received while the user was offline.
  */
 function wasMessageReceivedWhileOffline(action, isOffline, lastOfflineAt, lastOnlineAt, getLocalDateFromDatetime) {
-    var wasByCurrentUser = wasActionTakenByCurrentUser(action);
-    var wasCreatedOffline = wasActionCreatedWhileOffline(action, isOffline, lastOfflineAt, lastOnlineAt, getLocalDateFromDatetime);
+    const wasByCurrentUser = wasActionTakenByCurrentUser(action);
+    const wasCreatedOffline = wasActionCreatedWhileOffline(action, isOffline, lastOfflineAt, lastOnlineAt, getLocalDateFromDatetime);
     return !wasByCurrentUser && wasCreatedOffline && !(action.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD || action.isOptimisticAction);
 }
 function getReportActionFromExpensifyCard(cardID) {
-    return Object.values(allReportActions !== null && allReportActions !== void 0 ? allReportActions : {})
-        .map(function (reportActions) { return Object.values(reportActions !== null && reportActions !== void 0 ? reportActions : {}); })
+    return Object.values(allReportActions ?? {})
+        .map((reportActions) => Object.values(reportActions ?? {}))
         .flat()
-        .find(function (reportAction) {
-        var cardIssuedActionOriginalMessage = isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.CARD_ISSUED_VIRTUAL) ? getOriginalMessage(reportAction) : undefined;
-        return (cardIssuedActionOriginalMessage === null || cardIssuedActionOriginalMessage === void 0 ? void 0 : cardIssuedActionOriginalMessage.cardID) === cardID;
+        .find((reportAction) => {
+        const cardIssuedActionOriginalMessage = isActionOfType(reportAction, CONST_1.default.REPORT.ACTIONS.TYPE.CARD_ISSUED_VIRTUAL) ? getOriginalMessage(reportAction) : undefined;
+        return cardIssuedActionOriginalMessage?.cardID === cardID;
     });
 }
-function getIntegrationSyncFailedMessage(action, policyID, shouldShowOldDotLink) {
-    var _a;
-    if (shouldShowOldDotLink === void 0) { shouldShowOldDotLink = false; }
-    var _b = (_a = getOriginalMessage(action)) !== null && _a !== void 0 ? _a : { label: '', errorMessage: '' }, label = _b.label, errorMessage = _b.errorMessage;
-    var param = encodeURIComponent("{\"policyID\": \"".concat(policyID, "\"}"));
-    var workspaceAccountingLink = shouldShowOldDotLink ? "".concat(oldDotEnvironmentURL, "/policy?param=").concat(param, "#connections") : "".concat(environmentURL, "/").concat(ROUTES_1.default.POLICY_ACCOUNTING.getRoute(policyID));
+function getIntegrationSyncFailedMessage(action, policyID, shouldShowOldDotLink = false) {
+    const { label, errorMessage } = getOriginalMessage(action) ?? { label: '', errorMessage: '' };
+    const param = encodeURIComponent(`{"policyID": "${policyID}"}`);
+    const workspaceAccountingLink = shouldShowOldDotLink ? `${oldDotEnvironmentURL}/policy?param=${param}#connections` : `${environmentURL}/${ROUTES_1.default.POLICY_ACCOUNTING.getRoute(policyID)}`;
     return (0, Localize_1.translateLocal)('report.actions.type.integrationSyncFailed', {
-        label: label,
-        errorMessage: errorMessage,
-        workspaceAccountingLink: workspaceAccountingLink,
+        label,
+        errorMessage,
+        workspaceAccountingLink,
     });
 }
 function getManagerOnVacation(action) {
-    var _a;
     if (!isApprovedAction(action)) {
         return;
     }
-    return (_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.managerOnVacation;
+    return getOriginalMessage(action)?.managerOnVacation;
 }
 function getVacationer(action) {
-    var _a;
     if (!isSubmittedAction(action)) {
         return;
     }
-    return (_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.vacationer;
+    return getOriginalMessage(action)?.vacationer;
 }
 function getSubmittedTo(action) {
-    var _a;
     if (!isSubmittedAction(action)) {
         return;
     }
-    return (_a = getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.to;
+    return getOriginalMessage(action)?.to;
 }

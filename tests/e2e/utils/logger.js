@@ -1,40 +1,27 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeToLogFile = exports.success = exports.error = exports.note = exports.warn = exports.info = exports.log = void 0;
 /* eslint-disable import/no-import-module-exports */
-var fs_1 = require("fs");
-var path_1 = require("path");
-var config_1 = require("../config");
-var COLOR_DIM = '\x1b[2m';
-var COLOR_RESET = '\x1b[0m';
-var COLOR_YELLOW = '\x1b[33m';
-var COLOR_RED = '\x1b[31m';
-var COLOR_GREEN = '\x1b[32m';
-var getDateString = function () { return "[".concat(Date(), "] "); };
-var writeToLogFile = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
+const fs_1 = require("fs");
+const path_1 = require("path");
+const config_1 = require("../config");
+const COLOR_DIM = '\x1b[2m';
+const COLOR_RESET = '\x1b[0m';
+const COLOR_YELLOW = '\x1b[33m';
+const COLOR_RED = '\x1b[31m';
+const COLOR_GREEN = '\x1b[32m';
+const getDateString = () => `[${Date()}] `;
+const writeToLogFile = (...args) => {
     if (!fs_1.default.existsSync(config_1.default.LOG_FILE)) {
         // Check that the directory exists
-        var logDir = path_1.default.dirname(config_1.default.LOG_FILE);
+        const logDir = path_1.default.dirname(config_1.default.LOG_FILE);
         if (!fs_1.default.existsSync(logDir)) {
             fs_1.default.mkdirSync(logDir);
         }
         fs_1.default.writeFileSync(config_1.default.LOG_FILE, '');
     }
-    fs_1.default.appendFileSync(config_1.default.LOG_FILE, "".concat(args
-        .map(function (arg) {
+    fs_1.default.appendFileSync(config_1.default.LOG_FILE, `${args
+        .map((arg) => {
         if (typeof arg === 'string') {
             // Remove color codes from arg, because they are not supported in log files
             // eslint-disable-next-line no-control-regex
@@ -43,60 +30,36 @@ var writeToLogFile = function () {
         return arg;
     })
         .join(' ')
-        .trim(), "\n"));
+        .trim()}\n`);
 };
 exports.writeToLogFile = writeToLogFile;
-var log = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var argsWithTime = __spreadArray([getDateString()], args, true);
-    console.debug.apply(console, argsWithTime);
-    writeToLogFile.apply(void 0, argsWithTime);
+const log = (...args) => {
+    const argsWithTime = [getDateString(), ...args];
+    console.debug(...argsWithTime);
+    writeToLogFile(...argsWithTime);
 };
 exports.log = log;
-var info = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    log.apply(void 0, __spreadArray(['▶️'], args, false));
+const info = (...args) => {
+    log('▶️', ...args);
 };
 exports.info = info;
-var success = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray(['✅', COLOR_GREEN], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const success = (...args) => {
+    const lines = ['✅', COLOR_GREEN, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.success = success;
-var warn = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray(['⚠️', COLOR_YELLOW], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const warn = (...args) => {
+    const lines = ['⚠️', COLOR_YELLOW, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.warn = warn;
-var note = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray([COLOR_DIM], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const note = (...args) => {
+    const lines = [COLOR_DIM, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.note = note;
-var error = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var lines = __spreadArray(__spreadArray(['🔴', COLOR_RED], args, true), [COLOR_RESET], false);
-    log.apply(void 0, lines);
+const error = (...args) => {
+    const lines = ['🔴', COLOR_RED, ...args, COLOR_RESET];
+    log(...lines);
 };
 exports.error = error;

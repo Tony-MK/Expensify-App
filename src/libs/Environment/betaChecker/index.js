@@ -7,5 +7,5 @@ function isBetaBuild() {
     return Promise.resolve(false);
 }
 exports.default = {
-    isBetaBuild: isBetaBuild,
+    isBetaBuild,
 };

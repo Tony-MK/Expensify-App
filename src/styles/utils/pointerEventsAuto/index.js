@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pointerEventsAuto = {
+const pointerEventsAuto = {
     pointerEvents: 'auto',
 };
 exports.default = pointerEventsAuto;

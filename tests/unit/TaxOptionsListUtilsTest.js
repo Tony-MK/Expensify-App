@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var TaxOptionsListUtils_1 = require("@libs/TaxOptionsListUtils");
-var IntlStore_1 = require("@src/languages/IntlStore");
-var TestHelper_1 = require("../utils/TestHelper");
-var waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
-describe('TaxOptionsListUtils', function () {
-    beforeAll(function () {
+const TaxOptionsListUtils_1 = require("@libs/TaxOptionsListUtils");
+const IntlStore_1 = require("@src/languages/IntlStore");
+const TestHelper_1 = require("../utils/TestHelper");
+const waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
+describe('TaxOptionsListUtils', () => {
+    beforeAll(() => {
         IntlStore_1.default.load('en');
         return (0, waitForBatchedUpdates_1.default)();
     });
-    it('getTaxRatesSection()', function () {
-        var search = 'rate';
-        var emptySearch = '';
-        var tokenizeSearch = 'Tax 2';
-        var wrongSearch = 'bla bla';
-        var taxRatesWithDefault = {
+    it('getTaxRatesSection()', () => {
+        const search = 'rate';
+        const emptySearch = '';
+        const tokenizeSearch = 'Tax 2';
+        const wrongSearch = 'bla bla';
+        const taxRatesWithDefault = {
             name: 'Tax',
             defaultExternalID: 'CODE1',
             defaultValue: '0%',
@@ -43,13 +43,13 @@ describe('TaxOptionsListUtils', function () {
                 },
             },
         };
-        var policy = {
+        const policy = {
             taxRates: taxRatesWithDefault,
         };
-        var transaction = {
+        const transaction = {
             taxCode: 'CODE1',
         };
-        var resultList = [
+        const resultList = [
             {
                 data: [
                     {
@@ -87,7 +87,7 @@ describe('TaxOptionsListUtils', function () {
                 title: '',
             },
         ];
-        var searchResultList = [
+        const searchResultList = [
             {
                 data: [
                     {
@@ -105,39 +105,39 @@ describe('TaxOptionsListUtils', function () {
                 title: '',
             },
         ];
-        var wrongSearchResultList = [
+        const wrongSearchResultList = [
             {
                 data: [],
                 shouldShow: true,
                 title: '',
             },
         ];
-        var result = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
-            policy: policy,
+        const result = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
+            policy,
             searchValue: emptySearch,
             localeCompare: TestHelper_1.localeCompare,
-            transaction: transaction,
+            transaction,
         });
         expect(result).toStrictEqual(resultList);
-        var searchResult = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
-            policy: policy,
+        const searchResult = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
+            policy,
             searchValue: search,
             localeCompare: TestHelper_1.localeCompare,
-            transaction: transaction,
+            transaction,
         });
         expect(searchResult).toStrictEqual(searchResultList);
-        var tokenizeSearchResult = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
-            policy: policy,
+        const tokenizeSearchResult = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
+            policy,
             searchValue: tokenizeSearch,
             localeCompare: TestHelper_1.localeCompare,
-            transaction: transaction,
+            transaction,
         });
         expect(tokenizeSearchResult).toStrictEqual(searchResultList);
-        var wrongSearchResult = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
-            policy: policy,
+        const wrongSearchResult = (0, TaxOptionsListUtils_1.getTaxRatesSection)({
+            policy,
             searchValue: wrongSearch,
             localeCompare: TestHelper_1.localeCompare,
-            transaction: transaction,
+            transaction,
         });
         expect(wrongSearchResult).toStrictEqual(wrongSearchResultList);
     });

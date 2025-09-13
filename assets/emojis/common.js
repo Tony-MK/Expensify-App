@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.categoryFrequentlyUsed = exports.skinTones = void 0;
-var emoji_svg_1 = require("@assets/images/emoji.svg");
-var flag_svg_1 = require("@assets/images/emojiCategoryIcons/flag.svg");
-var hamburger_svg_1 = require("@assets/images/emojiCategoryIcons/hamburger.svg");
-var light_bulb_svg_1 = require("@assets/images/emojiCategoryIcons/light-bulb.svg");
-var peace_sign_svg_1 = require("@assets/images/emojiCategoryIcons/peace-sign.svg");
-var plane_svg_1 = require("@assets/images/emojiCategoryIcons/plane.svg");
-var plant_svg_1 = require("@assets/images/emojiCategoryIcons/plant.svg");
-var soccer_ball_svg_1 = require("@assets/images/emojiCategoryIcons/soccer-ball.svg");
-var history_svg_1 = require("@assets/images/history.svg");
-var CONST_1 = require("@src/CONST");
-var skinTones = [
+const emoji_svg_1 = require("@assets/images/emoji.svg");
+const flag_svg_1 = require("@assets/images/emojiCategoryIcons/flag.svg");
+const hamburger_svg_1 = require("@assets/images/emojiCategoryIcons/hamburger.svg");
+const light_bulb_svg_1 = require("@assets/images/emojiCategoryIcons/light-bulb.svg");
+const peace_sign_svg_1 = require("@assets/images/emojiCategoryIcons/peace-sign.svg");
+const plane_svg_1 = require("@assets/images/emojiCategoryIcons/plane.svg");
+const plant_svg_1 = require("@assets/images/emojiCategoryIcons/plant.svg");
+const soccer_ball_svg_1 = require("@assets/images/emojiCategoryIcons/soccer-ball.svg");
+const history_svg_1 = require("@assets/images/history.svg");
+const CONST_1 = require("@src/CONST");
+const skinTones = [
     {
         code: '🖐',
         skinTone: -1,
@@ -38,7 +38,7 @@ var skinTones = [
     },
 ];
 exports.skinTones = skinTones;
-var emojis = [
+const emojis = [
     {
         header: true,
         icon: emoji_svg_1.default,
@@ -7869,7 +7869,7 @@ var emojis = [
         code: CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE,
     },
 ];
-var categoryFrequentlyUsed = {
+const categoryFrequentlyUsed = {
     header: true,
     code: 'frequentlyUsed',
     icon: history_svg_1.default,

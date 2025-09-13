@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Default = void 0;
-var react_1 = require("react");
-var InlineSystemMessage_1 = require("@components/InlineSystemMessage");
+const react_1 = require("react");
+const InlineSystemMessage_1 = require("@components/InlineSystemMessage");
 /**
  * We use the Component Story Format for writing stories. Follow the docs here:
  *
  * https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
  */
-var story = {
+const story = {
     title: 'Components/InlineSystemMessage',
     component: InlineSystemMessage_1.default,
 };
@@ -18,7 +18,7 @@ function Template(props) {
 }
 // Arguments can be passed to the component by binding
 // See: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-var Default = Template.bind({});
+const Default = Template.bind({});
 exports.Default = Default;
 Default.args = {
     message: 'This is an error message',

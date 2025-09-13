@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KEYS_TO_PRESERVE = void 0;
 exports.setLocale = setLocale;
@@ -33,97 +22,96 @@ exports.setIsUsingImportedState = setIsUsingImportedState;
 exports.clearOnyxAndResetApp = clearOnyxAndResetApp;
 exports.setPreservedUserSession = setPreservedUserSession;
 // Issue - https://github.com/Expensify/App/issues/26719
-var expensify_common_1 = require("expensify-common");
-var react_native_1 = require("react-native");
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var Browser = require("@libs/Browser");
-var DateUtils_1 = require("@libs/DateUtils");
-var Log_1 = require("@libs/Log");
-var currentUrl_1 = require("@libs/Navigation/currentUrl");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Performance_1 = require("@libs/Performance");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var SessionUtils_1 = require("@libs/SessionUtils");
-var Sound_1 = require("@libs/Sound");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var Network_1 = require("./Network");
-var PersistedRequests_1 = require("./PersistedRequests");
-var Policy_1 = require("./Policy/Policy");
-var Session_1 = require("./Session");
+const expensify_common_1 = require("expensify-common");
+const react_native_1 = require("react-native");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const Browser = require("@libs/Browser");
+const DateUtils_1 = require("@libs/DateUtils");
+const Log_1 = require("@libs/Log");
+const currentUrl_1 = require("@libs/Navigation/currentUrl");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Performance_1 = require("@libs/Performance");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const SessionUtils_1 = require("@libs/SessionUtils");
+const Sound_1 = require("@libs/Sound");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const Network_1 = require("./Network");
+const PersistedRequests_1 = require("./PersistedRequests");
+const Policy_1 = require("./Policy/Policy");
+const Session_1 = require("./Session");
 // `currentSessionData` is only used in actions, not during render. So `Onyx.connectWithoutView` is appropriate.
 // If React components need this value in the future, use `useOnyx` instead.
-var currentSessionData = {
+let currentSessionData = {
     accountID: undefined,
     email: '',
 };
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (val) {
-        var _a;
+    callback: (val) => {
         currentSessionData = {
-            accountID: val === null || val === void 0 ? void 0 : val.accountID,
-            email: (_a = val === null || val === void 0 ? void 0 : val.email) !== null && _a !== void 0 ? _a : '',
+            accountID: val?.accountID,
+            email: val?.email ?? '',
         };
     },
 });
 // `isSidebarLoaded` is only used inside the event handler, not during render.
 // `useOnyx` would trigger extra rerenders without affecting the View, so `Onyx.connectWithoutView` is used instead
-var isSidebarLoaded;
+let isSidebarLoaded;
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.IS_SIDEBAR_LOADED,
-    callback: function (val) { return (isSidebarLoaded = val); },
+    callback: (val) => (isSidebarLoaded = val),
     initWithStoredValues: false,
 });
 // `isUsingImportedState` is only used in `clearOnyxAndResetApp`, not during render. So `Onyx.connectWithoutView` is appropriate.
 // If React components need this value in the future, use `useOnyx` instead.
-var isUsingImportedState;
+let isUsingImportedState;
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.IS_USING_IMPORTED_STATE,
-    callback: function (value) {
-        isUsingImportedState = value !== null && value !== void 0 ? value : false;
+    callback: (value) => {
+        isUsingImportedState = value ?? false;
     },
 });
 // hasLoadedAppPromise is used in the "reconnectApp" function and is not directly associated with the View,
 // so retrieving it using Onyx.connectWithoutView is correct.
-var resolveHasLoadedAppPromise;
-var hasLoadedAppPromise = new Promise(function (resolve) {
+let resolveHasLoadedAppPromise;
+const hasLoadedAppPromise = new Promise((resolve) => {
     resolveHasLoadedAppPromise = resolve;
 });
 // hasLoadedApp is used in the "reconnectApp" function and is not directly associated with the View,
 // so retrieving it using Onyx.connectWithoutView is correct.
 // If this variable is ever needed for use in React components, it should be retrieved using useOnyx.
-var hasLoadedApp;
+let hasLoadedApp;
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.HAS_LOADED_APP,
-    callback: function (value) {
+    callback: (value) => {
         hasLoadedApp = value;
-        resolveHasLoadedAppPromise === null || resolveHasLoadedAppPromise === void 0 ? void 0 : resolveHasLoadedAppPromise();
+        resolveHasLoadedAppPromise?.();
     },
 });
 // allReports is used in the "ForOpenOrReconnect" functions and is not directly associated with the View,
 // so retrieving it using Onyx.connectWithoutView is correct.
 // If this variable is ever needed for use in React components, it should be retrieved using useOnyx.
-var allReports;
+let allReports;
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.COLLECTION.REPORT,
     waitForCollectionCallback: true,
-    callback: function (value) {
+    callback: (value) => {
         allReports = value;
     },
 });
-var preservedUserSession;
+let preservedUserSession;
 // We called `connectWithoutView` here because it is not connected to any UI
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.PRESERVED_USER_SESSION,
-    callback: function (value) {
+    callback: (value) => {
         preservedUserSession = value;
     },
 });
-var KEYS_TO_PRESERVE = [
+const KEYS_TO_PRESERVE = [
     ONYXKEYS_1.default.ACCOUNT,
     ONYXKEYS_1.default.IS_CHECKING_PUBLIC_ROOM,
     ONYXKEYS_1.default.IS_LOADING_APP,
@@ -150,11 +138,11 @@ exports.KEYS_TO_PRESERVE = KEYS_TO_PRESERVE;
  */
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.RESET_REQUIRED,
-    callback: function (isResetRequired) {
+    callback: (isResetRequired) => {
         if (!isResetRequired) {
             return;
         }
-        react_native_onyx_1.default.clear(KEYS_TO_PRESERVE).then(function () {
+        react_native_onyx_1.default.clear(KEYS_TO_PRESERVE).then(() => {
             // Set this to false to reset the flag for this client
             react_native_onyx_1.default.set(ONYXKEYS_1.default.RESET_REQUIRED, false);
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -162,18 +150,18 @@ react_native_onyx_1.default.connectWithoutView({
         });
     },
 });
-var resolveIsReadyPromise;
-var isReadyToOpenApp = new Promise(function (resolve) {
+let resolveIsReadyPromise;
+const isReadyToOpenApp = new Promise((resolve) => {
     resolveIsReadyPromise = resolve;
 });
 function confirmReadyToOpenApp() {
     resolveIsReadyPromise();
 }
 function getNonOptimisticPolicyIDs(policies) {
-    return Object.values(policies !== null && policies !== void 0 ? policies : {})
-        .filter(function (policy) { return policy && policy.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD; })
-        .map(function (policy) { return policy === null || policy === void 0 ? void 0 : policy.id; })
-        .filter(function (id) { return !!id; });
+    return Object.values(policies ?? {})
+        .filter((policy) => policy && policy.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.ADD)
+        .map((policy) => policy?.id)
+        .filter((id) => !!id);
 }
 function setLocale(locale, currentPreferredLocale) {
     if (locale === currentPreferredLocale) {
@@ -185,17 +173,17 @@ function setLocale(locale, currentPreferredLocale) {
         return;
     }
     // Optimistically change preferred locale
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PREFERRED_LOCALE,
             value: locale,
         },
     ];
-    var parameters = {
+    const parameters = {
         value: locale,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_PREFERRED_LOCALE, parameters, { optimisticData: optimisticData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_PREFERRED_LOCALE, parameters, { optimisticData });
 }
 function setSidebarLoaded() {
     if (isSidebarLoaded) {
@@ -207,8 +195,8 @@ function setSidebarLoaded() {
 function setAppLoading(isLoading) {
     react_native_onyx_1.default.set(ONYXKEYS_1.default.IS_LOADING_APP, isLoading);
 }
-var appState;
-react_native_1.AppState.addEventListener('change', function (nextAppState) {
+let appState;
+react_native_1.AppState.addEventListener('change', (nextAppState) => {
     if (nextAppState.match(/inactive|background/) && appState === 'active') {
         Log_1.default.info('Flushing logs as app is going inactive', true, {}, true);
     }
@@ -218,12 +206,12 @@ react_native_1.AppState.addEventListener('change', function (nextAppState) {
  * Gets the policy params that are passed to the server in the OpenApp and ReconnectApp API commands. This includes a full list of policy IDs the client knows about as well as when they were last modified.
  */
 function getPolicyParamsForOpenOrReconnect() {
-    return new Promise(function (resolve) {
-        isReadyToOpenApp.then(function () {
-            var connection = react_native_onyx_1.default.connect({
+    return new Promise((resolve) => {
+        isReadyToOpenApp.then(() => {
+            const connection = react_native_onyx_1.default.connect({
                 key: ONYXKEYS_1.default.COLLECTION.POLICY,
                 waitForCollectionCallback: true,
-                callback: function (policies) {
+                callback: (policies) => {
                     react_native_onyx_1.default.disconnect(connection);
                     resolve({ policyIDList: getNonOptimisticPolicyIDs(policies) });
                 },
@@ -234,12 +222,8 @@ function getPolicyParamsForOpenOrReconnect() {
 /**
  * Returns the Onyx data that is used for both the OpenApp and ReconnectApp API commands.
  */
-function getOnyxDataForOpenOrReconnect(isOpenApp, isFullReconnect, shouldKeepPublicRooms, allReportsWithDraftComments) {
-    var _a, _b, _c;
-    if (isOpenApp === void 0) { isOpenApp = false; }
-    if (isFullReconnect === void 0) { isFullReconnect = false; }
-    if (shouldKeepPublicRooms === void 0) { shouldKeepPublicRooms = false; }
-    var result = {
+function getOnyxDataForOpenOrReconnect(isOpenApp = false, isFullReconnect = false, shouldKeepPublicRooms = false, allReportsWithDraftComments) {
+    const result = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -264,53 +248,49 @@ function getOnyxDataForOpenOrReconnect(isOpenApp, isFullReconnect, shouldKeepPub
         ],
     };
     if (isOpenApp) {
-        (_a = result.optimisticData) === null || _a === void 0 ? void 0 : _a.push({
+        result.optimisticData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.IS_LOADING_APP,
             value: true,
         });
-        (_b = result.finallyData) === null || _b === void 0 ? void 0 : _b.push({
+        result.finallyData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.IS_LOADING_APP,
             value: false,
         });
     }
     if (isOpenApp || isFullReconnect) {
-        (_c = result.successData) === null || _c === void 0 ? void 0 : _c.push({
+        result.successData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.LAST_FULL_RECONNECT_TIME,
             value: DateUtils_1.default.getDBTime(),
         });
     }
     if (shouldKeepPublicRooms) {
-        var publicReports = Object.values(allReports !== null && allReports !== void 0 ? allReports : {}).filter(function (report) { return (0, ReportUtils_1.isPublicRoom)(report) && (0, ReportUtils_1.isValidReport)(report); });
-        publicReports === null || publicReports === void 0 ? void 0 : publicReports.forEach(function (report) {
-            var _a;
-            (_a = result.successData) === null || _a === void 0 ? void 0 : _a.push({
+        const publicReports = Object.values(allReports ?? {}).filter((report) => (0, ReportUtils_1.isPublicRoom)(report) && (0, ReportUtils_1.isValidReport)(report));
+        publicReports?.forEach((report) => {
+            result.successData?.push({
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(report === null || report === void 0 ? void 0 : report.reportID),
-                value: __assign({}, report),
+                key: `${ONYXKEYS_1.default.COLLECTION.REPORT}${report?.reportID}`,
+                value: {
+                    ...report,
+                },
             });
         });
     }
     // Find all reports that have a non-null draft comment and map them to their corresponding report objects from allReports
     // This ensures that any report with a draft comment is preserved in Onyx even if it doesn’t contain chat history
-    var reportsWithDraftComments = Object.entries(allReportsWithDraftComments !== null && allReportsWithDraftComments !== void 0 ? allReportsWithDraftComments : {})
-        .filter(function (_a) {
-        var value = _a[1];
-        return value !== null;
-    })
-        .map(function (_a) {
-        var key = _a[0];
-        return key.replace(ONYXKEYS_1.default.COLLECTION.REPORT_DRAFT_COMMENT, '');
-    })
-        .map(function (reportID) { return allReports === null || allReports === void 0 ? void 0 : allReports["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(reportID)]; });
-    reportsWithDraftComments === null || reportsWithDraftComments === void 0 ? void 0 : reportsWithDraftComments.forEach(function (report) {
-        var _a;
-        (_a = result.successData) === null || _a === void 0 ? void 0 : _a.push({
+    const reportsWithDraftComments = Object.entries(allReportsWithDraftComments ?? {})
+        .filter(([, value]) => value !== null)
+        .map(([key]) => key.replace(ONYXKEYS_1.default.COLLECTION.REPORT_DRAFT_COMMENT, ''))
+        .map((reportID) => allReports?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${reportID}`]);
+    reportsWithDraftComments?.forEach((report) => {
+        result.successData?.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(report === null || report === void 0 ? void 0 : report.reportID),
-            value: __assign({}, report),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT}${report?.reportID}`,
+            value: {
+                ...report,
+            },
         });
     });
     return result;
@@ -318,10 +298,9 @@ function getOnyxDataForOpenOrReconnect(isOpenApp, isFullReconnect, shouldKeepPub
 /**
  * Fetches data needed for app initialization
  */
-function openApp(shouldKeepPublicRooms, allReportsWithDraftComments) {
-    if (shouldKeepPublicRooms === void 0) { shouldKeepPublicRooms = false; }
-    return getPolicyParamsForOpenOrReconnect().then(function (policyParams) {
-        var params = __assign({ enablePriorityModeFilter: true }, policyParams);
+function openApp(shouldKeepPublicRooms = false, allReportsWithDraftComments) {
+    return getPolicyParamsForOpenOrReconnect().then((policyParams) => {
+        const params = { enablePriorityModeFilter: true, ...policyParams };
         return API.writeWithNoDuplicatesConflictAction(types_1.WRITE_COMMANDS.OPEN_APP, params, getOnyxDataForOpenOrReconnect(true, undefined, shouldKeepPublicRooms, allReportsWithDraftComments));
     });
 }
@@ -329,22 +308,21 @@ function openApp(shouldKeepPublicRooms, allReportsWithDraftComments) {
  * Fetches data when the app reconnects to the network
  * @param [updateIDFrom] the ID of the Onyx update that we want to start fetching from
  */
-function reconnectApp(updateIDFrom) {
-    if (updateIDFrom === void 0) { updateIDFrom = 0; }
-    hasLoadedAppPromise.then(function () {
+function reconnectApp(updateIDFrom = 0) {
+    hasLoadedAppPromise.then(() => {
         if (!hasLoadedApp) {
             openApp();
             return;
         }
-        console.debug("[OnyxUpdates] App reconnecting with updateIDFrom: ".concat(updateIDFrom));
-        getPolicyParamsForOpenOrReconnect().then(function (policyParams) {
-            var params = policyParams;
+        console.debug(`[OnyxUpdates] App reconnecting with updateIDFrom: ${updateIDFrom}`);
+        getPolicyParamsForOpenOrReconnect().then((policyParams) => {
+            const params = policyParams;
             // Include the update IDs when reconnecting so that the server can send incremental updates if they are available.
             // Otherwise, a full set of app data will be returned.
             if (updateIDFrom) {
                 params.updateIDFrom = updateIDFrom;
             }
-            var isFullReconnect = !updateIDFrom;
+            const isFullReconnect = !updateIDFrom;
             API.writeWithNoDuplicatesConflictAction(types_1.WRITE_COMMANDS.RECONNECT_APP, params, getOnyxDataForOpenOrReconnect(false, isFullReconnect, isSidebarLoaded));
         });
     });
@@ -355,9 +333,9 @@ function reconnectApp(updateIDFrom) {
  * state because of race conditions between reconnectApp and other pusher updates being applied at the same time.
  */
 function finalReconnectAppAfterActivatingReliableUpdates() {
-    console.debug("[OnyxUpdates] Executing last reconnect app with promise");
-    return getPolicyParamsForOpenOrReconnect().then(function (policyParams) {
-        var params = __assign({}, policyParams);
+    console.debug(`[OnyxUpdates] Executing last reconnect app with promise`);
+    return getPolicyParamsForOpenOrReconnect().then((policyParams) => {
+        const params = { ...policyParams };
         // It is SUPER BAD FORM to return promises from action methods.
         // DO NOT FOLLOW THIS PATTERN!!!!!
         // It was absolutely necessary in order to not break the app while migrating to the new reliable updates pattern. This method will be removed
@@ -371,13 +349,11 @@ function finalReconnectAppAfterActivatingReliableUpdates() {
  * @param [updateIDFrom] the ID of the Onyx update that we want to start fetching from
  * @param [updateIDTo] the ID of the Onyx update that we want to fetch up to
  */
-function getMissingOnyxUpdates(updateIDFrom, updateIDTo) {
-    if (updateIDFrom === void 0) { updateIDFrom = 0; }
-    if (updateIDTo === void 0) { updateIDTo = 0; }
-    console.debug("[OnyxUpdates] Fetching missing updates updateIDFrom: ".concat(updateIDFrom, " and updateIDTo: ").concat(updateIDTo));
-    var parameters = {
-        updateIDFrom: updateIDFrom,
-        updateIDTo: updateIDTo,
+function getMissingOnyxUpdates(updateIDFrom = 0, updateIDTo = 0) {
+    console.debug(`[OnyxUpdates] Fetching missing updates updateIDFrom: ${updateIDFrom} and updateIDTo: ${updateIDTo}`);
+    const parameters = {
+        updateIDFrom,
+        updateIDTo,
     };
     // It is SUPER BAD FORM to return promises from action methods.
     // DO NOT FOLLOW THIS PATTERN!!!!!
@@ -389,8 +365,8 @@ function getMissingOnyxUpdates(updateIDFrom, updateIDTo) {
  * This promise is used so that deeplink component know when a transition is end.
  * This is necessary because we want to begin deeplink redirection after the transition is end.
  */
-var resolveSignOnTransitionToFinishPromise;
-var signOnTransitionToFinishPromise = new Promise(function (resolve) {
+let resolveSignOnTransitionToFinishPromise;
+const signOnTransitionToFinishPromise = new Promise((resolve) => {
     resolveSignOnTransitionToFinishPromise = resolve;
 });
 function waitForSignOnTransitionToFinish() {
@@ -412,22 +388,16 @@ function endSignOnTransition() {
  * @param [file], avatar file for workspace
  * @param [routeToNavigateAfterCreate], Optional, route to navigate after creating a workspace
  */
-function createWorkspaceWithPolicyDraftAndNavigateToIt(policyOwnerEmail, policyName, transitionFromOldDot, makeMeAdmin, backTo, policyID, currency, file, routeToNavigateAfterCreate, lastUsedPaymentMethod) {
-    if (policyOwnerEmail === void 0) { policyOwnerEmail = ''; }
-    if (policyName === void 0) { policyName = ''; }
-    if (transitionFromOldDot === void 0) { transitionFromOldDot = false; }
-    if (makeMeAdmin === void 0) { makeMeAdmin = false; }
-    if (backTo === void 0) { backTo = ''; }
-    if (policyID === void 0) { policyID = ''; }
-    var policyIDWithDefault = policyID || (0, Policy_1.generatePolicyID)();
+function createWorkspaceWithPolicyDraftAndNavigateToIt(policyOwnerEmail = '', policyName = '', transitionFromOldDot = false, makeMeAdmin = false, backTo = '', policyID = '', currency, file, routeToNavigateAfterCreate, lastUsedPaymentMethod) {
+    const policyIDWithDefault = policyID || (0, Policy_1.generatePolicyID)();
     (0, Policy_1.createDraftInitialWorkspace)(policyOwnerEmail, policyName, policyIDWithDefault, makeMeAdmin, currency, file);
     Navigation_1.default.isNavigationReady()
-        .then(function () {
+        .then(() => {
         if (transitionFromOldDot) {
             // We must call goBack() to remove the /transition route from history
             Navigation_1.default.goBack();
         }
-        var routeToNavigate = routeToNavigateAfterCreate !== null && routeToNavigateAfterCreate !== void 0 ? routeToNavigateAfterCreate : ROUTES_1.default.WORKSPACE_INITIAL.getRoute(policyIDWithDefault, backTo);
+        const routeToNavigate = routeToNavigateAfterCreate ?? ROUTES_1.default.WORKSPACE_INITIAL.getRoute(policyIDWithDefault, backTo);
         savePolicyDraftByNewWorkspace(policyIDWithDefault, policyName, policyOwnerEmail, makeMeAdmin, currency, file, lastUsedPaymentMethod);
         Navigation_1.default.navigate(routeToNavigate, { forceReplace: !transitionFromOldDot });
     })
@@ -443,19 +413,16 @@ function createWorkspaceWithPolicyDraftAndNavigateToIt(policyOwnerEmail, policyN
  * @param [currency] Optional, selected currency for the workspace
  * @param [file] Optional, avatar file for workspace
  */
-function savePolicyDraftByNewWorkspace(policyID, policyName, policyOwnerEmail, makeMeAdmin, currency, file, lastUsedPaymentMethod) {
-    if (policyOwnerEmail === void 0) { policyOwnerEmail = ''; }
-    if (makeMeAdmin === void 0) { makeMeAdmin = false; }
-    if (currency === void 0) { currency = ''; }
+function savePolicyDraftByNewWorkspace(policyID, policyName, policyOwnerEmail = '', makeMeAdmin = false, currency = '', file, lastUsedPaymentMethod) {
     (0, Policy_1.createWorkspace)({
-        policyOwnerEmail: policyOwnerEmail,
-        makeMeAdmin: makeMeAdmin,
-        policyName: policyName,
-        policyID: policyID,
+        policyOwnerEmail,
+        makeMeAdmin,
+        policyName,
+        policyID,
         engagementChoice: CONST_1.default.ONBOARDING_CHOICES.MANAGE_TEAM,
-        currency: currency,
-        file: file,
-        lastUsedPaymentMethod: lastUsedPaymentMethod,
+        currency,
+        file,
+        lastUsedPaymentMethod,
     });
 }
 /**
@@ -478,30 +445,29 @@ function savePolicyDraftByNewWorkspace(policyID, policyName, policyOwnerEmail, m
  * from Onyx because it will not render the AuthScreens until that point.
  */
 function setUpPoliciesAndNavigate(session) {
-    var _a, _b;
-    var currentUrl = (0, currentUrl_1.default)();
-    if (!session || !(currentUrl === null || currentUrl === void 0 ? void 0 : currentUrl.includes('exitTo'))) {
+    const currentUrl = (0, currentUrl_1.default)();
+    if (!session || !currentUrl?.includes('exitTo')) {
         endSignOnTransition();
         return;
     }
-    var isLoggingInAsNewUser = !!session.email && (0, SessionUtils_1.isLoggingInAsNewUser)(currentUrl, session.email);
-    var url = new URL(currentUrl);
-    var exitTo = url.searchParams.get('exitTo');
+    const isLoggingInAsNewUser = !!session.email && (0, SessionUtils_1.isLoggingInAsNewUser)(currentUrl, session.email);
+    const url = new URL(currentUrl);
+    const exitTo = url.searchParams.get('exitTo');
     // Approved Accountants and Guides can enter a flow where they make a workspace for other users,
     // and those are passed as a search parameter when using transition links
-    var policyOwnerEmail = (_a = url.searchParams.get('ownerEmail')) !== null && _a !== void 0 ? _a : '';
-    var makeMeAdmin = !!url.searchParams.get('makeMeAdmin');
-    var policyName = (_b = url.searchParams.get('policyName')) !== null && _b !== void 0 ? _b : '';
+    const policyOwnerEmail = url.searchParams.get('ownerEmail') ?? '';
+    const makeMeAdmin = !!url.searchParams.get('makeMeAdmin');
+    const policyName = url.searchParams.get('policyName') ?? '';
     // Sign out the current user if we're transitioning with a different user
-    var isTransitioning = expensify_common_1.Str.startsWith(url.pathname, expensify_common_1.Str.normalizeUrl(ROUTES_1.default.TRANSITION_BETWEEN_APPS));
-    var shouldCreateFreePolicy = !isLoggingInAsNewUser && isTransitioning && exitTo === ROUTES_1.default.WORKSPACE_NEW;
+    const isTransitioning = expensify_common_1.Str.startsWith(url.pathname, expensify_common_1.Str.normalizeUrl(ROUTES_1.default.TRANSITION_BETWEEN_APPS));
+    const shouldCreateFreePolicy = !isLoggingInAsNewUser && isTransitioning && exitTo === ROUTES_1.default.WORKSPACE_NEW;
     if (shouldCreateFreePolicy) {
         createWorkspaceWithPolicyDraftAndNavigateToIt(policyOwnerEmail, policyName, true, makeMeAdmin);
         return;
     }
     if (!isLoggingInAsNewUser && exitTo) {
         Navigation_1.default.waitForProtectedRoutes()
-            .then(function () {
+            .then(() => {
             Navigation_1.default.navigate(exitTo);
         })
             .then(endSignOnTransition);
@@ -511,13 +477,13 @@ function setUpPoliciesAndNavigate(session) {
     }
 }
 function redirectThirdPartyDesktopSignIn() {
-    var currentUrl = (0, currentUrl_1.default)();
+    const currentUrl = (0, currentUrl_1.default)();
     if (!currentUrl) {
         return;
     }
-    var url = new URL(currentUrl);
-    if (url.pathname === "/".concat(ROUTES_1.default.GOOGLE_SIGN_IN) || url.pathname === "/".concat(ROUTES_1.default.APPLE_SIGN_IN)) {
-        Navigation_1.default.isNavigationReady().then(function () {
+    const url = new URL(currentUrl);
+    if (url.pathname === `/${ROUTES_1.default.GOOGLE_SIGN_IN}` || url.pathname === `/${ROUTES_1.default.APPLE_SIGN_IN}`) {
+        Navigation_1.default.isNavigationReady().then(() => {
             Navigation_1.default.goBack();
             Navigation_1.default.navigate(ROUTES_1.default.DESKTOP_SIGN_IN_REDIRECT);
         });
@@ -526,8 +492,7 @@ function redirectThirdPartyDesktopSignIn() {
 /**
  * @param shouldAuthenticateWithCurrentAccount Optional, indicates whether default authentication method (shortLivedAuthToken) should be used
  */
-function beginDeepLinkRedirect(shouldAuthenticateWithCurrentAccount, isMagicLink, initialRoute) {
-    if (shouldAuthenticateWithCurrentAccount === void 0) { shouldAuthenticateWithCurrentAccount = true; }
+function beginDeepLinkRedirect(shouldAuthenticateWithCurrentAccount = true, isMagicLink, initialRoute) {
     // There's no support for anonymous users on desktop
     if ((0, Session_1.isAnonymousUser)()) {
         return;
@@ -538,11 +503,11 @@ function beginDeepLinkRedirect(shouldAuthenticateWithCurrentAccount, isMagicLink
         Browser.openRouteInDesktopApp();
         return;
     }
-    var parameters = { shouldRetry: false };
+    const parameters = { shouldRetry: false };
     // eslint-disable-next-line rulesdir/no-api-side-effects-method
-    API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.OPEN_OLD_DOT_LINK, parameters, {}).then(function (response) {
+    API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.OPEN_OLD_DOT_LINK, parameters, {}).then((response) => {
         if (!response) {
-            Log_1.default.alert('Trying to redirect via deep link, but the response is empty. User likely not authenticated.', { response: response, shouldAuthenticateWithCurrentAccount: shouldAuthenticateWithCurrentAccount, currentUserAccountID: currentSessionData.accountID }, true);
+            Log_1.default.alert('Trying to redirect via deep link, but the response is empty. User likely not authenticated.', { response, shouldAuthenticateWithCurrentAccount, currentUserAccountID: currentSessionData.accountID }, true);
             return;
         }
         Browser.openRouteInDesktopApp(response.shortLivedAuthToken, currentSessionData.email, isMagicLink ? '/r' : initialRoute);
@@ -551,12 +516,11 @@ function beginDeepLinkRedirect(shouldAuthenticateWithCurrentAccount, isMagicLink
 /**
  * @param shouldAuthenticateWithCurrentAccount Optional, indicates whether default authentication method (shortLivedAuthToken) should be used
  */
-function beginDeepLinkRedirectAfterTransition(shouldAuthenticateWithCurrentAccount) {
-    if (shouldAuthenticateWithCurrentAccount === void 0) { shouldAuthenticateWithCurrentAccount = true; }
-    waitForSignOnTransitionToFinish().then(function () { return beginDeepLinkRedirect(shouldAuthenticateWithCurrentAccount); });
+function beginDeepLinkRedirectAfterTransition(shouldAuthenticateWithCurrentAccount = true) {
+    waitForSignOnTransitionToFinish().then(() => beginDeepLinkRedirect(shouldAuthenticateWithCurrentAccount));
 }
 function handleRestrictedEvent(eventName) {
-    var parameters = { eventName: eventName };
+    const parameters = { eventName };
     API.write(types_1.WRITE_COMMANDS.HANDLE_RESTRICTED_EVENT, parameters);
 }
 function updateLastVisitedPath(path) {
@@ -573,12 +537,12 @@ function setPreservedUserSession(session) {
 }
 function clearOnyxAndResetApp(shouldNavigateToHomepage) {
     // The value of isUsingImportedState will be lost once Onyx is cleared, so we need to store it
-    var isStateImported = isUsingImportedState;
-    var sequentialQueue = (0, PersistedRequests_1.getAll)();
+    const isStateImported = isUsingImportedState;
+    const sequentialQueue = (0, PersistedRequests_1.getAll)();
     (0, PersistedRequests_1.rollbackOngoingRequest)();
     Navigation_1.default.clearPreloadedRoutes();
     react_native_onyx_1.default.clear(KEYS_TO_PRESERVE)
-        .then(function () {
+        .then(() => {
         // Network key is preserved, so when using imported state, we should stop forcing offline mode so that the app can re-fetch the network
         if (isStateImported) {
             (0, Network_1.setShouldForceOffline)(false);
@@ -591,15 +555,15 @@ function clearOnyxAndResetApp(shouldNavigateToHomepage) {
             react_native_onyx_1.default.set(ONYXKEYS_1.default.PRESERVED_USER_SESSION, null);
         }
     })
-        .then(function () {
+        .then(() => {
         // Requests in a sequential queue should be called even if the Onyx state is reset, so we do not lose any pending data.
         // However, the OpenApp request must be called before any other request in a queue to ensure data consistency.
         // To do that, sequential queue is cleared together with other keys, and then it's restored once the OpenApp request is resolved.
-        openApp().then(function () {
+        openApp().then(() => {
             if (!sequentialQueue || isStateImported) {
                 return;
             }
-            sequentialQueue.forEach(function (request) {
+            sequentialQueue.forEach((request) => {
                 (0, PersistedRequests_1.save)(request);
             });
         });

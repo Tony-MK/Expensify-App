@@ -1,25 +1,14 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseExpensiMarkWithShortMentions = parseExpensiMarkWithShortMentions;
 exports.decorateRangesWithShortMentions = decorateRangesWithShortMentions;
 exports.addDomainToShortMention = addDomainToShortMention;
 exports.getParsedMessageWithShortMentions = getParsedMessageWithShortMentions;
-var react_native_live_markdown_1 = require("@expensify/react-native-live-markdown");
-var expensify_common_1 = require("expensify-common");
-var CONST_1 = require("@src/CONST");
-var Parser_1 = require("./Parser");
-var PhoneNumber_1 = require("./PhoneNumber");
+const react_native_live_markdown_1 = require("@expensify/react-native-live-markdown");
+const expensify_common_1 = require("expensify-common");
+const CONST_1 = require("@src/CONST");
+const Parser_1 = require("./Parser");
+const PhoneNumber_1 = require("./PhoneNumber");
 /**
  * Handles possible short mentions inside ranges by verifying if the specific range refers to a user mention/login
  * that is available in passed `availableMentions` list. If yes, then it gets the same styling as normal email mention.
@@ -28,33 +17,42 @@ var PhoneNumber_1 = require("./PhoneNumber");
 function decorateRangesWithShortMentions(ranges, text, availableMentions, currentUserMentions) {
     'worklet';
     return ranges
-        .map(function (range) {
+        .map((range) => {
         if (range.type === 'mention-short') {
             // +1 because we want to skip `@` character from the mention value - ex: @mateusz -> mateusz
-            var mentionValue = text.slice(range.start + 1, range.start + range.length);
-            if (currentUserMentions === null || currentUserMentions === void 0 ? void 0 : currentUserMentions.includes(mentionValue)) {
-                return __assign(__assign({}, range), { type: 'mention-here' });
+            const mentionValue = text.slice(range.start + 1, range.start + range.length);
+            if (currentUserMentions?.includes(mentionValue)) {
+                return {
+                    ...range,
+                    type: 'mention-here',
+                };
             }
             if (availableMentions.includes(mentionValue)) {
-                return __assign(__assign({}, range), { type: 'mention-user' });
+                return {
+                    ...range,
+                    type: 'mention-user',
+                };
             }
             // If it's neither, we remove the range since no styling will be needed
             return;
         }
         // Iterate over full mentions and see if any is a self mention
         if (range.type === 'mention-user') {
-            var mentionValue = text.slice(range.start + 1, range.start + range.length);
-            if (currentUserMentions === null || currentUserMentions === void 0 ? void 0 : currentUserMentions.includes(mentionValue)) {
-                return __assign(__assign({}, range), { type: 'mention-here' });
+            const mentionValue = text.slice(range.start + 1, range.start + range.length);
+            if (currentUserMentions?.includes(mentionValue)) {
+                return {
+                    ...range,
+                    type: 'mention-here',
+                };
             }
         }
         return range;
     })
-        .filter(function (maybeRange) { return !!maybeRange; });
+        .filter((maybeRange) => !!maybeRange);
 }
 function parseExpensiMarkWithShortMentions(text, availableMentions, currentUserMentions) {
     'worklet';
-    var parsedRanges = (0, react_native_live_markdown_1.parseExpensiMark)(text);
+    const parsedRanges = (0, react_native_live_markdown_1.parseExpensiMark)(text);
     return decorateRangesWithShortMentions(parsedRanges, text, availableMentions, currentUserMentions);
 }
 /**
@@ -63,13 +61,13 @@ function parseExpensiMarkWithShortMentions(text, availableMentions, currentUserM
  */
 function addDomainToShortMention(mention, availableMentionLogins, userPrivateDomain) {
     if (!expensify_common_1.Str.isValidEmail(mention) && userPrivateDomain) {
-        var mentionWithEmailDomain = "".concat(mention, "@").concat(userPrivateDomain);
+        const mentionWithEmailDomain = `${mention}@${userPrivateDomain}`;
         if (availableMentionLogins.includes(mentionWithEmailDomain)) {
             return mentionWithEmailDomain;
         }
     }
     if (expensify_common_1.Str.isValidE164Phone(mention)) {
-        var mentionWithSmsDomain = (0, PhoneNumber_1.addSMSDomainIfPhoneNumber)(mention);
+        const mentionWithSmsDomain = (0, PhoneNumber_1.addSMSDomainIfPhoneNumber)(mention);
         if (availableMentionLogins.includes(mentionWithSmsDomain)) {
             return mentionWithSmsDomain;
         }
@@ -88,22 +86,21 @@ function addDomainToShortMention(mention, availableMentionLogins, userPrivateDom
  * However, we cannot use `parseExpensiMark` for the text that is being sent to backend, as we need html mention tags.
  * This function is the missing piece that will use ExpensiMark for parsing, but will also strip+transform `mention-short` into full mentions.
  */
-function getParsedMessageWithShortMentions(_a) {
-    var text = _a.text, availableMentionLogins = _a.availableMentionLogins, userEmailDomain = _a.userEmailDomain, parserOptions = _a.parserOptions;
-    var parsedText = Parser_1.default.replace(text, {
+function getParsedMessageWithShortMentions({ text, availableMentionLogins, userEmailDomain, parserOptions }) {
+    const parsedText = Parser_1.default.replace(text, {
         shouldEscapeText: true,
         disabledRules: parserOptions.disabledRules,
         extras: parserOptions.extras,
     });
-    var textWithHandledMentions = parsedText.replace(CONST_1.default.REGEX.SHORT_MENTION_HTML, function (fullMatch, group1) {
+    const textWithHandledMentions = parsedText.replace(CONST_1.default.REGEX.SHORT_MENTION_HTML, (fullMatch, group1) => {
         // Casting here is safe since our logic guarantees that if regex matches we will get group1 as non-empty string
-        var shortMention = group1;
+        const shortMention = group1;
         if (!expensify_common_1.Str.isValidMention(shortMention)) {
             return shortMention;
         }
-        var loginPart = shortMention.substring(1);
-        var mentionWithDomain = addDomainToShortMention(loginPart, availableMentionLogins, userEmailDomain);
-        return mentionWithDomain ? "<mention-user>@".concat(mentionWithDomain, "</mention-user>") : shortMention;
+        const loginPart = shortMention.substring(1);
+        const mentionWithDomain = addDomainToShortMention(loginPart, availableMentionLogins, userEmailDomain);
+        return mentionWithDomain ? `<mention-user>@${mentionWithDomain}</mention-user>` : shortMention;
     });
     return textWithHandledMentions;
 }

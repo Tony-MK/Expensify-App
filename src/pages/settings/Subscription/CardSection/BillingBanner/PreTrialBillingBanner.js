@@ -1,21 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Illustrations = require("@components/Icon/Illustrations");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Report = require("@libs/actions/Report");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReportUtils = require("@libs/ReportUtils");
-var ROUTES_1 = require("@src/ROUTES");
-var BillingBanner_1 = require("./BillingBanner");
+const react_1 = require("react");
+const Illustrations = require("@components/Icon/Illustrations");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Report = require("@libs/actions/Report");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReportUtils = require("@libs/ReportUtils");
+const ROUTES_1 = require("@src/ROUTES");
+const BillingBanner_1 = require("./BillingBanner");
 function PreTrialBillingBanner() {
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var navigateToChat = function () {
-        var reportUsedForOnboarding = ReportUtils.getChatUsedForOnboarding();
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const navigateToChat = () => {
+        const reportUsedForOnboarding = ReportUtils.getChatUsedForOnboarding();
         if (!reportUsedForOnboarding) {
             Report.navigateToConciergeChat();
             return;

@@ -1,32 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
+const react_1 = require("react");
 // eslint-disable-next-line no-restricted-imports
-var react_native_1 = require("react-native");
-var PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
-var Tooltip_1 = require("@components/Tooltip");
-var EducationalTooltip_1 = require("@components/Tooltip/EducationalTooltip");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var TabIcon_1 = require("./TabIcon");
-var TabLabel_1 = require("./TabLabel");
-var AnimatedPressableWithFeedback = react_native_1.Animated.createAnimatedComponent(PressableWithFeedback_1.default);
-function TabSelectorItem(_a) {
-    var _b;
-    var icon = _a.icon, _c = _a.title, title = _c === void 0 ? '' : _c, _d = _a.onPress, onPress = _d === void 0 ? function () { } : _d, _e = _a.backgroundColor, backgroundColor = _e === void 0 ? '' : _e, _f = _a.activeOpacity, activeOpacity = _f === void 0 ? 0 : _f, _g = _a.inactiveOpacity, inactiveOpacity = _g === void 0 ? 1 : _g, _h = _a.isActive, isActive = _h === void 0 ? false : _h, _j = _a.shouldShowLabelWhenInactive, shouldShowLabelWhenInactive = _j === void 0 ? true : _j, testID = _a.testID, _k = _a.shouldShowProductTrainingTooltip, shouldShowProductTrainingTooltip = _k === void 0 ? false : _k, renderProductTrainingTooltip = _a.renderProductTrainingTooltip, _l = _a.parentX, parentX = _l === void 0 ? 0 : _l, _m = _a.parentWidth, parentWidth = _m === void 0 ? 0 : _m, _o = _a.equalWidth, equalWidth = _o === void 0 ? false : _o;
-    var styles = (0, useThemeStyles_1.default)();
-    var _p = (0, react_1.useState)(false), isHovered = _p[0], setIsHovered = _p[1];
-    var childRef = (0, react_1.useRef)(null);
-    var shouldShowEducationalTooltip = shouldShowProductTrainingTooltip && isActive;
-    var _q = (0, react_1.useState)(0), shiftHorizontal = _q[0], setShiftHorizontal = _q[1];
+const react_native_1 = require("react-native");
+const PressableWithFeedback_1 = require("@components/Pressable/PressableWithFeedback");
+const Tooltip_1 = require("@components/Tooltip");
+const EducationalTooltip_1 = require("@components/Tooltip/EducationalTooltip");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const TabIcon_1 = require("./TabIcon");
+const TabLabel_1 = require("./TabLabel");
+const AnimatedPressableWithFeedback = react_native_1.Animated.createAnimatedComponent(PressableWithFeedback_1.default);
+function TabSelectorItem({ icon, title = '', onPress = () => { }, backgroundColor = '', activeOpacity = 0, inactiveOpacity = 1, isActive = false, shouldShowLabelWhenInactive = true, testID, shouldShowProductTrainingTooltip = false, renderProductTrainingTooltip, parentX = 0, parentWidth = 0, equalWidth = false, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const [isHovered, setIsHovered] = (0, react_1.useState)(false);
+    const childRef = (0, react_1.useRef)(null);
+    const shouldShowEducationalTooltip = shouldShowProductTrainingTooltip && isActive;
+    const [shiftHorizontal, setShiftHorizontal] = (0, react_1.useState)(0);
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var isSmallScreenWidth = (0, useResponsiveLayout_1.default)().isSmallScreenWidth;
+    const { isSmallScreenWidth } = (0, useResponsiveLayout_1.default)();
     // Compute horizontal shift for EducationalTooltip:
     //  - on desktop, ignore RHP bounds and center tooltip on the tab (no shift needed)
     //  - on mobile (aka small screen) center tooltip within the panel
-    (0, react_1.useLayoutEffect)(function () {
+    (0, react_1.useLayoutEffect)(() => {
         // only active tab gets tooltip
         if (!isActive) {
             return;
@@ -37,20 +35,19 @@ function TabSelectorItem(_a) {
             return;
         }
         // must allow animation to complete before taking measurement
-        var timerID = setTimeout(function () {
-            var _a;
-            (_a = childRef.current) === null || _a === void 0 ? void 0 : _a.measureInWindow(function (x, _y, width) {
+        const timerID = setTimeout(() => {
+            childRef.current?.measureInWindow((x, _y, width) => {
                 // To center tooltip in parent:
-                var parentCenter = parentX + parentWidth / 2; // ... where it should be...
-                var currentCenter = x + width / 2; // ... minus where it is now...
+                const parentCenter = parentX + parentWidth / 2; // ... where it should be...
+                const currentCenter = x + width / 2; // ... minus where it is now...
                 setShiftHorizontal(parentCenter - currentCenter); // ...equals the shift needed
             });
         }, CONST_1.default.TOOLTIP_ANIMATION_DURATION);
-        return function () {
+        return () => {
             clearTimeout(timerID);
         };
     }, [isActive, childRef, isSmallScreenWidth, parentX, parentWidth]);
-    var children = (<AnimatedPressableWithFeedback accessibilityLabel={title} style={[styles.tabSelectorButton, styles.tabBackground(isHovered, isActive, backgroundColor), styles.userSelectNone]} wrapperStyle={[equalWidth ? styles.flex1 : styles.flexGrow1]} onPress={onPress} onHoverIn={function () { return setIsHovered(true); }} onHoverOut={function () { return setIsHovered(false); }} role={CONST_1.default.ROLE.BUTTON} dataSet={_b = {}, _b[CONST_1.default.SELECTION_SCRAPER_HIDDEN_ELEMENT] = true, _b} testID={testID} ref={childRef}>
+    const children = (<AnimatedPressableWithFeedback accessibilityLabel={title} style={[styles.tabSelectorButton, styles.tabBackground(isHovered, isActive, backgroundColor), styles.userSelectNone]} wrapperStyle={[equalWidth ? styles.flex1 : styles.flexGrow1]} onPress={onPress} onHoverIn={() => setIsHovered(true)} onHoverOut={() => setIsHovered(false)} role={CONST_1.default.ROLE.BUTTON} dataSet={{ [CONST_1.default.SELECTION_SCRAPER_HIDDEN_ELEMENT]: true }} testID={testID} ref={childRef}>
             <TabIcon_1.default icon={icon} activeOpacity={styles.tabOpacity(isHovered, isActive, activeOpacity, inactiveOpacity).opacity} inactiveOpacity={styles.tabOpacity(isHovered, isActive, inactiveOpacity, activeOpacity).opacity}/>
             {(shouldShowLabelWhenInactive || isActive) && (<TabLabel_1.default title={title} activeOpacity={styles.tabOpacity(isHovered, isActive, activeOpacity, inactiveOpacity).opacity} inactiveOpacity={styles.tabOpacity(isHovered, isActive, inactiveOpacity, activeOpacity).opacity} hasIcon={!!icon}/>)}
         </AnimatedPressableWithFeedback>);

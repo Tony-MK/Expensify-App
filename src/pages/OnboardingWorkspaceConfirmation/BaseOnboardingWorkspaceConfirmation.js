@@ -1,83 +1,72 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var Onboarding_1 = require("@userActions/Onboarding");
-var Policy_1 = require("@userActions/Policy/Policy");
-var Welcome_1 = require("@userActions/Welcome");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var WorkspaceConfirmationForm_1 = require("@src/types/form/WorkspaceConfirmationForm");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
-var OnboardingCurrencyPicker_1 = require("./OnboardingCurrencyPicker");
-function BaseOnboardingWorkspaceConfirmation(_a) {
-    var _b, _c, _d;
-    var shouldUseNativeStyles = _a.shouldUseNativeStyles;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var onboardingPurposeSelected = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true })[0];
-    var allPolicies = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true })[0];
-    var onboardingPolicyID = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_POLICY_ID, { canBeMissing: true })[0];
-    var onboardingAdminsChatReportID = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ADMINS_CHAT_REPORT_ID, { canBeMissing: true })[0];
-    var onboardingIsMediumOrLargerScreenWidth = (0, useResponsiveLayout_1.default)().onboardingIsMediumOrLargerScreenWidth;
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var _e = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORKSPACE_DETAILS_FORM_DRAFT, { canBeMissing: true }), draftValues = _e[0], draftValuesMetadata = _e[1];
-    var _f = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false }), session = _f[0], sessionMetadata = _f[1];
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var paidGroupPolicy = Object.values(allPolicies !== null && allPolicies !== void 0 ? allPolicies : {}).find(function (policy) { return (0, PolicyUtils_1.isPaidGroupPolicy)(policy) && (0, PolicyUtils_1.isPolicyAdmin)(policy, session === null || session === void 0 ? void 0 : session.email); });
-    var defaultWorkspaceName = (_b = draftValues === null || draftValues === void 0 ? void 0 : draftValues.name) !== null && _b !== void 0 ? _b : (0, Policy_1.generateDefaultWorkspaceName)(session === null || session === void 0 ? void 0 : session.email);
-    var defaultCurrency = (_d = (_c = draftValues === null || draftValues === void 0 ? void 0 : draftValues.currency) !== null && _c !== void 0 ? _c : currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.localCurrencyCode) !== null && _d !== void 0 ? _d : CONST_1.default.CURRENCY.USD;
-    (0, react_1.useEffect)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const Onboarding_1 = require("@userActions/Onboarding");
+const Policy_1 = require("@userActions/Policy/Policy");
+const Welcome_1 = require("@userActions/Welcome");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const WorkspaceConfirmationForm_1 = require("@src/types/form/WorkspaceConfirmationForm");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+const OnboardingCurrencyPicker_1 = require("./OnboardingCurrencyPicker");
+function BaseOnboardingWorkspaceConfirmation({ shouldUseNativeStyles }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [onboardingPurposeSelected] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_PURPOSE_SELECTED, { canBeMissing: true });
+    const [allPolicies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true });
+    const [onboardingPolicyID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_POLICY_ID, { canBeMissing: true });
+    const [onboardingAdminsChatReportID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ONBOARDING_ADMINS_CHAT_REPORT_ID, { canBeMissing: true });
+    const { onboardingIsMediumOrLargerScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const [draftValues, draftValuesMetadata] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.ONBOARDING_WORKSPACE_DETAILS_FORM_DRAFT, { canBeMissing: true });
+    const [session, sessionMetadata] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { canBeMissing: false });
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const paidGroupPolicy = Object.values(allPolicies ?? {}).find((policy) => (0, PolicyUtils_1.isPaidGroupPolicy)(policy) && (0, PolicyUtils_1.isPolicyAdmin)(policy, session?.email));
+    const defaultWorkspaceName = draftValues?.name ?? (0, Policy_1.generateDefaultWorkspaceName)(session?.email);
+    const defaultCurrency = draftValues?.currency ?? currentUserPersonalDetails?.localCurrencyCode ?? CONST_1.default.CURRENCY.USD;
+    (0, react_1.useEffect)(() => {
         (0, Welcome_1.setOnboardingErrorMessage)('');
     }, []);
-    var handleSubmit = (0, react_1.useCallback)(function (values) {
+    const handleSubmit = (0, react_1.useCallback)((values) => {
         if (!onboardingPurposeSelected) {
             return;
         }
-        var shouldCreateWorkspace = !onboardingPolicyID && !paidGroupPolicy;
-        var name = values.name.trim();
-        var currency = values[WorkspaceConfirmationForm_1.default.CURRENCY];
+        const shouldCreateWorkspace = !onboardingPolicyID && !paidGroupPolicy;
+        const name = values.name.trim();
+        const currency = values[WorkspaceConfirmationForm_1.default.CURRENCY];
         // We need `adminsChatReportID` for `completeOnboarding`, but at the same time, we don't want to call `createWorkspace` more than once.
         // If we have already created a workspace, we want to reuse the `onboardingAdminsChatReportID` and `onboardingPolicyID`.
-        var _a = shouldCreateWorkspace
+        const { adminsChatReportID, policyID } = shouldCreateWorkspace
             ? (0, Policy_1.createWorkspace)({
                 policyOwnerEmail: undefined,
                 makeMeAdmin: true,
                 policyName: name,
                 policyID: (0, Policy_1.generatePolicyID)(),
                 engagementChoice: CONST_1.default.ONBOARDING_CHOICES.TRACK_WORKSPACE,
-                currency: currency,
+                currency,
                 file: undefined,
                 shouldAddOnboardingTasks: false,
             })
-            : { adminsChatReportID: onboardingAdminsChatReportID, policyID: onboardingPolicyID }, adminsChatReportID = _a.adminsChatReportID, policyID = _a.policyID;
+            : { adminsChatReportID: onboardingAdminsChatReportID, policyID: onboardingPolicyID };
         if (shouldCreateWorkspace) {
             (0, Welcome_1.setOnboardingAdminsChatReportID)(adminsChatReportID);
             (0, Welcome_1.setOnboardingPolicyID)(policyID);
@@ -85,16 +74,16 @@ function BaseOnboardingWorkspaceConfirmation(_a) {
         (0, Onboarding_1.clearWorkspaceDetailsDraft)();
         Navigation_1.default.navigate(ROUTES_1.default.ONBOARDING_WORKSPACE_INVITE.getRoute());
     }, [onboardingPurposeSelected, onboardingPolicyID, paidGroupPolicy, onboardingAdminsChatReportID]);
-    var validate = function (values) {
-        var errors = {};
-        var name = values.name.trim();
+    const validate = (values) => {
+        const errors = {};
+        const name = values.name.trim();
         if (!(0, ValidationUtils_1.isRequiredFulfilled)(name)) {
             errors.name = translate('workspace.editor.nameIsRequiredError');
         }
-        else if (__spreadArray([], name, true).length > CONST_1.default.TITLE_CHARACTER_LIMIT) {
+        else if ([...name].length > CONST_1.default.TITLE_CHARACTER_LIMIT) {
             // Uses the spread syntax to count the number of Unicode code points instead of the number of UTF-16
             // code units.
-            (0, ErrorUtils_1.addErrorMessage)(errors, 'name', translate('common.error.characterLimitExceedCounter', { length: __spreadArray([], name, true).length, limit: CONST_1.default.TITLE_CHARACTER_LIMIT }));
+            (0, ErrorUtils_1.addErrorMessage)(errors, 'name', translate('common.error.characterLimitExceedCounter', { length: [...name].length, limit: CONST_1.default.TITLE_CHARACTER_LIMIT }));
         }
         if (!(0, ValidationUtils_1.isRequiredFulfilled)(values[WorkspaceConfirmationForm_1.default.CURRENCY])) {
             errors[WorkspaceConfirmationForm_1.default.CURRENCY] = translate('common.error.fieldRequired');

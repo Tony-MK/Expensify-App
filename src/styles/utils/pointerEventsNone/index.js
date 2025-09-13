@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pointerEventsNone = {
+const pointerEventsNone = {
     pointerEvents: 'none',
 };
 exports.default = pointerEventsNone;

@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KeyboardStateContext = void 0;
 exports.KeyboardStateProvider = KeyboardStateProvider;
-var react_1 = require("react");
-var react_native_keyboard_controller_1 = require("react-native-keyboard-controller");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var useSafeAreaInsets_1 = require("@hooks/useSafeAreaInsets");
-var getKeyboardHeight_1 = require("@libs/getKeyboardHeight");
-var KeyboardStateContext = (0, react_1.createContext)({
+const react_1 = require("react");
+const react_native_keyboard_controller_1 = require("react-native-keyboard-controller");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const useSafeAreaInsets_1 = require("@hooks/useSafeAreaInsets");
+const getKeyboardHeight_1 = require("@libs/getKeyboardHeight");
+const KeyboardStateContext = (0, react_1.createContext)({
     isKeyboardShown: false,
     isKeyboardActive: false,
     keyboardHeight: 0,
@@ -15,56 +15,55 @@ var KeyboardStateContext = (0, react_1.createContext)({
     isKeyboardAnimatingRef: { current: false },
 });
 exports.KeyboardStateContext = KeyboardStateContext;
-function KeyboardStateProvider(_a) {
-    var children = _a.children;
-    var bottom = (0, useSafeAreaInsets_1.default)().bottom;
-    var _b = (0, react_1.useState)(0), keyboardHeight = _b[0], setKeyboardHeight = _b[1];
-    var _c = (0, react_1.useState)(0), keyboardActiveHeight = _c[0], setKeyboardActiveHeight = _c[1];
-    var isKeyboardAnimatingRef = (0, react_1.useRef)(false);
-    var _d = (0, react_1.useState)(false), isKeyboardActive = _d[0], setIsKeyboardActive = _d[1];
-    (0, react_1.useEffect)(function () {
-        var keyboardDidShowListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardDidShow', function (e) {
+function KeyboardStateProvider({ children }) {
+    const { bottom } = (0, useSafeAreaInsets_1.default)();
+    const [keyboardHeight, setKeyboardHeight] = (0, react_1.useState)(0);
+    const [keyboardActiveHeight, setKeyboardActiveHeight] = (0, react_1.useState)(0);
+    const isKeyboardAnimatingRef = (0, react_1.useRef)(false);
+    const [isKeyboardActive, setIsKeyboardActive] = (0, react_1.useState)(false);
+    (0, react_1.useEffect)(() => {
+        const keyboardDidShowListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardDidShow', (e) => {
             setKeyboardHeight((0, getKeyboardHeight_1.default)(e.height, bottom));
             setIsKeyboardActive(true);
         });
-        var keyboardDidHideListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardDidHide', function () {
+        const keyboardDidHideListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardDidHide', () => {
             setKeyboardHeight(0);
             setIsKeyboardActive(false);
         });
-        var keyboardWillShowListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardWillShow', function (e) {
+        const keyboardWillShowListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardWillShow', (e) => {
             setIsKeyboardActive(true);
             setKeyboardActiveHeight(e.height);
         });
-        var keyboardWillHideListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardWillHide', function () {
+        const keyboardWillHideListener = react_native_keyboard_controller_1.KeyboardEvents.addListener('keyboardWillHide', () => {
             setIsKeyboardActive(false);
             setKeyboardActiveHeight(0);
         });
-        return function () {
+        return () => {
             keyboardDidShowListener.remove();
             keyboardDidHideListener.remove();
             keyboardWillShowListener.remove();
             keyboardWillHideListener.remove();
         };
     }, [bottom]);
-    var setIsKeyboardAnimating = (0, react_1.useCallback)(function (isAnimating) {
+    const setIsKeyboardAnimating = (0, react_1.useCallback)((isAnimating) => {
         isKeyboardAnimatingRef.current = isAnimating;
     }, []);
     (0, react_native_keyboard_controller_1.useKeyboardHandler)({
-        onStart: function () {
+        onStart: () => {
             'worklet';
             (0, react_native_reanimated_1.runOnJS)(setIsKeyboardAnimating)(true);
         },
-        onEnd: function () {
+        onEnd: () => {
             'worklet';
             (0, react_native_reanimated_1.runOnJS)(setIsKeyboardAnimating)(false);
         },
     }, []);
-    var contextValue = (0, react_1.useMemo)(function () { return ({
-        keyboardHeight: keyboardHeight,
-        keyboardActiveHeight: keyboardActiveHeight,
+    const contextValue = (0, react_1.useMemo)(() => ({
+        keyboardHeight,
+        keyboardActiveHeight,
         isKeyboardShown: keyboardHeight !== 0,
-        isKeyboardAnimatingRef: isKeyboardAnimatingRef,
-        isKeyboardActive: isKeyboardActive,
-    }); }, [isKeyboardActive, keyboardActiveHeight, keyboardHeight]);
+        isKeyboardAnimatingRef,
+        isKeyboardActive,
+    }), [isKeyboardActive, keyboardActiveHeight, keyboardHeight]);
     return <KeyboardStateContext.Provider value={contextValue}>{children}</KeyboardStateContext.Provider>;
 }

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SIDE_EFFECT_REQUEST_COMMANDS = exports.READ_COMMANDS = exports.WRITE_COMMANDS = void 0;
-var WRITE_COMMANDS = {
+const WRITE_COMMANDS = {
     CLEAN_POLICY_TAGS: 'ClearPolicyTags',
     IMPORT_MULTI_LEVEL_TAGS: 'ImportMultiLevelTags',
     SET_WORKSPACE_AUTO_REPORTING_FREQUENCY: 'SetWorkspaceAutoReportingFrequency',
@@ -502,7 +502,7 @@ var WRITE_COMMANDS = {
     ADD_REPORT_APPROVER: 'AddReportApprover',
 };
 exports.WRITE_COMMANDS = WRITE_COMMANDS;
-var READ_COMMANDS = {
+const READ_COMMANDS = {
     GET_CORPAY_BANK_ACCOUNT_FIELDS: 'GetCorpayBankAccountFields',
     CONNECT_POLICY_TO_QUICKBOOKS_ONLINE: 'ConnectPolicyToQuickbooksOnline',
     CONNECT_POLICY_TO_XERO: 'ConnectPolicyToXero',
@@ -578,7 +578,7 @@ var READ_COMMANDS = {
     GET_TRANSACTIONS_FOR_MERGING: 'GetTransactionsForMerging',
 };
 exports.READ_COMMANDS = READ_COMMANDS;
-var SIDE_EFFECT_REQUEST_COMMANDS = {
+const SIDE_EFFECT_REQUEST_COMMANDS = {
     AUTHENTICATE_PUSHER: 'AuthenticatePusher',
     GENERATE_SPOTNANA_TOKEN: 'GenerateSpotnanaToken',
     GET_MISSING_ONYX_MESSAGES: 'GetMissingOnyxMessages',

@@ -1,26 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_svg_1 = require("react-native-svg");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ItemListSkeletonView_1 = require("./ItemListSkeletonView");
-var barHeight = 7;
-var longBarWidth = 120;
-var mediumBarWidth = 60;
-var shortBarWidth = 40;
-function MergeExpensesSkeleton(_a) {
-    var fixedNumItems = _a.fixedNumItems, speed = _a.speed;
-    var containerRef = (0, react_1.useRef)(null);
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = react_1.default.useState(0), pageWidth = _b[0], setPageWidth = _b[1];
-    (0, react_1.useLayoutEffect)(function () {
-        var _a;
-        (_a = containerRef.current) === null || _a === void 0 ? void 0 : _a.measure(function (x, y, width) {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_svg_1 = require("react-native-svg");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ItemListSkeletonView_1 = require("./ItemListSkeletonView");
+const barHeight = 7;
+const longBarWidth = 120;
+const mediumBarWidth = 60;
+const shortBarWidth = 40;
+function MergeExpensesSkeleton({ fixedNumItems, speed }) {
+    const containerRef = (0, react_1.useRef)(null);
+    const styles = (0, useThemeStyles_1.default)();
+    const [pageWidth, setPageWidth] = react_1.default.useState(0);
+    (0, react_1.useLayoutEffect)(() => {
+        containerRef.current?.measure((x, y, width) => {
             setPageWidth(width - 24);
         });
     }, []);
-    var skeletonItem = (0, react_1.useCallback)(function () {
+    const skeletonItem = (0, react_1.useCallback)(() => {
         return (<>
                 <react_native_svg_1.Rect x={12} y={12} width={36} height={40} rx={4} ry={4}/>
                 <react_native_svg_1.Rect x={66} y={22} width={longBarWidth} height={barHeight}/>

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var defaultState = {
+const defaultState = {
     type: 'cellular',
     isConnected: true,
     isInternetReachable: true,
@@ -10,11 +10,11 @@ var defaultState = {
         carrier: 'T-Mobile',
     },
 };
-var netInfoMock = {
-    configure: function () { },
-    fetch: function () { return Promise.resolve(defaultState); },
-    refresh: function () { return Promise.resolve(defaultState); },
-    addEventListener: function () { return function () { }; },
-    useNetInfo: function () { return defaultState; },
+const netInfoMock = {
+    configure: () => { },
+    fetch: () => Promise.resolve(defaultState),
+    refresh: () => Promise.resolve(defaultState),
+    addEventListener: () => () => { },
+    useNetInfo: () => defaultState,
 };
 exports.default = netInfoMock;

@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.originalMessageR14932 = exports.actionR98765 = exports.actionR14932 = void 0;
-var CONST_1 = require("@src/CONST");
-var usersIDs = [15593135, 51760358, 26502375];
-var amount = 10402;
-var currency = CONST_1.default.CURRENCY.USD;
-var REPORT_R98765 = {
+const CONST_1 = require("@src/CONST");
+const usersIDs = [15593135, 51760358, 26502375];
+const amount = 10402;
+const currency = CONST_1.default.CURRENCY.USD;
+const REPORT_R98765 = {
     IOUReportID: 'IOU_REPORT_ID_R98765',
     IOUTransactionID: 'TRANSACTION_ID_R98765',
     reportActionID: 'REPORT_ACTION_ID_R98765',
     childReportID: 'CHILD_REPORT_ID_R98765',
 };
-var REPORT_R14932 = {
+const REPORT_R14932 = {
     IOUReportID: 'IOU_REPORT_ID_R14932',
     IOUTransactionID: 'TRANSACTION_ID_R14932',
     reportActionID: 'REPORT_ACTION_ID_R14932',
     childReportID: 'CHILD_REPORT_ID_R14932',
 };
-var originalMessageR14932 = {
-    currency: currency,
-    amount: amount,
+const originalMessageR14932 = {
+    currency,
+    amount,
     IOUReportID: REPORT_R14932.IOUReportID,
     IOUTransactionID: REPORT_R14932.IOUTransactionID,
     participantAccountIDs: usersIDs,
@@ -28,7 +28,7 @@ var originalMessageR14932 = {
     comment: '',
 };
 exports.originalMessageR14932 = originalMessageR14932;
-var message = [
+const message = [
     {
         type: CONST_1.default.REPORT.MESSAGE.TYPE.COMMENT,
         html: '$0.01 expense',
@@ -39,16 +39,16 @@ var message = [
         deleted: '',
     },
 ];
-var person = [
+const person = [
     {
         type: 'TEXT',
         style: 'strong',
         text: 'John Smith',
     },
 ];
-var actionR14932 = {
-    person: person,
-    message: message,
+const actionR14932 = {
+    person,
+    message,
     reportActionID: REPORT_R14932.reportActionID,
     childReportID: REPORT_R14932.childReportID,
     originalMessage: originalMessageR14932,
@@ -59,9 +59,9 @@ var actionR14932 = {
     created: '2025-02-14 08:12:05.165',
 };
 exports.actionR14932 = actionR14932;
-var originalMessageR98765 = {
-    amount: amount,
-    currency: currency,
+const originalMessageR98765 = {
+    amount,
+    currency,
     IOUReportID: REPORT_R98765.IOUReportID,
     IOUTransactionID: REPORT_R98765.IOUTransactionID,
     participantAccountIDs: usersIDs,
@@ -69,9 +69,9 @@ var originalMessageR98765 = {
     comment: '',
     lastModified: '2025-02-20 08:10:05.165',
 };
-var actionR98765 = {
-    message: message,
-    person: person,
+const actionR98765 = {
+    message,
+    person,
     reportActionID: REPORT_R98765.reportActionID,
     childReportID: REPORT_R98765.childReportID,
     originalMessage: originalMessageR98765,

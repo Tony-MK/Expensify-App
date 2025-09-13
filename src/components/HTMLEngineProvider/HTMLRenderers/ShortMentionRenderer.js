@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_render_html_1 = require("react-native-render-html");
-var Text_1 = require("@components/Text");
-var useShortMentionsList_1 = require("@hooks/useShortMentionsList");
-var CONST_1 = require("@src/CONST");
-var MentionHereRenderer_1 = require("./MentionHereRenderer");
-var MentionUserRenderer_1 = require("./MentionUserRenderer");
+const react_1 = require("react");
+const react_native_render_html_1 = require("react-native-render-html");
+const Text_1 = require("@components/Text");
+const useShortMentionsList_1 = require("@hooks/useShortMentionsList");
+const CONST_1 = require("@src/CONST");
+const MentionHereRenderer_1 = require("./MentionHereRenderer");
+const MentionUserRenderer_1 = require("./MentionUserRenderer");
 function ShortMentionRenderer(props) {
-    var _a = (0, useShortMentionsList_1.default)(), availableLoginsList = _a.availableLoginsList, currentUserMentions = _a.currentUserMentions;
-    var mentionValue = 'data' in props.tnode ? props.tnode.data.replace(CONST_1.default.UNICODE.LTR, '') : '';
-    var mentionLogin = mentionValue.substring(1);
-    if (currentUserMentions === null || currentUserMentions === void 0 ? void 0 : currentUserMentions.includes(mentionLogin)) {
+    const { availableLoginsList, currentUserMentions } = (0, useShortMentionsList_1.default)();
+    const mentionValue = 'data' in props.tnode ? props.tnode.data.replace(CONST_1.default.UNICODE.LTR, '') : '';
+    const mentionLogin = mentionValue.substring(1);
+    if (currentUserMentions?.includes(mentionLogin)) {
         // eslint-disable-next-line react/jsx-props-no-spreading
         return <MentionHereRenderer_1.default {...props}/>;
     }

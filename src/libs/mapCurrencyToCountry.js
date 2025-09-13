@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CONST_1 = require("@src/CONST");
+const CONST_1 = require("@src/CONST");
 function mapCurrencyToCountry(currency) {
     switch (currency) {
         case CONST_1.default.CURRENCY.USD:

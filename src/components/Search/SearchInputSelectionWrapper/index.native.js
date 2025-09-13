@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Deferred_1 = require("@components/Deferred");
-var SearchAutocompleteInput_1 = require("@components/Search/SearchAutocompleteInput");
-var SearchInputSelectionSkeleton_1 = require("@components/Skeletons/SearchInputSelectionSkeleton");
+const react_1 = require("react");
+const Deferred_1 = require("@components/Deferred");
+const SearchAutocompleteInput_1 = require("@components/Search/SearchAutocompleteInput");
+const SearchInputSelectionSkeleton_1 = require("@components/Skeletons/SearchInputSelectionSkeleton");
 function SearchInputSelectionWrapper(props, ref) {
     return (<react_1.Suspense fallback={<SearchInputSelectionSkeleton_1.default />}>
             <Deferred_1.default>

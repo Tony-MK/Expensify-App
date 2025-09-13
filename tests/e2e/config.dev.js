@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var packageName = 'com.expensify.chat.dev';
-var appPath = './android/app/build/intermediates/apk/development/debug/app-development-debug.apk';
-var config = {
+const packageName = 'com.expensify.chat.dev';
+const appPath = './android/app/build/intermediates/apk/development/debug/app-development-debug.apk';
+const config = {
     MAIN_APP_PACKAGE: packageName,
     DELTA_APP_PACKAGE: packageName,
     BRANCH_MAIN: 'main',

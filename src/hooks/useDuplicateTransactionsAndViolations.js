@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var useOnyx_1 = require("./useOnyx");
+const react_1 = require("react");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const useOnyx_1 = require("./useOnyx");
 /**
  * Selects violations related to provided transaction IDs and if present, the violations of their duplicates.
  * @param transactionIDs - An array of transaction IDs to fetch their violations for.
@@ -12,27 +12,26 @@ var useOnyx_1 = require("./useOnyx");
  * @private
  */
 function selectViolationsWithDuplicates(transactionIDs, allTransactionsViolations) {
-    if (!allTransactionsViolations || !(transactionIDs === null || transactionIDs === void 0 ? void 0 : transactionIDs.length)) {
+    if (!allTransactionsViolations || !transactionIDs?.length) {
         return {};
     }
-    var result = {};
-    for (var _i = 0, transactionIDs_1 = transactionIDs; _i < transactionIDs_1.length; _i++) {
-        var transactionID = transactionIDs_1[_i];
-        var key = "".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat(transactionID);
-        var transactionViolations = allTransactionsViolations[key];
+    const result = {};
+    for (const transactionID of transactionIDs) {
+        const key = `${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`;
+        const transactionViolations = allTransactionsViolations[key];
         if (!transactionViolations) {
             continue;
         }
         result[key] = transactionViolations;
         transactionViolations
-            .filter(function (violations) { return violations.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION; })
-            .flatMap(function (violations) { var _a, _b; return (_b = (_a = violations === null || violations === void 0 ? void 0 : violations.data) === null || _a === void 0 ? void 0 : _a.duplicates) !== null && _b !== void 0 ? _b : []; })
-            .forEach(function (duplicateID) {
+            .filter((violations) => violations.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION)
+            .flatMap((violations) => violations?.data?.duplicates ?? [])
+            .forEach((duplicateID) => {
             if (!duplicateID) {
                 return;
             }
-            var duplicateKey = "".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat(duplicateID);
-            var duplicateViolations = allTransactionsViolations[duplicateKey];
+            const duplicateKey = `${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${duplicateID}`;
+            const duplicateViolations = allTransactionsViolations[duplicateKey];
             if (duplicateViolations) {
                 result[duplicateKey] = duplicateViolations;
             }
@@ -51,27 +50,26 @@ function selectTransactionsWithDuplicates(transactionIDs, allTransactions, dupli
     if (!allTransactions) {
         return {};
     }
-    var result = {};
-    for (var _i = 0, transactionIDs_2 = transactionIDs; _i < transactionIDs_2.length; _i++) {
-        var transactionID = transactionIDs_2[_i];
-        var key = "".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(transactionID);
-        var transaction = allTransactions[key];
+    const result = {};
+    for (const transactionID of transactionIDs) {
+        const key = `${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${transactionID}`;
+        const transaction = allTransactions[key];
         if (transaction) {
             result[key] = transaction;
         }
-        var transactionViolations = duplicateTransactionViolations === null || duplicateTransactionViolations === void 0 ? void 0 : duplicateTransactionViolations["".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat(transactionID)];
+        const transactionViolations = duplicateTransactionViolations?.[`${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${transactionID}`];
         if (!transactionViolations) {
             continue;
         }
         transactionViolations
-            .filter(function (violations) { return violations.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION; })
-            .flatMap(function (violations) { var _a, _b; return (_b = (_a = violations === null || violations === void 0 ? void 0 : violations.data) === null || _a === void 0 ? void 0 : _a.duplicates) !== null && _b !== void 0 ? _b : []; })
-            .forEach(function (duplicateID) {
+            .filter((violations) => violations.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION)
+            .flatMap((violations) => violations?.data?.duplicates ?? [])
+            .forEach((duplicateID) => {
             if (!duplicateID) {
                 return;
             }
-            var duplicateKey = "".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(duplicateID);
-            var duplicateTransaction = allTransactions[duplicateKey];
+            const duplicateKey = `${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${duplicateID}`;
+            const duplicateTransaction = allTransactions[duplicateKey];
             if (duplicateTransaction) {
                 result[duplicateKey] = duplicateTransaction;
             }
@@ -85,23 +83,23 @@ function selectTransactionsWithDuplicates(transactionIDs, allTransactions, dupli
  * @returns - An object containing duplicate transactions and their violations.
  */
 function useDuplicateTransactionsAndViolations(transactionIDs) {
-    var violationsSelectorMemo = (0, react_1.useMemo)(function () {
-        return function (allTransactionsViolations) { return selectViolationsWithDuplicates(transactionIDs, allTransactionsViolations); };
+    const violationsSelectorMemo = (0, react_1.useMemo)(() => {
+        return (allTransactionsViolations) => selectViolationsWithDuplicates(transactionIDs, allTransactionsViolations);
     }, [transactionIDs]);
-    var duplicateTransactionViolations = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, {
+    const [duplicateTransactionViolations] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS, {
         canBeMissing: true,
         selector: violationsSelectorMemo,
-    })[0];
-    var transactionSelector = (0, react_1.useMemo)(function () {
-        return function (allTransactions) { return selectTransactionsWithDuplicates(transactionIDs, allTransactions, duplicateTransactionViolations); };
+    });
+    const transactionSelector = (0, react_1.useMemo)(() => {
+        return (allTransactions) => selectTransactionsWithDuplicates(transactionIDs, allTransactions, duplicateTransactionViolations);
     }, [transactionIDs, duplicateTransactionViolations]);
-    var duplicateTransactions = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
+    const [duplicateTransactions] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
         canBeMissing: true,
         selector: transactionSelector,
-    })[0];
-    return (0, react_1.useMemo)(function () { return ({
-        duplicateTransactions: duplicateTransactions,
-        duplicateTransactionViolations: duplicateTransactionViolations,
-    }); }, [duplicateTransactions, duplicateTransactionViolations]);
+    });
+    return (0, react_1.useMemo)(() => ({
+        duplicateTransactions,
+        duplicateTransactionViolations,
+    }), [duplicateTransactions, duplicateTransactionViolations]);
 }
 exports.default = useDuplicateTransactionsAndViolations;

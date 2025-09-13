@@ -1,5 +1,4 @@
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21;
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *   _____                      __         __
@@ -12,11 +11,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * - Improve the prompts in prompts/translation, or
  * - Improve context annotations in src/languages/en.ts
  */
-var expensify_common_1 = require("expensify-common");
-var startCase_1 = require("lodash/startCase");
-var CONST_1 = require("@src/CONST");
+const expensify_common_1 = require("expensify-common");
+const startCase_1 = require("lodash/startCase");
+const CONST_1 = require("@src/CONST");
 /* eslint-disable max-len */
-var translations = {
+const translations = {
     common: {
         count: 'カウント',
         cancel: 'キャンセル',
@@ -70,7 +69,7 @@ var translations = {
         wallet: 'ウォレット',
         preferences: '設定',
         view: '表示',
-        review: function (reviewParams) { return "Review".concat((reviewParams === null || reviewParams === void 0 ? void 0 : reviewParams.amount) ? " ".concat(reviewParams === null || reviewParams === void 0 ? void 0 : reviewParams.amount) : ''); },
+        review: (reviewParams) => `Review${reviewParams?.amount ? ` ${reviewParams?.amount}` : ''}`,
         not: 'いいえ',
         signIn: 'サインイン',
         signInWithGoogle: 'Googleでサインイン',
@@ -117,10 +116,7 @@ var translations = {
         currentMonth: '今月',
         ssnLast4: 'SSNの下4桁',
         ssnFull9: 'SSNの9桁すべて',
-        addressLine: function (_a) {
-            var lineNumber = _a.lineNumber;
-            return "\u4F4F\u6240\u884C ".concat(lineNumber);
-        },
+        addressLine: ({ lineNumber }) => `住所行 ${lineNumber}`,
         personalAddress: '個人住所',
         companyAddress: '会社の住所',
         noPO: '私書箱やメールドロップの住所はご遠慮ください。',
@@ -140,10 +136,7 @@ var translations = {
         send: '送信',
         na: 'N/A',
         noResultsFound: '結果が見つかりませんでした',
-        noResultsFoundMatching: function (_a) {
-            var searchString = _a.searchString;
-            return "\u300C".concat(searchString, "\u300D\u306B\u4E00\u81F4\u3059\u308B\u7D50\u679C\u306F\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002");
-        },
+        noResultsFoundMatching: ({ searchString }) => `「${searchString}」に一致する結果は見つかりませんでした。`,
         recentDestinations: '最近の目的地',
         timePrefix: 'それは',
         conjunctionFor: 'for',
@@ -157,13 +150,10 @@ var translations = {
         error: {
             invalidAmount: '無効な金額',
             acceptTerms: '続行するには、利用規約に同意する必要があります。',
-            phoneNumber: "\u6709\u52B9\u306A\u96FB\u8A71\u756A\u53F7\u3092\u56FD\u30B3\u30FC\u30C9\u3068\u3068\u3082\u306B\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF08\u4F8B: ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, "\uFF09"),
+            phoneNumber: `有効な電話番号を国コードとともに入力してください（例: ${CONST_1.default.EXAMPLE_PHONE_NUMBER}）`,
             fieldRequired: 'このフィールドは必須です',
             requestModified: 'このリクエストは他のメンバーによって変更されています。',
-            characterLimitExceedCounter: function (_a) {
-                var length = _a.length, limit = _a.limit;
-                return "\u6587\u5B57\u6570\u5236\u9650\u3092\u8D85\u3048\u307E\u3057\u305F\uFF08".concat(length, "/").concat(limit, "\uFF09");
-            },
+            characterLimitExceedCounter: ({ length, limit }) => `文字数制限を超えました（${length}/${limit}）`,
             dateInvalid: '有効な日付を選択してください',
             invalidDateShouldBeFuture: '今日または将来の日付を選択してください',
             invalidTimeShouldBeFuture: '少なくとも1分以上先の時間を選択してください。',
@@ -219,10 +209,7 @@ var translations = {
         verify: '確認する',
         yesContinue: 'はい、続けてください。',
         websiteExample: 'e.g. https://www.expensify.com',
-        zipCodeExampleFormat: function (_a) {
-            var zipSampleFormat = _a.zipSampleFormat;
-            return (zipSampleFormat ? "e.g. ".concat(zipSampleFormat) : '');
-        },
+        zipCodeExampleFormat: ({ zipSampleFormat }) => (zipSampleFormat ? `e.g. ${zipSampleFormat}` : ''),
         description: '説明',
         title: 'タイトル',
         assignee: '担当者',
@@ -237,8 +224,8 @@ var translations = {
         someone: '誰か',
         total: '合計',
         edit: '編集',
-        letsDoThis: "\u3084\u308A\u307E\u3057\u3087\u3046\uFF01",
-        letsStart: "\u59CB\u3081\u307E\u3057\u3087\u3046",
+        letsDoThis: `やりましょう！`,
+        letsStart: `始めましょう`,
         showMore: 'もっと見る',
         merchant: '商人',
         category: 'カテゴリー',
@@ -330,10 +317,7 @@ var translations = {
         hourAbbreviation: 'h',
         minuteAbbreviation: 'm',
         skip: 'Skip',
-        chatWithAccountManager: function (_a) {
-            var accountManagerDisplayName = _a.accountManagerDisplayName;
-            return "\u4F55\u304B\u7279\u5B9A\u306E\u3082\u306E\u304C\u5FC5\u8981\u3067\u3059\u304B\uFF1F\u30A2\u30AB\u30A6\u30F3\u30C8\u30DE\u30CD\u30FC\u30B8\u30E3\u30FC\u306E".concat(accountManagerDisplayName, "\u3068\u30C1\u30E3\u30C3\u30C8\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        chatWithAccountManager: ({ accountManagerDisplayName }) => `何か特定のものが必要ですか？アカウントマネージャーの${accountManagerDisplayName}とチャットしてください。`,
         chatNow: '今すぐチャット',
         workEmail: '勤務用メールアドレス',
         destination: '目的地',
@@ -413,10 +397,7 @@ var translations = {
         chooseDocument: 'ファイルを選択',
         attachmentTooLarge: '添付ファイルが大きすぎます',
         sizeExceeded: '添付ファイルのサイズが24MBの制限を超えています。',
-        sizeExceededWithLimit: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u6DFB\u4ED8\u30D5\u30A1\u30A4\u30EB\u306E\u30B5\u30A4\u30BA\u304C ".concat(maxUploadSizeInMB, " MB \u306E\u5236\u9650\u3092\u8D85\u3048\u3066\u3044\u307E\u3059\u3002");
-        },
+        sizeExceededWithLimit: ({ maxUploadSizeInMB }) => `添付ファイルのサイズが ${maxUploadSizeInMB} MB の制限を超えています。`,
         attachmentTooSmall: '添付ファイルが小さすぎます',
         sizeNotMet: '添付ファイルのサイズは240バイト以上である必要があります。',
         wrongFileType: '無効なファイルタイプ',
@@ -425,24 +406,12 @@ var translations = {
         protectedPDFNotSupported: 'パスワード保護されたPDFはサポートされていません',
         attachmentImageResized: 'この画像はプレビュー用にサイズ変更されています。フル解像度でダウンロードしてください。',
         attachmentImageTooLarge: 'この画像はアップロード前にプレビューするには大きすぎます。',
-        tooManyFiles: function (_a) {
-            var fileLimit = _a.fileLimit;
-            return "\u4E00\u5EA6\u306B\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3067\u304D\u308B\u30D5\u30A1\u30A4\u30EB\u306F".concat(fileLimit, "\u500B\u307E\u3067\u3067\u3059\u3002");
-        },
-        sizeExceededWithValue: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u30D5\u30A1\u30A4\u30EB\u304C ".concat(maxUploadSizeInMB, " MB \u3092\u8D85\u3048\u3066\u3044\u307E\u3059\u3002\u3082\u3046\u4E00\u5EA6\u304A\u8A66\u3057\u304F\u3060\u3055\u3044\u3002");
-        },
+        tooManyFiles: ({ fileLimit }) => `一度にアップロードできるファイルは${fileLimit}個までです。`,
+        sizeExceededWithValue: ({ maxUploadSizeInMB }) => `ファイルが ${maxUploadSizeInMB} MB を超えています。もう一度お試しください。`,
         someFilesCantBeUploaded: '一部のファイルはアップロードできません',
-        sizeLimitExceeded: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u30D5\u30A1\u30A4\u30EB\u306F".concat(maxUploadSizeInMB, "MB\u672A\u6E80\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002\u305D\u308C\u3088\u308A\u5927\u304D\u3044\u30D5\u30A1\u30A4\u30EB\u306F\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3055\u308C\u307E\u305B\u3093\u3002");
-        },
+        sizeLimitExceeded: ({ maxUploadSizeInMB }) => `ファイルは${maxUploadSizeInMB}MB未満である必要があります。それより大きいファイルはアップロードされません。`,
         maxFileLimitExceeded: '一度に最大30枚の領収書をアップロードできます。超過分はアップロードされません。',
-        unsupportedFileType: function (_a) {
-            var fileType = _a.fileType;
-            return "".concat(fileType, "\u30D5\u30A1\u30A4\u30EB\u306F\u30B5\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002\u30B5\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u308B\u30D5\u30A1\u30A4\u30EB\u30BF\u30A4\u30D7\u306E\u307F\u304C\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3055\u308C\u307E\u3059\u3002");
-        },
+        unsupportedFileType: ({ fileType }) => `${fileType}ファイルはサポートされていません。サポートされているファイルタイプのみがアップロードされます。`,
         learnMoreAboutSupportedFiles: 'サポートされているフォーマットについて詳しく知る。',
         passwordProtected: 'パスワード保護されたPDFはサポートされていません。サポートされているファイルのみがアップロードされます。',
     },
@@ -467,14 +436,8 @@ var translations = {
     composer: {
         noExtensionFoundForMimeType: 'MIMEタイプに対応する拡張子が見つかりません',
         problemGettingImageYouPasted: '貼り付けた画像の取得に問題が発生しました。',
-        commentExceededMaxLength: function (_a) {
-            var formattedMaxLength = _a.formattedMaxLength;
-            return "\u30B3\u30E1\u30F3\u30C8\u306E\u6700\u5927\u9577\u306F".concat(formattedMaxLength, "\u6587\u5B57\u3067\u3059\u3002");
-        },
-        taskTitleExceededMaxLength: function (_a) {
-            var formattedMaxLength = _a.formattedMaxLength;
-            return "\u30BF\u30B9\u30AF\u30BF\u30A4\u30C8\u30EB\u306E\u6700\u5927\u9577\u306F".concat(formattedMaxLength, "\u6587\u5B57\u3067\u3059\u3002");
-        },
+        commentExceededMaxLength: ({ formattedMaxLength }) => `コメントの最大長は${formattedMaxLength}文字です。`,
+        taskTitleExceededMaxLength: ({ formattedMaxLength }) => `タスクタイトルの最大長は${formattedMaxLength}文字です。`,
     },
     baseUpdateAppModal: {
         updateApp: 'アプリを更新',
@@ -487,10 +450,7 @@ var translations = {
         redirectedToDesktopApp: 'デスクトップアプリにリダイレクトしました。',
         youCanAlso: 'あなたもできます',
         openLinkInBrowser: 'このリンクをブラウザで開いてください。',
-        loggedInAs: function (_a) {
-            var email = _a.email;
-            return "".concat(email, "\u3068\u3057\u3066\u30ED\u30B0\u30A4\u30F3\u3057\u3066\u3044\u307E\u3059\u3002\u3053\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u3067\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\u30A2\u30D7\u30EA\u306B\u30ED\u30B0\u30A4\u30F3\u3059\u308B\u306B\u306F\u3001\u30D7\u30ED\u30F3\u30D7\u30C8\u306E\u300C\u30EA\u30F3\u30AF\u3092\u958B\u304F\u300D\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        loggedInAs: ({ email }) => `${email}としてログインしています。このアカウントでデスクトップアプリにログインするには、プロンプトの「リンクを開く」をクリックしてください。`,
         doNotSeePrompt: 'プロンプトが見えませんか？',
         tryAgain: 'もう一度試してください。',
         or: '、または',
@@ -520,12 +480,12 @@ var translations = {
         findMember: 'メンバーを見つける',
         searchForSomeone: '誰かを検索',
     },
-    emptyList: (_a = {},
-        _a[CONST_1.default.IOU.TYPE.CREATE] = {
+    emptyList: {
+        [CONST_1.default.IOU.TYPE.CREATE]: {
             title: '経費を提出し、上司に紹介する',
             subtitleText: 'あなたの上司にもExpensifyを使ってもらいたいですか？経費を提出するだけで、あとは私たちにお任せください。',
         },
-        _a),
+    },
     videoChatButtonAndMenu: {
         tooltip: '通話を予約する',
     },
@@ -540,14 +500,8 @@ var translations = {
         phrase2: 'お金は語る。そして、チャットと支払いが一つの場所にある今、それは簡単です。',
         phrase3: 'あなたの支払いは、あなたが要点を伝えるのと同じくらい速く届きます。',
         enterPassword: 'パスワードを入力してください',
-        welcomeNewFace: function (_a) {
-            var login = _a.login;
-            return "".concat(login, "\u3001\u3053\u3053\u3067\u65B0\u3057\u3044\u9854\u3092\u898B\u308B\u306E\u306F\u3044\u3064\u3082\u5B09\u3057\u3044\u3067\u3059\uFF01");
-        },
-        welcomeEnterMagicCode: function (_a) {
-            var login = _a.login;
-            return "".concat(login, "\u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u30021\uFF5E2\u5206\u4EE5\u5185\u306B\u5C4A\u304F\u306F\u305A\u3067\u3059\u3002");
-        },
+        welcomeNewFace: ({ login }) => `${login}、ここで新しい顔を見るのはいつも嬉しいです！`,
+        welcomeEnterMagicCode: ({ login }) => `${login}に送信されたマジックコードを入力してください。1～2分以内に届くはずです。`,
     },
     login: {
         hero: {
@@ -556,14 +510,8 @@ var translations = {
         },
     },
     thirdPartySignIn: {
-        alreadySignedIn: function (_a) {
-            var email = _a.email;
-            return "".concat(email, "\u3068\u3057\u3066\u65E2\u306B\u30B5\u30A4\u30F3\u30A4\u30F3\u3057\u3066\u3044\u307E\u3059\u3002");
-        },
-        goBackMessage: function (_a) {
-            var provider = _a.provider;
-            return "".concat(provider, "\u3067\u30B5\u30A4\u30F3\u30A4\u30F3\u3057\u305F\u304F\u306A\u3044\u3067\u3059\u304B\uFF1F");
-        },
+        alreadySignedIn: ({ email }) => `${email}として既にサインインしています。`,
+        goBackMessage: ({ provider }) => `${provider}でサインインしたくないですか？`,
         continueWithMyCurrentSession: '現在のセッションを続ける',
         redirectToDesktopMessage: 'サインインが完了すると、デスクトップアプリにリダイレクトします。',
     },
@@ -582,10 +530,7 @@ var translations = {
         writeSomething: '何かを書いてください...',
         blockedFromConcierge: '通信は禁止されています。',
         fileUploadFailed: 'アップロードに失敗しました。ファイルがサポートされていません。',
-        localTime: function (_a) {
-            var user = _a.user, time = _a.time;
-            return "".concat(user, "\u306E\u305F\u3081\u306E").concat(time, "\u3067\u3059");
-        },
+        localTime: ({ user, time }) => `${user}のための${time}です`,
         edited: '(編集済み)',
         emoji: 'Emoji',
         collapse: '折りたたむ',
@@ -599,18 +544,9 @@ var translations = {
         copyEmailToClipboard: 'メールをクリップボードにコピー',
         markAsUnread: '未読としてマーク',
         markAsRead: '既読にする',
-        editAction: function (_a) {
-            var action = _a.action;
-            return "".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '経費' : 'コメント', "\u3092\u7DE8\u96C6");
-        },
-        deleteAction: function (_a) {
-            var action = _a.action;
-            return "".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '経費' : 'コメント', "\u3092\u524A\u9664");
-        },
-        deleteConfirmation: function (_a) {
-            var action = _a.action;
-            return "\u3053\u306E".concat((action === null || action === void 0 ? void 0 : action.actionName) === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '経費' : 'コメント', "\u3092\u524A\u9664\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F");
-        },
+        editAction: ({ action }) => `${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '経費' : 'コメント'}を編集`,
+        deleteAction: ({ action }) => `${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '経費' : 'コメント'}を削除`,
+        deleteConfirmation: ({ action }) => `この${action?.actionName === CONST_1.default.REPORT.ACTIONS.TYPE.IOU ? '経費' : 'コメント'}を削除してもよろしいですか？`,
         onlyVisible: 'にのみ表示',
         replyInThread: 'スレッドで返信',
         joinThread: 'スレッドに参加する',
@@ -624,48 +560,21 @@ var translations = {
         reactedWith: 'リアクションしました',
     },
     reportActionsView: {
-        beginningOfArchivedRoom: function (_a) {
-            var reportName = _a.reportName, reportDetailsLink = _a.reportDetailsLink;
-            return "<strong><a class=\"no-style-link\" href=\"".concat(reportDetailsLink, "\">").concat(reportName, "</a></strong>\u306E\u30D1\u30FC\u30C6\u30A3\u30FC\u3092\u898B\u9003\u3057\u305F\u306E\u3060\u304B\u3089\u3001\u3053\u3053\u306B\u306F\u4F55\u3082\u306A\u3044\u3002");
-        },
-        beginningOfChatHistoryDomainRoom: function (_a) {
-            var domainRoom = _a.domainRoom;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F\u3001<strong>".concat(domainRoom, "</strong>\u30C9\u30E1\u30A4\u30F3\u306EExpensify\u30E1\u30F3\u30D0\u30FC\u5168\u54E1\u3068\u306E\u30C1\u30E3\u30C3\u30C8\u3067\u3059\u3002\u540C\u50DA\u3068\u30C1\u30E3\u30C3\u30C8\u3057\u305F\u308A\u3001\u30D2\u30F3\u30C8\u3092\u5171\u6709\u3057\u305F\u308A\u3001\u8CEA\u554F\u3057\u305F\u308A\u3059\u308B\u306E\u306B\u3054\u5229\u7528\u304F\u3060\u3055\u3044\u3002");
-        },
-        beginningOfChatHistoryAdminRoom: function (_a) {
-            var workspaceName = _a.workspaceName;
-            return "<strong>".concat(workspaceName, "</strong>\u7BA1\u7406\u8005\u3068\u306E\u30C1\u30E3\u30C3\u30C8\u3067\u3059\u3002\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u306A\u3069\u306B\u3064\u3044\u3066\u30C1\u30E3\u30C3\u30C8\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        beginningOfChatHistoryAnnounceRoom: function (_a) {
-            var workspaceName = _a.workspaceName;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F<strong>".concat(workspaceName, "</strong>\u306E\u307F\u3093\u306A\u3068\u4E00\u7DD2\u3067\u3059\u3002\u91CD\u8981\u306A\u304A\u77E5\u3089\u305B\u3092\u3059\u308B\u3068\u304D\u306B\u4F7F\u3063\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        beginningOfChatHistoryUserRoom: function (_a) {
-            var reportName = _a.reportName, reportDetailsLink = _a.reportDetailsLink;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u30EB\u30FC\u30E0\u306F\u3001<strong><a class=\"no-style-link\" href=\"".concat(reportDetailsLink, "\">").concat(reportName, "</a></strong>\u306B\u95A2\u3059\u308B\u3053\u3068\u306A\u3089\u4F55\u3067\u3082\u3069\u3046\u305E\u3002");
-        },
-        beginningOfChatHistoryInvoiceRoom: function (_a) {
-            var invoicePayer = _a.invoicePayer, invoiceReceiver = _a.invoiceReceiver;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F\u3001<strong>".concat(invoicePayer, "</strong>\u3068<strong>").concat(invoiceReceiver, "</strong>\u9593\u306E\u8ACB\u6C42\u66F8\u7528\u3067\u3059\u3002\u8ACB\u6C42\u66F8\u3092\u9001\u4FE1\u3059\u308B\u306B\u306F\u3001<emoji>").concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "</emoji> \u30DC\u30BF\u30F3\u3092\u4F7F\u7528\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        beginningOfArchivedRoom: ({ reportName, reportDetailsLink }) => `<strong><a class="no-style-link" href="${reportDetailsLink}">${reportName}</a></strong>のパーティーを見逃したのだから、ここには何もない。`,
+        beginningOfChatHistoryDomainRoom: ({ domainRoom }) => `このチャットは、<strong>${domainRoom}</strong>ドメインのExpensifyメンバー全員とのチャットです。同僚とチャットしたり、ヒントを共有したり、質問したりするのにご利用ください。`,
+        beginningOfChatHistoryAdminRoom: ({ workspaceName }) => `<strong>${workspaceName}</strong>管理者とのチャットです。ワークスペースのセットアップなどについてチャットしてください。`,
+        beginningOfChatHistoryAnnounceRoom: ({ workspaceName }) => `このチャットは<strong>${workspaceName}</strong>のみんなと一緒です。重要なお知らせをするときに使ってください。`,
+        beginningOfChatHistoryUserRoom: ({ reportName, reportDetailsLink }) => `このチャットルームは、<strong><a class="no-style-link" href="${reportDetailsLink}">${reportName}</a></strong>に関することなら何でもどうぞ。`,
+        beginningOfChatHistoryInvoiceRoom: ({ invoicePayer, invoiceReceiver }) => `このチャットは、<strong>${invoicePayer}</strong>と<strong>${invoiceReceiver}</strong>間の請求書用です。請求書を送信するには、<emoji>${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}</emoji> ボタンを使用してください。`,
         beginningOfChatHistory: 'このチャットは',
-        beginningOfChatHistoryPolicyExpenseChat: function (_a) {
-            var workspaceName = _a.workspaceName, submitterDisplayName = _a.submitterDisplayName;
-            return "\u3053\u3053\u3067<strong>".concat(submitterDisplayName, "</strong>\u304C<strong>").concat(workspaceName, "</strong>\u306B\u7D4C\u8CBB\u3092\u63D0\u51FA\u3057\u307E\u3059\u3002<emoji>").concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "</emoji>\u30DC\u30BF\u30F3\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        beginningOfChatHistoryPolicyExpenseChat: ({ workspaceName, submitterDisplayName }) => `ここで<strong>${submitterDisplayName}</strong>が<strong>${workspaceName}</strong>に経費を提出します。<emoji>${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}</emoji>ボタンをクリックしてください。`,
         beginningOfChatHistorySelfDM: 'これはあなたの個人スペースです。メモ、タスク、下書き、リマインダーに使用してください。',
         beginningOfChatHistorySystemDM: 'ようこそ！セットアップを始めましょう。',
         chatWithAccountManager: 'こちらでアカウントマネージャーとチャットしてください',
         sayHello: 'こんにちは！',
         yourSpace: 'あなたのスペース',
-        welcomeToRoom: function (_a) {
-            var roomName = _a.roomName;
-            return "".concat(roomName, "\u3078\u3088\u3046\u3053\u305D\uFF01");
-        },
-        usePlusButton: function (_a) {
-            var additionalText = _a.additionalText;
-            return " ".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, " \u30DC\u30BF\u30F3\u3092\u4F7F\u7528\u3057\u3066\u7D4C\u8CBB\u3092").concat(additionalText, "\u3057\u307E\u3059\u3002");
-        },
+        welcomeToRoom: ({ roomName }) => `${roomName}へようこそ！`,
+        usePlusButton: ({ additionalText }) => ` ${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE} ボタンを使用して経費を${additionalText}します。`,
         askConcierge: '質問をして、24時間365日リアルタイムサポートを受けましょう。',
         conciergeSupport: '24時間年中無休サポート',
         create: '作成する',
@@ -692,32 +601,17 @@ var translations = {
         areTyping: '入力中...',
         multipleMembers: '複数のメンバー',
     },
-    reportArchiveReasons: (_b = {},
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.DEFAULT] = 'このチャットルームはアーカイブされました。',
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_CLOSED] = function (_a) {
-            var displayName = _a.displayName;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F".concat(displayName, "\u304C\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u9589\u3058\u305F\u305F\u3081\u3001\u3082\u3046\u30A2\u30AF\u30C6\u30A3\u30D6\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_MERGED] = function (_a) {
-            var displayName = _a.displayName, oldDisplayName = _a.oldDisplayName;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F\u3001".concat(oldDisplayName, "\u304C\u30A2\u30AB\u30A6\u30F3\u30C8\u3092").concat(displayName, "\u3068\u7D71\u5408\u3057\u305F\u305F\u3081\u3001\u3082\u3046\u30A2\u30AF\u30C6\u30A3\u30D6\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.REMOVED_FROM_POLICY] = function (_a) {
-            var displayName = _a.displayName, policyName = _a.policyName, _b = _a.shouldUseYou, shouldUseYou = _b === void 0 ? false : _b;
-            return shouldUseYou
-                ? "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F\u3001<strong>\u3042\u306A\u305F</strong>\u304C".concat(policyName, "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30E1\u30F3\u30D0\u30FC\u3067\u306F\u306A\u304F\u306A\u3063\u305F\u305F\u3081\u3001\u30A2\u30AF\u30C6\u30A3\u30D6\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002")
-                : "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F\u3001".concat(displayName, "\u304C").concat(policyName, "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30E1\u30F3\u30D0\u30FC\u3067\u306A\u304F\u306A\u3063\u305F\u305F\u3081\u3001\u30A2\u30AF\u30C6\u30A3\u30D6\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.POLICY_DELETED] = function (_a) {
-            var policyName = _a.policyName;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F\u3001".concat(policyName, " \u304C\u30A2\u30AF\u30C6\u30A3\u30D6\u306A\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u306F\u306A\u304F\u306A\u3063\u305F\u305F\u3081\u3001\u3082\u3046\u30A2\u30AF\u30C6\u30A3\u30D6\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.INVOICE_RECEIVER_POLICY_DELETED] = function (_a) {
-            var policyName = _a.policyName;
-            return "\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306F\u3001".concat(policyName, " \u304C\u30A2\u30AF\u30C6\u30A3\u30D6\u306A\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u306F\u306A\u304F\u306A\u3063\u305F\u305F\u3081\u3001\u3082\u3046\u30A2\u30AF\u30C6\u30A3\u30D6\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u3002");
-        },
-        _b[CONST_1.default.REPORT.ARCHIVE_REASON.BOOKING_END_DATE_HAS_PASSED] = 'この予約はアーカイブされています。',
-        _b),
+    reportArchiveReasons: {
+        [CONST_1.default.REPORT.ARCHIVE_REASON.DEFAULT]: 'このチャットルームはアーカイブされました。',
+        [CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_CLOSED]: ({ displayName }) => `このチャットは${displayName}がアカウントを閉じたため、もうアクティブではありません。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.ACCOUNT_MERGED]: ({ displayName, oldDisplayName }) => `このチャットは、${oldDisplayName}がアカウントを${displayName}と統合したため、もうアクティブではありません。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.REMOVED_FROM_POLICY]: ({ displayName, policyName, shouldUseYou = false }) => shouldUseYou
+            ? `このチャットは、<strong>あなた</strong>が${policyName}ワークスペースのメンバーではなくなったため、アクティブではありません。`
+            : `このチャットは、${displayName}が${policyName}ワークスペースのメンバーでなくなったため、アクティブではありません。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.POLICY_DELETED]: ({ policyName }) => `このチャットは、${policyName} がアクティブなワークスペースではなくなったため、もうアクティブではありません。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.INVOICE_RECEIVER_POLICY_DELETED]: ({ policyName }) => `このチャットは、${policyName} がアクティブなワークスペースではなくなったため、もうアクティブではありません。`,
+        [CONST_1.default.REPORT.ARCHIVE_REASON.BOOKING_END_DATE_HAS_PASSED]: 'この予約はアーカイブされています。',
+    },
     writeCapabilityPage: {
         label: '誰が投稿できますか',
         writeCapability: {
@@ -757,53 +651,31 @@ var translations = {
         upload: 'スプレッドシートをアップロード',
         import: 'スプレッドシートをインポート',
         dragAndDrop: '<muted-link>スプレッドシートをここにドラッグ＆ドロップするか、以下のファイルを選択してください。対応フォーマット: .csv, .txt, .xls, および .xlsx。</muted-link>',
-        dragAndDropMultiLevelTag: "<muted-link>\u30B9\u30D7\u30EC\u30C3\u30C9\u30B7\u30FC\u30C8\u3092\u3053\u3053\u306B\u30C9\u30E9\u30C3\u30B0\uFF06\u30C9\u30ED\u30C3\u30D7\u3059\u308B\u304B\u3001\u4EE5\u4E0B\u306E\u30D5\u30A1\u30A4\u30EB\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002 <a href=\"".concat(CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK, "\">\u8A73\u7D30</a> \u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002"),
+        dragAndDropMultiLevelTag: `<muted-link>スプレッドシートをここにドラッグ＆ドロップするか、以下のファイルを選択してください。 <a href="${CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK}">詳細</a> をご覧ください。`,
         chooseSpreadsheet: '<muted-link>インポートするスプレッドシートファイルを選択してください。サポートされている形式: .csv, .txt, .xls, および .xlsx。</muted-link>',
-        chooseSpreadsheetMultiLevelTag: "<muted-link>\u30A4\u30F3\u30DD\u30FC\u30C8\u3059\u308B\u30B9\u30D7\u30EC\u30C3\u30C9\u30B7\u30FC\u30C8\u30D5\u30A1\u30A4\u30EB\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002 <a href=\"".concat(CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK, "\">\u8A73\u7D30</a> \u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002"),
+        chooseSpreadsheetMultiLevelTag: `<muted-link>インポートするスプレッドシートファイルを選択してください。 <a href="${CONST_1.default.IMPORT_SPREADSHEET.MULTI_LEVEL_TAGS_ARTICLE_LINK}">詳細</a> をご覧ください。`,
         fileContainsHeader: 'ファイルには列ヘッダーが含まれています。',
-        column: function (_a) {
-            var name = _a.name;
-            return "\u5217 ".concat(name);
-        },
-        fieldNotMapped: function (_a) {
-            var fieldName = _a.fieldName;
-            return "\u304A\u3063\u3068\uFF01\u5FC5\u9808\u30D5\u30A3\u30FC\u30EB\u30C9\uFF08\"".concat(fieldName, "\"\uFF09\u304C\u30DE\u30C3\u30D4\u30F3\u30B0\u3055\u308C\u3066\u3044\u307E\u305B\u3093\u3002\u78BA\u8A8D\u3057\u3066\u518D\u8A66\u884C\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        singleFieldMultipleColumns: function (_a) {
-            var fieldName = _a.fieldName;
-            return "\u304A\u3063\u3068\uFF01\u5358\u4E00\u306E\u30D5\u30A3\u30FC\u30EB\u30C9\uFF08\u300C".concat(fieldName, "\u300D\uFF09\u3092\u8907\u6570\u306E\u5217\u306B\u30DE\u30C3\u30D4\u30F3\u30B0\u3057\u3066\u3044\u307E\u3059\u3002\u78BA\u8A8D\u3057\u3066\u518D\u8A66\u884C\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        emptyMappedField: function (_a) {
-            var fieldName = _a.fieldName;
-            return "\u304A\u3063\u3068\uFF01\u30D5\u30A3\u30FC\u30EB\u30C9\uFF08\"".concat(fieldName, "\"\uFF09\u306B1\u3064\u4EE5\u4E0A\u306E\u7A7A\u306E\u5024\u304C\u542B\u307E\u308C\u3066\u3044\u307E\u3059\u3002\u78BA\u8A8D\u3057\u3066\u3082\u3046\u4E00\u5EA6\u304A\u8A66\u3057\u304F\u3060\u3055\u3044\u3002");
-        },
+        column: ({ name }) => `列 ${name}`,
+        fieldNotMapped: ({ fieldName }) => `おっと！必須フィールド（"${fieldName}"）がマッピングされていません。確認して再試行してください。`,
+        singleFieldMultipleColumns: ({ fieldName }) => `おっと！単一のフィールド（「${fieldName}」）を複数の列にマッピングしています。確認して再試行してください。`,
+        emptyMappedField: ({ fieldName }) => `おっと！フィールド（"${fieldName}"）に1つ以上の空の値が含まれています。確認してもう一度お試しください。`,
         importSuccessfulTitle: 'インポートが成功しました',
-        importCategoriesSuccessfulDescription: function (_a) {
-            var categories = _a.categories;
-            return (categories > 1 ? "".concat(categories, " \u30AB\u30C6\u30B4\u30EA\u30FC\u304C\u8FFD\u52A0\u3055\u308C\u307E\u3057\u305F\u3002") : '1 カテゴリが追加されました。');
-        },
-        importMembersSuccessfulDescription: function (_a) {
-            var added = _a.added, updated = _a.updated;
+        importCategoriesSuccessfulDescription: ({ categories }) => (categories > 1 ? `${categories} カテゴリーが追加されました。` : '1 カテゴリが追加されました。'),
+        importMembersSuccessfulDescription: ({ added, updated }) => {
             if (!added && !updated) {
                 return 'メンバーが追加または更新されていません。';
             }
             if (added && updated) {
-                return "".concat(added, " \u30E1\u30F3\u30D0\u30FC").concat(added > 1 ? 's' : '', "\u304C\u8FFD\u52A0\u3055\u308C\u3001").concat(updated, " \u30E1\u30F3\u30D0\u30FC").concat(updated > 1 ? 's' : '', "\u304C\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002");
+                return `${added} メンバー${added > 1 ? 's' : ''}が追加され、${updated} メンバー${updated > 1 ? 's' : ''}が更新されました。`;
             }
             if (updated) {
-                return updated > 1 ? "".concat(updated, " \u4EBA\u306E\u30E1\u30F3\u30D0\u30FC\u304C\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002") : '1名のメンバーが更新されました。';
+                return updated > 1 ? `${updated} 人のメンバーが更新されました。` : '1名のメンバーが更新されました。';
             }
-            return added > 1 ? "".concat(added, " \u4EBA\u306E\u30E1\u30F3\u30D0\u30FC\u304C\u8FFD\u52A0\u3055\u308C\u307E\u3057\u305F\u3002") : '1人のメンバーが追加されました。';
+            return added > 1 ? `${added} 人のメンバーが追加されました。` : '1人のメンバーが追加されました。';
         },
-        importTagsSuccessfulDescription: function (_a) {
-            var tags = _a.tags;
-            return (tags > 1 ? "".concat(tags, " \u30BF\u30B0\u304C\u8FFD\u52A0\u3055\u308C\u307E\u3057\u305F\u3002") : '1 つのタグが追加されました。');
-        },
+        importTagsSuccessfulDescription: ({ tags }) => (tags > 1 ? `${tags} タグが追加されました。` : '1 つのタグが追加されました。'),
         importMultiLevelTagsSuccessfulDescription: 'マルチレベルタグが追加されました。',
-        importPerDiemRatesSuccessfulDescription: function (_a) {
-            var rates = _a.rates;
-            return rates > 1 ? "".concat(rates, " \u306E\u65E5\u5F53\u304C\u8FFD\u52A0\u3055\u308C\u307E\u3057\u305F\u3002") : '1つの日当料金が追加されました。';
-        },
+        importPerDiemRatesSuccessfulDescription: ({ rates }) => rates > 1 ? `${rates} の日当が追加されました。` : '1つの日当料金が追加されました。',
         importFailedTitle: 'インポートに失敗しました',
         importFailedDescription: 'すべてのフィールドが正しく入力されていることを確認し、再試行してください。問題が解決しない場合は、Conciergeに連絡してください。',
         importDescription: '以下のインポートされた列の横にあるドロップダウンをクリックして、スプレッドシートからマップするフィールドを選択してください。',
@@ -812,12 +684,10 @@ var translations = {
         importSpreadsheetLibraryError: 'スプレッドシートモジュールの読み込みに失敗しました。インターネット接続を確認して、もう一度お試しください。',
         importSpreadsheet: 'スプレッドシートをインポート',
         downloadCSV: 'CSVをダウンロード',
-        importMemberConfirmation: function () { return ({
-            one: "\u3053\u306E\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3067\u8FFD\u52A0\u3055\u308C\u308B\u65B0\u3057\u3044\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30E1\u30F3\u30D0\u30FC\u306E\u8A73\u7D30\u3092\u4EE5\u4E0B\u3067\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u65E2\u5B58\u306E\u30E1\u30F3\u30D0\u30FC\u306B\u306F\u30ED\u30FC\u30EB\u306E\u66F4\u65B0\u3084\u62DB\u5F85\u30E1\u30C3\u30BB\u30FC\u30B8\u306F\u9001\u4FE1\u3055\u308C\u307E\u305B\u3093\u3002",
-            other: function (count) {
-                return "\u3053\u306E\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3067\u8FFD\u52A0\u3055\u308C\u308B".concat(count, "\u4EBA\u306E\u65B0\u3057\u3044\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30E1\u30F3\u30D0\u30FC\u306E\u8A73\u7D30\u3092\u4EE5\u4E0B\u3067\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u65E2\u5B58\u306E\u30E1\u30F3\u30D0\u30FC\u306B\u306F\u30ED\u30FC\u30EB\u306E\u66F4\u65B0\u3084\u62DB\u5F85\u30E1\u30C3\u30BB\u30FC\u30B8\u306F\u9001\u4FE1\u3055\u308C\u307E\u305B\u3093\u3002");
-            },
-        }); },
+        importMemberConfirmation: () => ({
+            one: `このアップロードで追加される新しいワークスペースメンバーの詳細を以下で確認してください。既存のメンバーにはロールの更新や招待メッセージは送信されません。`,
+            other: (count) => `このアップロードで追加される${count}人の新しいワークスペースメンバーの詳細を以下で確認してください。既存のメンバーにはロールの更新や招待メッセージは送信されません。`,
+        }),
     },
     receipt: {
         upload: '領収書をアップロード',
@@ -838,7 +708,7 @@ var translations = {
         locationAccessMessage: '位置情報へのアクセスは、どこに行ってもタイムゾーンと通貨を正確に保つのに役立ちます。',
         locationErrorTitle: '位置情報へのアクセスを許可',
         locationErrorMessage: '位置情報へのアクセスは、どこに行ってもタイムゾーンと通貨を正確に保つのに役立ちます。',
-        allowLocationFromSetting: "\u4F4D\u7F6E\u60C5\u5831\u3078\u306E\u30A2\u30AF\u30BB\u30B9\u306F\u3001\u3069\u3053\u306B\u884C\u3063\u3066\u3082\u30BF\u30A4\u30E0\u30BE\u30FC\u30F3\u3068\u901A\u8CA8\u3092\u6B63\u78BA\u306B\u4FDD\u3064\u306E\u306B\u5F79\u7ACB\u3061\u307E\u3059\u3002\u30C7\u30D0\u30A4\u30B9\u306E\u6A29\u9650\u8A2D\u5B9A\u304B\u3089\u4F4D\u7F6E\u60C5\u5831\u3078\u306E\u30A2\u30AF\u30BB\u30B9\u3092\u8A31\u53EF\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+        allowLocationFromSetting: `位置情報へのアクセスは、どこに行ってもタイムゾーンと通貨を正確に保つのに役立ちます。デバイスの権限設定から位置情報へのアクセスを許可してください。`,
         dropTitle: 'そのままにしておく',
         dropMessage: 'ここにファイルをドロップしてください',
         flash: 'フラッシュ',
@@ -858,10 +728,7 @@ var translations = {
         splitBill: '経費を分割',
         splitScan: 'レシートを分割',
         splitDistance: '距離を分割',
-        paySomeone: function (_a) {
-            var _b = _a === void 0 ? {} : _a, name = _b.name;
-            return "Pay ".concat(name !== null && name !== void 0 ? name : '誰か');
-        },
+        paySomeone: ({ name } = {}) => `Pay ${name ?? '誰か'}`,
         assignTask: 'タスクを割り当てる',
         header: 'クイックアクション',
         noLongerHaveReportAccess: '以前のクイックアクションの宛先へのアクセス権がなくなりました。以下から新しいものを選んでください。',
@@ -872,58 +739,34 @@ var translations = {
         amount: '金額',
         taxAmount: '税額',
         taxRate: '税率',
-        approve: function (_a) {
-            var _b = _a === void 0 ? {} : _a, formattedAmount = _b.formattedAmount;
-            return (formattedAmount ? "".concat(formattedAmount, " \u3092\u627F\u8A8D\u3059\u308B") : '承認する');
-        },
+        approve: ({ formattedAmount, } = {}) => (formattedAmount ? `${formattedAmount} を承認する` : '承認する'),
         approved: '承認済み',
         cash: '現金',
         card: 'カード',
         original: 'Original',
         split: '分割',
         splitExpense: '経費を分割',
-        splitExpenseSubtitle: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "".concat(merchant, "\u304B\u3089").concat(amount);
-        },
+        splitExpenseSubtitle: ({ amount, merchant }) => `${merchant}から${amount}`,
         addSplit: '分割を追加',
-        totalAmountGreaterThanOriginal: function (_a) {
-            var amount = _a.amount;
-            return "\u5408\u8A08\u91D1\u984D\u306F\u5143\u306E\u7D4C\u8CBB\u3088\u308A\u3082".concat(amount, "\u591A\u3044\u3067\u3059\u3002");
-        },
-        totalAmountLessThanOriginal: function (_a) {
-            var amount = _a.amount;
-            return "\u5408\u8A08\u91D1\u984D\u306F\u5143\u306E\u7D4C\u8CBB\u3088\u308A\u3082".concat(amount, "\u5C11\u306A\u304F\u306A\u3063\u3066\u3044\u307E\u3059\u3002");
-        },
+        totalAmountGreaterThanOriginal: ({ amount }) => `合計金額は元の経費よりも${amount}多いです。`,
+        totalAmountLessThanOriginal: ({ amount }) => `合計金額は元の経費よりも${amount}少なくなっています。`,
         splitExpenseZeroAmount: '続行する前に有効な金額を入力してください。',
-        splitExpenseEditTitle: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "".concat(merchant, "\u306E").concat(amount, "\u3092\u7DE8\u96C6");
-        },
+        splitExpenseEditTitle: ({ amount, merchant }) => `${merchant}の${amount}を編集`,
         removeSplit: '分割を削除',
-        paySomeone: function (_a) {
-            var _b = _a === void 0 ? {} : _a, name = _b.name;
-            return "Pay ".concat(name !== null && name !== void 0 ? name : '誰か');
-        },
+        paySomeone: ({ name } = {}) => `Pay ${name ?? '誰か'}`,
         expense: '経費',
         categorize: 'カテゴリー分けする',
         share: '共有',
         participants: '参加者',
         createExpense: '経費を作成',
         trackDistance: '距離を追跡する',
-        createExpenses: function (_a) {
-            var expensesNumber = _a.expensesNumber;
-            return "".concat(expensesNumber, "\u4EF6\u306E\u7D4C\u8CBB\u3092\u4F5C\u6210");
-        },
+        createExpenses: ({ expensesNumber }) => `${expensesNumber}件の経費を作成`,
         removeExpense: '経費を削除',
         removeThisExpense: 'この経費を削除',
         removeExpenseConfirmation: 'このレシートを削除しますか？この操作は元に戻せません。',
         addExpense: '経費を追加',
         chooseRecipient: '受取人を選択',
-        createExpenseWithAmount: function (_a) {
-            var amount = _a.amount;
-            return "".concat(amount, "\u306E\u7D4C\u8CBB\u3092\u4F5C\u6210");
-        },
+        createExpenseWithAmount: ({ amount }) => `${amount}の経費を作成`,
         confirmDetails: '詳細を確認',
         pay: '支払う',
         cancelPayment: '支払いをキャンセルする',
@@ -933,54 +776,38 @@ var translations = {
         canceled: 'キャンセルされました',
         posted: '投稿済み',
         deleteReceipt: '領収書を削除',
-        deletedTransaction: function (_a) {
-            var amount = _a.amount, merchant = _a.merchant;
-            return "\u7D4C\u8CBB\u3092\u524A\u9664\u3057\u307E\u3057\u305F (".concat(merchant, "\u306E").concat(amount, ")");
-        },
-        movedFromReport: function (_a) {
-            var reportName = _a.reportName;
-            return "\u8CBB\u7528".concat(reportName ? "".concat(reportName, " \u304B\u3089") : '', "\u3092\u79FB\u52D5\u3057\u307E\u3057\u305F");
-        },
-        movedTransaction: function (_a) {
-            var reportUrl = _a.reportUrl, reportName = _a.reportName;
-            return "\u3053\u306E\u7D4C\u8CBB".concat(reportName ? "to <a href=\"".concat(reportUrl, "\">").concat(reportName, "</a>") : '', "\u3092\u79FB\u52D5\u3057\u307E\u3057\u305F");
-        },
-        unreportedTransaction: function (_a) {
-            var reportUrl = _a.reportUrl;
-            return "\u3053\u306E\u7D4C\u8CBB\u3092\u3042\u306A\u305F\u306E<a href=\"".concat(reportUrl, "\">\u500B\u4EBA\u30B9\u30DA\u30FC\u30B9</a>\u306B\u79FB\u52D5\u3057\u307E\u3057\u305F\u3002");
-        },
-        movedAction: function (_a) {
-            var shouldHideMovedReportUrl = _a.shouldHideMovedReportUrl, movedReportUrl = _a.movedReportUrl, newParentReportUrl = _a.newParentReportUrl, toPolicyName = _a.toPolicyName;
+        deletedTransaction: ({ amount, merchant }) => `経費を削除しました (${merchant}の${amount})`,
+        movedFromReport: ({ reportName }) => `費用${reportName ? `${reportName} から` : ''}を移動しました`,
+        movedTransaction: ({ reportUrl, reportName }) => `この経費${reportName ? `to <a href="${reportUrl}">${reportName}</a>` : ''}を移動しました`,
+        unreportedTransaction: ({ reportUrl }) => `この経費をあなたの<a href="${reportUrl}">個人スペース</a>に移動しました。`,
+        movedAction: ({ shouldHideMovedReportUrl, movedReportUrl, newParentReportUrl, toPolicyName }) => {
             if (shouldHideMovedReportUrl) {
-                return "<a href=\"".concat(newParentReportUrl, "\">").concat(toPolicyName, "</a> \u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u3092\u79FB\u52D5\u3057\u307E\u3057\u305F");
+                return `<a href="${newParentReportUrl}">${toPolicyName}</a> ワークスペースにこのレポートを移動しました`;
             }
-            return "<a href=\"".concat(movedReportUrl, "\">\u30EC\u30DD\u30FC\u30C8</a> \u3092 <a href=\"").concat(newParentReportUrl, "\">").concat(toPolicyName, "</a> \u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u79FB\u52D5\u3057\u307E\u3057\u305F");
+            return `<a href="${movedReportUrl}">レポート</a> を <a href="${newParentReportUrl}">${toPolicyName}</a> ワークスペースに移動しました`;
         },
         pendingMatchWithCreditCard: 'カード取引との一致待ちの領収書',
         pendingMatch: '保留中の一致',
         pendingMatchWithCreditCardDescription: '領収書がカード取引と一致待ちです。現金としてマークしてキャンセルしてください。',
         markAsCash: '現金としてマーク',
         routePending: 'ルートを保留中...',
-        receiptScanning: function () { return ({
+        receiptScanning: () => ({
             one: '領収書をスキャン中...',
             other: '領収書をスキャン中...',
-        }); },
+        }),
         scanMultipleReceipts: '複数の領収書をスキャンする',
         scanMultipleReceiptsDescription: 'すべての領収書を一度に撮影し、自分で詳細を確認するか、SmartScanに任せましょう。',
         receiptScanInProgress: '領収書のスキャン中',
         receiptScanInProgressDescription: '領収書のスキャン中です。後で確認するか、今すぐ詳細を入力してください。',
         removeFromReport: '領収書を削除',
         moveToPersonalSpace: '領収書を個人スペースに移動',
-        duplicateTransaction: function (_a) {
-            var isSubmitted = _a.isSubmitted;
-            return !isSubmitted
-                ? '重複の可能性がある経費が特定されました。提出を有効にするために重複を確認してください。'
-                : '重複の可能性がある経費が特定されました。承認を有効にするために重複を確認してください。';
-        },
-        receiptIssuesFound: function () { return ({
+        duplicateTransaction: ({ isSubmitted }) => !isSubmitted
+            ? '重複の可能性がある経費が特定されました。提出を有効にするために重複を確認してください。'
+            : '重複の可能性がある経費が特定されました。承認を有効にするために重複を確認してください。',
+        receiptIssuesFound: () => ({
             one: '問題が見つかりました',
             other: '問題が見つかりました',
-        }); },
+        }),
         fieldPending: '保留中...',
         defaultRate: 'デフォルトレート',
         receiptMissingDetails: '領収書に詳細が欠けています',
@@ -998,34 +825,33 @@ var translations = {
         invalidDomainError: '無効なドメインが入力されました。続行するには、有効なドメインを入力してください。',
         publicDomainError: 'パブリックドメインに入りました。続行するには、プライベートドメインを入力してください。',
         // TODO: This key should be deprecated. More details: https://github.com/Expensify/App/pull/59653#discussion_r2028653252
-        expenseCountWithStatus: function (_a) {
-            var _b = _a.scanningReceipts, scanningReceipts = _b === void 0 ? 0 : _b, _c = _a.pendingReceipts, pendingReceipts = _c === void 0 ? 0 : _c;
-            var statusText = [];
+        expenseCountWithStatus: ({ scanningReceipts = 0, pendingReceipts = 0 }) => {
+            const statusText = [];
             if (scanningReceipts > 0) {
-                statusText.push("".concat(scanningReceipts, " \u30B9\u30AD\u30E3\u30F3\u4E2D"));
+                statusText.push(`${scanningReceipts} スキャン中`);
             }
             if (pendingReceipts > 0) {
-                statusText.push("".concat(pendingReceipts, " \u4EF6\u306E\u4FDD\u7559\u4E2D"));
+                statusText.push(`${pendingReceipts} 件の保留中`);
             }
             return {
-                one: statusText.length > 0 ? "1 \u7D4C\u8CBB (".concat(statusText.join(', '), ")") : "1 \u7D4C\u8CBB",
-                other: function (count) { return (statusText.length > 0 ? "".concat(count, " \u7D4C\u8CBB (").concat(statusText.join(', '), ")") : "".concat(count, " \u7D4C\u8CBB")); },
+                one: statusText.length > 0 ? `1 経費 (${statusText.join(', ')})` : `1 経費`,
+                other: (count) => (statusText.length > 0 ? `${count} 経費 (${statusText.join(', ')})` : `${count} 経費`),
             };
         },
-        expenseCount: function () {
+        expenseCount: () => {
             return {
                 one: '1 経費',
-                other: function (count) { return "".concat(count, " \u7D4C\u8CBB"); },
+                other: (count) => `${count} 経費`,
             };
         },
-        deleteExpense: function () { return ({
+        deleteExpense: () => ({
             one: '経費を削除',
             other: '経費を削除',
-        }); },
-        deleteConfirmation: function () { return ({
+        }),
+        deleteConfirmation: () => ({
             one: 'この経費を削除してもよろしいですか？',
             other: 'これらの経費を削除してもよろしいですか？',
-        }); },
+        }),
         deleteReport: 'レポートを削除',
         deleteReportConfirmation: 'このレポートを削除してもよろしいですか？',
         settledExpensify: '支払済み',
@@ -1033,210 +859,66 @@ var translations = {
         settledElsewhere: '他で支払い済み',
         individual: '個人',
         business: 'ビジネス',
-        settleExpensify: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "Expensify\u3067".concat(formattedAmount, "\u3092\u652F\u6255\u3046") : "Expensify\u3067\u652F\u6255\u3046");
-        },
-        settlePersonal: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "".concat(formattedAmount, "\u3092\u500B\u4EBA\u3068\u3057\u3066\u652F\u6255\u3046") : "\u500B\u4EBA\u53E3\u5EA7\u3067\u652F\u6255\u3046");
-        },
-        settleWallet: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "\u30A6\u30A9\u30EC\u30C3\u30C8\u3067".concat(formattedAmount, "\u3092\u652F\u6255\u3046") : "\u30A6\u30A9\u30EC\u30C3\u30C8\u3067\u652F\u6255\u3046");
-        },
-        settlePayment: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return "".concat(formattedAmount, "\u3092\u652F\u6255\u3046");
-        },
-        settleBusiness: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "".concat(formattedAmount, "\u3092\u30D3\u30B8\u30CD\u30B9\u3068\u3057\u3066\u652F\u6255\u3046") : "\u30D3\u30B8\u30CD\u30B9\u53E3\u5EA7\u3067\u652F\u6255\u3046");
-        },
-        payElsewhere: function (_a) {
-            var formattedAmount = _a.formattedAmount;
-            return (formattedAmount ? "".concat(formattedAmount, "\u3092\u652F\u6255\u3044\u6E08\u307F\u306B\u30DE\u30FC\u30AF") : "\u652F\u6255\u3044\u6E08\u307F\u306B\u30DE\u30FC\u30AF");
-        },
-        settleInvoicePersonal: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return (amount ? "".concat(amount, "\u3092\u500B\u4EBA\u53E3\u5EA7\uFF08").concat(last4Digits, "\uFF09\u3067\u652F\u6255\u3044\u6E08\u307F") : "\u500B\u4EBA\u53E3\u5EA7\u3067\u652F\u6255\u3044\u6E08\u307F");
-        },
-        settleInvoiceBusiness: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return (amount ? "".concat(amount, "\u3092\u30D3\u30B8\u30CD\u30B9\u53E3\u5EA7\uFF08").concat(last4Digits, "\uFF09\u3067\u652F\u6255\u3044\u6E08\u307F") : "\u30D3\u30B8\u30CD\u30B9\u53E3\u5EA7\u3067\u652F\u6255\u3044\u6E08\u307F");
-        },
-        payWithPolicy: function (_a) {
-            var formattedAmount = _a.formattedAmount, policyName = _a.policyName;
-            return formattedAmount ? "".concat(policyName, "\u7D4C\u7531\u3067").concat(formattedAmount, "\u3092\u652F\u6255\u3046") : "".concat(policyName, "\u7D4C\u7531\u3067\u652F\u6255\u3046");
-        },
-        businessBankAccount: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return amount ? "".concat(amount, "\u3092\u9280\u884C\u53E3\u5EA7\uFF08").concat(last4Digits, "\uFF09\u3067\u652F\u6255\u3044\u6E08\u307F") : "\u3092\u9280\u884C\u53E3\u5EA7\uFF08".concat(last4Digits, "\uFF09\u3067\u652F\u6255\u3044\u6E08\u307F");
-        },
-        automaticallyPaidWithBusinessBankAccount: function (_a) {
-            var amount = _a.amount, last4Digits = _a.last4Digits;
-            return "".concat(amount, "\u5186\u304C\u9280\u884C\u53E3\u5EA7\uFF08\u4E0B\uFF14\u6841\uFF1A").concat(last4Digits, "\uFF09\u3067\u652F\u6255\u308F\u308C\u307E\u3057\u305F <a href=\"").concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30EB\u30FC\u30EB</a>\u306B\u3088\u308B");
-        },
-        invoicePersonalBank: function (_a) {
-            var lastFour = _a.lastFour;
-            return "\u500B\u4EBA\u53E3\u5EA7\u30FB".concat(lastFour);
-        },
-        invoiceBusinessBank: function (_a) {
-            var lastFour = _a.lastFour;
-            return "\u30D3\u30B8\u30CD\u30B9\u53E3\u5EA7\u30FB".concat(lastFour);
-        },
+        settleExpensify: ({ formattedAmount }) => (formattedAmount ? `Expensifyで${formattedAmount}を支払う` : `Expensifyで支払う`),
+        settlePersonal: ({ formattedAmount }) => (formattedAmount ? `${formattedAmount}を個人として支払う` : `個人口座で支払う`),
+        settleWallet: ({ formattedAmount }) => (formattedAmount ? `ウォレットで${formattedAmount}を支払う` : `ウォレットで支払う`),
+        settlePayment: ({ formattedAmount }) => `${formattedAmount}を支払う`,
+        settleBusiness: ({ formattedAmount }) => (formattedAmount ? `${formattedAmount}をビジネスとして支払う` : `ビジネス口座で支払う`),
+        payElsewhere: ({ formattedAmount }) => (formattedAmount ? `${formattedAmount}を支払い済みにマーク` : `支払い済みにマーク`),
+        settleInvoicePersonal: ({ amount, last4Digits }) => (amount ? `${amount}を個人口座（${last4Digits}）で支払い済み` : `個人口座で支払い済み`),
+        settleInvoiceBusiness: ({ amount, last4Digits }) => (amount ? `${amount}をビジネス口座（${last4Digits}）で支払い済み` : `ビジネス口座で支払い済み`),
+        payWithPolicy: ({ formattedAmount, policyName }) => formattedAmount ? `${policyName}経由で${formattedAmount}を支払う` : `${policyName}経由で支払う`,
+        businessBankAccount: ({ amount, last4Digits }) => amount ? `${amount}を銀行口座（${last4Digits}）で支払い済み` : `を銀行口座（${last4Digits}）で支払い済み`,
+        automaticallyPaidWithBusinessBankAccount: ({ amount, last4Digits }) => `${amount}円が銀行口座（下４桁：${last4Digits}）で支払われました <a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">ワークスペースのルール</a>による`,
+        invoicePersonalBank: ({ lastFour }) => `個人口座・${lastFour}`,
+        invoiceBusinessBank: ({ lastFour }) => `ビジネス口座・${lastFour}`,
         nextStep: '次のステップ',
         finished: '完了',
-        sendInvoice: function (_a) {
-            var amount = _a.amount;
-            return "".concat(amount, " \u8ACB\u6C42\u66F8\u3092\u9001\u4FE1");
-        },
-        submitAmount: function (_a) {
-            var amount = _a.amount;
-            return "".concat(amount, "\u3092\u63D0\u51FA");
-        },
-        expenseAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount).concat(comment ? "".concat(comment, " \u306E\u305F\u3081\u306B") : '');
-        },
-        submitted: function (_a) {
-            var memo = _a.memo;
-            return "\u63D0\u51FA\u6E08\u307F".concat(memo ? "\u3001\u6B21\u306E\u3088\u3046\u306B\u8A00\u3063\u3066 ".concat(memo) : '');
-        },
-        automaticallySubmitted: "<a href=\"".concat(CONST_1.default.SELECT_WORKFLOWS_HELP_URL, "\">\u9001\u4FE1\u306E\u9045\u5EF6</a>\u3092\u901A\u3058\u3066\u9001\u4FE1\u3055\u308C\u307E\u3057\u305F"),
-        trackedAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "tracking ".concat(formattedAmount).concat(comment ? "".concat(comment, " \u306E\u305F\u3081\u306B") : '');
-        },
-        splitAmount: function (_a) {
-            var amount = _a.amount;
-            return "".concat(amount, " \u3092\u5206\u5272");
-        },
-        didSplitAmount: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "split ".concat(formattedAmount).concat(comment ? "".concat(comment, " \u306E\u305F\u3081\u306B") : '');
-        },
-        yourSplit: function (_a) {
-            var amount = _a.amount;
-            return "\u3042\u306A\u305F\u306E\u5206\u5272\u984D ".concat(amount);
-        },
-        payerOwesAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount, comment = _a.comment;
-            return "".concat(payer, " \u306F ").concat(amount).concat(comment ? "".concat(comment, " \u306E\u305F\u3081\u306B") : '', " \u3092\u501F\u308A\u3066\u3044\u307E\u3059\u3002");
-        },
-        payerOwes: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " \u306E\u501F\u91D1:");
-        },
-        payerPaidAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u304C").concat(amount, "\u3092\u652F\u6255\u3044\u307E\u3057\u305F");
-        },
-        payerPaid: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " \u304C\u652F\u6255\u3044\u307E\u3057\u305F:");
-        },
-        payerSpentAmount: function (_a) {
-            var payer = _a.payer, amount = _a.amount;
-            return "".concat(payer, "\u304C").concat(amount, "\u3092\u4F7F\u3044\u307E\u3057\u305F");
-        },
-        payerSpent: function (_a) {
-            var payer = _a.payer;
-            return "".concat(payer, " \u304C\u4F7F\u3063\u305F\u91D1\u984D:");
-        },
-        managerApproved: function (_a) {
-            var manager = _a.manager;
-            return "".concat(manager, " \u627F\u8A8D\u6E08\u307F:");
-        },
-        managerApprovedAmount: function (_a) {
-            var manager = _a.manager, amount = _a.amount;
-            return "".concat(manager, " \u304C ").concat(amount, " \u3092\u627F\u8A8D\u3057\u307E\u3057\u305F");
-        },
-        payerSettled: function (_a) {
-            var amount = _a.amount;
-            return "".concat(amount, " \u3092\u652F\u6255\u3044\u307E\u3057\u305F");
-        },
-        payerSettledWithMissingBankAccount: function (_a) {
-            var amount = _a.amount;
-            return "".concat(amount, "\u3092\u652F\u6255\u3044\u307E\u3057\u305F\u3002\u652F\u6255\u3044\u3092\u53D7\u3051\u53D6\u308B\u306B\u306F\u9280\u884C\u53E3\u5EA7\u3092\u8FFD\u52A0\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        automaticallyApproved: "<a href=\"".concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30EB\u30FC\u30EB</a>\u3067\u627F\u8A8D\u6E08\u307F"),
-        approvedAmount: function (_a) {
-            var amount = _a.amount;
-            return "\u627F\u8A8D\u6E08\u307F ".concat(amount);
-        },
-        approvedMessage: "\u627F\u8A8D\u6E08\u307F",
-        unapproved: "\u672A\u627F\u8A8D",
-        automaticallyForwarded: "<a href=\"".concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30EB\u30FC\u30EB</a>\u3067\u627F\u8A8D\u6E08\u307F"),
-        forwarded: "\u627F\u8A8D\u6E08\u307F",
+        sendInvoice: ({ amount }) => `${amount} 請求書を送信`,
+        submitAmount: ({ amount }) => `${amount}を提出`,
+        expenseAmount: ({ formattedAmount, comment }) => `${formattedAmount}${comment ? `${comment} のために` : ''}`,
+        submitted: ({ memo }) => `提出済み${memo ? `、次のように言って ${memo}` : ''}`,
+        automaticallySubmitted: `<a href="${CONST_1.default.SELECT_WORKFLOWS_HELP_URL}">送信の遅延</a>を通じて送信されました`,
+        trackedAmount: ({ formattedAmount, comment }) => `tracking ${formattedAmount}${comment ? `${comment} のために` : ''}`,
+        splitAmount: ({ amount }) => `${amount} を分割`,
+        didSplitAmount: ({ formattedAmount, comment }) => `split ${formattedAmount}${comment ? `${comment} のために` : ''}`,
+        yourSplit: ({ amount }) => `あなたの分割額 ${amount}`,
+        payerOwesAmount: ({ payer, amount, comment }) => `${payer} は ${amount}${comment ? `${comment} のために` : ''} を借りています。`,
+        payerOwes: ({ payer }) => `${payer} の借金:`,
+        payerPaidAmount: ({ payer, amount }) => `${payer ? `${payer} ` : ''}が${amount}を支払いました`,
+        payerPaid: ({ payer }) => `${payer} が支払いました:`,
+        payerSpentAmount: ({ payer, amount }) => `${payer}が${amount}を使いました`,
+        payerSpent: ({ payer }) => `${payer} が使った金額:`,
+        managerApproved: ({ manager }) => `${manager} 承認済み:`,
+        managerApprovedAmount: ({ manager, amount }) => `${manager} が ${amount} を承認しました`,
+        payerSettled: ({ amount }) => `${amount} を支払いました`,
+        payerSettledWithMissingBankAccount: ({ amount }) => `${amount}を支払いました。支払いを受け取るには銀行口座を追加してください。`,
+        automaticallyApproved: `<a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">ワークスペースルール</a>で承認済み`,
+        approvedAmount: ({ amount }) => `承認済み ${amount}`,
+        approvedMessage: `承認済み`,
+        unapproved: `未承認`,
+        automaticallyForwarded: `<a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">ワークスペースルール</a>で承認済み`,
+        forwarded: `承認済み`,
         rejectedThisReport: 'このレポートを拒否しました',
-        waitingOnBankAccount: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName;
-            return "\u652F\u6255\u3044\u3092\u958B\u59CB\u3057\u307E\u3057\u305F\u304C\u3001".concat(submitterDisplayName, "\u304C\u9280\u884C\u53E3\u5EA7\u3092\u8FFD\u52A0\u3059\u308B\u306E\u3092\u5F85\u3063\u3066\u3044\u307E\u3059\u3002");
-        },
-        adminCanceledRequest: function (_a) {
-            var manager = _a.manager;
-            return "".concat(manager ? "".concat(manager, ": ") : '', "\u304C\u652F\u6255\u3044\u3092\u30AD\u30E3\u30F3\u30BB\u30EB\u3057\u307E\u3057\u305F");
-        },
-        canceledRequest: function (_a) {
-            var amount = _a.amount, submitterDisplayName = _a.submitterDisplayName;
-            return "".concat(submitterDisplayName, "\u304C30\u65E5\u4EE5\u5185\u306BExpensify\u30A6\u30A9\u30EC\u30C3\u30C8\u3092\u6709\u52B9\u306B\u3057\u306A\u304B\u3063\u305F\u305F\u3081\u3001").concat(amount, "\u306E\u652F\u6255\u3044\u3092\u30AD\u30E3\u30F3\u30BB\u30EB\u3057\u307E\u3057\u305F\u3002");
-        },
-        settledAfterAddedBankAccount: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName, amount = _a.amount;
-            return "".concat(submitterDisplayName, "\u304C\u9280\u884C\u53E3\u5EA7\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002").concat(amount, "\u306E\u652F\u6255\u3044\u304C\u884C\u308F\u308C\u307E\u3057\u305F\u3002");
-        },
-        paidElsewhere: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u652F\u6255\u3044\u6E08\u307F\u306B\u30DE\u30FC\u30AF\u3055\u308C\u307E\u3057\u305F");
-        },
-        paidWithExpensify: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u30A6\u30A9\u30EC\u30C3\u30C8\u3067\u652F\u6255\u3044\u6E08\u307F");
-        },
-        automaticallyPaidWithExpensify: function (_a) {
-            var _b = _a === void 0 ? {} : _a, payer = _b.payer;
-            return "".concat(payer ? "".concat(payer, " ") : '', "\u306F<a href=\"").concat(CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL, "\">\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30EB\u30FC\u30EB</a>\u3092\u901A\u3058\u3066Expensify\u3067\u652F\u6255\u3044\u307E\u3057\u305F\u3002");
-        },
+        waitingOnBankAccount: ({ submitterDisplayName }) => `支払いを開始しましたが、${submitterDisplayName}が銀行口座を追加するのを待っています。`,
+        adminCanceledRequest: ({ manager }) => `${manager ? `${manager}: ` : ''}が支払いをキャンセルしました`,
+        canceledRequest: ({ amount, submitterDisplayName }) => `${submitterDisplayName}が30日以内にExpensifyウォレットを有効にしなかったため、${amount}の支払いをキャンセルしました。`,
+        settledAfterAddedBankAccount: ({ submitterDisplayName, amount }) => `${submitterDisplayName}が銀行口座を追加しました。${amount}の支払いが行われました。`,
+        paidElsewhere: ({ payer } = {}) => `${payer ? `${payer} ` : ''}支払い済みにマークされました`,
+        paidWithExpensify: ({ payer } = {}) => `${payer ? `${payer} ` : ''}ウォレットで支払い済み`,
+        automaticallyPaidWithExpensify: ({ payer } = {}) => `${payer ? `${payer} ` : ''}は<a href="${CONST_1.default.CONFIGURE_EXPENSE_REPORT_RULES_HELP_URL}">ワークスペースルール</a>を通じてExpensifyで支払いました。`,
         noReimbursableExpenses: 'このレポートには無効な金額が含まれています',
         pendingConversionMessage: 'オンラインに戻ると合計が更新されます。',
         changedTheExpense: '経費を変更しました',
-        setTheRequest: function (_a) {
-            var valueName = _a.valueName, newValueToDisplay = _a.newValueToDisplay;
-            return "".concat(valueName, " \u3092 ").concat(newValueToDisplay, " \u306B");
-        },
-        setTheDistanceMerchant: function (_a) {
-            var translatedChangedField = _a.translatedChangedField, newMerchant = _a.newMerchant, newAmountToDisplay = _a.newAmountToDisplay;
-            return "".concat(translatedChangedField, "\u3092").concat(newMerchant, "\u306B\u8A2D\u5B9A\u3057\u3001\u91D1\u984D\u3092").concat(newAmountToDisplay, "\u306B\u8A2D\u5B9A\u3057\u307E\u3057\u305F\u3002");
-        },
-        removedTheRequest: function (_a) {
-            var valueName = _a.valueName, oldValueToDisplay = _a.oldValueToDisplay;
-            return "".concat(valueName, "\uFF08\u4EE5\u524D\u306F").concat(oldValueToDisplay, "\uFF09");
-        },
-        updatedTheRequest: function (_a) {
-            var valueName = _a.valueName, newValueToDisplay = _a.newValueToDisplay, oldValueToDisplay = _a.oldValueToDisplay;
-            return "".concat(valueName, "\u3092").concat(newValueToDisplay, "\uFF08\u4EE5\u524D\u306F").concat(oldValueToDisplay, "\uFF09\u306B");
-        },
-        updatedTheDistanceMerchant: function (_a) {
-            var translatedChangedField = _a.translatedChangedField, newMerchant = _a.newMerchant, oldMerchant = _a.oldMerchant, newAmountToDisplay = _a.newAmountToDisplay, oldAmountToDisplay = _a.oldAmountToDisplay;
-            return "".concat(translatedChangedField, "\u3092").concat(newMerchant, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F").concat(oldMerchant, "\uFF09\u3001\u3053\u308C\u306B\u3088\u308A\u91D1\u984D\u304C").concat(newAmountToDisplay, "\u306B\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F").concat(oldAmountToDisplay, "\uFF09\u3002");
-        },
-        threadExpenseReportName: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount, " ").concat(comment ? "".concat(comment, "\u7528") : '経費');
-        },
-        invoiceReportName: function (_a) {
-            var linkedReportID = _a.linkedReportID;
-            return "\u8ACB\u6C42\u66F8\u30EC\u30DD\u30FC\u30C8 #".concat(linkedReportID);
-        },
-        threadPaySomeoneReportName: function (_a) {
-            var formattedAmount = _a.formattedAmount, comment = _a.comment;
-            return "".concat(formattedAmount, " \u9001\u4FE1\u6E08\u307F").concat(comment ? "".concat(comment, " \u306E\u305F\u3081\u306B") : '');
-        },
-        movedFromPersonalSpace: function (_a) {
-            var workspaceName = _a.workspaceName, reportName = _a.reportName;
-            return "\u500B\u4EBA\u30B9\u30DA\u30FC\u30B9\u304B\u3089".concat(workspaceName !== null && workspaceName !== void 0 ? workspaceName : "".concat(reportName, "\u3068\u30C1\u30E3\u30C3\u30C8\u3059\u308B"), "\u306B\u7D4C\u8CBB\u3092\u79FB\u52D5\u3057\u307E\u3057\u305F\u3002");
-        },
+        setTheRequest: ({ valueName, newValueToDisplay }) => `${valueName} を ${newValueToDisplay} に`,
+        setTheDistanceMerchant: ({ translatedChangedField, newMerchant, newAmountToDisplay }) => `${translatedChangedField}を${newMerchant}に設定し、金額を${newAmountToDisplay}に設定しました。`,
+        removedTheRequest: ({ valueName, oldValueToDisplay }) => `${valueName}（以前は${oldValueToDisplay}）`,
+        updatedTheRequest: ({ valueName, newValueToDisplay, oldValueToDisplay }) => `${valueName}を${newValueToDisplay}（以前は${oldValueToDisplay}）に`,
+        updatedTheDistanceMerchant: ({ translatedChangedField, newMerchant, oldMerchant, newAmountToDisplay, oldAmountToDisplay }) => `${translatedChangedField}を${newMerchant}に変更しました（以前は${oldMerchant}）、これにより金額が${newAmountToDisplay}に更新されました（以前は${oldAmountToDisplay}）。`,
+        threadExpenseReportName: ({ formattedAmount, comment }) => `${formattedAmount} ${comment ? `${comment}用` : '経費'}`,
+        invoiceReportName: ({ linkedReportID }) => `請求書レポート #${linkedReportID}`,
+        threadPaySomeoneReportName: ({ formattedAmount, comment }) => `${formattedAmount} 送信済み${comment ? `${comment} のために` : ''}`,
+        movedFromPersonalSpace: ({ workspaceName, reportName }) => `個人スペースから${workspaceName ?? `${reportName}とチャットする`}に経費を移動しました。`,
         movedToPersonalSpace: '経費を個人スペースに移動しました',
         tagSelection: '支出をより整理するためにタグを選択してください。',
         categorySelection: '支出をより整理するためにカテゴリを選択してください。',
@@ -1246,10 +928,7 @@ var translations = {
             invalidAmount: '続行する前に有効な金額を入力してください',
             invalidDistance: '続行する前に有効な距離を入力してください',
             invalidIntegerAmount: '続行する前にドルの金額を入力してください',
-            invalidTaxAmount: function (_a) {
-                var amount = _a.amount;
-                return "\u6700\u5927\u7A0E\u984D\u306F".concat(amount, "\u3067\u3059\u3002");
-            },
+            invalidTaxAmount: ({ amount }) => `最大税額は${amount}です。`,
             invalidSplit: '分割の合計は総額と等しくなければなりません。',
             invalidSplitParticipants: '少なくとも2人の参加者に対して、ゼロより大きい金額を入力してください。',
             invalidSplitYourself: '分割のためにゼロ以外の金額を入力してください。',
@@ -1280,10 +959,7 @@ var translations = {
         },
         dismissReceiptError: 'エラーを無視する',
         dismissReceiptErrorConfirmation: 'ご注意ください！このエラーを無視すると、アップロードした領収書が完全に削除されます。本当に実行しますか？',
-        waitingOnEnabledWallet: function (_a) {
-            var submitterDisplayName = _a.submitterDisplayName;
-            return "\u7CBE\u7B97\u3092\u958B\u59CB\u3057\u307E\u3057\u305F\u3002".concat(submitterDisplayName, " \u304C\u30A6\u30A9\u30EC\u30C3\u30C8\u3092\u6709\u52B9\u306B\u3059\u308B\u307E\u3067\u3001\u652F\u6255\u3044\u306F\u4FDD\u7559\u3055\u308C\u307E\u3059\u3002");
-        },
+        waitingOnEnabledWallet: ({ submitterDisplayName }) => `精算を開始しました。${submitterDisplayName} がウォレットを有効にするまで、支払いは保留されます。`,
         enableWallet: 'ウォレットを有効にする',
         hold: '保留',
         unhold: '保留を解除',
@@ -1302,10 +978,7 @@ var translations = {
         retract: '取り消す',
         reopened: '再開されました',
         reopenReport: 'レポートを再開する',
-        reopenExportedReportConfirmation: function (_a) {
-            var connectionName = _a.connectionName;
-            return "\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u306F\u3059\u3067\u306B".concat(connectionName, "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u307E\u3059\u3002\u5909\u66F4\u3059\u308B\u3068\u30C7\u30FC\u30BF\u306E\u4E0D\u4E00\u81F4\u304C\u751F\u3058\u308B\u53EF\u80FD\u6027\u304C\u3042\u308A\u307E\u3059\u3002\u672C\u5F53\u306B\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u3092\u518D\u958B\u3057\u307E\u3059\u304B\uFF1F");
-        },
+        reopenExportedReportConfirmation: ({ connectionName }) => `このレポートはすでに${connectionName}にエクスポートされています。変更するとデータの不一致が生じる可能性があります。本当にこのレポートを再開しますか？`,
         reason: '理由',
         holdReasonRequired: '保留する際には理由が必要です。',
         expenseWasPutOnHold: '経費は保留されました',
@@ -1317,16 +990,16 @@ var translations = {
         keepAll: 'すべて保持',
         confirmApprove: '承認金額を確認',
         confirmApprovalAmount: '準拠している経費のみを承認するか、レポート全体を承認します。',
-        confirmApprovalAllHoldAmount: function () { return ({
+        confirmApprovalAllHoldAmount: () => ({
             one: 'この経費は保留中です。それでも承認しますか？',
             other: 'これらの経費は保留中です。それでも承認しますか？',
-        }); },
+        }),
         confirmPay: '支払い金額を確認',
         confirmPayAmount: '保留されていないものを支払うか、レポート全体を支払う。',
-        confirmPayAllHoldAmount: function () { return ({
+        confirmPayAllHoldAmount: () => ({
             one: 'この経費は保留中です。それでも支払いますか？',
             other: 'これらの経費は保留中です。それでも支払いますか？',
-        }); },
+        }),
         payOnly: '支払いのみ',
         approveOnly: '承認のみ',
         holdEducationalTitle: 'このリクエストはオン',
@@ -1349,10 +1022,7 @@ var translations = {
         unapprove: '承認を取り消す',
         unapproveReport: 'レポートの承認を取り消す',
         headsUp: '注意！',
-        unapproveWithIntegrationWarning: function (_a) {
-            var accountingIntegration = _a.accountingIntegration;
-            return "\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u306F\u3059\u3067\u306B".concat(accountingIntegration, "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u307E\u3059\u3002\u5909\u66F4\u3059\u308B\u3068\u30C7\u30FC\u30BF\u306E\u4E0D\u6574\u5408\u304C\u751F\u3058\u308B\u53EF\u80FD\u6027\u304C\u3042\u308A\u307E\u3059\u3002\u672C\u5F53\u306B\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u306E\u627F\u8A8D\u3092\u53D6\u308A\u6D88\u3057\u307E\u3059\u304B\uFF1F");
-        },
+        unapproveWithIntegrationWarning: ({ accountingIntegration }) => `このレポートはすでに${accountingIntegration}にエクスポートされています。変更するとデータの不整合が生じる可能性があります。本当にこのレポートの承認を取り消しますか？`,
         reimbursable: '払い戻し可能',
         nonReimbursable: '払い戻し不可',
         bookingPending: 'この予約は保留中です',
@@ -1372,25 +1042,22 @@ var translations = {
         quantity: '数量',
         subrateSelection: 'サブレートを選択し、数量を入力してください。',
         qty: '数量',
-        firstDayText: function () { return ({
-            one: "\u521D\u65E5: 1\u6642\u9593",
-            other: function (count) { return "\u521D\u65E5: ".concat(count.toFixed(2), "\u6642\u9593"); },
-        }); },
-        lastDayText: function () { return ({
-            one: "\u6700\u7D42\u65E5: 1\u6642\u9593",
-            other: function (count) { return "\u6700\u7D42\u65E5: ".concat(count.toFixed(2), "\u6642\u9593"); },
-        }); },
-        tripLengthText: function () { return ({
-            one: "\u65C5\u884C: 1\u65E5\u9593",
-            other: function (count) { return "\u65C5\u884C: ".concat(count, "\u65E5\u9593"); },
-        }); },
+        firstDayText: () => ({
+            one: `初日: 1時間`,
+            other: (count) => `初日: ${count.toFixed(2)}時間`,
+        }),
+        lastDayText: () => ({
+            one: `最終日: 1時間`,
+            other: (count) => `最終日: ${count.toFixed(2)}時間`,
+        }),
+        tripLengthText: () => ({
+            one: `旅行: 1日間`,
+            other: (count) => `旅行: ${count}日間`,
+        }),
         dates: '日付',
         rates: '料金',
-        submitsTo: function (_a) {
-            var name = _a.name;
-            return "".concat(name, "\u306B\u9001\u4FE1");
-        },
-        moveExpenses: function () { return ({ one: '経費を移動', other: '経費を移動' }); },
+        submitsTo: ({ name }) => `${name}に送信`,
+        moveExpenses: () => ({ one: '経費を移動', other: '経費を移動' }),
         reject: {
             educationalTitle: '保留しますか、それとも却下しますか？',
             educationalText: '経費を承認または支払う準備ができていない場合は、保留または却下できます。',
@@ -1411,14 +1078,8 @@ var translations = {
         changeApprover: {
             title: '承認者を変更',
             subtitle: 'このレポートの承認者を変更するオプションを選択してください。',
-            description: function (_a) {
-                var workflowSettingLink = _a.workflowSettingLink;
-                return "<a href=\"".concat(workflowSettingLink, "\">\u30EF\u30FC\u30AF\u30D5\u30ED\u30FC\u8A2D\u5B9A</a>\u3067\u3001\u3059\u3079\u3066\u306E\u30EC\u30DD\u30FC\u30C8\u306E\u627F\u8A8D\u8005\u3092\u6052\u4E45\u7684\u306B\u5909\u66F4\u3059\u308B\u3053\u3068\u3082\u3067\u304D\u307E\u3059\u3002");
-            },
-            changedApproverMessage: function (_a) {
-                var managerID = _a.managerID;
-                return "<mention-user accountID=\"".concat(managerID, "\"/> \u306B\u627F\u8A8D\u8005\u3092\u5909\u66F4\u3057\u307E\u3057\u305F");
-            },
+            description: ({ workflowSettingLink }) => `<a href="${workflowSettingLink}">ワークフロー設定</a>で、すべてのレポートの承認者を恒久的に変更することもできます。`,
+            changedApproverMessage: ({ managerID }) => `<mention-user accountID="${managerID}"/> に承認者を変更しました`,
             actions: {
                 addApprover: '承認者を追加',
                 addApproverSubtitle: '既存のワークフローに承認者を追加します。',
@@ -1434,11 +1095,8 @@ var translations = {
         listPage: {
             header: '経費をマージ',
             noEligibleExpenseFound: 'マージ対象となる経費が見つかりません',
-            noEligibleExpenseFoundSubtitle: "<muted-text><centered-text>\u3053\u306E\u7D4C\u8CBB\u3068\u30DE\u30FC\u30B8\u3067\u304D\u308B\u7D4C\u8CBB\u304C\u3042\u308A\u307E\u305B\u3093\u3002<a href=\"".concat(CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES, "\">\u30DE\u30FC\u30B8\u53EF\u80FD\u306A\u7D4C\u8CBB</a>\u306B\u3064\u3044\u3066\u8A73\u3057\u304F\u306F\u3053\u3061\u3089\u3002</centered-text></muted-text>"),
-            selectTransactionToMerge: function (_a) {
-                var reportName = _a.reportName;
-                return "<a href=\"".concat(CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES, "\">\u30DE\u30FC\u30B8\u5BFE\u8C61\u306E\u7D4C\u8CBB</a>\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044 <strong>").concat(reportName, "</strong>.");
-            },
+            noEligibleExpenseFoundSubtitle: `<muted-text><centered-text>この経費とマージできる経費がありません。<a href="${CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES}">マージ可能な経費</a>について詳しくはこちら。</centered-text></muted-text>`,
+            selectTransactionToMerge: ({ reportName }) => `<a href="${CONST_1.default.HELP_DOC_LINKS.MERGE_EXPENSES}">マージ対象の経費</a>を選択してください <strong>${reportName}</strong>.`,
         },
         receiptPage: {
             header: '領収書を選択',
@@ -1448,10 +1106,7 @@ var translations = {
             header: '詳細を選択',
             pageTitle: '保存する詳細を選んでください：',
             noDifferences: 'トランザクション間に差異はありません',
-            pleaseSelectError: function (_a) {
-                var field = _a.field;
-                return "".concat(field, " \u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044");
-            },
+            pleaseSelectError: ({ field }) => `${field} を選択してください`,
             selectAllDetailsError: '続行する前にすべての詳細を選択してください。',
         },
         confirmationPage: {
@@ -1485,18 +1140,9 @@ var translations = {
         viewPhoto: '写真を見る',
         imageUploadFailed: '画像のアップロードに失敗しました',
         deleteWorkspaceError: '申し訳ありませんが、ワークスペースのアバターを削除する際に予期しない問題が発生しました。',
-        sizeExceeded: function (_a) {
-            var maxUploadSizeInMB = _a.maxUploadSizeInMB;
-            return "\u9078\u629E\u3057\u305F\u753B\u50CF\u306F\u3001\u6700\u5927\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u30B5\u30A4\u30BA\u306E".concat(maxUploadSizeInMB, " MB\u3092\u8D85\u3048\u3066\u3044\u307E\u3059\u3002");
-        },
-        resolutionConstraints: function (_a) {
-            var minHeightInPx = _a.minHeightInPx, minWidthInPx = _a.minWidthInPx, maxHeightInPx = _a.maxHeightInPx, maxWidthInPx = _a.maxWidthInPx;
-            return "".concat(minHeightInPx, "x").concat(minWidthInPx, "\u30D4\u30AF\u30BB\u30EB\u4EE5\u4E0A\u3001").concat(maxHeightInPx, "x").concat(maxWidthInPx, "\u30D4\u30AF\u30BB\u30EB\u672A\u6E80\u306E\u753B\u50CF\u3092\u30A2\u30C3\u30D7\u30ED\u30FC\u30C9\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        notAllowedExtension: function (_a) {
-            var allowedExtensions = _a.allowedExtensions;
-            return "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB\u5199\u771F\u306F\u6B21\u306E\u30BF\u30A4\u30D7\u306E\u3044\u305A\u308C\u304B\u3067\u306A\u3051\u308C\u3070\u306A\u308A\u307E\u305B\u3093: ".concat(allowedExtensions.join(', '), "\u3002");
-        },
+        sizeExceeded: ({ maxUploadSizeInMB }) => `選択した画像は、最大アップロードサイズの${maxUploadSizeInMB} MBを超えています。`,
+        resolutionConstraints: ({ minHeightInPx, minWidthInPx, maxHeightInPx, maxWidthInPx }) => `${minHeightInPx}x${minWidthInPx}ピクセル以上、${maxHeightInPx}x${maxWidthInPx}ピクセル未満の画像をアップロードしてください。`,
+        notAllowedExtension: ({ allowedExtensions }) => `プロフィール写真は次のタイプのいずれかでなければなりません: ${allowedExtensions.join(', ')}。`,
     },
     modal: {
         backdropLabel: 'モーダルバックドロップ',
@@ -1547,10 +1193,7 @@ var translations = {
         helpTextAfterEmail: '複数のメールアドレスから。',
         pleaseVerify: 'この連絡方法を確認してください',
         getInTouch: '私たちがあなたに連絡を取る必要がある場合、この連絡方法を使用します。',
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "".concat(contactMethod, "\u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u30021\uFF5E2\u5206\u4EE5\u5185\u306B\u5C4A\u304F\u306F\u305A\u3067\u3059\u3002");
-        },
+        enterMagicCode: ({ contactMethod }) => `${contactMethod}に送信されたマジックコードを入力してください。1～2分以内に届くはずです。`,
         setAsDefault: 'デフォルトに設定',
         yourDefaultContactMethod: 'これは現在のデフォルトの連絡方法です。削除する前に、別の連絡方法を選択し、「デフォルトに設定」をクリックする必要があります。',
         removeContactMethod: '連絡方法を削除',
@@ -1674,10 +1317,7 @@ var translations = {
             enterCommand: 'コマンドを入力してください',
             execute: '実行する',
             noLogsAvailable: 'ログは利用できません',
-            logSizeTooLarge: function (_a) {
-                var size = _a.size;
-                return "\u30ED\u30B0\u30B5\u30A4\u30BA\u304C".concat(size, " MB\u306E\u5236\u9650\u3092\u8D85\u3048\u3066\u3044\u307E\u3059\u3002\u300C\u30ED\u30B0\u3092\u4FDD\u5B58\u300D\u3092\u4F7F\u7528\u3057\u3066\u30ED\u30B0\u30D5\u30A1\u30A4\u30EB\u3092\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-            },
+            logSizeTooLarge: ({ size }) => `ログサイズが${size} MBの制限を超えています。「ログを保存」を使用してログファイルをダウンロードしてください。`,
             logs: 'ログ',
             viewConsole: 'コンソールを表示',
         },
@@ -1686,7 +1326,7 @@ var translations = {
         restoreStashed: '隠されたログインを復元',
         signOutConfirmationText: 'サインアウトすると、オフラインでの変更が失われます。',
         versionLetter: 'v',
-        readTheTermsAndPrivacy: "<muted-text-micro><a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">\u5229\u7528\u898F\u7D04</a>\u3068<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">\u30D7\u30E9\u30A4\u30D0\u30B7\u30FC</a>\u3092\u304A\u8AAD\u307F\u304F\u3060\u3055\u3044\u3002</muted-text-micro>"),
+        readTheTermsAndPrivacy: `<muted-text-micro><a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">利用規約</a>と<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">プライバシー</a>をお読みください。</muted-text-micro>`,
         help: '助けて',
         whatIsNew: '新着情報',
         accountSettings: 'アカウント設定',
@@ -1712,8 +1352,8 @@ var translations = {
         },
         accountValidate: {
             confirmMerge: 'アカウントをマージしてもよろしいですか？',
-            lossOfUnsubmittedData: "\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u7D71\u5408\u306F\u5143\u306B\u623B\u305B\u305A\u3001\u672A\u63D0\u51FA\u306E\u7D4C\u8CBB\u304C\u5931\u308F\u308C\u308B\u7D50\u679C\u306B\u306A\u308A\u307E\u3059\u3002",
-            enterMagicCode: "\u7D9A\u884C\u3059\u308B\u306B\u306F\u3001\u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+            lossOfUnsubmittedData: `アカウントの統合は元に戻せず、未提出の経費が失われる結果になります。`,
+            enterMagicCode: `続行するには、に送信されたマジックコードを入力してください。`,
             errors: {
                 incorrectMagicCode: '無効または不正なマジックコードです。もう一度お試しいただくか、新しいコードをリクエストしてください。',
                 fallback: '問題が発生しました。後でもう一度お試しください。',
@@ -1721,10 +1361,7 @@ var translations = {
         },
         mergeSuccess: {
             accountsMerged: 'アカウントが統合されました！',
-            description: function (_a) {
-                var from = _a.from, to = _a.to;
-                return "<muted-text><centered-text><strong>".concat(from, "</strong>\u3001<strong>").concat(to, "</strong> \u306E\u5168\u30C7\u30FC\u30BF\u306E\u30DE\u30FC\u30B8\u306B\u6210\u529F\u3057\u307E\u3057\u305F\u3002\u4ECA\u5F8C\u3001\u3053\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u306B\u306F\u3069\u3061\u3089\u306E\u30ED\u30B0\u30A4\u30F3\u3082\u4F7F\u7528\u3067\u304D\u307E\u3059\u3002</centered-text></muted-text>");
-            },
+            description: ({ from, to }) => `<muted-text><centered-text><strong>${from}</strong>、<strong>${to}</strong> の全データのマージに成功しました。今後、このアカウントにはどちらのログインも使用できます。</centered-text></muted-text>`,
         },
         mergePendingSAML: {
             weAreWorkingOnIt: '対応中です',
@@ -1732,38 +1369,16 @@ var translations = {
             reachOutForHelp: '<muted-text><centered-text>ご質問は<concierge-link>Conciergeまでお</concierge-link>気軽にどうぞ！</centered-text></muted-text>',
             goToExpensifyClassic: 'Expensify Classicに移動',
         },
-        mergeFailureSAMLDomainControlDescription: function (_a) {
-            var _b;
-            var email = _a.email;
-            return "<muted-text><centered-text><strong>".concat(email, "</strong> \u306F <strong>").concat((_b = email.split('@').at(1)) !== null && _b !== void 0 ? _b : '', "</strong> \u306B\u3088\u3063\u3066\u7BA1\u7406\u3055\u308C\u3066\u3044\u308B\u305F\u3081\u3001\u30DE\u30FC\u30B8\u3067\u304D\u307E\u305B\u3093\u3002<concierge-link>Concierge\u306B\u3054\u76F8\u8AC7</concierge-link>\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-        },
-        mergeFailureSAMLAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>\u30C9\u30E1\u30A4\u30F3\u7BA1\u7406\u8005\u304C\u30D7\u30E9\u30A4\u30DE\u30EA\u30ED\u30B0\u30A4\u30F3\u3068\u3057\u3066\u8A2D\u5B9A\u3057\u3066\u3044\u308B\u305F\u3081\u3001<strong>".concat(email, "</strong> \u3092\u4ED6\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u306B\u7D71\u5408\u3059\u308B\u3053\u3068\u306F\u3067\u304D\u307E\u305B\u3093\u3002\u4EE3\u308F\u308A\u306B\u4ED6\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u30DE\u30FC\u30B8\u3057\u3066\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-        },
+        mergeFailureSAMLDomainControlDescription: ({ email }) => `<muted-text><centered-text><strong>${email}</strong> は <strong>${email.split('@').at(1) ?? ''}</strong> によって管理されているため、マージできません。<concierge-link>Conciergeにご相談</concierge-link>ください。</centered-text></muted-text>`,
+        mergeFailureSAMLAccountDescription: ({ email }) => `<muted-text><centered-text>ドメイン管理者がプライマリログインとして設定しているため、<strong>${email}</strong> を他のアカウントに統合することはできません。代わりに他のアカウントをマージしてください。</centered-text></muted-text>`,
         mergeFailure2FA: {
-            description: function (_a) {
-                var email = _a.email;
-                return "<muted-text><centered-text><strong>".concat(email, "</strong>\u3001\u4E8C\u8981\u7D20\u8A8D\u8A3C\uFF082FA\uFF09\u304C\u6709\u52B9\u306B\u306A\u3063\u3066\u3044\u308B\u305F\u3081\u3001\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u7D71\u5408\u3067\u304D\u307E\u305B\u3093\u3002<strong>").concat(email, "</strong>\u30012FA\u3092\u7121\u52B9\u306B\u3057\u3066\u518D\u5EA6\u304A\u8A66\u3057\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-            },
+            description: ({ email }) => `<muted-text><centered-text><strong>${email}</strong>、二要素認証（2FA）が有効になっているため、アカウントを統合できません。<strong>${email}</strong>、2FAを無効にして再度お試しください。</centered-text></muted-text>`,
             learnMore: 'アカウントの統合について詳しく学ぶ。',
         },
-        mergeFailureAccountLockedDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text><strong>".concat(email, "</strong> \u306F\u30ED\u30C3\u30AF\u3055\u308C\u3066\u3044\u308B\u306E\u3067\u3001\u30DE\u30FC\u30B8\u3067\u304D\u306A\u3044\u3002<concierge-link>Concierge\u306B\u3054\u76F8\u8AC7</concierge-link>\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-        },
-        mergeFailureUncreatedAccountDescription: function (_a) {
-            var email = _a.email, contactMethodLink = _a.contactMethodLink;
-            return "<muted-text><centered-text><strong>".concat(email, "</strong> \u304CExpensify\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u6301\u3063\u3066\u3044\u306A\u3044\u305F\u3081\u3001\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u7D71\u5408\u3067\u304D\u307E\u305B\u3093\u3002\u4EE3\u308F\u308A\u306B<a href=\"").concat(contactMethodLink, "\">\u9023\u7D61\u5148\u3068\u3057\u3066\u8FFD\u52A0\u3057\u3066</a>\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-        },
-        mergeFailureSmartScannerAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text><strong>".concat(email, "</strong> \u3092\u4ED6\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u306B\u7D71\u5408\u3059\u308B\u3053\u3068\u306F\u3067\u304D\u307E\u305B\u3093\u3002\u4EE3\u308F\u308A\u306B\u4ED6\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u7D71\u5408\u3057\u3066\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-        },
-        mergeFailureInvoicedAccountDescription: function (_a) {
-            var email = _a.email;
-            return "<muted-text><centered-text>\u3053\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u306F\u8ACB\u6C42\u6E08\u307F\u306E\u8ACB\u6C42\u30EA\u30EC\u30FC\u30B7\u30E7\u30F3\u30B7\u30C3\u30D7\u3092\u6240\u6709\u3057\u3066\u3044\u308B\u305F\u3081\u3001<strong>".concat(email, "</strong> \u306B\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u30DE\u30FC\u30B8\u3059\u308B\u3053\u3068\u306F\u3067\u304D\u307E\u305B\u3093\u3002</centered-text></muted-text>");
-        },
+        mergeFailureAccountLockedDescription: ({ email }) => `<muted-text><centered-text><strong>${email}</strong> はロックされているので、マージできない。<concierge-link>Conciergeにご相談</concierge-link>ください。</centered-text></muted-text>`,
+        mergeFailureUncreatedAccountDescription: ({ email, contactMethodLink }) => `<muted-text><centered-text><strong>${email}</strong> がExpensifyアカウントを持っていないため、アカウントを統合できません。代わりに<a href="${contactMethodLink}">連絡先として追加して</a>ください。</centered-text></muted-text>`,
+        mergeFailureSmartScannerAccountDescription: ({ email }) => `<muted-text><centered-text><strong>${email}</strong> を他のアカウントに統合することはできません。代わりに他のアカウントを統合してください。</centered-text></muted-text>`,
+        mergeFailureInvoicedAccountDescription: ({ email }) => `<muted-text><centered-text>このアカウントは請求済みの請求リレーションシップを所有しているため、<strong>${email}</strong> にアカウントをマージすることはできません。</centered-text></muted-text>`,
         mergeFailureTooManyAttempts: {
             heading: '後でもう一度お試しください。',
             description: 'アカウントの統合を試みる回数が多すぎます。後でもう一度お試しください。',
@@ -1787,7 +1402,7 @@ var translations = {
     },
     failedToLockAccountPage: {
         failedToLockAccount: 'アカウントのロックに失敗しました',
-        failedToLockAccountDescription: "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u30ED\u30C3\u30AF\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u3053\u306E\u554F\u984C\u3092\u89E3\u6C7A\u3059\u308B\u305F\u3081\u306BConcierge\u3068\u30C1\u30E3\u30C3\u30C8\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+        failedToLockAccountDescription: `アカウントをロックできませんでした。この問題を解決するためにConciergeとチャットしてください。`,
         chatWithConcierge: 'Conciergeとチャットする',
     },
     unlockAccountPage: {
@@ -1872,7 +1487,7 @@ var translations = {
         changePaymentCurrency: '支払い通貨を変更',
         paymentCurrency: '支払い通貨',
         paymentCurrencyDescription: 'すべての個人経費を変換する標準通貨を選択してください',
-        note: "\u6CE8: \u304A\u652F\u6255\u3044\u306E\u901A\u8CA8\u3092\u5909\u66F4\u3059\u308B\u3068\u3001Expensify\u306E\u304A\u652F\u6255\u3044\u306B\u5F71\u97FF\u3059\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002\u8A73\u3057\u304F\u306F<a href=\"".concat(CONST_1.default.PRICING, "\">\u4FA1\u683C\u30DA\u30FC\u30B8</a>\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002"),
+        note: `注: お支払いの通貨を変更すると、Expensifyのお支払いに影響する場合があります。詳しくは<a href="${CONST_1.default.PRICING}">価格ページ</a>をご覧ください。`,
     },
     addDebitCardPage: {
         addADebitCard: 'デビットカードを追加',
@@ -1963,24 +1578,15 @@ var translations = {
         availableSpend: '残りの制限',
         smartLimit: {
             name: 'スマートリミット',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u3067\u306F\u6700\u5927".concat(formattedLimit, "\u307E\u3067\u4F7F\u7528\u3067\u304D\u3001\u63D0\u51FA\u3055\u308C\u305F\u7D4C\u8CBB\u304C\u627F\u8A8D\u3055\u308C\u308B\u3068\u5236\u9650\u304C\u30EA\u30BB\u30C3\u30C8\u3055\u308C\u307E\u3059\u3002");
-            },
+            title: ({ formattedLimit }) => `このカードでは最大${formattedLimit}まで使用でき、提出された経費が承認されると制限がリセットされます。`,
         },
         fixedLimit: {
             name: '固定限度額',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u3067\u306F\u6700\u5927".concat(formattedLimit, "\u307E\u3067\u5229\u7528\u3067\u304D\u3001\u305D\u308C\u4EE5\u964D\u306F\u7121\u52B9\u306B\u306A\u308A\u307E\u3059\u3002");
-            },
+            title: ({ formattedLimit }) => `このカードでは最大${formattedLimit}まで利用でき、それ以降は無効になります。`,
         },
         monthlyLimit: {
             name: '月間制限',
-            title: function (_a) {
-                var formattedLimit = _a.formattedLimit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u3067\u306F\u3001\u6708\u306B\u6700\u5927".concat(formattedLimit, "\u307E\u3067\u4F7F\u7528\u3067\u304D\u307E\u3059\u3002\u3053\u306E\u5236\u9650\u306F\u3001\u6BCE\u6708\u306E1\u65E5\u306B\u30EA\u30BB\u30C3\u30C8\u3055\u308C\u307E\u3059\u3002");
-            },
+            title: ({ formattedLimit }) => `このカードでは、月に最大${formattedLimit}まで使用できます。この制限は、毎月の1日にリセットされます。`,
         },
         virtualCardNumber: 'バーチャルカード番号',
         travelCardCvv: 'トラベルカードCVV',
@@ -2003,16 +1609,10 @@ var translations = {
             copyCardNumber: 'カード番号をコピー',
             updateAddress: '住所を更新',
         },
-        cardAddedToWallet: function (_a) {
-            var platform = _a.platform;
-            return "".concat(platform, "\u30A6\u30A9\u30EC\u30C3\u30C8\u306B\u8FFD\u52A0\u3055\u308C\u307E\u3057\u305F");
-        },
+        cardAddedToWallet: ({ platform }) => `${platform}ウォレットに追加されました`,
         cardDetailsLoadingFailure: 'カードの詳細を読み込む際にエラーが発生しました。インターネット接続を確認して、もう一度お試しください。',
         validateCardTitle: 'あなたであることを確認しましょう',
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "\u30AB\u30FC\u30C9\u306E\u8A73\u7D30\u3092\u8868\u793A\u3059\u308B\u306B\u306F\u3001".concat(contactMethod, " \u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u30021\uFF5E2\u5206\u4EE5\u5185\u306B\u5C4A\u304F\u306F\u305A\u3067\u3059\u3002");
-        },
+        enterMagicCode: ({ contactMethod }) => `カードの詳細を表示するには、${contactMethod} に送信されたマジックコードを入力してください。1～2分以内に届くはずです。`,
     },
     workflowsPage: {
         workflowTitle: '支出',
@@ -2062,10 +1662,7 @@ var translations = {
             },
         },
         approverInMultipleWorkflows: 'このメンバーはすでに別の承認ワークフローに属しています。ここでの更新はそちらにも反映されます。',
-        approverCircularReference: function (_a) {
-            var name1 = _a.name1, name2 = _a.name2;
-            return "<strong>".concat(name1, "</strong> \u306F\u3059\u3067\u306B <strong>").concat(name2, "</strong> \u306B\u30EC\u30DD\u30FC\u30C8\u3092\u627F\u8A8D\u3057\u3066\u3044\u307E\u3059\u3002\u5FAA\u74B0\u30EF\u30FC\u30AF\u30D5\u30ED\u30FC\u3092\u907F\u3051\u308B\u305F\u3081\u306B\u3001\u5225\u306E\u627F\u8A8D\u8005\u3092\u9078\u3093\u3067\u304F\u3060\u3055\u3044\u3002");
-        },
+        approverCircularReference: ({ name1, name2 }) => `<strong>${name1}</strong> はすでに <strong>${name2}</strong> にレポートを承認しています。循環ワークフローを避けるために、別の承認者を選んでください。`,
         emptyContent: {
             title: '表示するメンバーがいません',
             expensesFromSubtitle: 'すべてのワークスペースメンバーは既存の承認ワークフローにすでに属しています。',
@@ -2145,15 +1742,9 @@ var translations = {
         shipCard: 'カードを発送',
     },
     transferAmountPage: {
-        transfer: function (_a) {
-            var amount = _a.amount;
-            return "Transfer".concat(amount ? " ".concat(amount) : '');
-        },
+        transfer: ({ amount }) => `Transfer${amount ? ` ${amount}` : ''}`,
         instant: 'インスタント（デビットカード）',
-        instantSummary: function (_a) {
-            var rate = _a.rate, minAmount = _a.minAmount;
-            return "".concat(rate, "% \u624B\u6570\u6599\uFF08\u6700\u4F4E ").concat(minAmount, "\uFF09");
-        },
+        instantSummary: ({ rate, minAmount }) => `${rate}% 手数料（最低 ${minAmount}）`,
         ach: '1～3営業日（銀行口座）',
         achSummary: '手数料なし',
         whichAccount: 'どのアカウントですか？',
@@ -2176,10 +1767,7 @@ var translations = {
         cardLastFour: '末尾が',
         addFirstPaymentMethod: 'アプリ内で直接送受金を行うために支払い方法を追加してください。',
         defaultPaymentMethod: 'デフォルト',
-        bankAccountLastFour: function (_a) {
-            var lastFour = _a.lastFour;
-            return "\u9280\u884C\u53E3\u5EA7\u30FB".concat(lastFour);
-        },
+        bankAccountLastFour: ({ lastFour }) => `銀行口座・${lastFour}`,
     },
     preferencesPage: {
         appSection: {
@@ -2207,10 +1795,7 @@ var translations = {
         },
     },
     reportDetailsPage: {
-        inWorkspace: function (_a) {
-            var policyName = _a.policyName;
-            return "".concat(policyName, " \u5185");
-        },
+        inWorkspace: ({ policyName }) => `${policyName} 内`,
         generatingPDF: 'PDFを生成中',
         waitForPDF: 'PDFを生成するまでお待ちください',
         errorPDF: 'PDFの生成中にエラーが発生しました。',
@@ -2224,10 +1809,7 @@ var translations = {
     groupChat: {
         lastMemberTitle: '注意！',
         lastMemberWarning: 'あなたが最後の一人なので、退出するとこのチャットはすべてのメンバーにアクセスできなくなります。本当に退出しますか？',
-        defaultReportName: function (_a) {
-            var displayName = _a.displayName;
-            return "".concat(displayName, "\u306E\u30B0\u30EB\u30FC\u30D7\u30C1\u30E3\u30C3\u30C8");
-        },
+        defaultReportName: ({ displayName }) => `${displayName}のグループチャット`,
     },
     languagePage: {
         language: '言語',
@@ -2249,8 +1831,8 @@ var translations = {
         chooseThemeBelowOrSync: '以下のテーマを選択するか、デバイスの設定と同期してください。',
     },
     termsOfUse: {
-        terms: "<muted-text-xs>\u30ED\u30B0\u30A4\u30F3\u3059\u308B\u3053\u3068\u3067\u3001<a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">\u5229\u7528\u898F\u7D04</a>\u304A\u3088\u3073<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">\u30D7\u30E9\u30A4\u30D0\u30B7\u30FC</a>\u306B\u540C\u610F\u3057\u305F\u3082\u306E\u3068\u307F\u306A\u3055\u308C\u307E\u3059\u3002</muted-text-xs>"),
-        license: "<muted-text-xs>\u9001\u91D1\u306F".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS, " (NMLS ID:2017010)\u306E<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.LICENSES_URL, "\">\u30E9\u30A4\u30BB\u30F3\u30B9</a>\u306B\u57FA\u3065\u304D\u63D0\u4F9B\u3055\u308C\u308B\u3002</muted-text-xs>"),
+        terms: `<muted-text-xs>ログインすることで、<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">利用規約</a>および<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">プライバシー</a>に同意したものとみなされます。</muted-text-xs>`,
+        license: `<muted-text-xs>送金は${CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS} (NMLS ID:2017010)の<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.LICENSES_URL}">ライセンス</a>に基づき提供される。</muted-text-xs>`,
     },
     validateCodeForm: {
         magicCodeNotReceived: 'マジックコードを受け取っていませんか？',
@@ -2291,10 +1873,7 @@ var translations = {
         },
         cannotGetAccountDetails: 'アカウントの詳細を取得できませんでした。もう一度サインインしてください。',
         loginForm: 'ログインフォーム',
-        notYou: function (_a) {
-            var user = _a.user;
-            return "".concat(user, "\u3067\u306F\u3042\u308A\u307E\u305B\u3093\u304B\uFF1F");
-        },
+        notYou: ({ user }) => `${user}ではありませんか？`,
     },
     onboarding: {
         welcome: 'ようこそ！',
@@ -2308,38 +1887,30 @@ var translations = {
         getStarted: '始めましょう',
         whatsYourName: 'あなたの名前は何ですか？',
         peopleYouMayKnow: 'あなたが知っている人々はすでにここにいます！メールを確認して参加しましょう。',
-        workspaceYouMayJoin: function (_a) {
-            var domain = _a.domain, email = _a.email;
-            return "".concat(domain, " \u306E\u8AB0\u304B\u304C\u3059\u3067\u306B\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u4F5C\u6210\u3057\u3066\u3044\u307E\u3059\u3002").concat(email, " \u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        workspaceYouMayJoin: ({ domain, email }) => `${domain} の誰かがすでにワークスペースを作成しています。${email} に送信されたマジックコードを入力してください。`,
         joinAWorkspace: 'ワークスペースに参加する',
         listOfWorkspaces: 'こちらが参加できるワークスペースのリストです。心配しないでください。後で参加することもできます。',
-        workspaceMemberList: function (_a) {
-            var employeeCount = _a.employeeCount, policyOwner = _a.policyOwner;
-            return "".concat(employeeCount, " \u540D\u306E\u30E1\u30F3\u30D0\u30FC").concat(employeeCount > 1 ? 's' : '', " \u2022 ").concat(policyOwner);
-        },
+        workspaceMemberList: ({ employeeCount, policyOwner }) => `${employeeCount} 名のメンバー${employeeCount > 1 ? 's' : ''} • ${policyOwner}`,
         whereYouWork: 'どこで働いていますか？',
         errorSelection: '先に進むためのオプションを選択してください',
-        purpose: (_c = {
-                title: '今日は何をしたいですか？',
-                errorContinue: 'セットアップを続行するには「続行」を押してください。',
-                errorBackButton: 'アプリの使用を開始するためにセットアップの質問を完了してください'
-            },
-            _c[CONST_1.default.ONBOARDING_CHOICES.EMPLOYER] = '雇用主から払い戻しを受ける',
-            _c[CONST_1.default.ONBOARDING_CHOICES.MANAGE_TEAM] = '私のチームの経費を管理する',
-            _c[CONST_1.default.ONBOARDING_CHOICES.PERSONAL_SPEND] = '経費を追跡し、予算を管理する',
-            _c[CONST_1.default.ONBOARDING_CHOICES.CHAT_SPLIT] = '友達とチャットして経費を分割する',
-            _c[CONST_1.default.ONBOARDING_CHOICES.LOOKING_AROUND] = '何か他のもの',
-            _c),
-        employees: (_d = {
-                title: '従業員は何人いますか？'
-            },
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO] = '1-10人の従業員',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL] = '11-50人の従業員',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM_SMALL] = '51-100人の従業員',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM] = '101-1,000人の従業員',
-            _d[CONST_1.default.ONBOARDING_COMPANY_SIZE.LARGE] = '1,000人以上の従業員',
-            _d),
+        purpose: {
+            title: '今日は何をしたいですか？',
+            errorContinue: 'セットアップを続行するには「続行」を押してください。',
+            errorBackButton: 'アプリの使用を開始するためにセットアップの質問を完了してください',
+            [CONST_1.default.ONBOARDING_CHOICES.EMPLOYER]: '雇用主から払い戻しを受ける',
+            [CONST_1.default.ONBOARDING_CHOICES.MANAGE_TEAM]: '私のチームの経費を管理する',
+            [CONST_1.default.ONBOARDING_CHOICES.PERSONAL_SPEND]: '経費を追跡し、予算を管理する',
+            [CONST_1.default.ONBOARDING_CHOICES.CHAT_SPLIT]: '友達とチャットして経費を分割する',
+            [CONST_1.default.ONBOARDING_CHOICES.LOOKING_AROUND]: '何か他のもの',
+        },
+        employees: {
+            title: '従業員は何人いますか？',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MICRO]: '1-10人の従業員',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.SMALL]: '11-50人の従業員',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM_SMALL]: '51-100人の従業員',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.MEDIUM]: '101-1,000人の従業員',
+            [CONST_1.default.ONBOARDING_COMPANY_SIZE.LARGE]: '1,000人以上の従業員',
+        },
         accounting: {
             title: '会計ソフトを使用していますか？',
             none: 'None',
@@ -2364,10 +1935,7 @@ var translations = {
         },
         workEmailValidation: {
             title: '勤務先のメールを確認してください',
-            magicCodeSent: function (_a) {
-                var workEmail = _a.workEmail;
-                return "".concat(workEmail, " \u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u30021\u30012\u5206\u3067\u5C4A\u304F\u306F\u305A\u3067\u3059\u3002");
-            },
+            magicCodeSent: ({ workEmail }) => `${workEmail} に送信されたマジックコードを入力してください。1、2分で届くはずです。`,
         },
         workEmailValidationError: {
             publicEmail: '有効なプライベートドメインの勤務用メールアドレスを入力してください。例: mitch@company.com',
@@ -2375,72 +1943,42 @@ var translations = {
         },
         mergeBlockScreen: {
             title: '勤務用メールを追加できませんでした。',
-            subtitle: function (_a) {
-                var workEmail = _a.workEmail;
-                return "".concat(workEmail, "\u3092\u8FFD\u52A0\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u5F8C\u3067\u8A2D\u5B9A\u3067\u518D\u8A66\u884C\u3059\u308B\u304B\u3001\u30AC\u30A4\u30C0\u30F3\u30B9\u304C\u5FC5\u8981\u306A\u5834\u5408\u306FConcierge\u3068\u30C1\u30E3\u30C3\u30C8\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-            },
+            subtitle: ({ workEmail }) => `${workEmail}を追加できませんでした。後で設定で再試行するか、ガイダンスが必要な場合はConciergeとチャットしてください。`,
         },
         tasks: {
             testDriveAdminTask: {
-                title: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](".concat(testDriveURL, ")\u3092\u884C\u3046");
-                },
-                description: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "Expensify\u304C\u6700\u3082\u5B89\u3044\u65B9\u6CD5\u3067\u3042\u308B\u7406\u7531\u3092\u78BA\u304B\u3081\u308B\u305F\u3081\u306B\u3001[\u30AF\u30A4\u30C3\u30AF\u30D7\u30ED\u30C0\u30AF\u30C8\u30C4\u30A2\u30FC](".concat(testDriveURL, ")\u3092\u3057\u307E\u3059\u3002");
-                },
+                title: ({ testDriveURL }) => `[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](${testDriveURL})\u3092\u884C\u3046`,
+                description: ({ testDriveURL }) => `Expensify\u304C\u6700\u3082\u5B89\u3044\u65B9\u6CD5\u3067\u3042\u308B\u7406\u7531\u3092\u78BA\u304B\u3081\u308B\u305F\u3081\u306B\u3001[\u30AF\u30A4\u30C3\u30AF\u30D7\u30ED\u30C0\u30AF\u30C8\u30C4\u30A2\u30FC](${testDriveURL})\u3092\u3057\u307E\u3059\u3002`,
             },
             testDriveEmployeeTask: {
-                title: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](".concat(testDriveURL, ")\u3092\u884C\u3046");
-                },
-                description: function (_a) {
-                    var testDriveURL = _a.testDriveURL;
-                    return "[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](".concat(testDriveURL, ")\u3092\u884C\u3044\u3001\u30C1\u30FC\u30E0\u306B *3 \u304B\u6708\u9593\u306E Expensify \u7121\u6599\u30AF\u30FC\u30DD\u30F3*\u3092\u624B\u306B\u5165\u308C\u307E\u3057\u3087\u3046\uFF01");
-                },
+                title: ({ testDriveURL }) => `[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](${testDriveURL})\u3092\u884C\u3046`,
+                description: ({ testDriveURL }) => `[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](${testDriveURL})\u3092\u884C\u3044\u3001\u30C1\u30FC\u30E0\u306B *3 \u304B\u6708\u9593\u306E Expensify \u7121\u6599\u30AF\u30FC\u30DD\u30F3*\u3092\u624B\u306B\u5165\u308C\u307E\u3057\u3087\u3046\uff01`,
             },
             createTestDriveAdminWorkspaceTask: {
-                title: function (_a) {
-                    var workspaceConfirmationLink = _a.workspaceConfirmationLink;
-                    return "[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u4F5C\u6210](".concat(workspaceConfirmationLink, ")");
-                },
+                title: ({ workspaceConfirmationLink }) => `[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u4F5C\u6210](${workspaceConfirmationLink})`,
                 description: '\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u30B9\u30DA\u30B7\u30E3\u30EA\u30B9\u30C8\u3068\u5171\u306B\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u4F5C\u6210\u3057\u3001\u8A2D\u5B9A\u3092\u69CB\u6210\u3057\u307E\u3059\uFF01',
             },
             createWorkspaceTask: {
-                title: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return "[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u4F5C\u6210](".concat(workspaceSettingsLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return '*\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u4F5C\u6210\u3057\u307E\u3059* \u306B\u306F\u3001\u7D4C\u8CBB\u3092\u8FFD\u8DE1\u3057\u3001\u9818\u53CE\u66F8\u3092\u30B9\u30AD\u30E3\u30F3\u3057\u3001\u30C1\u30E3\u30C3\u30C8\u306A\u3069\u3092\u884C\u3044\u307E\u3059\u3002\n' +
-                        '\n' +
-                        '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9* > *\u65B0\u3057\u3044\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '\n' +
-                        "*\u65B0\u3057\u3044\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u6E96\u5099\u304C\u3067\u304D\u307E\u3057\u305F\uFF01* [\u78BA\u8A8D\u3059\u308B](".concat(workspaceSettingsLink, ")\u3002");
-                },
+                title: ({ workspaceSettingsLink }) => `[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u4F5C\u6210](${workspaceSettingsLink})`,
+                description: ({ workspaceSettingsLink }) => '*\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u4F5C\u6210\u3057\u307E\u3059* \u306B\u306F\u3001\u7D4C\u8CBB\u3092\u8FFD\u8DE1\u3057\u3001\u9818\u53CE\u66F8\u3092\u30B9\u30AD\u30E3\u30F3\u3057\u3001\u30C1\u30E3\u30C3\u30C8\u306A\u3069\u3092\u884C\u3044\u307E\u3059\u3002\n' +
+                    '\n' +
+                    '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9* > *\u65B0\u3057\u3044\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '\n' +
+                    `*\u65B0\u3057\u3044\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u6E96\u5099\u304C\u3067\u304D\u307E\u3057\u305F\uFF01* [\u78BA\u8A8D\u3059\u308B](${workspaceSettingsLink})\u3002`,
             },
             setupCategoriesTask: {
-                title: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink;
-                    return "[\u30AB\u30C6\u30B4\u30EA\u30FC\u306E\u8A2D\u5B9A](".concat(workspaceCategoriesLink, ")");
-                },
-                description: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink;
-                    return '*\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u8A2D\u5B9A\u3057\u307E\u3059* \u3068\u3001\u30C1\u30FC\u30E0\u306F\u7C21\u5358\u306A\u5831\u544A\u306E\u305F\u3081\u306B\u7D4C\u8CBB\u3092\u30B3\u30FC\u30C9\u5316\u3067\u304D\u307E\u3059\u3002\n' +
-                        '\n' +
-                        '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
-                        '4. *\u30AB\u30C6\u30B4\u30EA\u30FC*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '5. \u4E0D\u8981\u306A\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u7121\u52B9\u306B\u3057\u307E\u3059\u3002\n' +
-                        '6. \u53F3\u4E0A\u306B\u81EA\u5206\u306E\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u8FFD\u52A0\u3057\u307E\u3059\u3002\n' +
-                        '\n' +
-                        "[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30AB\u30C6\u30B4\u30EA\u30FC\u8A2D\u5B9A\u3078](".concat(workspaceCategoriesLink, ")\u3002\n") +
-                        '\n' +
-                        "![\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u8A2D\u5B9A](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-categories-v2.mp4)");
-                },
+                title: ({ workspaceCategoriesLink }) => `[\u30AB\u30C6\u30B4\u30EA\u30FC\u306E\u8A2D\u5B9A](${workspaceCategoriesLink})`,
+                description: ({ workspaceCategoriesLink }) => '*\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u8A2D\u5B9A\u3057\u307E\u3059* \u3068\u3001\u30C1\u30FC\u30E0\u306F\u7C21\u5358\u306A\u5831\u544A\u306E\u305F\u3081\u306B\u7D4C\u8CBB\u3092\u30B3\u30FC\u30C9\u5316\u3067\u304D\u307E\u3059\u3002\n' +
+                    '\n' +
+                    '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
+                    '4. *\u30AB\u30C6\u30B4\u30EA\u30FC*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '5. \u4E0D\u8981\u306A\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u7121\u52B9\u306B\u3057\u307E\u3059\u3002\n' +
+                    '6. \u53F3\u4E0A\u306B\u81EA\u5206\u306E\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u8FFD\u52A0\u3057\u307E\u3059\u3002\n' +
+                    '\n' +
+                    `[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30AB\u30C6\u30B4\u30EA\u30FC\u8A2D\u5B9A\u3078](${workspaceCategoriesLink})\u3002\n` +
+                    '\n' +
+                    `![\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u8A2D\u5B9A](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-categories-v2.mp4)`,
             },
             combinedTrackSubmitExpenseTask: {
                 title: '\u7D4C\u8CBB\u3092\u63D0\u51FA\u3059\u308B',
@@ -2449,7 +1987,7 @@ var translations = {
                     '1. \u7DD1\u8272\u306E*+*\u30DC\u30BF\u30F3\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
                     '2. *\u7D4C\u8CBB\u306E\u4F5C\u6210*\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
                     '3. \u91D1\u984D\u3092\u5165\u529B\u3059\u308B\u304B\u3001\u9818\u53CE\u66F8\u3092\u30B9\u30AD\u30E3\u30F3\u3057\u307E\u3059\u3002\n' +
-                    "4. \u4E0A\u53F8\u306E\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u96FB\u8A71\u756A\u53F7\u3092\u8FFD\u52A0\u3057\u307E\u3059\u3002\n" +
+                    `4. \u4E0A\u53F8\u306E\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u96FB\u8A71\u756A\u53F7\u3092\u8FFD\u52A0\u3057\u307E\u3059\u3002\n` +
                     '5. *\u4F5C\u6210*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
                     '\n' +
                     '\u3053\u308C\u3067\u5B8C\u4E86\u3067\u3059\uFF01',
@@ -2464,7 +2002,7 @@ var translations = {
                     '4. \u8A73\u7D30\u3092\u78BA\u8A8D\u3057\u307E\u3059\u3002\n' +
                     '5. *\u4F5C\u6210*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
                     '\n' +
-                    "\u3053\u308C\u3067\u5B8C\u4E86\u3067\u3059\uFF01",
+                    `\u3053\u308C\u3067\u5B8C\u4E86\u3067\u3059\uFF01`,
             },
             trackExpenseTask: {
                 title: '\u7D4C\u8CBB\u3092\u8FFD\u8DE1\u3059\u308B',
@@ -2479,113 +2017,77 @@ var translations = {
                     '\u3053\u308C\u3067\u5B8C\u4E86\u3067\u3059\uFF01\u306F\u3044\u3001\u305D\u308C\u307B\u3069\u7C21\u5358\u3067\u3059\u3002',
             },
             addAccountingIntegrationTask: {
-                title: function (_a) {
-                    var integrationName = _a.integrationName, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "".concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '' : '\u3068', "[").concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u3042\u306A\u305F\u306E' : '', " ").concat(integrationName, "](").concat(workspaceAccountingLink, ")\u3068\u63A5\u7D9A\u3059\u308B");
-                },
-                description: function (_a) {
-                    var integrationName = _a.integrationName, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "".concat(integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u3042\u306A\u305F\u306E' : '', " ").concat(integrationName, "\u3068\u63A5\u7D9A\u3059\u308B\u3068\u3001\u7D4C\u8CBB\u306E\u81EA\u52D5\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u3068\u540C\u671F\u304C\u53EF\u80FD\u306B\u306A\u308A\u3001\u6708\u672B\u306E\u7D50\u7B97\u304C\u5BB9\u6613\u306B\u306A\u308A\u307E\u3059\u3002\n") +
-                        '\n' +
-                        '1. *\u8A2D\u5B9A*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '2. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u306B\u79FB\u52D5\u3057\u307E\u3059\u3002\n' +
-                        '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
-                        '4. *\u4F1A\u8A08*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        "5. ".concat(integrationName, "\u3092\u63A2\u3057\u307E\u3059\u3002\n") +
-                        '6. *\u63A5\u7D9A*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '\n' +
-                        "".concat(integrationName && CONST_1.default.connectionsVideoPaths[integrationName]
-                            ? "[\u4F1A\u8A08\u306B\u79FB\u52D5\u3059\u308B](".concat(workspaceAccountingLink, ").\n\n![").concat(integrationName, "\u3068\u63A5\u7D9A\u3059\u308B](").concat(CONST_1.default.CLOUDFRONT_URL, "/").concat(CONST_1.default.connectionsVideoPaths[integrationName], ")")
-                            : "[\u4F1A\u8A08\u306B\u79FB\u52D5\u3059\u308B](".concat(workspaceAccountingLink, ")."));
-                },
+                title: ({ integrationName, workspaceAccountingLink }) => `${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '' : '\u3068'}[${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u3042\u306A\u305F\u306E' : ''} ${integrationName}](${workspaceAccountingLink})\u3068\u63A5\u7D9A\u3059\u308B`,
+                description: ({ integrationName, workspaceAccountingLink }) => `${integrationName === CONST_1.default.ONBOARDING_ACCOUNTING_MAPPING.other ? '\u3042\u306A\u305F\u306E' : ''} ${integrationName}\u3068\u63A5\u7D9A\u3059\u308B\u3068\u3001\u7D4C\u8CBB\u306E\u81EA\u52D5\u30B3\u30FC\u30C7\u30A3\u30F3\u30B0\u3068\u540C\u671F\u304C\u53EF\u80FD\u306B\u306A\u308A\u3001\u6708\u672B\u306E\u7D50\u7B97\u304C\u5BB9\u6613\u306B\u306A\u308A\u307E\u3059\u3002\n` +
+                    '\n' +
+                    '1. *\u8A2D\u5B9A*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '2. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u306B\u79FB\u52D5\u3057\u307E\u3059\u3002\n' +
+                    '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
+                    '4. *\u4F1A\u8A08*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    `5. ${integrationName}\u3092\u63A2\u3057\u307E\u3059\u3002\n` +
+                    '6. *\u63A5\u7D9A*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '\n' +
+                    `${integrationName && CONST_1.default.connectionsVideoPaths[integrationName]
+                        ? `[\u4F1A\u8A08\u306B\u79FB\u52D5\u3059\u308B](${workspaceAccountingLink}).\n\n![${integrationName}\u3068\u63A5\u7D9A\u3059\u308B](${CONST_1.default.CLOUDFRONT_URL}/${CONST_1.default.connectionsVideoPaths[integrationName]})`
+                        : `[\u4F1A\u8A08\u306B\u79FB\u52D5\u3059\u308B](${workspaceAccountingLink}).`}`,
             },
             connectCorporateCardTask: {
-                title: function (_a) {
-                    var corporateCardLink = _a.corporateCardLink;
-                    return "[\u3042\u306A\u305F\u306E\u6CD5\u4EBA\u30AB\u30FC\u30C9](".concat(corporateCardLink, ")\u3092\u63A5\u7D9A\u3059\u308B");
-                },
-                description: function (_a) {
-                    var corporateCardLink = _a.corporateCardLink;
-                    return "\u6CD5\u4EBA\u30AB\u30FC\u30C9\u3092\u63A5\u7D9A\u3059\u308B\u3068\u3001\u7D4C\u8CBB\u3092\u81EA\u52D5\u7684\u306B\u30A4\u30F3\u30DD\u30FC\u30C8\u3057\u3001\u30B3\u30FC\u30C9\u5316\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002\n" +
-                        '\n' +
-                        '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '2. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
-                        '3. *\u6CD5\u4EBA\u30AB\u30FC\u30C9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '4. \u30D7\u30ED\u30F3\u30D7\u30C8\u306B\u5F93\u3063\u3066\u30AB\u30FC\u30C9\u3092\u63A5\u7D9A\u3057\u307E\u3059\u3002\n' +
-                        '\n' +
-                        "[\u79C1\u306E\u6CD5\u4EBA\u30AB\u30FC\u30C9\u3092\u63A5\u7D9A\u3059\u308B](".concat(corporateCardLink, ")\u3002");
-                },
+                title: ({ corporateCardLink }) => `[\u3042\u306A\u305F\u306E\u6CD5\u4EBA\u30AB\u30FC\u30C9](${corporateCardLink})\u3092\u63A5\u7D9A\u3059\u308B`,
+                description: ({ corporateCardLink }) => `\u6CD5\u4EBA\u30AB\u30FC\u30C9\u3092\u63A5\u7D9A\u3059\u308B\u3068\u3001\u7D4C\u8CBB\u3092\u81EA\u52D5\u7684\u306B\u30A4\u30F3\u30DD\u30FC\u30C8\u3057\u3001\u30B3\u30FC\u30C9\u5316\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002\n` +
+                    '\n' +
+                    '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '2. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
+                    '3. *\u6CD5\u4EBA\u30AB\u30FC\u30C9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '4. \u30D7\u30ED\u30F3\u30D7\u30C8\u306B\u5F93\u3063\u3066\u30AB\u30FC\u30C9\u3092\u63A5\u7D9A\u3057\u307E\u3059\u3002\n' +
+                    '\n' +
+                    `[\u79C1\u306E\u6CD5\u4EBA\u30AB\u30FC\u30C9\u3092\u63A5\u7D9A\u3059\u308B](${corporateCardLink})\u3002`,
             },
             inviteTeamTask: {
-                title: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return "[\u3042\u306A\u305F\u306E\u30C1\u30FC\u30E0](".concat(workspaceMembersLink, ")\u3092\u62DB\u5F85\u3059\u308B");
-                },
-                description: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return '*\u3042\u306A\u305F\u306E\u30C1\u30FC\u30E0\u3092\u62DB\u5F85\u3057\u307E\u3059* \u3068\u3001\u5F7C\u3089\u306F\u4ECA\u65E5\u304B\u3089\u7D4C\u8CBB\u306E\u8FFD\u8DE1\u3092\u958B\u59CB\u3067\u304D\u307E\u3059\u3002\n' +
-                        '\n' +
-                        '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
-                        '4. *\u30E1\u30F3\u30D0\u30FC* > *\u30E1\u30F3\u30D0\u30FC\u3092\u62DB\u5F85*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '5. \u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u96FB\u8A71\u756A\u53F7\u3092\u5165\u529B\u3057\u307E\u3059\u3002\n' +
-                        '6. \u5FC5\u8981\u306B\u5FDC\u3058\u3066\u30AB\u30B9\u30BF\u30E0\u62DB\u5F85\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u8FFD\u52A0\u3057\u307E\u3059\uFF01\n' +
-                        '\n' +
-                        "[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30E1\u30F3\u30D0\u30FC\u3078](".concat(workspaceMembersLink, ")\u3002\n") +
-                        '\n' +
-                        "![\u3042\u306A\u305F\u306E\u30C1\u30FC\u30E0\u3092\u62DB\u5F85](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-invite_members-v2.mp4)");
-                },
+                title: ({ workspaceMembersLink }) => `[\u3042\u306A\u305F\u306E\u30C1\u30FC\u30E0](${workspaceMembersLink})\u3092\u62DB\u5F85\u3059\u308B`,
+                description: ({ workspaceMembersLink }) => '*\u3042\u306A\u305F\u306E\u30C1\u30FC\u30E0\u3092\u62DB\u5F85\u3057\u307E\u3059* \u3068\u3001\u5F7C\u3089\u306F\u4ECA\u65E5\u304B\u3089\u7D4C\u8CBB\u306E\u8FFD\u8DE1\u3092\u958B\u59CB\u3067\u304D\u307E\u3059\u3002\n' +
+                    '\n' +
+                    '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
+                    '4. *\u30E1\u30F3\u30D0\u30FC* > *\u30E1\u30F3\u30D0\u30FC\u3092\u62DB\u5F85*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '5. \u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u96FB\u8A71\u756A\u53F7\u3092\u5165\u529B\u3057\u307E\u3059\u3002\n' +
+                    '6. \u5FC5\u8981\u306B\u5FDC\u3058\u3066\u30AB\u30B9\u30BF\u30E0\u62DB\u5F85\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u8FFD\u52A0\u3057\u307E\u3059\uFF01\n' +
+                    '\n' +
+                    `[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30E1\u30F3\u30D0\u30FC\u3078](${workspaceMembersLink})\u3002\n` +
+                    '\n' +
+                    `![\u3042\u306A\u305F\u306E\u30C1\u30FC\u30E0\u3092\u62DB\u5F85](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-invite_members-v2.mp4)`,
             },
             setupCategoriesAndTags: {
-                title: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink, workspaceTagsLink = _a.workspaceTagsLink;
-                    return "[\u30AB\u30C6\u30B4\u30EA\u30FC](".concat(workspaceCategoriesLink, ")\u3068[\u30BF\u30B0](").concat(workspaceTagsLink, ")\u3092\u8A2D\u5B9A\u3059\u308B");
-                },
-                description: function (_a) {
-                    var workspaceCategoriesLink = _a.workspaceCategoriesLink, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return '*\u30AB\u30C6\u30B4\u30EA\u30FC\u3068\u30BF\u30B0\u3092\u8A2D\u5B9A\u3057\u307E\u3059* \u3068\u3001\u30C1\u30FC\u30E0\u306F\u7D4C\u8CBB\u3092\u30B3\u30FC\u30C9\u5316\u3057\u3066\u5BB9\u6613\u306B\u5831\u544A\u3067\u304D\u307E\u3059\u3002\n' +
-                        '\n' +
-                        "[\u4F1A\u8A08\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2\u3092\u63A5\u7D9A\u3059\u308B](".concat(workspaceAccountingLink, ")\u3053\u3068\u3067\u81EA\u52D5\u7684\u306B\u30A4\u30F3\u30DD\u30FC\u30C8\u3059\u308B\u304B\u3001[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u8A2D\u5B9A](").concat(workspaceCategoriesLink, ")\u3067\u624B\u52D5\u3067\u8A2D\u5B9A\u3057\u307E\u305B\u3093\u304B\u3002");
-                },
+                title: ({ workspaceCategoriesLink, workspaceTagsLink }) => `[\u30AB\u30C6\u30B4\u30EA\u30FC](${workspaceCategoriesLink})\u3068[\u30BF\u30B0](${workspaceTagsLink})\u3092\u8A2D\u5B9A\u3059\u308B`,
+                description: ({ workspaceCategoriesLink, workspaceAccountingLink }) => '*\u30AB\u30C6\u30B4\u30EA\u30FC\u3068\u30BF\u30B0\u3092\u8A2D\u5B9A\u3057\u307E\u3059* \u3068\u3001\u30C1\u30FC\u30E0\u306F\u7D4C\u8CBB\u3092\u30B3\u30FC\u30C9\u5316\u3057\u3066\u5BB9\u6613\u306B\u5831\u544A\u3067\u304D\u307E\u3059\u3002\n' +
+                    '\n' +
+                    `[\u4F1A\u8A08\u30BD\u30D5\u30C8\u30A6\u30A7\u30A2\u3092\u63A5\u7D9A\u3059\u308B](${workspaceAccountingLink})\u3053\u3068\u3067\u81EA\u52D5\u7684\u306B\u30A4\u30F3\u30DD\u30FC\u30C8\u3059\u308B\u304B\u3001[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u8A2D\u5B9A](${workspaceCategoriesLink})\u3067\u624B\u52D5\u3067\u8A2D\u5B9A\u3057\u307E\u305B\u3093\u304B\u3002`,
             },
             setupTagsTask: {
-                title: function (_a) {
-                    var workspaceTagsLink = _a.workspaceTagsLink;
-                    return "[\u30BF\u30B0](".concat(workspaceTagsLink, ")\u3092\u8A2D\u5B9A\u3059\u308B");
-                },
-                description: function (_a) {
-                    var workspaceMoreFeaturesLink = _a.workspaceMoreFeaturesLink;
-                    return '\u30BF\u30B0\u3092\u4F7F\u7528\u3057\u3066\u3001\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3001\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u3001\u5834\u6240\u3001\u90E8\u7F72\u306A\u3069\u306E\u8FFD\u52A0\u306E\u7D4C\u8CBB\u8A73\u7D30\u3092\u8FFD\u52A0\u3057\u307E\u3059\u3002\u8907\u6570\u306E\u30EC\u30D9\u30EB\u306E\u30BF\u30B0\u304C\u5FC5\u8981\u306A\u5834\u5408\u306F\u3001Control\u30D7\u30E9\u30F3\u306B\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3067\u304D\u307E\u3059\u3002\n' +
-                        '\n' +
-                        '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
-                        '4. *\u305D\u306E\u4ED6\u306E\u6A5F\u80FD*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '5. *\u30BF\u30B0*\u3092\u6709\u52B9\u306B\u3057\u307E\u3059\u3002\n' +
-                        '6. \u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30A8\u30C7\u30A3\u30BF\u30FC\u3067*\u30BF\u30B0*\u306B\u79FB\u52D5\u3057\u307E\u3059\u3002\n' +
-                        '7. *+\u30BF\u30B0\u3092\u8FFD\u52A0*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u3001\u81EA\u5206\u306E\u30BF\u30B0\u3092\u4F5C\u6210\u3057\u307E\u3059\u3002\n' +
-                        '\n' +
-                        "[\u305D\u306E\u4ED6\u306E\u6A5F\u80FD\u3078](".concat(workspaceMoreFeaturesLink, ")\u3002\n") +
-                        '\n' +
-                        "![\u30BF\u30B0\u3092\u8A2D\u5B9A](".concat(CONST_1.default.CLOUDFRONT_URL, "/videos/walkthrough-tags-v2.mp4)");
-                },
+                title: ({ workspaceTagsLink }) => `[\u30BF\u30B0](${workspaceTagsLink})\u3092\u8A2D\u5B9A\u3059\u308B`,
+                description: ({ workspaceMoreFeaturesLink }) => '\u30BF\u30B0\u3092\u4F7F\u7528\u3057\u3066\u3001\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3001\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u3001\u5834\u6240\u3001\u90E8\u7F72\u306A\u3069\u306E\u8FFD\u52A0\u306E\u7D4C\u8CBB\u8A73\u7D30\u3092\u8FFD\u52A0\u3057\u307E\u3059\u3002\u8907\u6570\u306E\u30EC\u30D9\u30EB\u306E\u30BF\u30B0\u304C\u5FC5\u8981\u306A\u5834\u5408\u306F\u3001Control\u30D7\u30E9\u30F3\u306B\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3067\u304D\u307E\u3059\u3002\n' +
+                    '\n' +
+                    '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '3. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
+                    '4. *\u305D\u306E\u4ED6\u306E\u6A5F\u80FD*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '5. *\u30BF\u30B0*\u3092\u6709\u52B9\u306B\u3057\u307E\u3059\u3002\n' +
+                    '6. \u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u30A8\u30C7\u30A3\u30BF\u30FC\u3067*\u30BF\u30B0*\u306B\u79FB\u52D5\u3057\u307E\u3059\u3002\n' +
+                    '7. *+\u30BF\u30B0\u3092\u8FFD\u52A0*\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u3001\u81EA\u5206\u306E\u30BF\u30B0\u3092\u4F5C\u6210\u3057\u307E\u3059\u3002\n' +
+                    '\n' +
+                    `[\u305D\u306E\u4ED6\u306E\u6A5F\u80FD\u3078](${workspaceMoreFeaturesLink})\u3002\n` +
+                    '\n' +
+                    `![\u30BF\u30B0\u3092\u8A2D\u5B9A](${CONST_1.default.CLOUDFRONT_URL}/videos/walkthrough-tags-v2.mp4)`,
             },
             inviteAccountantTask: {
-                title: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return "\u3042\u306A\u305F\u306E[ \u4F1A\u8A08\u58EB ](".concat(workspaceMembersLink, ")\u3092\u62DB\u5F85");
-                },
-                description: function (_a) {
-                    var workspaceMembersLink = _a.workspaceMembersLink;
-                    return '*\u3042\u306A\u305F\u306E\u4F1A\u8A08\u58EB\u3092\u62DB\u5F85* \u3057\u3066\u3001\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u5354\u529B\u3057\u3001\u4F01\u696D\u7D4C\u8CBB\u3092\u7BA1\u7406\u3057\u307E\u3057\u3087\u3046\u3002\n' +
-                        '\n' +
-                        '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9* \u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '2. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
-                        '3. *\u30E1\u30F3\u30D0\u30FC* \u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '4. *\u30E1\u30F3\u30D0\u30FC\u3092\u62DB\u5F85* \u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '5. \u4F1A\u8A08\u58EB\u306E\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3092\u5165\u529B\u3057\u307E\u3059\u3002\n' +
-                        '\n' +
-                        "[\u4ECA\u3059\u3050\u4F1A\u8A08\u58EB\u3092\u62DB\u5F85](".concat(workspaceMembersLink, ")\u3002");
-                },
+                title: ({ workspaceMembersLink }) => `\u3042\u306A\u305F\u306E[ \u4F1A\u8A08\u58EB ](${workspaceMembersLink})\u3092\u62DB\u5F85`,
+                description: ({ workspaceMembersLink }) => '*\u3042\u306A\u305F\u306E\u4F1A\u8A08\u58EB\u3092\u62DB\u5F85* \u3057\u3066\u3001\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u5354\u529B\u3057\u3001\u4F01\u696D\u7D4C\u8CBB\u3092\u7BA1\u7406\u3057\u307E\u3057\u3087\u3046\u3002\n' +
+                    '\n' +
+                    '1. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9* \u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '2. \u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n' +
+                    '3. *\u30E1\u30F3\u30D0\u30FC* \u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '4. *\u30E1\u30F3\u30D0\u30FC\u3092\u62DB\u5F85* \u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '5. \u4F1A\u8A08\u58EB\u306E\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3092\u5165\u529B\u3057\u307E\u3059\u3002\n' +
+                    '\n' +
+                    `[\u4ECA\u3059\u3050\u4F1A\u8A08\u58EB\u3092\u62DB\u5F85](${workspaceMembersLink})\u3002`,
             },
             startChatTask: {
                 title: '\u30C1\u30E3\u30C3\u30C8\u3092\u958B\u59CB\u3059\u308B',
@@ -2612,17 +2114,11 @@ var translations = {
                     '\u5FC5\u8981\u306A\u3089\u3070\u8A73\u7D30\u3092\u8FFD\u52A0\u3059\u308B\u304B\u3001\u5358\u306B\u9001\u4FE1\u3057\u307E\u3059\u3002\u6255\u3044\u623B\u3057\u3092\u3042\u308A\u307E\u3057\u3087\u3046\uFF01',
             },
             reviewWorkspaceSettingsTask: {
-                title: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return "[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u8A2D\u5B9A](".concat(workspaceSettingsLink, ")\u3092\u78BA\u8A8D\u3059\u308B");
-                },
-                description: function (_a) {
-                    var workspaceSettingsLink = _a.workspaceSettingsLink;
-                    return '\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u8A2D\u5B9A\u3092\u78BA\u8A8D\u304A\u3088\u3073\u66F4\u65B0\u3059\u308B\u65B9\u6CD5\u306F\u6B21\u306E\u3068\u304A\u308A\u3067\u3059\uFF1A\n' +
-                        '1. \u8A2D\u5B9A\u30BF\u30D6\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        '2. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9* > [\u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9]\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
-                        "[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3078\u79FB\u52D5](".concat(workspaceSettingsLink, ")\u3002#admins\u30EB\u30FC\u30E0\u3067\u3068\u3082\u306B\u8FFD\u8DE1\u3057\u307E\u3059\u3002");
-                },
+                title: ({ workspaceSettingsLink }) => `[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u8A2D\u5B9A](${workspaceSettingsLink})\u3092\u78BA\u8A8D\u3059\u308B`,
+                description: ({ workspaceSettingsLink }) => '\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u8A2D\u5B9A\u3092\u78BA\u8A8D\u304A\u3088\u3073\u66F4\u65B0\u3059\u308B\u65B9\u6CD5\u306F\u6B21\u306E\u3068\u304A\u308A\u3067\u3059\uFF1A\n' +
+                    '1. \u8A2D\u5B9A\u30BF\u30D6\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    '2. *\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9* > [\u3042\u306A\u305F\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9]\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n' +
+                    `[\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3078\u79FB\u52D5](${workspaceSettingsLink})\u3002#admins\u30EB\u30FC\u30E0\u3067\u3068\u3082\u306B\u8FFD\u8DE1\u3057\u307E\u3059\u3002`,
             },
             createReportTask: {
                 title: '\u521D\u3081\u3066\u306E\u30EC\u30DD\u30FC\u30C8\u3092\u4F5C\u6210\u3059\u308B',
@@ -2637,10 +2133,7 @@ var translations = {
             },
         },
         testDrive: {
-            name: function (_a) {
-                var testDriveURL = _a.testDriveURL;
-                return testDriveURL ? "[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](".concat(testDriveURL, ")\u3092\u884C\u3046") : '\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6\u3092\u884C\u3046';
-            },
+            name: ({ testDriveURL }) => testDriveURL ? `[\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6](${testDriveURL})\u3092\u884C\u3046` : '\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6\u3092\u884C\u3046',
             embeddedDemoIframeTitle: '\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6',
             employeeFakeReceipt: {
                 description: '\u79C1\u306E\u30C6\u30B9\u30C8\u30C9\u30E9\u30A4\u30D6\u306E\u9818\u53CE\u66F8\uFF01',
@@ -2649,12 +2142,9 @@ var translations = {
         messages: {
             onboardingEmployerOrSubmitMessage: '\u652F\u6255\u3044\u3092\u53D7\u3051\u53D6\u308B\u306E\u306F\u3001\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u9001\u308B\u306E\u3068\u540C\u3058\u304F\u3089\u3044\u7C21\u5358\u3067\u3059\u3002\u57FA\u672C\u3092\u78BA\u8A8D\u3057\u307E\u3057\u3087\u3046\u3002',
             onboardingPersonalSpendMessage: '\u6570\u56DE\u30AF\u30EA\u30C3\u30AF\u3059\u308B\u3060\u3051\u3067\u3042\u306A\u305F\u306E\u652F\u51FA\u3092\u8FFD\u8DE1\u3059\u308B\u65B9\u6CD5\u306F\u6B21\u306E\u3068\u304A\u308A\u3067\u3059\u3002',
-            onboardingManageTeamMessage: function (_a) {
-                var hasIntroSelected = _a.hasIntroSelected;
-                return hasIntroSelected
-                    ? '\u0023 \u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u304c\u958b\u59cb\u3057\u307e\u3057\u305f\uff01\u3055\u3041\u3001\u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u3092\u59cb\u3081\u307e\u3057\u3087\u3046\u3002\n\ud83d\udc4b \u3053\u3093\u306b\u3061\u306f\u3001Expensify \u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u30b9\u30da\u30b7\u30e3\u30ea\u30b9\u30c8\u306e\u79c1\u3067\u3059\u3002\u30ef\u30fc\u30af\u30b9\u30da\u30fc\u30b9\u3092\u4f5c\u6210\u3057\u305f\u306e\u3067\u300130\u65e5\u9593\u306e\u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u3092\u6700\u5927\u9650\u5229\u7528\u3057\u3001\u4e0b\u8a18\u306e\u624b\u9806\u306b\u5f93\u3063\u3066\u304f\u3060\u3055\u3044\u3002'
-                    : '\u0023 \u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u304c\u958b\u59cb\u3057\u307e\u3057\u305f\uff01\u3055\u3041\u3001\u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u3092\u59cb\u3081\u307e\u3057\u3087\u3046\u3002\n\ud83d\udc4b \u3053\u3093\u306b\u3061\u306f\u3001Expensify \u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u30b9\u30da\u30b7\u30e3\u30ea\u30b9\u30c8\u306e\u79c1\u3067\u3059\u3002\u30c1\u30fc\u30e0\u306e\u9818\u53ce\u66f8\u3084\u7d4c\u8cbb\u3092\u7ba1\u7406\u3059\u308b\u305f\u3081\u306b\u3001\u3059\u3067\u306b\u30ef\u30fc\u30af\u30b9\u30da\u30fc\u30b9\u3092\u4f5c\u6210\u3057\u307e\u3057\u305f\u300230\u65e5\u9593\u306e\u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u3092\u6700\u5927\u9650\u5229\u7528\u3059\u308b\u305f\u3081\u306b\u3001\u4e0b\u8a18\u306e\u6b8b\u308a\u306e\u624b\u9806\u306b\u5f93\u3063\u3066\u304f\u3060\u3055\u3044\u3002';
-            },
+            onboardingManageTeamMessage: ({ hasIntroSelected }) => hasIntroSelected
+                ? '\u0023 \u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u304c\u958b\u59cb\u3057\u307e\u3057\u305f\uff01\u3055\u3041\u3001\u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u3092\u59cb\u3081\u307e\u3057\u3087\u3046\u3002\n\ud83d\udc4b \u3053\u3093\u306b\u3061\u306f\u3001Expensify \u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u30b9\u30da\u30b7\u30e3\u30ea\u30b9\u30c8\u306e\u79c1\u3067\u3059\u3002\u30ef\u30fc\u30af\u30b9\u30da\u30fc\u30b9\u3092\u4f5c\u6210\u3057\u305f\u306e\u3067\u300130\u65e5\u9593\u306e\u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u3092\u6700\u5927\u9650\u5229\u7528\u3057\u3001\u4e0b\u8a18\u306e\u624b\u9806\u306b\u5f93\u3063\u3066\u304f\u3060\u3055\u3044\u3002'
+                : '\u0023 \u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u304c\u958b\u59cb\u3057\u307e\u3057\u305f\uff01\u3055\u3041\u3001\u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u3092\u59cb\u3081\u307e\u3057\u3087\u3046\u3002\n\ud83d\udc4b \u3053\u3093\u306b\u3061\u306f\u3001Expensify \u30bb\u30c3\u30c8\u30a2\u30c3\u30d7\u30b9\u30da\u30b7\u30e3\u30ea\u30b9\u30c8\u306e\u79c1\u3067\u3059\u3002\u30c1\u30fc\u30e0\u306e\u9818\u53ce\u66f8\u3084\u7d4c\u8cbb\u3092\u7ba1\u7406\u3059\u308b\u305f\u3081\u306b\u3001\u3059\u3067\u306b\u30ef\u30fc\u30af\u30b9\u30da\u30fc\u30b9\u3092\u4f5c\u6210\u3057\u307e\u3057\u305f\u300230\u65e5\u9593\u306e\u7121\u6599\u30c8\u30e9\u30a4\u30a2\u30eb\u3092\u6700\u5927\u9650\u5229\u7528\u3059\u308b\u305f\u3081\u306b\u3001\u4e0b\u8a18\u306e\u6b8b\u308a\u306e\u624b\u9806\u306b\u5f93\u3063\u3066\u304f\u3060\u3055\u3044\u3002',
             onboardingTrackWorkspaceMessage: '# \u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u3057\u307E\u3057\u3087\u3046\n\u3063\u3066\u3001\u304A\u624B\u4F1D\u3044\u3057\u307E\u3059\uFF01\u958B\u59CB\u306B\u3042\u305F\u3063\u3066\u3001\u3042\u306A\u305F\u306E\u30ef\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u8A2D\u5B9A\u3092\u500B\u4EBA\u4E8B\u696D\u4E3B\u3084\u985E\u4F3C\u306E\u4F01\u696D\u306B\u5408\u308F\u305B\u3066\u8ABF\u6574\u3057\u307E\u3057\u305F\u3002\u4EE5\u4E0B\u306E\u30EA\u30F3\u30AF\u3092\u30AF\u30EA\u30C3\u30AF\u3059\u308B\u3068\u3001\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u8ABF\u6574\u3067\u304D\u307E\u3059\uFF01\n\n\u6570\u56DE\u30AF\u30EA\u30C3\u30AF\u3059\u308B\u3060\u3051\u3067\u3042\u306A\u305F\u306E\u652F\u51FA\u3092\u8FFD\u8DE1\u3059\u308B\u65B9\u6CD5\u306F\u6B21\u306E\u3068\u304A\u308A\u3067\u3059\u3002',
             onboardingChatSplitMessage: '\u53CB\u9054\u3068\u306E\u8ACB\u6C42\u66F8\u306E\u5206\u5272\u306F\u3001\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u9001\u308B\u306E\u3068\u540C\u3058\u304F\u3089\u3044\u7C21\u5358\u3067\u3059\u3002\u65B9\u6CD5\u306F\u6B21\u306E\u3068\u304A\u308A\u3067\u3059\u3002',
             onboardingAdminMessage: '\u7BA1\u7406\u8005\u3068\u3057\u3066\u30C1\u30FC\u30E0\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u7BA1\u7406\u3057\u3001\u81EA\u5206\u306E\u7D4C\u8CBB\u3092\u63D0\u51FA\u3059\u308B\u65B9\u6CD5\u3092\u5B66\u3073\u307E\u3057\u3087\u3046\u3002',
@@ -2703,52 +2193,28 @@ var translations = {
         legalLastName: '法的な姓',
         address: '住所',
         error: {
-            dateShouldBeBefore: function (_a) {
-                var dateString = _a.dateString;
-                return "\u65E5\u4ED8\u306F".concat(dateString, "\u3088\u308A\u524D\u3067\u306A\u3051\u308C\u3070\u306A\u308A\u307E\u305B\u3093\u3002");
-            },
-            dateShouldBeAfter: function (_a) {
-                var dateString = _a.dateString;
-                return "\u65E5\u4ED8\u306F".concat(dateString, "\u4EE5\u964D\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002");
-            },
+            dateShouldBeBefore: ({ dateString }) => `日付は${dateString}より前でなければなりません。`,
+            dateShouldBeAfter: ({ dateString }) => `日付は${dateString}以降である必要があります。`,
             hasInvalidCharacter: '名前にはラテン文字のみを含めることができます。',
-            incorrectZipFormat: function (_a) {
-                var _b = _a === void 0 ? {} : _a, zipFormat = _b.zipFormat;
-                return "\u7121\u52B9\u306A\u90F5\u4FBF\u756A\u53F7\u5F62\u5F0F".concat(zipFormat ? "\u8A31\u5BB9\u3055\u308C\u308B\u5F62\u5F0F: ".concat(zipFormat) : '');
-            },
-            invalidPhoneNumber: "\u96FB\u8A71\u756A\u53F7\u304C\u6709\u52B9\u3067\u3042\u308B\u3053\u3068\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044 (\u4F8B: ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, ")"),
+            incorrectZipFormat: ({ zipFormat } = {}) => `無効な郵便番号形式${zipFormat ? `許容される形式: ${zipFormat}` : ''}`,
+            invalidPhoneNumber: `電話番号が有効であることを確認してください (例: ${CONST_1.default.EXAMPLE_PHONE_NUMBER})`,
         },
     },
     resendValidationForm: {
         linkHasBeenResent: 'リンクが再送信されました。',
-        weSentYouMagicSignInLink: function (_a) {
-            var login = _a.login, loginType = _a.loginType;
-            return "".concat(login, "\u306B\u30DE\u30B8\u30C3\u30AF\u30B5\u30A4\u30F3\u30A4\u30F3\u30EA\u30F3\u30AF\u3092\u9001\u4FE1\u3057\u307E\u3057\u305F\u3002\u30B5\u30A4\u30F3\u30A4\u30F3\u3059\u308B\u306B\u306F").concat(loginType, "\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        weSentYouMagicSignInLink: ({ login, loginType }) => `${login}にマジックサインインリンクを送信しました。サインインするには${loginType}を確認してください。`,
         resendLink: 'リンクを再送信',
     },
     unlinkLoginForm: {
-        toValidateLogin: function (_a) {
-            var primaryLogin = _a.primaryLogin, secondaryLogin = _a.secondaryLogin;
-            return "".concat(secondaryLogin, "\u3092\u78BA\u8A8D\u3059\u308B\u306B\u306F\u3001").concat(primaryLogin, "\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u8A2D\u5B9A\u304B\u3089\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u518D\u9001\u4FE1\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        noLongerHaveAccess: function (_a) {
-            var primaryLogin = _a.primaryLogin;
-            return "".concat(primaryLogin, "\u306B\u30A2\u30AF\u30BB\u30B9\u3067\u304D\u306A\u304F\u306A\u3063\u305F\u5834\u5408\u306F\u3001\u30A2\u30AB\u30A6\u30F3\u30C8\u306E\u30EA\u30F3\u30AF\u3092\u89E3\u9664\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        toValidateLogin: ({ primaryLogin, secondaryLogin }) => `${secondaryLogin}を確認するには、${primaryLogin}のアカウント設定からマジックコードを再送信してください。`,
+        noLongerHaveAccess: ({ primaryLogin }) => `${primaryLogin}にアクセスできなくなった場合は、アカウントのリンクを解除してください。`,
         unlink: 'リンク解除',
         linkSent: 'リンクが送信されました！',
         successfullyUnlinkedLogin: 'セカンダリーログインのリンク解除に成功しました！',
     },
     emailDeliveryFailurePage: {
-        ourEmailProvider: function (_a) {
-            var login = _a.login;
-            return "\u79C1\u305F\u3061\u306E\u30E1\u30FC\u30EB\u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\u306F\u3001\u914D\u4FE1\u306E\u554F\u984C\u306B\u3088\u308A".concat(login, "\u3078\u306E\u30E1\u30FC\u30EB\u3092\u4E00\u6642\u7684\u306B\u505C\u6B62\u3057\u307E\u3057\u305F\u3002\u30ED\u30B0\u30A4\u30F3\u3092\u89E3\u9664\u3059\u308B\u306B\u306F\u3001\u6B21\u306E\u624B\u9806\u306B\u5F93\u3063\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
-        confirmThat: function (_a) {
-            var login = _a.login;
-            return "".concat(login, "\u304C\u6B63\u3057\u304F\u7DB4\u3089\u308C\u3066\u304A\u308A\u3001\u5B9F\u969B\u306B\u914D\u4FE1\u53EF\u80FD\u306A\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3067\u3042\u308B\u3053\u3068\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        ourEmailProvider: ({ login }) => `私たちのメールプロバイダーは、配信の問題により${login}へのメールを一時的に停止しました。ログインを解除するには、次の手順に従ってください。`,
+        confirmThat: ({ login }) => `${login}が正しく綴られており、実際に配信可能なメールアドレスであることを確認してください。`,
         emailAliases: '「expenses@domain.com」のようなメールエイリアスは、有効なExpensifyログインとするために、自分のメール受信箱にアクセスできる必要があります。',
         ensureYourEmailClient: 'メールクライアントがexpensify.comからのメールを許可していることを確認してください。',
         youCanFindDirections: 'このステップを完了する方法についての指示を見つけることができます。',
@@ -2757,38 +2223,33 @@ var translations = {
         toUnblock: 'ログインを解除するために。',
     },
     smsDeliveryFailurePage: {
-        smsDeliveryFailureMessage: function (_a) {
-            var login = _a.login;
-            return "".concat(login, "\u306BSMS\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u9001\u4FE1\u3067\u304D\u306A\u304B\u3063\u305F\u305F\u3081\u3001\u4E00\u6642\u7684\u306B\u505C\u6B62\u3057\u307E\u3057\u305F\u3002\u756A\u53F7\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        smsDeliveryFailureMessage: ({ login }) => `${login}にSMSメッセージを送信できなかったため、一時的に停止しました。番号を確認してください。`,
         validationSuccess: 'あなたの番号が確認されました！新しいマジックサインインコードを送信するには、以下をクリックしてください。',
-        validationFailed: function (_a) {
-            var _b;
-            var timeData = _a.timeData;
+        validationFailed: ({ timeData, }) => {
             if (!timeData) {
                 return 'もう一度試す前に少々お待ちください。';
             }
-            var timeParts = [];
+            const timeParts = [];
             if (timeData.days) {
-                timeParts.push("".concat(timeData.days, " ").concat(timeData.days === 1 ? '日' : '日'));
+                timeParts.push(`${timeData.days} ${timeData.days === 1 ? '日' : '日'}`);
             }
             if (timeData.hours) {
-                timeParts.push("".concat(timeData.hours, " ").concat(timeData.hours === 1 ? '時間' : '時間'));
+                timeParts.push(`${timeData.hours} ${timeData.hours === 1 ? '時間' : '時間'}`);
             }
             if (timeData.minutes) {
-                timeParts.push("".concat(timeData.minutes, " ").concat(timeData.minutes === 1 ? '分' : '分'));
+                timeParts.push(`${timeData.minutes} ${timeData.minutes === 1 ? '分' : '分'}`);
             }
-            var timeText = '';
+            let timeText = '';
             if (timeParts.length === 1) {
-                timeText = (_b = timeParts.at(0)) !== null && _b !== void 0 ? _b : '';
+                timeText = timeParts.at(0) ?? '';
             }
             else if (timeParts.length === 2) {
-                timeText = "".concat(timeParts.at(0), " and ").concat(timeParts.at(1));
+                timeText = `${timeParts.at(0)} and ${timeParts.at(1)}`;
             }
             else if (timeParts.length === 3) {
-                timeText = "".concat(timeParts.at(0), ", ").concat(timeParts.at(1), ", and ").concat(timeParts.at(2));
+                timeText = `${timeParts.at(0)}, ${timeParts.at(1)}, and ${timeParts.at(2)}`;
             }
-            return "\u304A\u5F85\u3061\u304F\u3060\u3055\u3044\uFF01\u3082\u3046\u4E00\u5EA6\u756A\u53F7\u3092\u78BA\u8A8D\u3059\u308B\u306B\u306F\u3001".concat(timeText, "\u5F85\u3064\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002");
+            return `お待ちください！もう一度番号を確認するには、${timeText}待つ必要があります。`;
         },
     },
     welcomeSignUpForm: {
@@ -2823,10 +2284,7 @@ var translations = {
         goToChatInstead: '代わりにチャットに移動してください。',
     },
     errorPage: {
-        title: function (_a) {
-            var isBreakLine = _a.isBreakLine;
-            return "\u304A\u3063\u3068... ".concat(isBreakLine ? '\n' : '', "\u4F55\u304B\u304C\u3046\u307E\u304F\u3044\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002");
-        },
+        title: ({ isBreakLine }) => `おっと... ${isBreakLine ? '\n' : ''}何かがうまくいきませんでした。`,
         subtitle: 'リクエストを完了できませんでした。後でもう一度お試しください。',
     },
     setPasswordPage: {
@@ -2854,38 +2312,25 @@ var translations = {
             custom: 'カスタム',
         },
         vacationDelegate: '休暇代理人',
-        setVacationDelegate: "\u4E0D\u5728\u4E2D\u306B\u30EC\u30DD\u30FC\u30C8\u3092\u627F\u8A8D\u3057\u3066\u3082\u3089\u3046\u305F\u3081\u3001\u4F11\u6687\u4EE3\u7406\u4EBA\u3092\u8A2D\u5B9A\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+        setVacationDelegate: `不在中にレポートを承認してもらうため、休暇代理人を設定してください。`,
         vacationDelegateError: '休暇代理人の更新中にエラーが発生しました。',
-        asVacationDelegate: function (_a) {
-            var managerName = _a.nameOrEmail;
-            return "".concat(managerName, "\u306E\u4F11\u6687\u4EE3\u7406\u4EBA\u3068\u3057\u3066");
-        },
-        toAsVacationDelegate: function (_a) {
-            var submittedToName = _a.submittedToName, vacationDelegateName = _a.vacationDelegateName;
-            return "".concat(submittedToName, "\u3078\u3001").concat(vacationDelegateName, "\u306E\u4F11\u6687\u4EE3\u7406\u4EBA\u3068\u3057\u3066");
-        },
-        vacationDelegateWarning: function (_a) {
-            var nameOrEmail = _a.nameOrEmail;
-            return "".concat(nameOrEmail, " \u3092\u4F11\u6687\u4EE3\u7406\u4EBA\u3068\u3057\u3066\u8A2D\u5B9A\u3057\u3066\u3044\u307E\u3059\u3002\u307E\u3060\u3059\u3079\u3066\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u53C2\u52A0\u3057\u3066\u3044\u307E\u305B\u3093\u3002\u7D9A\u884C\u3059\u308B\u3068\u3001\u3059\u3079\u3066\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u7BA1\u7406\u8005\u306B\u8FFD\u52A0\u3092\u4F9D\u983C\u3059\u308B\u30E1\u30FC\u30EB\u304C\u9001\u4FE1\u3055\u308C\u307E\u3059\u3002");
-        },
+        asVacationDelegate: ({ nameOrEmail: managerName }) => `${managerName}の休暇代理人として`,
+        toAsVacationDelegate: ({ submittedToName, vacationDelegateName }) => `${submittedToName}へ、${vacationDelegateName}の休暇代理人として`,
+        vacationDelegateWarning: ({ nameOrEmail }) => `${nameOrEmail} を休暇代理人として設定しています。まだすべてのワークスペースに参加していません。続行すると、すべてのワークスペース管理者に追加を依頼するメールが送信されます。`,
         untilTomorrow: '明日まで',
-        untilTime: function (_a) {
-            var time = _a.time;
-            return "".concat(time, "\u307E\u3067");
-        },
+        untilTime: ({ time }) => `${time}まで`,
         date: '日付',
         time: '時間',
         clearAfter: '後でクリア',
         whenClearStatus: 'いつステータスをクリアすべきですか？',
     },
-    stepCounter: function (_a) {
-        var step = _a.step, total = _a.total, text = _a.text;
-        var result = "\u30B9\u30C6\u30C3\u30D7".concat(step);
+    stepCounter: ({ step, total, text }) => {
+        let result = `ステップ${step}`;
         if (total) {
-            result = "".concat(result, " of ").concat(total);
+            result = `${result} of ${total}`;
         }
         if (text) {
-            result = "".concat(result, ": ").concat(text);
+            result = `${result}: ${text}`;
         }
         return result;
     },
@@ -2908,22 +2353,16 @@ var translations = {
         toGetStarted: '銀行口座を追加して、経費を払い戻し、Expensifyカードを発行し、請求書の支払いを受け取り、すべてを一箇所で支払います。',
         plaidBodyCopy: '従業員に会社の経費を支払う、そして払い戻しを受ける、より簡単な方法を提供しましょう。',
         checkHelpLine: '口座の小切手にルーティング番号と口座番号が記載されています。',
-        hasPhoneLoginError: function (_a) {
-            var contactMethodRoute = _a.contactMethodRoute;
-            return "\u9280\u884C\u53E3\u5EA7\u3092\u63A5\u7D9A\u3059\u308B\u306B\u306F\u3001\u304A\u9858\u3044\u3057\u307E\u3059 <a href=\"".concat(contactMethodRoute, "\">\u30E1\u30FC\u30EB\u3092\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC\u30ED\u30B0\u30A4\u30F3\u3068\u3057\u3066\u8FFD\u52A0\u3059\u308B</a> \u3082\u3046\u4E00\u5EA6\u8A66\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u96FB\u8A71\u756A\u53F7\u3092\u30BB\u30AB\u30F3\u30C0\u30EA\u30ED\u30B0\u30A4\u30F3\u3068\u3057\u3066\u8FFD\u52A0\u3067\u304D\u307E\u3059\u3002");
-        },
+        hasPhoneLoginError: ({ contactMethodRoute }) => `銀行口座を接続するには、お願いします <a href="${contactMethodRoute}">メールをプライマリーログインとして追加する</a> もう一度試してください。電話番号をセカンダリログインとして追加できます。`,
         hasBeenThrottledError: '銀行口座の追加中にエラーが発生しました。数分待ってから再試行してください。',
-        hasCurrencyError: function (_a) {
-            var workspaceRoute = _a.workspaceRoute;
-            return "\u304A\u3063\u3068\uFF01\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u901A\u8CA8\u304CUSD\u3068\u306F\u7570\u306A\u308B\u901A\u8CA8\u306B\u8A2D\u5B9A\u3055\u308C\u3066\u3044\u308B\u3088\u3046\u3067\u3059\u3002\u7D9A\u884C\u3059\u308B\u306B\u306F\u3001\u3053\u3061\u3089\u306B\u30A2\u30AF\u30BB\u30B9\u3057\u3066\u304F\u3060\u3055\u3044\u3002<a href=\"".concat(workspaceRoute, "\">\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8A2D\u5B9A</a> USD\u306B\u8A2D\u5B9A\u3057\u3066\u3001\u3082\u3046\u4E00\u5EA6\u304A\u8A66\u3057\u304F\u3060\u3055\u3044\u3002");
-        },
+        hasCurrencyError: ({ workspaceRoute }) => `おっと！ワークスペースの通貨がUSDとは異なる通貨に設定されているようです。続行するには、こちらにアクセスしてください。<a href="${workspaceRoute}">ワークスペースの設定</a> USDに設定して、もう一度お試しください。`,
         error: {
             youNeedToSelectAnOption: 'オプションを選択してください',
             noBankAccountAvailable: '申し訳ありませんが、利用可能な銀行口座がありません。',
             noBankAccountSelected: 'アカウントを選択してください',
             taxID: '有効な税務ID番号を入力してください',
             website: '有効なウェブサイトを入力してください',
-            zipCode: "\u6709\u52B9\u306A\u90F5\u4FBF\u756A\u53F7\u3092\u6B21\u306E\u5F62\u5F0F\u3067\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044: ".concat(CONST_1.default.COUNTRY_ZIP_REGEX_DATA.US.samples),
+            zipCode: `有効な郵便番号を次の形式で入力してください: ${CONST_1.default.COUNTRY_ZIP_REGEX_DATA.US.samples}`,
             phoneNumber: '有効な電話番号を入力してください',
             email: '有効なメールアドレスを入力してください',
             companyName: '有効なビジネス名を入力してください',
@@ -2987,12 +2426,9 @@ var translations = {
         retry: '再試行',
     },
     messages: {
-        errorMessageInvalidPhone: "\u6709\u52B9\u306A\u96FB\u8A71\u756A\u53F7\u3092\u62EC\u5F27\u3084\u30C0\u30C3\u30B7\u30E5\u306A\u3057\u3067\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u7C73\u56FD\u5916\u306E\u5834\u5408\u306F\u3001\u56FD\u30B3\u30FC\u30C9\u3092\u542B\u3081\u3066\u304F\u3060\u3055\u3044\uFF08\u4F8B: ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, "\uFF09\u3002"),
+        errorMessageInvalidPhone: `有効な電話番号を括弧やダッシュなしで入力してください。米国外の場合は、国コードを含めてください（例: ${CONST_1.default.EXAMPLE_PHONE_NUMBER}）。`,
         errorMessageInvalidEmail: '無効なメールアドレス',
-        userIsAlreadyMember: function (_a) {
-            var login = _a.login, name = _a.name;
-            return "".concat(login, " \u306F\u3059\u3067\u306B ").concat(name, " \u306E\u30E1\u30F3\u30D0\u30FC\u3067\u3059");
-        },
+        userIsAlreadyMember: ({ login, name }) => `${login} はすでに ${name} のメンバーです`,
     },
     onfidoStep: {
         acceptTerms: 'Expensifyウォレットの有効化リクエストを続行することで、あなたは読んで理解し、受け入れたことを確認します',
@@ -3000,7 +2436,7 @@ var translations = {
         tryAgain: 'もう一度試してください。',
         verifyIdentity: '本人確認を行う',
         letsVerifyIdentity: 'あなたの身元を確認しましょう',
-        butFirst: "\u3067\u3082\u307E\u305A\u306F\u9000\u5C48\u306A\u3053\u3068\u304B\u3089\u3002\u6B21\u306E\u30B9\u30C6\u30C3\u30D7\u3067\u6CD5\u7684\u6587\u66F8\u3092\u8AAD\u3093\u3067\u3001\u6E96\u5099\u304C\u3067\u304D\u305F\u3089\u300C\u627F\u8AFE\u300D\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+        butFirst: `でもまずは退屈なことから。次のステップで法的文書を読んで、準備ができたら「承諾」をクリックしてください。`,
         genericError: 'このステップの処理中にエラーが発生しました。もう一度お試しください。',
         cameraPermissionsNotGranted: 'カメラアクセスを有効にする',
         cameraRequestMessage: '銀行口座の確認を完了するためにカメラへのアクセスが必要です。設定 > New Expensify から有効にしてください。',
@@ -3046,10 +2482,7 @@ var translations = {
         checkTheBoxes: '以下のボックスをチェックしてください。',
         agreeToTerms: '利用規約に同意すれば、準備完了です！',
         shortTermsForm: {
-            expensifyPaymentsAccount: function (_a) {
-                var walletProgram = _a.walletProgram;
-                return "Expensify\u30A6\u30A9\u30EC\u30C3\u30C8\u306F".concat(walletProgram, "\u306B\u3088\u3063\u3066\u767A\u884C\u3055\u308C\u3066\u3044\u307E\u3059\u3002");
-            },
+            expensifyPaymentsAccount: ({ walletProgram }) => `Expensifyウォレットは${walletProgram}によって発行されています。`,
             perPurchase: '購入ごとに',
             atmWithdrawal: 'ATM引き出し',
             cashReload: '現金リロード',
@@ -3066,10 +2499,7 @@ var translations = {
             conditionsDetails: 'すべての料金およびサービスの詳細と条件については、こちらをご覧ください',
             conditionsPhone: 'または +1 833-400-0904 にお電話ください。',
             instant: '(instant)',
-            electronicFundsInstantFeeMin: function (_a) {
-                var amount = _a.amount;
-                return "(min ".concat(amount, ")");
-            },
+            electronicFundsInstantFeeMin: ({ amount }) => `(min ${amount})`,
         },
         longTermsForm: {
             listOfAllFees: 'Expensifyウォレット手数料の一覧',
@@ -3087,21 +2517,15 @@ var translations = {
             electronicFundsStandardDetails: "There's no fee to transfer funds from your Expensify Wallet " +
                 'to your bank account using the standard option. This transfer usually completes within 1-3 business' +
                 ' days.',
-            electronicFundsInstantDetails: function (_a) {
-                var percentage = _a.percentage, amount = _a.amount;
-                return "There's a fee to transfer funds from your Expensify Wallet to " +
-                    'your linked debit card using the instant transfer option. This transfer usually completes within ' +
-                    "several minutes. The fee is ".concat(percentage, "% of the transfer amount (with a minimum fee of ").concat(amount, ").");
-            },
-            fdicInsuranceBancorp: function (_a) {
-                var amount = _a.amount;
-                return 'Your funds are eligible for FDIC insurance. Your funds will be held at or ' +
-                    "transferred to ".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK, ", an FDIC-insured institution. Once there, your funds are insured up ") +
-                    "to ".concat(amount, " by the FDIC in the event ").concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK, " fails, if specific deposit insurance requirements ") +
-                    "are met and your card is registered. See";
-            },
+            electronicFundsInstantDetails: ({ percentage, amount }) => "There's a fee to transfer funds from your Expensify Wallet to " +
+                'your linked debit card using the instant transfer option. This transfer usually completes within ' +
+                `several minutes. The fee is ${percentage}% of the transfer amount (with a minimum fee of ${amount}).`,
+            fdicInsuranceBancorp: ({ amount }) => 'Your funds are eligible for FDIC insurance. Your funds will be held at or ' +
+                `transferred to ${CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK}, an FDIC-insured institution. Once there, your funds are insured up ` +
+                `to ${amount} by the FDIC in the event ${CONST_1.default.WALLET.PROGRAM_ISSUERS.BANCORP_BANK} fails, if specific deposit insurance requirements ` +
+                `are met and your card is registered. See`,
             fdicInsuranceBancorp2: '詳細については。',
-            contactExpensifyPayments: "".concat(CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS, " \u306B\u9023\u7D61\u3059\u308B\u306B\u306F\u3001+1 833-400-0904 \u306B\u96FB\u8A71\u3059\u308B\u304B\u3001\u30E1\u30FC\u30EB\u3067\u304A\u554F\u3044\u5408\u308F\u305B\u304F\u3060\u3055\u3044\u3002"),
+            contactExpensifyPayments: `${CONST_1.default.WALLET.PROGRAM_ISSUERS.EXPENSIFY_PAYMENTS} に連絡するには、+1 833-400-0904 に電話するか、メールでお問い合わせください。`,
             contactExpensifyPayments2: 'またはサインイン',
             generalInformation: 'プリペイドアカウントに関する一般情報については、こちらをご覧ください。',
             generalInformation2: 'プリペイドアカウントに関する苦情がある場合は、消費者金融保護局（Consumer Financial Protection Bureau）に1-855-411-2372までお電話いただくか、次のウェブサイトをご覧ください。',
@@ -3109,10 +2533,7 @@ var translations = {
             automated: '自動化',
             liveAgent: 'ライブエージェント',
             instant: 'インスタント',
-            electronicFundsInstantFeeMin: function (_a) {
-                var amount = _a.amount;
-                return "\u6700\u5C0F ".concat(amount);
-            },
+            electronicFundsInstantFeeMin: ({ amount }) => `最小 ${amount}`,
         },
     },
     activateStep: {
@@ -3211,8 +2632,7 @@ var translations = {
         whatsTheBusinessName: 'ビジネス名は何ですか？',
         whatsTheBusinessAddress: '会社の住所は何ですか？',
         whatsTheBusinessContactInformation: 'ビジネス連絡先情報は何ですか？',
-        whatsTheBusinessRegistrationNumber: function (_a) {
-            var country = _a.country;
+        whatsTheBusinessRegistrationNumber: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.GB:
                     return '会社登録番号（CRN）は何ですか?';
@@ -3220,8 +2640,7 @@ var translations = {
                     return '事業登録番号は何ですか?';
             }
         },
-        whatsTheBusinessTaxIDEIN: function (_a) {
-            var country = _a.country;
+        whatsTheBusinessTaxIDEIN: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.US:
                     return '雇用者識別番号（EIN）とは何ですか？';
@@ -3241,8 +2660,7 @@ var translations = {
         whatsTheBusinessAnnualPayment: 'ビジネスの年間支払い額はどれくらいですか？',
         whatsYourExpectedAverageReimbursements: 'あなたの期待される平均払い戻し額はいくらですか？',
         registrationNumber: '登録番号',
-        taxIDEIN: function (_a) {
-            var country = _a.country;
+        taxIDEIN: ({ country }) => {
             switch (country) {
                 case CONST_1.default.COUNTRY.US:
                     return 'EIN';
@@ -3263,15 +2681,9 @@ var translations = {
         incorporationTypeName: '法人の種類',
         businessCategory: 'ビジネスカテゴリ',
         annualPaymentVolume: '年間支払額',
-        annualPaymentVolumeInCurrency: function (_a) {
-            var currencyCode = _a.currencyCode;
-            return "".concat(currencyCode, "\u3067\u306E\u5E74\u9593\u652F\u6255\u984D");
-        },
+        annualPaymentVolumeInCurrency: ({ currencyCode }) => `${currencyCode}での年間支払額`,
         averageReimbursementAmount: '平均払い戻し額',
-        averageReimbursementAmountInCurrency: function (_a) {
-            var currencyCode = _a.currencyCode;
-            return "".concat(currencyCode, "\u3067\u306E\u5E73\u5747\u6255\u3044\u623B\u3057\u984D");
-        },
+        averageReimbursementAmountInCurrency: ({ currencyCode }) => `${currencyCode}での平均払い戻し額`,
         selectIncorporationType: '法人の種類を選択',
         selectBusinessCategory: 'ビジネスカテゴリを選択',
         selectAnnualPaymentVolume: '年間支払い額を選択',
@@ -3285,8 +2697,7 @@ var translations = {
         findAverageReimbursement: '平均払い戻し額を見つける',
         error: {
             registrationNumber: '有効な登録番号を提供してください。',
-            taxIDEIN: function (_a) {
-                var country = _a.country;
+            taxIDEIN: ({ country }) => {
                 switch (country) {
                     case CONST_1.default.COUNTRY.US:
                         return '有効な雇用者識別番号（EIN）を入力してください';
@@ -3303,18 +2714,9 @@ var translations = {
         },
     },
     beneficialOwnerInfoStep: {
-        doYouOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E25%\u4EE5\u4E0A\u3092\u6240\u6709\u3057\u3066\u3044\u307E\u3059\u304B\uFF1F");
-        },
-        doAnyIndividualOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E25%\u4EE5\u4E0A\u3092\u6240\u6709\u3057\u3066\u3044\u308B\u500B\u4EBA\u306F\u3044\u307E\u3059\u304B\uFF1F");
-        },
-        areThereMoreIndividualsWhoOwn25percent: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E\u682A\u5F0F\u306E25%\u4EE5\u4E0A\u3092\u4FDD\u6709\u3059\u308B\u500B\u4EBA\u306F\u4ED6\u306B\u3044\u307E\u3059\u304B\uFF1F");
-        },
+        doYouOwn25percent: ({ companyName }) => `${companyName}の25%以上を所有していますか？`,
+        doAnyIndividualOwn25percent: ({ companyName }) => `${companyName}の25%以上を所有している個人はいますか？`,
+        areThereMoreIndividualsWhoOwn25percent: ({ companyName }) => `${companyName}の株式の25%以上を保有する個人は他にいますか？`,
         regulationRequiresUsToVerifyTheIdentity: '規制により、事業の25%以上を所有する個人の身元を確認する必要があります。',
         companyOwner: 'ビジネスオーナー',
         enterLegalFirstAndLastName: '所有者の法的な名前は何ですか？',
@@ -3335,14 +2737,8 @@ var translations = {
         ownerInfo: '所有者情報',
         businessOwner: 'ビジネスオーナー',
         signerInfo: '署名者情報',
-        doYouOwn: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E25%\u4EE5\u4E0A\u3092\u6240\u6709\u3057\u3066\u3044\u307E\u3059\u304B\uFF1F");
-        },
-        doesAnyoneOwn: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E25%\u4EE5\u4E0A\u3092\u6240\u6709\u3057\u3066\u3044\u308B\u500B\u4EBA\u306F\u3044\u307E\u3059\u304B\uFF1F");
-        },
+        doYouOwn: ({ companyName }) => `${companyName}の25%以上を所有していますか？`,
+        doesAnyoneOwn: ({ companyName }) => `${companyName}の25%以上を所有している個人はいますか？`,
         regulationsRequire: '規制により、事業の25%以上を所有する個人の身元を確認する必要があります。',
         legalFirstName: '法的な名前',
         legalLastName: '法的な姓',
@@ -3363,10 +2759,7 @@ var translations = {
         letsDoubleCheck: 'すべてが正しいかどうかをもう一度確認しましょう。',
         legalName: '法的氏名',
         ownershipPercentage: '所有権の割合',
-        areThereOther: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E25%\u4EE5\u4E0A\u3092\u6240\u6709\u3057\u3066\u3044\u308B\u4ED6\u306E\u500B\u4EBA\u306F\u3044\u307E\u3059\u304B?");
-        },
+        areThereOther: ({ companyName }) => `${companyName}の25%以上を所有している他の個人はいますか?`,
         owners: '所有者',
         addCertified: '認定された組織図を追加して、実質的所有者を表示する',
         regulationRequiresChart: '規制により、事業の25%以上を所有するすべての個人または法人を示す所有権チャートの認証済みコピーを収集する必要があります。',
@@ -3393,7 +2786,7 @@ var translations = {
         headerTitle: '銀行口座を確認する',
         buttonText: 'セットアップを完了する',
         maxAttemptsReached: 'この銀行口座の検証は、不正な試行が多すぎるため無効になっています。',
-        description: "1\uFF5E2\u55B6\u696D\u65E5\u4EE5\u5185\u306B\u3001\u300CExpensify, Inc. Validation\u300D\u306E\u3088\u3046\u306A\u540D\u524D\u304B\u3089\u3042\u306A\u305F\u306E\u9280\u884C\u53E3\u5EA7\u306B3\u3064\u306E\u5C0F\u984D\u53D6\u5F15\u3092\u9001\u4FE1\u3057\u307E\u3059\u3002",
+        description: `1～2営業日以内に、「Expensify, Inc. Validation」のような名前からあなたの銀行口座に3つの小額取引を送信します。`,
         descriptionCTA: '以下のフィールドに各取引金額を入力してください。例: 1.51。',
         reviewingInfo: 'ありがとうございます！私たちはあなたの情報を確認しており、すぐにご連絡いたします。Conciergeとのチャットをご確認ください。',
         forNextStep: '銀行口座の設定を完了するための次のステップ。',
@@ -3419,7 +2812,7 @@ var translations = {
         validateButtonText: '検証する',
         validationInputLabel: '取引',
         maxAttemptsReached: 'この銀行口座の検証は、不正な試行が多すぎるため無効になっています。',
-        description: "1\uFF5E2\u55B6\u696D\u65E5\u4EE5\u5185\u306B\u3001\u300CExpensify, Inc. Validation\u300D\u306E\u3088\u3046\u306A\u540D\u524D\u304B\u3089\u3042\u306A\u305F\u306E\u9280\u884C\u53E3\u5EA7\u306B3\u3064\u306E\u5C0F\u984D\u53D6\u5F15\u3092\u9001\u4FE1\u3057\u307E\u3059\u3002",
+        description: `1～2営業日以内に、「Expensify, Inc. Validation」のような名前からあなたの銀行口座に3つの小額取引を送信します。`,
         descriptionCTA: '以下のフィールドに各取引金額を入力してください。例: 1.51。',
         reviewingInfo: 'ありがとうございます！私たちはあなたの情報を確認しており、すぐにご連絡いたします。Conciergeとのチャットをご確認ください。',
         forNextSteps: '銀行口座の設定を完了するための次のステップ。',
@@ -3447,10 +2840,7 @@ var translations = {
     },
     signerInfoStep: {
         signerInfo: '署名者情報',
-        areYouDirector: function (_a) {
-            var companyName = _a.companyName;
-            return "\u3042\u306A\u305F\u306F".concat(companyName, "\u306E\u53D6\u7DE0\u5F79\u307E\u305F\u306F\u4E0A\u7D1A\u5F79\u54E1\u3067\u3059\u304B\uFF1F");
-        },
+        areYouDirector: ({ companyName }) => `あなたは${companyName}の取締役または上級役員ですか？`,
         regulationRequiresUs: '規制により、署名者がビジネスを代表してこの行動を取る権限があるかどうかを確認する必要があります。',
         whatsYourName: 'あなたの法的な名前は何ですか',
         fullName: '法的なフルネーム',
@@ -3462,16 +2852,10 @@ var translations = {
         letsDoubleCheck: 'すべてが正しいかどうかをもう一度確認しましょう。',
         legalName: '法的氏名',
         proofOf: '個人住所の証明書',
-        enterOneEmail: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E\u30C7\u30A3\u30EC\u30AF\u30BF\u30FC\u307E\u305F\u306F\u4E0A\u7D1A\u5F79\u54E1\u306E\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        enterOneEmail: ({ companyName }) => `${companyName}のディレクターまたは上級役員のメールアドレスを入力してください。`,
         regulationRequiresOneMoreDirector: '規制により、署名者として少なくとももう一人の取締役または上級役員が必要です。',
         hangTight: 'お待ちください…',
-        enterTwoEmails: function (_a) {
-            var companyName = _a.companyName;
-            return "".concat(companyName, "\u306E\u53D6\u7DE0\u5F79\u307E\u305F\u306F\u4E0A\u7D1A\u5F79\u54E1\u306E\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u30922\u4EF6\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        enterTwoEmails: ({ companyName }) => `${companyName}の取締役または上級役員のメールアドレスを2件入力してください。`,
         sendReminder: 'リマインダーを送信',
         chooseFile: 'ファイルを選択',
         weAreWaiting: '私たちは、他の人がビジネスの取締役または上級役員としての身元を確認するのを待っています。',
@@ -3485,10 +2869,7 @@ var translations = {
         pleaseUpload: '事業体の取締役または上級役員としての身元を確認するために、追加の書類を以下にアップロードしてください。',
         enterSignerInfo: '署名者情報を入力してください',
         thisStep: 'このステップは完了しました',
-        isConnecting: function (_a) {
-            var bankAccountLastFour = _a.bankAccountLastFour, currency = _a.currency;
-            return "".concat(currency, "\u306E\u30D3\u30B8\u30CD\u30B9\u9280\u884C\u53E3\u5EA7\uFF08\u4E0B4\u6841\uFF1A").concat(bankAccountLastFour, "\uFF09\u3092Expensify\u306B\u63A5\u7D9A\u3057\u3066\u3001\u5F93\u696D\u54E1\u306B").concat(currency, "\u3067\u652F\u6255\u3044\u307E\u3059\u3002\u6B21\u306E\u30B9\u30C6\u30C3\u30D7\u3067\u306F\u3001\u53D6\u7DE0\u5F79\u307E\u305F\u306F\u4E0A\u7D1A\u5F79\u54E1\u306E\u7F72\u540D\u8005\u60C5\u5831\u304C\u5FC5\u8981\u3067\u3059\u3002");
-        },
+        isConnecting: ({ bankAccountLastFour, currency }) => `${currency}のビジネス銀行口座（下4桁：${bankAccountLastFour}）をExpensifyに接続して、従業員に${currency}で支払います。次のステップでは、取締役または上級役員の署名者情報が必要です。`,
     },
     agreementsStep: {
         agreements: '契約書',
@@ -3496,7 +2877,7 @@ var translations = {
         regulationRequiresUs: '規制により、事業の25%以上を所有する個人の身元を確認する必要があります。',
         iAmAuthorized: '私はビジネス支出のためにビジネス銀行口座を使用する権限があります。',
         iCertify: '提供された情報が真実で正確であることを証明します。',
-        iAcceptTheTermsAndConditions: "<a href=\"https://cross-border.corpay.com/tc/\">\u5229\u7528\u898F\u7D04</a>\u306B\u540C\u610F\u3057\u307E\u3059\u3002",
+        iAcceptTheTermsAndConditions: `<a href="https://cross-border.corpay.com/tc/">利用規約</a>に同意します。`,
         iAcceptTheTermsAndConditionsAccessibility: '利用規約に同意します。',
         accept: '銀行口座を承認して追加',
         iConsentToThePrivacyNotice: '<a href="https://payments.corpay.com/compliance">プライバシーポリシー</a>に同意します。',
@@ -3548,17 +2929,14 @@ var translations = {
             header: '続行する前に...',
             title: '利用規約',
             label: '利用規約に同意します。',
-            subtitle: "Expensify Travel\u306E<a href=\"".concat(CONST_1.default.TRAVEL_TERMS_URL, "\">\u5229\u7528\u898F\u7D04</a>\u306B\u540C\u610F\u3057\u3066\u304F\u3060\u3055\u3044\u3002"),
+            subtitle: `Expensify Travelの<a href="${CONST_1.default.TRAVEL_TERMS_URL}">利用規約</a>に同意してください。`,
             error: '続行するには、Expensify Travel の利用規約に同意する必要があります。',
             defaultWorkspaceError: 'Expensify Travelを有効にするには、デフォルトのワークスペースを設定する必要があります。設定 > ワークスペース > ワークスペースの横にある縦の3つのドットをクリック > デフォルトのワークスペースとして設定し、もう一度お試しください！',
         },
         flight: 'フライト',
         flightDetails: {
             passenger: '乗客',
-            layover: function (_a) {
-                var layover = _a.layover;
-                return "<muted-text-label>\u3053\u306E\u30D5\u30E9\u30A4\u30C8\u306E\u524D\u306B<strong>".concat(layover, "\u306E\u4E57\u308A\u7D99\u304E</strong>\u304C\u3042\u308A\u307E\u3059</muted-text-label>");
-            },
+            layover: ({ layover }) => `<muted-text-label>このフライトの前に<strong>${layover}の乗り継ぎ</strong>があります</muted-text-label>`,
             takeOff: '離陸',
             landing: 'ランディング',
             seat: '席',
@@ -3620,10 +2998,7 @@ var translations = {
         tripSummary: '旅行概要',
         departs: '出発します',
         errorMessage: '問題が発生しました。後でもう一度お試しください。',
-        phoneError: function (_a) {
-            var phoneErrorMethodsRoute = _a.phoneErrorMethodsRoute;
-            return "<rbr>\u65C5\u884C\u4E88\u7D04\u306E\u305F\u3081\u306E<a href=\"".concat(phoneErrorMethodsRoute, "\">\u30D7\u30E9\u30A4\u30DE\u30EA\u30ED\u30B0\u30A4\u30F3\u3068\u3057\u3066\u3001\u4ED5\u4E8B\u306E\u96FB\u5B50\u30E1\u30FC\u30EB\u3092\u8FFD\u52A0\u3057\u3066</a>\u304F\u3060\u3055\u3044\u3002</rbr>");
-        },
+        phoneError: ({ phoneErrorMethodsRoute }) => `<rbr>旅行予約のための<a href="${phoneErrorMethodsRoute}">プライマリログインとして、仕事の電子メールを追加して</a>ください。</rbr>`,
         domainSelector: {
             title: 'ドメイン',
             subtitle: 'Expensify Travelのセットアップ用にドメインを選択してください。',
@@ -3631,102 +3006,42 @@ var translations = {
         },
         domainPermissionInfo: {
             title: 'ドメイン',
-            restriction: function (_a) {
-                var domain = _a.domain;
-                return "Y<strong>".concat(domain, "</strong> \u30C9\u30E1\u30A4\u30F3\u3067 Expensify Travel \u3092\u6709\u52B9\u306B\u3059\u308B\u6A29\u9650\u304C\u3042\u308A\u307E\u305B\u3093\u3002\u305D\u306E\u30C9\u30E1\u30A4\u30F3\u306E\u62C5\u5F53\u8005\u306E\u65B9\u306B\u3001\u4EE3\u308F\u308A\u306B\u65C5\u884C\u6A5F\u80FD\u3092\u6709\u52B9\u306B\u3057\u3066\u3082\u3089\u3046\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002");
-            },
-            accountantInvitation: "\u4F1A\u8A08\u58EB\u306E\u65B9\u3067\u3001\u3053\u306E\u30C9\u30E1\u30A4\u30F3\u3067\u306E\u51FA\u5F35\u3092\u53EF\u80FD\u306B\u3059\u308B\u305F\u3081\u3001<a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.EXPENSIFY_APPROVED_PROGRAM_URL, "\">ExpensifyApproved! \u4F1A\u8A08\u58EB\u30D7\u30ED\u30B0\u30E9\u30E0</a>\u3078\u306E\u53C2\u52A0\u3092\u3054\u691C\u8A0E\u304F\u3060\u3055\u3044\u3002"),
+            restriction: ({ domain }) => `Y<strong>${domain}</strong> ドメインで Expensify Travel を有効にする権限がありません。そのドメインの担当者の方に、代わりに旅行機能を有効にしてもらう必要があります。`,
+            accountantInvitation: `会計士の方で、このドメインでの出張を可能にするため、<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.EXPENSIFY_APPROVED_PROGRAM_URL}">ExpensifyApproved! 会計士プログラム</a>への参加をご検討ください。`,
         },
         publicDomainError: {
             title: 'Expensify Travelを始めましょう',
-            message: "Expensify Travel\u3067\u306F\u3001\u500B\u4EBA\u306E\u30E1\u30FC\u30EB\uFF08\u4F8B: name@gmail.com\uFF09\u3067\u306F\u306A\u304F\u3001\u52E4\u52D9\u5148\u306E\u30E1\u30FC\u30EB\uFF08\u4F8B: name@company.com\uFF09\u3092\u4F7F\u7528\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002",
+            message: `Expensify Travelでは、個人のメール（例: name@gmail.com）ではなく、勤務先のメール（例: name@company.com）を使用する必要があります。`,
         },
         blockedFeatureModal: {
             title: 'Expensify Travelは無効になっています',
-            message: "\u7BA1\u7406\u8005\u304CExpensify Travel\u3092\u30AA\u30D5\u306B\u3057\u307E\u3057\u305F\u3002\u65C5\u884C\u306E\u624B\u914D\u306B\u3064\u3044\u3066\u306F\u3001\u4F1A\u793E\u306E\u4E88\u7D04\u30DD\u30EA\u30B7\u30FC\u306B\u5F93\u3063\u3066\u304F\u3060\u3055\u3044\u3002",
+            message: `管理者がExpensify Travelをオフにしました。旅行の手配については、会社の予約ポリシーに従ってください。`,
         },
         verifyCompany: {
             title: '今日から旅行を始めましょう！',
-            message: "\u65C5\u884C\u306E\u30C7\u30E2\u3092\u53D6\u5F97\u3057\u3001\u5FA1\u793E\u5411\u3051\u306B\u6709\u52B9\u5316\u3059\u308B\u306B\u306F\u3001\u30A2\u30AB\u30A6\u30F3\u30C8\u30DE\u30CD\u30FC\u30B8\u30E3\u30FC\u307E\u305F\u306Fsalesteam@expensify.com\u306B\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002",
+            message: `旅行のデモを取得し、御社向けに有効化するには、アカウントマネージャーまたはsalesteam@expensify.comにご連絡ください。`,
         },
         updates: {
-            bookingTicketed: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate, _b = _a.confirmationID, confirmationID = _b === void 0 ? '' : _b;
-                return "\u3042\u306A\u305F\u306E\u30D5\u30E9\u30A4\u30C8 ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") \u306F ").concat(startDate, " \u306B\u4E88\u7D04\u3055\u308C\u307E\u3057\u305F\u3002\u78BA\u8A8D\u30B3\u30FC\u30C9: ").concat(confirmationID);
-            },
-            ticketVoided: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "".concat(startDate, "\u306E").concat(airlineCode, "\u4FBF\uFF08").concat(origin, " \u2192 ").concat(destination, "\uFF09\u306E\u822A\u7A7A\u5238\u306F\u7121\u52B9\u306B\u306A\u308A\u307E\u3057\u305F\u3002");
-            },
-            ticketRefunded: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "".concat(startDate, "\u306E").concat(airlineCode, "\u4FBF\uFF08").concat(origin, " \u2192 ").concat(destination, "\uFF09\u306E\u30C1\u30B1\u30C3\u30C8\u306F\u6255\u3044\u623B\u3057\u307E\u305F\u306F\u4EA4\u63DB\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            flightCancelled: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u3042\u306A\u305F\u306E\u30D5\u30E9\u30A4\u30C8 ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") \u306F ").concat(startDate, " \u306B\u822A\u7A7A\u4F1A\u793E\u306B\u3088\u3063\u3066\u30AD\u30E3\u30F3\u30BB\u30EB\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            flightScheduleChangePending: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u822A\u7A7A\u4F1A\u793E\u306F\u30D5\u30E9\u30A4\u30C8".concat(airlineCode, "\u306E\u30B9\u30B1\u30B8\u30E5\u30FC\u30EB\u5909\u66F4\u3092\u63D0\u6848\u3057\u307E\u3057\u305F\u3002\u78BA\u8A8D\u3092\u5F85\u3063\u3066\u3044\u307E\u3059\u3002");
-            },
-            flightScheduleChangeClosed: function (_a) {
-                var airlineCode = _a.airlineCode, startDate = _a.startDate;
-                return "\u30B9\u30B1\u30B8\u30E5\u30FC\u30EB\u5909\u66F4\u304C\u78BA\u8A8D\u3055\u308C\u307E\u3057\u305F: \u30D5\u30E9\u30A4\u30C8 ".concat(airlineCode, " \u306F ").concat(startDate, " \u306B\u51FA\u767A\u3057\u307E\u3059\u3002");
-            },
-            flightUpdated: function (_a) {
-                var airlineCode = _a.airlineCode, origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "\u3042\u306A\u305F\u306E\u30D5\u30E9\u30A4\u30C8 ".concat(airlineCode, " (").concat(origin, " \u2192 ").concat(destination, ") \u304C ").concat(startDate, " \u306B\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            flightCabinChanged: function (_a) {
-                var airlineCode = _a.airlineCode, cabinClass = _a.cabinClass;
-                return "\u30D5\u30E9\u30A4\u30C8".concat(airlineCode, "\u306E\u30AD\u30E3\u30D3\u30F3\u30AF\u30E9\u30B9\u304C").concat(cabinClass, "\u306B\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            flightSeatConfirmed: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u30D5\u30E9\u30A4\u30C8".concat(airlineCode, "\u306E\u5EA7\u5E2D\u6307\u5B9A\u304C\u78BA\u8A8D\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            flightSeatChanged: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u30D5\u30E9\u30A4\u30C8".concat(airlineCode, "\u306E\u5EA7\u5E2D\u6307\u5B9A\u304C\u5909\u66F4\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            flightSeatCancelled: function (_a) {
-                var airlineCode = _a.airlineCode;
-                return "\u30D5\u30E9\u30A4\u30C8".concat(airlineCode, "\u306E\u5EA7\u5E2D\u6307\u5B9A\u304C\u524A\u9664\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
+            bookingTicketed: ({ airlineCode, origin, destination, startDate, confirmationID = '' }) => `あなたのフライト ${airlineCode} (${origin} → ${destination}) は ${startDate} に予約されました。確認コード: ${confirmationID}`,
+            ticketVoided: ({ airlineCode, origin, destination, startDate }) => `${startDate}の${airlineCode}便（${origin} → ${destination}）の航空券は無効になりました。`,
+            ticketRefunded: ({ airlineCode, origin, destination, startDate }) => `${startDate}の${airlineCode}便（${origin} → ${destination}）のチケットは払い戻しまたは交換されました。`,
+            flightCancelled: ({ airlineCode, origin, destination, startDate }) => `あなたのフライト ${airlineCode} (${origin} → ${destination}) は ${startDate} に航空会社によってキャンセルされました。`,
+            flightScheduleChangePending: ({ airlineCode }) => `航空会社はフライト${airlineCode}のスケジュール変更を提案しました。確認を待っています。`,
+            flightScheduleChangeClosed: ({ airlineCode, startDate }) => `スケジュール変更が確認されました: フライト ${airlineCode} は ${startDate} に出発します。`,
+            flightUpdated: ({ airlineCode, origin, destination, startDate }) => `あなたのフライト ${airlineCode} (${origin} → ${destination}) が ${startDate} に更新されました。`,
+            flightCabinChanged: ({ airlineCode, cabinClass }) => `フライト${airlineCode}のキャビンクラスが${cabinClass}に更新されました。`,
+            flightSeatConfirmed: ({ airlineCode }) => `フライト${airlineCode}の座席指定が確認されました。`,
+            flightSeatChanged: ({ airlineCode }) => `フライト${airlineCode}の座席指定が変更されました。`,
+            flightSeatCancelled: ({ airlineCode }) => `フライト${airlineCode}の座席指定が削除されました。`,
             paymentDeclined: '航空券の支払いに失敗しました。もう一度お試しください。',
-            bookingCancelledByTraveler: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "\u3042\u306A\u305F\u306F".concat(id, "\u306E").concat(type, "\u4E88\u7D04\u3092\u30AD\u30E3\u30F3\u30BB\u30EB\u3057\u307E\u3057\u305F\u3002");
-            },
-            bookingCancelledByVendor: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "\u30D9\u30F3\u30C0\u30FC\u304C\u3042\u306A\u305F\u306E".concat(type, "\u4E88\u7D04").concat(id, "\u3092\u30AD\u30E3\u30F3\u30BB\u30EB\u3057\u307E\u3057\u305F\u3002");
-            },
-            bookingRebooked: function (_a) {
-                var type = _a.type, _b = _a.id, id = _b === void 0 ? '' : _b;
-                return "\u3042\u306A\u305F\u306E".concat(type, "\u4E88\u7D04\u304C\u518D\u4E88\u7D04\u3055\u308C\u307E\u3057\u305F\u3002\u65B0\u3057\u3044\u78BA\u8A8D\u756A\u53F7\uFF1A").concat(id, "\u3002");
-            },
-            bookingUpdated: function (_a) {
-                var type = _a.type;
-                return "\u3042\u306A\u305F\u306E".concat(type, "\u306E\u4E88\u7D04\u304C\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002\u65C5\u7A0B\u3067\u65B0\u3057\u3044\u8A73\u7D30\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-            },
-            railTicketRefund: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "".concat(startDate, "\u306E").concat(origin, " \u2192 ").concat(destination, "\u306E\u9244\u9053\u30C1\u30B1\u30C3\u30C8\u304C\u6255\u3044\u623B\u3055\u308C\u307E\u3057\u305F\u3002\u30AF\u30EC\u30B8\u30C3\u30C8\u304C\u51E6\u7406\u3055\u308C\u307E\u3059\u3002");
-            },
-            railTicketExchange: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "".concat(startDate, "\u306E").concat(origin, " \u2192 ").concat(destination, "\u306E\u9244\u9053\u30C1\u30B1\u30C3\u30C8\u304C\u4EA4\u63DB\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            railTicketUpdate: function (_a) {
-                var origin = _a.origin, destination = _a.destination, startDate = _a.startDate;
-                return "".concat(origin, " \u2192 ").concat(destination, " \u306E ").concat(startDate, " \u306E\u9244\u9053\u30C1\u30B1\u30C3\u30C8\u304C\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            defaultUpdate: function (_a) {
-                var type = _a.type;
-                return "\u3042\u306A\u305F\u306E".concat(type, "\u4E88\u7D04\u304C\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
+            bookingCancelledByTraveler: ({ type, id = '' }) => `あなたは${id}の${type}予約をキャンセルしました。`,
+            bookingCancelledByVendor: ({ type, id = '' }) => `ベンダーがあなたの${type}予約${id}をキャンセルしました。`,
+            bookingRebooked: ({ type, id = '' }) => `あなたの${type}予約が再予約されました。新しい確認番号：${id}。`,
+            bookingUpdated: ({ type }) => `あなたの${type}の予約が更新されました。旅程で新しい詳細を確認してください。`,
+            railTicketRefund: ({ origin, destination, startDate }) => `${startDate}の${origin} → ${destination}の鉄道チケットが払い戻されました。クレジットが処理されます。`,
+            railTicketExchange: ({ origin, destination, startDate }) => `${startDate}の${origin} → ${destination}の鉄道チケットが交換されました。`,
+            railTicketUpdate: ({ origin, destination, startDate }) => `${origin} → ${destination} の ${startDate} の鉄道チケットが更新されました。`,
+            defaultUpdate: ({ type }) => `あなたの${type}予約が更新されました。`,
         },
         flightTo: 'フライト',
         trainTo: '電車',
@@ -3775,18 +3090,18 @@ var translations = {
             issueAndManageCards: 'カードの発行と管理',
             reconcileCards: 'カードを照合する',
             selectAll: 'すべて選択',
-            selected: function () { return ({
+            selected: () => ({
                 one: '1 件選択済み',
-                other: function (count) { return "".concat(count, " \u4EF6\u9078\u629E\u6E08\u307F"); },
-            }); },
+                other: (count) => `${count} 件選択済み`,
+            }),
             settlementFrequency: '決済頻度',
             setAsDefault: 'デフォルトのワークスペースに設定',
-            defaultNote: "".concat(CONST_1.default.EMAIL.RECEIPTS, " \u306B\u9001\u4FE1\u3055\u308C\u305F\u9818\u53CE\u66F8\u306F\u3001\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u8868\u793A\u3055\u308C\u307E\u3059\u3002"),
+            defaultNote: `${CONST_1.default.EMAIL.RECEIPTS} に送信された領収書は、このワークスペースに表示されます。`,
             deleteConfirmation: 'このワークスペースを削除してもよろしいですか？',
             deleteWithCardsConfirmation: 'このワークスペースを削除してもよろしいですか？これにより、すべてのカードフィードと割り当てられたカードが削除されます。',
             unavailable: '利用できないワークスペース',
             memberNotFound: 'メンバーが見つかりません。新しいメンバーをワークスペースに招待するには、上の招待ボタンを使用してください。',
-            notAuthorized: "\u3053\u306E\u30DA\u30FC\u30B8\u306B\u30A2\u30AF\u30BB\u30B9\u3059\u308B\u6A29\u9650\u304C\u3042\u308A\u307E\u305B\u3093\u3002\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u53C2\u52A0\u3057\u3088\u3046\u3068\u3057\u3066\u3044\u308B\u5834\u5408\u306F\u3001\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30AA\u30FC\u30CA\u30FC\u306B\u30E1\u30F3\u30D0\u30FC\u3068\u3057\u3066\u8FFD\u52A0\u3057\u3066\u3082\u3089\u3063\u3066\u304F\u3060\u3055\u3044\u3002\u4ED6\u306B\u4F55\u304B\u304A\u56F0\u308A\u3067\u3059\u304B\uFF1F".concat(CONST_1.default.EMAIL.CONCIERGE, "\u306B\u304A\u554F\u3044\u5408\u308F\u305B\u304F\u3060\u3055\u3044\u3002"),
+            notAuthorized: `このページにアクセスする権限がありません。このワークスペースに参加しようとしている場合は、ワークスペースのオーナーにメンバーとして追加してもらってください。他に何かお困りですか？${CONST_1.default.EMAIL.CONCIERGE}にお問い合わせください。`,
             goToWorkspace: 'ワークスペースに移動',
             duplicateWorkspace: 'ワークスペースの複製',
             duplicateWorkspacePrefix: '重複',
@@ -3806,10 +3121,7 @@ var translations = {
             subscription: 'サブスクリプション',
             markAsEntered: '手動入力としてマーク',
             markAsExported: '輸出マーク',
-            exportIntegrationSelected: function (_a) {
-                var connectionName = _a.connectionName;
-                return "".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8");
-            },
+            exportIntegrationSelected: ({ connectionName }) => `${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}にエクスポート`,
             letsDoubleCheck: 'すべてが正しいかどうかをもう一度確認しましょう。',
             lineItemLevel: 'ラインアイテムレベル',
             reportLevel: 'レポートレベル',
@@ -3817,36 +3129,20 @@ var translations = {
             appliedOnExport: 'Expensifyにインポートされず、エクスポート時に適用されます。',
             shareNote: {
                 header: '他のメンバーとワークスペースを共有する',
-                content: function (_a) {
-                    var adminsRoomLink = _a.adminsRoomLink;
-                    return "\u3053\u306EQR\u30B3\u30FC\u30C9\u3092\u5171\u6709\u3059\u308B\u304B\u3001\u4EE5\u4E0B\u306E\u30EA\u30F3\u30AF\u3092\u30B3\u30D4\u30FC\u3057\u3066\u3001\u30E1\u30F3\u30D0\u30FC\u304C\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3078\u306E\u30A2\u30AF\u30BB\u30B9\u3092\u30EA\u30AF\u30A8\u30B9\u30C8\u3057\u3084\u3059\u304F\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3078\u306E\u53C2\u52A0\u30EA\u30AF\u30A8\u30B9\u30C8\u306F\u3059\u3079\u3066\u3001<a href=\"".concat(adminsRoomLink, "\">").concat(CONST_1.default.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS, "</a> \u30EB\u30FC\u30E0\u306B\u8868\u793A\u3055\u308C\u3001\u3054\u78BA\u8A8D\u3044\u305F\u3060\u3051\u307E\u3059\u3002");
-                },
+                content: ({ adminsRoomLink }) => `このQRコードを共有するか、以下のリンクをコピーして、メンバーがワークスペースへのアクセスをリクエストしやすくしてください。ワークスペースへの参加リクエストはすべて、<a href="${adminsRoomLink}">${CONST_1.default.REPORT.WORKSPACE_CHAT_ROOMS.ADMINS}</a> ルームに表示され、ご確認いただけます。`,
             },
-            connectTo: function (_a) {
-                var connectionName = _a.connectionName;
-                return "".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\u306B\u63A5\u7D9A");
-            },
+            connectTo: ({ connectionName }) => `${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}に接続`,
             createNewConnection: '新しい接続を作成',
             reuseExistingConnection: '既存の接続を再利用する',
             existingConnections: '既存の接続',
-            existingConnectionsDescription: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u4EE5\u524D\u306B".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\u306B\u63A5\u7D9A\u3057\u305F\u3053\u3068\u304C\u3042\u308B\u306E\u3067\u3001\u65E2\u5B58\u306E\u63A5\u7D9A\u3092\u518D\u5229\u7528\u3059\u308B\u304B\u3001\u65B0\u3057\u3044\u63A5\u7D9A\u3092\u4F5C\u6210\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002");
-            },
-            lastSyncDate: function (_a) {
-                var connectionName = _a.connectionName, formattedDate = _a.formattedDate;
-                return "".concat(connectionName, " - \u6700\u7D42\u540C\u671F\u65E5 ").concat(formattedDate);
-            },
-            authenticationError: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u8A8D\u8A3C\u30A8\u30E9\u30FC\u306E\u305F\u3081\u3001".concat(connectionName, " \u306B\u63A5\u7D9A\u3067\u304D\u307E\u305B\u3093\u3002");
-            },
+            existingConnectionsDescription: ({ connectionName }) => `以前に${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}に接続したことがあるので、既存の接続を再利用するか、新しい接続を作成することができます。`,
+            lastSyncDate: ({ connectionName, formattedDate }) => `${connectionName} - 最終同期日 ${formattedDate}`,
+            authenticationError: ({ connectionName }) => `認証エラーのため、${connectionName} に接続できません。`,
             learnMore: '詳しくはこちら',
             memberAlternateText: 'メンバーはレポートを提出および承認できます。',
             adminAlternateText: '管理者は、すべてのレポートとワークスペース設定に対して完全な編集アクセス権を持っています。',
             auditorAlternateText: '監査人はレポートを閲覧し、コメントを残すことができます。',
-            roleName: function (_a) {
-                var _b = _a === void 0 ? {} : _a, role = _b.role;
+            roleName: ({ role } = {}) => {
                 switch (role) {
                     case CONST_1.default.POLICY.ROLE.ADMIN:
                         return '管理者';
@@ -3871,11 +3167,8 @@ var translations = {
             submitExpense: '以下に経費を提出してください:',
             defaultCategory: 'デフォルトカテゴリ',
             viewTransactions: '取引を表示',
-            policyExpenseChatName: function (_a) {
-                var displayName = _a.displayName;
-                return "".concat(displayName, "\u306E\u7D4C\u8CBB");
-            },
-            deepDiveExpensifyCard: "<muted-text-label>Expensify Card\u306E\u53D6\u5F15\u306F\u3001<a href=\"".concat(CONST_1.default.DEEP_DIVE_EXPENSIFY_CARD, "\">\u5F0A\u793E\u306E\u7D71\u5408</a>\u3067\u4F5C\u6210\u3055\u308C\u305F \u300CExpensify Card Liability Account \u300D\u306B\u81EA\u52D5\u7684\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3055\u308C\u307E\u3059\u3002</muted-text-label>"),
+            policyExpenseChatName: ({ displayName }) => `${displayName}の経費`,
+            deepDiveExpensifyCard: `<muted-text-label>Expensify Cardの取引は、<a href="${CONST_1.default.DEEP_DIVE_EXPENSIFY_CARD}">弊社の統合</a>で作成された 「Expensify Card Liability Account 」に自動的にエクスポートされます。</muted-text-label>`,
         },
         receiptPartners: {
             connect: '今すぐ接続',
@@ -3892,14 +3185,13 @@ var translations = {
                 all: 'すべて',
                 linked: 'リンク済み',
                 outstanding: '未処理',
-                status: (_e = {
-                        resend: '再送信',
-                        invite: '招待'
-                    },
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED] = 'リンク済み',
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED_PENDING_APPROVAL] = '保留中',
-                    _e[CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.SUSPENDED] = '停止中',
-                    _e),
+                status: {
+                    resend: '再送信',
+                    invite: '招待',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED]: 'リンク済み',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.LINKED_PENDING_APPROVAL]: '保留中',
+                    [CONST_1.default.POLICY.RECEIPT_PARTNERS.UBER_EMPLOYEE_STATUS.SUSPENDED]: '停止中',
+                },
                 invitationFailure: 'Uber for Businessへのメンバー招待に失敗しました',
                 autoRemove: 'Uber for Business に新しいワークスペースメンバーを招待する',
                 autoInvite: 'Uber for Business から削除されたワークスペースメンバーを非アクティブ化する',
@@ -3914,37 +3206,28 @@ var translations = {
         perDiem: {
             subtitle: '日当料金を設定して、従業員の1日の支出を管理します。',
             amount: '金額',
-            deleteRates: function () { return ({
+            deleteRates: () => ({
                 one: 'レートを削除',
                 other: 'レートを削除',
-            }); },
+            }),
             deletePerDiemRate: '日当料金を削除',
             findPerDiemRate: '日当料金を見つける',
-            areYouSureDelete: function () { return ({
+            areYouSureDelete: () => ({
                 one: 'このレートを削除してもよろしいですか？',
                 other: 'これらのレートを削除してもよろしいですか？',
-            }); },
+            }),
             emptyList: {
                 title: '日当',
                 subtitle: '日当の設定を行い、従業員の1日の支出を管理します。スプレッドシートからレートをインポートして始めましょう。',
             },
             errors: {
-                existingRateError: function (_a) {
-                    var rate = _a.rate;
-                    return "\u5024\u304C".concat(rate, "\u306E\u30EC\u30FC\u30C8\u306F\u65E2\u306B\u5B58\u5728\u3057\u307E\u3059");
-                },
+                existingRateError: ({ rate }) => `値が${rate}のレートは既に存在します`,
             },
             importPerDiemRates: '日当料金をインポート',
             editPerDiemRate: '日当料金を編集',
             editPerDiemRates: '日当のレートを編集',
-            editDestinationSubtitle: function (_a) {
-                var destination = _a.destination;
-                return "\u3053\u306E\u5B9B\u5148\u3092\u66F4\u65B0\u3059\u308B\u3068\u3001\u3059\u3079\u3066\u306E".concat(destination, "\u306E\u65E5\u5F53\u30B5\u30D6\u30EC\u30FC\u30C8\u304C\u5909\u66F4\u3055\u308C\u307E\u3059\u3002");
-            },
-            editCurrencySubtitle: function (_a) {
-                var destination = _a.destination;
-                return "\u3053\u306E\u901A\u8CA8\u3092\u66F4\u65B0\u3059\u308B\u3068\u3001\u3059\u3079\u3066\u306E".concat(destination, "\u306E\u65E5\u5F53\u30B5\u30D6\u30EC\u30FC\u30C8\u304C\u5909\u66F4\u3055\u308C\u307E\u3059\u3002");
-            },
+            editDestinationSubtitle: ({ destination }) => `この宛先を更新すると、すべての${destination}の日当サブレートが変更されます。`,
+            editCurrencySubtitle: ({ destination }) => `この通貨を更新すると、すべての${destination}の日当サブレートが変更されます。`,
         },
         qbd: {
             exportOutOfPocketExpensesDescription: '実費経費がQuickBooks Desktopにエクスポートされる方法を設定します。',
@@ -3964,41 +3247,41 @@ var translations = {
             exportDate: {
                 label: 'エクスポート日付',
                 description: 'この日付を使用してレポートをQuickBooks Desktopにエクスポートしてください。',
-                values: (_f = {},
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最後の経費の日付',
                         description: 'レポート上の最新経費の日付。',
                     },
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: 'エクスポート日付',
                         description: 'レポートがQuickBooks Desktopにエクスポートされた日付。',
                     },
-                    _f[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: '提出日',
                         description: 'レポートが承認のために提出された日付。',
                     },
-                    _f),
+                },
             },
             exportCheckDescription: '各Expensifyレポートに対して項目別の小切手を作成し、以下の銀行口座から送信します。',
             exportJournalEntryDescription: '各Expensifyレポートに対して項目別の仕訳を作成し、以下のアカウントに投稿します。',
             exportVendorBillDescription: '私たちは、各Expensifyレポートのために項目別のベンダー請求書を作成し、以下のアカウントに追加します。この期間が閉じている場合、次の開いている期間の1日に投稿します。',
             outOfPocketTaxEnabledDescription: 'QuickBooks Desktopは、仕訳帳エクスポートで税金をサポートしていません。ワークスペースで税金が有効になっているため、このエクスポートオプションは利用できません。',
             outOfPocketTaxEnabledError: '税金が有効になっている場合、仕訳帳は利用できません。別のエクスポートオプションを選択してください。',
-            accounts: (_g = {},
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD] = 'クレジットカード',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = '仕入先請求書',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '仕訳帳エントリ',
-                _g[CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = 'チェック',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CHECK, "Description")] = '各Expensifyレポートに対して項目別の小切手を作成し、以下の銀行口座から送信します。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "Description")] = 'クレジットカード取引の加盟店名をQuickBooksの対応するベンダーに自動的に一致させます。ベンダーが存在しない場合は、関連付けのために「Credit Card Misc.」ベンダーを作成します。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Description")] = '私たちは、各Expensifyレポートに対して最後の経費の日付を含む項目別のベンダー請求書を作成し、以下のアカウントに追加します。この期間が閉じている場合、次の開いている期間の1日に投稿します。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "AccountDescription")] = 'クレジットカード取引のエクスポート先を選択してください。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "AccountDescription")] = 'すべてのクレジットカード取引に適用するベンダーを選択してください。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "AccountDescription")] = '小切手の送付先を選択してください。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Error")] = '場所が有効になっている場合、ベンダー請求書は利用できません。別のエクスポートオプションを選択してください。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "Error")] = '場所が有効になっている場合、小切手は利用できません。別のエクスポートオプションを選択してください。',
-                _g["".concat(CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY, "Error")] = '税金が有効になっている場合、仕訳帳は利用できません。別のエクスポートオプションを選択してください。',
-                _g),
+            accounts: {
+                [CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD]: 'クレジットカード',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: '仕入先請求書',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '仕訳帳エントリ',
+                [CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: 'チェック',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CHECK}Description`]: '各Expensifyレポートに対して項目別の小切手を作成し、以下の銀行口座から送信します。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}Description`]: 'クレジットカード取引の加盟店名をQuickBooksの対応するベンダーに自動的に一致させます。ベンダーが存在しない場合は、関連付けのために「Credit Card Misc.」ベンダーを作成します。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Description`]: '私たちは、各Expensifyレポートに対して最後の経費の日付を含む項目別のベンダー請求書を作成し、以下のアカウントに追加します。この期間が閉じている場合、次の開いている期間の1日に投稿します。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}AccountDescription`]: 'クレジットカード取引のエクスポート先を選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}AccountDescription`]: 'すべてのクレジットカード取引に適用するベンダーを選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK}AccountDescription`]: '小切手の送付先を選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Error`]: '場所が有効になっている場合、ベンダー請求書は利用できません。別のエクスポートオプションを選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.CHECK}Error`]: '場所が有効になっている場合、小切手は利用できません。別のエクスポートオプションを選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_DESKTOP_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY}Error`]: '税金が有効になっている場合、仕訳帳は利用できません。別のエクスポートオプションを選択してください。',
+            },
             noAccountsFound: 'アカウントが見つかりません',
             noAccountsFoundDescription: 'QuickBooks Desktopにアカウントを追加して、接続を再同期してください。',
             qbdSetup: 'QuickBooks Desktop のセットアップ',
@@ -4011,10 +3294,7 @@ var translations = {
                 title: 'このリンクを開いて接続してください。',
                 body: 'セットアップを完了するには、QuickBooks Desktop が実行されているコンピューターで次のリンクを開いてください。',
                 setupErrorTitle: '問題が発生しました',
-                setupErrorBody: function (_a) {
-                    var conciergeLink = _a.conciergeLink;
-                    return "<muted-text><centered-text>\u73FE\u5728\u3001QuickBooks Desktop\u3078\u306E\u63A5\u7D9A\u304C\u3067\u304D\u307E\u305B\u3093\u3002\u554F\u984C\u304C\u89E3\u6C7A\u3057\u306A\u3044\u5834\u5408\u306F\u3001\u5F8C\u3067\u3082\u3046\u4E00\u5EA6\u304A\u8A66\u3057\u3044\u305F\u3060\u304F\u304B\u3001<a href=\"".concat(conciergeLink, "\">Concierge\u307E\u3067\u3054\u9023\u7D61\u304F\u3060\u3055\u3044</a>\u3002</centered-text></muted-text>");
-                },
+                setupErrorBody: ({ conciergeLink }) => `<muted-text><centered-text>現在、QuickBooks Desktopへの接続ができません。問題が解決しない場合は、後でもう一度お試しいただくか、<a href="${conciergeLink}">Conciergeまでご連絡ください</a>。</centered-text></muted-text>`,
             },
             importDescription: 'QuickBooks DesktopからExpensifyにインポートするコーディング設定を選択してください。',
             classes: 'クラス',
@@ -4058,20 +3338,20 @@ var translations = {
             exportDate: {
                 label: 'エクスポート日付',
                 description: 'この日付を使用してレポートをQuickBooks Onlineにエクスポートしてください。',
-                values: (_h = {},
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最後の経費の日付',
                         description: 'レポート上の最新経費の日付。',
                     },
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: 'エクスポート日付',
                         description: 'レポートがQuickBooks Onlineにエクスポートされた日付。',
                     },
-                    _h[CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.QUICKBOOKS_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: '提出日',
                         description: 'レポートが承認のために提出された日付。',
                     },
-                    _h),
+                },
             },
             receivable: '売掛金', // This is an account name that will come directly from QBO, so I don't know why we need a translation for it. It should take whatever the name of the account is in QBO. Leaving this note for CS.
             archive: '売掛金アーカイブ', // This is an account name that will come directly from QBO, so I don't know why we need a translation for it. It should take whatever the name of the account is in QBO. Leaving this note for CS.
@@ -4106,45 +3386,45 @@ var translations = {
                 accountSelectDescription: '請求書を支払う場所を選択すると、QuickBooks Onlineで支払いを作成します。',
                 invoiceAccountSelectorDescription: '請求書の支払いを受け取る場所を選択すると、QuickBooks Onlineで支払いを作成します。',
             },
-            accounts: (_j = {},
-                _j[CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD] = 'デビットカード',
-                _j[CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD] = 'クレジットカード',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = '仕入先請求書',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '仕訳帳エントリ',
-                _j[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = 'チェック',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD, "Description")] = '私たちは、デビットカード取引の加盟店名をQuickBooksの対応するベンダーに自動的に一致させます。ベンダーが存在しない場合は、関連付けのために「Debit Card Misc.」ベンダーを作成します。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "Description")] = 'クレジットカード取引の加盟店名をQuickBooksの対応するベンダーに自動的に一致させます。ベンダーが存在しない場合は、関連付けのために「Credit Card Misc.」ベンダーを作成します。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Description")] = '私たちは、各Expensifyレポートに対して最後の経費の日付を含む項目別のベンダー請求書を作成し、以下のアカウントに追加します。この期間が閉じている場合、次の開いている期間の1日に投稿します。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD, "AccountDescription")] = 'デビットカード取引のエクスポート先を選択してください。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD, "AccountDescription")] = 'クレジットカード取引のエクスポート先を選択してください。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "AccountDescription")] = 'すべてのクレジットカード取引に適用するベンダーを選択してください。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL, "Error")] = '場所が有効になっている場合、ベンダー請求書は利用できません。別のエクスポートオプションを選択してください。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK, "Error")] = '場所が有効になっている場合、小切手は利用できません。別のエクスポートオプションを選択してください。',
-                _j["".concat(CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY, "Error")] = '税金が有効になっている場合、仕訳帳は利用できません。別のエクスポートオプションを選択してください。',
-                _j),
-            exportDestinationAccountsMisconfigurationError: (_k = {},
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = 'ベンダー請求書のエクスポートに有効なアカウントを選択してください。',
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '仕訳エクスポートのために有効なアカウントを選択してください',
-                _k[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = '小切手のエクスポート用に有効なアカウントを選択してください',
-                _k),
-            exportDestinationSetupAccountsInfo: (_l = {},
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL] = 'ベンダー請求書エクスポートを使用するには、QuickBooks Onlineで買掛金勘定を設定してください。',
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY] = '仕訳エクスポートを使用するには、QuickBooks Onlineで仕訳アカウントを設定してください。',
-                _l[CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK] = 'チェックエクスポートを使用するには、QuickBooks Onlineで銀行口座を設定してください。',
-                _l),
+            accounts: {
+                [CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD]: 'デビットカード',
+                [CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD]: 'クレジットカード',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: '仕入先請求書',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '仕訳帳エントリ',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: 'チェック',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD}Description`]: '私たちは、デビットカード取引の加盟店名をQuickBooksの対応するベンダーに自動的に一致させます。ベンダーが存在しない場合は、関連付けのために「Debit Card Misc.」ベンダーを作成します。',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}Description`]: 'クレジットカード取引の加盟店名をQuickBooksの対応するベンダーに自動的に一致させます。ベンダーが存在しない場合は、関連付けのために「Credit Card Misc.」ベンダーを作成します。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Description`]: '私たちは、各Expensifyレポートに対して最後の経費の日付を含む項目別のベンダー請求書を作成し、以下のアカウントに追加します。この期間が閉じている場合、次の開いている期間の1日に投稿します。',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD}AccountDescription`]: 'デビットカード取引のエクスポート先を選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.CREDIT_CARD}AccountDescription`]: 'クレジットカード取引のエクスポート先を選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}AccountDescription`]: 'すべてのクレジットカード取引に適用するベンダーを選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL}Error`]: '場所が有効になっている場合、ベンダー請求書は利用できません。別のエクスポートオプションを選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK}Error`]: '場所が有効になっている場合、小切手は利用できません。別のエクスポートオプションを選択してください。',
+                [`${CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY}Error`]: '税金が有効になっている場合、仕訳帳は利用できません。別のエクスポートオプションを選択してください。',
+            },
+            exportDestinationAccountsMisconfigurationError: {
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: 'ベンダー請求書のエクスポートに有効なアカウントを選択してください。',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '仕訳エクスポートのために有効なアカウントを選択してください',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: '小切手のエクスポート用に有効なアカウントを選択してください',
+            },
+            exportDestinationSetupAccountsInfo: {
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.VENDOR_BILL]: 'ベンダー請求書エクスポートを使用するには、QuickBooks Onlineで買掛金勘定を設定してください。',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.JOURNAL_ENTRY]: '仕訳エクスポートを使用するには、QuickBooks Onlineで仕訳アカウントを設定してください。',
+                [CONST_1.default.QUICKBOOKS_REIMBURSABLE_ACCOUNT_TYPE.CHECK]: 'チェックエクスポートを使用するには、QuickBooks Onlineで銀行口座を設定してください。',
+            },
             noAccountsFound: 'アカウントが見つかりません',
             noAccountsFoundDescription: 'QuickBooks Onlineにアカウントを追加し、接続を再同期してください。',
             accountingMethods: {
                 label: 'エクスポートのタイミング',
                 description: '経費をエクスポートするタイミングを選択:',
-                values: (_m = {},
-                    _m[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '発生主義',
-                    _m[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '現金',
-                    _m),
-                alternateText: (_o = {},
-                    _o[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自己負担の経費は最終承認時にエクスポートされます。',
-                    _o[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自己負担の経費は支払われたときにエクスポートされます。',
-                    _o),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '発生主義',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '現金',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自己負担の経費は最終承認時にエクスポートされます。',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自己負担の経費は支払われたときにエクスポートされます。',
+                },
             },
         },
         workspaceList: {
@@ -4160,24 +3440,18 @@ var translations = {
             accountsSwitchDescription: '有効になっているカテゴリーは、メンバーが経費を作成する際に選択できるようになります。',
             trackingCategories: 'トラッキングカテゴリ',
             trackingCategoriesDescription: 'ExpensifyでXeroのトラッキングカテゴリをどのように処理するか選択してください。',
-            mapTrackingCategoryTo: function (_a) {
-                var categoryName = _a.categoryName;
-                return "Xero ".concat(categoryName, " \u3092\u30DE\u30C3\u30D4\u30F3\u30B0\u3059\u308B");
-            },
-            mapTrackingCategoryToDescription: function (_a) {
-                var categoryName = _a.categoryName;
-                return "Xero\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3059\u308B\u969B\u306B".concat(categoryName, "\u3092\u3069\u3053\u306B\u30DE\u30C3\u30D4\u30F3\u30B0\u3059\u308B\u304B\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-            },
+            mapTrackingCategoryTo: ({ categoryName }) => `Xero ${categoryName} をマッピングする`,
+            mapTrackingCategoryToDescription: ({ categoryName }) => `Xeroにエクスポートする際に${categoryName}をどこにマッピングするか選択してください。`,
             customers: '顧客への再請求',
             customersDescription: 'Expensifyで顧客に再請求するかどうかを選択します。Xeroの顧客連絡先は経費にタグ付けでき、Xeroに売上請求書としてエクスポートされます。',
             taxesDescription: 'ExpensifyでXeroの税金をどのように処理するか選択してください。',
             notImported: 'インポートされていません',
             notConfigured: '未設定',
-            trackingCategoriesOptions: (_p = {},
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.DEFAULT] = 'Xero連絡先のデフォルト',
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.TAG] = 'タグ',
-                _p[CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.REPORT_FIELD] = 'レポートフィールド',
-                _p),
+            trackingCategoriesOptions: {
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.DEFAULT]: 'Xero連絡先のデフォルト',
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.TAG]: 'タグ',
+                [CONST_1.default.XERO_CONFIG.TRACKING_CATEGORY_OPTIONS.REPORT_FIELD]: 'レポートフィールド',
+            },
             exportDescription: 'ExpensifyデータをXeroにエクスポートする方法を設定します。',
             purchaseBill: '購入請求書',
             exportDeepDiveCompanyCard: 'エクスポートされた経費は、以下のXero銀行口座に銀行取引として記録され、取引日付は銀行明細書の日付と一致します。',
@@ -4201,43 +3475,43 @@ var translations = {
             exportDate: {
                 label: '購入請求書の日付',
                 description: 'この日付を使用してレポートをXeroにエクスポートしてください。',
-                values: (_q = {},
-                    _q[CONST_1.default.XERO_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.XERO_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最後の経費の日付',
                         description: 'レポート上の最新経費の日付。',
                     },
-                    _q[CONST_1.default.XERO_EXPORT_DATE.REPORT_EXPORTED] = {
+                    [CONST_1.default.XERO_EXPORT_DATE.REPORT_EXPORTED]: {
                         label: 'エクスポート日付',
                         description: 'レポートがXeroにエクスポートされた日付。',
                     },
-                    _q[CONST_1.default.XERO_EXPORT_DATE.REPORT_SUBMITTED] = {
+                    [CONST_1.default.XERO_EXPORT_DATE.REPORT_SUBMITTED]: {
                         label: '提出日',
                         description: 'レポートが承認のために提出された日付。',
                     },
-                    _q),
+                },
             },
             invoiceStatus: {
                 label: '購入請求書のステータス',
                 description: 'このステータスを使用して、購入請求書をXeroにエクスポートします。',
-                values: (_r = {},
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.DRAFT] = '下書き',
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_APPROVAL] = '承認待ち',
-                    _r[CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_PAYMENT] = '支払い待ち',
-                    _r),
+                values: {
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.DRAFT]: '下書き',
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_APPROVAL]: '承認待ち',
+                    [CONST_1.default.XERO_CONFIG.INVOICE_STATUS.AWAITING_PAYMENT]: '支払い待ち',
+                },
             },
             noAccountsFound: 'アカウントが見つかりません',
             noAccountsFoundDescription: 'Xeroにアカウントを追加し、再度接続を同期してください。',
             accountingMethods: {
                 label: 'エクスポートのタイミング',
                 description: '経費をエクスポートするタイミングを選択:',
-                values: (_s = {},
-                    _s[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '発生主義',
-                    _s[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '現金',
-                    _s),
-                alternateText: (_t = {},
-                    _t[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自己負担の経費は最終承認時にエクスポートされます。',
-                    _t[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自己負担の経費は支払われたときにエクスポートされます。',
-                    _t),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '発生主義',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '現金',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自己負担の経費は最終承認時にエクスポートされます。',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自己負担の経費は支払われたときにエクスポートされます。',
+                },
             },
         },
         sageIntacct: {
@@ -4247,46 +3521,43 @@ var translations = {
             exportDate: {
                 label: 'エクスポート日付',
                 description: 'この日付を使用してレポートをSage Intacctにエクスポートしてください。',
-                values: (_u = {},
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最後の経費の日付',
                         description: 'レポート上の最新経費の日付。',
                     },
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.EXPORTED] = {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.EXPORTED]: {
                         label: 'エクスポート日付',
                         description: 'レポートがSage Intacctにエクスポートされた日付。',
                     },
-                    _u[CONST_1.default.SAGE_INTACCT_EXPORT_DATE.SUBMITTED] = {
+                    [CONST_1.default.SAGE_INTACCT_EXPORT_DATE.SUBMITTED]: {
                         label: '提出日',
                         description: 'レポートが承認のために提出された日付。',
                     },
-                    _u),
+                },
             },
             reimbursableExpenses: {
                 description: '実費経費がSage Intacctにエクスポートされる方法を設定します。',
-                values: (_v = {},
-                    _v[CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.EXPENSE_REPORT] = '経費報告書',
-                    _v[CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL] = '仕入先請求書',
-                    _v),
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.EXPENSE_REPORT]: '経費報告書',
+                    [CONST_1.default.SAGE_INTACCT_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL]: '仕入先請求書',
+                },
             },
             nonReimbursableExpenses: {
                 description: '会社カードの購入がSage Intacctにエクスポートされる方法を設定します。',
-                values: (_w = {},
-                    _w[CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.CREDIT_CARD_CHARGE] = 'クレジットカード',
-                    _w[CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL] = '仕入先請求書',
-                    _w),
+                values: {
+                    [CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.CREDIT_CARD_CHARGE]: 'クレジットカード',
+                    [CONST_1.default.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSE_TYPE.VENDOR_BILL]: '仕入先請求書',
+                },
             },
             creditCardAccount: 'クレジットカードアカウント',
             defaultVendor: 'デフォルトのベンダー',
-            defaultVendorDescription: function (_a) {
-                var isReimbursable = _a.isReimbursable;
-                return "Sage Intacct\u3067\u4E00\u81F4\u3059\u308B\u30D9\u30F3\u30C0\u30FC\u304C\u306A\u3044".concat(isReimbursable ? '' : 'non-', "\u306E\u6255\u3044\u623B\u3057\u53EF\u80FD\u306A\u7D4C\u8CBB\u306B\u9069\u7528\u3055\u308C\u308B\u30C7\u30D5\u30A9\u30EB\u30C8\u306E\u30D9\u30F3\u30C0\u30FC\u3092\u8A2D\u5B9A\u3057\u307E\u3059\u3002");
-            },
+            defaultVendorDescription: ({ isReimbursable }) => `Sage Intacctで一致するベンダーがない${isReimbursable ? '' : 'non-'}の払い戻し可能な経費に適用されるデフォルトのベンダーを設定します。`,
             exportDescription: 'ExpensifyデータをSage Intacctにエクスポートする方法を設定します。',
             exportPreferredExporterNote: '優先されるエクスポーターは任意のワークスペース管理者で構いませんが、ドメイン設定で個々の会社カードに異なるエクスポートアカウントを設定する場合は、ドメイン管理者である必要があります。',
             exportPreferredExporterSubNote: '一度設定すると、優先エクスポーターは自分のアカウントでエクスポート用のレポートを確認できます。',
             noAccountsFound: 'アカウントが見つかりません',
-            noAccountsFoundDescription: "Sage Intacct\u306B\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u8FFD\u52A0\u3057\u3001\u518D\u5EA6\u63A5\u7D9A\u3092\u540C\u671F\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+            noAccountsFoundDescription: `Sage Intacctにアカウントを追加し、再度接続を同期してください。`,
             autoSync: '自動同期',
             autoSyncDescription: 'Expensifyは毎日自動的にSage Intacctと同期します。',
             inviteEmployees: '従業員を招待する',
@@ -4297,14 +3568,14 @@ var translations = {
             accountingMethods: {
                 label: 'エクスポートのタイミング',
                 description: '経費をエクスポートするタイミングを選択:',
-                values: (_x = {},
-                    _x[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '発生主義',
-                    _x[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '現金',
-                    _x),
-                alternateText: (_y = {},
-                    _y[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自己負担の経費は最終承認時にエクスポートされます。',
-                    _y[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自己負担の経費は支払われたときにエクスポートされます。',
-                    _y),
+                values: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '発生主義',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '現金',
+                },
+                alternateText: {
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自己負担の経費は最終承認時にエクスポートされます。',
+                    [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自己負担の経費は支払われたときにエクスポートされます。',
+                },
             },
         },
         netsuite: {
@@ -4320,50 +3591,50 @@ var translations = {
             reimbursableJournalPostingAccount: '払い戻し可能な仕訳記帳口座',
             journalPostingPreference: {
                 label: '仕訳の投稿設定',
-                values: (_z = {},
-                    _z[CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_INDIVIDUAL_LINE] = '各レポートの単一の項目別エントリ',
-                    _z[CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_TOTAL_LINE] = '各経費の単一エントリ',
-                    _z),
+                values: {
+                    [CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_INDIVIDUAL_LINE]: '各レポートの単一の項目別エントリ',
+                    [CONST_1.default.NETSUITE_JOURNAL_POSTING_PREFERENCE.JOURNALS_POSTING_TOTAL_LINE]: '各経費の単一エントリ',
+                },
             },
             invoiceItem: {
                 label: '請求書項目',
-                values: (_0 = {},
-                    _0[CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.CREATE] = {
+                values: {
+                    [CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.CREATE]: {
                         label: '作成してください。',
                         description: 'エクスポート時に（既に存在しない場合は）「Expensify請求書の項目」を作成します。',
                     },
-                    _0[CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.SELECT] = {
+                    [CONST_1.default.NETSUITE_INVOICE_ITEM_PREFERENCE.SELECT]: {
                         label: '既存のものを選択',
                         description: 'Expensifyの請求書を以下で選択された項目に結びつけます。',
                     },
-                    _0),
+                },
             },
             exportDate: {
                 label: 'エクスポート日付',
                 description: 'この日付を使用してレポートをNetSuiteにエクスポートしてください。',
-                values: (_1 = {},
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.LAST_EXPENSE] = {
+                values: {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.LAST_EXPENSE]: {
                         label: '最後の経費の日付',
                         description: 'レポート上の最新経費の日付。',
                     },
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.EXPORTED] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.EXPORTED]: {
                         label: 'エクスポート日付',
                         description: 'レポートがNetSuiteにエクスポートされた日付。',
                     },
-                    _1[CONST_1.default.NETSUITE_EXPORT_DATE.SUBMITTED] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DATE.SUBMITTED]: {
                         label: '提出日',
                         description: 'レポートが承認のために提出された日付。',
                     },
-                    _1),
+                },
             },
             exportDestination: {
-                values: (_2 = {},
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.EXPENSE_REPORT] = {
+                values: {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.EXPENSE_REPORT]: {
                         label: '経費報告書',
                         reimbursableDescription: '実費は、経費報告書としてNetSuiteにエクスポートされます。',
                         nonReimbursableDescription: '会社のカード経費は、経費報告書としてNetSuiteにエクスポートされます。',
                     },
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.VENDOR_BILL] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.VENDOR_BILL]: {
                         label: '仕入先請求書',
                         reimbursableDescription: 'Out-of-pocket expenses will export as bills payable to the NetSuite vendor specified below.\n' +
                             '\n' +
@@ -4372,7 +3643,7 @@ var translations = {
                             '\n' +
                             'If you’d like to set a specific vendor for each card, go to *Settings > Domains > Company Cards*.',
                     },
-                    _2[CONST_1.default.NETSUITE_EXPORT_DESTINATION.JOURNAL_ENTRY] = {
+                    [CONST_1.default.NETSUITE_EXPORT_DESTINATION.JOURNAL_ENTRY]: {
                         label: '仕訳帳エントリ',
                         reimbursableDescription: 'Out-of-pocket expenses will export as journal entries to the NetSuite account specified below.\n' +
                             '\n' +
@@ -4381,7 +3652,7 @@ var translations = {
                             '\n' +
                             'If you’d like to set a specific vendor for each card, go to *Settings > Domains > Company Cards*.',
                     },
-                    _2),
+                },
             },
             advancedConfig: {
                 autoSyncDescription: 'Expensifyは毎日自動的にNetSuiteと同期します。',
@@ -4404,42 +3675,42 @@ var translations = {
                 exportReportsTo: {
                     label: '経費報告承認レベル',
                     description: 'Expensifyで経費報告書が承認され、NetSuiteにエクスポートされた後、NetSuiteで投稿する前に追加の承認レベルを設定できます。',
-                    values: (_3 = {},
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_NONE] = 'NetSuiteのデフォルト設定',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_SUPERVISOR_APPROVED] = 'スーパーバイザー承認のみ',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_ACCOUNTING_APPROVED] = '会計のみ承認済み',
-                        _3[CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_BOTH] = '監督者と会計が承認しました',
-                        _3),
+                    values: {
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_NONE]: 'NetSuiteのデフォルト設定',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_SUPERVISOR_APPROVED]: 'スーパーバイザー承認のみ',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_ACCOUNTING_APPROVED]: '会計のみ承認済み',
+                        [CONST_1.default.NETSUITE_REPORTS_APPROVAL_LEVEL.REPORTS_APPROVED_BOTH]: '監督者と会計が承認しました',
+                    },
                 },
                 accountingMethods: {
                     label: 'エクスポートのタイミング',
                     description: '経費をエクスポートするタイミングを選択:',
-                    values: (_4 = {},
-                        _4[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '発生主義',
-                        _4[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '現金',
-                        _4),
-                    alternateText: (_5 = {},
-                        _5[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL] = '自己負担の経費は最終承認時にエクスポートされます。',
-                        _5[expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH] = '自己負担の経費は支払われたときにエクスポートされます。',
-                        _5),
+                    values: {
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '発生主義',
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '現金',
+                    },
+                    alternateText: {
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.ACCRUAL]: '自己負担の経費は最終承認時にエクスポートされます。',
+                        [expensify_common_1.CONST.INTEGRATIONS.ACCOUNTING_METHOD.CASH]: '自己負担の経費は支払われたときにエクスポートされます。',
+                    },
                 },
                 exportVendorBillsTo: {
                     label: 'ベンダー請求書承認レベル',
                     description: 'ベンダーの請求書がExpensifyで承認され、NetSuiteにエクスポートされると、NetSuiteで投稿する前に追加の承認レベルを設定できます。',
-                    values: (_6 = {},
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED_NONE] = 'NetSuiteのデフォルト設定',
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVAL_PENDING] = '承認待ち',
-                        _6[CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED] = '投稿が承認されました',
-                        _6),
+                    values: {
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED_NONE]: 'NetSuiteのデフォルト設定',
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVAL_PENDING]: '承認待ち',
+                        [CONST_1.default.NETSUITE_VENDOR_BILLS_APPROVAL_LEVEL.VENDOR_BILLS_APPROVED]: '投稿が承認されました',
+                    },
                 },
                 exportJournalsTo: {
                     label: '仕訳承認レベル',
                     description: 'Expensifyで仕訳が承認され、NetSuiteにエクスポートされた後、NetSuiteで仕訳を記帳する前に追加の承認レベルを設定できます。',
-                    values: (_7 = {},
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED_NONE] = 'NetSuiteのデフォルト設定',
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVAL_PENDING] = '承認待ち',
-                        _7[CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED] = '投稿が承認されました',
-                        _7),
+                    values: {
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED_NONE]: 'NetSuiteのデフォルト設定',
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVAL_PENDING]: '承認待ち',
+                        [CONST_1.default.NETSUITE_JOURNALS_APPROVAL_LEVEL.JOURNALS_APPROVED]: '投稿が承認されました',
+                    },
                 },
                 error: {
                     customFormID: '有効な数値のカスタムフォームIDを入力してください',
@@ -4508,22 +3779,13 @@ var translations = {
                     importJobs: 'プロジェクトをインポート',
                     customers: '顧客',
                     jobs: 'プロジェクト',
-                    label: function (_a) {
-                        var importFields = _a.importFields, importType = _a.importType;
-                        return "".concat(importFields.join('と'), ", ").concat(importType);
-                    },
+                    label: ({ importFields, importType }) => `${importFields.join('と')}, ${importType}`,
                 },
                 importTaxDescription: 'NetSuiteから税グループをインポートします。',
                 importCustomFields: {
                     chooseOptionBelow: '以下のオプションから選択してください:',
-                    label: function (_a) {
-                        var importedTypes = _a.importedTypes;
-                        return "Imported as ".concat(importedTypes.join('と'));
-                    },
-                    requiredFieldError: function (_a) {
-                        var fieldName = _a.fieldName;
-                        return "".concat(fieldName, "\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044");
-                    },
+                    label: ({ importedTypes }) => `Imported as ${importedTypes.join('と')}`,
+                    requiredFieldError: ({ fieldName }) => `${fieldName}を入力してください`,
                     customSegments: {
                         title: 'カスタムセグメント/レコード',
                         addText: 'カスタムセグメント/レコードを追加',
@@ -4551,23 +3813,20 @@ var translations = {
                             segmentRecordType: 'カスタムセグメントまたはカスタムレコードを追加しますか？',
                             customSegmentNameTitle: 'カスタムセグメント名は何ですか？',
                             customRecordNameTitle: 'カスタムレコード名は何ですか？',
-                            customSegmentNameFooter: "NetSuite\u306E*\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA > \u30EA\u30F3\u30AF\u3001\u30EC\u30B3\u30FC\u30C9\u3001\u30D5\u30A3\u30FC\u30EB\u30C9 > \u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8*\u30DA\u30FC\u30B8\u3067\u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u540D\u3092\u898B\u3064\u3051\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002\n\n_\u8A73\u7D30\u306A\u624B\u9806\u306B\u3064\u3044\u3066\u306F\u3001[\u30D8\u30EB\u30D7\u30B5\u30A4\u30C8\u3092\u3054\u89A7\u304F\u3060\u3055\u3044](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")\u3002_"),
-                            customRecordNameFooter: "NetSuite\u3067\u30AB\u30B9\u30BF\u30E0\u30EC\u30B3\u30FC\u30C9\u540D\u3092\u898B\u3064\u3051\u308B\u306B\u306F\u3001\u30B0\u30ED\u30FC\u30D0\u30EB\u691C\u7D22\u3067\u300CTransaction Column Field\u300D\u3092\u5165\u529B\u3057\u307E\u3059\u3002\n\n_\u8A73\u7D30\u306A\u624B\u9806\u306B\u3064\u3044\u3066\u306F\u3001[\u30D8\u30EB\u30D7\u30B5\u30A4\u30C8\u3092\u3054\u89A7\u304F\u3060\u3055\u3044](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")\u3002_"),
+                            customSegmentNameFooter: `NetSuiteの*カスタマイズ > リンク、レコード、フィールド > カスタムセグメント*ページでカスタムセグメント名を見つけることができます。\n\n_詳細な手順については、[ヘルプサイトをご覧ください](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})。_`,
+                            customRecordNameFooter: `NetSuiteでカスタムレコード名を見つけるには、グローバル検索で「Transaction Column Field」を入力します。\n\n_詳細な手順については、[ヘルプサイトをご覧ください](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})。_`,
                             customSegmentInternalIDTitle: '内部IDは何ですか？',
-                            customSegmentInternalIDFooter: "\u307E\u305A\u3001NetSuite\u3067\u5185\u90E8ID\u3092\u6709\u52B9\u306B\u3059\u308B\u306B\u306F\u3001*Home > Set Preferences > Show Internal ID*\u306B\u79FB\u52D5\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n\nNetSuite\u3067\u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u306E\u5185\u90E8ID\u3092\u898B\u3064\u3051\u308B\u306B\u306F\u3001\u4EE5\u4E0B\u306E\u624B\u9806\u306B\u5F93\u3063\u3066\u304F\u3060\u3055\u3044\uFF1A\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*\u306B\u79FB\u52D5\u3057\u307E\u3059\u3002\n2. \u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n3. *Custom Record Type*\u306E\u96A3\u306B\u3042\u308B\u30CF\u30A4\u30D1\u30FC\u30EA\u30F3\u30AF\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n4. \u4E0B\u90E8\u306E\u30C6\u30FC\u30D6\u30EB\u3067\u5185\u90E8ID\u3092\u898B\u3064\u3051\u307E\u3059\u3002\n\n_\u8A73\u7D30\u306A\u624B\u9806\u306B\u3064\u3044\u3066\u306F\u3001[\u3053\u3061\u3089\u306E\u30D8\u30EB\u30D7\u30B5\u30A4\u30C8](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002_"),
-                            customRecordInternalIDFooter: "NetSuite\u3067\u30AB\u30B9\u30BF\u30E0\u30EC\u30B3\u30FC\u30C9\u306E\u5185\u90E8ID\u3092\u898B\u3064\u3051\u308B\u306B\u306F\u3001\u6B21\u306E\u624B\u9806\u306B\u5F93\u3044\u307E\u3059\uFF1A\n\n1. \u30B0\u30ED\u30FC\u30D0\u30EB\u691C\u7D22\u306B\u300CTransaction Line Fields\u300D\u3068\u5165\u529B\u3057\u307E\u3059\u3002\n2. \u30AB\u30B9\u30BF\u30E0\u30EC\u30B3\u30FC\u30C9\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n3. \u5DE6\u5074\u306B\u5185\u90E8ID\u3092\u898B\u3064\u3051\u307E\u3059\u3002\n\n_\u8A73\u7D30\u306A\u624B\u9806\u306B\u3064\u3044\u3066\u306F\u3001[\u30D8\u30EB\u30D7\u30B5\u30A4\u30C8](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002_"),
+                            customSegmentInternalIDFooter: `まず、NetSuiteで内部IDを有効にするには、*Home > Set Preferences > Show Internal ID*に移動してください。\n\nNetSuiteでカスタムセグメントの内部IDを見つけるには、以下の手順に従ってください：\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*に移動します。\n2. カスタムセグメントをクリックします。\n3. *Custom Record Type*の隣にあるハイパーリンクをクリックします。\n4. 下部のテーブルで内部IDを見つけます。\n\n_詳細な手順については、[こちらのヘルプサイト](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})をご覧ください。_`,
+                            customRecordInternalIDFooter: `NetSuiteでカスタムレコードの内部IDを見つけるには、次の手順に従います：\n\n1. グローバル検索に「Transaction Line Fields」と入力します。\n2. カスタムレコードをクリックします。\n3. 左側に内部IDを見つけます。\n\n_詳細な手順については、[ヘルプサイト](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})をご覧ください。_`,
                             customSegmentScriptIDTitle: 'スクリプトIDは何ですか？',
-                            customSegmentScriptIDFooter: "NetSuite\u3067\u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u30B9\u30AF\u30EA\u30D7\u30C8ID\u3092\u898B\u3064\u3051\u308B\u306B\u306F\u3001\u6B21\u306E\u624B\u9806\u306B\u5F93\u3063\u3066\u304F\u3060\u3055\u3044\uFF1A\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*\u3092\u9078\u629E\u3057\u307E\u3059\u3002\n2. \u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n3. \u753B\u9762\u4E0B\u90E8\u8FD1\u304F\u306E*Application and Sourcing*\u30BF\u30D6\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3001\u6B21\u306E\u3044\u305A\u308C\u304B\u3092\u9078\u629E\u3057\u307E\u3059\uFF1A\n    a. \u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u3092Expensify\u3067*\u30BF\u30B0*\uFF08\u30E9\u30A4\u30F3\u30A2\u30A4\u30C6\u30E0\u30EC\u30D9\u30EB\uFF09\u3068\u3057\u3066\u8868\u793A\u3057\u305F\u3044\u5834\u5408\u306F\u3001*Transaction Columns*\u30B5\u30D6\u30BF\u30D6\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3001*Field ID*\u3092\u4F7F\u7528\u3057\u307E\u3059\u3002\n    b. \u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u3092Expensify\u3067*\u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9*\uFF08\u30EC\u30DD\u30FC\u30C8\u30EC\u30D9\u30EB\uFF09\u3068\u3057\u3066\u8868\u793A\u3057\u305F\u3044\u5834\u5408\u306F\u3001*Transactions*\u30B5\u30D6\u30BF\u30D6\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3001*Field ID*\u3092\u4F7F\u7528\u3057\u307E\u3059\u3002\n\n_\u8A73\u7D30\u306A\u624B\u9806\u306B\u3064\u3044\u3066\u306F\u3001[\u3053\u3061\u3089\u306E\u30D8\u30EB\u30D7\u30B5\u30A4\u30C8](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002_"),
+                            customSegmentScriptIDFooter: `NetSuiteでカスタムセグメントスクリプトIDを見つけるには、次の手順に従ってください：\n\n1. *Customization > Lists, Records, & Fields > Custom Segments*を選択します。\n2. カスタムセグメントをクリックします。\n3. 画面下部近くの*Application and Sourcing*タブをクリックし、次のいずれかを選択します：\n    a. カスタムセグメントをExpensifyで*タグ*（ラインアイテムレベル）として表示したい場合は、*Transaction Columns*サブタブをクリックし、*Field ID*を使用します。\n    b. カスタムセグメントをExpensifyで*レポートフィールド*（レポートレベル）として表示したい場合は、*Transactions*サブタブをクリックし、*Field ID*を使用します。\n\n_詳細な手順については、[こちらのヘルプサイト](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})をご覧ください。_`,
                             customRecordScriptIDTitle: 'トランザクション列IDは何ですか？',
-                            customRecordScriptIDFooter: "NetSuite\u3067\u30AB\u30B9\u30BF\u30E0\u30EC\u30B3\u30FC\u30C9\u30B9\u30AF\u30EA\u30D7\u30C8ID\u3092\u898B\u3064\u3051\u308B\u306B\u306F\u3001\u6B21\u306E\u624B\u9806\u306B\u5F93\u3063\u3066\u304F\u3060\u3055\u3044\uFF1A\n\n1. \u30B0\u30ED\u30FC\u30D0\u30EB\u691C\u7D22\u3067\u300CTransaction Line Fields\u300D\u3068\u5165\u529B\u3057\u307E\u3059\u3002\n2. \u30AB\u30B9\u30BF\u30E0\u30EC\u30B3\u30FC\u30C9\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n3. \u5DE6\u5074\u306B\u30B9\u30AF\u30EA\u30D7\u30C8ID\u3092\u898B\u3064\u3051\u307E\u3059\u3002\n\n_\u8A73\u7D30\u306A\u624B\u9806\u306B\u3064\u3044\u3066\u306F\u3001[\u30D8\u30EB\u30D7\u30B5\u30A4\u30C8](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS, ")\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002_"),
+                            customRecordScriptIDFooter: `NetSuiteでカスタムレコードスクリプトIDを見つけるには、次の手順に従ってください：\n\n1. グローバル検索で「Transaction Line Fields」と入力します。\n2. カスタムレコードをクリックします。\n3. 左側にスクリプトIDを見つけます。\n\n_詳細な手順については、[ヘルプサイト](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_SEGMENTS})をご覧ください。_`,
                             customSegmentMappingTitle: 'このカスタムセグメントはExpensifyでどのように表示されるべきですか？',
                             customRecordMappingTitle: 'このカスタムレコードはExpensifyでどのように表示されるべきですか？',
                         },
                         errors: {
-                            uniqueFieldError: function (_a) {
-                                var fieldName = _a.fieldName;
-                                return "\u3053\u306E".concat(fieldName === null || fieldName === void 0 ? void 0 : fieldName.toLowerCase(), "\u3092\u6301\u3064\u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8/\u30EC\u30B3\u30FC\u30C9\u306F\u3059\u3067\u306B\u5B58\u5728\u3057\u307E\u3059");
-                            },
+                            uniqueFieldError: ({ fieldName }) => `この${fieldName?.toLowerCase()}を持つカスタムセグメント/レコードはすでに存在します`,
                         },
                     },
                     customLists: {
@@ -4589,40 +3848,31 @@ var translations = {
                         addForm: {
                             listNameTitle: 'カスタムリストを選択',
                             transactionFieldIDTitle: '取引フィールドIDは何ですか？',
-                            transactionFieldIDFooter: "NetSuite\u3067\u30C8\u30E9\u30F3\u30B6\u30AF\u30B7\u30E7\u30F3\u30D5\u30A3\u30FC\u30EB\u30C9ID\u3092\u898B\u3064\u3051\u308B\u306B\u306F\u3001\u6B21\u306E\u624B\u9806\u306B\u5F93\u3063\u3066\u304F\u3060\u3055\u3044\uFF1A\n\n1. \u30B0\u30ED\u30FC\u30D0\u30EB\u691C\u7D22\u3067\u300CTransaction Line Fields\u300D\u3068\u5165\u529B\u3057\u307E\u3059\u3002\n2. \u30AB\u30B9\u30BF\u30E0\u30EA\u30B9\u30C8\u306B\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n3. \u5DE6\u5074\u306B\u30C8\u30E9\u30F3\u30B6\u30AF\u30B7\u30E7\u30F3\u30D5\u30A3\u30FC\u30EB\u30C9ID\u3092\u898B\u3064\u3051\u307E\u3059\u3002\n\n_\u8A73\u7D30\u306A\u624B\u9806\u306B\u3064\u3044\u3066\u306F\u3001[\u30D8\u30EB\u30D7\u30B5\u30A4\u30C8](".concat(CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS, ")\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002_"),
+                            transactionFieldIDFooter: `NetSuiteでトランザクションフィールドIDを見つけるには、次の手順に従ってください：\n\n1. グローバル検索で「Transaction Line Fields」と入力します。\n2. カスタムリストにクリックします。\n3. 左側にトランザクションフィールドIDを見つけます。\n\n_詳細な手順については、[ヘルプサイト](${CONST_1.default.NETSUITE_IMPORT.HELP_LINKS.CUSTOM_LISTS})をご覧ください。_`,
                             mappingTitle: 'このカスタムリストはExpensifyでどのように表示されるべきですか？',
                         },
                         errors: {
-                            uniqueTransactionFieldIDError: "\u3053\u306E\u53D6\u5F15\u30D5\u30A3\u30FC\u30EB\u30C9ID\u3092\u6301\u3064\u30AB\u30B9\u30BF\u30E0\u30EA\u30B9\u30C8\u306F\u65E2\u306B\u5B58\u5728\u3057\u307E\u3059",
+                            uniqueTransactionFieldIDError: `この取引フィールドIDを持つカスタムリストは既に存在します`,
                         },
                     },
                 },
-                importTypes: (_8 = {},
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT] = {
+                importTypes: {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT]: {
                         label: 'NetSuiteの従業員デフォルト',
                         description: 'Expensifyにインポートされず、エクスポート時に適用されます。',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "NetSuite\u3067".concat(importField, "\u3092\u4F7F\u7528\u3059\u308B\u5834\u5408\u3001Expense Report\u307E\u305F\u306FJournal Entry\u3078\u306E\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u6642\u306B\u5F93\u696D\u54E1\u8A18\u9332\u306B\u8A2D\u5B9A\u3055\u308C\u305F\u30C7\u30D5\u30A9\u30EB\u30C8\u3092\u9069\u7528\u3057\u307E\u3059\u3002");
-                        },
+                        footerContent: ({ importField }) => `NetSuiteで${importField}を使用する場合、Expense ReportまたはJournal Entryへのエクスポート時に従業員記録に設定されたデフォルトを適用します。`,
                     },
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG] = {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG]: {
                         label: 'タグ',
                         description: 'ラインアイテムレベル',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "".concat((0, startCase_1.default)(importField), " \u306F\u3001\u5F93\u696D\u54E1\u306E\u30EC\u30DD\u30FC\u30C8\u306E\u5404\u7D4C\u8CBB\u306B\u5BFE\u3057\u3066\u9078\u629E\u53EF\u80FD\u306B\u306A\u308A\u307E\u3059\u3002");
-                        },
+                        footerContent: ({ importField }) => `${(0, startCase_1.default)(importField)} は、従業員のレポートの各経費に対して選択可能になります。`,
                     },
-                    _8[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD] = {
+                    [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD]: {
                         label: 'レポートフィールド',
                         description: 'レポートレベル',
-                        footerContent: function (_a) {
-                            var importField = _a.importField;
-                            return "".concat((0, startCase_1.default)(importField), " \u306E\u9078\u629E\u306F\u3001\u5F93\u696D\u54E1\u306E\u30EC\u30DD\u30FC\u30C8\u4E0A\u306E\u3059\u3079\u3066\u306E\u7D4C\u8CBB\u306B\u9069\u7528\u3055\u308C\u307E\u3059\u3002");
-                        },
+                        footerContent: ({ importField }) => `${(0, startCase_1.default)(importField)} の選択は、従業員のレポート上のすべての経費に適用されます。`,
                     },
-                    _8),
+                },
             },
         },
         intacct: {
@@ -4652,12 +3902,11 @@ var translations = {
             addAUserDefinedDimension: 'ユーザー定義のディメンションを追加',
             detailedInstructionsLink: '詳細な指示を表示',
             detailedInstructionsRestOfSentence: 'ユーザー定義のディメンションを追加する際に。',
-            userDimensionsAdded: function () { return ({
+            userDimensionsAdded: () => ({
                 one: '1 UDDが追加されました',
-                other: function (count) { return "".concat(count, " UDDs\u304C\u8FFD\u52A0\u3055\u308C\u307E\u3057\u305F"); },
-            }); },
-            mappingTitle: function (_a) {
-                var mappingName = _a.mappingName;
+                other: (count) => `${count} UDDsが追加されました`,
+            }),
+            mappingTitle: ({ mappingName }) => {
                 switch (mappingName) {
                     case CONST_1.default.SAGE_INTACCT_CONFIG.MAPPINGS.DEPARTMENTS:
                         return '部門';
@@ -4690,7 +3939,7 @@ var translations = {
                     vcf: 'Visa Commercial Cards',
                     stripe: 'Stripeカード',
                 },
-                yourCardProvider: "\u3042\u306A\u305F\u306E\u30AB\u30FC\u30C9\u30D7\u30ED\u30D0\u30A4\u30C0\u30FC\u306F\u8AB0\u3067\u3059\u304B\uFF1F",
+                yourCardProvider: `あなたのカードプロバイダーは誰ですか？`,
                 whoIsYourBankAccount: 'あなたの銀行はどこですか？',
                 whereIsYourBankLocated: 'あなたの銀行はどこにありますか？',
                 howDoYouWantToConnect: 'どのように銀行に接続したいですか？',
@@ -4699,20 +3948,17 @@ var translations = {
                     linkText: 'オプション。',
                 },
                 commercialFeedDetails: '銀行との設定が必要です。これは通常、大企業によって使用され、資格がある場合には最良のオプションであることが多いです。',
-                commercialFeedPlaidDetails: "\u9280\u884C\u3068\u306E\u8A2D\u5B9A\u304C\u5FC5\u8981\u3067\u3059\u304C\u3001\u79C1\u305F\u3061\u304C\u6848\u5185\u3057\u307E\u3059\u3002\u3053\u308C\u306F\u901A\u5E38\u3001\u5927\u4F01\u696D\u306B\u9650\u5B9A\u3055\u308C\u3066\u3044\u307E\u3059\u3002",
+                commercialFeedPlaidDetails: `銀行との設定が必要ですが、私たちが案内します。これは通常、大企業に限定されています。`,
                 directFeedDetails: '最も簡単な方法です。マスター資格情報を使用してすぐに接続します。この方法が最も一般的です。',
                 enableFeed: {
-                    title: function (_a) {
-                        var provider = _a.provider;
-                        return "".concat(provider, "\u30D5\u30A3\u30FC\u30C9\u3092\u6709\u52B9\u306B\u3059\u308B");
-                    },
+                    title: ({ provider }) => `${provider}フィードを有効にする`,
                     heading: '私たちはあなたのカード発行会社と直接統合しており、取引データをExpensifyに迅速かつ正確にインポートできます。\n\n始めるには、次の手順に従ってください:',
                     visa: '私たちはVisaとグローバルな統合をしていますが、適格性は銀行やカードプログラムによって異なります。\n\n始めるには、次のことを行ってください:',
                     mastercard: '私たちはMastercardとのグローバルな統合を持っていますが、適格性は銀行やカードプログラムによって異なります。\n\n始めるには、次の手順に従ってください。',
-                    vcf: "1. Visa Commercial Cards\u306E\u8A2D\u5B9A\u65B9\u6CD5\u306B\u3064\u3044\u3066\u306E\u8A73\u7D30\u306A\u624B\u9806\u306F\u3001[\u3053\u3061\u3089\u306E\u30D8\u30EB\u30D7\u8A18\u4E8B](".concat(CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP, ")\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002\n\n2. \u3042\u306A\u305F\u306E\u30D7\u30ED\u30B0\u30E9\u30E0\u306B\u5546\u696D\u30D5\u30A3\u30FC\u30C9\u3092\u30B5\u30DD\u30FC\u30C8\u3057\u3066\u3044\u308B\u304B\u3092\u78BA\u8A8D\u3059\u308B\u305F\u3081\u306B\u3001[\u9280\u884C\u306B\u9023\u7D61](").concat(CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP, ")\u3057\u3001\u30D5\u30A3\u30FC\u30C9\u3092\u6709\u52B9\u306B\u3059\u308B\u3088\u3046\u4F9D\u983C\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n\n3. *\u30D5\u30A3\u30FC\u30C9\u304C\u6709\u52B9\u306B\u306A\u308A\u3001\u305D\u306E\u8A73\u7D30\u3092\u53D6\u5F97\u3057\u305F\u3089\u3001\u6B21\u306E\u753B\u9762\u306B\u9032\u3093\u3067\u304F\u3060\u3055\u3044\u3002*"),
-                    gl1025: "1. American Express\u304C\u3042\u306A\u305F\u306E\u30D7\u30ED\u30B0\u30E9\u30E0\u306B\u5546\u696D\u30D5\u30A3\u30FC\u30C9\u3092\u6709\u52B9\u306B\u3067\u304D\u308B\u304B\u3069\u3046\u304B\u3092\u78BA\u8A8D\u3059\u308B\u306B\u306F\u3001[\u3053\u306E\u30D8\u30EB\u30D7\u8A18\u4E8B](".concat(CONST_1.default.COMPANY_CARDS_AMEX_COMMERCIAL_CARD_HELP, ")\u3092\u8A2A\u554F\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n\n2. \u30D5\u30A3\u30FC\u30C9\u304C\u6709\u52B9\u306B\u306A\u308B\u3068\u3001Amex\u306F\u3042\u306A\u305F\u306B\u30D7\u30ED\u30C0\u30AF\u30B7\u30E7\u30F3\u30EC\u30BF\u30FC\u3092\u9001\u308A\u307E\u3059\u3002\n\n3. *\u30D5\u30A3\u30FC\u30C9\u60C5\u5831\u3092\u53D6\u5F97\u3057\u305F\u3089\u3001\u6B21\u306E\u753B\u9762\u306B\u9032\u3093\u3067\u304F\u3060\u3055\u3044\u3002*"),
-                    cdf: "1. Mastercard Commercial Cards\u306E\u8A2D\u5B9A\u65B9\u6CD5\u306B\u3064\u3044\u3066\u306E\u8A73\u7D30\u306A\u624B\u9806\u306F\u3001[\u3053\u3061\u3089\u306E\u30D8\u30EB\u30D7\u8A18\u4E8B](".concat(CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS, ")\u3092\u3054\u89A7\u304F\u3060\u3055\u3044\u3002\n\n2. \u3042\u306A\u305F\u306E\u30D7\u30ED\u30B0\u30E9\u30E0\u306B\u5546\u696D\u30D5\u30A3\u30FC\u30C9\u3092\u30B5\u30DD\u30FC\u30C8\u3057\u3066\u3044\u308B\u304B\u3092\u78BA\u8A8D\u3059\u308B\u305F\u3081\u306B\u3001[\u9280\u884C\u306B\u9023\u7D61](").concat(CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS, ")\u3057\u3001\u30D5\u30A3\u30FC\u30C9\u3092\u6709\u52B9\u306B\u3059\u308B\u3088\u3046\u4F9D\u983C\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n\n3. *\u30D5\u30A3\u30FC\u30C9\u304C\u6709\u52B9\u306B\u306A\u308A\u3001\u305D\u306E\u8A73\u7D30\u3092\u53D6\u5F97\u3057\u305F\u3089\u3001\u6B21\u306E\u753B\u9762\u306B\u9032\u3093\u3067\u304F\u3060\u3055\u3044\u3002*"),
-                    stripe: "1. Stripe\u306E\u30C0\u30C3\u30B7\u30E5\u30DC\u30FC\u30C9\u306B\u30A2\u30AF\u30BB\u30B9\u3057\u3001[\u8A2D\u5B9A](".concat(CONST_1.default.COMPANY_CARDS_STRIPE_HELP, ")\u306B\u79FB\u52D5\u3057\u307E\u3059\u3002\n\n2. \u88FD\u54C1\u7D71\u5408\u306E\u4E0B\u3067\u3001Expensify\u306E\u6A2A\u306B\u3042\u308B\u6709\u52B9\u5316\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n\n3. \u30D5\u30A3\u30FC\u30C9\u304C\u6709\u52B9\u306B\u306A\u3063\u305F\u3089\u3001\u4E0B\u306E\u9001\u4FE1\u3092\u30AF\u30EA\u30C3\u30AF\u3059\u308B\u3068\u3001\u8FFD\u52A0\u4F5C\u696D\u3092\u958B\u59CB\u3057\u307E\u3059\u3002"),
+                    vcf: `1. Visa Commercial Cardsの設定方法についての詳細な手順は、[こちらのヘルプ記事](${CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP})をご覧ください。\n\n2. あなたのプログラムに商業フィードをサポートしているかを確認するために、[銀行に連絡](${CONST_1.default.COMPANY_CARDS_VISA_COMMERCIAL_CARD_HELP})し、フィードを有効にするよう依頼してください。\n\n3. *フィードが有効になり、その詳細を取得したら、次の画面に進んでください。*`,
+                    gl1025: `1. American Expressがあなたのプログラムに商業フィードを有効にできるかどうかを確認するには、[このヘルプ記事](${CONST_1.default.COMPANY_CARDS_AMEX_COMMERCIAL_CARD_HELP})を訪問してください。\n\n2. フィードが有効になると、Amexはあなたにプロダクションレターを送ります。\n\n3. *フィード情報を取得したら、次の画面に進んでください。*`,
+                    cdf: `1. Mastercard Commercial Cardsの設定方法についての詳細な手順は、[こちらのヘルプ記事](${CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS})をご覧ください。\n\n2. あなたのプログラムに商業フィードをサポートしているかを確認するために、[銀行に連絡](${CONST_1.default.COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS})し、フィードを有効にするよう依頼してください。\n\n3. *フィードが有効になり、その詳細を取得したら、次の画面に進んでください。*`,
+                    stripe: `1. Stripeのダッシュボードにアクセスし、[設定](${CONST_1.default.COMPANY_CARDS_STRIPE_HELP})に移動します。\n\n2. 製品統合の下で、Expensifyの横にある有効化をクリックします。\n\n3. フィードが有効になったら、下の送信をクリックすると、追加作業を開始します。`,
                 },
                 whatBankIssuesCard: 'これらのカードを発行している銀行はどこですか？',
                 enterNameOfBank: '銀行名を入力してください',
@@ -4725,12 +3971,12 @@ var translations = {
                         helpLabel: 'これらのIDはどこで見つけることができますか？',
                     },
                     gl1025: {
-                        title: "Amex\u914D\u4FE1\u30D5\u30A1\u30A4\u30EB\u540D\u306F\u4F55\u3067\u3059\u304B\uFF1F",
+                        title: `Amex配信ファイル名は何ですか？`,
                         fileNameLabel: '配信ファイル名',
                         helpLabel: '配信ファイル名はどこで見つけますか？',
                     },
                     cdf: {
-                        title: "Mastercard\u306E\u914D\u5E03ID\u306F\u4F55\u3067\u3059\u304B\uFF1F",
+                        title: `Mastercardの配布IDは何ですか？`,
                         distributionLabel: '配信ID',
                         helpLabel: '配布IDはどこで見つけられますか？',
                     },
@@ -4746,26 +3992,20 @@ var translations = {
                     pleaseSelectFeedType: '続行する前にフィードタイプを選択してください',
                 },
             },
-            statementCloseDate: (_9 = {},
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_DAY_OF_MONTH] = '月の最終日',
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_BUSINESS_DAY_OF_MONTH] = '月の最終営業日',
-                _9[CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH] = 'カスタム月日',
-                _9),
+            statementCloseDate: {
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_DAY_OF_MONTH]: '月の最終日',
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.LAST_BUSINESS_DAY_OF_MONTH]: '月の最終営業日',
+                [CONST_1.default.COMPANY_CARDS.STATEMENT_CLOSE_DATE.CUSTOM_DAY_OF_MONTH]: 'カスタム月日',
+            },
             assignCard: 'カードを割り当てる',
             findCard: 'カードを探す',
             cardNumber: 'カード番号',
             commercialFeed: '商業フィード',
-            feedName: function (_a) {
-                var feedName = _a.feedName;
-                return "".concat(feedName, "\u30AB\u30FC\u30C9");
-            },
+            feedName: ({ feedName }) => `${feedName}カード`,
             directFeed: 'ダイレクトフィード',
             whoNeedsCardAssigned: '誰にカードを割り当てる必要がありますか？',
             chooseCard: 'カードを選んでください',
-            chooseCardFor: function (_a) {
-                var assignee = _a.assignee, feed = _a.feed;
-                return "".concat(feed, "\u30AB\u30FC\u30C9\u30D5\u30A3\u30FC\u30C9\u304B\u3089").concat(assignee, "\u306E\u305F\u3081\u306B\u30AB\u30FC\u30C9\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-            },
+            chooseCardFor: ({ assignee, feed }) => `${feed}カードフィードから${assignee}のためにカードを選択してください。`,
             noActiveCards: 'このフィードにはアクティブなカードがありません',
             somethingMightBeBroken: '<muted-text><centered-text>あるいは、何かが壊れているかもしれません。いずれにせよ、ご不明な点があれば、<concierge-link>Concierge までお問い合わせ</concierge-link>ください。</centered-text></muted-text>',
             chooseTransactionStartDate: '取引の開始日を選択してください',
@@ -4778,13 +4018,10 @@ var translations = {
             cardholder: 'カードホルダー',
             card: 'カード',
             cardName: 'カード名',
-            brokenConnectionErrorFirstPart: "\u30AB\u30FC\u30C9\u30D5\u30A3\u30FC\u30C9\u306E\u63A5\u7D9A\u304C\u5207\u308C\u3066\u3044\u307E\u3059\u3002\u3069\u3046\u304B",
+            brokenConnectionErrorFirstPart: `カードフィードの接続が切れています。どうか`,
             brokenConnectionErrorLink: '銀行にログインする',
             brokenConnectionErrorSecondPart: 'それで、再び接続を確立できます。',
-            assignedCard: function (_a) {
-                var assignee = _a.assignee, link = _a.link;
-                return "".concat(assignee, "\u306B").concat(link, "\u3092\u5272\u308A\u5F53\u3066\u307E\u3057\u305F\uFF01\u30A4\u30F3\u30DD\u30FC\u30C8\u3055\u308C\u305F\u53D6\u5F15\u306F\u3053\u306E\u30C1\u30E3\u30C3\u30C8\u306B\u8868\u793A\u3055\u308C\u307E\u3059\u3002");
-            },
+            assignedCard: ({ assignee, link }) => `${assignee}に${link}を割り当てました！インポートされた取引はこのチャットに表示されます。`,
             companyCard: '会社カード',
             chooseCardFeed: 'カードフィードを選択',
             ukRegulation: 'Expensify, Inc.は、Plaid Financial Ltd.の代理店であり、支払いサービス規則2017に基づいて金融行動監視機構によって規制されている認可支払い機関です（会社参照番号: 804718）。Plaidは、Expensify Limitedをその代理店として通じて、規制されたアカウント情報サービスを提供します。',
@@ -4804,10 +4041,7 @@ var translations = {
             limit: '制限',
             currentBalance: '現在の残高',
             currentBalanceDescription: '現在の残高は、前回の決済日以降に発生したすべてのExpensifyカード取引の合計です。',
-            balanceWillBeSettledOn: function (_a) {
-                var settlementDate = _a.settlementDate;
-                return "\u6B8B\u9AD8\u306F".concat(settlementDate, "\u306B\u6C7A\u6E08\u3055\u308C\u307E\u3059\u3002");
-            },
+            balanceWillBeSettledOn: ({ settlementDate }) => `残高は${settlementDate}に決済されます。`,
             settleBalance: '残高を清算する',
             cardLimit: 'カード限度額',
             remainingLimit: '残りの制限',
@@ -4823,10 +4057,7 @@ var translations = {
             addNewBankAccount: '新しい銀行口座を追加',
             settlementAccount: '決済口座',
             settlementAccountDescription: 'Expensifyカードの残高を支払うアカウントを選択してください。',
-            settlementAccountInfo: function (_a) {
-                var reconciliationAccountSettingsLink = _a.reconciliationAccountSettingsLink, accountNumber = _a.accountNumber;
-                return "\u7D99\u7D9A\u7684\u306A\u7167\u5408\u304C\u6B63\u3057\u304F\u6A5F\u80FD\u3059\u308B\u3088\u3046\u306B\u3001\u3053\u306E\u53E3\u5EA7\u304C<a href=\"".concat(reconciliationAccountSettingsLink, "\">\u7167\u5408\u53E3\u5EA7</a>\uFF08").concat(accountNumber, "\uFF09\u3068\u4E00\u81F4\u3057\u3066\u3044\u308B\u3053\u3068\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-            },
+            settlementAccountInfo: ({ reconciliationAccountSettingsLink, accountNumber }) => `継続的な照合が正しく機能するように、この口座が<a href="${reconciliationAccountSettingsLink}">照合口座</a>（${accountNumber}）と一致していることを確認してください。`,
             settlementFrequency: '決済頻度',
             settlementFrequencyDescription: 'Expensifyカードの残高をどのくらいの頻度で支払うか選択してください。',
             settlementFrequencyInfo: '月次決済に切り替えたい場合は、Plaidを通じて銀行口座を接続し、90日間のプラス残高履歴が必要です。',
@@ -4840,45 +4071,18 @@ var translations = {
             deactivate: 'カードを無効化する',
             changeCardLimit: 'カード限度額を変更',
             changeLimit: '制限を変更',
-            smartLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u306E\u9650\u5EA6\u984D\u3092".concat(limit, "\u306B\u5909\u66F4\u3059\u308B\u3068\u3001\u65B0\u3057\u3044\u53D6\u5F15\u306F\u30AB\u30FC\u30C9\u4E0A\u3067\u3055\u3089\u306B\u7D4C\u8CBB\u3092\u627F\u8A8D\u3059\u308B\u307E\u3067\u62D2\u5426\u3055\u308C\u307E\u3059\u3002");
-            },
-            monthlyLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u306E\u9650\u5EA6\u984D\u3092".concat(limit, "\u306B\u5909\u66F4\u3059\u308B\u3068\u3001\u65B0\u3057\u3044\u53D6\u5F15\u306F\u6765\u6708\u307E\u3067\u62D2\u5426\u3055\u308C\u307E\u3059\u3002");
-            },
-            fixedLimitWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u306E\u9650\u5EA6\u984D\u3092".concat(limit, "\u306B\u5909\u66F4\u3059\u308B\u3068\u3001\u65B0\u3057\u3044\u53D6\u5F15\u306F\u62D2\u5426\u3055\u308C\u307E\u3059\u3002");
-            },
+            smartLimitWarning: ({ limit }) => `このカードの限度額を${limit}に変更すると、新しい取引はカード上でさらに経費を承認するまで拒否されます。`,
+            monthlyLimitWarning: ({ limit }) => `このカードの限度額を${limit}に変更すると、新しい取引は来月まで拒否されます。`,
+            fixedLimitWarning: ({ limit }) => `このカードの限度額を${limit}に変更すると、新しい取引は拒否されます。`,
             changeCardLimitType: 'カード制限タイプを変更する',
             changeLimitType: '制限タイプを変更',
-            changeCardSmartLimitTypeWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u306E\u9650\u5EA6\u984D\u30BF\u30A4\u30D7\u3092\u30B9\u30DE\u30FC\u30C8\u30EA\u30DF\u30C3\u30C8\u306B\u5909\u66F4\u3059\u308B\u3068\u3001".concat(limit, " \u306E\u672A\u627F\u8A8D\u9650\u5EA6\u984D\u306B\u65E2\u306B\u9054\u3057\u3066\u3044\u308B\u305F\u3081\u3001\u65B0\u3057\u3044\u53D6\u5F15\u306F\u62D2\u5426\u3055\u308C\u307E\u3059\u3002");
-            },
-            changeCardMonthlyLimitTypeWarning: function (_a) {
-                var limit = _a.limit;
-                return "\u3053\u306E\u30AB\u30FC\u30C9\u306E\u9650\u5EA6\u984D\u30BF\u30A4\u30D7\u3092\u6708\u6B21\u306B\u5909\u66F4\u3059\u308B\u3068\u3001".concat(limit, " \u306E\u6708\u6B21\u9650\u5EA6\u984D\u306B\u3059\u3067\u306B\u9054\u3057\u3066\u3044\u308B\u305F\u3081\u3001\u65B0\u3057\u3044\u53D6\u5F15\u306F\u62D2\u5426\u3055\u308C\u307E\u3059\u3002");
-            },
+            changeCardSmartLimitTypeWarning: ({ limit }) => `このカードの限度額タイプをスマートリミットに変更すると、${limit} の未承認限度額に既に達しているため、新しい取引は拒否されます。`,
+            changeCardMonthlyLimitTypeWarning: ({ limit }) => `このカードの限度額タイプを月次に変更すると、${limit} の月次限度額にすでに達しているため、新しい取引は拒否されます。`,
             addShippingDetails: '配送詳細を追加',
-            issuedCard: function (_a) {
-                var assignee = _a.assignee;
-                return "".concat(assignee, "\u306BExpensify\u30AB\u30FC\u30C9\u3092\u767A\u884C\u3057\u307E\u3057\u305F\uFF01\u30AB\u30FC\u30C9\u306F2\uFF5E3\u55B6\u696D\u65E5\u3067\u5230\u7740\u3057\u307E\u3059\u3002");
-            },
-            issuedCardNoShippingDetails: function (_a) {
-                var assignee = _a.assignee;
-                return "".concat(assignee, "\u306BExpensify\u30AB\u30FC\u30C9\u3092\u767A\u884C\u3057\u307E\u3057\u305F\uFF01\u30AB\u30FC\u30C9\u306F\u767A\u9001\u60C5\u5831\u304C\u8FFD\u52A0\u3055\u308C\u6B21\u7B2C\u3001\u767A\u9001\u3055\u308C\u307E\u3059\u3002");
-            },
-            issuedCardVirtual: function (_a) {
-                var assignee = _a.assignee, link = _a.link;
-                return "".concat(assignee, "\u306B\u30D0\u30FC\u30C1\u30E3\u30EB").concat(link, "\u3092\u767A\u884C\u3057\u307E\u3057\u305F\uFF01\u30AB\u30FC\u30C9\u306F\u3059\u3050\u306B\u4F7F\u7528\u3067\u304D\u307E\u3059\u3002");
-            },
-            addedShippingDetails: function (_a) {
-                var assignee = _a.assignee;
-                return "".concat(assignee, "\u304C\u914D\u9001\u60C5\u5831\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002Expensify Card\u306F2\uFF5E3\u55B6\u696D\u65E5\u3067\u5230\u7740\u3057\u307E\u3059\u3002");
-            },
+            issuedCard: ({ assignee }) => `${assignee}にExpensifyカードを発行しました！カードは2～3営業日で到着します。`,
+            issuedCardNoShippingDetails: ({ assignee }) => `${assignee}にExpensifyカードを発行しました！カードは発送情報が追加され次第、発送されます。`,
+            issuedCardVirtual: ({ assignee, link }) => `${assignee}にバーチャル${link}を発行しました！カードはすぐに使用できます。`,
+            addedShippingDetails: ({ assignee }) => `${assignee}が配送情報を追加しました。Expensify Cardは2～3営業日で到着します。`,
             verifyingHeader: '確認中',
             bankAccountVerifiedHeader: '銀行口座が確認されました',
             verifyingBankAccount: '銀行口座を確認しています...',
@@ -4904,18 +4108,12 @@ var translations = {
             deleteFailureMessage: 'カテゴリの削除中にエラーが発生しました。もう一度お試しください。',
             categoryName: 'カテゴリ名',
             requiresCategory: 'メンバーはすべての経費を分類しなければなりません。',
-            needCategoryForExportToIntegration: function (_a) {
-                var connectionName = _a.connectionName;
-                return "\u3059\u3079\u3066\u306E\u7D4C\u8CBB\u306F\u3001".concat(connectionName, "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3059\u308B\u305F\u3081\u306B\u30AB\u30C6\u30B4\u30EA\u5206\u3051\u3055\u308C\u306A\u3051\u308C\u3070\u306A\u308A\u307E\u305B\u3093\u3002");
-            },
+            needCategoryForExportToIntegration: ({ connectionName }) => `すべての経費は、${connectionName}にエクスポートするためにカテゴリ分けされなければなりません。`,
             subtitle: 'お金がどこで使われているかをより良く把握しましょう。デフォルトのカテゴリーを使用するか、自分で追加してください。',
             emptyCategories: {
                 title: 'カテゴリが作成されていません',
                 subtitle: '支出を整理するためにカテゴリーを追加してください。',
-                subtitleWithAccounting: function (_a) {
-                    var accountingPageURL = _a.accountingPageURL;
-                    return "<muted-text><centered-text>\u3042\u306A\u305F\u306E\u30AB\u30C6\u30B4\u30EA\u30FC\u306F\u73FE\u5728\u3001\u4F1A\u8A08\u63A5\u7D9A\u304B\u3089\u30A4\u30F3\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u307E\u3059\u3002<a href=\"".concat(accountingPageURL, "\">\u4F1A\u8A08</a>\u306B\u79FB\u52D5\u3057\u3066\u5909\u66F4\u3057\u3066\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-                },
+                subtitleWithAccounting: ({ accountingPageURL }) => `<muted-text><centered-text>あなたのカテゴリーは現在、会計接続からインポートされています。<a href="${accountingPageURL}">会計</a>に移動して変更してください。</centered-text></muted-text>`,
             },
             updateFailureMessage: 'カテゴリの更新中にエラーが発生しました。もう一度お試しください。',
             createFailureMessage: 'カテゴリの作成中にエラーが発生しました。もう一度お試しください。',
@@ -4934,7 +4132,7 @@ var translations = {
             importCategories: 'カテゴリをインポート',
             cannotDeleteOrDisableAllCategories: {
                 title: 'すべてのカテゴリーを削除または無効にすることはできません。',
-                description: "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u30AB\u30C6\u30B4\u30EA\u30FC\u304C\u5FC5\u8981\u306A\u305F\u3081\u3001\u5C11\u306A\u304F\u3068\u30821\u3064\u306E\u30AB\u30C6\u30B4\u30EA\u30FC\u3092\u6709\u52B9\u306B\u3057\u3066\u304A\u304F\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002",
+                description: `ワークスペースでカテゴリーが必要なため、少なくとも1つのカテゴリーを有効にしておく必要があります。`,
             },
         },
         moreFeatures: {
@@ -5002,18 +4200,9 @@ var translations = {
                 cardNumber: 'カード番号',
                 cardholder: 'カードホルダー',
                 cardName: 'カード名',
-                integrationExport: function (_a) {
-                    var integration = _a.integration, type = _a.type;
-                    return integration && type ? "".concat(integration, " ").concat(type.toLowerCase(), " \u30A8\u30AF\u30B9\u30DD\u30FC\u30C8") : "".concat(integration, " \u30A8\u30AF\u30B9\u30DD\u30FC\u30C8");
-                },
-                integrationExportTitleXero: function (_a) {
-                    var integration = _a.integration;
-                    return "\u53D6\u5F15\u3092\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3059\u308B".concat(integration, "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
-                integrationExportTitle: function (_a) {
-                    var integration = _a.integration, exportPageLink = _a.exportPageLink;
-                    return "\u53D6\u5F15\u3092\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3059\u308B".concat(integration, "\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u5229\u7528\u53EF\u80FD\u306A\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u5909\u66F4\u3059\u308B\u306B\u306F\u3001\u5225\u306E<a href=\"").concat(exportPageLink, "\">\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u30AA\u30D7\u30B7\u30E7\u30F3</a>\u3092\u9078\u629E\u3057\u307E\u3059\u3002");
-                },
+                integrationExport: ({ integration, type }) => integration && type ? `${integration} ${type.toLowerCase()} エクスポート` : `${integration} エクスポート`,
+                integrationExportTitleXero: ({ integration }) => `取引をエクスポートする${integration}アカウントを選択してください。`,
+                integrationExportTitle: ({ integration, exportPageLink }) => `取引をエクスポートする${integration}アカウントを選択してください。利用可能なアカウントを変更するには、別の<a href="${exportPageLink}">エクスポートオプション</a>を選択します。`,
                 lastUpdated: '最終更新日',
                 transactionStartDate: '取引開始日',
                 updateCard: 'カードを更新する',
@@ -5028,10 +4217,7 @@ var translations = {
                 cardFeedRestrictDeletingTransaction: '取引の削除を制限する',
                 cardFeedAllowDeletingTransaction: '取引の削除を許可',
                 removeCardFeed: 'カードフィードを削除',
-                removeCardFeedTitle: function (_a) {
-                    var feedName = _a.feedName;
-                    return "".concat(feedName, " \u30D5\u30A3\u30FC\u30C9\u3092\u524A\u9664");
-                },
+                removeCardFeedTitle: ({ feedName }) => `${feedName} フィードを削除`,
                 removeCardFeedDescription: 'このカードフィードを削除してもよろしいですか？これにより、すべてのカードの割り当てが解除されます。',
                 error: {
                     feedNameRequired: 'カードフィード名は必須です',
@@ -5043,26 +4229,20 @@ var translations = {
                 setTransactionLiabilityDescription: '有効にすると、カード保有者はカード取引を削除できます。新しい取引はこのルールに従います。',
                 emptyAddedFeedTitle: '会社カードを割り当てる',
                 emptyAddedFeedDescription: '最初のカードをメンバーに割り当てて始めましょう。',
-                pendingFeedTitle: "\u30EA\u30AF\u30A8\u30B9\u30C8\u3092\u78BA\u8A8D\u3057\u3066\u3044\u307E\u3059...",
-                pendingFeedDescription: "\u73FE\u5728\u3001\u30D5\u30A3\u30FC\u30C9\u306E\u8A73\u7D30\u3092\u78BA\u8A8D\u3057\u3066\u3044\u307E\u3059\u3002\u305D\u308C\u304C\u5B8C\u4E86\u6B21\u7B2C\u3001\u7D4C\u7531\u3067\u3054\u9023\u7D61\u3044\u305F\u3057\u307E\u3059\u3002",
+                pendingFeedTitle: `リクエストを確認しています...`,
+                pendingFeedDescription: `現在、フィードの詳細を確認しています。それが完了次第、経由でご連絡いたします。`,
                 pendingBankTitle: 'ブラウザウィンドウを確認してください。',
-                pendingBankDescription: function (_a) {
-                    var bankName = _a.bankName;
-                    return "".concat(bankName, "\u306B\u63A5\u7D9A\u3059\u308B\u306B\u306F\u3001\u958B\u3044\u305F\u30D6\u30E9\u30A6\u30B6\u30A6\u30A3\u30F3\u30C9\u30A6\u3092\u4F7F\u7528\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u30A6\u30A3\u30F3\u30C9\u30A6\u304C\u958B\u304B\u306A\u3044\u5834\u5408\u306F\u3001");
-                },
+                pendingBankDescription: ({ bankName }) => `${bankName}に接続するには、開いたブラウザウィンドウを使用してください。ウィンドウが開かない場合は、`,
                 pendingBankLink: 'こちらをクリックしてください',
                 giveItNameInstruction: 'カードに他と区別できる名前を付けてください。',
                 updating: '更新中...',
                 noAccountsFound: 'アカウントが見つかりません',
                 defaultCard: 'デフォルトカード',
-                downgradeTitle: "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u30C0\u30A6\u30F3\u30B0\u30EC\u30FC\u30C9\u3067\u304D\u307E\u305B\u3093",
-                downgradeSubTitleFirstPart: "\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306F\u3001\u8907\u6570\u306E\u30AB\u30FC\u30C9\u30D5\u30A3\u30FC\u30C9\u304C\u63A5\u7D9A\u3055\u308C\u3066\u3044\u308B\u305F\u3081\uFF08Expensify\u30AB\u30FC\u30C9\u3092\u9664\u304F\uFF09\u3001\u30C0\u30A6\u30F3\u30B0\u30EC\u30FC\u30C9\u3067\u304D\u307E\u305B\u3093\u3002\u3069\u3046\u305E",
-                downgradeSubTitleMiddlePart: "\u30AB\u30FC\u30C9\u30D5\u30A3\u30FC\u30C9\u30921\u3064\u3060\u3051\u4FDD\u6301",
+                downgradeTitle: `ワークスペースをダウングレードできません`,
+                downgradeSubTitleFirstPart: `このワークスペースは、複数のカードフィードが接続されているため（Expensifyカードを除く）、ダウングレードできません。どうぞ`,
+                downgradeSubTitleMiddlePart: `カードフィードを1つだけ保持`,
                 downgradeSubTitleLastPart: '続行する。',
-                noAccountsFoundDescription: function (_a) {
-                    var connection = _a.connection;
-                    return "".concat(connection, "\u306B\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u8FFD\u52A0\u3057\u3001\u518D\u5EA6\u63A5\u7D9A\u3092\u540C\u671F\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                noAccountsFoundDescription: ({ connection }) => `${connection}にアカウントを追加し、再度接続を同期してください。`,
                 expensifyCardBannerTitle: 'Expensifyカードを取得する',
                 expensifyCardBannerSubtitle: 'すべての米国での購入でキャッシュバックを楽しみ、Expensifyの請求書が最大50%オフ、無制限のバーチャルカードなど、さらに多くの特典があります。',
                 expensifyCardBannerLearnMoreButton: '詳細を確認',
@@ -5126,9 +4306,9 @@ var translations = {
         },
         reports: {
             reportsCustomTitleExamples: '例:',
-            customReportNamesSubtitle: "<muted-text>\u5F53\u793E\u306E<a href=\"".concat(CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL, "\">\u8C4A\u5BCC\u306A\u6570\u5F0F</a>\u3092\u4F7F\u7528\u3057\u3066\u3001\u30EC\u30DD\u30FC\u30C8\u306E\u30BF\u30A4\u30C8\u30EB\u3092\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA\u3067\u304D\u307E\u3059\u3002</muted-text>"),
+            customReportNamesSubtitle: `<muted-text>当社の<a href="${CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL}">豊富な数式</a>を使用して、レポートのタイトルをカスタマイズできます。</muted-text>`,
             customNameTitle: 'デフォルトのレポートタイトル',
-            customNameDescription: "\u5F53\u793E\u306E<a href=\"".concat(CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL, "\">\u8C4A\u5BCC\u306A\u6570\u5F0F</a>\u3092\u4F7F\u7528\u3057\u3066\u3001\u7D4C\u8CBB\u5831\u544A\u66F8\u306E\u30AB\u30B9\u30BF\u30E0\u540D\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002"),
+            customNameDescription: `当社の<a href="${CONST_1.default.CUSTOM_REPORT_NAME_HELP_URL}">豊富な数式</a>を使用して、経費報告書のカスタム名を選択してください。`,
             customNameInputLabel: '名前',
             customNameEmailPhoneExample: 'メンバーのメールまたは電話番号: {report:submit:from}',
             customNameStartDateExample: 'レポート開始日: {report:startdate}',
@@ -5203,19 +4383,13 @@ var translations = {
             editTags: 'タグを編集',
             findTag: 'タグを見つける',
             subtitle: 'タグは、コストをより詳細に分類する方法を追加します。',
-            dependentMultiLevelTagsSubtitle: function (_a) {
-                var importSpreadsheetLink = _a.importSpreadsheetLink;
-                return "<muted-text><a href=\"".concat(CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL_DEPENDENT_TAGS, "\">\u4F9D\u5B58\u30BF\u30B0</a>\u3092\u4F7F\u7528\u3057\u3066\u3044\u307E\u3059\u3002<a href=\"").concat(importSpreadsheetLink, "\">\u30B9\u30D7\u30EC\u30C3\u30C9\u30B7\u30FC\u30C8\u3092\u518D\u30A4\u30F3\u30DD\u30FC\u30C8</a>\u3057\u3066\u30BF\u30B0\u3092\u66F4\u65B0\u3067\u304D\u307E\u3059\u3002</muted-text>");
-            },
+            dependentMultiLevelTagsSubtitle: ({ importSpreadsheetLink }) => `<muted-text><a href="${CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL_DEPENDENT_TAGS}">依存タグ</a>を使用しています。<a href="${importSpreadsheetLink}">スプレッドシートを再インポート</a>してタグを更新できます。</muted-text>`,
             emptyTags: {
                 title: 'タグが作成されていません',
                 //  We need to remove the subtitle and use the below one when we remove the canUseMultiLevelTags beta
                 subtitle: 'プロジェクト、場所、部門などを追跡するためのタグを追加します。',
-                subtitleHTML: "<muted-text><centered-text>\u30B9\u30D7\u30EC\u30C3\u30C9\u30B7\u30FC\u30C8\u3092\u30A4\u30F3\u30DD\u30FC\u30C8\u3057\u3066\u3001\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3001\u5834\u6240\u3001\u90E8\u7F72\u306A\u3069\u3092\u8FFD\u8DE1\u3059\u308B\u305F\u3081\u306E\u30BF\u30B0\u3092\u8FFD\u52A0\u3067\u304D\u307E\u3059\u3002\u30BF\u30B0\u30D5\u30A1\u30A4\u30EB\u306E\u30D5\u30A9\u30FC\u30DE\u30C3\u30C8\u306B\u3064\u3044\u3066\u306F<a href=\"".concat(CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL, "\">\u3053\u3061\u3089\u3092\u3054\u89A7</a>\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>"),
-                subtitleWithAccounting: function (_a) {
-                    var accountingPageURL = _a.accountingPageURL;
-                    return "<muted-text><centered-text>\u30BF\u30B0\u306F\u73FE\u5728\u3001\u4F1A\u8A08\u63A5\u7D9A\u304B\u3089\u30A4\u30F3\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u307E\u3059\u3002<a href=\"".concat(accountingPageURL, "\">\u30A2\u30AB\u30A6\u30F3\u30C6\u30A3\u30F3\u30B0</a>\u306B\u79FB\u52D5\u3057\u3066\u5909\u66F4\u3057\u3066\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>");
-                },
+                subtitleHTML: `<muted-text><centered-text>スプレッドシートをインポートして、プロジェクト、場所、部署などを追跡するためのタグを追加できます。タグファイルのフォーマットについては<a href="${CONST_1.default.IMPORT_TAGS_EXPENSIFY_URL}">こちらをご覧</a>ください。</centered-text></muted-text>`,
+                subtitleWithAccounting: ({ accountingPageURL }) => `<muted-text><centered-text>タグは現在、会計接続からインポートされています。<a href="${accountingPageURL}">アカウンティング</a>に移動して変更してください。</centered-text></muted-text>`,
             },
             deleteTag: 'タグを削除',
             deleteTags: 'タグを削除',
@@ -5234,7 +4408,7 @@ var translations = {
             importTags: 'タグをインポート',
             importTagsSupportingText: '経費を1種類のタグまたは複数のタグでコード化します。',
             configureMultiLevelTags: 'マルチレベルタグ付けのためのタグリストを設定します。',
-            importMultiLevelTagsSupportingText: "\u3053\u3061\u3089\u304C\u30BF\u30B0\u306E\u30D7\u30EC\u30D3\u30E5\u30FC\u3067\u3059\u3002\u3059\u3079\u3066\u554F\u984C\u306A\u3051\u308C\u3070\u3001\u4E0B\u306E\u30DC\u30BF\u30F3\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u30A4\u30F3\u30DD\u30FC\u30C8\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+            importMultiLevelTagsSupportingText: `こちらがタグのプレビューです。すべて問題なければ、下のボタンをクリックしてインポートしてください。`,
             importMultiLevelTags: {
                 firstRowTitle: '最初の行は各タグリストのタイトルです',
                 independentTags: 'これらは独立したタグです',
@@ -5253,22 +4427,19 @@ var translations = {
                 prompt5: '詳細を確認',
                 prompt6: 'タグレベルについて。',
             },
-            importedTagsMessage: function (_a) {
-                var columnCounts = _a.columnCounts;
-                return "\u30B9\u30D7\u30EC\u30C3\u30C9\u30B7\u30FC\u30C8\u3067*".concat(columnCounts, "\u5217*\u304C\u898B\u3064\u304B\u308A\u307E\u3057\u305F\u3002\u30BF\u30B0\u540D\u3092\u542B\u3080\u5217\u306E\u6A2A\u306B*\u540D\u524D*\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u307E\u305F\u3001\u30BF\u30B0\u306E\u30B9\u30C6\u30FC\u30BF\u30B9\u3092\u8A2D\u5B9A\u3059\u308B\u5217\u306E\u6A2A\u306B*\u6709\u52B9*\u3092\u9078\u629E\u3059\u308B\u3053\u3068\u3082\u3067\u304D\u307E\u3059\u3002");
-            },
+            importedTagsMessage: ({ columnCounts }) => `スプレッドシートで*${columnCounts}列*が見つかりました。タグ名を含む列の横に*名前*を選択してください。また、タグのステータスを設定する列の横に*有効*を選択することもできます。`,
             cannotDeleteOrDisableAllTags: {
                 title: 'すべてのタグを削除または無効にすることはできません',
-                description: "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u30BF\u30B0\u304C\u5FC5\u8981\u306A\u305F\u3081\u3001\u5C11\u306A\u304F\u3068\u30821\u3064\u306E\u30BF\u30B0\u3092\u6709\u52B9\u306B\u3057\u3066\u304A\u304F\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002",
+                description: `ワークスペースでタグが必要なため、少なくとも1つのタグを有効にしておく必要があります。`,
             },
             cannotMakeAllTagsOptional: {
                 title: 'すべてのタグをオプションにすることはできません',
-                description: "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8A2D\u5B9A\u3067\u30BF\u30B0\u304C\u5FC5\u8981\u306A\u305F\u3081\u3001\u5C11\u306A\u304F\u3068\u30821\u3064\u306E\u30BF\u30B0\u3092\u5FC5\u9808\u306B\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002",
+                description: `ワークスペースの設定でタグが必要なため、少なくとも1つのタグを必須にする必要があります。`,
             },
-            tagCount: function () { return ({
+            tagCount: () => ({
                 one: '1日',
-                other: function (count) { return "".concat(count, " \u30BF\u30B0"); },
-            }); },
+                other: (count) => `${count} タグ`,
+            }),
         },
         taxes: {
             subtitle: '税名、税率を追加し、デフォルトを設定します。',
@@ -5291,23 +4462,20 @@ var translations = {
                 updateTaxClaimableFailureMessage: '返金可能な部分は、距離料金額より少なくなければなりません。',
             },
             deleteTaxConfirmation: 'この税金を削除してもよろしいですか？',
-            deleteMultipleTaxConfirmation: function (_a) {
-                var taxAmount = _a.taxAmount;
-                return "".concat(taxAmount, "\u306E\u7A0E\u91D1\u3092\u524A\u9664\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F");
-            },
+            deleteMultipleTaxConfirmation: ({ taxAmount }) => `${taxAmount}の税金を削除してもよろしいですか？`,
             actions: {
                 delete: 'レートを削除',
                 deleteMultiple: 'レートを削除',
                 enable: 'レートを有効にする',
                 disable: 'レートを無効にする',
-                enableTaxRates: function () { return ({
+                enableTaxRates: () => ({
                     one: 'レートを有効にする',
                     other: 'レートを有効にする',
-                }); },
-                disableTaxRates: function () { return ({
+                }),
+                disableTaxRates: () => ({
                     one: 'レートを無効にする',
                     other: 'レートを無効にする',
-                }); },
+                }),
             },
             importedFromAccountingSoftware: '以下の税金はあなたのからインポートされています',
             taxCode: '税コード',
@@ -5322,10 +4490,7 @@ var translations = {
             reimbursementAccount: '払い戻し口座',
             delayedSubmission: '遅延送信',
             welcomeNote: '新しいワークスペースの使用を開始してください',
-            confirmTitle: function (_a) {
-                var newWorkspaceName = _a.newWorkspaceName, totalMembers = _a.totalMembers;
-                return "".concat(newWorkspaceName !== null && newWorkspaceName !== void 0 ? newWorkspaceName : '', " \u3092\u4F5C\u6210\u3057\u3001\u5143\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E ").concat(totalMembers !== null && totalMembers !== void 0 ? totalMembers : 0, " \u4EBA\u306E\u30E1\u30F3\u30D0\u30FC\u3068\u5171\u6709\u3057\u3088\u3046\u3068\u3057\u3066\u3044\u307E\u3059\u3002");
-            },
+            confirmTitle: ({ newWorkspaceName, totalMembers }) => `${newWorkspaceName ?? ''} を作成し、元のワークスペースの ${totalMembers ?? 0} 人のメンバーと共有しようとしています。`,
         },
         emptyWorkspace: {
             title: 'ワークスペースがありません',
@@ -5343,40 +4508,25 @@ var translations = {
             newWorkspace: '新しいワークスペース',
             getTheExpensifyCardAndMore: 'Expensifyカードを取得して、さらに多くの特典を享受しましょう。',
             confirmWorkspace: 'ワークスペースを確認',
-            myGroupWorkspace: function (_a) {
-                var workspaceNumber = _a.workspaceNumber;
-                return "\u30DE\u30A4\u30B0\u30EB\u30FC\u30D7\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9".concat(workspaceNumber ? " ".concat(workspaceNumber) : '');
-            },
-            workspaceName: function (_a) {
-                var userName = _a.userName, workspaceNumber = _a.workspaceNumber;
-                return "".concat(userName, "\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9").concat(workspaceNumber ? " ".concat(workspaceNumber) : '');
-            },
+            myGroupWorkspace: ({ workspaceNumber }) => `マイグループワークスペース${workspaceNumber ? ` ${workspaceNumber}` : ''}`,
+            workspaceName: ({ userName, workspaceNumber }) => `${userName}のワークスペース${workspaceNumber ? ` ${workspaceNumber}` : ''}`,
         },
         people: {
             genericFailureMessage: 'ワークスペースからメンバーを削除する際にエラーが発生しました。もう一度お試しください。',
-            removeMembersPrompt: function (_a) {
-                var memberName = _a.memberName;
-                return ({
-                    one: "".concat(memberName, "\u3092\u524A\u9664\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F"),
-                    other: 'これらのメンバーを削除してもよろしいですか？',
-                });
-            },
-            removeMembersWarningPrompt: function (_a) {
-                var memberName = _a.memberName, ownerName = _a.ownerName;
-                return "".concat(memberName, " \u306F\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u627F\u8A8D\u8005\u3067\u3059\u3002\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u5171\u6709\u3092\u89E3\u9664\u3059\u308B\u3068\u3001\u627F\u8A8D\u30EF\u30FC\u30AF\u30D5\u30ED\u30FC\u3067 ").concat(ownerName, " \u3068\u3044\u3046\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u6240\u6709\u8005\u306B\u7F6E\u304D\u63DB\u3048\u3089\u308C\u307E\u3059\u3002");
-            },
-            removeMembersTitle: function () { return ({
+            removeMembersPrompt: ({ memberName }) => ({
+                one: `${memberName}を削除してもよろしいですか？`,
+                other: 'これらのメンバーを削除してもよろしいですか？',
+            }),
+            removeMembersWarningPrompt: ({ memberName, ownerName }) => `${memberName} はこのワークスペースの承認者です。このワークスペースの共有を解除すると、承認ワークフローで ${ownerName} というワークスペースの所有者に置き換えられます。`,
+            removeMembersTitle: () => ({
                 one: 'メンバーを削除',
                 other: 'メンバーを削除',
-            }); },
+            }),
             findMember: 'メンバーを探す',
             removeWorkspaceMemberButtonTitle: 'ワークスペースから削除',
             removeGroupMemberButtonTitle: 'グループから削除',
             removeRoomMemberButtonTitle: 'チャットから削除',
-            removeMemberPrompt: function (_a) {
-                var memberName = _a.memberName;
-                return "".concat(memberName, "\u3092\u524A\u9664\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F");
-            },
+            removeMemberPrompt: ({ memberName }) => `${memberName}を削除してもよろしいですか？`,
             removeMemberTitle: 'メンバーを削除',
             transferOwner: 'オーナーを移行',
             makeMember: 'メンバーにする',
@@ -5389,14 +4539,8 @@ var translations = {
                 genericRemove: 'そのワークスペースメンバーの削除に問題が発生しました。',
             },
             addedWithPrimary: '一部のメンバーがプライマリーログインで追加されました。',
-            invitedBySecondaryLogin: function (_a) {
-                var secondaryLogin = _a.secondaryLogin;
-                return "\u30BB\u30AB\u30F3\u30C0\u30EA\u30FC\u30ED\u30B0\u30A4\u30F3 ".concat(secondaryLogin, " \u306B\u3088\u3063\u3066\u8FFD\u52A0\u3055\u308C\u307E\u3057\u305F\u3002");
-            },
-            workspaceMembersCount: function (_a) {
-                var count = _a.count;
-                return "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30E1\u30F3\u30D0\u30FC\u7DCF\u6570: ".concat(count);
-            },
+            invitedBySecondaryLogin: ({ secondaryLogin }) => `セカンダリーログイン ${secondaryLogin} によって追加されました。`,
+            workspaceMembersCount: ({ count }) => `ワークスペースのメンバー総数: ${count}`,
             importMembers: 'メンバーをインポート',
         },
         card: {
@@ -5453,8 +4597,7 @@ var translations = {
             talkYourAccountManager: 'アカウントマネージャーとチャットする。',
             talkToConcierge: 'Conciergeとチャットする。',
             needAnotherAccounting: '別の会計ソフトウェアが必要ですか？',
-            connectionName: function (_a) {
-                var connectionName = _a.connectionName;
+            connectionName: ({ connectionName }) => {
                 switch (connectionName) {
                     case CONST_1.default.POLICY.CONNECTIONS.NAME.QBO:
                         return 'QuickBooks Online';
@@ -5473,10 +4616,7 @@ var translations = {
             goToODToFix: 'この問題を解決するには、Expensify Classicに移動してください。',
             goToODToSettings: '設定を管理するには、Expensify Classicに移動してください。',
             setup: '接続する',
-            lastSync: function (_a) {
-                var relativeDate = _a.relativeDate;
-                return "\u6700\u7D42\u540C\u671F\u65E5\u6642: ".concat(relativeDate);
-            },
+            lastSync: ({ relativeDate }) => `最終同期日時: ${relativeDate}`,
             notSync: '同期されていません',
             import: 'インポート',
             export: 'エクスポート',
@@ -5485,18 +4625,12 @@ var translations = {
             syncNow: '今すぐ同期',
             disconnect: '切断する',
             reinstall: 'コネクタを再インストール',
-            disconnectTitle: function (_a) {
-                var _b = _a === void 0 ? {} : _a, connectionName = _b.connectionName;
-                var integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : '統合';
-                return "".concat(integrationName, "\u3092\u5207\u65AD");
+            disconnectTitle: ({ connectionName } = {}) => {
+                const integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : '統合';
+                return `${integrationName}を切断`;
             },
-            connectTitle: function (_a) {
-                var _b;
-                var connectionName = _a.connectionName;
-                return "".concat((_b = CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]) !== null && _b !== void 0 ? _b : '会計統合', " \u306B\u63A5\u7D9A");
-            },
-            syncError: function (_a) {
-                var connectionName = _a.connectionName;
+            connectTitle: ({ connectionName }) => `${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ?? '会計統合'} に接続`,
+            syncError: ({ connectionName }) => {
                 switch (connectionName) {
                     case CONST_1.default.POLICY.CONNECTIONS.NAME.QBO:
                         return 'QuickBooks Onlineに接続できません';
@@ -5516,29 +4650,23 @@ var translations = {
             imported: 'インポート済み',
             notImported: 'インポートされていません',
             importAsCategory: 'カテゴリとしてインポートされました',
-            importTypes: (_10 = {},
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.IMPORTED] = 'インポート済み',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG] = 'タグとしてインポートされました',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.DEFAULT] = 'インポート済み',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NOT_IMPORTED] = 'インポートされていません',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE] = 'インポートされていません',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD] = 'レポートフィールドとしてインポートされました',
-                _10[CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT] = 'NetSuiteの従業員デフォルト',
-                _10),
-            disconnectPrompt: function (_a) {
-                var _b = _a === void 0 ? {} : _a, connectionName = _b.connectionName;
-                var integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : 'この統合';
-                return "".concat(integrationName, "\u3092\u5207\u65AD\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F");
+            importTypes: {
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.IMPORTED]: 'インポート済み',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.TAG]: 'タグとしてインポートされました',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.DEFAULT]: 'インポート済み',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NOT_IMPORTED]: 'インポートされていません',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NONE]: 'インポートされていません',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.REPORT_FIELD]: 'レポートフィールドとしてインポートされました',
+                [CONST_1.default.INTEGRATION_ENTITY_MAP_TYPES.NETSUITE_DEFAULT]: 'NetSuiteの従業員デフォルト',
             },
-            connectPrompt: function (_a) {
-                var _b;
-                var connectionName = _a.connectionName;
-                return "".concat((_b = CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]) !== null && _b !== void 0 ? _b : 'この会計統合', "\u3092\u63A5\u7D9A\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F\u3053\u308C\u306B\u3088\u308A\u3001\u65E2\u5B58\u306E\u4F1A\u8A08\u63A5\u7D9A\u304C\u3059\u3079\u3066\u524A\u9664\u3055\u308C\u307E\u3059\u3002");
+            disconnectPrompt: ({ connectionName } = {}) => {
+                const integrationName = connectionName && CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ? CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] : 'この統合';
+                return `${integrationName}を切断してもよろしいですか？`;
             },
+            connectPrompt: ({ connectionName }) => `${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName] ?? 'この会計統合'}を接続してもよろしいですか？これにより、既存の会計接続がすべて削除されます。`,
             enterCredentials: '資格情報を入力してください',
             connections: {
-                syncStageName: function (_a) {
-                    var stage = _a.stage;
+                syncStageName: ({ stage }) => {
                     switch (stage) {
                         case 'quickbooksOnlineImportCustomers':
                         case 'quickbooksDesktopImportCustomers':
@@ -5667,7 +4795,7 @@ var translations = {
                             return 'Sage Intacctデータのインポート';
                         default: {
                             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                            return "\u30B9\u30C6\u30FC\u30B8\u306E\u7FFB\u8A33\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093: ".concat(stage);
+                            return `ステージの翻訳が見つかりません: ${stage}`;
                         }
                     }
                 },
@@ -5687,18 +4815,12 @@ var translations = {
             reconciliationAccount: '調整口座',
             continuousReconciliation: '継続的な照合',
             saveHoursOnReconciliation: '各会計期間の調整にかかる時間を節約するために、ExpensifyがExpensify Cardの明細書と決済を継続的に調整します。',
-            enableContinuousReconciliation: function (_a) {
-                var accountingAdvancedSettingsLink = _a.accountingAdvancedSettingsLink, connectionName = _a.connectionName;
-                return "<muted-text-label>\u7D99\u7D9A\u7684\u306A\u7167\u5408\u3092\u6709\u52B9\u306B\u3059\u308B\u305F\u3081\u3001".concat(connectionName, "\u306E<a href=\"").concat(accountingAdvancedSettingsLink, "\">\u81EA\u52D5\u540C\u671F</a>\u3092\u6709\u52B9\u306B\u3057\u3066\u304F\u3060\u3055\u3044\u3002</muted-text-label>");
-            },
+            enableContinuousReconciliation: ({ accountingAdvancedSettingsLink, connectionName }) => `<muted-text-label>継続的な照合を有効にするため、${connectionName}の<a href="${accountingAdvancedSettingsLink}">自動同期</a>を有効にしてください。</muted-text-label>`,
             chooseReconciliationAccount: {
                 chooseBankAccount: 'Expensifyカードの支払いを照合する銀行口座を選択してください。',
                 accountMatches: 'このアカウントがあなたのものと一致していることを確認してください',
                 settlementAccount: 'Expensifyカード決済口座',
-                reconciliationWorks: function (_a) {
-                    var lastFourPAN = _a.lastFourPAN;
-                    return "\uFF08".concat(lastFourPAN, "\u3067\u7D42\u308F\u308B\uFF09\u305F\u3081\u3001\u7D99\u7D9A\u7684\u306A\u8ABF\u6574\u304C\u6B63\u3057\u304F\u6A5F\u80FD\u3057\u307E\u3059\u3002");
-                },
+                reconciliationWorks: ({ lastFourPAN }) => `（${lastFourPAN}で終わる）ため、継続的な調整が正しく機能します。`,
             },
         },
         export: {
@@ -5728,7 +4850,7 @@ var translations = {
             members: 'メンバーを招待する',
             invitePeople: '新しいメンバーを招待する',
             genericFailureMessage: 'メンバーをワークスペースに招待する際にエラーが発生しました。もう一度お試しください。',
-            pleaseEnterValidLogin: "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9\u307E\u305F\u306F\u96FB\u8A71\u756A\u53F7\u304C\u6709\u52B9\u3067\u3042\u308B\u3053\u3068\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\uFF08\u4F8B: ".concat(CONST_1.default.EXAMPLE_PHONE_NUMBER, "\uFF09\u3002"),
+            pleaseEnterValidLogin: `メールアドレスまたは電話番号が有効であることを確認してください（例: ${CONST_1.default.EXAMPLE_PHONE_NUMBER}）。`,
             user: 'ユーザー',
             users: 'ユーザー',
             invited: '招待されました',
@@ -5742,10 +4864,7 @@ var translations = {
             personalMessagePrompt: 'メッセージ',
             genericFailureMessage: 'メンバーをワークスペースに招待する際にエラーが発生しました。もう一度お試しください。',
             inviteNoMembersError: '少なくとも1人のメンバーを選択して招待してください。',
-            joinRequest: function (_a) {
-                var user = _a.user, workspaceName = _a.workspaceName;
-                return "".concat(user, "\u304C").concat(workspaceName, "\u3078\u306E\u53C2\u52A0\u3092\u30EA\u30AF\u30A8\u30B9\u30C8\u3057\u307E\u3057\u305F\u3002");
-            },
+            joinRequest: ({ user, workspaceName }) => `${user}が${workspaceName}への参加をリクエストしました。`,
         },
         distanceRates: {
             oopsNotSoFast: 'おっと！ちょっと待って...',
@@ -5756,28 +4875,28 @@ var translations = {
             addRate: 'レートを追加',
             findRate: 'レートを見つける',
             trackTax: '税金を追跡する',
-            deleteRates: function () { return ({
+            deleteRates: () => ({
                 one: 'レートを削除',
                 other: 'レートを削除',
-            }); },
-            enableRates: function () { return ({
+            }),
+            enableRates: () => ({
                 one: 'レートを有効にする',
                 other: 'レートを有効にする',
-            }); },
-            disableRates: function () { return ({
+            }),
+            disableRates: () => ({
                 one: 'レートを無効にする',
                 other: 'レートを無効にする',
-            }); },
+            }),
             enableRate: 'レートを有効にする',
             status: 'ステータス',
             unit: '単位',
             taxFeatureNotEnabledMessage: 'この機能を使用するには、ワークスペースで税金を有効にする必要があります。こちらに移動して',
             changePromptMessage: 'その変更を行うために。',
             deleteDistanceRate: '距離料金を削除',
-            areYouSureDelete: function () { return ({
+            areYouSureDelete: () => ({
                 one: 'このレートを削除してもよろしいですか？',
                 other: 'これらのレートを削除してもよろしいですか？',
-            }); },
+            }),
             errors: {
                 rateNameRequired: 'レート名は必須です',
                 existingRateName: 'この名前の距離レートはすでに存在します',
@@ -5792,10 +4911,7 @@ var translations = {
             nameIsRequiredError: 'ワークスペースに名前を付ける必要があります',
             currencyInputLabel: 'デフォルト通貨',
             currencyInputHelpText: 'このワークスペースのすべての経費はこの通貨に変換されます。',
-            currencyInputDisabledText: function (_a) {
-                var currency = _a.currency;
-                return "\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306F".concat(currency, "\u306E\u9280\u884C\u53E3\u5EA7\u306B\u30EA\u30F3\u30AF\u3055\u308C\u3066\u3044\u308B\u305F\u3081\u3001\u30C7\u30D5\u30A9\u30EB\u30C8\u901A\u8CA8\u3092\u5909\u66F4\u3067\u304D\u307E\u305B\u3093\u3002");
-            },
+            currencyInputDisabledText: ({ currency }) => `このワークスペースは${currency}の銀行口座にリンクされているため、デフォルト通貨を変更できません。`,
             save: '保存',
             genericFailureMessage: 'ワークスペースの更新中にエラーが発生しました。もう一度お試しください。',
             avatarUploadFailureMessage: 'アバターのアップロード中にエラーが発生しました。もう一度お試しください。',
@@ -5827,158 +4943,136 @@ var translations = {
             updateToUSD: 'USDに更新',
             updateWorkspaceCurrency: 'ワークスペースの通貨を更新する',
             workspaceCurrencyNotSupported: 'ワークスペース通貨はサポートされていません',
-            yourWorkspace: "\u3054\u4F7F\u7528\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306F\u3001\u30B5\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u306A\u3044\u901A\u8CA8\u306B\u8A2D\u5B9A\u3055\u308C\u3066\u3044\u307E\u3059\u3002<a href=\"".concat(CONST_1.default.CONNECT_A_BUSINESS_BANK_ACCOUNT_HELP_URL, "\">\u30B5\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u308B\u901A\u8CA8\u306E\u4E00\u89A7</a>\u3092\u3054\u78BA\u8A8D\u304F\u3060\u3055\u3044\u3002"),
+            yourWorkspace: `ご使用のワークスペースは、サポートされていない通貨に設定されています。<a href="${CONST_1.default.CONNECT_A_BUSINESS_BANK_ACCOUNT_HELP_URL}">サポートされている通貨の一覧</a>をご確認ください。`,
         },
         changeOwner: {
             changeOwnerPageTitle: 'オーナーを移行',
             addPaymentCardTitle: '所有権を移転するために支払いカードを入力してください。',
             addPaymentCardButtonText: '利用規約に同意して支払いカードを追加',
-            addPaymentCardReadAndAcceptText: "<muted-text-micro><a href=\"".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, "\">\u898F\u7D04</a>\u3068<a href=\"").concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL, "\">\u30D7\u30E9\u30A4\u30D0\u30B7\u30FC</a>\u30DD\u30EA\u30B7\u30FC\u306B\u540C\u610F\u3057\u3066\u30AB\u30FC\u30C9\u3092\u8FFD\u52A0\u3057\u3066\u304F\u3060\u3055\u3044\u3002</muted-text-micro>"),
+            addPaymentCardReadAndAcceptText: `<muted-text-micro><a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}">規約</a>と<a href="${CONST_1.default.OLD_DOT_PUBLIC_URLS.PRIVACY_URL}">プライバシー</a>ポリシーに同意してカードを追加してください。</muted-text-micro>`,
             addPaymentCardPciCompliant: 'PCI-DSS 準拠',
             addPaymentCardBankLevelEncrypt: '銀行レベルの暗号化',
             addPaymentCardRedundant: '冗長インフラストラクチャー',
-            addPaymentCardLearnMore: "<muted-text>\u5F53\u793E\u306E<a href=\"".concat(CONST_1.default.PERSONAL_DATA_PROTECTION_INFO_URL, "\">\u30BB\u30AD\u30E5\u30EA\u30C6\u30A3</a>\u306B\u3064\u3044\u3066\u8A73\u3057\u304F\u306F\u3053\u3061\u3089\u3002</muted-text>"),
+            addPaymentCardLearnMore: `<muted-text>当社の<a href="${CONST_1.default.PERSONAL_DATA_PROTECTION_INFO_URL}">セキュリティ</a>について詳しくはこちら。</muted-text>`,
             amountOwedTitle: '未払い残高',
             amountOwedButtonText: 'OK',
             amountOwedText: 'このアカウントには前月からの未払い残高があります。\n\nこの残高を清算して、このワークスペースの請求を引き継ぎますか？',
             ownerOwesAmountTitle: '未払い残高',
             ownerOwesAmountButtonText: '残高を移動',
-            ownerOwesAmountText: function (_a) {
-                var email = _a.email, amount = _a.amount;
-                return "\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u6240\u6709\u8005\uFF08".concat(email, "\uFF09\u306B\u306F\u3001\u524D\u6708\u304B\u3089\u306E\u672A\u6255\u3044\u6B8B\u9AD8\u304C\u3042\u308A\u307E\u3059\u3002\n\n\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8ACB\u6C42\u3092\u5F15\u304D\u7D99\u3050\u305F\u3081\u306B\u3001\u3053\u306E\u91D1\u984D\uFF08").concat(amount, "\uFF09\u3092\u632F\u308A\u66FF\u3048\u307E\u3059\u304B\uFF1F\u3042\u306A\u305F\u306E\u652F\u6255\u3044\u30AB\u30FC\u30C9\u306B\u5373\u5EA7\u306B\u8ACB\u6C42\u3055\u308C\u307E\u3059\u3002");
-            },
+            ownerOwesAmountText: ({ email, amount }) => `このワークスペースのアカウント所有者（${email}）には、前月からの未払い残高があります。\n\nこのワークスペースの請求を引き継ぐために、この金額（${amount}）を振り替えますか？あなたの支払いカードに即座に請求されます。`,
             subscriptionTitle: '年間サブスクリプションを引き継ぐ',
             subscriptionButtonText: 'サブスクリプションを移行する',
-            subscriptionText: function (_a) {
-                var usersCount = _a.usersCount, finalCount = _a.finalCount;
-                return "\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u5F15\u304D\u7D99\u3050\u3068\u3001\u5E74\u9593\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u304C\u73FE\u5728\u306E\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u3068\u7D71\u5408\u3055\u308C\u307E\u3059\u3002\u3053\u308C\u306B\u3088\u308A\u3001\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u306E\u30B5\u30A4\u30BA\u304C".concat(usersCount, "\u4EBA\u5897\u52A0\u3057\u3001\u65B0\u3057\u3044\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u306E\u30B5\u30A4\u30BA\u306F").concat(finalCount, "\u4EBA\u306B\u306A\u308A\u307E\u3059\u3002\u7D9A\u884C\u3057\u307E\u3059\u304B\uFF1F");
-            },
+            subscriptionText: ({ usersCount, finalCount }) => `このワークスペースを引き継ぐと、年間サブスクリプションが現在のサブスクリプションと統合されます。これにより、サブスクリプションのサイズが${usersCount}人増加し、新しいサブスクリプションのサイズは${finalCount}人になります。続行しますか？`,
             duplicateSubscriptionTitle: '重複サブスクリプションの警告',
             duplicateSubscriptionButtonText: '続行する',
-            duplicateSubscriptionText: function (_a) {
-                var email = _a.email, workspaceName = _a.workspaceName;
-                return "".concat(email, "\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8ACB\u6C42\u3092\u5F15\u304D\u7D99\u3054\u3046\u3068\u3057\u3066\u3044\u308B\u3088\u3046\u3067\u3059\u304C\u3001\u305D\u306E\u305F\u3081\u306B\u306F\u307E\u305A\u3001\u3059\u3079\u3066\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u7BA1\u7406\u8005\u3067\u3042\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002\n\n\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9").concat(workspaceName, "\u306E\u8ACB\u6C42\u306E\u307F\u3092\u5F15\u304D\u7D99\u304E\u305F\u3044\u5834\u5408\u306F\u3001\u300C\u7D9A\u884C\u300D\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n\n\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u5168\u4F53\u306E\u8ACB\u6C42\u3092\u5F15\u304D\u7D99\u304E\u305F\u3044\u5834\u5408\u306F\u3001\u307E\u305A\u3059\u3079\u3066\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u7BA1\u7406\u8005\u3068\u3057\u3066\u8FFD\u52A0\u3057\u3066\u3082\u3089\u3063\u3066\u304B\u3089\u3001\u8ACB\u6C42\u3092\u5F15\u304D\u7D99\u3044\u3067\u304F\u3060\u3055\u3044\u3002");
-            },
+            duplicateSubscriptionText: ({ email, workspaceName }) => `${email}のワークスペースの請求を引き継ごうとしているようですが、そのためにはまず、すべてのワークスペースで管理者である必要があります。\n\nワークスペース${workspaceName}の請求のみを引き継ぎたい場合は、「続行」をクリックしてください。\n\nサブスクリプション全体の請求を引き継ぎたい場合は、まずすべてのワークスペースに管理者として追加してもらってから、請求を引き継いでください。`,
             hasFailedSettlementsTitle: '所有権を移転できません',
             hasFailedSettlementsButtonText: '了解しました。',
-            hasFailedSettlementsText: function (_a) {
-                var email = _a.email;
-                return "".concat(email, " \u306F\u672A\u6255\u3044\u306E Expensify Card \u6C7A\u6E08\u304C\u3042\u308B\u305F\u3081\u3001\u8ACB\u6C42\u3092\u5F15\u304D\u7D99\u3050\u3053\u3068\u304C\u3067\u304D\u307E\u305B\u3093\u3002\u554F\u984C\u3092\u89E3\u6C7A\u3059\u308B\u305F\u3081\u306B\u3001concierge@expensify.com \u306B\u9023\u7D61\u3059\u308B\u3088\u3046\u306B\u4F9D\u983C\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u305D\u306E\u5F8C\u3001\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8ACB\u6C42\u3092\u5F15\u304D\u7D99\u3050\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002");
-            },
+            hasFailedSettlementsText: ({ email }) => `${email} は未払いの Expensify Card 決済があるため、請求を引き継ぐことができません。問題を解決するために、concierge@expensify.com に連絡するように依頼してください。その後、このワークスペースの請求を引き継ぐことができます。`,
             failedToClearBalanceTitle: '残高をクリアできませんでした',
             failedToClearBalanceButtonText: 'OK',
             failedToClearBalanceText: '残高をクリアできませんでした。後でもう一度お試しください。',
             successTitle: 'やったー！準備完了です。',
             successDescription: 'あなたはこのワークスペースのオーナーになりました。',
             errorTitle: 'おっと！ちょっと待って...',
-            errorDescription: "<muted-text><centered-text>\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u6240\u6709\u6A29\u306E\u79FB\u8EE2\u306B\u554F\u984C\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002\u3082\u3046\u4E00\u5EA6\u304A\u8A66\u3057\u3044\u305F\u3060\u304F\u304B\u3001<concierge-link>Concierge \u307E\u3067\u304A\u554F\u3044\u5408\u308F\u305B</concierge-link>\u304F\u3060\u3055\u3044\u3002</centered-text></muted-text>",
+            errorDescription: `<muted-text><centered-text>このワークスペースの所有権の移転に問題が発生しました。もう一度お試しいただくか、<concierge-link>Concierge までお問い合わせ</concierge-link>ください。</centered-text></muted-text>`,
         },
         exportAgainModal: {
             title: '注意！',
-            description: function (_a) {
-                var reportName = _a.reportName, connectionName = _a.connectionName;
-                return "\u6B21\u306E\u30EC\u30DD\u30FC\u30C8\u306F\u3059\u3067\u306B".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u307E\u3059\uFF1A\n\n").concat(reportName, "\n\n\u672C\u5F53\u306B\u518D\u5EA6\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3057\u307E\u3059\u304B\uFF1F");
-            },
+            description: ({ reportName, connectionName }) => `次のレポートはすでに${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}にエクスポートされています：\n\n${reportName}\n\n本当に再度エクスポートしますか？`,
             confirmText: 'はい、再度エクスポートしてください。',
             cancelText: 'キャンセル',
         },
-        upgrade: (_11 = {
-                reportFields: {
-                    title: 'レポートフィールド',
-                    description: "\u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9\u3067\u306F\u3001\u500B\u3005\u306E\u9805\u76EE\u306E\u7D4C\u8CBB\u306B\u95A2\u9023\u3059\u308B\u30BF\u30B0\u3068\u306F\u7570\u306A\u308A\u3001\u30D8\u30C3\u30C0\u30FC\u30EC\u30D9\u30EB\u306E\u8A73\u7D30\u3092\u6307\u5B9A\u3067\u304D\u307E\u3059\u3002\u3053\u308C\u3089\u306E\u8A73\u7D30\u306B\u306F\u3001\u7279\u5B9A\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u540D\u3001\u51FA\u5F35\u60C5\u5831\u3001\u5834\u6240\u306A\u3069\u304C\u542B\u307E\u308C\u308B\u3053\u3068\u304C\u3042\u308A\u307E\u3059\u3002",
-                    onlyAvailableOnPlan: 'レポートフィールドは、Controlプランでのみ利用可能です。料金は',
-                }
+        upgrade: {
+            reportFields: {
+                title: 'レポートフィールド',
+                description: `レポートフィールドでは、個々の項目の経費に関連するタグとは異なり、ヘッダーレベルの詳細を指定できます。これらの詳細には、特定のプロジェクト名、出張情報、場所などが含まれることがあります。`,
+                onlyAvailableOnPlan: 'レポートフィールドは、Controlプランでのみ利用可能です。料金は',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE]: {
                 title: 'NetSuite',
-                description: "Expensify + NetSuite\u306E\u7D71\u5408\u306B\u3088\u308A\u3001\u81EA\u52D5\u540C\u671F\u3092\u697D\u3057\u307F\u3001\u624B\u52D5\u5165\u529B\u3092\u524A\u6E1B\u3067\u304D\u307E\u3059\u3002\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3084\u9867\u5BA2\u306E\u30DE\u30C3\u30D4\u30F3\u30B0\u3092\u542B\u3080\u30CD\u30A4\u30C6\u30A3\u30D6\u304A\u3088\u3073\u30AB\u30B9\u30BF\u30E0\u30BB\u30B0\u30E1\u30F3\u30C8\u306E\u30B5\u30DD\u30FC\u30C8\u3067\u3001\u8A73\u7D30\u3067\u30EA\u30A2\u30EB\u30BF\u30A4\u30E0\u306E\u8CA1\u52D9\u30A4\u30F3\u30B5\u30A4\u30C8\u3092\u5F97\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002",
+                description: `Expensify + NetSuiteの統合により、自動同期を楽しみ、手動入力を削減できます。プロジェクトや顧客のマッピングを含むネイティブおよびカスタムセグメントのサポートで、詳細でリアルタイムの財務インサイトを得ることができます。`,
                 onlyAvailableOnPlan: '私たちのNetSuite統合は、Controlプランでのみ利用可能です。開始価格は',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.SAGE_INTACCT] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.SAGE_INTACCT]: {
                 title: 'Sage Intacct',
-                description: "Expensify + Sage Intacct \u306E\u7D71\u5408\u3067\u3001\u81EA\u52D5\u540C\u671F\u3092\u697D\u3057\u307F\u3001\u624B\u52D5\u5165\u529B\u3092\u6E1B\u3089\u3057\u307E\u3057\u3087\u3046\u3002\u30E6\u30FC\u30B6\u30FC\u5B9A\u7FA9\u306E\u30C7\u30A3\u30E1\u30F3\u30B7\u30E7\u30F3\u306B\u3088\u308B\u8A73\u7D30\u3067\u30EA\u30A2\u30EB\u30BF\u30A4\u30E0\u306A\u8CA1\u52D9\u30A4\u30F3\u30B5\u30A4\u30C8\u3092\u5F97\u308B\u3068\u3068\u3082\u306B\u3001\u90E8\u9580\u3001\u30AF\u30E9\u30B9\u3001\u5834\u6240\u3001\u9867\u5BA2\u3001\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\uFF08\u30B8\u30E7\u30D6\uFF09\u3054\u3068\u306E\u7D4C\u8CBB\u30B3\u30FC\u30C9\u5316\u304C\u53EF\u80FD\u3067\u3059\u3002",
+                description: `Expensify + Sage Intacct の統合で、自動同期を楽しみ、手動入力を減らしましょう。ユーザー定義のディメンションによる詳細でリアルタイムな財務インサイトを得るとともに、部門、クラス、場所、顧客、プロジェクト（ジョブ）ごとの経費コード化が可能です。`,
                 onlyAvailableOnPlan: 'Sage Intacctとの統合は、Controlプランでのみ利用可能で、料金は',
             },
-            _11[CONST_1.default.POLICY.CONNECTIONS.NAME.QBD] = {
+            [CONST_1.default.POLICY.CONNECTIONS.NAME.QBD]: {
                 title: 'QuickBooks Desktop',
-                description: "Expensify + QuickBooks Desktop \u306E\u7D71\u5408\u3067\u3001\u81EA\u52D5\u540C\u671F\u3092\u697D\u3057\u307F\u3001\u624B\u52D5\u5165\u529B\u3092\u6E1B\u3089\u3057\u307E\u3057\u3087\u3046\u3002\u30AF\u30E9\u30B9\u3001\u30A2\u30A4\u30C6\u30E0\u3001\u9867\u5BA2\u3001\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3054\u3068\u306E\u7D4C\u8CBB\u30B3\u30FC\u30C9\u5316\u3068\u30EA\u30A2\u30EB\u30BF\u30A4\u30E0\u306E\u53CC\u65B9\u5411\u63A5\u7D9A\u3067\u3001\u7A76\u6975\u306E\u52B9\u7387\u6027\u3092\u5B9F\u73FE\u3057\u307E\u3059\u3002",
+                description: `Expensify + QuickBooks Desktop の統合で、自動同期を楽しみ、手動入力を減らしましょう。クラス、アイテム、顧客、プロジェクトごとの経費コード化とリアルタイムの双方向接続で、究極の効率性を実現します。`,
                 onlyAvailableOnPlan: 'QuickBooks Desktopの統合は、Controlプランでのみ利用可能で、料金は',
             },
-            _11[CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.approvals.id] = {
+            [CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.approvals.id]: {
                 title: '高度な承認',
-                description: "\u8FFD\u52A0\u306E\u627F\u8A8D\u30EC\u30A4\u30E4\u30FC\u3092\u52A0\u3048\u305F\u3044\u5834\u5408\u3084\u3001\u6700\u3082\u5927\u304D\u306A\u7D4C\u8CBB\u306B\u3082\u3046\u4E00\u3064\u306E\u76EE\u3092\u901A\u3057\u305F\u3044\u5834\u5408\u3067\u3082\u3001\u79C1\u305F\u3061\u304C\u30B5\u30DD\u30FC\u30C8\u3057\u307E\u3059\u3002\u9AD8\u5EA6\u306A\u627F\u8A8D\u6A5F\u80FD\u306B\u3088\u308A\u3001\u3042\u3089\u3086\u308B\u30EC\u30D9\u30EB\u3067\u9069\u5207\u306A\u30C1\u30A7\u30C3\u30AF\u3092\u884C\u3044\u3001\u30C1\u30FC\u30E0\u306E\u652F\u51FA\u3092\u7BA1\u7406\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002",
+                description: `追加の承認レイヤーを加えたい場合や、最も大きな経費にもう一つの目を通したい場合でも、私たちがサポートします。高度な承認機能により、あらゆるレベルで適切なチェックを行い、チームの支出を管理することができます。`,
                 onlyAvailableOnPlan: '高度な承認は、Controlプランでのみ利用可能で、料金は',
             },
-            _11.categories = {
+            categories: {
                 title: 'カテゴリ',
-                description: "\u30AB\u30C6\u30B4\u30EA\u306F\u3001\u652F\u51FA\u3092\u3088\u308A\u826F\u304F\u6574\u7406\u3057\u3001\u304A\u91D1\u3092\u3069\u3053\u306B\u4F7F\u3063\u3066\u3044\u308B\u304B\u3092\u628A\u63E1\u3059\u308B\u306E\u306B\u5F79\u7ACB\u3061\u307E\u3059\u3002\u63D0\u6848\u3055\u308C\u305F\u30AB\u30C6\u30B4\u30EA\u30EA\u30B9\u30C8\u3092\u4F7F\u7528\u3059\u308B\u304B\u3001\u81EA\u5206\u3067\u4F5C\u6210\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+                description: `カテゴリは、支出をより良く整理し、お金をどこに使っているかを把握するのに役立ちます。提案されたカテゴリリストを使用するか、自分で作成してください。`,
                 onlyAvailableOnPlan: 'カテゴリは、Collectプランで利用可能です。料金は',
             },
-            _11.glCodes = {
+            glCodes: {
                 title: 'GLコード',
-                description: "GL\u30B3\u30FC\u30C9\u3092\u30AB\u30C6\u30B4\u30EA\u3068\u30BF\u30B0\u306B\u8FFD\u52A0\u3057\u3066\u3001\u4F1A\u8A08\u304A\u3088\u3073\u7D66\u4E0E\u30B7\u30B9\u30C6\u30E0\u3078\u306E\u7D4C\u8CBB\u306E\u7C21\u5358\u306A\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3092\u5B9F\u73FE\u3057\u307E\u3057\u3087\u3046\u3002",
+                description: `GLコードをカテゴリとタグに追加して、会計および給与システムへの経費の簡単なエクスポートを実現しましょう。`,
                 onlyAvailableOnPlan: 'GLコードは、Controlプランでのみ利用可能です。開始価格は',
             },
-            _11.glAndPayrollCodes = {
+            glAndPayrollCodes: {
                 title: 'GL & Payroll コード',
-                description: "GL\u30B3\u30FC\u30C9\u3068\u7D66\u4E0E\u30B3\u30FC\u30C9\u3092\u30AB\u30C6\u30B4\u30EA\u306B\u8FFD\u52A0\u3057\u3066\u3001\u7D4C\u8CBB\u3092\u4F1A\u8A08\u304A\u3088\u3073\u7D66\u4E0E\u30B7\u30B9\u30C6\u30E0\u306B\u7C21\u5358\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3057\u307E\u3057\u3087\u3046\u3002",
+                description: `GLコードと給与コードをカテゴリに追加して、経費を会計および給与システムに簡単にエクスポートしましょう。`,
                 onlyAvailableOnPlan: 'GLおよび給与コードは、Controlプランでのみ利用可能です。料金は',
             },
-            _11.taxCodes = {
+            taxCodes: {
                 title: '税コード',
-                description: "\u7A0E\u30B3\u30FC\u30C9\u3092\u7A0E\u91D1\u306B\u8FFD\u52A0\u3057\u3066\u3001\u7D4C\u8CBB\u3092\u4F1A\u8A08\u304A\u3088\u3073\u7D66\u4E0E\u30B7\u30B9\u30C6\u30E0\u306B\u7C21\u5358\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3057\u307E\u3057\u3087\u3046\u3002",
+                description: `税コードを税金に追加して、経費を会計および給与システムに簡単にエクスポートしましょう。`,
                 onlyAvailableOnPlan: '税コードは、Controlプランでのみ利用可能です。料金は',
             },
-            _11.companyCards = {
+            companyCards: {
                 title: '無制限の会社カード',
-                description: "\u3055\u3089\u306B\u30AB\u30FC\u30C9\u30D5\u30A3\u30FC\u30C9\u3092\u8FFD\u52A0\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u304B\uFF1F\u3059\u3079\u3066\u306E\u4E3B\u8981\u306A\u30AB\u30FC\u30C9\u767A\u884C\u4F1A\u793E\u304B\u3089\u306E\u53D6\u5F15\u3092\u540C\u671F\u3059\u308B\u305F\u3081\u306B\u3001\u7121\u5236\u9650\u306E\u4F1A\u793E\u30AB\u30FC\u30C9\u3092\u30A2\u30F3\u30ED\u30C3\u30AF\u3057\u307E\u3057\u3087\u3046\u3002",
+                description: `さらにカードフィードを追加する必要がありますか？すべての主要なカード発行会社からの取引を同期するために、無制限の会社カードをアンロックしましょう。`,
                 onlyAvailableOnPlan: 'これは、Controlプランでのみ利用可能です。料金は',
             },
-            _11.rules = {
+            rules: {
                 title: 'ルール',
-                description: "\u30EB\u30FC\u30EB\u306F\u30D0\u30C3\u30AF\u30B0\u30E9\u30A6\u30F3\u30C9\u3067\u5B9F\u884C\u3055\u308C\u3001\u3042\u306A\u305F\u306E\u652F\u51FA\u3092\u7BA1\u7406\u3059\u308B\u306E\u3067\u3001\u5C0F\u3055\u306A\u3053\u3068\u3092\u5FC3\u914D\u3059\u308B\u5FC5\u8981\u306F\u3042\u308A\u307E\u305B\u3093\u3002\n\n\u9818\u53CE\u66F8\u3084\u8AAC\u660E\u306A\u3069\u306E\u7D4C\u8CBB\u8A73\u7D30\u3092\u8981\u6C42\u3057\u3001\u5236\u9650\u3084\u30C7\u30D5\u30A9\u30EB\u30C8\u3092\u8A2D\u5B9A\u3057\u3001\u627F\u8A8D\u3068\u652F\u6255\u3044\u3092\u81EA\u52D5\u5316\u3057\u307E\u3059\u3002\u3059\u3079\u3066\u3092\u4E00\u304B\u6240\u3067\u884C\u3048\u307E\u3059\u3002",
+                description: `ルールはバックグラウンドで実行され、あなたの支出を管理するので、小さなことを心配する必要はありません。\n\n領収書や説明などの経費詳細を要求し、制限やデフォルトを設定し、承認と支払いを自動化します。すべてを一か所で行えます。`,
                 onlyAvailableOnPlan: 'ルールは、Controlプランでのみ利用可能で、料金は',
             },
-            _11.perDiem = {
+            perDiem: {
                 title: '日当',
                 description: '日当は、従業員が出張する際に日々の費用を遵守し、予測可能にするための優れた方法です。カスタム料金、デフォルトカテゴリ、目的地やサブレートなどの詳細な機能をお楽しみください。',
                 onlyAvailableOnPlan: '日当は、Controlプランでのみ利用可能です。料金は',
             },
-            _11.travel = {
+            travel: {
                 title: '旅行',
                 description: 'Expensify Travelは、メンバーが宿泊施設、フライト、交通機関などを予約できる新しい法人向け旅行予約および管理プラットフォームです。',
                 onlyAvailableOnPlan: '旅行は、Collectプランで利用可能です。料金は',
             },
-            _11.multiLevelTags = {
+            multiLevelTags: {
                 title: 'マルチレベルタグ',
                 description: 'マルチレベルタグは、経費をより正確に追跡するのに役立ちます。各項目に部門、クライアント、コストセンターなどの複数のタグを割り当てることで、すべての経費の完全なコンテキストを把握できます。これにより、より詳細なレポート作成、承認ワークフロー、および会計エクスポートが可能になります。',
                 onlyAvailableOnPlan: 'マルチレベルタグは、Controlプランでのみ利用可能です。開始価格は',
             },
-            _11[CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.multiApprovalLevels.id] = {
+            [CONST_1.default.UPGRADE_FEATURE_INTRO_MAPPING.multiApprovalLevels.id]: {
                 title: '複数の承認レベル',
                 description: '複数の承認レベルは、払い戻しが行われる前に複数の人がレポートを承認する必要がある企業向けのワークフローツールです。',
                 onlyAvailableOnPlan: '複数の承認レベルは、Controlプランでのみ利用可能です。料金は ',
             },
-            _11.pricing = {
+            pricing: {
                 perActiveMember: 'アクティブメンバー1人あたり月額。',
                 perMember: 'メンバーごとに月額。',
             },
-            _11.note = function (_a) {
-                var subscriptionLink = _a.subscriptionLink;
-                return "<muted-text>\u3053\u306E\u6A5F\u80FD\u3092\u5229\u7528\u3059\u308B\u306B\u306F\u3001\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3059\u308B\u304B\u3001\u5F53\u793E\u306E\u30D7\u30E9\u30F3\u3068\u4FA1\u683C<a href=\"".concat(subscriptionLink, "\">\u306B\u3064\u3044\u3066\u8A73\u3057\u304F\u3054\u78BA\u8A8D</a>\u304F\u3060\u3055\u3044\u3002</muted-text>");
-            },
-            _11.upgradeToUnlock = 'この機能をアンロックする',
-            _11.completed = {
-                headline: "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3057\u307E\u3057\u305F\uFF01",
-                successMessage: function (_a) {
-                    var policyName = _a.policyName, subscriptionLink = _a.subscriptionLink;
-                    return "<centered-text>".concat(policyName, "\u3092\u30B3\u30F3\u30C8\u30ED\u30FC\u30EB\u30D7\u30E9\u30F3\u306B\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3057\u307E\u3057\u305F\uFF01\u8A73\u7D30\u306B\u3064\u3044\u3066\u306F\u3001<a href=\"").concat(subscriptionLink, "\">\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u3092\u3054\u78BA\u8A8D</a>\u304F\u3060\u3055\u3044\u3002</centered-text>");
-                },
-                categorizeMessage: "Collect\u30D7\u30E9\u30F3\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u6B63\u5E38\u306B\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3055\u308C\u307E\u3057\u305F\u3002\u3053\u308C\u3067\u7D4C\u8CBB\u3092\u5206\u985E\u3067\u304D\u307E\u3059\uFF01",
-                travelMessage: "Collect\u30D7\u30E9\u30F3\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306B\u6B63\u5E38\u306B\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3055\u308C\u307E\u3057\u305F\u3002\u3053\u308C\u3067\u3001\u65C5\u884C\u306E\u4E88\u7D04\u3068\u7BA1\u7406\u3092\u958B\u59CB\u3067\u304D\u307E\u3059\uFF01",
+            note: ({ subscriptionLink }) => `<muted-text>この機能を利用するには、ワークスペースをアップグレードするか、当社のプランと価格<a href="${subscriptionLink}">について詳しくご確認</a>ください。</muted-text>`,
+            upgradeToUnlock: 'この機能をアンロックする',
+            completed: {
+                headline: `ワークスペースをアップグレードしました！`,
+                successMessage: ({ policyName, subscriptionLink }) => `<centered-text>${policyName}をコントロールプランにアップグレードしました！詳細については、<a href="${subscriptionLink}">サブスクリプションをご確認</a>ください。</centered-text>`,
+                categorizeMessage: `Collectプランのワークスペースに正常にアップグレードされました。これで経費を分類できます！`,
+                travelMessage: `Collectプランのワークスペースに正常にアップグレードされました。これで、旅行の予約と管理を開始できます！`,
                 gotIt: '了解しました、ありがとうございます。',
             },
-            _11.commonFeatures = {
+            commonFeatures: {
                 title: 'Controlプランにアップグレード',
                 note: '以下を含む、最も強力な機能をアンロック:',
                 benefits: {
@@ -5994,7 +5088,7 @@ var translations = {
                     selectWorkspace: 'ワークスペースを選択し、プランタイプを変更します',
                 },
             },
-            _11),
+        },
         downgrade: {
             commonFeatures: {
                 title: 'Collectプランにダウングレードする',
@@ -6022,27 +5116,15 @@ var translations = {
         payAndDowngrade: {
             title: '支払いとダウングレード',
             headline: '最終支払い',
-            description1: function (_a) {
-                var formattedAmount = _a.formattedAmount;
-                return "\u3053\u306E\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u306E\u6700\u7D42\u7684\u306A\u8ACB\u6C42\u984D\u306F<strong>".concat(formattedAmount, "</strong>\u3067\u3059");
-            },
-            description2: function (_a) {
-                var date = _a.date;
-                return "".concat(date, "\u306E\u5185\u8A33\u3092\u4EE5\u4E0B\u306B\u793A\u3057\u307E\u3059\uFF1A");
-            },
+            description1: ({ formattedAmount }) => `このサブスクリプションの最終的な請求額は<strong>${formattedAmount}</strong>です`,
+            description2: ({ date }) => `${date}の内訳を以下に示します：`,
             subscription: 'ご注意ください！この操作は、Expensifyのサブスクリプションを終了し、このワークスペースを削除し、すべてのワークスペースメンバーを削除します。このワークスペースを保持し、自分だけを削除したい場合は、別の管理者に請求を引き継いでもらってください。',
             genericFailureMessage: '請求書の支払い中にエラーが発生しました。もう一度お試しください。',
         },
         restrictedAction: {
             restricted: '制限されています',
-            actionsAreCurrentlyRestricted: function (_a) {
-                var workspaceName = _a.workspaceName;
-                return "".concat(workspaceName, " \u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u306E\u30A2\u30AF\u30B7\u30E7\u30F3\u306F\u73FE\u5728\u5236\u9650\u3055\u308C\u3066\u3044\u307E\u3059\u3002");
-            },
-            workspaceOwnerWillNeedToAddOrUpdatePaymentCard: function (_a) {
-                var workspaceOwnerName = _a.workspaceOwnerName;
-                return "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30AA\u30FC\u30CA\u30FC\u3067\u3042\u308B".concat(workspaceOwnerName, "\u306F\u3001\u65B0\u3057\u3044\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u30A2\u30AF\u30C6\u30A3\u30D3\u30C6\u30A3\u3092\u30A2\u30F3\u30ED\u30C3\u30AF\u3059\u308B\u305F\u3081\u306B\u3001\u30D5\u30A1\u30A4\u30EB\u4E0A\u306E\u652F\u6255\u3044\u30AB\u30FC\u30C9\u3092\u8FFD\u52A0\u307E\u305F\u306F\u66F4\u65B0\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002");
-            },
+            actionsAreCurrentlyRestricted: ({ workspaceName }) => `${workspaceName} ワークスペースでのアクションは現在制限されています。`,
+            workspaceOwnerWillNeedToAddOrUpdatePaymentCard: ({ workspaceOwnerName }) => `ワークスペースのオーナーである${workspaceOwnerName}は、新しいワークスペースのアクティビティをアンロックするために、ファイル上の支払いカードを追加または更新する必要があります。`,
             youWillNeedToAddOrUpdatePaymentCard: '新しいワークスペースのアクティビティを解除するには、ファイル上の支払いカードを追加または更新する必要があります。',
             addPaymentCardToUnlock: '支払いカードを追加してロックを解除！',
             addPaymentCardToContinueUsingWorkspace: 'このワークスペースを引き続き使用するには、支払いカードを追加してください。',
@@ -6054,10 +5136,7 @@ var translations = {
         rules: {
             individualExpenseRules: {
                 title: '経費',
-                subtitle: function (_a) {
-                    var categoriesPageLink = _a.categoriesPageLink, tagsPageLink = _a.tagsPageLink;
-                    return "<muted-text>\u500B\u3005\u306E\u7D4C\u8CBB\u306B\u5BFE\u3057\u3066\u652F\u51FA\u5236\u9650\u3068\u30C7\u30D5\u30A9\u30EB\u30C8\u8A2D\u5B9A\u3092\u8A2D\u5B9A\u3067\u304D\u307E\u3059\u3002\u307E\u305F\u3001<a href=\"".concat(categoriesPageLink, "\">\u30AB\u30C6\u30B4\u30EA</a>\u3068<a href=\"").concat(tagsPageLink, "\">\u30BF\u30B0</a>\u306B\u95A2\u3059\u308B\u30EB\u30FC\u30EB\u3092\u4F5C\u6210\u3059\u308B\u3053\u3068\u3082\u53EF\u80FD\u3067\u3059\u3002</muted-text>");
-                },
+                subtitle: ({ categoriesPageLink, tagsPageLink }) => `<muted-text>個々の経費に対して支出制限とデフォルト設定を設定できます。また、<a href="${categoriesPageLink}">カテゴリ</a>と<a href="${tagsPageLink}">タグ</a>に関するルールを作成することも可能です。</muted-text>`,
                 receiptRequiredAmount: '領収書の必要金額',
                 receiptRequiredAmountDescription: 'カテゴリルールで上書きされない限り、この金額を超える支出には領収書が必要です。',
                 maxExpenseAmount: '最大経費額',
@@ -6065,10 +5144,10 @@ var translations = {
                 maxAge: '最大年齢',
                 maxExpenseAge: '最大経費年齢',
                 maxExpenseAgeDescription: '特定の日数より古い支出をフラグする。',
-                maxExpenseAgeDays: function () { return ({
+                maxExpenseAgeDays: () => ({
                     one: '1日',
-                    other: function (count) { return "".concat(count, "\u65E5\u9593"); },
-                }); },
+                    other: (count) => `${count}日間`,
+                }),
                 cashExpenseDefault: '現金経費のデフォルト',
                 cashExpenseDefaultDescription: '現金経費をどのように作成するかを選択します。インポートされた会社カード取引でない場合、経費は現金経費とみなされます。これには手動で作成された経費、領収書、日当、距離、時間経費が含まれます。',
                 reimbursableDefault: '精算可能',
@@ -6080,10 +5159,7 @@ var translations = {
                 alwaysNonReimbursable: '常に精算不可',
                 alwaysNonReimbursableDescription: '経費は従業員に返金されません',
                 billableDefault: '請求可能なデフォルト',
-                billableDefaultDescription: function (_a) {
-                    var tagsPageLink = _a.tagsPageLink;
-                    return "<muted-text>\u73FE\u91D1\u3068\u30AF\u30EC\u30B8\u30C3\u30C8\u30AB\u30FC\u30C9\u306E\u652F\u51FA\u3092\u30C7\u30D5\u30A9\u30EB\u30C8\u3067\u8ACB\u6C42\u53EF\u80FD\u306B\u3059\u308B\u304B\u3069\u3046\u304B\u3092\u9078\u629E\u3057\u307E\u3059\u3002\u8ACB\u6C42\u53EF\u80FD\u306A\u652F\u51FA\u306F<a href=\"".concat(tagsPageLink, "\">\u30BF\u30B0</a>\u3067\u6709\u52B9\u307E\u305F\u306F\u7121\u52B9\u306B\u8A2D\u5B9A\u3055\u308C\u307E\u3059\u3002</muted-text>");
-                },
+                billableDefaultDescription: ({ tagsPageLink }) => `<muted-text>現金とクレジットカードの支出をデフォルトで請求可能にするかどうかを選択します。請求可能な支出は<a href="${tagsPageLink}">タグ</a>で有効または無効に設定されます。</muted-text>`,
                 billable: 'ビラブル',
                 billableDescription: '経費は多くの場合、クライアントに再請求されます。',
                 nonBillable: '非請求対象',
@@ -6114,39 +5190,24 @@ var translations = {
                 randomReportAuditDescription: '一部のレポートは自動承認の対象であっても、手動承認を必要とするようにします。',
                 autoPayApprovedReportsTitle: '自動支払い承認済みレポート',
                 autoPayApprovedReportsSubtitle: 'どの経費報告書が自動支払いの対象となるかを設定します。',
-                autoPayApprovedReportsLimitError: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, currency = _b.currency;
-                    return "".concat(currency !== null && currency !== void 0 ? currency : '', "20,000\u672A\u6E80\u306E\u91D1\u984D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                autoPayApprovedReportsLimitError: ({ currency } = {}) => `${currency ?? ''}20,000未満の金額を入力してください。`,
                 autoPayApprovedReportsLockedSubtitle: 'その他の機能に移動してワークフローを有効にし、その後、支払いを追加してこの機能をアンロックしてください。',
                 autoPayReportsUnderTitle: '以下の金額未満のレポートを自動支払い',
                 autoPayReportsUnderDescription: 'この金額以下の完全に準拠した経費報告書は自動的に支払われます。',
-                unlockFeatureEnableWorkflowsSubtitle: function (_a) {
-                    var featureName = _a.featureName, moreFeaturesLink = _a.moreFeaturesLink;
-                    return "[\u3055\u3089\u306B\u591A\u304F\u306E\u6A5F\u80FD](".concat(moreFeaturesLink, ")\u306B\u30A2\u30AF\u30BB\u30B9\u3057\u3066\u30EF\u30FC\u30AF\u30D5\u30ED\u30FC\u3092\u6709\u52B9\u306B\u3057\u3001").concat(featureName, "\u3092\u8FFD\u52A0\u3057\u3066\u3053\u306E\u6A5F\u80FD\u306E\u30ED\u30C3\u30AF\u3092\u89E3\u9664\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
-                enableFeatureSubtitle: function (_a) {
-                    var featureName = _a.featureName, moreFeaturesLink = _a.moreFeaturesLink;
-                    return "[\u3055\u3089\u306B\u591A\u304F\u306E\u6A5F\u80FD](".concat(moreFeaturesLink, ")\u306B\u30A2\u30AF\u30BB\u30B9\u3057\u3001").concat(featureName, "\u3092\u6709\u52B9\u306B\u3057\u3066\u3053\u306E\u6A5F\u80FD\u306E\u30ED\u30C3\u30AF\u3092\u89E3\u9664\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                unlockFeatureEnableWorkflowsSubtitle: ({ featureName, moreFeaturesLink }) => `[さらに多くの機能](${moreFeaturesLink})にアクセスしてワークフローを有効にし、${featureName}を追加してこの機能のロックを解除してください。`,
+                enableFeatureSubtitle: ({ featureName, moreFeaturesLink }) => `[さらに多くの機能](${moreFeaturesLink})にアクセスし、${featureName}を有効にしてこの機能のロックを解除してください。`,
             },
             categoryRules: {
                 title: 'カテゴリールール',
                 approver: '承認者',
                 requireDescription: '説明が必要です',
                 descriptionHint: '説明のヒント',
-                descriptionHintDescription: function (_a) {
-                    var categoryName = _a.categoryName;
-                    return "\u5F93\u696D\u54E1\u306B\u300C".concat(categoryName, "\u300D\u306E\u652F\u51FA\u306B\u95A2\u3059\u308B\u8FFD\u52A0\u60C5\u5831\u3092\u63D0\u4F9B\u3059\u308B\u3088\u3046\u306B\u30EA\u30DE\u30A4\u30F3\u30C9\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u3053\u306E\u30D2\u30F3\u30C8\u306F\u7D4C\u8CBB\u306E\u8AAC\u660E\u6B04\u306B\u8868\u793A\u3055\u308C\u307E\u3059\u3002");
-                },
+                descriptionHintDescription: ({ categoryName }) => `従業員に「${categoryName}」の支出に関する追加情報を提供するようにリマインドしてください。このヒントは経費の説明欄に表示されます。`,
                 descriptionHintLabel: 'ヒント',
                 descriptionHintSubtitle: 'プロのヒント: 短ければ短いほど良い！',
                 maxAmount: '最大金額',
                 flagAmountsOver: '金額が超過している場合はフラグを立てる',
-                flagAmountsOverDescription: function (_a) {
-                    var categoryName = _a.categoryName;
-                    return "\u300C".concat(categoryName, "\u300D\u30AB\u30C6\u30B4\u30EA\u306B\u9069\u7528\u3055\u308C\u307E\u3059\u3002");
-                },
+                flagAmountsOverDescription: ({ categoryName }) => `「${categoryName}」カテゴリに適用されます。`,
                 flagAmountsOverSubtitle: 'これはすべての経費の最大金額を上書きします。',
                 expenseLimitTypes: {
                     expense: '個別経費',
@@ -6156,18 +5217,12 @@ var translations = {
                 },
                 requireReceiptsOver: 'を超える領収書を必須にする',
                 requireReceiptsOverList: {
-                    default: function (_a) {
-                        var defaultAmount = _a.defaultAmount;
-                        return "".concat(defaultAmount, " ").concat(CONST_1.default.DOT_SEPARATOR, " \u30C7\u30D5\u30A9\u30EB\u30C8");
-                    },
+                    default: ({ defaultAmount }) => `${defaultAmount} ${CONST_1.default.DOT_SEPARATOR} デフォルト`,
                     never: '領収書を要求しない',
                     always: '常に領収書を要求する',
                 },
                 defaultTaxRate: 'デフォルト税率',
-                enableWorkflows: function (_a) {
-                    var moreFeaturesLink = _a.moreFeaturesLink;
-                    return "\u300C[\u3055\u3089\u306B\u591A\u304F\u306E\u6A5F\u80FD](".concat(moreFeaturesLink, ")\u300D\u306B\u79FB\u52D5\u3057\u3001\u30EF\u30FC\u30AF\u30D5\u30ED\u30FC\u3092\u6709\u52B9\u306B\u3057\u307E\u3059\u3002\u305D\u306E\u5F8C\u3001\u627F\u8A8D\u3092\u8FFD\u52A0\u3057\u3066\u3053\u306E\u6A5F\u80FD\u3092\u89E3\u9664\u3057\u307E\u3059\u3002");
-                },
+                enableWorkflows: ({ moreFeaturesLink }) => `「[さらに多くの機能](${moreFeaturesLink})」に移動し、ワークフローを有効にします。その後、承認を追加してこの機能を解除します。`,
             },
             customRules: {
                 title: 'カスタムルール',
@@ -6187,13 +5242,10 @@ var translations = {
             },
             description: 'あなたにぴったりのプランを選びましょう。機能と価格の詳細なリストについては、こちらをご覧ください。',
             subscriptionLink: 'プランの種類と料金に関するヘルプページ',
-            lockedPlanDescription: function (_a) {
-                var count = _a.count, annualSubscriptionEndDate = _a.annualSubscriptionEndDate;
-                return ({
-                    one: "\u3042\u306A\u305F\u306F\u3001\u5E74\u9593\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u304C\u7D42\u4E86\u3059\u308B".concat(annualSubscriptionEndDate, "\u307E\u3067\u3001Control\u30D7\u30E9\u30F3\u306E1\u4EBA\u306E\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u306B\u30B3\u30DF\u30C3\u30C8\u3057\u3066\u3044\u307E\u3059\u3002\u81EA\u52D5\u66F4\u65B0\u3092\u7121\u52B9\u306B\u3059\u308B\u3053\u3068\u3067\u3001").concat(annualSubscriptionEndDate, "\u304B\u3089\u5F93\u91CF\u8AB2\u91D1\u5236\u306E\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u306B\u5207\u308A\u66FF\u3048\u3001Collect\u30D7\u30E9\u30F3\u306B\u30C0\u30A6\u30F3\u30B0\u30EC\u30FC\u30C9\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002"),
-                    other: "\u3042\u306A\u305F\u306F\u3001\u5E74\u9593\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u304C".concat(annualSubscriptionEndDate, "\u306B\u7D42\u4E86\u3059\u308B\u307E\u3067\u3001Control\u30D7\u30E9\u30F3\u3067").concat(count, "\u4EBA\u306E\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u306B\u30B3\u30DF\u30C3\u30C8\u3057\u3066\u3044\u307E\u3059\u3002\u81EA\u52D5\u66F4\u65B0\u3092\u7121\u52B9\u306B\u3059\u308B\u3053\u3068\u3067\u3001").concat(annualSubscriptionEndDate, "\u304B\u3089\u5F93\u91CF\u8AB2\u91D1\u5236\u306E\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u306B\u5207\u308A\u66FF\u3048\u3001Collect\u30D7\u30E9\u30F3\u306B\u30C0\u30A6\u30F3\u30B0\u30EC\u30FC\u30C9\u3059\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002"),
-                });
-            },
+            lockedPlanDescription: ({ count, annualSubscriptionEndDate }) => ({
+                one: `あなたは、年間サブスクリプションが終了する${annualSubscriptionEndDate}まで、Controlプランの1人のアクティブメンバーにコミットしています。自動更新を無効にすることで、${annualSubscriptionEndDate}から従量課金制のサブスクリプションに切り替え、Collectプランにダウングレードすることができます。`,
+                other: `あなたは、年間サブスクリプションが${annualSubscriptionEndDate}に終了するまで、Controlプランで${count}人のアクティブメンバーにコミットしています。自動更新を無効にすることで、${annualSubscriptionEndDate}から従量課金制のサブスクリプションに切り替え、Collectプランにダウングレードすることができます。`,
+            }),
             subscriptions: 'サブスクリプション',
         },
     },
@@ -6236,22 +5288,15 @@ var translations = {
         public_announceDescription: '誰でもこのルームを見つけることができます',
         createRoom: 'ルームを作成',
         roomAlreadyExistsError: 'この名前の部屋はすでに存在します',
-        roomNameReservedError: function (_a) {
-            var reservedName = _a.reservedName;
-            return "".concat(reservedName, "\u306F\u3059\u3079\u3066\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3067\u30C7\u30D5\u30A9\u30EB\u30C8\u306E\u30EB\u30FC\u30E0\u3067\u3059\u3002\u5225\u306E\u540D\u524D\u3092\u9078\u3093\u3067\u304F\u3060\u3055\u3044\u3002");
-        },
+        roomNameReservedError: ({ reservedName }) => `${reservedName}はすべてのワークスペースでデフォルトのルームです。別の名前を選んでください。`,
         roomNameInvalidError: 'ルーム名には小文字のアルファベット、数字、ハイフンのみを使用できます。',
         pleaseEnterRoomName: '部屋の名前を入力してください',
         pleaseSelectWorkspace: 'ワークスペースを選択してください',
-        renamedRoomAction: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName, actorName = _a.actorName, isExpenseReport = _a.isExpenseReport;
-            var actor = actorName ? "".concat(actorName, " ") : '';
-            return isExpenseReport ? "".concat(actor, "\u306F\"").concat(oldName, "\"\u304B\u3089\"").concat(newName, "\"\u306B\u540D\u524D\u3092\u5909\u66F4\u3057\u307E\u3057\u305F") : "".concat(actor, "\u304C\u3053\u306E\u30EB\u30FC\u30E0\u306E\u540D\u524D\u3092\"").concat(oldName, "\"\u304B\u3089\"").concat(newName, "\"\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
+        renamedRoomAction: ({ oldName, newName, actorName, isExpenseReport }) => {
+            const actor = actorName ? `${actorName} ` : '';
+            return isExpenseReport ? `${actor}は"${oldName}"から"${newName}"に名前を変更しました` : `${actor}がこのルームの名前を"${oldName}"から"${newName}"に変更しました。`;
         },
-        roomRenamedTo: function (_a) {
-            var newName = _a.newName;
-            return "\u90E8\u5C4B\u306E\u540D\u524D\u304C".concat(newName, "\u306B\u5909\u66F4\u3055\u308C\u307E\u3057\u305F\u3002");
-        },
+        roomRenamedTo: ({ newName }) => `部屋の名前が${newName}に変更されました。`,
         social: 'ソーシャル',
         selectAWorkspace: 'ワークスペースを選択',
         growlMessageOnRenameError: 'ワークスペースルームの名前を変更できません。接続を確認して、再試行してください。',
@@ -6272,288 +5317,156 @@ var translations = {
         billcom: 'BILLCOM',
     },
     workspaceActions: {
-        addApprovalRule: function (_a) {
-            var approverEmail = _a.approverEmail, approverName = _a.approverName, field = _a.field, name = _a.name;
-            return "".concat(field, "\u300C").concat(name, "\u300D\u306E\u627F\u8A8D\u8005\u3068\u3057\u3066").concat(approverName, "\uFF08").concat(approverEmail, "\uFF09\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+        addApprovalRule: ({ approverEmail, approverName, field, name }) => `${field}「${name}」の承認者として${approverName}（${approverEmail}）を追加しました。`,
+        deleteApprovalRule: ({ approverEmail, approverName, field, name }) => `${field}「${name}」の承認者として${approverName}（${approverEmail}）を削除しました。`,
+        updateApprovalRule: ({ field, name, newApproverEmail, newApproverName, oldApproverEmail, oldApproverName }) => {
+            const formatApprover = (displayName, email) => (displayName ? `${displayName} (${email})` : email);
+            return `${field}「${name}」の承認者を${formatApprover(newApproverName, newApproverEmail)}に変更しました（以前は${formatApprover(oldApproverName, oldApproverEmail)}）`;
         },
-        deleteApprovalRule: function (_a) {
-            var approverEmail = _a.approverEmail, approverName = _a.approverName, field = _a.field, name = _a.name;
-            return "".concat(field, "\u300C").concat(name, "\u300D\u306E\u627F\u8A8D\u8005\u3068\u3057\u3066").concat(approverName, "\uFF08").concat(approverEmail, "\uFF09\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateApprovalRule: function (_a) {
-            var field = _a.field, name = _a.name, newApproverEmail = _a.newApproverEmail, newApproverName = _a.newApproverName, oldApproverEmail = _a.oldApproverEmail, oldApproverName = _a.oldApproverName;
-            var formatApprover = function (displayName, email) { return (displayName ? "".concat(displayName, " (").concat(email, ")") : email); };
-            return "".concat(field, "\u300C").concat(name, "\u300D\u306E\u627F\u8A8D\u8005\u3092").concat(formatApprover(newApproverName, newApproverEmail), "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F").concat(formatApprover(oldApproverName, oldApproverEmail), "\uFF09");
-        },
-        addCategory: function (_a) {
-            var categoryName = _a.categoryName;
-            return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F");
-        },
-        deleteCategory: function (_a) {
-            var categoryName = _a.categoryName;
-            return "\u30AB\u30C6\u30B4\u30EA\u30FC\u300C".concat(categoryName, "\u300D\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateCategory: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName;
-            return "".concat(oldValue ? '無効' : '有効', " \u30AB\u30C6\u30B4\u30EA \"").concat(categoryName, "\"");
-        },
-        updateCategoryPayrollCode: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName, newValue = _a.newValue;
+        addCategory: ({ categoryName }) => `カテゴリ「${categoryName}」を追加しました`,
+        deleteCategory: ({ categoryName }) => `カテゴリー「${categoryName}」を削除しました。`,
+        updateCategory: ({ oldValue, categoryName }) => `${oldValue ? '無効' : '有効'} カテゴリ "${categoryName}"`,
+        updateCategoryPayrollCode: ({ oldValue, categoryName, newValue }) => {
             if (!oldValue) {
-                return "\u7D66\u4E0E\u30B3\u30FC\u30C9\u300C".concat(newValue, "\u300D\u3092\u30AB\u30C6\u30B4\u30EA\u300C").concat(categoryName, "\u300D\u306B\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+                return `給与コード「${newValue}」をカテゴリ「${categoryName}」に追加しました。`;
             }
             if (!newValue && oldValue) {
-                return "\u7D66\u4E0E\u30B3\u30FC\u30C9\u300C".concat(oldValue, "\u300D\u3092\u30AB\u30C6\u30B4\u30EA\u300C").concat(categoryName, "\u300D\u304B\u3089\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
+                return `給与コード「${oldValue}」をカテゴリ「${categoryName}」から削除しました。`;
             }
-            return "\"".concat(categoryName, "\" \u30AB\u30C6\u30B4\u30EA\u306E\u7D66\u4E0E\u30B3\u30FC\u30C9\u3092\u300C").concat(newValue, "\u300D\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\u300C").concat(oldValue, "\u300D\uFF09\u3002");
+            return `"${categoryName}" カテゴリの給与コードを「${newValue}」に変更しました（以前は「${oldValue}」）。`;
         },
-        updateCategoryGLCode: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName, newValue = _a.newValue;
+        updateCategoryGLCode: ({ oldValue, categoryName, newValue }) => {
             if (!oldValue) {
-                return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u306BGL\u30B3\u30FC\u30C9\u300C").concat(newValue, "\u300D\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+                return `カテゴリ「${categoryName}」にGLコード「${newValue}」を追加しました。`;
             }
             if (!newValue && oldValue) {
-                return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u304B\u3089GL\u30B3\u30FC\u30C9\u300C").concat(oldValue, "\u300D\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
+                return `カテゴリ「${categoryName}」からGLコード「${oldValue}」を削除しました。`;
             }
-            return "\u300C".concat(categoryName, "\u300D\u30AB\u30C6\u30B4\u30EA\u306EGL\u30B3\u30FC\u30C9\u3092\u300C").concat(newValue, "\u300D\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\u300C").concat(oldValue, "\u300D\uFF09");
+            return `「${categoryName}」カテゴリのGLコードを「${newValue}」に変更しました（以前は「${oldValue}」）`;
         },
-        updateAreCommentsRequired: function (_a) {
-            var oldValue = _a.oldValue, categoryName = _a.categoryName;
-            return "\u300C".concat(categoryName, "\u300D\u30AB\u30C6\u30B4\u30EA\u306E\u8AAC\u660E\u3092").concat(!oldValue ? '必須' : '不要', "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F").concat(!oldValue ? '不要' : '必須', "\uFF09");
+        updateAreCommentsRequired: ({ oldValue, categoryName }) => {
+            return `「${categoryName}」カテゴリの説明を${!oldValue ? '必須' : '不要'}に変更しました（以前は${!oldValue ? '不要' : '必須'}）`;
         },
-        updateCategoryMaxExpenseAmount: function (_a) {
-            var categoryName = _a.categoryName, oldAmount = _a.oldAmount, newAmount = _a.newAmount;
+        updateCategoryMaxExpenseAmount: ({ categoryName, oldAmount, newAmount }) => {
             if (newAmount && !oldAmount) {
-                return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u306B\u6700\u5927\u91D1\u984D").concat(newAmount, "\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+                return `カテゴリ「${categoryName}」に最大金額${newAmount}を追加しました。`;
             }
             if (oldAmount && !newAmount) {
-                return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u304B\u3089\u6700\u5927\u91D1\u984D").concat(oldAmount, "\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
+                return `カテゴリ「${categoryName}」から最大金額${oldAmount}を削除しました。`;
             }
-            return "\"".concat(categoryName, "\" \u30AB\u30C6\u30B4\u30EA\u306E\u6700\u5927\u91D1\u984D\u3092 ").concat(newAmount, " \u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F ").concat(oldAmount, "\uFF09");
+            return `"${categoryName}" カテゴリの最大金額を ${newAmount} に変更しました（以前は ${oldAmount}）`;
         },
-        updateCategoryExpenseLimitType: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        updateCategoryExpenseLimitType: ({ categoryName, oldValue, newValue }) => {
             if (!oldValue) {
-                return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u306B\u5236\u9650\u30BF\u30A4\u30D7").concat(newValue, "\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+                return `カテゴリ「${categoryName}」に制限タイプ${newValue}を追加しました。`;
             }
-            return "\"".concat(categoryName, "\" \u30AB\u30C6\u30B4\u30EA\u306E\u5236\u9650\u30BF\u30A4\u30D7\u3092 ").concat(newValue, " \u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F ").concat(oldValue, "\uFF09");
+            return `"${categoryName}" カテゴリの制限タイプを ${newValue} に変更しました（以前は ${oldValue}）`;
         },
-        updateCategoryMaxAmountNoReceipt: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        updateCategoryMaxAmountNoReceipt: ({ categoryName, oldValue, newValue }) => {
             if (!oldValue) {
-                return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u3092\u66F4\u65B0\u3057\u3001Receipts\u3092").concat(newValue, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
+                return `カテゴリ「${categoryName}」を更新し、Receiptsを${newValue}に変更しました。`;
             }
-            return "\u300C".concat(categoryName, "\u300D\u30AB\u30C6\u30B4\u30EA\u3092").concat(newValue, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F").concat(oldValue, "\uFF09");
+            return `「${categoryName}」カテゴリを${newValue}に変更しました（以前は${oldValue}）`;
         },
-        setCategoryName: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(oldName, "\u300D\u306E\u540D\u524D\u3092\u300C").concat(newName, "\u300D\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
-        },
-        updatedDescriptionHint: function (_a) {
-            var categoryName = _a.categoryName, oldValue = _a.oldValue, newValue = _a.newValue;
+        setCategoryName: ({ oldName, newName }) => `カテゴリ「${oldName}」の名前を「${newName}」に変更しました。`,
+        updatedDescriptionHint: ({ categoryName, oldValue, newValue }) => {
             if (!newValue) {
-                return "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u304B\u3089\u8AAC\u660E\u30D2\u30F3\u30C8\u300C").concat(oldValue, "\u300D\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
+                return `カテゴリ「${categoryName}」から説明ヒント「${oldValue}」を削除しました。`;
             }
             return !oldValue
-                ? "\u30AB\u30C6\u30B4\u30EA\u300C".concat(categoryName, "\u300D\u306B\u8AAC\u660E\u306E\u30D2\u30F3\u30C8\u300C").concat(newValue, "\u300D\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002")
-                : "\"".concat(categoryName, "\" \u30AB\u30C6\u30B4\u30EA\u306E\u8AAC\u660E\u30D2\u30F3\u30C8\u3092 \"").concat(newValue, "\" \u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F \"").concat(oldValue, "\"\uFF09");
+                ? `カテゴリ「${categoryName}」に説明のヒント「${newValue}」を追加しました。`
+                : `"${categoryName}" カテゴリの説明ヒントを "${newValue}" に変更しました（以前は "${oldValue}"）`;
         },
-        updateTagListName: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "\u30BF\u30B0\u30EA\u30B9\u30C8\u540D\u3092\"".concat(newName, "\"\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\"").concat(oldName, "\"\uFF09");
-        },
-        addTag: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName;
-            return "\u30BF\u30B0\u300C".concat(tagName, "\u300D\u3092\u30EA\u30B9\u30C8\u300C").concat(tagListName, "\u300D\u306B\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateTagName: function (_a) {
-            var tagListName = _a.tagListName, newName = _a.newName, oldName = _a.oldName;
-            return "\u30BF\u30B0\u30EA\u30B9\u30C8\u300C".concat(tagListName, "\u300D\u3092\u66F4\u65B0\u3057\u3001\u30BF\u30B0\u300C").concat(oldName, "\u300D\u3092\u300C").concat(newName, "\u300D\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateTagEnabled: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName, enabled = _a.enabled;
-            return "".concat(enabled ? '有効' : '無効', " \u30EA\u30B9\u30C8\u300C").concat(tagListName, "\u300D\u306E\u30BF\u30B0\u300C").concat(tagName, "\u300D");
-        },
-        deleteTag: function (_a) {
-            var tagListName = _a.tagListName, tagName = _a.tagName;
-            return "\u30EA\u30B9\u30C8\u300C".concat(tagListName, "\u300D\u304B\u3089\u30BF\u30B0\u300C").concat(tagName, "\u300D\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
-        },
-        deleteMultipleTags: function (_a) {
-            var count = _a.count, tagListName = _a.tagListName;
-            return "\u30EA\u30B9\u30C8\u300C".concat(tagListName, "\u300D\u304B\u3089\u300C").concat(count, "\u300D\u30BF\u30B0\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateTag: function (_a) {
-            var tagListName = _a.tagListName, newValue = _a.newValue, tagName = _a.tagName, updatedField = _a.updatedField, oldValue = _a.oldValue;
+        updateTagListName: ({ oldName, newName }) => `タグリスト名を"${newName}"に変更しました（以前は"${oldName}"）`,
+        addTag: ({ tagListName, tagName }) => `タグ「${tagName}」をリスト「${tagListName}」に追加しました。`,
+        updateTagName: ({ tagListName, newName, oldName }) => `タグリスト「${tagListName}」を更新し、タグ「${oldName}」を「${newName}」に変更しました。`,
+        updateTagEnabled: ({ tagListName, tagName, enabled }) => `${enabled ? '有効' : '無効'} リスト「${tagListName}」のタグ「${tagName}」`,
+        deleteTag: ({ tagListName, tagName }) => `リスト「${tagListName}」からタグ「${tagName}」を削除しました。`,
+        deleteMultipleTags: ({ count, tagListName }) => `リスト「${tagListName}」から「${count}」タグを削除しました。`,
+        updateTag: ({ tagListName, newValue, tagName, updatedField, oldValue }) => {
             if (oldValue) {
-                return "\u30BF\u30B0\u30EA\u30B9\u30C8\u300C".concat(tagListName, "\u300D\u306E\u30BF\u30B0\u300C").concat(tagName, "\u300D\u3092\u66F4\u65B0\u3057\u3001").concat(updatedField, "\u3092\u300C").concat(oldValue, "\u300D\u304B\u3089\u300C").concat(newValue, "\u300D\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
+                return `タグリスト「${tagListName}」のタグ「${tagName}」を更新し、${updatedField}を「${oldValue}」から「${newValue}」に変更しました。`;
             }
-            return "\u30EA\u30B9\u30C8\u300C".concat(tagListName, "\u300D\u306E\u30BF\u30B0\u300C").concat(tagName, "\u300D\u3092\u66F4\u65B0\u3057\u3001").concat(updatedField, "\u3092\u300C").concat(newValue, "\u300D\u306B\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+            return `リスト「${tagListName}」のタグ「${tagName}」を更新し、${updatedField}を「${newValue}」に追加しました。`;
         },
-        updateCustomUnit: function (_a) {
-            var customUnitName = _a.customUnitName, newValue = _a.newValue, oldValue = _a.oldValue, updatedField = _a.updatedField;
-            return "".concat(customUnitName, "\u306E").concat(updatedField, "\u3092\"").concat(oldValue, "\"\u304B\u3089\"").concat(newValue, "\"\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateCustomUnitTaxEnabled: function (_a) {
-            var newValue = _a.newValue;
-            return "\u8DDD\u96E2\u30EC\u30FC\u30C8\u306B\u95A2\u3059\u308B".concat(newValue ? '有効' : '無効', "\u306E\u7A0E\u91D1\u8FFD\u8DE1");
-        },
-        addCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, rateName = _a.rateName;
-            return "\u65B0\u3057\u3044\u300C".concat(customUnitName, "\u300D\u30EC\u30FC\u30C8\u300C").concat(rateName, "\u300D\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
-        },
-        updatedCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, oldValue = _a.oldValue, updatedField = _a.updatedField;
-            return "".concat(customUnitName, "\u306E").concat(updatedField, "\u300C").concat(customUnitRateName, "\u300D\u306E\u30EC\u30FC\u30C8\u3092\u300C").concat(newValue, "\u300D\uFF08\u4EE5\u524D\u306F\u300C").concat(oldValue, "\u300D\uFF09\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
-        },
-        updatedCustomUnitTaxRateExternalID: function (_a) {
-            var customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, newTaxPercentage = _a.newTaxPercentage, oldTaxPercentage = _a.oldTaxPercentage, oldValue = _a.oldValue;
+        updateCustomUnit: ({ customUnitName, newValue, oldValue, updatedField }) => `${customUnitName}の${updatedField}を"${oldValue}"から"${newValue}"に変更しました。`,
+        updateCustomUnitTaxEnabled: ({ newValue }) => `距離レートに関する${newValue ? '有効' : '無効'}の税金追跡`,
+        addCustomUnitRate: ({ customUnitName, rateName }) => `新しい「${customUnitName}」レート「${rateName}」を追加しました。`,
+        updatedCustomUnitRate: ({ customUnitName, customUnitRateName, newValue, oldValue, updatedField }) => `${customUnitName}の${updatedField}「${customUnitRateName}」のレートを「${newValue}」（以前は「${oldValue}」）に変更しました。`,
+        updatedCustomUnitTaxRateExternalID: ({ customUnitRateName, newValue, newTaxPercentage, oldTaxPercentage, oldValue }) => {
             if (oldTaxPercentage && oldValue) {
-                return "\u8DDD\u96E2\u30EC\u30FC\u30C8\u300C".concat(customUnitRateName, "\u300D\u306E\u7A0E\u7387\u3092\u300C").concat(newValue, " (").concat(newTaxPercentage, ")\u300D\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\u300C").concat(oldValue, " (").concat(oldTaxPercentage, ")\u300D\uFF09\u3002");
+                return `距離レート「${customUnitRateName}」の税率を「${newValue} (${newTaxPercentage})」に変更しました（以前は「${oldValue} (${oldTaxPercentage})」）。`;
             }
-            return "\u8DDD\u96E2\u30EC\u30FC\u30C8\u300C".concat(customUnitRateName, "\u300D\u306B\u7A0E\u7387\u300C").concat(newValue, " (").concat(newTaxPercentage, ")\u300D\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+            return `距離レート「${customUnitRateName}」に税率「${newValue} (${newTaxPercentage})」を追加しました。`;
         },
-        updatedCustomUnitTaxClaimablePercentage: function (_a) {
-            var customUnitRateName = _a.customUnitRateName, newValue = _a.newValue, oldValue = _a.oldValue;
+        updatedCustomUnitTaxClaimablePercentage: ({ customUnitRateName, newValue, oldValue }) => {
             if (oldValue) {
-                return "\u8DDD\u96E2\u30EC\u30FC\u30C8\u300C".concat(customUnitRateName, "\u300D\u306E\u7A0E\u9084\u4ED8\u53EF\u80FD\u90E8\u5206\u3092\u300C").concat(newValue, "\u300D\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\u300C").concat(oldValue, "\u300D\uFF09\u3002");
+                return `距離レート「${customUnitRateName}」の税還付可能部分を「${newValue}」に変更しました（以前は「${oldValue}」）。`;
             }
-            return "\u8DDD\u96E2\u6599\u91D1\u300C".concat(customUnitRateName, "\u300D\u306B\u7A0E\u9084\u4ED8\u53EF\u80FD\u90E8\u5206\u300C").concat(newValue, "\u300D\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
+            return `距離料金「${customUnitRateName}」に税還付可能部分「${newValue}」を追加しました。`;
         },
-        deleteCustomUnitRate: function (_a) {
-            var customUnitName = _a.customUnitName, rateName = _a.rateName;
-            return "\"".concat(customUnitName, "\" \u30EC\u30FC\u30C8 \"").concat(rateName, "\" \u3092\u524A\u9664\u3057\u307E\u3057\u305F");
-        },
-        addedReportField: function (_a) {
-            var fieldType = _a.fieldType, fieldName = _a.fieldName;
-            return "".concat(fieldType, " \u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9 \"").concat(fieldName, "\" \u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F");
-        },
-        updateReportFieldDefaultValue: function (_a) {
-            var defaultValue = _a.defaultValue, fieldName = _a.fieldName;
-            return "\u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9 \"".concat(fieldName, "\" \u306E\u30C7\u30D5\u30A9\u30EB\u30C8\u5024\u3092 \"").concat(defaultValue, "\" \u306B\u8A2D\u5B9A\u3059\u308B");
-        },
-        addedReportFieldOption: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName;
-            return "\u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9\u300C".concat(fieldName, "\u300D\u306B\u30AA\u30D7\u30B7\u30E7\u30F3\u300C").concat(optionName, "\u300D\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002");
-        },
-        removedReportFieldOption: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName;
-            return "\u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9\u300C".concat(fieldName, "\u300D\u304B\u3089\u30AA\u30D7\u30B7\u30E7\u30F3\u300C").concat(optionName, "\u300D\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateReportFieldOptionDisabled: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName, optionEnabled = _a.optionEnabled;
-            return "".concat(optionEnabled ? '有効' : '無効', " \u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9\u300C").concat(fieldName, "\u300D\u306E\u30AA\u30D7\u30B7\u30E7\u30F3\u300C").concat(optionName, "\u300D");
-        },
-        updateReportFieldAllOptionsDisabled: function (_a) {
-            var fieldName = _a.fieldName, optionName = _a.optionName, allEnabled = _a.allEnabled, toggledOptionsCount = _a.toggledOptionsCount;
+        deleteCustomUnitRate: ({ customUnitName, rateName }) => `"${customUnitName}" レート "${rateName}" を削除しました`,
+        addedReportField: ({ fieldType, fieldName }) => `${fieldType} レポートフィールド "${fieldName}" を追加しました`,
+        updateReportFieldDefaultValue: ({ defaultValue, fieldName }) => `レポートフィールド "${fieldName}" のデフォルト値を "${defaultValue}" に設定する`,
+        addedReportFieldOption: ({ fieldName, optionName }) => `レポートフィールド「${fieldName}」にオプション「${optionName}」を追加しました。`,
+        removedReportFieldOption: ({ fieldName, optionName }) => `レポートフィールド「${fieldName}」からオプション「${optionName}」を削除しました。`,
+        updateReportFieldOptionDisabled: ({ fieldName, optionName, optionEnabled }) => `${optionEnabled ? '有効' : '無効'} レポートフィールド「${fieldName}」のオプション「${optionName}」`,
+        updateReportFieldAllOptionsDisabled: ({ fieldName, optionName, allEnabled, toggledOptionsCount }) => {
             if (toggledOptionsCount && toggledOptionsCount > 1) {
-                return "".concat(allEnabled ? '有効' : '無効', " \u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9 \"").concat(fieldName, "\" \u306E\u3059\u3079\u3066\u306E\u30AA\u30D7\u30B7\u30E7\u30F3");
+                return `${allEnabled ? '有効' : '無効'} レポートフィールド "${fieldName}" のすべてのオプション`;
             }
-            return "".concat(allEnabled ? '有効' : '無効', " \u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9\u300C").concat(fieldName, "\u300D\u306E\u30AA\u30D7\u30B7\u30E7\u30F3\u300C").concat(optionName, "\u300D\u3001\u3059\u3079\u3066\u306E\u30AA\u30D7\u30B7\u30E7\u30F3\u3092").concat(allEnabled ? '有効' : '無効');
+            return `${allEnabled ? '有効' : '無効'} レポートフィールド「${fieldName}」のオプション「${optionName}」、すべてのオプションを${allEnabled ? '有効' : '無効'}`;
         },
-        deleteReportField: function (_a) {
-            var fieldType = _a.fieldType, fieldName = _a.fieldName;
-            return "".concat(fieldType, "\u30EC\u30DD\u30FC\u30C8\u30D5\u30A3\u30FC\u30EB\u30C9\u300C").concat(fieldName, "\u300D\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
-        },
-        preventSelfApproval: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\"Prevent self-approval\" \u3092 \"".concat(newValue === 'true' ? '有効' : '無効', "\" \u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F \"").concat(oldValue === 'true' ? '有効' : '無効', "\"\uFF09");
-        },
-        updateMaxExpenseAmountNoReceipt: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u6700\u5927\u9818\u53CE\u66F8\u5FC5\u8981\u7D4C\u8CBB\u984D\u3092".concat(oldValue, "\u304B\u3089").concat(newValue, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateMaxExpenseAmount: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u9055\u53CD\u306E\u305F\u3081\u306E\u6700\u5927\u7D4C\u8CBB\u984D\u3092".concat(oldValue, "\u304B\u3089").concat(newValue, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateMaxExpenseAge: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\"\u6700\u5927\u7D4C\u8CBB\u5E74\u9F62\uFF08\u65E5\u6570\uFF09\"\u3092\"".concat(newValue, "\"\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\"").concat(oldValue === 'false' ? CONST_1.default.POLICY.DEFAULT_MAX_EXPENSE_AGE : oldValue, "\"\uFF09");
-        },
-        updateMonthlyOffset: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
+        deleteReportField: ({ fieldType, fieldName }) => `${fieldType}レポートフィールド「${fieldName}」を削除しました。`,
+        preventSelfApproval: ({ oldValue, newValue }) => `"Prevent self-approval" を "${newValue === 'true' ? '有効' : '無効'}" に更新しました（以前は "${oldValue === 'true' ? '有効' : '無効'}"）`,
+        updateMaxExpenseAmountNoReceipt: ({ oldValue, newValue }) => `最大領収書必要経費額を${oldValue}から${newValue}に変更しました。`,
+        updateMaxExpenseAmount: ({ oldValue, newValue }) => `違反のための最大経費額を${oldValue}から${newValue}に変更しました。`,
+        updateMaxExpenseAge: ({ oldValue, newValue }) => `"最大経費年齢（日数）"を"${newValue}"に更新しました（以前は"${oldValue === 'false' ? CONST_1.default.POLICY.DEFAULT_MAX_EXPENSE_AGE : oldValue}"）`,
+        updateMonthlyOffset: ({ oldValue, newValue }) => {
             if (!oldValue) {
-                return "\u6708\u6B21\u30EC\u30DD\u30FC\u30C8\u306E\u63D0\u51FA\u65E5\u3092\u300C".concat(newValue, "\u300D\u306B\u8A2D\u5B9A\u3059\u308B");
+                return `月次レポートの提出日を「${newValue}」に設定する`;
             }
-            return "\u6708\u6B21\u5831\u544A\u66F8\u306E\u63D0\u51FA\u65E5\u3092\u300C".concat(newValue, "\u300D\uFF08\u4EE5\u524D\u306F\u300C").concat(oldValue, "\u300D\uFF09\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\u3002");
+            return `月次報告書の提出日を「${newValue}」（以前は「${oldValue}」）に更新しました。`;
         },
-        updateDefaultBillable: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\"\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u3078\u306E\u7D4C\u8CBB\u518D\u8ACB\u6C42\"\u3092\"".concat(newValue, "\"\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\"").concat(oldValue, "\"\uFF09");
-        },
-        updateDefaultReimbursable: function (_a) {
-            var oldValue = _a.oldValue, newValue = _a.newValue;
-            return "\u300C\u73FE\u91D1\u7D4C\u8CBB\u306E\u30C7\u30D5\u30A9\u30EB\u30C8\u300D\u3092\"".concat(newValue, "\"\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F (\u4EE5\u524D\u306F\"").concat(oldValue, "\")");
-        },
-        updateDefaultTitleEnforced: function (_a) {
-            var value = _a.value;
-            return "\"\u30C7\u30D5\u30A9\u30EB\u30C8\u306E\u30EC\u30DD\u30FC\u30C8\u30BF\u30A4\u30C8\u30EB\u3092\u5F37\u5236\u3059\u308B\" ".concat(value ? 'on' : 'オフ');
-        },
-        renamedWorkspaceNameAction: function (_a) {
-            var oldName = _a.oldName, newName = _a.newName;
-            return "\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u540D\u524D\u3092\u300C".concat(newName, "\u300D\uFF08\u4EE5\u524D\u306F\u300C").concat(oldName, "\u300D\uFF09\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateWorkspaceDescription: function (_a) {
-            var newDescription = _a.newDescription, oldDescription = _a.oldDescription;
-            return !oldDescription ? "\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8AAC\u660E\u3092\"".concat(newDescription, "\"\u306B\u8A2D\u5B9A\u3057\u3066\u304F\u3060\u3055\u3044\u3002") : "\u3053\u306E\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8AAC\u660E\u3092\"".concat(oldDescription, "\"\u304B\u3089\"").concat(newDescription, "\"\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\u3002");
-        },
-        removedFromApprovalWorkflow: function (_a) {
-            var _b;
-            var submittersNames = _a.submittersNames;
-            var joinedNames = '';
+        updateDefaultBillable: ({ oldValue, newValue }) => `"クライアントへの経費再請求"を"${newValue}"に更新しました（以前は"${oldValue}"）`,
+        updateDefaultReimbursable: ({ oldValue, newValue }) => `「現金経費のデフォルト」を"${newValue}"に更新しました (以前は"${oldValue}")`,
+        updateDefaultTitleEnforced: ({ value }) => `"デフォルトのレポートタイトルを強制する" ${value ? 'on' : 'オフ'}`,
+        renamedWorkspaceNameAction: ({ oldName, newName }) => `このワークスペースの名前を「${newName}」（以前は「${oldName}」）に更新しました。`,
+        updateWorkspaceDescription: ({ newDescription, oldDescription }) => !oldDescription ? `このワークスペースの説明を"${newDescription}"に設定してください。` : `このワークスペースの説明を"${oldDescription}"から"${newDescription}"に更新しました。`,
+        removedFromApprovalWorkflow: ({ submittersNames }) => {
+            let joinedNames = '';
             if (submittersNames.length === 1) {
-                joinedNames = (_b = submittersNames.at(0)) !== null && _b !== void 0 ? _b : '';
+                joinedNames = submittersNames.at(0) ?? '';
             }
             else if (submittersNames.length === 2) {
                 joinedNames = submittersNames.join('と');
             }
             else if (submittersNames.length > 2) {
-                joinedNames = "".concat(submittersNames.slice(0, submittersNames.length - 1).join(', '), " and ").concat(submittersNames.at(-1));
+                joinedNames = `${submittersNames.slice(0, submittersNames.length - 1).join(', ')} and ${submittersNames.at(-1)}`;
             }
             return {
-                one: "".concat(joinedNames, "\u306E\u627F\u8A8D\u30EF\u30FC\u30AF\u30D5\u30ED\u30FC\u3068\u7D4C\u8CBB\u30C1\u30E3\u30C3\u30C8\u304B\u3089\u3042\u306A\u305F\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002\u4EE5\u524D\u306B\u63D0\u51FA\u3055\u308C\u305F\u30EC\u30DD\u30FC\u30C8\u306F\u3001\u5F15\u304D\u7D9A\u304D\u53D7\u4FE1\u30C8\u30EC\u30A4\u3067\u627F\u8A8D\u53EF\u80FD\u3067\u3059\u3002"),
-                other: "".concat(joinedNames, "\u306E\u627F\u8A8D\u30EF\u30FC\u30AF\u30D5\u30ED\u30FC\u3068\u7D4C\u8CBB\u30C1\u30E3\u30C3\u30C8\u304B\u3089\u3042\u306A\u305F\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002\u4EE5\u524D\u306B\u63D0\u51FA\u3055\u308C\u305F\u30EC\u30DD\u30FC\u30C8\u306F\u3001\u5F15\u304D\u7D9A\u304D\u3042\u306A\u305F\u306E\u53D7\u4FE1\u30C8\u30EC\u30A4\u3067\u627F\u8A8D\u53EF\u80FD\u3067\u3059\u3002"),
+                one: `${joinedNames}の承認ワークフローと経費チャットからあなたを削除しました。以前に提出されたレポートは、引き続き受信トレイで承認可能です。`,
+                other: `${joinedNames}の承認ワークフローと経費チャットからあなたを削除しました。以前に提出されたレポートは、引き続きあなたの受信トレイで承認可能です。`,
             };
         },
-        demotedFromWorkspace: function (_a) {
-            var policyName = _a.policyName, oldRole = _a.oldRole;
-            return "".concat(policyName, "\u3067\u306E\u3042\u306A\u305F\u306E\u5F79\u5272\u304C").concat(oldRole, "\u304B\u3089\u30E6\u30FC\u30B6\u30FC\u306B\u66F4\u65B0\u3055\u308C\u307E\u3057\u305F\u3002\u3042\u306A\u305F\u81EA\u8EAB\u306E\u3082\u306E\u3092\u9664\u304F\u3059\u3079\u3066\u306E\u63D0\u51FA\u8005\u306E\u7D4C\u8CBB\u30C1\u30E3\u30C3\u30C8\u304B\u3089\u524A\u9664\u3055\u308C\u307E\u3057\u305F\u3002");
-        },
-        updatedWorkspaceCurrencyAction: function (_a) {
-            var oldCurrency = _a.oldCurrency, newCurrency = _a.newCurrency;
-            return "\u30C7\u30D5\u30A9\u30EB\u30C8\u901A\u8CA8\u3092".concat(newCurrency, "\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F").concat(oldCurrency, "\uFF09");
-        },
-        updatedWorkspaceFrequencyAction: function (_a) {
-            var oldFrequency = _a.oldFrequency, newFrequency = _a.newFrequency;
-            return "\u81EA\u52D5\u30EC\u30DD\u30FC\u30C8\u306E\u983B\u5EA6\u3092\u300C".concat(newFrequency, "\u300D\uFF08\u4EE5\u524D\u306F\u300C").concat(oldFrequency, "\u300D\uFF09\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\u3002");
-        },
-        updateApprovalMode: function (_a) {
-            var newValue = _a.newValue, oldValue = _a.oldValue;
-            return "\u627F\u8A8D\u30E2\u30FC\u30C9\u3092\"".concat(oldValue, "\"\u304B\u3089\"").concat(newValue, "\"\u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\u3002");
-        },
+        demotedFromWorkspace: ({ policyName, oldRole }) => `${policyName}でのあなたの役割が${oldRole}からユーザーに更新されました。あなた自身のものを除くすべての提出者の経費チャットから削除されました。`,
+        updatedWorkspaceCurrencyAction: ({ oldCurrency, newCurrency }) => `デフォルト通貨を${newCurrency}に更新しました（以前は${oldCurrency}）`,
+        updatedWorkspaceFrequencyAction: ({ oldFrequency, newFrequency }) => `自動レポートの頻度を「${newFrequency}」（以前は「${oldFrequency}」）に更新しました。`,
+        updateApprovalMode: ({ newValue, oldValue }) => `承認モードを"${oldValue}"から"${newValue}"に更新しました。`,
         upgradedWorkspace: 'このワークスペースをコントロールプランにアップグレードしました',
         downgradedWorkspace: 'このワークスペースをCollectプランにダウングレードしました。',
-        updatedAuditRate: function (_a) {
-            var oldAuditRate = _a.oldAuditRate, newAuditRate = _a.newAuditRate;
-            return "\u30EC\u30DD\u30FC\u30C8\u304C\u624B\u52D5\u627F\u8A8D\u306E\u305F\u3081\u306B\u30E9\u30F3\u30C0\u30E0\u306B\u30EB\u30FC\u30C6\u30A3\u30F3\u30B0\u3055\u308C\u308B\u5272\u5408\u3092".concat(Math.round(newAuditRate * 100), "%\uFF08\u4EE5\u524D\u306F").concat(Math.round(oldAuditRate * 100), "%\uFF09\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\u3002");
-        },
-        updatedManualApprovalThreshold: function (_a) {
-            var oldLimit = _a.oldLimit, newLimit = _a.newLimit;
-            return "\u3059\u3079\u3066\u306E\u7D4C\u8CBB\u306E\u624B\u52D5\u627F\u8A8D\u9650\u5EA6\u984D\u3092".concat(newLimit, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F").concat(oldLimit, "\uFF09");
-        },
+        updatedAuditRate: ({ oldAuditRate, newAuditRate }) => `レポートが手動承認のためにランダムにルーティングされる割合を${Math.round(newAuditRate * 100)}%（以前は${Math.round(oldAuditRate * 100)}%）に変更しました。`,
+        updatedManualApprovalThreshold: ({ oldLimit, newLimit }) => `すべての経費の手動承認限度額を${newLimit}に変更しました（以前は${oldLimit}）`,
     },
     roomMembersPage: {
         memberNotFound: 'メンバーが見つかりません。',
         useInviteButton: '新しいメンバーをチャットに招待するには、上の招待ボタンを使用してください。',
-        notAuthorized: "\u3053\u306E\u30DA\u30FC\u30B8\u306B\u30A2\u30AF\u30BB\u30B9\u3059\u308B\u6A29\u9650\u304C\u3042\u308A\u307E\u305B\u3093\u3002\u3053\u306E\u30EB\u30FC\u30E0\u306B\u53C2\u52A0\u3057\u3088\u3046\u3068\u3057\u3066\u3044\u308B\u5834\u5408\u306F\u3001\u30EB\u30FC\u30E0\u30E1\u30F3\u30D0\u30FC\u306B\u8FFD\u52A0\u3057\u3066\u3082\u3089\u3063\u3066\u304F\u3060\u3055\u3044\u3002\u4ED6\u306B\u4F55\u304B\u304A\u56F0\u308A\u3067\u3059\u304B\uFF1F".concat(CONST_1.default.EMAIL.CONCIERGE, "\u306B\u304A\u554F\u3044\u5408\u308F\u305B\u304F\u3060\u3055\u3044\u3002"),
-        roomArchived: "\u3053\u306E\u30EB\u30FC\u30E0\u306F\u30A2\u30FC\u30AB\u30A4\u30D6\u3055\u308C\u307E\u3057\u305F\u3002\u3054\u4E0D\u660E\u306A\u70B9\u304C\u3042\u308C\u3070\u3001".concat(CONST_1.default.EMAIL.CONCIERGE, " \u307E\u3067\u3054\u9023\u7D61\u304F\u3060\u3055\u3044\u3002"),
-        removeMembersPrompt: function (_a) {
-            var memberName = _a.memberName;
-            return ({
-                one: "\u3053\u306E\u30EB\u30FC\u30E0\u304B\u3089".concat(memberName, "\u3092\u524A\u9664\u3057\u3066\u3082\u3088\u308D\u3057\u3044\u3067\u3059\u304B\uFF1F"),
-                other: '選択したメンバーをルームから削除してもよろしいですか？',
-            });
-        },
+        notAuthorized: `このページにアクセスする権限がありません。このルームに参加しようとしている場合は、ルームメンバーに追加してもらってください。他に何かお困りですか？${CONST_1.default.EMAIL.CONCIERGE}にお問い合わせください。`,
+        roomArchived: `このルームはアーカイブされました。ご不明な点があれば、${CONST_1.default.EMAIL.CONCIERGE} までご連絡ください。`,
+        removeMembersPrompt: ({ memberName }) => ({
+            one: `このルームから${memberName}を削除してもよろしいですか？`,
+            other: '選択したメンバーをルームから削除してもよろしいですか？',
+        }),
         error: {
             genericAdd: 'このルームメンバーの追加に問題が発生しました',
         },
@@ -6575,10 +5488,7 @@ var translations = {
         completed: '完了しました',
         action: '完了',
         messages: {
-            created: function (_a) {
-                var title = _a.title;
-                return "".concat(title, "\u306E\u30BF\u30B9\u30AF");
-            },
+            created: ({ title }) => `${title}のタスク`,
             completed: '完了としてマークされました',
             canceled: '削除されたタスク',
             reopened: '未完了としてマークされました',
@@ -6592,10 +5502,7 @@ var translations = {
         deleteConfirmation: 'このタスクを削除してもよろしいですか？',
     },
     statementPage: {
-        title: function (_a) {
-            var year = _a.year, monthName = _a.monthName;
-            return "".concat(monthName, " ").concat(year, " \u660E\u7D30\u66F8");
-        },
+        title: ({ year, monthName }) => `${monthName} ${year} 明細書`,
     },
     keyboardShortcutsPage: {
         title: 'キーボードショートカット',
@@ -6621,7 +5528,7 @@ var translations = {
         searchResults: {
             emptyResults: {
                 title: '表示するものがありません',
-                subtitle: "\u691C\u7D22\u6761\u4EF6\u3092\u8ABF\u6574\u3059\u308B\u304B\u3001\u7DD1\u8272\u306E".concat(CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE, "\u30DC\u30BF\u30F3\u3067\u4F55\u304B\u3092\u4F5C\u6210\u3057\u3066\u307F\u3066\u304F\u3060\u3055\u3044\u3002"),
+                subtitle: `検索条件を調整するか、緑色の${CONST_1.default.CUSTOM_EMOJIS.GLOBAL_CREATE}ボタンで何かを作成してみてください。`,
             },
             emptyExpenseResults: {
                 title: 'まだ経費が作成されていません。',
@@ -6690,24 +5597,15 @@ var translations = {
         filtersHeader: 'フィルター',
         filters: {
             date: {
-                before: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "".concat(date !== null && date !== void 0 ? date : '', "\u306E\u524D\u306B");
+                before: ({ date } = {}) => `${date ?? ''}の前に`,
+                after: ({ date } = {}) => `After ${date ?? ''}`,
+                on: ({ date } = {}) => `On ${date ?? ''}`,
+                presets: {
+                    [CONST_1.default.SEARCH.DATE_PRESETS.NEVER]: '未承認',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.LAST_MONTH]: '先月',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.THIS_MONTH]: '今月',
+                    [CONST_1.default.SEARCH.DATE_PRESETS.LAST_STATEMENT]: '最後の声明',
                 },
-                after: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "After ".concat(date !== null && date !== void 0 ? date : '');
-                },
-                on: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, date = _b.date;
-                    return "On ".concat(date !== null && date !== void 0 ? date : '');
-                },
-                presets: (_12 = {},
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.NEVER] = '未承認',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.LAST_MONTH] = '先月',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.THIS_MONTH] = '今月',
-                    _12[CONST_1.default.SEARCH.DATE_PRESETS.LAST_STATEMENT] = '最後の声明',
-                    _12),
             },
             status: 'ステータス',
             keyword: 'キーワード',
@@ -6718,32 +5616,17 @@ var translations = {
             unread: '未読',
             completed: '完了しました',
             amount: {
-                lessThan: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, amount = _b.amount;
-                    return "".concat(amount !== null && amount !== void 0 ? amount : '', "\u672A\u6E80");
-                },
-                greaterThan: function (_a) {
-                    var _b = _a === void 0 ? {} : _a, amount = _b.amount;
-                    return "".concat(amount !== null && amount !== void 0 ? amount : '', " \u3088\u308A\u5927\u304D\u3044");
-                },
-                between: function (_a) {
-                    var greaterThan = _a.greaterThan, lessThan = _a.lessThan;
-                    return "".concat(greaterThan, " \u3068 ").concat(lessThan, " \u306E\u9593");
-                },
+                lessThan: ({ amount } = {}) => `${amount ?? ''}未満`,
+                greaterThan: ({ amount } = {}) => `${amount ?? ''} より大きい`,
+                between: ({ greaterThan, lessThan }) => `${greaterThan} と ${lessThan} の間`,
             },
             card: {
                 expensify: 'Expensify',
                 individualCards: '個別カード',
                 closedCards: 'クローズドカード',
                 cardFeeds: 'カードフィード',
-                cardFeedName: function (_a) {
-                    var cardFeedBankName = _a.cardFeedBankName, cardFeedLabel = _a.cardFeedLabel;
-                    return "\u3059\u3079\u3066\u306E".concat(cardFeedBankName).concat(cardFeedLabel ? " - ".concat(cardFeedLabel) : '');
-                },
-                cardFeedNameCSV: function (_a) {
-                    var cardFeedLabel = _a.cardFeedLabel;
-                    return "\u3059\u3079\u3066\u306ECSV\u30A4\u30F3\u30DD\u30FC\u30C8\u30AB\u30FC\u30C9".concat(cardFeedLabel ? " - ".concat(cardFeedLabel) : '');
-                },
+                cardFeedName: ({ cardFeedBankName, cardFeedLabel }) => `すべての${cardFeedBankName}${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
+                cardFeedNameCSV: ({ cardFeedLabel }) => `すべてのCSVインポートカード${cardFeedLabel ? ` - ${cardFeedLabel}` : ''}`,
             },
             current: '現在',
             past: '過去',
@@ -6756,26 +5639,26 @@ var translations = {
             billable: 'ビラブル',
             reimbursable: '払い戻し可能',
             purchaseCurrency: '購入通貨',
-            groupBy: (_13 = {},
-                _13[CONST_1.default.SEARCH.GROUP_BY.REPORTS] = '報告',
-                _13[CONST_1.default.SEARCH.GROUP_BY.FROM] = 'から',
-                _13[CONST_1.default.SEARCH.GROUP_BY.CARD] = 'カード',
-                _13[CONST_1.default.SEARCH.GROUP_BY.WITHDRAWAL_ID] = '出金ID',
-                _13),
+            groupBy: {
+                [CONST_1.default.SEARCH.GROUP_BY.REPORTS]: '報告',
+                [CONST_1.default.SEARCH.GROUP_BY.FROM]: 'から',
+                [CONST_1.default.SEARCH.GROUP_BY.CARD]: 'カード',
+                [CONST_1.default.SEARCH.GROUP_BY.WITHDRAWAL_ID]: '出金ID',
+            },
             feed: 'フィード',
-            withdrawalType: (_14 = {},
-                _14[CONST_1.default.SEARCH.WITHDRAWAL_TYPE.EXPENSIFY_CARD] = 'Expensify Card',
-                _14[CONST_1.default.SEARCH.WITHDRAWAL_TYPE.REIMBURSEMENT] = '払い戻し',
-                _14),
+            withdrawalType: {
+                [CONST_1.default.SEARCH.WITHDRAWAL_TYPE.EXPENSIFY_CARD]: 'Expensify Card',
+                [CONST_1.default.SEARCH.WITHDRAWAL_TYPE.REIMBURSEMENT]: '払い戻し',
+            },
             has: {
                 receipt: '領収書',
             },
-            action: (_15 = {},
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.SUBMIT] = '送信',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.APPROVE] = '承認',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.PAY] = '支払う',
-                _15[CONST_1.default.SEARCH.ACTION_FILTERS.EXPORT] = 'エクスポート',
-                _15),
+            action: {
+                [CONST_1.default.SEARCH.ACTION_FILTERS.SUBMIT]: '送信',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.APPROVE]: '承認',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.PAY]: '支払う',
+                [CONST_1.default.SEARCH.ACTION_FILTERS.EXPORT]: 'エクスポート',
+            },
         },
         has: '含む',
         groupBy: 'グループ',
@@ -6879,10 +5762,7 @@ var translations = {
     checkForUpdatesModal: {
         available: {
             title: 'アップデートが利用可能です',
-            message: function (_a) {
-                var isSilentUpdating = _a.isSilentUpdating;
-                return "\u65B0\u3057\u3044\u30D0\u30FC\u30B8\u30E7\u30F3\u306F\u307E\u3082\u306A\u304F\u5229\u7528\u53EF\u80FD\u306B\u306A\u308A\u307E\u3059\u3002".concat(!isSilentUpdating ? '更新の準備が整いましたらお知らせします。' : '');
-            },
+            message: ({ isSilentUpdating }) => `新しいバージョンはまもなく利用可能になります。${!isSilentUpdating ? '更新の準備が整いましたらお知らせします。' : ''}`,
             soundsGood: '良さそうです',
         },
         notAvailable: {
@@ -6907,148 +5787,80 @@ var translations = {
         noActivityYet: 'まだ活動がありません',
         actions: {
             type: {
-                changeField: function (_a) {
-                    var oldValue = _a.oldValue, newValue = _a.newValue, fieldName = _a.fieldName;
-                    return "".concat(fieldName, "\u3092").concat(oldValue, "\u304B\u3089").concat(newValue, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F");
-                },
-                changeFieldEmpty: function (_a) {
-                    var newValue = _a.newValue, fieldName = _a.fieldName;
-                    return "".concat(fieldName, "\u3092").concat(newValue, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F");
-                },
-                changeReportPolicy: function (_a) {
-                    var fromPolicyName = _a.fromPolicyName, toPolicyName = _a.toPolicyName;
+                changeField: ({ oldValue, newValue, fieldName }) => `${fieldName}を${oldValue}から${newValue}に変更しました`,
+                changeFieldEmpty: ({ newValue, fieldName }) => `${fieldName}を${newValue}に変更しました`,
+                changeReportPolicy: ({ fromPolicyName, toPolicyName }) => {
                     if (!toPolicyName) {
-                        return "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u5909\u66F4\u3057\u307E\u3057\u305F".concat(fromPolicyName ? "\uFF08\u4EE5\u524D\u306F ".concat(fromPolicyName, "\uFF09") : '');
+                        return `ワークスペースを変更しました${fromPolicyName ? `（以前は ${fromPolicyName}）` : ''}`;
                     }
-                    return "\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092".concat(toPolicyName, "\u306B\u5909\u66F4\u3057\u307E\u3057\u305F").concat(fromPolicyName ? "\uFF08\u4EE5\u524D\u306F ".concat(fromPolicyName, "\uFF09") : '');
+                    return `ワークスペースを${toPolicyName}に変更しました${fromPolicyName ? `（以前は ${fromPolicyName}）` : ''}`;
                 },
-                changeType: function (_a) {
-                    var oldType = _a.oldType, newType = _a.newType;
-                    return "".concat(oldType, " \u304B\u3089 ").concat(newType, " \u306B\u30BF\u30A4\u30D7\u3092\u5909\u66F4\u3057\u307E\u3057\u305F");
-                },
-                exportedToCSV: "CSV\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3055\u308C\u307E\u3057\u305F",
+                changeType: ({ oldType, newType }) => `${oldType} から ${newType} にタイプを変更しました`,
+                exportedToCSV: `CSVにエクスポートされました`,
                 exportedToIntegration: {
-                    automatic: function (_a) {
-                        var _b;
-                        var label = _a.label;
+                    automatic: ({ label }) => {
                         // The label will always be in English, so we need to translate it
-                        var labelTranslations = (_b = {},
-                            _b[CONST_1.default.REPORT.EXPORT_OPTION_LABELS.EXPENSE_LEVEL_EXPORT] = translations.export.expenseLevelExport,
-                            _b[CONST_1.default.REPORT.EXPORT_OPTION_LABELS.REPORT_LEVEL_EXPORT] = translations.export.reportLevelExport,
-                            _b);
-                        var translatedLabel = labelTranslations[label] || label;
-                        return "".concat(translatedLabel, "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3055\u308C\u307E\u3057\u305F");
+                        const labelTranslations = {
+                            [CONST_1.default.REPORT.EXPORT_OPTION_LABELS.EXPENSE_LEVEL_EXPORT]: translations.export.expenseLevelExport,
+                            [CONST_1.default.REPORT.EXPORT_OPTION_LABELS.REPORT_LEVEL_EXPORT]: translations.export.reportLevelExport,
+                        };
+                        const translatedLabel = labelTranslations[label] || label;
+                        return `${translatedLabel}にエクスポートされました`;
                     },
-                    automaticActionOne: function (_a) {
-                        var label = _a.label;
-                        return "".concat(label, " \u7D4C\u7531\u3067\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3055\u308C\u307E\u3057\u305F");
-                    },
+                    automaticActionOne: ({ label }) => `${label} 経由でエクスポートされました`,
                     automaticActionTwo: '会計設定',
-                    manual: function (_a) {
-                        var label = _a.label;
-                        return "\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u3092\u624B\u52D5\u3067".concat(label, "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u6E08\u307F\u3068\u3057\u3066\u30DE\u30FC\u30AF\u3057\u307E\u3057\u305F\u3002");
-                    },
+                    manual: ({ label }) => `このレポートを手動で${label}にエクスポート済みとしてマークしました。`,
                     automaticActionThree: '正常にレコードを作成しました',
                     reimburseableLink: '自己負担費用',
                     nonReimbursableLink: '会社カード経費',
-                    pending: function (_a) {
-                        var label = _a.label;
-                        return "\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u306E\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3092".concat(label, "\u306B\u958B\u59CB\u3057\u307E\u3057\u305F...");
-                    },
+                    pending: ({ label }) => `このレポートのエクスポートを${label}に開始しました...`,
                 },
-                integrationsMessage: function (_a) {
-                    var errorMessage = _a.errorMessage, label = _a.label, linkText = _a.linkText, linkURL = _a.linkURL;
-                    return "\u3053\u306E\u30EC\u30DD\u30FC\u30C8\u3092".concat(label, "\u306B\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\uFF08\"").concat(errorMessage).concat(linkText ? " <a href=\"".concat(linkURL, "\">").concat(linkText, "</a>") : '', "\"\uFF09");
-                },
-                managerAttachReceipt: "\u9818\u53CE\u66F8\u3092\u8FFD\u52A0\u3057\u307E\u3057\u305F",
-                managerDetachReceipt: "\u9818\u53CE\u66F8\u3092\u524A\u9664\u3057\u307E\u3057\u305F",
-                markedReimbursed: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "\u4ED6\u306E\u5834\u6240\u3067".concat(currency).concat(amount, "\u3092\u652F\u6255\u3044\u307E\u3057\u305F\u3002");
-                },
-                markedReimbursedFromIntegration: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "".concat(currency).concat(amount, " \u3092\u7D71\u5408\u7D4C\u7531\u3067\u652F\u6255\u3044\u307E\u3057\u305F");
-                },
-                outdatedBankAccount: "\u652F\u6255\u8005\u306E\u9280\u884C\u53E3\u5EA7\u306B\u554F\u984C\u304C\u3042\u308B\u305F\u3081\u3001\u652F\u6255\u3044\u3092\u51E6\u7406\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002",
-                reimbursementACHBounce: "\u652F\u6255\u8005\u306B\u5341\u5206\u306A\u8CC7\u91D1\u304C\u306A\u3044\u305F\u3081\u3001\u652F\u6255\u3044\u3092\u51E6\u7406\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002",
-                reimbursementACHCancelled: "\u652F\u6255\u3044\u3092\u30AD\u30E3\u30F3\u30BB\u30EB\u3057\u307E\u3057\u305F",
-                reimbursementAccountChanged: "\u652F\u6255\u3044\u3092\u51E6\u7406\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u652F\u6255\u8005\u304C\u9280\u884C\u53E3\u5EA7\u3092\u5909\u66F4\u3057\u305F\u305F\u3081\u3067\u3059\u3002",
-                reimbursementDelayed: "\u652F\u6255\u3044\u306F\u51E6\u7406\u3055\u308C\u307E\u3057\u305F\u304C\u3001\u3055\u3089\u306B1\uFF5E2\u55B6\u696D\u65E5\u9045\u308C\u307E\u3059\u3002",
-                selectedForRandomAudit: "\u30EC\u30D3\u30E5\u30FC\u306E\u305F\u3081\u306B\u30E9\u30F3\u30C0\u30E0\u306B\u9078\u3070\u308C\u307E\u3057\u305F",
-                selectedForRandomAuditMarkdown: "[\u30E9\u30F3\u30C0\u30E0\u306B\u9078\u629E\u3055\u308C\u305F](https://help.expensify.com/articles/expensify-classic/reports/Set-a-random-report-audit-schedule)\u30EC\u30D3\u30E5\u30FC\u7528",
-                share: function (_a) {
-                    var to = _a.to;
-                    return "\u62DB\u5F85\u3055\u308C\u305F\u30E1\u30F3\u30D0\u30FC".concat(to);
-                },
-                unshare: function (_a) {
-                    var to = _a.to;
-                    return "\u524A\u9664\u3055\u308C\u305F\u30E1\u30F3\u30D0\u30FC".concat(to);
-                },
-                stripePaid: function (_a) {
-                    var amount = _a.amount, currency = _a.currency;
-                    return "".concat(currency).concat(amount, " \u3092\u652F\u6255\u3044\u307E\u3057\u305F");
-                },
-                takeControl: "\u5236\u5FA1\u3092\u53D6\u308A\u307E\u3057\u305F",
-                integrationSyncFailed: function (_a) {
-                    var label = _a.label, errorMessage = _a.errorMessage, workspaceAccountingLink = _a.workspaceAccountingLink;
-                    return "".concat(label, "\u3068\u306E\u540C\u671F\u4E2D\u306B\u554F\u984C\u304C\u767A\u751F\u3057\u307E\u3057\u305F").concat(errorMessage ? "\uFF08\"".concat(errorMessage, "\"\uFF09") : '', "\u3002<a href=\"").concat(workspaceAccountingLink, "\">\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u306E\u8A2D\u5B9A</a>\u3067\u554F\u984C\u3092\u4FEE\u6B63\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
-                addEmployee: function (_a) {
-                    var email = _a.email, role = _a.role;
-                    return "".concat(email, "\u3092").concat(role === 'member' ? 'a' : 'an', " ").concat(role, "\u3068\u3057\u3066\u8FFD\u52A0\u3057\u307E\u3057\u305F");
-                },
-                updateRole: function (_a) {
-                    var email = _a.email, currentRole = _a.currentRole, newRole = _a.newRole;
-                    return "".concat(email, " \u306E\u5F79\u5272\u3092 ").concat(newRole, " \u306B\u66F4\u65B0\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F ").concat(currentRole, "\uFF09");
-                },
-                updatedCustomField1: function (_a) {
-                    var email = _a.email, previousValue = _a.previousValue, newValue = _a.newValue;
+                integrationsMessage: ({ errorMessage, label, linkText, linkURL }) => `このレポートを${label}にエクスポートできませんでした（"${errorMessage}${linkText ? ` <a href="${linkURL}">${linkText}</a>` : ''}"）`,
+                managerAttachReceipt: `領収書を追加しました`,
+                managerDetachReceipt: `領収書を削除しました`,
+                markedReimbursed: ({ amount, currency }) => `他の場所で${currency}${amount}を支払いました。`,
+                markedReimbursedFromIntegration: ({ amount, currency }) => `${currency}${amount} を統合経由で支払いました`,
+                outdatedBankAccount: `支払者の銀行口座に問題があるため、支払いを処理できませんでした。`,
+                reimbursementACHBounce: `支払者に十分な資金がないため、支払いを処理できませんでした。`,
+                reimbursementACHCancelled: `支払いをキャンセルしました`,
+                reimbursementAccountChanged: `支払いを処理できませんでした。支払者が銀行口座を変更したためです。`,
+                reimbursementDelayed: `支払いは処理されましたが、さらに1～2営業日遅れます。`,
+                selectedForRandomAudit: `レビューのためにランダムに選ばれました`,
+                selectedForRandomAuditMarkdown: `[ランダムに選択された](https://help.expensify.com/articles/expensify-classic/reports/Set-a-random-report-audit-schedule)レビュー用`,
+                share: ({ to }) => `招待されたメンバー${to}`,
+                unshare: ({ to }) => `削除されたメンバー${to}`,
+                stripePaid: ({ amount, currency }) => `${currency}${amount} を支払いました`,
+                takeControl: `制御を取りました`,
+                integrationSyncFailed: ({ label, errorMessage, workspaceAccountingLink }) => `${label}との同期中に問題が発生しました${errorMessage ? `（"${errorMessage}"）` : ''}。<a href="${workspaceAccountingLink}">ワークスペースの設定</a>で問題を修正してください。`,
+                addEmployee: ({ email, role }) => `${email}を${role === 'member' ? 'a' : 'an'} ${role}として追加しました`,
+                updateRole: ({ email, currentRole, newRole }) => `${email} の役割を ${newRole} に更新しました（以前は ${currentRole}）`,
+                updatedCustomField1: ({ email, previousValue, newValue }) => {
                     if (!newValue) {
-                        return "".concat(email, "\u306E\u30AB\u30B9\u30BF\u30E0\u30D5\u30A3\u30FC\u30EB\u30C91\u3092\u524A\u9664\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\u300C").concat(previousValue, "\u300D\uFF09");
+                        return `${email}のカスタムフィールド1を削除しました（以前は「${previousValue}」）`;
                     }
                     return !previousValue
-                        ? "\"".concat(newValue, "\" \u3092 ").concat(email, " \u306E\u30AB\u30B9\u30BF\u30E0\u30D5\u30A3\u30FC\u30EB\u30C91\u306B\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002")
-                        : "".concat(email, " \u306E\u30AB\u30B9\u30BF\u30E0\u30D5\u30A3\u30FC\u30EB\u30C91\u3092 \"").concat(newValue, "\" \u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F \"").concat(previousValue, "\"\uFF09");
+                        ? `"${newValue}" を ${email} のカスタムフィールド1に追加しました。`
+                        : `${email} のカスタムフィールド1を "${newValue}" に変更しました（以前は "${previousValue}"）`;
                 },
-                updatedCustomField2: function (_a) {
-                    var email = _a.email, previousValue = _a.previousValue, newValue = _a.newValue;
+                updatedCustomField2: ({ email, previousValue, newValue }) => {
                     if (!newValue) {
-                        return "".concat(email, "\u306E\u30AB\u30B9\u30BF\u30E0\u30D5\u30A3\u30FC\u30EB\u30C92\u3092\u524A\u9664\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\u300C").concat(previousValue, "\u300D\uFF09");
+                        return `${email}のカスタムフィールド2を削除しました（以前は「${previousValue}」）`;
                     }
                     return !previousValue
-                        ? "\"".concat(newValue, "\" \u3092 ").concat(email, " \u306E\u30AB\u30B9\u30BF\u30E0\u30D5\u30A3\u30FC\u30EB\u30C92\u306B\u8FFD\u52A0\u3057\u307E\u3057\u305F\u3002")
-                        : "".concat(email, "\u306E\u30AB\u30B9\u30BF\u30E0\u30D5\u30A3\u30FC\u30EB\u30C92\u3092\"").concat(newValue, "\"\u306B\u5909\u66F4\u3057\u307E\u3057\u305F\uFF08\u4EE5\u524D\u306F\"").concat(previousValue, "\"\uFF09");
+                        ? `"${newValue}" を ${email} のカスタムフィールド2に追加しました。`
+                        : `${email}のカスタムフィールド2を"${newValue}"に変更しました（以前は"${previousValue}"）`;
                 },
-                leftWorkspace: function (_a) {
-                    var nameOrEmail = _a.nameOrEmail;
-                    return "".concat(nameOrEmail, " \u304C\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u9000\u51FA\u3057\u307E\u3057\u305F");
-                },
-                removeMember: function (_a) {
-                    var email = _a.email, role = _a.role;
-                    return "".concat(role, " ").concat(email, " \u3092\u524A\u9664\u3057\u307E\u3057\u305F");
-                },
-                removedConnection: function (_a) {
-                    var connectionName = _a.connectionName;
-                    return "".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], " \u3078\u306E\u63A5\u7D9A\u3092\u524A\u9664\u3057\u307E\u3057\u305F\u3002");
-                },
-                addedConnection: function (_a) {
-                    var connectionName = _a.connectionName;
-                    return "".concat(CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName], "\u306B\u63A5\u7D9A\u3057\u307E\u3057\u305F");
-                },
+                leftWorkspace: ({ nameOrEmail }) => `${nameOrEmail} がワークスペースを退出しました`,
+                removeMember: ({ email, role }) => `${role} ${email} を削除しました`,
+                removedConnection: ({ connectionName }) => `${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]} への接続を削除しました。`,
+                addedConnection: ({ connectionName }) => `${CONST_1.default.POLICY.CONNECTIONS.NAME_USER_FRIENDLY[connectionName]}に接続しました`,
                 leftTheChat: 'チャットを退出しました',
             },
         },
     },
     chronos: {
-        oooEventSummaryFullDay: function (_a) {
-            var summary = _a.summary, dayCount = _a.dayCount, date = _a.date;
-            return "".concat(summary, " \u306F ").concat(date, " \u307E\u3067\u306E ").concat(dayCount, " \u65E5\u9593\u306E ").concat(dayCount === 1 ? '日' : '日', " \u3067\u3059\u3002");
-        },
-        oooEventSummaryPartialDay: function (_a) {
-            var summary = _a.summary, timePeriod = _a.timePeriod, date = _a.date;
-            return "".concat(date, "\u306E").concat(timePeriod, "\u304B\u3089\u306E").concat(summary);
-        },
+        oooEventSummaryFullDay: ({ summary, dayCount, date }) => `${summary} は ${date} までの ${dayCount} 日間の ${dayCount === 1 ? '日' : '日'} です。`,
+        oooEventSummaryPartialDay: ({ summary, timePeriod, date }) => `${date}の${timePeriod}からの${summary}`,
     },
     footer: {
         features: '機能',
@@ -7108,10 +5920,7 @@ var translations = {
         reply: '返信',
         from: 'から',
         in: 'に',
-        parentNavigationSummary: function (_a) {
-            var reportName = _a.reportName, workspaceName = _a.workspaceName;
-            return "From ".concat(reportName).concat(workspaceName ? "".concat(workspaceName, "\u5185") : '');
-        },
+        parentNavigationSummary: ({ reportName, workspaceName }) => `From ${reportName}${workspaceName ? `${workspaceName}内` : ''}`,
     },
     qrCodes: {
         copy: 'URLをコピー',
@@ -7167,10 +5976,7 @@ var translations = {
         principalWorkEmail: '主要な勤務先のメールアドレス',
         updateYourEmail: 'メールアドレスを更新してください',
         updateEmail: 'メールアドレスを更新する',
-        schoolMailAsDefault: function (_a) {
-            var contactMethodsRoute = _a.contactMethodsRoute;
-            return "\u5148\u306B\u9032\u3080\u524D\u306B\u3001\u5B66\u6821\u306E\u30E1\u30FC\u30EB\u3092\u30C7\u30D5\u30A9\u30EB\u30C8\u306E\u9023\u7D61\u65B9\u6CD5\u3068\u3057\u3066\u8A2D\u5B9A\u3057\u3066\u304F\u3060\u3055\u3044\u3002\u8A2D\u5B9A > \u30D7\u30ED\u30D5\u30A3\u30FC\u30EB > <a href=\"".concat(contactMethodsRoute, "\">\u9023\u7D61\u65B9\u6CD5</a> \u3067\u884C\u3046\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002");
-        },
+        schoolMailAsDefault: ({ contactMethodsRoute }) => `先に進む前に、学校のメールをデフォルトの連絡方法として設定してください。設定 > プロフィール > <a href="${contactMethodsRoute}">連絡方法</a> で行うことができます。`,
         error: {
             enterPhoneEmail: '有効なメールアドレスまたは電話番号を入力してください',
             enterEmail: 'メールアドレスを入力してください',
@@ -7224,71 +6030,55 @@ var translations = {
         guaranteed: '保証付きeレシート',
         transactionDate: '取引日付',
     },
-    referralProgram: (_16 = {},
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.START_CHAT] = {
+    referralProgram: {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.START_CHAT]: {
             buttonText: 'チャットを始める、<success><strong>友達を紹介する</strong></success>。',
             header: 'チャットを開始し、友達を紹介する',
             body: '友達にもExpensifyを使ってほしいですか？ 彼らとチャットを始めるだけで、あとは私たちにお任せください。',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SUBMIT_EXPENSE]: {
             buttonText: '経費を提出し、<success><strong>上司に紹介する</strong></success>。',
             header: '経費を提出し、上司に紹介する',
             body: 'あなたの上司にもExpensifyを使ってもらいたいですか？経費を提出するだけで、あとは私たちにお任せください。',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.REFER_FRIEND] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.REFER_FRIEND]: {
             header: '友達を紹介する',
             body: 'Expensifyを友達にも使ってもらいたいですか？彼らとチャットしたり、支払ったり、経費を分割したりするだけで、あとは私たちにお任せください。または、招待リンクを共有するだけでもOKです！',
         },
-        _16[CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SHARE_CODE] = {
+        [CONST_1.default.REFERRAL_PROGRAM.CONTENT_TYPES.SHARE_CODE]: {
             buttonText: '友達を紹介する',
             header: '友達を紹介する',
             body: 'Expensifyを友達にも使ってもらいたいですか？彼らとチャットしたり、支払ったり、経費を分割したりするだけで、あとは私たちにお任せください。または、招待リンクを共有するだけでもOKです！',
         },
-        _16.copyReferralLink = '招待リンクをコピー',
-        _16),
-    systemChatFooterMessage: (_17 = {},
-        _17[CONST_1.default.INTRO_CHOICES.MANAGE_TEAM] = {
+        copyReferralLink: '招待リンクをコピー',
+    },
+    systemChatFooterMessage: {
+        [CONST_1.default.INTRO_CHOICES.MANAGE_TEAM]: {
             phrase1: 'セットアップスペシャリストとチャットする',
             phrase2: 'ヘルプが必要な場合',
         },
-        _17.default = {
+        default: {
             phrase1: 'メッセージ',
             phrase2: 'セットアップのヘルプについて',
         },
-        _17),
+    },
     violations: {
         allTagLevelsRequired: 'すべてのタグが必要です。',
         autoReportedRejectedExpense: 'この経費は却下されました。',
         billableExpense: '課金対象は無効になりました',
-        cashExpenseWithNoReceipt: function (_a) {
-            var _b = _a === void 0 ? {} : _a, formattedLimit = _b.formattedLimit;
-            return "Receipt required".concat(formattedLimit ? "".concat(formattedLimit, " \u3092\u8D85\u3048\u308B") : '');
-        },
+        cashExpenseWithNoReceipt: ({ formattedLimit } = {}) => `Receipt required${formattedLimit ? `${formattedLimit} を超える` : ''}`,
         categoryOutOfPolicy: 'カテゴリが無効になりました。',
-        conversionSurcharge: function (_a) {
-            var surcharge = _a.surcharge;
-            return "".concat(surcharge, "% \u306E\u70BA\u66FF\u624B\u6570\u6599\u304C\u9069\u7528\u3055\u308C\u307E\u3057\u305F\u3002");
-        },
+        conversionSurcharge: ({ surcharge }) => `${surcharge}% の為替手数料が適用されました。`,
         customUnitOutOfPolicy: 'このワークスペースでは有効なレートではありません。',
         duplicatedTransaction: 'Duplicate',
         fieldRequired: 'レポートフィールドは必須です',
         futureDate: '未来の日付は許可されていません',
-        invoiceMarkup: function (_a) {
-            var invoiceMarkup = _a.invoiceMarkup;
-            return "".concat(invoiceMarkup, "% \u4E0A\u4E57\u305B\u3055\u308C\u307E\u3057\u305F");
-        },
-        maxAge: function (_a) {
-            var maxAge = _a.maxAge;
-            return "".concat(maxAge, "\u65E5\u3088\u308A\u53E4\u3044\u65E5\u4ED8");
-        },
+        invoiceMarkup: ({ invoiceMarkup }) => `${invoiceMarkup}% 上乗せされました`,
+        maxAge: ({ maxAge }) => `${maxAge}日より古い日付`,
         missingCategory: 'カテゴリがありません',
         missingComment: '選択したカテゴリーの説明が必要です。',
-        missingTag: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "Missing ".concat(tagName !== null && tagName !== void 0 ? tagName : 'tag');
-        },
-        modifiedAmount: function (_a) {
-            var type = _a.type, displayPercentVariance = _a.displayPercentVariance;
+        missingTag: ({ tagName } = {}) => `Missing ${tagName ?? 'tag'}`,
+        modifiedAmount: ({ type, displayPercentVariance }) => {
             switch (type) {
                 case 'distance':
                     return '金額が計算された距離と異なります';
@@ -7296,45 +6086,26 @@ var translations = {
                     return 'カード取引を超える金額';
                 default:
                     if (displayPercentVariance) {
-                        return "\u30B9\u30AD\u30E3\u30F3\u3055\u308C\u305F\u9818\u53CE\u66F8\u3088\u308A\u3082".concat(displayPercentVariance, "%\u591A\u3044\u91D1\u984D");
+                        return `スキャンされた領収書よりも${displayPercentVariance}%多い金額`;
                     }
                     return 'スキャンされた領収書よりも金額が多い';
             }
         },
         modifiedDate: '日付がスキャンされた領収書と異なります',
         nonExpensiworksExpense: '非Expensiworks経費',
-        overAutoApprovalLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "\u7D4C\u8CBB\u304C\u81EA\u52D5\u627F\u8A8D\u9650\u5EA6\u984D\u306E".concat(formattedLimit, "\u3092\u8D85\u3048\u3066\u3044\u307E\u3059\u3002");
-        },
-        overCategoryLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "".concat(formattedLimit, "/\u4EBA\u306E\u30AB\u30C6\u30B4\u30EA\u5236\u9650\u3092\u8D85\u3048\u308B\u91D1\u984D");
-        },
-        overLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "".concat(formattedLimit, "/\u4EBA\u306E\u5236\u9650\u3092\u8D85\u3048\u305F\u91D1\u984D");
-        },
-        overTripLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "".concat(formattedLimit, "/\u56DE\u3092\u8D85\u3048\u308B\u91D1\u984D");
-        },
-        overLimitAttendee: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "".concat(formattedLimit, "/\u4EBA\u306E\u5236\u9650\u3092\u8D85\u3048\u305F\u91D1\u984D");
-        },
-        perDayLimit: function (_a) {
-            var formattedLimit = _a.formattedLimit;
-            return "1\u65E5\u3042\u305F\u308A\u306E\u30AB\u30C6\u30B4\u30EA\u5236\u9650".concat(formattedLimit, "/\u4EBA\u3092\u8D85\u3048\u308B\u91D1\u984D");
-        },
+        overAutoApprovalLimit: ({ formattedLimit }) => `経費が自動承認限度額の${formattedLimit}を超えています。`,
+        overCategoryLimit: ({ formattedLimit }) => `${formattedLimit}/人のカテゴリ制限を超える金額`,
+        overLimit: ({ formattedLimit }) => `${formattedLimit}/人の制限を超えた金額`,
+        overTripLimit: ({ formattedLimit }) => `${formattedLimit}/回を超える金額`,
+        overLimitAttendee: ({ formattedLimit }) => `${formattedLimit}/人の制限を超えた金額`,
+        perDayLimit: ({ formattedLimit }) => `1日あたりのカテゴリ制限${formattedLimit}/人を超える金額`,
         receiptNotSmartScanned: '領収書と経費の詳細を手動で追加しました。',
-        receiptRequired: function (_a) {
-            var formattedLimit = _a.formattedLimit, category = _a.category;
-            var message = '領収書が必要です';
-            if (formattedLimit !== null && formattedLimit !== void 0 ? formattedLimit : category) {
+        receiptRequired: ({ formattedLimit, category }) => {
+            let message = '領収書が必要です';
+            if (formattedLimit ?? category) {
                 message += '終了';
                 if (formattedLimit) {
-                    message += " ".concat(formattedLimit);
+                    message += ` ${formattedLimit}`;
                 }
                 if (category) {
                     message += 'カテゴリ制限';
@@ -7342,41 +6113,36 @@ var translations = {
             }
             return message;
         },
-        prohibitedExpense: function (_a) {
-            var prohibitedExpenseType = _a.prohibitedExpenseType;
-            var preMessage = '禁止された経費:';
+        prohibitedExpense: ({ prohibitedExpenseType }) => {
+            const preMessage = '禁止された経費:';
             switch (prohibitedExpenseType) {
                 case 'alcohol':
-                    return "".concat(preMessage, " \u30A2\u30EB\u30B3\u30FC\u30EB");
+                    return `${preMessage} アルコール`;
                 case 'gambling':
-                    return "".concat(preMessage, " \u30AE\u30E3\u30F3\u30D6\u30EB");
+                    return `${preMessage} ギャンブル`;
                 case 'tobacco':
-                    return "".concat(preMessage, " \u30BF\u30D0\u30B3");
+                    return `${preMessage} タバコ`;
                 case 'adultEntertainment':
-                    return "".concat(preMessage, " \u30A2\u30C0\u30EB\u30C8\u30A8\u30F3\u30BF\u30FC\u30C6\u30A4\u30F3\u30E1\u30F3\u30C8");
+                    return `${preMessage} アダルトエンターテインメント`;
                 case 'hotelIncidentals':
-                    return "".concat(preMessage, " \u30DB\u30C6\u30EB\u96D1\u8CBB");
+                    return `${preMessage} ホテル雑費`;
                 default:
-                    return "".concat(preMessage).concat(prohibitedExpenseType);
+                    return `${preMessage}${prohibitedExpenseType}`;
             }
         },
-        customRules: function (_a) {
-            var message = _a.message;
-            return message;
-        },
+        customRules: ({ message }) => message,
         reviewRequired: 'レビューが必要です',
-        rter: function (_a) {
-            var brokenBankConnection = _a.brokenBankConnection, email = _a.email, isAdmin = _a.isAdmin, isTransactionOlderThan7Days = _a.isTransactionOlderThan7Days, member = _a.member, rterType = _a.rterType;
+        rter: ({ brokenBankConnection, email, isAdmin, isTransactionOlderThan7Days, member, rterType }) => {
             if (rterType === CONST_1.default.RTER_VIOLATION_TYPES.BROKEN_CARD_CONNECTION_530) {
                 return '銀行接続が切れているため、領収書を自動照合できません。';
             }
             if (brokenBankConnection || rterType === CONST_1.default.RTER_VIOLATION_TYPES.BROKEN_CARD_CONNECTION) {
                 return isAdmin
-                    ? "".concat(email, "\u304C\u4FEE\u6B63\u3059\u308B\u5FC5\u8981\u304C\u3042\u308B\u9280\u884C\u63A5\u7D9A\u306E\u554F\u984C\u306E\u305F\u3081\u3001\u9818\u53CE\u66F8\u3092\u81EA\u52D5\u30DE\u30C3\u30C1\u30F3\u30B0\u3067\u304D\u307E\u305B\u3093\u3002")
+                    ? `${email}が修正する必要がある銀行接続の問題のため、領収書を自動マッチングできません。`
                     : '壊れた銀行接続のため、領収書を自動マッチングできません。修正が必要です。';
             }
             if (!isTransactionOlderThan7Days) {
-                return isAdmin ? "".concat(member, "\u306B\u73FE\u91D1\u3068\u3057\u3066\u30DE\u30FC\u30AF\u3059\u308B\u3088\u3046\u306B\u4F9D\u983C\u3059\u308B\u304B\u30017\u65E5\u9593\u5F85\u3063\u3066\u518D\u8A66\u884C\u3057\u3066\u304F\u3060\u3055\u3044\u3002") : 'カード取引とのマージを待機中。';
+                return isAdmin ? `${member}に現金としてマークするように依頼するか、7日間待って再試行してください。` : 'カード取引とのマージを待機中。';
             }
             return '';
         },
@@ -7384,24 +6150,12 @@ var translations = {
         adminBrokenConnectionError: '銀行接続の不具合により領収書が保留されています。で解決してください。',
         memberBrokenConnectionError: '銀行接続が壊れているため、領収書が保留中です。ワークスペース管理者に解決を依頼してください。',
         markAsCashToIgnore: '現金としてマークして無視し、支払いをリクエストします。',
-        smartscanFailed: function (_a) {
-            var _b = _a.canEdit, canEdit = _b === void 0 ? true : _b;
-            return "\u9818\u53CE\u66F8\u306E\u30B9\u30AD\u30E3\u30F3\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002".concat(canEdit ? '詳細を手動で入力してください。' : '');
-        },
+        smartscanFailed: ({ canEdit = true }) => `領収書のスキャンに失敗しました。${canEdit ? '詳細を手動で入力してください。' : ''}`,
         receiptGeneratedWithAI: 'AI生成の領収書の可能性',
-        someTagLevelsRequired: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "Missing ".concat(tagName !== null && tagName !== void 0 ? tagName : 'タグ');
-        },
-        tagOutOfPolicy: function (_a) {
-            var _b = _a === void 0 ? {} : _a, tagName = _b.tagName;
-            return "".concat(tagName !== null && tagName !== void 0 ? tagName : 'タグ', " \u306F\u7121\u52B9\u306B\u306A\u308A\u307E\u3057\u305F");
-        },
+        someTagLevelsRequired: ({ tagName } = {}) => `Missing ${tagName ?? 'タグ'}`,
+        tagOutOfPolicy: ({ tagName } = {}) => `${tagName ?? 'タグ'} は無効になりました`,
         taxAmountChanged: '税額が変更されました',
-        taxOutOfPolicy: function (_a) {
-            var _b = _a === void 0 ? {} : _a, taxName = _b.taxName;
-            return "".concat(taxName !== null && taxName !== void 0 ? taxName : '税金', " \u306F\u7121\u52B9\u306B\u306A\u308A\u307E\u3057\u305F");
-        },
+        taxOutOfPolicy: ({ taxName } = {}) => `${taxName ?? '税金'} は無効になりました`,
         taxRateChanged: '税率が変更されました',
         taxRequired: '税率が見つかりません',
         none: 'None',
@@ -7413,17 +6167,14 @@ var translations = {
         categoryToKeep: '保持するカテゴリを選択',
         isTransactionBillable: '取引が請求可能か選択',
         keepThisOne: 'このままにしておく',
-        confirmDetails: "\u4FDD\u6301\u3057\u3066\u3044\u308B\u8A73\u7D30\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
-        confirmDuplicatesInfo: "\u4FDD\u6301\u3057\u306A\u304B\u3063\u305F\u91CD\u8907\u306F\u3001\u63D0\u51FA\u8005\u304C\u524A\u9664\u3067\u304D\u308B\u3088\u3046\u306B\u4FDD\u7559\u3055\u308C\u307E\u3059\u3002",
+        confirmDetails: `保持している詳細を確認してください。`,
+        confirmDuplicatesInfo: `保持しなかった重複は、提出者が削除できるように保留されます。`,
         hold: 'この経費は保留されました',
         resolvedDuplicates: '重複を解決しました',
     },
-    reportViolations: (_18 = {},
-        _18[CONST_1.default.REPORT_VIOLATIONS.FIELD_REQUIRED] = function (_a) {
-            var fieldName = _a.fieldName;
-            return "".concat(fieldName, "\u306F\u5FC5\u9808\u3067\u3059");
-        },
-        _18),
+    reportViolations: {
+        [CONST_1.default.REPORT_VIOLATIONS.FIELD_REQUIRED]: ({ fieldName }) => `${fieldName}は必須です`,
+    },
     violationDismissal: {
         rter: {
             manual: 'この領収書を現金としてマークしました',
@@ -7448,16 +6199,16 @@ var translations = {
             title: '退会理由を教えてください',
             subtitle: '行く前に、Expensify Classicに切り替えたい理由を教えてください。',
         },
-        reasons: (_19 = {},
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE] = 'Expensify Classicでのみ利用可能な機能が必要です。',
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND] = 'New Expensifyの使い方がわかりません。',
-            _19[CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC] = 'New Expensifyの使い方は理解していますが、Expensify Classicの方が好きです。',
-            _19),
-        prompts: (_20 = {},
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE] = 'New Expensifyにないどの機能が必要ですか？',
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND] = '何をしようとしているのですか？',
-            _20[CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC] = 'なぜExpensify Classicを好むのですか？',
-            _20),
+        reasons: {
+            [CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE]: 'Expensify Classicでのみ利用可能な機能が必要です。',
+            [CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND]: 'New Expensifyの使い方がわかりません。',
+            [CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC]: 'New Expensifyの使い方は理解していますが、Expensify Classicの方が好きです。',
+        },
+        prompts: {
+            [CONST_1.default.EXIT_SURVEY.REASONS.FEATURE_NOT_AVAILABLE]: 'New Expensifyにないどの機能が必要ですか？',
+            [CONST_1.default.EXIT_SURVEY.REASONS.DONT_UNDERSTAND]: '何をしようとしているのですか？',
+            [CONST_1.default.EXIT_SURVEY.REASONS.PREFER_CLASSIC]: 'なぜExpensify Classicを好むのですか？',
+        },
         responsePlaceholder: 'あなたの返信',
         thankYou: 'フィードバックありがとうございます！',
         thankYouSubtitle: 'あなたの回答は、私たちがより良い製品を作り、物事を成し遂げるのに役立ちます。ありがとうございます！',
@@ -7469,11 +6220,11 @@ var translations = {
         bookACall: '通話を予約する',
         noThanks: '結構です',
         bookACallTitle: 'プロダクトマネージャーと話しますか？',
-        benefits: (_21 = {},
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.CHATTING_DIRECTLY] = '経費やレポートで直接チャットする',
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.EVERYTHING_MOBILE] = 'モバイルで全てを行う能力',
-            _21[CONST_1.default.EXIT_SURVEY.BENEFIT.TRAVEL_EXPENSE] = 'チャットのスピードで出張と経費を管理',
-            _21),
+        benefits: {
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.CHATTING_DIRECTLY]: '経費やレポートで直接チャットする',
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.EVERYTHING_MOBILE]: 'モバイルで全てを行う能力',
+            [CONST_1.default.EXIT_SURVEY.BENEFIT.TRAVEL_EXPENSE]: 'チャットのスピードで出張と経費を管理',
+        },
         bookACallTextTop: 'Expensify Classicに切り替えると、次のことを逃すことになります：',
         bookACallTextBottom: 'なぜかを理解するために、あなたとお電話でお話しできることを楽しみにしています。ご要望について話し合うために、私たちのシニアプロダクトマネージャーの一人との通話を予約できます。',
         takeMeToExpensifyClassic: 'Expensify Classicに連れて行ってください。',
@@ -7489,34 +6240,22 @@ var translations = {
         authenticatePaymentCard: '支払いカードを認証する',
         mobileReducedFunctionalityMessage: 'モバイルアプリではサブスクリプションの変更を行うことができません。',
         badge: {
-            freeTrial: function (_a) {
-                var numOfDays = _a.numOfDays;
-                return "\u7121\u6599\u30C8\u30E9\u30A4\u30A2\u30EB: \u6B8B\u308A".concat(numOfDays, " ").concat(numOfDays === 1 ? '日' : '日');
-            },
+            freeTrial: ({ numOfDays }) => `無料トライアル: 残り${numOfDays} ${numOfDays === 1 ? '日' : '日'}`,
         },
         billingBanner: {
             policyOwnerAmountOwed: {
                 title: 'お支払い情報が古くなっています',
-                subtitle: function (_a) {
-                    var date = _a.date;
-                    return "\u3059\u3079\u3066\u306E\u304A\u6C17\u306B\u5165\u308A\u306E\u6A5F\u80FD\u3092\u5F15\u304D\u7D9A\u304D\u4F7F\u7528\u3059\u308B\u305F\u3081\u306B\u3001".concat(date, "\u307E\u3067\u306B\u304A\u652F\u6255\u3044\u30AB\u30FC\u30C9\u3092\u66F4\u65B0\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                subtitle: ({ date }) => `すべてのお気に入りの機能を引き続き使用するために、${date}までにお支払いカードを更新してください。`,
             },
             policyOwnerAmountOwedOverdue: {
                 title: 'お支払いを処理できませんでした。',
-                subtitle: function (_a) {
-                    var date = _a.date, purchaseAmountOwed = _a.purchaseAmountOwed;
-                    return date && purchaseAmountOwed
-                        ? "".concat(date, "\u306E").concat(purchaseAmountOwed, "\u306E\u8ACB\u6C42\u3092\u51E6\u7406\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002\u672A\u6255\u3044\u91D1\u984D\u3092\u6E05\u7B97\u3059\u308B\u305F\u3081\u306B\u652F\u6255\u3044\u30AB\u30FC\u30C9\u3092\u8FFD\u52A0\u3057\u3066\u304F\u3060\u3055\u3044\u3002")
-                        : '支払いカードを追加して、未払い金額を清算してください。';
-                },
+                subtitle: ({ date, purchaseAmountOwed }) => date && purchaseAmountOwed
+                    ? `${date}の${purchaseAmountOwed}の請求を処理できませんでした。未払い金額を清算するために支払いカードを追加してください。`
+                    : '支払いカードを追加して、未払い金額を清算してください。',
             },
             policyOwnerUnderInvoicing: {
                 title: 'お支払い情報が古くなっています',
-                subtitle: function (_a) {
-                    var date = _a.date;
-                    return "\u304A\u652F\u6255\u3044\u304C\u671F\u9650\u3092\u904E\u304E\u3066\u3044\u307E\u3059\u3002\u30B5\u30FC\u30D3\u30B9\u306E\u4E2D\u65AD\u3092\u907F\u3051\u308B\u305F\u3081\u306B\u3001".concat(date, "\u307E\u3067\u306B\u8ACB\u6C42\u66F8\u3092\u304A\u652F\u6255\u3044\u304F\u3060\u3055\u3044\u3002");
-                },
+                subtitle: ({ date }) => `お支払いが期限を過ぎています。サービスの中断を避けるために、${date}までに請求書をお支払いください。`,
             },
             policyOwnerUnderInvoicingOverdue: {
                 title: 'お支払い情報が古くなっています',
@@ -7524,31 +6263,19 @@ var translations = {
             },
             billingDisputePending: {
                 title: 'カードを請求できませんでした。',
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed, cardEnding = _a.cardEnding;
-                    return "\u3042\u306A\u305F\u306F\u3001".concat(cardEnding, "\u3067\u7D42\u308F\u308B\u30AB\u30FC\u30C9\u306E").concat(amountOwed, "\u306E\u8ACB\u6C42\u3092\u7570\u8B70\u7533\u3057\u7ACB\u3066\u3057\u307E\u3057\u305F\u3002\u7570\u8B70\u304C\u9280\u884C\u3067\u89E3\u6C7A\u3055\u308C\u308B\u307E\u3067\u3001\u3042\u306A\u305F\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u306F\u30ED\u30C3\u30AF\u3055\u308C\u307E\u3059\u3002");
-                },
+                subtitle: ({ amountOwed, cardEnding }) => `あなたは、${cardEnding}で終わるカードの${amountOwed}の請求を異議申し立てしました。異議が銀行で解決されるまで、あなたのアカウントはロックされます。`,
             },
             cardAuthenticationRequired: {
                 title: 'お支払いカードの認証が完了していません。',
-                subtitle: function (_a) {
-                    var cardEnding = _a.cardEnding;
-                    return "\u672B\u5C3E\u304C".concat(cardEnding, "\u306E\u652F\u6255\u3044\u30AB\u30FC\u30C9\u3092\u6709\u52B9\u306B\u3059\u308B\u306B\u306F\u3001\u8A8D\u8A3C\u30D7\u30ED\u30BB\u30B9\u3092\u5B8C\u4E86\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                subtitle: ({ cardEnding }) => `末尾が${cardEnding}の支払いカードを有効にするには、認証プロセスを完了してください。`,
             },
             insufficientFunds: {
                 title: 'カードを請求できませんでした。',
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed;
-                    return "\u304A\u652F\u6255\u3044\u30AB\u30FC\u30C9\u306F\u6B8B\u9AD8\u4E0D\u8DB3\u306E\u305F\u3081\u62D2\u5426\u3055\u308C\u307E\u3057\u305F\u3002\u518D\u8A66\u884C\u3059\u308B\u304B\u3001\u65B0\u3057\u3044\u652F\u6255\u3044\u30AB\u30FC\u30C9\u3092\u8FFD\u52A0\u3057\u3066\u3001\u672A\u6255\u3044\u6B8B\u9AD8".concat(amountOwed, "\u3092\u30AF\u30EA\u30A2\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                subtitle: ({ amountOwed }) => `お支払いカードは残高不足のため拒否されました。再試行するか、新しい支払いカードを追加して、未払い残高${amountOwed}をクリアしてください。`,
             },
             cardExpired: {
                 title: 'カードを請求できませんでした。',
-                subtitle: function (_a) {
-                    var amountOwed = _a.amountOwed;
-                    return "\u304A\u652F\u6255\u3044\u30AB\u30FC\u30C9\u306E\u6709\u52B9\u671F\u9650\u304C\u5207\u308C\u307E\u3057\u305F\u3002\u65B0\u3057\u3044\u652F\u6255\u3044\u30AB\u30FC\u30C9\u3092\u8FFD\u52A0\u3057\u3066\u3001\u672A\u6255\u3044\u6B8B\u9AD8\u306E".concat(amountOwed, "\u3092\u6E05\u7B97\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                subtitle: ({ amountOwed }) => `お支払いカードの有効期限が切れました。新しい支払いカードを追加して、未払い残高の${amountOwed}を清算してください。`,
             },
             cardExpireSoon: {
                 title: 'あなたのカードはまもなく有効期限が切れます',
@@ -7562,10 +6289,7 @@ var translations = {
                 title: 'カードを請求できませんでした。',
                 subtitle: '再試行する前に、Expensifyの請求を承認し、保留を解除するために直接銀行に連絡してください。それ以外の場合は、別の支払いカードを追加してみてください。',
             },
-            cardOnDispute: function (_a) {
-                var amountOwed = _a.amountOwed, cardEnding = _a.cardEnding;
-                return "\u3042\u306A\u305F\u306F\u3001".concat(cardEnding, "\u3067\u7D42\u308F\u308B\u30AB\u30FC\u30C9\u306E").concat(amountOwed, "\u306E\u8ACB\u6C42\u3092\u7570\u8B70\u7533\u3057\u7ACB\u3066\u3057\u307E\u3057\u305F\u3002\u7570\u8B70\u304C\u9280\u884C\u3067\u89E3\u6C7A\u3055\u308C\u308B\u307E\u3067\u3001\u3042\u306A\u305F\u306E\u30A2\u30AB\u30A6\u30F3\u30C8\u306F\u30ED\u30C3\u30AF\u3055\u308C\u307E\u3059\u3002");
-            },
+            cardOnDispute: ({ amountOwed, cardEnding }) => `あなたは、${cardEnding}で終わるカードの${amountOwed}の請求を異議申し立てしました。異議が銀行で解決されるまで、あなたのアカウントはロックされます。`,
             preTrial: {
                 title: '無料トライアルを開始',
                 subtitleStart: '次のステップとして、',
@@ -7573,10 +6297,7 @@ var translations = {
                 subtitleEnd: 'あなたのチームが経費精算を始められるように。',
             },
             trialStarted: {
-                title: function (_a) {
-                    var numOfDays = _a.numOfDays;
-                    return "\u30C8\u30E9\u30A4\u30A2\u30EB: ".concat(numOfDays, " ").concat(numOfDays === 1 ? '日' : '日', " \u65E5\u6B8B\u308A\uFF01");
-                },
+                title: ({ numOfDays }) => `トライアル: ${numOfDays} ${numOfDays === 1 ? '日' : '日'} 日残り！`,
                 subtitle: 'お気に入りの機能を引き続き利用するために、支払いカードを追加してください。',
             },
             trialEnded: {
@@ -7586,36 +6307,18 @@ var translations = {
             earlyDiscount: {
                 claimOffer: 'オファーを請求する',
                 noThanks: '結構です',
-                subscriptionPageTitle: function (_a) {
-                    var discountType = _a.discountType;
-                    return "<strong>\u6700\u521D\u306E1\u5E74\u9593\u306F".concat(discountType, "%\u30AA\u30D5\uFF01</strong> \u652F\u6255\u3044\u30AB\u30FC\u30C9\u3092\u8FFD\u52A0\u3057\u3066\u3001\u5E74\u9593\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u3092\u958B\u59CB\u3059\u308B\u3060\u3051\u3067\u3059\u3002");
-                },
-                onboardingChatTitle: function (_a) {
-                    var discountType = _a.discountType;
-                    return "\u671F\u9593\u9650\u5B9A\u30AA\u30D5\u30A1\u30FC: \u6700\u521D\u306E1\u5E74\u9593\u306F".concat(discountType, "%\u30AA\u30D5\uFF01");
-                },
-                subtitle: function (_a) {
-                    var days = _a.days, hours = _a.hours, minutes = _a.minutes, seconds = _a.seconds;
-                    return "".concat(hours, "\u6642\u9593 ").concat(minutes, "\u5206 ").concat(seconds, "\u79D2\u4EE5\u5185\u306B").concat(days > 0 ? "".concat(days, "\u65E5 :") : '', "\u3092\u8ACB\u6C42\u3057\u3066\u304F\u3060\u3055\u3044");
-                },
+                subscriptionPageTitle: ({ discountType }) => `<strong>最初の1年間は${discountType}%オフ！</strong> 支払いカードを追加して、年間サブスクリプションを開始するだけです。`,
+                onboardingChatTitle: ({ discountType }) => `期間限定オファー: 最初の1年間は${discountType}%オフ！`,
+                subtitle: ({ days, hours, minutes, seconds }) => `${hours}時間 ${minutes}分 ${seconds}秒以内に${days > 0 ? `${days}日 :` : ''}を請求してください`,
             },
         },
         cardSection: {
             title: '支払い',
             subtitle: 'Expensifyのサブスクリプションを支払うためのカードを追加してください。',
             addCardButton: '支払いカードを追加',
-            cardNextPayment: function (_a) {
-                var nextPaymentDate = _a.nextPaymentDate;
-                return "\u6B21\u56DE\u306E\u652F\u6255\u65E5\u306F".concat(nextPaymentDate, "\u3067\u3059\u3002");
-            },
-            cardEnding: function (_a) {
-                var cardNumber = _a.cardNumber;
-                return "".concat(cardNumber, "\u3067\u7D42\u308F\u308B\u30AB\u30FC\u30C9");
-            },
-            cardInfo: function (_a) {
-                var name = _a.name, expiration = _a.expiration, currency = _a.currency;
-                return "\u540D\u524D: ".concat(name, "\u3001\u6709\u52B9\u671F\u9650: ").concat(expiration, "\u3001\u901A\u8CA8: ").concat(currency);
-            },
+            cardNextPayment: ({ nextPaymentDate }) => `次回の支払日は${nextPaymentDate}です。`,
+            cardEnding: ({ cardNumber }) => `${cardNumber}で終わるカード`,
+            cardInfo: ({ name, expiration, currency }) => `名前: ${name}、有効期限: ${expiration}、通貨: ${currency}`,
             changeCard: '支払いカードを変更',
             changeCurrency: '支払い通貨を変更',
             cardNotFound: '支払いカードが追加されていません',
@@ -7632,30 +6335,15 @@ var translations = {
             title: 'あなたのプラン',
             exploreAllPlans: 'すべてのプランを探る',
             customPricing: 'カスタム価格設定',
-            asLowAs: function (_a) {
-                var price = _a.price;
-                return "\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC1\u4EBA\u3042\u305F\u308A\u6708\u984D".concat(price, "\u304B\u3089");
-            },
-            pricePerMemberMonth: function (_a) {
-                var price = _a.price;
-                return "\u30E1\u30F3\u30D0\u30FC1\u4EBA\u3042\u305F\u308A\u6708".concat(price);
-            },
-            pricePerMemberPerMonth: function (_a) {
-                var price = _a.price;
-                return "\u30E1\u30F3\u30D0\u30FC1\u4EBA\u3042\u305F\u308A\u6708".concat(price);
-            },
+            asLowAs: ({ price }) => `アクティブメンバー1人あたり月額${price}から`,
+            pricePerMemberMonth: ({ price }) => `メンバー1人あたり月${price}`,
+            pricePerMemberPerMonth: ({ price }) => `メンバー1人あたり月${price}`,
             perMemberMonth: 'メンバーごと/月',
             collect: {
                 title: '収集する',
                 description: '経費、旅行、チャットを提供する小規模ビジネスプラン。',
-                priceAnnual: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "".concat(lower, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u3064\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u304B\u3089\u3001").concat(upper, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u305F\u306A\u3044\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u307E\u3067\u3002");
-                },
-                pricePayPerUse: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "".concat(lower, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u3064\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u304B\u3089\u3001").concat(upper, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u305F\u306A\u3044\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u307E\u3067\u3002");
-                },
+                priceAnnual: ({ lower, upper }) => `${lower}/Expensifyカードを持つアクティブメンバーから、${upper}/Expensifyカードを持たないアクティブメンバーまで。`,
+                pricePayPerUse: ({ lower, upper }) => `${lower}/Expensifyカードを持つアクティブメンバーから、${upper}/Expensifyカードを持たないアクティブメンバーまで。`,
                 benefit1: '領収書スキャン',
                 benefit2: '払い戻し',
                 benefit3: '法人カード管理',
@@ -7668,14 +6356,8 @@ var translations = {
             control: {
                 title: 'コントロール',
                 description: '大企業向けの経費、旅行、チャット。',
-                priceAnnual: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "".concat(lower, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u3064\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u304B\u3089\u3001").concat(upper, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u305F\u306A\u3044\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u307E\u3067\u3002");
-                },
-                pricePayPerUse: function (_a) {
-                    var lower = _a.lower, upper = _a.upper;
-                    return "".concat(lower, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u3064\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u304B\u3089\u3001").concat(upper, "/Expensify\u30AB\u30FC\u30C9\u3092\u6301\u305F\u306A\u3044\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u307E\u3067\u3002");
-                },
+                priceAnnual: ({ lower, upper }) => `${lower}/Expensifyカードを持つアクティブメンバーから、${upper}/Expensifyカードを持たないアクティブメンバーまで。`,
+                pricePayPerUse: ({ lower, upper }) => `${lower}/Expensifyカードを持つアクティブメンバーから、${upper}/Expensifyカードを持たないアクティブメンバーまで。`,
                 benefit1: 'Collectプランのすべて',
                 benefit2: 'マルチレベル承認ワークフロー',
                 benefit3: 'カスタム経費ルール',
@@ -7695,7 +6377,7 @@ var translations = {
         },
         compareModal: {
             comparePlans: 'プランを比較',
-            subtitle: "<muted-text>\u5FC5\u8981\u306A\u6A5F\u80FD\u3092\u89E3\u653E\u3057\u307E\u3057\u3087\u3046\u3002\u3042\u306A\u305F\u306B\u6700\u9069\u306A\u30D7\u30E9\u30F3\u3092\u9078\u629E\u3057\u3066\u304F\u3060\u3055\u3044\u3002<a href=\"".concat(CONST_1.default.PRICING, "\">\u6599\u91D1\u30DA\u30FC\u30B8\u3092\u3054\u89A7\u3044\u305F\u3060\u304F\u304B</a>\u3001\u5404\u30D7\u30E9\u30F3\u306E\u6A5F\u80FD\u8A73\u7D30\u3092\u3054\u78BA\u8A8D\u304F\u3060\u3055\u3044\u3002</muted-text>"),
+            subtitle: `<muted-text>必要な機能を解放しましょう。あなたに最適なプランを選択してください。<a href="${CONST_1.default.PRICING}">料金ページをご覧いただくか</a>、各プランの機能詳細をご確認ください。</muted-text>`,
         },
         details: {
             title: 'サブスクリプションの詳細',
@@ -7715,16 +6397,10 @@ var translations = {
             note: '注: アクティブメンバーとは、会社のワークスペースに関連付けられた経費データを作成、編集、提出、承認、払い戻し、またはエクスポートした人を指します。',
             confirmDetails: '新しい年間サブスクリプションの詳細を確認してください:',
             subscriptionSize: 'サブスクリプションサイズ',
-            activeMembers: function (_a) {
-                var size = _a.size;
-                return "".concat(size, " \u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC/\u6708");
-            },
+            activeMembers: ({ size }) => `${size} アクティブメンバー/月`,
             subscriptionRenews: 'サブスクリプションの更新',
             youCantDowngrade: '年間サブスクリプション中はダウングレードできません。',
-            youAlreadyCommitted: function (_a) {
-                var size = _a.size, date = _a.date;
-                return "\u3042\u306A\u305F\u306F\u3059\u3067\u306B\u3001".concat(date, "\u307E\u3067\u6BCE\u6708").concat(size, "\u306E\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC\u306E\u5E74\u9593\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u30B5\u30A4\u30BA\u306B\u30B3\u30DF\u30C3\u30C8\u3057\u3066\u3044\u307E\u3059\u3002\u81EA\u52D5\u66F4\u65B0\u3092\u7121\u52B9\u306B\u3059\u308B\u3053\u3068\u3067\u3001").concat(date, "\u306B\u5F93\u91CF\u8AB2\u91D1\u5236\u306E\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u306B\u5207\u308A\u66FF\u3048\u308B\u3053\u3068\u304C\u3067\u304D\u307E\u3059\u3002");
-            },
+            youAlreadyCommitted: ({ size, date }) => `あなたはすでに、${date}まで毎月${size}のアクティブメンバーの年間サブスクリプションサイズにコミットしています。自動更新を無効にすることで、${date}に従量課金制のサブスクリプションに切り替えることができます。`,
             error: {
                 size: '有効なサブスクリプションサイズを入力してください',
                 sameSize: '現在のサブスクリプションサイズとは異なる番号を入力してください。',
@@ -7738,28 +6414,19 @@ var translations = {
         },
         subscriptionSettings: {
             title: 'サブスクリプション設定',
-            summary: function (_a) {
-                var subscriptionType = _a.subscriptionType, subscriptionSize = _a.subscriptionSize, autoRenew = _a.autoRenew, autoIncrease = _a.autoIncrease;
-                return "\u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u30BF\u30A4\u30D7: ".concat(subscriptionType, ", \u30B5\u30D6\u30B9\u30AF\u30EA\u30D7\u30B7\u30E7\u30F3\u30B5\u30A4\u30BA: ").concat(subscriptionSize, ", \u81EA\u52D5\u66F4\u65B0: ").concat(autoRenew, ", \u5E74\u9593\u30B7\u30FC\u30C8\u306E\u81EA\u52D5\u5897\u52A0: ").concat(autoIncrease);
-            },
+            summary: ({ subscriptionType, subscriptionSize, autoRenew, autoIncrease }) => `サブスクリプションタイプ: ${subscriptionType}, サブスクリプションサイズ: ${subscriptionSize}, 自動更新: ${autoRenew}, 年間シートの自動増加: ${autoIncrease}`,
             none: 'none',
             on: 'on',
             off: 'オフ',
             annual: '年次',
             autoRenew: '自動更新',
             autoIncrease: '年間シートの自動増加',
-            saveUpTo: function (_a) {
-                var amountWithCurrency = _a.amountWithCurrency;
-                return "\u30A2\u30AF\u30C6\u30A3\u30D6\u30E1\u30F3\u30D0\u30FC1\u4EBA\u3042\u305F\u308A\u3001\u6700\u5927".concat(amountWithCurrency, "/\u6708\u3092\u7BC0\u7D04");
-            },
+            saveUpTo: ({ amountWithCurrency }) => `アクティブメンバー1人あたり、最大${amountWithCurrency}/月を節約`,
             automaticallyIncrease: 'アクティブメンバーがサブスクリプションのサイズを超えた場合、年間シート数を自動的に増やします。注：これにより、年間サブスクリプションの終了日が延長されます。',
             disableAutoRenew: '自動更新を無効にする',
             helpUsImprove: 'Expensifyの改善にご協力ください',
             whatsMainReason: '自動更新を無効にする主な理由は何ですか？',
-            renewsOn: function (_a) {
-                var date = _a.date;
-                return "".concat(date, "\u306B\u66F4\u65B0\u3055\u308C\u307E\u3059\u3002");
-            },
+            renewsOn: ({ date }) => `${date}に更新されます。`,
             pricingConfiguration: '価格は構成によって異なります。最も安い価格を得るには、年次サブスクリプションを選択し、Expensifyカードを取得してください。',
             learnMore: {
                 part1: '詳細については、こちらをご覧ください',
@@ -7777,16 +6444,13 @@ var translations = {
                 title: 'サブスクリプションがキャンセルされました',
                 subtitle: '年間サブスクリプションがキャンセルされました。',
                 info: 'ワークスペースを従量課金制で引き続き使用したい場合は、これで準備完了です。',
-                preventFutureActivity: function (_a) {
-                    var workspacesListRoute = _a.workspacesListRoute;
-                    return "\u4ECA\u5F8C\u306E\u30A2\u30AF\u30C6\u30A3\u30D3\u30C6\u30A3\u3068\u8ACB\u6C42\u3092\u9632\u304E\u305F\u3044\u5834\u5408\u306F\u3001<a href=\"".concat(workspacesListRoute, "\">\u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u524A\u9664\u3059\u308B</a> \u30EF\u30FC\u30AF\u30B9\u30DA\u30FC\u30B9\u3092\u524A\u9664\u3059\u308B\u3068\u3001\u73FE\u5728\u306E\u30AB\u30EC\u30F3\u30C0\u30FC\u6708\u306B\u767A\u751F\u3057\u305F\u672A\u6255\u3044\u306E\u6D3B\u52D5\u306B\u5BFE\u3057\u3066\u8ACB\u6C42\u3055\u308C\u308B\u3053\u3068\u306B\u6CE8\u610F\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-                },
+                preventFutureActivity: ({ workspacesListRoute }) => `今後のアクティビティと請求を防ぎたい場合は、<a href="${workspacesListRoute}">ワークスペースを削除する</a> ワークスペースを削除すると、現在のカレンダー月に発生した未払いの活動に対して請求されることに注意してください。`,
             },
             requestSubmitted: {
                 title: 'リクエストが送信されました',
                 subtitle: 'ご解約をご希望されていることをお知らせいただき、ありがとうございます。ご要望を確認中で、近日中に<concierge-link>Concierge</concierge-link>のチャットを通じてご連絡いたします。',
             },
-            acknowledgement: "\u65E9\u671F\u30AD\u30E3\u30F3\u30BB\u30EB\u3092\u30EA\u30AF\u30A8\u30B9\u30C8\u3059\u308B\u3053\u3068\u306B\u3088\u308A\u3001Expensify \u304C Expensify \u306E\u4E0B\u3067\u305D\u306E\u3088\u3046\u306A\u30EA\u30AF\u30A8\u30B9\u30C8\u3092\u627F\u8A8D\u3059\u308B\u7FA9\u52D9\u3092\u8CA0\u308F\u306A\u3044\u3053\u3068\u3092\u8A8D\u3081\u3001\u540C\u610F\u3057\u307E\u3059\u3002<a href=".concat(CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL, ">\u5229\u7528\u898F\u7D04</a>\u307E\u305F\u306F\u3001\u79C1\u3068Expensify\u306E\u9593\u306E\u4ED6\u306E\u9069\u7528\u3055\u308C\u308B\u30B5\u30FC\u30D3\u30B9\u5951\u7D04\u306B\u57FA\u3065\u304D\u3001Expensify\u304C\u305D\u306E\u3088\u3046\u306A\u8981\u6C42\u3092\u8A31\u53EF\u3059\u308B\u304B\u3069\u3046\u304B\u306B\u3064\u3044\u3066\u306E\u552F\u4E00\u306E\u88C1\u91CF\u6A29\u3092\u4FDD\u6301\u3057\u3066\u3044\u308B\u3053\u3068\u3002"),
+            acknowledgement: `早期キャンセルをリクエストすることにより、Expensify が Expensify の下でそのようなリクエストを承認する義務を負わないことを認め、同意します。<a href=${CONST_1.default.OLD_DOT_PUBLIC_URLS.TERMS_URL}>利用規約</a>または、私とExpensifyの間の他の適用されるサービス契約に基づき、Expensifyがそのような要求を許可するかどうかについての唯一の裁量権を保持していること。`,
         },
     },
     feedbackSurvey: {
@@ -7808,8 +6472,7 @@ var translations = {
         addCopilot: 'コパイロットを追加',
         membersCanAccessYourAccount: 'これらのメンバーはあなたのアカウントにアクセスできます:',
         youCanAccessTheseAccounts: 'これらのアカウントには、アカウントスイッチャーを通じてアクセスできます。',
-        role: function (_a) {
-            var _b = _a === void 0 ? {} : _a, role = _b.role;
+        role: ({ role } = {}) => {
             switch (role) {
                 case CONST_1.default.DELEGATE_ROLE.ALL:
                     return '満杯';
@@ -7820,15 +6483,11 @@ var translations = {
             }
         },
         genericError: 'おっと、何か問題が発生しました。もう一度お試しください。',
-        onBehalfOfMessage: function (_a) {
-            var delegator = _a.delegator;
-            return "".concat(delegator, "\u306B\u4EE3\u308F\u3063\u3066");
-        },
+        onBehalfOfMessage: ({ delegator }) => `${delegator}に代わって`,
         accessLevel: 'アクセスレベル',
         confirmCopilot: '以下であなたのコパイロットを確認してください。',
         accessLevelDescription: '以下からアクセスレベルを選択してください。フルアクセスと限定アクセスの両方で、コパイロットはすべての会話と経費を閲覧できます。',
-        roleDescription: function (_a) {
-            var _b = _a === void 0 ? {} : _a, role = _b.role;
+        roleDescription: ({ role } = {}) => {
             switch (role) {
                 case CONST_1.default.DELEGATE_ROLE.ALL:
                     return 'あなたのアカウントで、他のメンバーがあなたに代わってすべての操作を行うことを許可します。チャット、提出、承認、支払い、設定の更新などが含まれます。';
@@ -7842,20 +6501,11 @@ var translations = {
         removeCopilotConfirmation: 'このコパイロットを削除してもよろしいですか？',
         changeAccessLevel: 'アクセスレベルを変更',
         makeSureItIsYou: 'あなたであることを確認しましょう',
-        enterMagicCode: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "".concat(contactMethod, "\u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u3001\u30B3\u30D1\u30A4\u30ED\u30C3\u30C8\u3092\u8FFD\u52A0\u3057\u3066\u304F\u3060\u3055\u3044\u30021\uFF5E2\u5206\u4EE5\u5185\u306B\u5C4A\u304F\u306F\u305A\u3067\u3059\u3002");
-        },
-        enterMagicCodeUpdate: function (_a) {
-            var contactMethod = _a.contactMethod;
-            return "\u30B3\u30D1\u30A4\u30ED\u30C3\u30C8\u3092\u66F4\u65B0\u3059\u308B\u305F\u3081\u306B\u3001".concat(contactMethod, "\u306B\u9001\u4FE1\u3055\u308C\u305F\u30DE\u30B8\u30C3\u30AF\u30B3\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002");
-        },
+        enterMagicCode: ({ contactMethod }) => `${contactMethod}に送信されたマジックコードを入力して、コパイロットを追加してください。1～2分以内に届くはずです。`,
+        enterMagicCodeUpdate: ({ contactMethod }) => `コパイロットを更新するために、${contactMethod}に送信されたマジックコードを入力してください。`,
         notAllowed: 'ちょっと待ってください…',
         noAccessMessage: 'コパイロットとして、このページにアクセスする権限がありません。申し訳ありません！',
-        notAllowedMessage: function (_a) {
-            var accountOwnerEmail = _a.accountOwnerEmail;
-            return "".concat(accountOwnerEmail, " \u306E<a href=\"").concat(CONST_1.default.DELEGATE_ROLE_HELP_DOT_ARTICLE_LINK, "\">\u526F\u64CD\u7E26\u58EB</a>\u3068\u3057\u3066\u3001\u3042\u306A\u305F\u306F\u3053\u306E\u884C\u52D5\u3092\u53D6\u308B\u8A31\u53EF\u3092\u6301\u3063\u3066\u3044\u307E\u305B\u3093\u3002\u7533\u3057\u8A33\u3042\u308A\u307E\u305B\u3093\uFF01");
-        },
+        notAllowedMessage: ({ accountOwnerEmail }) => `${accountOwnerEmail} の<a href="${CONST_1.default.DELEGATE_ROLE_HELP_DOT_ARTICLE_LINK}">副操縦士</a>として、あなたはこの行動を取る許可を持っていません。申し訳ありません！`,
         copilotAccess: 'Copilotアクセス',
     },
     debug: {
@@ -7867,18 +6517,9 @@ var translations = {
         nothingToPreview: 'プレビューするものがありません',
         editJson: 'JSONを編集:',
         preview: 'プレビュー:',
-        missingProperty: function (_a) {
-            var propertyName = _a.propertyName;
-            return "".concat(propertyName, " \u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093");
-        },
-        invalidProperty: function (_a) {
-            var propertyName = _a.propertyName, expectedType = _a.expectedType;
-            return "\u7121\u52B9\u306A\u30D7\u30ED\u30D1\u30C6\u30A3: ".concat(propertyName, " - \u671F\u5F85\u3055\u308C\u308B\u578B: ").concat(expectedType);
-        },
-        invalidValue: function (_a) {
-            var expectedValues = _a.expectedValues;
-            return "\u7121\u52B9\u306A\u5024 - \u671F\u5F85\u3055\u308C\u308B\u5024: ".concat(expectedValues);
-        },
+        missingProperty: ({ propertyName }) => `${propertyName} が見つかりません`,
+        invalidProperty: ({ propertyName, expectedType }) => `無効なプロパティ: ${propertyName} - 期待される型: ${expectedType}`,
+        invalidValue: ({ expectedValues }) => `無効な値 - 期待される値: ${expectedValues}`,
         missingValue: '値が不足しています',
         createReportAction: 'レポートアクションを作成',
         reportAction: 'アクションを報告する',
@@ -8028,10 +6669,7 @@ var translations = {
             readyForTheRealThing: '本番の準備はできましたか？',
             getStarted: '始めましょう',
         },
-        employeeInviteMessage: function (_a) {
-            var name = _a.name;
-            return "# ".concat(name, "\u304CExpensify\u306E\u8A66\u7528\u306B\u3042\u306A\u305F\u3092\u62DB\u5F85\u3057\u307E\u3057\u305F\n\u3053\u3093\u306B\u3061\u306F\uFF01\u79C1\u306FExpensify\u3092\u8A66\u7528\u3059\u308B\u305F\u3081\u306E*3\u30F6\u6708\u7121\u6599*\u3092\u624B\u306B\u5165\u308C\u307E\u3057\u305F\u3002\u3053\u308C\u306F\u3001\u7D4C\u8CBB\u3092\u51E6\u7406\u3059\u308B\u6700\u901F\u306E\u65B9\u6CD5\u3067\u3059\u3002\n\n\u3053\u3061\u3089\u304C\u305D\u306E\u4ED5\u7D44\u307F\u3092\u793A\u3059*\u30C6\u30B9\u30C8\u9818\u53CE\u66F8*\u3067\u3059\uFF1A");
-        },
+        employeeInviteMessage: ({ name }) => `# ${name}がExpensifyの試用にあなたを招待しました\nこんにちは！私はExpensifyを試用するための*3ヶ月無料*を手に入れました。これは、経費を処理する最速の方法です。\n\nこちらがその仕組みを示す*テスト領収書*です：`,
     },
     export: {
         basicExport: '基本エクスポート',

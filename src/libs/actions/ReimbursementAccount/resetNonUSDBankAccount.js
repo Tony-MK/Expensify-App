@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function resetNonUSDBankAccount(policyID, achAccount, shouldResetLocally) {
     if (!policyID) {
         throw new Error('Missing policy when attempting to reset');
     }
     if (shouldResetLocally) {
-        var updateData = [
+        const updateData = [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.SET,
                 key: ONYXKEYS_1.default.FORMS.REIMBURSEMENT_ACCOUNT_FORM_DRAFT,
@@ -18,7 +18,7 @@ function resetNonUSDBankAccount(policyID, achAccount, shouldResetLocally) {
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     achAccount: null,
                 },
@@ -32,7 +32,7 @@ function resetNonUSDBankAccount(policyID, achAccount, shouldResetLocally) {
         react_native_onyx_1.default.update(updateData);
         return;
     }
-    API.write(types_1.WRITE_COMMANDS.RESET_BANK_ACCOUNT_SETUP, { policyID: policyID }, {
+    API.write(types_1.WRITE_COMMANDS.RESET_BANK_ACCOUNT_SETUP, { policyID }, {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -46,7 +46,7 @@ function resetNonUSDBankAccount(policyID, achAccount, shouldResetLocally) {
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
                     achAccount: null,
                 },
@@ -72,9 +72,9 @@ function resetNonUSDBankAccount(policyID, achAccount, shouldResetLocally) {
             },
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-                key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+                key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
                 value: {
-                    achAccount: achAccount,
+                    achAccount,
                 },
             },
         ],

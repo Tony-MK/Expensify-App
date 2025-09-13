@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var useHtmlPaste = function () { };
+const useHtmlPaste = () => { };
 exports.default = useHtmlPaste;

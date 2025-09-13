@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removePolicyConnection = removePolicyConnection;
 exports.updateManyPolicyConnectionConfigs = updateManyPolicyConnectionConfigs;
@@ -20,53 +9,51 @@ exports.isConnectionUnverified = isConnectionUnverified;
 exports.isConnectionInProgress = isConnectionInProgress;
 exports.hasSynchronizationErrorMessage = hasSynchronizationErrorMessage;
 exports.setConnectionError = setConnectionError;
-var date_fns_1 = require("date-fns");
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var ErrorUtils = require("@libs/ErrorUtils");
-var PolicyUtils = require("@libs/PolicyUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const date_fns_1 = require("date-fns");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const ErrorUtils = require("@libs/ErrorUtils");
+const PolicyUtils = require("@libs/PolicyUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
 function removePolicyConnection(policy, connectionName) {
-    var _a;
-    var _b;
-    var policyID = policy.id;
-    var workspaceAccountID = (_b = policy === null || policy === void 0 ? void 0 : policy.workspaceAccountID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID;
-    var optimisticData = [
+    const policyID = policy.id;
+    const workspaceAccountID = policy?.workspaceAccountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
-                connections: (_a = {},
-                    _a[connectionName] = null,
-                    _a),
+                connections: {
+                    [connectionName]: null,
+                },
             },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS}${policyID}`,
             value: null,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION}${workspaceAccountID}`,
             value: null,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION}${workspaceAccountID}`,
             value: null,
         },
     ];
-    var successData = [];
-    var failureData = [];
-    var supportedConnections = [CONST_1.default.POLICY.CONNECTIONS.NAME.QBO, CONST_1.default.POLICY.CONNECTIONS.NAME.XERO];
+    const successData = [];
+    const failureData = [];
+    const supportedConnections = [CONST_1.default.POLICY.CONNECTIONS.NAME.QBO, CONST_1.default.POLICY.CONNECTIONS.NAME.XERO];
     if (PolicyUtils.isCollectPolicy(policy) && supportedConnections.includes(connectionName)) {
         optimisticData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 areReportFieldsEnabled: false,
                 pendingFields: {
@@ -76,7 +63,7 @@ function removePolicyConnection(policy, connectionName) {
         });
         successData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 pendingFields: {
                     areReportFieldsEnabled: null,
@@ -85,20 +72,20 @@ function removePolicyConnection(policy, connectionName) {
         });
         failureData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
-                areReportFieldsEnabled: policy === null || policy === void 0 ? void 0 : policy.areReportFieldsEnabled,
+                areReportFieldsEnabled: policy?.areReportFieldsEnabled,
                 pendingFields: {
                     areReportFieldsEnabled: null,
                 },
             },
         });
     }
-    var parameters = {
-        policyID: policyID,
-        connectionName: connectionName,
+    const parameters = {
+        policyID,
+        connectionName,
     };
-    API.write(types_1.WRITE_COMMANDS.REMOVE_POLICY_CONNECTION, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.REMOVE_POLICY_CONNECTION, parameters, { optimisticData, successData, failureData });
 }
 /**
  * This method returns read command and stage in progress for a given accounting integration.
@@ -134,145 +121,147 @@ function getSyncConnectionParameters(connectionName) {
  * @param connectionName - Name of the connection, QBO/Xero
  * @param forceDataRefresh - If true, it will trigger a full data refresh
  */
-function syncConnection(policy, connectionName, forceDataRefresh) {
-    if (forceDataRefresh === void 0) { forceDataRefresh = false; }
+function syncConnection(policy, connectionName, forceDataRefresh = false) {
     if (!connectionName || !policy) {
         return;
     }
-    var policyID = policy.id;
-    var syncConnectionData = getSyncConnectionParameters(connectionName);
+    const policyID = policy.id;
+    const syncConnectionData = getSyncConnectionParameters(connectionName);
     if (!syncConnectionData) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS}${policyID}`,
             value: {
-                stageInProgress: syncConnectionData === null || syncConnectionData === void 0 ? void 0 : syncConnectionData.stageInProgress,
-                connectionName: connectionName,
+                stageInProgress: syncConnectionData?.stageInProgress,
+                connectionName,
                 timestamp: new Date().toISOString(),
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS}${policyID}`,
             value: null,
         },
     ];
-    var parameters = {
-        policyID: policyID,
+    const parameters = {
+        policyID,
         idempotencyKey: policyID,
     };
     if (connectionName === CONST_1.default.POLICY.CONNECTIONS.NAME.QBD) {
         parameters.forceDataRefresh = forceDataRefresh;
     }
     API.read(syncConnectionData.readCommand, parameters, {
-        optimisticData: optimisticData,
-        failureData: failureData,
+        optimisticData,
+        failureData,
     });
 }
 function updateManyPolicyConnectionConfigs(policyID, connectionName, configUpdate, configCurrentData) {
-    var _a, _b, _c;
     if (!policyID) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
-                connections: (_a = {},
-                    _a[connectionName] = {
-                        config: __assign(__assign({}, configUpdate), { pendingFields: Object.fromEntries(Object.keys(configUpdate).map(function (settingName) { return [settingName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE]; })), errorFields: Object.fromEntries(Object.keys(configUpdate).map(function (settingName) { return [settingName, null]; })) }),
-                    },
-                    _a),
-            },
-        },
-    ];
-    var failureData = [
-        {
-            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-            value: {
-                connections: (_b = {},
-                    _b[connectionName] = {
-                        config: __assign(__assign({}, configCurrentData), { pendingFields: Object.fromEntries(Object.keys(configUpdate).map(function (settingName) { return [settingName, null]; })), errorFields: Object.fromEntries(Object.keys(configUpdate).map(function (settingName) { return [settingName, ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage')]; })) }),
-                    },
-                    _b),
-            },
-        },
-    ];
-    var successData = [
-        {
-            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
-            value: {
-                connections: (_c = {},
-                    _c[connectionName] = {
+                connections: {
+                    [connectionName]: {
                         config: {
-                            pendingFields: Object.fromEntries(Object.keys(configUpdate).map(function (settingName) { return [settingName, null]; })),
-                            errorFields: Object.fromEntries(Object.keys(configUpdate).map(function (settingName) { return [settingName, null]; })),
+                            ...configUpdate,
+                            pendingFields: Object.fromEntries(Object.keys(configUpdate).map((settingName) => [settingName, CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE])),
+                            errorFields: Object.fromEntries(Object.keys(configUpdate).map((settingName) => [settingName, null])),
                         },
                     },
-                    _c),
+                },
             },
         },
     ];
-    var parameters = {
-        policyID: policyID,
-        connectionName: connectionName,
+    const failureData = [
+        {
+            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+            value: {
+                connections: {
+                    [connectionName]: {
+                        config: {
+                            ...configCurrentData,
+                            pendingFields: Object.fromEntries(Object.keys(configUpdate).map((settingName) => [settingName, null])),
+                            errorFields: Object.fromEntries(Object.keys(configUpdate).map((settingName) => [settingName, ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage')])),
+                        },
+                    },
+                },
+            },
+        },
+    ];
+    const successData = [
+        {
+            onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
+            value: {
+                connections: {
+                    [connectionName]: {
+                        config: {
+                            pendingFields: Object.fromEntries(Object.keys(configUpdate).map((settingName) => [settingName, null])),
+                            errorFields: Object.fromEntries(Object.keys(configUpdate).map((settingName) => [settingName, null])),
+                        },
+                    },
+                },
+            },
+        },
+    ];
+    const parameters = {
+        policyID,
+        connectionName,
         configUpdate: JSON.stringify(configUpdate),
         idempotencyKey: Object.keys(configUpdate).join(','),
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_MANY_POLICY_CONNECTION_CONFIGS, parameters, { optimisticData: optimisticData, failureData: failureData, successData: successData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_MANY_POLICY_CONNECTION_CONFIGS, parameters, { optimisticData, failureData, successData });
 }
 function hasSynchronizationErrorMessage(policy, connectionName, isSyncInProgress) {
-    var _a, _b, _c;
-    var connection = (_a = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _a === void 0 ? void 0 : _a[connectionName];
-    if (isSyncInProgress || (0, EmptyObject_1.isEmptyObject)(connection === null || connection === void 0 ? void 0 : connection.lastSync) || ((_b = connection === null || connection === void 0 ? void 0 : connection.lastSync) === null || _b === void 0 ? void 0 : _b.isSuccessful) !== false || !((_c = connection === null || connection === void 0 ? void 0 : connection.lastSync) === null || _c === void 0 ? void 0 : _c.errorDate)) {
+    const connection = policy?.connections?.[connectionName];
+    if (isSyncInProgress || (0, EmptyObject_1.isEmptyObject)(connection?.lastSync) || connection?.lastSync?.isSuccessful !== false || !connection?.lastSync?.errorDate) {
         return false;
     }
     return true;
 }
 function isAuthenticationError(policy, connectionName) {
-    var _a, _b;
-    var connection = (_a = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _a === void 0 ? void 0 : _a[connectionName];
-    return ((_b = connection === null || connection === void 0 ? void 0 : connection.lastSync) === null || _b === void 0 ? void 0 : _b.isAuthenticationError) === true;
+    const connection = policy?.connections?.[connectionName];
+    return connection?.lastSync?.isAuthenticationError === true;
 }
 function isConnectionUnverified(policy, connectionName) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     // A verified connection is one that has been successfully synced at least once
     // We'll always err on the side of considering a connection as verified connected even if we can't find a lastSync property saying as such
     // i.e. this is a property that is explicitly set to false, not just missing
     if (connectionName === CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE) {
-        return !((_c = (_b = (_a = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _a === void 0 ? void 0 : _a[CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE]) === null || _b === void 0 ? void 0 : _b.verified) !== null && _c !== void 0 ? _c : true);
+        return !(policy?.connections?.[CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE]?.verified ?? true);
     }
     // If the connection has no lastSync property, we'll consider it unverified
-    if ((0, EmptyObject_1.isEmptyObject)((_e = (_d = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _d === void 0 ? void 0 : _d[connectionName]) === null || _e === void 0 ? void 0 : _e.lastSync)) {
+    if ((0, EmptyObject_1.isEmptyObject)(policy?.connections?.[connectionName]?.lastSync)) {
         return true;
     }
-    return !((_j = (_h = (_g = (_f = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _f === void 0 ? void 0 : _f[connectionName]) === null || _g === void 0 ? void 0 : _g.lastSync) === null || _h === void 0 ? void 0 : _h.isConnected) !== null && _j !== void 0 ? _j : true);
+    return !(policy?.connections?.[connectionName]?.lastSync?.isConnected ?? true);
 }
 function setConnectionError(policyID, connectionName, errorMessage) {
-    var _a;
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), {
-        connections: (_a = {},
-            _a[connectionName] = {
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, {
+        connections: {
+            [connectionName]: {
                 lastSync: {
                     isSuccessful: false,
                     isConnected: false,
                     errorDate: new Date().toISOString(),
-                    errorMessage: errorMessage,
+                    errorMessage,
                 },
             },
-            _a),
+        },
     });
 }
 function copyExistingPolicyConnection(connectedPolicyID, targetPolicyID, connectionName) {
-    var stageInProgress;
+    let stageInProgress;
     switch (connectionName) {
         case CONST_1.default.POLICY.CONNECTIONS.NAME.NETSUITE:
             stageInProgress = CONST_1.default.POLICY.CONNECTIONS.SYNC_STAGE_NAME.NETSUITE_SYNC_CONNECTION;
@@ -283,33 +272,32 @@ function copyExistingPolicyConnection(connectedPolicyID, targetPolicyID, connect
         default:
             stageInProgress = null;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS).concat(targetPolicyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY_CONNECTION_SYNC_PROGRESS}${targetPolicyID}`,
             value: {
-                stageInProgress: stageInProgress,
-                connectionName: connectionName,
+                stageInProgress,
+                connectionName,
                 timestamp: new Date().toISOString(),
             },
         },
     ];
     API.write(types_1.WRITE_COMMANDS.COPY_EXISTING_POLICY_CONNECTION, {
         policyID: connectedPolicyID,
-        targetPolicyID: targetPolicyID,
-        connectionName: connectionName,
-    }, { optimisticData: optimisticData });
+        targetPolicyID,
+        connectionName,
+    }, { optimisticData });
 }
 function isConnectionInProgress(connectionSyncProgress, policy) {
-    var _a, _b, _c, _d;
     if (!policy || !connectionSyncProgress) {
         return false;
     }
-    var qboConnection = (_a = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _a === void 0 ? void 0 : _a.quickbooksOnline;
-    var lastSyncProgressDate = (0, date_fns_1.parseISO)((_b = connectionSyncProgress === null || connectionSyncProgress === void 0 ? void 0 : connectionSyncProgress.timestamp) !== null && _b !== void 0 ? _b : '');
-    return ((!!(connectionSyncProgress === null || connectionSyncProgress === void 0 ? void 0 : connectionSyncProgress.stageInProgress) &&
-        (connectionSyncProgress.stageInProgress !== CONST_1.default.POLICY.CONNECTIONS.SYNC_STAGE_NAME.JOB_DONE || !((_c = policy === null || policy === void 0 ? void 0 : policy.connections) === null || _c === void 0 ? void 0 : _c[connectionSyncProgress.connectionName])) &&
+    const qboConnection = policy?.connections?.quickbooksOnline;
+    const lastSyncProgressDate = (0, date_fns_1.parseISO)(connectionSyncProgress?.timestamp ?? '');
+    return ((!!connectionSyncProgress?.stageInProgress &&
+        (connectionSyncProgress.stageInProgress !== CONST_1.default.POLICY.CONNECTIONS.SYNC_STAGE_NAME.JOB_DONE || !policy?.connections?.[connectionSyncProgress.connectionName]) &&
         (0, date_fns_1.isValid)(lastSyncProgressDate) &&
         (0, date_fns_1.differenceInMinutes)(new Date(), lastSyncProgressDate) < CONST_1.default.POLICY.CONNECTIONS.SYNC_STAGE_TIMEOUT_MINUTES) ||
-        (!!qboConnection && !(qboConnection === null || qboConnection === void 0 ? void 0 : qboConnection.data) && !!((_d = qboConnection === null || qboConnection === void 0 ? void 0 : qboConnection.config) === null || _d === void 0 ? void 0 : _d.credentials)));
+        (!!qboConnection && !qboConnection?.data && !!qboConnection?.config?.credentials));
 }

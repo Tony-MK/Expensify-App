@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ApiUtils = require("@libs/ApiUtils");
-var tryResolveUrlFromApiRoot_1 = require("@libs/tryResolveUrlFromApiRoot");
-var Link = require("@userActions/Link");
-var CONST_1 = require("@src/CONST");
-var FileUtils_1 = require("./FileUtils");
-var createDownloadLink = function (href, fileName) {
-    var _a;
+const ApiUtils = require("@libs/ApiUtils");
+const tryResolveUrlFromApiRoot_1 = require("@libs/tryResolveUrlFromApiRoot");
+const Link = require("@userActions/Link");
+const CONST_1 = require("@src/CONST");
+const FileUtils_1 = require("./FileUtils");
+const createDownloadLink = (href, fileName) => {
     // creating anchor tag to initiate download
-    var link = document.createElement('a');
+    const link = document.createElement('a');
     // adding href to anchor
     link.href = href;
     link.style.display = 'none';
@@ -20,21 +19,17 @@ var createDownloadLink = function (href, fileName) {
     link.click();
     // Clean up and remove the link
     URL.revokeObjectURL(link.href);
-    (_a = link.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(link);
+    link.parentNode?.removeChild(link);
 };
 /**
  * The function downloads an attachment on web/desktop platforms.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-var fetchFileDownload = function (url, fileName, successMessage, shouldOpenExternalLink, formData, requestType, onDownloadFailed) {
-    if (successMessage === void 0) { successMessage = ''; }
-    if (shouldOpenExternalLink === void 0) { shouldOpenExternalLink = false; }
-    if (formData === void 0) { formData = undefined; }
-    if (requestType === void 0) { requestType = 'get'; }
-    var resolvedUrl = (0, tryResolveUrlFromApiRoot_1.default)(url);
-    var isApiUrl = resolvedUrl.startsWith(ApiUtils.getApiRoot());
-    var isAttachmentUrl = CONST_1.default.ATTACHMENT_LOCAL_URL_PREFIX.some(function (prefix) { return resolvedUrl.startsWith(prefix); });
-    var isSageUrl = url === CONST_1.default.EXPENSIFY_PACKAGE_FOR_SAGE_INTACCT;
+const fetchFileDownload = (url, fileName, successMessage = '', shouldOpenExternalLink = false, formData = undefined, requestType = 'get', onDownloadFailed) => {
+    const resolvedUrl = (0, tryResolveUrlFromApiRoot_1.default)(url);
+    const isApiUrl = resolvedUrl.startsWith(ApiUtils.getApiRoot());
+    const isAttachmentUrl = CONST_1.default.ATTACHMENT_LOCAL_URL_PREFIX.some((prefix) => resolvedUrl.startsWith(prefix));
+    const isSageUrl = url === CONST_1.default.EXPENSIFY_PACKAGE_FOR_SAGE_INTACCT;
     if (
     // We have two file download cases that we should allow: 1. downloading attachments 2. downloading Expensify package for Sage Intacct
     shouldOpenExternalLink ||
@@ -44,26 +39,26 @@ var fetchFileDownload = function (url, fileName, successMessage, shouldOpenExter
         Link.openExternalLink(url);
         return Promise.resolve();
     }
-    var fetchOptions = {
+    const fetchOptions = {
         method: requestType,
         body: formData,
         credentials: 'same-origin',
     };
     return fetch(url, fetchOptions)
-        .then(function (response) {
-        var contentType = response.headers.get('content-type');
-        if (contentType === 'application/json' && (fileName === null || fileName === void 0 ? void 0 : fileName.includes('.csv'))) {
+        .then((response) => {
+        const contentType = response.headers.get('content-type');
+        if (contentType === 'application/json' && fileName?.includes('.csv')) {
             throw new Error();
         }
         return response.blob();
     })
-        .then(function (blob) {
+        .then((blob) => {
         // Create blob link to download
-        var href = URL.createObjectURL(new Blob([blob]));
-        var completeFileName = (0, FileUtils_1.appendTimeToFileName)(fileName !== null && fileName !== void 0 ? fileName : (0, FileUtils_1.getFileName)(url));
+        const href = URL.createObjectURL(new Blob([blob]));
+        const completeFileName = (0, FileUtils_1.appendTimeToFileName)(fileName ?? (0, FileUtils_1.getFileName)(url));
         createDownloadLink(href, completeFileName);
     })
-        .catch(function () {
+        .catch(() => {
         if (onDownloadFailed) {
             onDownloadFailed();
         }

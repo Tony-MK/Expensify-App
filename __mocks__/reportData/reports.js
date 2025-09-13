@@ -1,27 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.iouReportR14932 = exports.chatReportR14932 = void 0;
-var CONST_1 = require("@src/CONST");
-var usersIDs = [15593135, 51760358, 26502375];
-var amount = 10402;
-var currency = CONST_1.default.CURRENCY.USD;
-var REPORT_ID_R14932 = 'REPORT_ID_R14932';
-var CHAT_REPORT_ID_R14932 = 'CHAT_REPORT_ID_R14932';
-var IOU_REPORT_ID_R14932 = 'IOU_REPORT_ID_R14932';
-var PARENT_REPORT_ACTION_ID_R14932 = 'PARENT_ACTION_ID_R14932';
-var PARENT_REPORT_ID_R14932 = 'PARENT_REPORT_ID_R14932';
-var LAST_MESSAGE_R14932 = 'LAST_MESSAGE_R14932';
-var participants = usersIDs.reduce(function (prev, userID) {
-    var _a;
-    return _a = {},
-        _a[userID] = {
+const CONST_1 = require("@src/CONST");
+const usersIDs = [15593135, 51760358, 26502375];
+const amount = 10402;
+const currency = CONST_1.default.CURRENCY.USD;
+const REPORT_ID_R14932 = 'REPORT_ID_R14932';
+const CHAT_REPORT_ID_R14932 = 'CHAT_REPORT_ID_R14932';
+const IOU_REPORT_ID_R14932 = 'IOU_REPORT_ID_R14932';
+const PARENT_REPORT_ACTION_ID_R14932 = 'PARENT_ACTION_ID_R14932';
+const PARENT_REPORT_ID_R14932 = 'PARENT_REPORT_ID_R14932';
+const LAST_MESSAGE_R14932 = 'LAST_MESSAGE_R14932';
+const participants = usersIDs.reduce((prev, userID) => {
+    return {
+        [userID]: {
             notificationPreference: 'always',
         },
-        _a;
+    };
 }, {});
-var iouReportR14932 = {
-    currency: currency,
-    participants: participants,
+const iouReportR14932 = {
+    currency,
+    participants,
     total: amount,
     unheldTotal: amount,
     chatReportID: CHAT_REPORT_ID_R14932,
@@ -61,9 +60,9 @@ var iouReportR14932 = {
     oldPolicyName: '',
 };
 exports.iouReportR14932 = iouReportR14932;
-var chatReportR14932 = {
-    currency: currency,
-    participants: participants,
+const chatReportR14932 = {
+    currency,
+    participants,
     lastMessageText: LAST_MESSAGE_R14932,
     reportID: REPORT_ID_R14932,
     iouReportID: IOU_REPORT_ID_R14932,
@@ -79,7 +78,7 @@ var chatReportR14932 = {
     writeCapability: CONST_1.default.REPORT.WRITE_CAPABILITIES.ALL,
     permissions: [CONST_1.default.REPORT.PERMISSIONS.READ, CONST_1.default.REPORT.PERMISSIONS.WRITE],
     type: CONST_1.default.REPORT.TYPE.CHAT,
-    lastMessageHtml: "<mention-user accountID=\"".concat(usersIDs.at(0), "\"/> <mention-user accountID=\"").concat(usersIDs.at(0), "\"/>"),
+    lastMessageHtml: `<mention-user accountID="${usersIDs.at(0)}"/> <mention-user accountID="${usersIDs.at(0)}"/>`,
     lastReadTime: '2025-03-11 08:51:38.736',
     lastVisibleActionCreated: '2025-03-11 08:47:56.654',
     lastVisibleActionLastModified: '2025-03-11 08:47:56.654',

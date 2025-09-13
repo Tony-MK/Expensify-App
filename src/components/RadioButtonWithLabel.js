@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var FormHelpMessage_1 = require("./FormHelpMessage");
-var Pressables = require("./Pressable");
-var RadioButton_1 = require("./RadioButton");
-var Text_1 = require("./Text");
-var PressableWithFeedback = Pressables.PressableWithFeedback;
-function RadioButtonWithLabel(_a) {
-    var labelElement = _a.labelElement, style = _a.style, _b = _a.label, label = _b === void 0 ? '' : _b, _c = _a.hasError, hasError = _c === void 0 ? false : _c, _d = _a.errorText, errorText = _d === void 0 ? '' : _d, isChecked = _a.isChecked, onPress = _a.onPress, wrapperStyle = _a.wrapperStyle, shouldBlendOpacity = _a.shouldBlendOpacity;
-    var styles = (0, useThemeStyles_1.default)();
-    var defaultStyles = [styles.flexRow, styles.alignItemsCenter];
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const FormHelpMessage_1 = require("./FormHelpMessage");
+const Pressables = require("./Pressable");
+const RadioButton_1 = require("./RadioButton");
+const Text_1 = require("./Text");
+const PressableWithFeedback = Pressables.PressableWithFeedback;
+function RadioButtonWithLabel({ labelElement, style, label = '', hasError = false, errorText = '', isChecked, onPress, wrapperStyle, shouldBlendOpacity }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const defaultStyles = [styles.flexRow, styles.alignItemsCenter];
     if (!label && !labelElement) {
         throw new Error('Must provide at least label or labelComponent prop');
     }

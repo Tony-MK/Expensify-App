@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var KeyboardShortcut_1 = require("@libs/KeyboardShortcut");
-var CONST_1 = require("@src/CONST");
-function CarouselActions(_a) {
-    var onCycleThroughAttachments = _a.onCycleThroughAttachments;
-    (0, react_1.useEffect)(function () {
-        var shortcutLeftConfig = CONST_1.default.KEYBOARD_SHORTCUTS.ARROW_LEFT;
-        var unsubscribeLeftKey = KeyboardShortcut_1.default.subscribe(shortcutLeftConfig.shortcutKey, function (event) {
-            if ((event === null || event === void 0 ? void 0 : event.target) instanceof HTMLElement) {
+const react_1 = require("react");
+const KeyboardShortcut_1 = require("@libs/KeyboardShortcut");
+const CONST_1 = require("@src/CONST");
+function CarouselActions({ onCycleThroughAttachments }) {
+    (0, react_1.useEffect)(() => {
+        const shortcutLeftConfig = CONST_1.default.KEYBOARD_SHORTCUTS.ARROW_LEFT;
+        const unsubscribeLeftKey = KeyboardShortcut_1.default.subscribe(shortcutLeftConfig.shortcutKey, (event) => {
+            if (event?.target instanceof HTMLElement) {
                 // prevents focus from highlighting around the modal
                 event.target.blur();
             }
             onCycleThroughAttachments(-1);
         }, shortcutLeftConfig.descriptionKey, shortcutLeftConfig.modifiers);
-        var shortcutRightConfig = CONST_1.default.KEYBOARD_SHORTCUTS.ARROW_RIGHT;
-        var unsubscribeRightKey = KeyboardShortcut_1.default.subscribe(shortcutRightConfig.shortcutKey, function (event) {
-            if ((event === null || event === void 0 ? void 0 : event.target) instanceof HTMLElement) {
+        const shortcutRightConfig = CONST_1.default.KEYBOARD_SHORTCUTS.ARROW_RIGHT;
+        const unsubscribeRightKey = KeyboardShortcut_1.default.subscribe(shortcutRightConfig.shortcutKey, (event) => {
+            if (event?.target instanceof HTMLElement) {
                 // prevents focus from highlighting around the modal
                 event.target.blur();
             }
             onCycleThroughAttachments(1);
         }, shortcutRightConfig.descriptionKey, shortcutRightConfig.modifiers);
-        return function () {
+        return () => {
             unsubscribeLeftKey();
             unsubscribeRightKey();
         };

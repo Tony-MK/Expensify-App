@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.firebasePerfWeb = exports.firebaseApp = void 0;
-var app_1 = require("@firebase/app");
-var performance_1 = require("@firebase/performance");
-var CONFIG_1 = require("@src/CONFIG");
-var firebaseConfig = CONFIG_1.default.FIREBASE_WEB_CONFIG;
-var firebaseApp = (0, app_1.initializeApp)(firebaseConfig);
+const app_1 = require("@firebase/app");
+const performance_1 = require("@firebase/performance");
+const CONFIG_1 = require("@src/CONFIG");
+const firebaseConfig = CONFIG_1.default.FIREBASE_WEB_CONFIG;
+const firebaseApp = (0, app_1.initializeApp)(firebaseConfig);
 exports.firebaseApp = firebaseApp;
 (0, performance_1.initializePerformance)(firebaseApp, { dataCollectionEnabled: true });
-var firebasePerfWeb = (0, performance_1.getPerformance)(firebaseApp);
+const firebasePerfWeb = (0, performance_1.getPerformance)(firebaseApp);
 exports.firebasePerfWeb = firebasePerfWeb;

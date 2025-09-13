@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var searchParser_1 = require("@libs/SearchParser/searchParser");
-var CONST_1 = require("@src/CONST");
-var searchParsersCommonQueries_1 = require("../utils/fixtures/searchParsersCommonQueries");
-var tests = [
+const searchParser_1 = require("@libs/SearchParser/searchParser");
+const CONST_1 = require("@src/CONST");
+const searchParsersCommonQueries_1 = require("../utils/fixtures/searchParsersCommonQueries");
+const tests = [
     {
         query: searchParsersCommonQueries_1.default.simple,
         expected: {
@@ -528,7 +528,7 @@ var tests = [
 /*
  * Test keywords with special characters and wrapped in quotes
  */
-var keywordTests = [
+const keywordTests = [
     {
         query: '" " "  "', // Multiple whitespaces wrapped in quotes
         expected: {
@@ -652,17 +652,15 @@ var keywordTests = [
         },
     },
 ];
-describe('search parser', function () {
-    test.each(tests)("parsing: $query", function (_a) {
-        var query = _a.query, expected = _a.expected;
-        var result = (0, searchParser_1.parse)(query);
+describe('search parser', () => {
+    test.each(tests)(`parsing: $query`, ({ query, expected }) => {
+        const result = (0, searchParser_1.parse)(query);
         expect(result).toEqual(expected);
     });
 });
-describe('Testing search parser with special characters and wrapped in quotes.', function () {
-    test.each(keywordTests)("parsing: $query", function (_a) {
-        var query = _a.query, expected = _a.expected;
-        var result = (0, searchParser_1.parse)(query);
+describe('Testing search parser with special characters and wrapped in quotes.', () => {
+    test.each(keywordTests)(`parsing: $query`, ({ query, expected }) => {
+        const result = (0, searchParser_1.parse)(query);
         expect(result).toEqual(expected);
     });
 });

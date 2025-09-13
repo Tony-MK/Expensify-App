@@ -1,39 +1,19 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var clean_webpack_plugin_1 = require("clean-webpack-plugin");
-var copy_webpack_plugin_1 = require("copy-webpack-plugin");
-var dotenv_1 = require("dotenv");
-var fs_1 = require("fs");
-var html_webpack_plugin_1 = require("html-webpack-plugin");
-var path_1 = require("path");
-var terser_webpack_plugin_1 = require("terser-webpack-plugin");
-var webpack_1 = require("webpack");
-var webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
-var CustomVersionFilePlugin_1 = require("./CustomVersionFilePlugin");
+const clean_webpack_plugin_1 = require("clean-webpack-plugin");
+const copy_webpack_plugin_1 = require("copy-webpack-plugin");
+const dotenv_1 = require("dotenv");
+const fs_1 = require("fs");
+const html_webpack_plugin_1 = require("html-webpack-plugin");
+const path_1 = require("path");
+const terser_webpack_plugin_1 = require("terser-webpack-plugin");
+const webpack_1 = require("webpack");
+const webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
+const CustomVersionFilePlugin_1 = require("./CustomVersionFilePlugin");
 dotenv_1.default.config();
 // require is necessary, importing anything from @vue/preload-webpack-plugin causes an error
-var PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
-var includeModules = [
+const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
+const includeModules = [
     'react-native-animatable',
     'react-native-reanimated',
     'react-native-picker-select',
@@ -55,14 +35,14 @@ var includeModules = [
     'expo-image-manipulator',
     'expo-modules-core',
 ].join('|');
-var environmentToLogoSuffixMap = {
+const environmentToLogoSuffixMap = {
     production: '-dark',
     staging: '-stg',
     dev: '-dev',
     adhoc: '-adhoc',
 };
 function mapEnvironmentToLogoSuffix(environmentFile) {
-    var environment = environmentFile.split('.').at(2);
+    let environment = environmentFile.split('.').at(2);
     if (typeof environment === 'undefined') {
         environment = 'dev';
     }
@@ -71,9 +51,8 @@ function mapEnvironmentToLogoSuffix(environmentFile) {
 /**
  * Get a production grade config for web or desktop
  */
-var getCommonConfiguration = function (_a) {
-    var _b = _a.file, file = _b === void 0 ? '.env' : _b, _c = _a.platform, platform = _c === void 0 ? 'web' : _c;
-    var isDevelopment = file === '.env' || file === '.env.development';
+const getCommonConfiguration = ({ file = '.env', platform = 'web' }) => {
+    const isDevelopment = file === '.env' || file === '.env.development';
     return {
         mode: isDevelopment ? 'development' : 'production',
         devtool: 'source-map',
@@ -91,12 +70,12 @@ var getCommonConfiguration = function (_a) {
             // because we are not using the library for JSON format of Lottie animations.
             warningsFilter: ['./node_modules/lottie-react-native/lib/module/LottieView/index.web.js'],
         },
-        plugins: __spreadArray(__spreadArray(__spreadArray(__spreadArray([
+        plugins: [
             new clean_webpack_plugin_1.CleanWebpackPlugin(),
             new html_webpack_plugin_1.default({
                 template: 'web/index.html',
                 filename: 'index.html',
-                splashLogo: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../../assets/images/new-expensify".concat(mapEnvironmentToLogoSuffix(file), ".svg")), 'utf-8'),
+                splashLogo: fs_1.default.readFileSync(path_1.default.resolve(__dirname, `../../assets/images/new-expensify${mapEnvironmentToLogoSuffix(file)}.svg`), 'utf-8'),
                 isWeb: platform === 'web',
                 isProduction: file === '.env.production',
                 isStaging: file === '.env.staging',
@@ -144,26 +123,31 @@ var getCommonConfiguration = function (_a) {
             new webpack_1.IgnorePlugin({
                 resourceRegExp: /^\.\/locale$/,
                 contextRegExp: /moment$/,
-            })
-        ], (file === '.env.production' || file === '.env.staging'
-            ? [
-                new webpack_1.IgnorePlugin({
-                    resourceRegExp: /@welldone-software\/why-did-you-render/,
-                }),
-            ]
-            : []), true), (platform === 'web' ? [new CustomVersionFilePlugin_1.default()] : []), true), [
-            new webpack_1.DefinePlugin(__assign(__assign({}, (platform === 'desktop' ? {} : { process: { env: {} } })), { 
+            }),
+            ...(file === '.env.production' || file === '.env.staging'
+                ? [
+                    new webpack_1.IgnorePlugin({
+                        resourceRegExp: /@welldone-software\/why-did-you-render/,
+                    }),
+                ]
+                : []),
+            ...(platform === 'web' ? [new CustomVersionFilePlugin_1.default()] : []),
+            new webpack_1.DefinePlugin({
+                ...(platform === 'desktop' ? {} : { process: { env: {} } }),
                 // Define EXPO_OS for web platform to fix expo-modules-core warning
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                'process.env.EXPO_OS': JSON.stringify('web'), 
+                'process.env.EXPO_OS': JSON.stringify('web'),
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                __REACT_WEB_CONFIG__: JSON.stringify(dotenv_1.default.config({ path: file }).parsed), 
+                __REACT_WEB_CONFIG__: JSON.stringify(dotenv_1.default.config({ path: file }).parsed),
                 // React Native JavaScript environment requires the global __DEV__ variable to be accessible.
                 // react-native-render-html uses variable to log exclusively during development.
                 // See https://reactnative.dev/docs/javascript-environment
                 // eslint-disable-next-line @typescript-eslint/naming-convention
-                __DEV__: /staging|prod|adhoc/.test(file) === false }))
-        ], false), (process.env.ANALYZE_BUNDLE === 'true' ? [new webpack_bundle_analyzer_1.BundleAnalyzerPlugin()] : []), true),
+                __DEV__: /staging|prod|adhoc/.test(file) === false,
+            }),
+            // This allows us to interactively inspect JS bundle contents
+            ...(process.env.ANALYZE_BUNDLE === 'true' ? [new webpack_bundle_analyzer_1.BundleAnalyzerPlugin()] : []),
+        ],
         module: {
             rules: [
                 {
@@ -184,7 +168,7 @@ var getCommonConfiguration = function (_a) {
                      * You can remove something from this list if it doesn't use "react-native" as an import and it doesn't
                      * use JSX/JS that needs to be transformed by babel.
                      */
-                    exclude: [new RegExp("node_modules/(?!(".concat(includeModules, ")/).*|.native.js$"))],
+                    exclude: [new RegExp(`node_modules/(?!(${includeModules})/).*|.native.js$`)],
                 },
                 // We are importing this worker as a string by using asset/source otherwise it will default to loading via an HTTPS request later.
                 // This causes issues if we have gone offline before the pdfjs web worker is set up as we won't be able to load it from the server.
@@ -285,21 +269,21 @@ var getCommonConfiguration = function (_a) {
             // This is also why we have to use .website.js for our own web-specific files...
             // Because desktop also relies on "web-specific" module implementations
             // This also skips packing web only dependencies to desktop and vice versa
-            extensions: __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([
-                '.web.js'
-            ], (platform === 'desktop' ? ['.desktop.js'] : []), true), [
+            extensions: [
+                '.web.js',
+                ...(platform === 'desktop' ? ['.desktop.js'] : []),
                 '.website.js',
                 '.js',
                 '.jsx',
-                '.web.ts'
-            ], false), (platform === 'desktop' ? ['.desktop.ts'] : []), true), [
-                '.website.ts'
-            ], false), (platform === 'desktop' ? ['.desktop.tsx'] : []), true), [
+                '.web.ts',
+                ...(platform === 'desktop' ? ['.desktop.ts'] : []),
+                '.website.ts',
+                ...(platform === 'desktop' ? ['.desktop.tsx'] : []),
                 '.website.tsx',
                 '.ts',
                 '.web.tsx',
                 '.tsx',
-            ], false),
+            ],
             fallback: {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 'process/browser': require.resolve('process/browser'),

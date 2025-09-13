@@ -1,46 +1,43 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var InteractiveStepSubHeader_1 = require("@components/InteractiveStepSubHeader");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useSubStep_1 = require("@hooks/useSubStep");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var BankAccounts_1 = require("@libs/actions/BankAccounts");
-var PaymentMethods_1 = require("@libs/actions/PaymentMethods");
-var Wallet_1 = require("@libs/actions/Wallet");
-var Navigation_1 = require("@navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var SetupMethod_1 = require("./SetupMethod");
-var ConfirmationStep_1 = require("./substeps/ConfirmationStep");
-var PlaidStep_1 = require("./substeps/PlaidStep");
-var plaidSubsteps = [PlaidStep_1.default, ConfirmationStep_1.default];
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const InteractiveStepSubHeader_1 = require("@components/InteractiveStepSubHeader");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useSubStep_1 = require("@hooks/useSubStep");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const BankAccounts_1 = require("@libs/actions/BankAccounts");
+const PaymentMethods_1 = require("@libs/actions/PaymentMethods");
+const Wallet_1 = require("@libs/actions/Wallet");
+const Navigation_1 = require("@navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const SetupMethod_1 = require("./SetupMethod");
+const ConfirmationStep_1 = require("./substeps/ConfirmationStep");
+const PlaidStep_1 = require("./substeps/PlaidStep");
+const plaidSubsteps = [PlaidStep_1.default, ConfirmationStep_1.default];
 function AddBankAccount() {
-    var plaidData = (0, useOnyx_1.default)(ONYXKEYS_1.default.PLAID_DATA)[0];
-    var personalBankAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT)[0];
-    var personalBankAccountDraft = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.PERSONAL_BANK_ACCOUNT_FORM_DRAFT)[0];
-    var translate = (0, useLocalize_1.default)().translate;
-    var styles = (0, useThemeStyles_1.default)();
-    var submit = (0, react_1.useCallback)(function () {
-        var _a;
-        var bankAccounts = (_a = plaidData === null || plaidData === void 0 ? void 0 : plaidData.bankAccounts) !== null && _a !== void 0 ? _a : [];
-        var selectedPlaidBankAccount = bankAccounts.find(function (bankAccount) { return bankAccount.plaidAccountID === (personalBankAccountDraft === null || personalBankAccountDraft === void 0 ? void 0 : personalBankAccountDraft.plaidAccountID); });
+    const [plaidData] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PLAID_DATA);
+    const [personalBankAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.PERSONAL_BANK_ACCOUNT);
+    const [personalBankAccountDraft] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.PERSONAL_BANK_ACCOUNT_FORM_DRAFT);
+    const { translate } = (0, useLocalize_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const submit = (0, react_1.useCallback)(() => {
+        const bankAccounts = plaidData?.bankAccounts ?? [];
+        const selectedPlaidBankAccount = bankAccounts.find((bankAccount) => bankAccount.plaidAccountID === personalBankAccountDraft?.plaidAccountID);
         if (selectedPlaidBankAccount) {
             (0, BankAccounts_1.addPersonalBankAccount)(selectedPlaidBankAccount);
         }
-    }, [personalBankAccountDraft === null || personalBankAccountDraft === void 0 ? void 0 : personalBankAccountDraft.plaidAccountID, plaidData === null || plaidData === void 0 ? void 0 : plaidData.bankAccounts]);
-    var isSetupTypeChosen = (personalBankAccountDraft === null || personalBankAccountDraft === void 0 ? void 0 : personalBankAccountDraft.setupType) === CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID;
-    var _a = (0, useSubStep_1.default)({ bodyContent: plaidSubsteps, startFrom: 0, onFinished: submit }), SubStep = _a.componentToRender, isEditing = _a.isEditing, screenIndex = _a.screenIndex, nextScreen = _a.nextScreen, prevScreen = _a.prevScreen, moveTo = _a.moveTo;
-    var exitFlow = function (shouldContinue) {
-        var _a;
-        if (shouldContinue === void 0) { shouldContinue = false; }
-        var exitReportID = personalBankAccount === null || personalBankAccount === void 0 ? void 0 : personalBankAccount.exitReportID;
-        var onSuccessFallbackRoute = (_a = personalBankAccount === null || personalBankAccount === void 0 ? void 0 : personalBankAccount.onSuccessFallbackRoute) !== null && _a !== void 0 ? _a : '';
+    }, [personalBankAccountDraft?.plaidAccountID, plaidData?.bankAccounts]);
+    const isSetupTypeChosen = personalBankAccountDraft?.setupType === CONST_1.default.BANK_ACCOUNT.SETUP_TYPE.PLAID;
+    const { componentToRender: SubStep, isEditing, screenIndex, nextScreen, prevScreen, moveTo } = (0, useSubStep_1.default)({ bodyContent: plaidSubsteps, startFrom: 0, onFinished: submit });
+    const exitFlow = (shouldContinue = false) => {
+        const exitReportID = personalBankAccount?.exitReportID;
+        const onSuccessFallbackRoute = personalBankAccount?.onSuccessFallbackRoute ?? '';
         if (exitReportID) {
             Navigation_1.default.dismissModalWithReport({ reportID: exitReportID });
             return;
@@ -51,7 +48,7 @@ function AddBankAccount() {
         }
         Navigation_1.default.goBack(ROUTES_1.default.SETTINGS_WALLET);
     };
-    var handleBackButtonPress = function () {
+    const handleBackButtonPress = () => {
         if (!isSetupTypeChosen) {
             exitFlow();
             return;

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var colors_1 = require("@styles/theme/colors");
-var variables_1 = require("@styles/variables");
-var DotLottieAnimations = {
+const colors_1 = require("@styles/theme/colors");
+const variables_1 = require("@styles/variables");
+const DotLottieAnimations = {
     Abracadabra: {
         file: require('@assets/animations/Abracadabra.lottie'),
         w: 375,

@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Text_1 = require("@components/Text");
-function HelpDiagnosticData(_a) {
-    var styles = _a.styles, route = _a.route, children = _a.children, isExactMatch = _a.isExactMatch;
-    var diagnosticTitle = isExactMatch ? 'Help content found for route:' : 'Missing help content for route:';
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Text_1 = require("@components/Text");
+function HelpDiagnosticData({ styles, route, children, isExactMatch }) {
+    const diagnosticTitle = isExactMatch ? 'Help content found for route:' : 'Missing help content for route:';
     return (<>
             {!!children && (<>
                     {children}

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var ShortcutManager = react_native_1.NativeModules.ShortcutManager;
+const react_native_1 = require("react-native");
+const { ShortcutManager } = react_native_1.NativeModules;
 exports.default = ShortcutManager ||
     {
-        removeAllDynamicShortcuts: function () { },
+        removeAllDynamicShortcuts: () => { },
     };

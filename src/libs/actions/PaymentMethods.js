@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.kycWallRef = void 0;
 exports.deletePaymentCard = deletePaymentCard;
@@ -35,29 +24,28 @@ exports.clearWalletTermsError = clearWalletTermsError;
 exports.verifySetupIntent = verifySetupIntent;
 exports.addPaymentCardSCA = addPaymentCardSCA;
 exports.setInvoicingTransferBankAccount = setInvoicingTransferBankAccount;
-var react_1 = require("react");
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var CardUtils = require("@libs/CardUtils");
-var GoogleTagManager_1 = require("@libs/GoogleTagManager");
-var Log_1 = require("@libs/Log");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var AddPaymentCardForm_1 = require("@src/types/form/AddPaymentCardForm");
+const react_1 = require("react");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const CardUtils = require("@libs/CardUtils");
+const GoogleTagManager_1 = require("@libs/GoogleTagManager");
+const Log_1 = require("@libs/Log");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const AddPaymentCardForm_1 = require("@src/types/form/AddPaymentCardForm");
 /**
  * Sets up a ref to an instance of the KYC Wall component.
  */
-var kycWallRef = (0, react_1.createRef)();
+const kycWallRef = (0, react_1.createRef)();
 exports.kycWallRef = kycWallRef;
 /**
  * When we successfully add a payment method or pass the KYC checks we will continue with our setup action if we have one set.
  */
 function continueSetup(fallbackRoute) {
-    var _a;
-    if (!((_a = kycWallRef.current) === null || _a === void 0 ? void 0 : _a.continueAction)) {
+    if (!kycWallRef.current?.continueAction) {
         Navigation_1.default.goBack(fallbackRoute);
         return;
     }
@@ -66,21 +54,21 @@ function continueSetup(fallbackRoute) {
     kycWallRef.current.continueAction();
 }
 function openWalletPage() {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.IS_LOADING_PAYMENT_METHODS,
             value: true,
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.IS_LOADING_PAYMENT_METHODS,
             value: false,
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.IS_LOADING_PAYMENT_METHODS,
@@ -88,15 +76,13 @@ function openWalletPage() {
         },
     ];
     return API.read(types_1.READ_COMMANDS.OPEN_PAYMENTS_PAGE, null, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
-function getMakeDefaultPaymentOnyxData(bankAccountID, fundID, previousPaymentMethod, currentPaymentMethod, isOptimisticData) {
-    var _a, _b;
-    if (isOptimisticData === void 0) { isOptimisticData = true; }
-    var onyxData = [
+function getMakeDefaultPaymentOnyxData(bankAccountID, fundID, previousPaymentMethod, currentPaymentMethod, isOptimisticData = true) {
+    const onyxData = [
         isOptimisticData
             ? {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -119,26 +105,26 @@ function getMakeDefaultPaymentOnyxData(bankAccountID, fundID, previousPaymentMet
                 },
             },
     ];
-    if (previousPaymentMethod === null || previousPaymentMethod === void 0 ? void 0 : previousPaymentMethod.methodID) {
+    if (previousPaymentMethod?.methodID) {
         onyxData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: previousPaymentMethod.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT ? ONYXKEYS_1.default.BANK_ACCOUNT_LIST : ONYXKEYS_1.default.FUND_LIST,
-            value: (_a = {},
-                _a[previousPaymentMethod.methodID] = {
+            value: {
+                [previousPaymentMethod.methodID]: {
                     isDefault: !isOptimisticData,
                 },
-                _a),
+            },
         });
     }
-    if (currentPaymentMethod === null || currentPaymentMethod === void 0 ? void 0 : currentPaymentMethod.methodID) {
+    if (currentPaymentMethod?.methodID) {
         onyxData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: currentPaymentMethod.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT ? ONYXKEYS_1.default.BANK_ACCOUNT_LIST : ONYXKEYS_1.default.FUND_LIST,
-            value: (_b = {},
-                _b[currentPaymentMethod.methodID] = {
+            value: {
+                [currentPaymentMethod.methodID]: {
                     isDefault: isOptimisticData,
                 },
-                _b),
+            },
         });
     }
     return onyxData;
@@ -148,9 +134,9 @@ function getMakeDefaultPaymentOnyxData(bankAccountID, fundID, previousPaymentMet
  *
  */
 function makeDefaultPaymentMethod(bankAccountID, fundID, previousPaymentMethod, currentPaymentMethod) {
-    var parameters = {
-        bankAccountID: bankAccountID,
-        fundID: fundID,
+    const parameters = {
+        bankAccountID,
+        fundID,
     };
     API.write(types_1.WRITE_COMMANDS.MAKE_DEFAULT_PAYMENT_METHOD, parameters, {
         optimisticData: getMakeDefaultPaymentOnyxData(bankAccountID, fundID, previousPaymentMethod, currentPaymentMethod, true),
@@ -162,33 +148,33 @@ function makeDefaultPaymentMethod(bankAccountID, fundID, previousPaymentMethod, 
  *
  */
 function addPaymentCard(accountID, params) {
-    var cardMonth = CardUtils.getMonthFromExpirationDateString(params.expirationDate);
-    var cardYear = CardUtils.getYearFromExpirationDateString(params.expirationDate);
-    var parameters = {
+    const cardMonth = CardUtils.getMonthFromExpirationDateString(params.expirationDate);
+    const cardYear = CardUtils.getYearFromExpirationDateString(params.expirationDate);
+    const parameters = {
         cardNumber: CardUtils.getMCardNumberString(params.cardNumber),
-        cardYear: cardYear,
-        cardMonth: cardMonth,
+        cardYear,
+        cardMonth,
         cardCVV: params.securityCode,
         addressName: params.nameOnCard,
         addressZip: params.addressZipCode,
         currency: CONST_1.default.PAYMENT_CARD_CURRENCY.USD,
         isP2PDebitCard: true,
     };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM,
             value: { isLoading: true },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM,
             value: { isLoading: false },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM,
@@ -196,9 +182,9 @@ function addPaymentCard(accountID, params) {
         },
     ];
     API.write(types_1.WRITE_COMMANDS.ADD_PAYMENT_CARD, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
     GoogleTagManager_1.default.publishEvent(CONST_1.default.ANALYTICS.EVENT.PAID_ADOPTION, accountID);
 }
@@ -207,33 +193,33 @@ function addPaymentCard(accountID, params) {
  *
  */
 function addSubscriptionPaymentCard(accountID, cardData) {
-    var cardNumber = cardData.cardNumber, cardYear = cardData.cardYear, cardMonth = cardData.cardMonth, cardCVV = cardData.cardCVV, addressName = cardData.addressName, addressZip = cardData.addressZip, currency = cardData.currency;
-    var parameters = {
-        cardNumber: cardNumber,
-        cardYear: cardYear,
-        cardMonth: cardMonth,
-        cardCVV: cardCVV,
-        addressName: addressName,
-        addressZip: addressZip,
-        currency: currency,
+    const { cardNumber, cardYear, cardMonth, cardCVV, addressName, addressZip, currency } = cardData;
+    const parameters = {
+        cardNumber,
+        cardYear,
+        cardMonth,
+        cardCVV,
+        addressName,
+        addressZip,
+        currency,
         isP2PDebitCard: false,
         shouldClaimEarlyDiscountOffer: true,
     };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM,
             value: { isLoading: true },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM,
             value: { isLoading: false },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM,
@@ -241,18 +227,18 @@ function addSubscriptionPaymentCard(accountID, cardData) {
         },
     ];
     if (CONST_1.default.SCA_CURRENCIES.has(currency)) {
-        addPaymentCardSCA(parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+        addPaymentCardSCA(parameters, { optimisticData, successData, failureData });
     }
     else {
         // eslint-disable-next-line rulesdir/no-multiple-api-calls
         API.write(types_1.WRITE_COMMANDS.ADD_PAYMENT_CARD, parameters, {
-            optimisticData: optimisticData,
-            successData: successData,
-            failureData: failureData,
+            optimisticData,
+            successData,
+            failureData,
         });
     }
     if ((0, SubscriptionUtils_1.getCardForSubscriptionBilling)()) {
-        Log_1.default.info("[GTM] Not logging ".concat(CONST_1.default.ANALYTICS.EVENT.PAID_ADOPTION, " because a card was already added"));
+        Log_1.default.info(`[GTM] Not logging ${CONST_1.default.ANALYTICS.EVENT.PAID_ADOPTION} because a card was already added`);
     }
     else {
         GoogleTagManager_1.default.publishEvent(CONST_1.default.ANALYTICS.EVENT.PAID_ADOPTION, accountID);
@@ -262,30 +248,27 @@ function addSubscriptionPaymentCard(accountID, cardData) {
  * Calls the API to add a new SCA (GBP or EUR) card.
  * Updates verify3dsSubscription Onyx key with a new authentication link for 3DS.
  */
-function addPaymentCardSCA(params, onyxData) {
-    if (onyxData === void 0) { onyxData = {}; }
+function addPaymentCardSCA(params, onyxData = {}) {
     API.write(types_1.WRITE_COMMANDS.ADD_PAYMENT_CARD_SCA, params, onyxData);
 }
 /**
  * Resets the values for the add payment card form back to their initial states
  */
 function clearPaymentCardFormErrorAndSubmit() {
-    var _a;
-    react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM, (_a = {
-            isLoading: false,
-            errors: undefined
-        },
-        _a[AddPaymentCardForm_1.default.SETUP_COMPLETE] = false,
-        _a[AddPaymentCardForm_1.default.NAME_ON_CARD] = '',
-        _a[AddPaymentCardForm_1.default.CARD_NUMBER] = '',
-        _a[AddPaymentCardForm_1.default.EXPIRATION_DATE] = '',
-        _a[AddPaymentCardForm_1.default.SECURITY_CODE] = '',
-        _a[AddPaymentCardForm_1.default.ADDRESS_STREET] = '',
-        _a[AddPaymentCardForm_1.default.ADDRESS_ZIP_CODE] = '',
-        _a[AddPaymentCardForm_1.default.ADDRESS_STATE] = '',
-        _a[AddPaymentCardForm_1.default.ACCEPT_TERMS] = '',
-        _a[AddPaymentCardForm_1.default.CURRENCY] = CONST_1.default.PAYMENT_CARD_CURRENCY.USD,
-        _a));
+    react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM, {
+        isLoading: false,
+        errors: undefined,
+        [AddPaymentCardForm_1.default.SETUP_COMPLETE]: false,
+        [AddPaymentCardForm_1.default.NAME_ON_CARD]: '',
+        [AddPaymentCardForm_1.default.CARD_NUMBER]: '',
+        [AddPaymentCardForm_1.default.EXPIRATION_DATE]: '',
+        [AddPaymentCardForm_1.default.SECURITY_CODE]: '',
+        [AddPaymentCardForm_1.default.ADDRESS_STREET]: '',
+        [AddPaymentCardForm_1.default.ADDRESS_ZIP_CODE]: '',
+        [AddPaymentCardForm_1.default.ADDRESS_STATE]: '',
+        [AddPaymentCardForm_1.default.ACCEPT_TERMS]: '',
+        [AddPaymentCardForm_1.default.CURRENCY]: CONST_1.default.PAYMENT_CARD_CURRENCY.USD,
+    });
 }
 /**
  * Clear 3ds flow - when verification will be finished
@@ -298,31 +281,28 @@ function clearPaymentCard3dsVerification() {
  * Properly updates the nvp_privateStripeCustomerID onyx data for 3DS payment
  *
  */
-function verifySetupIntent(accountID, isVerifying) {
-    if (isVerifying === void 0) { isVerifying = true; }
-    API.write(types_1.WRITE_COMMANDS.VERIFY_SETUP_INTENT, { accountID: accountID, isVerifying: isVerifying });
+function verifySetupIntent(accountID, isVerifying = true) {
+    API.write(types_1.WRITE_COMMANDS.VERIFY_SETUP_INTENT, { accountID, isVerifying });
 }
 /**
  * Set currency for payments
  *
  */
 function setPaymentMethodCurrency(currency) {
-    var _a;
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM, (_a = {},
-        _a[AddPaymentCardForm_1.default.CURRENCY] = currency,
-        _a));
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.FORMS.ADD_PAYMENT_CARD_FORM, {
+        [AddPaymentCardForm_1.default.CURRENCY]: currency,
+    });
 }
 /**
  * Call the API to transfer wallet balance.
  *
  */
 function transferWalletBalance(paymentMethod) {
-    var _a;
-    var paymentMethodIDKey = paymentMethod.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT ? CONST_1.default.PAYMENT_METHOD_ID_KEYS.BANK_ACCOUNT : CONST_1.default.PAYMENT_METHOD_ID_KEYS.DEBIT_CARD;
-    var parameters = (_a = {},
-        _a[paymentMethodIDKey] = paymentMethod.methodID,
-        _a);
-    var optimisticData = [
+    const paymentMethodIDKey = paymentMethod.accountType === CONST_1.default.PAYMENT_METHODS.PERSONAL_BANK_ACCOUNT ? CONST_1.default.PAYMENT_METHOD_ID_KEYS.BANK_ACCOUNT : CONST_1.default.PAYMENT_METHOD_ID_KEYS.DEBIT_CARD;
+    const parameters = {
+        [paymentMethodIDKey]: paymentMethod.methodID,
+    };
+    const optimisticData = [
         {
             onyxMethod: 'merge',
             key: ONYXKEYS_1.default.WALLET_TRANSFER,
@@ -332,7 +312,7 @@ function transferWalletBalance(paymentMethod) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: 'merge',
             key: ONYXKEYS_1.default.WALLET_TRANSFER,
@@ -343,7 +323,7 @@ function transferWalletBalance(paymentMethod) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: 'merge',
             key: ONYXKEYS_1.default.WALLET_TRANSFER,
@@ -354,9 +334,9 @@ function transferWalletBalance(paymentMethod) {
         },
     ];
     API.write(types_1.WRITE_COMMANDS.TRANSFER_WALLET_BALANCE, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 function resetWalletTransferData() {
@@ -369,14 +349,14 @@ function resetWalletTransferData() {
     });
 }
 function saveWalletTransferAccountTypeAndID(selectedAccountType, selectedAccountID) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TRANSFER, { selectedAccountType: selectedAccountType, selectedAccountID: selectedAccountID });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TRANSFER, { selectedAccountType, selectedAccountID });
 }
 /**
  * Toggles the user's selected type of payment method (bank account or debit card) on the wallet transfer balance screen.
  *
  */
 function saveWalletTransferMethodType(filterPaymentMethodType) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TRANSFER, { filterPaymentMethodType: filterPaymentMethodType });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TRANSFER, { filterPaymentMethodType });
 }
 function dismissSuccessfulTransferBalancePage() {
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TRANSFER, { shouldShowSuccess: false });
@@ -387,8 +367,8 @@ function dismissSuccessfulTransferBalancePage() {
  *
  */
 function hasPaymentMethodError(bankList, fundList) {
-    var combinedPaymentMethods = __assign(__assign({}, bankList), fundList);
-    return Object.values(combinedPaymentMethods).some(function (item) { var _a; return Object.keys((_a = item.errors) !== null && _a !== void 0 ? _a : {}).length; });
+    const combinedPaymentMethods = { ...bankList, ...fundList };
+    return Object.values(combinedPaymentMethods).some((item) => Object.keys(item.errors ?? {}).length);
 }
 /**
  * Clears the error for the specified payment item
@@ -396,13 +376,12 @@ function hasPaymentMethodError(bankList, fundList) {
  * @param paymentMethodID
  */
 function clearDeletePaymentMethodError(paymentListKey, paymentMethodID) {
-    var _a;
-    react_native_onyx_1.default.merge(paymentListKey, (_a = {},
-        _a[paymentMethodID] = {
+    react_native_onyx_1.default.merge(paymentListKey, {
+        [paymentMethodID]: {
             pendingAction: null,
             errors: null,
         },
-        _a));
+    });
 }
 /**
  * If there was a failure adding a payment method, clearing it removes the payment method from the list entirely
@@ -410,10 +389,9 @@ function clearDeletePaymentMethodError(paymentListKey, paymentMethodID) {
  * @param paymentMethodID
  */
 function clearAddPaymentMethodError(paymentListKey, paymentMethodID) {
-    var _a;
-    react_native_onyx_1.default.merge(paymentListKey, (_a = {},
-        _a[paymentMethodID] = null,
-        _a));
+    react_native_onyx_1.default.merge(paymentListKey, {
+        [paymentMethodID]: null,
+    });
 }
 /**
  * Clear any error(s) related to the user's wallet
@@ -428,19 +406,18 @@ function clearWalletTermsError() {
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TERMS, { errors: null });
 }
 function deletePaymentCard(fundID) {
-    var _a;
-    var parameters = {
-        fundID: fundID,
+    const parameters = {
+        fundID,
     };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.FUND_LIST),
-            value: (_a = {}, _a[fundID] = { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE }, _a),
+            key: `${ONYXKEYS_1.default.FUND_LIST}`,
+            value: { [fundID]: { pendingAction: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE } },
         },
     ];
     API.write(types_1.WRITE_COMMANDS.DELETE_PAYMENT_CARD, parameters, {
-        optimisticData: optimisticData,
+        optimisticData,
     });
 }
 /**
@@ -448,11 +425,11 @@ function deletePaymentCard(fundID) {
  *
  */
 function updateBillingCurrency(currency, cardCVV) {
-    var parameters = {
-        cardCVV: cardCVV,
-        currency: currency,
+    const parameters = {
+        cardCVV,
+        currency,
     };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.CHANGE_BILLING_CURRENCY_FORM,
@@ -462,7 +439,7 @@ function updateBillingCurrency(currency, cardCVV) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.CHANGE_BILLING_CURRENCY_FORM,
@@ -471,7 +448,7 @@ function updateBillingCurrency(currency, cardCVV) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.CHANGE_BILLING_CURRENCY_FORM,
@@ -481,9 +458,9 @@ function updateBillingCurrency(currency, cardCVV) {
         },
     ];
     API.write(types_1.WRITE_COMMANDS.UPDATE_BILLING_CARD_CURRENCY, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 /**
@@ -491,14 +468,14 @@ function updateBillingCurrency(currency, cardCVV) {
  *
  */
 function setInvoicingTransferBankAccount(bankAccountID, policyID, previousBankAccountID) {
-    var parameters = {
-        bankAccountID: bankAccountID,
-        policyID: policyID,
+    const parameters = {
+        bankAccountID,
+        policyID,
     };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 invoice: {
                     bankAccount: {
@@ -508,10 +485,10 @@ function setInvoicingTransferBankAccount(bankAccountID, policyID, previousBankAc
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 invoice: {
                     bankAccount: {
@@ -522,7 +499,7 @@ function setInvoicingTransferBankAccount(bankAccountID, policyID, previousBankAc
         },
     ];
     API.write(types_1.WRITE_COMMANDS.SET_INVOICING_TRANSFER_BANK_ACCOUNT, parameters, {
-        optimisticData: optimisticData,
-        failureData: failureData,
+        optimisticData,
+        failureData,
     });
 }

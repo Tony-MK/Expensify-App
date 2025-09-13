@@ -1,35 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useEReceipt_1 = require("@hooks/useEReceipt");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var TransactionUtils_1 = require("@libs/TransactionUtils");
-var colors_1 = require("@styles/theme/colors");
-var variables_1 = require("@styles/variables");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var ImageSVG_1 = require("./ImageSVG");
-var Text_1 = require("./Text");
-function EReceiptThumbnail(_a) {
-    var transactionID = _a.transactionID, borderRadius = _a.borderRadius, fileExtension = _a.fileExtension, _b = _a.isReceiptThumbnail, isReceiptThumbnail = _b === void 0 ? false : _b, _c = _a.centerIconV, centerIconV = _c === void 0 ? true : _c, _d = _a.iconSize, iconSize = _d === void 0 ? 'large' : _d;
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var transaction = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useEReceipt_1 = require("@hooks/useEReceipt");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const TransactionUtils_1 = require("@libs/TransactionUtils");
+const colors_1 = require("@styles/theme/colors");
+const variables_1 = require("@styles/variables");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const ImageSVG_1 = require("./ImageSVG");
+const Text_1 = require("./Text");
+function EReceiptThumbnail({ transactionID, borderRadius, fileExtension, isReceiptThumbnail = false, centerIconV = true, iconSize = 'large' }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const [transaction] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, {
         canBeMissing: true,
-    })[0];
-    var _e = (0, useEReceipt_1.default)(transaction, fileExtension, isReceiptThumbnail), primaryColor = _e.primaryColor, secondaryColor = _e.secondaryColor, MCCIcon = _e.MCCIcon, tripIcon = _e.tripIcon, backgroundImage = _e.backgroundImage;
-    var isPerDiemRequest = (0, TransactionUtils_1.isPerDiemRequest)(transaction);
-    var receiptIconWidth = variables_1.default.eReceiptIconWidth;
-    var receiptIconHeight = variables_1.default.eReceiptIconHeight;
-    var receiptMCCSize = variables_1.default.eReceiptMCCHeightWidth;
-    var labelFontSize = variables_1.default.fontSizeNormal;
-    var labelLineHeight = variables_1.default.lineHeightLarge;
-    var backgroundImageMinWidth = variables_1.default.eReceiptBackgroundImageMinWidth;
+    });
+    const { primaryColor, secondaryColor, MCCIcon, tripIcon, backgroundImage } = (0, useEReceipt_1.default)(transaction, fileExtension, isReceiptThumbnail);
+    const isPerDiemRequest = (0, TransactionUtils_1.isPerDiemRequest)(transaction);
+    let receiptIconWidth = variables_1.default.eReceiptIconWidth;
+    let receiptIconHeight = variables_1.default.eReceiptIconHeight;
+    let receiptMCCSize = variables_1.default.eReceiptMCCHeightWidth;
+    let labelFontSize = variables_1.default.fontSizeNormal;
+    let labelLineHeight = variables_1.default.lineHeightLarge;
+    let backgroundImageMinWidth = variables_1.default.eReceiptBackgroundImageMinWidth;
     if (iconSize === 'x-small') {
         receiptIconWidth = variables_1.default.eReceiptIconWidthXSmall;
         receiptIconHeight = variables_1.default.eReceiptIconHeightXSmall;
@@ -58,7 +57,7 @@ function EReceiptThumbnail(_a) {
             styles.overflowHidden,
             styles.alignItemsCenter,
             centerIconV ? styles.justifyContentCenter : {},
-            borderRadius ? { borderRadius: borderRadius } : {},
+            borderRadius ? { borderRadius } : {},
         ]}>
             <react_native_1.View style={[styles.eReceiptBackgroundThumbnail, StyleUtils.getMinimumWidth(backgroundImageMinWidth)]}>
                 <ImageSVG_1.default src={backgroundImage}/>
@@ -70,7 +69,7 @@ function EReceiptThumbnail(_a) {
                 styles.labelStrong,
                 StyleUtils.getFontSizeStyle(labelFontSize),
                 StyleUtils.getLineHeightStyle(labelLineHeight),
-                StyleUtils.getTextColorStyle(primaryColor !== null && primaryColor !== void 0 ? primaryColor : colors_1.default.black),
+                StyleUtils.getTextColorStyle(primaryColor ?? colors_1.default.black),
             ]}>
                             {fileExtension.toUpperCase()}
                         </Text_1.default>)}

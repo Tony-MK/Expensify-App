@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requestReplacementExpensifyCard = requestReplacementExpensifyCard;
 exports.activatePhysicalExpensifyCard = activatePhysicalExpensifyCard;
@@ -37,31 +26,30 @@ exports.deactivateCard = deactivateCard;
 exports.getCardDefaultName = getCardDefaultName;
 exports.queueExpensifyCardForBilling = queueExpensifyCardForBilling;
 exports.clearIssueNewCardFormData = clearIssueNewCardFormData;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var ErrorUtils = require("@libs/ErrorUtils");
-var NetworkStore = require("@libs/Network/NetworkStore");
-var PolicyUtils = require("@libs/PolicyUtils");
-var ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const ErrorUtils = require("@libs/ErrorUtils");
+const NetworkStore = require("@libs/Network/NetworkStore");
+const PolicyUtils = require("@libs/PolicyUtils");
+const ReportActionsUtils_1 = require("@libs/ReportActionsUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function reportVirtualExpensifyCardFraud(card, validateCode) {
-    var _a;
-    var cardID = (_a = card === null || card === void 0 ? void 0 : card.cardID) !== null && _a !== void 0 ? _a : CONST_1.default.DEFAULT_NUMBER_ID;
-    var optimisticData = [
+    const cardID = card?.cardID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.REPORT_VIRTUAL_CARD_FRAUD,
             value: {
-                cardID: cardID,
+                cardID,
                 isLoading: true,
                 errors: null,
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.REPORT_VIRTUAL_CARD_FRAUD,
@@ -70,7 +58,7 @@ function reportVirtualExpensifyCardFraud(card, validateCode) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.REPORT_VIRTUAL_CARD_FRAUD,
@@ -79,14 +67,14 @@ function reportVirtualExpensifyCardFraud(card, validateCode) {
             },
         },
     ];
-    var parameters = {
-        cardID: cardID,
-        validateCode: validateCode,
+    const parameters = {
+        cardID,
+        validateCode,
     };
     API.write(types_1.WRITE_COMMANDS.REPORT_VIRTUAL_EXPENSIFY_CARD_FRAUD, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 /**
@@ -95,7 +83,7 @@ function reportVirtualExpensifyCardFraud(card, validateCode) {
  * @param reason - reason for replacement
  */
 function requestReplacementExpensifyCard(cardID, reason, validateCode) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.REPORT_PHYSICAL_CARD_FORM,
@@ -112,7 +100,7 @@ function requestReplacementExpensifyCard(cardID, reason, validateCode) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.REPORT_PHYSICAL_CARD_FORM,
@@ -121,7 +109,7 @@ function requestReplacementExpensifyCard(cardID, reason, validateCode) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.REPORT_PHYSICAL_CARD_FORM,
@@ -130,66 +118,65 @@ function requestReplacementExpensifyCard(cardID, reason, validateCode) {
             },
         },
     ];
-    var parameters = {
-        cardID: cardID,
-        reason: reason,
-        validateCode: validateCode,
+    const parameters = {
+        cardID,
+        reason,
+        validateCode,
     };
     API.write(types_1.WRITE_COMMANDS.REQUEST_REPLACEMENT_EXPENSIFY_CARD, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 /**
  * Activates the physical Expensify card based on the last four digits of the card number
  */
 function activatePhysicalExpensifyCard(cardLastFourDigits, cardID) {
-    var _a, _b, _c;
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_a = {},
-                _a[cardID] = {
+            value: {
+                [cardID]: {
                     errors: null,
                     isLoading: true,
                 },
-                _a),
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_b = {},
-                _b[cardID] = {
+            value: {
+                [cardID]: {
                     isLoading: false,
                 },
-                _b),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_c = {},
-                _c[cardID] = {
+            value: {
+                [cardID]: {
                     isLoading: false,
                 },
-                _c),
+            },
         },
     ];
-    var parameters = {
-        cardLastFourDigits: cardLastFourDigits,
-        cardID: cardID,
+    const parameters = {
+        cardLastFourDigits,
+        cardID,
     };
     // eslint-disable-next-line rulesdir/no-api-side-effects-method
     API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.ACTIVATE_PHYSICAL_EXPENSIFY_CARD, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
-    }).then(function (response) {
+        optimisticData,
+        successData,
+        failureData,
+    }).then((response) => {
         if (!response) {
             return;
         }
@@ -202,8 +189,7 @@ function activatePhysicalExpensifyCard(cardLastFourDigits, cardID) {
  * Clears errors for a specific cardID
  */
 function clearCardListErrors(cardID) {
-    var _a;
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.CARD_LIST, (_a = {}, _a[cardID] = { errors: null, isLoading: false }, _a));
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.CARD_LIST, { [cardID]: { errors: null, isLoading: false } });
 }
 /**
  * Clears the PIN for an activated card
@@ -225,23 +211,23 @@ function clearReportVirtualCardFraudForm() {
  * @returns promise with card details object
  */
 function revealVirtualCardDetails(cardID, validateCode) {
-    return new Promise(function (resolve, reject) {
-        var parameters = { cardID: cardID, validateCode: validateCode };
-        var optimisticData = [
+    return new Promise((resolve, reject) => {
+        const parameters = { cardID, validateCode };
+        const optimisticData = [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.ACCOUNT,
                 value: { isLoading: true },
             },
         ];
-        var successData = [
+        const successData = [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.ACCOUNT,
                 value: { isLoading: false },
             },
         ];
-        var failureData = [
+        const failureData = [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
                 key: ONYXKEYS_1.default.ACCOUNT,
@@ -250,13 +236,13 @@ function revealVirtualCardDetails(cardID, validateCode) {
         ];
         // eslint-disable-next-line rulesdir/no-api-side-effects-method
         API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.REVEAL_EXPENSIFY_CARD_DETAILS, parameters, {
-            optimisticData: optimisticData,
-            successData: successData,
-            failureData: failureData,
+            optimisticData,
+            successData,
+            failureData,
         })
-            .then(function (response) {
-            if ((response === null || response === void 0 ? void 0 : response.jsonCode) !== CONST_1.default.JSON_CODE.SUCCESS) {
-                if ((response === null || response === void 0 ? void 0 : response.jsonCode) === CONST_1.default.JSON_CODE.INCORRECT_MAGIC_CODE) {
+            .then((response) => {
+            if (response?.jsonCode !== CONST_1.default.JSON_CODE.SUCCESS) {
+                if (response?.jsonCode === CONST_1.default.JSON_CODE.INCORRECT_MAGIC_CODE) {
                     // eslint-disable-next-line prefer-promise-reject-errors
                     reject('validateCodeForm.error.incorrectMagicCode');
                     return;
@@ -268,72 +254,72 @@ function revealVirtualCardDetails(cardID, validateCode) {
             resolve(response);
         })
             // eslint-disable-next-line prefer-promise-reject-errors
-            .catch(function () { return reject('cardPage.cardDetailsLoadingFailure'); });
+            .catch(() => reject('cardPage.cardDetailsLoadingFailure'));
     });
 }
 function updateSettlementFrequency(workspaceAccountID, settlementFrequency, currentFrequency) {
-    var monthlySettlementDate = settlementFrequency === CONST_1.default.EXPENSIFY_CARD.FREQUENCY_SETTING.DAILY ? null : new Date();
-    var optimisticData = [
+    const monthlySettlementDate = settlementFrequency === CONST_1.default.EXPENSIFY_CARD.FREQUENCY_SETTING.DAILY ? null : new Date();
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
-                monthlySettlementDate: monthlySettlementDate,
+                monthlySettlementDate,
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
-                monthlySettlementDate: monthlySettlementDate,
+                monthlySettlementDate,
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
                 monthlySettlementDate: currentFrequency,
             },
         },
     ];
-    var parameters = {
-        workspaceAccountID: workspaceAccountID,
-        settlementFrequency: settlementFrequency,
+    const parameters = {
+        workspaceAccountID,
+        settlementFrequency,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_CARD_SETTLEMENT_FREQUENCY, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_CARD_SETTLEMENT_FREQUENCY, parameters, { optimisticData, successData, failureData });
 }
 function updateSettlementAccount(domainName, workspaceAccountID, policyID, settlementBankAccountID, currentSettlementBankAccountID) {
     if (!settlementBankAccountID) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
                 paymentBankAccountID: settlementBankAccountID,
                 isLoading: true,
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
                 paymentBankAccountID: settlementBankAccountID,
                 isLoading: false,
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
                 paymentBankAccountID: currentSettlementBankAccountID,
                 isLoading: false,
@@ -341,30 +327,29 @@ function updateSettlementAccount(domainName, workspaceAccountID, policyID, settl
             },
         },
     ];
-    var parameters = {
-        domainName: domainName,
-        settlementBankAccountID: settlementBankAccountID,
+    const parameters = {
+        domainName,
+        settlementBankAccountID,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_CARD_SETTLEMENT_ACCOUNT, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_CARD_SETTLEMENT_ACCOUNT, parameters, { optimisticData, successData, failureData });
 }
 function getCardDefaultName(userName) {
     if (!userName) {
         return '';
     }
-    return "".concat(userName, "'s Card");
+    return `${userName}'s Card`;
 }
-function setIssueNewCardStepAndData(_a) {
-    var data = _a.data, isEditing = _a.isEditing, step = _a.step, policyID = _a.policyID, isChangeAssigneeDisabled = _a.isChangeAssigneeDisabled;
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD).concat(policyID), {
-        data: data,
-        isEditing: isEditing,
+function setIssueNewCardStepAndData({ data, isEditing, step, policyID, isChangeAssigneeDisabled }) {
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD}${policyID}`, {
+        data,
+        isEditing,
         currentStep: step,
         errors: null,
-        isChangeAssigneeDisabled: isChangeAssigneeDisabled,
+        isChangeAssigneeDisabled,
     });
 }
 function clearIssueNewCardFlow(policyID) {
-    react_native_onyx_1.default.set("".concat(ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD).concat(policyID), {
+    react_native_onyx_1.default.set(`${ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD}${policyID}`, {
         currentStep: null,
         data: {},
     });
@@ -373,20 +358,19 @@ function clearIssueNewCardFormData() {
     react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.ISSUE_NEW_EXPENSIFY_CARD_FORM, {});
 }
 function clearIssueNewCardError(policyID) {
-    react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD).concat(policyID), { errors: null });
+    react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD}${policyID}`, { errors: null });
 }
 function updateExpensifyCardLimit(workspaceAccountID, cardID, newLimit, newAvailableSpend, oldLimit, oldAvailableSpend) {
-    var _a, _b, _c;
-    var authToken = NetworkStore.getAuthToken();
+    const authToken = NetworkStore.getAuthToken();
     if (!authToken) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_a = {},
-                _a[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     availableSpend: newAvailableSpend,
                     nameValuePairs: {
                         unapprovedExpenseLimit: newLimit,
@@ -397,15 +381,15 @@ function updateExpensifyCardLimit(workspaceAccountID, cardID, newLimit, newAvail
                     isLoading: true,
                     errors: null,
                 },
-                _a),
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_b = {},
-                _b[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         pendingFields: { unapprovedExpenseLimit: null },
                     },
@@ -413,15 +397,15 @@ function updateExpensifyCardLimit(workspaceAccountID, cardID, newLimit, newAvail
                     pendingFields: { availableSpend: null },
                     isLoading: false,
                 },
-                _b),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_c = {},
-                _c[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     availableSpend: oldAvailableSpend,
                     nameValuePairs: {
                         unapprovedExpenseLimit: oldLimit,
@@ -432,28 +416,27 @@ function updateExpensifyCardLimit(workspaceAccountID, cardID, newLimit, newAvail
                     isLoading: false,
                     errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                 },
-                _c),
+            },
         },
     ];
-    var parameters = {
-        authToken: authToken,
-        cardID: cardID,
+    const parameters = {
+        authToken,
+        cardID,
         limit: newLimit,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_EXPENSIFY_CARD_LIMIT, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_EXPENSIFY_CARD_LIMIT, parameters, { optimisticData, successData, failureData });
 }
 function updateExpensifyCardTitle(workspaceAccountID, cardID, newCardTitle, oldCardTitle) {
-    var _a, _b, _c;
-    var authToken = NetworkStore.getAuthToken();
+    const authToken = NetworkStore.getAuthToken();
     if (!authToken) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_a = {},
-                _a[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         cardTitle: newCardTitle,
                         pendingFields: { cardTitle: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE },
@@ -462,30 +445,30 @@ function updateExpensifyCardTitle(workspaceAccountID, cardID, newCardTitle, oldC
                     isLoading: true,
                     errors: null,
                 },
-                _a),
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_b = {},
-                _b[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         pendingFields: { cardTitle: null },
                     },
                     pendingAction: null,
                     isLoading: false,
                 },
-                _b),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_c = {},
-                _c[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         cardTitle: oldCardTitle,
                         pendingFields: { cardTitle: null },
@@ -494,28 +477,27 @@ function updateExpensifyCardTitle(workspaceAccountID, cardID, newCardTitle, oldC
                     isLoading: false,
                     errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                 },
-                _c),
+            },
         },
     ];
-    var parameters = {
-        authToken: authToken,
-        cardID: cardID,
+    const parameters = {
+        authToken,
+        cardID,
         cardTitle: newCardTitle,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_EXPENSIFY_CARD_TITLE, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_EXPENSIFY_CARD_TITLE, parameters, { optimisticData, successData, failureData });
 }
 function updateExpensifyCardLimitType(workspaceAccountID, cardID, newLimitType, oldLimitType) {
-    var _a, _b, _c;
-    var authToken = NetworkStore.getAuthToken();
+    const authToken = NetworkStore.getAuthToken();
     if (!authToken) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_a = {},
-                _a[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         limitType: newLimitType,
                         pendingFields: { limitType: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE },
@@ -525,15 +507,15 @@ function updateExpensifyCardLimitType(workspaceAccountID, cardID, newLimitType, 
                     isLoading: true,
                     errors: null,
                 },
-                _a),
+            },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_b = {},
-                _b[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     isLoading: false,
                     nameValuePairs: {
                         pendingFields: { limitType: null },
@@ -541,15 +523,15 @@ function updateExpensifyCardLimitType(workspaceAccountID, cardID, newLimitType, 
                     pendingAction: null,
                     pendingFields: { availableSpend: null },
                 },
-                _b),
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_c = {},
-                _c[cardID] = {
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
                     nameValuePairs: {
                         limitType: oldLimitType,
                         pendingFields: { limitType: null },
@@ -559,85 +541,92 @@ function updateExpensifyCardLimitType(workspaceAccountID, cardID, newLimitType, 
                     isLoading: false,
                     errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
                 },
-                _c),
+            },
         },
     ];
-    var parameters = {
-        authToken: authToken,
-        cardID: cardID,
+    const parameters = {
+        authToken,
+        cardID,
         limitType: newLimitType,
     };
-    API.write(types_1.WRITE_COMMANDS.UPDATE_EXPENSIFY_CARD_LIMIT_TYPE, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.UPDATE_EXPENSIFY_CARD_LIMIT_TYPE, parameters, { optimisticData, successData, failureData });
 }
 function deactivateCard(workspaceAccountID, card) {
-    var _a, _b, _c, _d, _e, _f;
-    var _g, _h;
-    var authToken = NetworkStore.getAuthToken();
-    var cardID = (_g = card === null || card === void 0 ? void 0 : card.cardID) !== null && _g !== void 0 ? _g : CONST_1.default.DEFAULT_NUMBER_ID;
-    var reportAction = (0, ReportActionsUtils_1.getReportActionFromExpensifyCard)(cardID);
-    var reportID = (_h = (0, ReportUtils_1.findReportIDForAction)(reportAction)) !== null && _h !== void 0 ? _h : reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportID;
+    const authToken = NetworkStore.getAuthToken();
+    const cardID = card?.cardID ?? CONST_1.default.DEFAULT_NUMBER_ID;
+    const reportAction = (0, ReportActionsUtils_1.getReportActionFromExpensifyCard)(cardID);
+    const reportID = (0, ReportUtils_1.findReportIDForAction)(reportAction) ?? reportAction?.reportID;
     if (!authToken) {
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_a = {},
-                _a[cardID] = null,
-                _a),
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: null,
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_b = {},
-                _b[cardID] = null,
-                _b),
+            value: {
+                [cardID]: null,
+            },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST).concat(workspaceAccountID, "_").concat(CONST_1.default.EXPENSIFY_CARD.BANK),
-            value: (_c = {},
-                _c[cardID] = __assign(__assign({}, card), { errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage') }),
-                _c),
+            key: `${ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST}${workspaceAccountID}_${CONST_1.default.EXPENSIFY_CARD.BANK}`,
+            value: {
+                [cardID]: {
+                    ...card,
+                    errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                },
+            },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.CARD_LIST,
-            value: (_d = {},
-                _d[cardID] = __assign(__assign({}, card), { errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage') }),
-                _d),
+            value: {
+                [cardID]: {
+                    ...card,
+                    errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
+                },
+            },
         },
     ];
-    if ((reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID) && reportID) {
+    if (reportAction?.reportActionID && reportID) {
         optimisticData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportID),
-            value: (_e = {},
-                _e[reportAction.reportActionID] = __assign(__assign({}, reportAction), { originalMessage: {
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportID}`,
+            value: {
+                [reportAction.reportActionID]: {
+                    ...reportAction,
+                    originalMessage: {
                         cardID: null,
-                    } }),
-                _e),
+                    },
+                },
+            },
         });
         failureData.push({
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(reportAction.reportID),
-            value: (_f = {},
-                _f[reportAction.reportActionID] = reportAction,
-                _f),
+            key: `${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${reportAction.reportID}`,
+            value: {
+                [reportAction.reportActionID]: reportAction,
+            },
         });
     }
-    var parameters = {
-        authToken: authToken,
-        cardID: cardID,
+    const parameters = {
+        authToken,
+        cardID,
     };
-    API.write(types_1.WRITE_COMMANDS.CARD_DEACTIVATE, parameters, { optimisticData: optimisticData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.CARD_DEACTIVATE, parameters, { optimisticData, failureData });
 }
 function startIssueNewCardFlow(policyID) {
-    var parameters = {
-        policyID: policyID,
+    const parameters = {
+        policyID,
     };
     API.read(types_1.READ_COMMANDS.START_ISSUE_NEW_CARD_FLOW, parameters);
 }
@@ -645,45 +634,45 @@ function configureExpensifyCardsForPolicy(policyID, bankAccountID) {
     if (!bankAccountID) {
         return;
     }
-    var workspaceAccountID = PolicyUtils.getWorkspaceAccountID(policyID);
-    var optimisticData = [
+    const workspaceAccountID = PolicyUtils.getWorkspaceAccountID(policyID);
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
                 isLoading: true,
             },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_BANK_ACCOUNT_METADATA).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_BANK_ACCOUNT_METADATA}${workspaceAccountID}`,
             value: {
                 isLoading: true,
                 isSuccess: false,
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
                 isLoading: false,
             },
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_BANK_ACCOUNT_METADATA).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_BANK_ACCOUNT_METADATA}${workspaceAccountID}`,
             value: {
                 isLoading: false,
                 isSuccess: true,
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.PRIVATE_EXPENSIFY_CARD_SETTINGS}${workspaceAccountID}`,
             value: {
                 isLoading: false,
                 errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
@@ -691,32 +680,32 @@ function configureExpensifyCardsForPolicy(policyID, bankAccountID) {
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_BANK_ACCOUNT_METADATA).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_BANK_ACCOUNT_METADATA}${workspaceAccountID}`,
             value: {
                 isLoading: false,
                 isSuccess: false,
             },
         },
     ];
-    var parameters = {
-        policyID: policyID,
-        bankAccountID: bankAccountID,
+    const parameters = {
+        policyID,
+        bankAccountID,
     };
     API.write(types_1.WRITE_COMMANDS.CONFIGURE_EXPENSIFY_CARDS_FOR_POLICY, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 function issueExpensifyCard(domainAccountID, policyID, feedCountry, validateCode, data) {
     if (!data) {
         return;
     }
-    var assigneeEmail = data.assigneeEmail, limit = data.limit, limitType = data.limitType, cardTitle = data.cardTitle, cardType = data.cardType;
-    var optimisticData = [
+    const { assigneeEmail, limit, limitType, cardTitle, cardType } = data;
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD}${policyID}`,
             value: {
                 isLoading: true,
                 errors: null,
@@ -724,111 +713,111 @@ function issueExpensifyCard(domainAccountID, policyID, feedCountry, validateCode
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD}${policyID}`,
             value: {
                 isLoading: false,
                 isSuccessful: true,
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.ISSUE_NEW_EXPENSIFY_CARD}${policyID}`,
             value: {
                 isLoading: false,
                 errors: ErrorUtils.getMicroSecondOnyxErrorWithTranslationKey('common.genericErrorMessage'),
             },
         },
     ];
-    var parameters = {
-        assigneeEmail: assigneeEmail,
-        limit: limit,
-        limitType: limitType,
-        cardTitle: cardTitle,
-        validateCode: validateCode,
-        domainAccountID: domainAccountID,
+    const parameters = {
+        assigneeEmail,
+        limit,
+        limitType,
+        cardTitle,
+        validateCode,
+        domainAccountID,
     };
     if (cardType === CONST_1.default.EXPENSIFY_CARD.CARD_TYPE.PHYSICAL) {
-        API.write(types_1.WRITE_COMMANDS.CREATE_EXPENSIFY_CARD, __assign(__assign({}, parameters), { feedCountry: feedCountry }), {
-            optimisticData: optimisticData,
-            successData: successData,
-            failureData: failureData,
+        API.write(types_1.WRITE_COMMANDS.CREATE_EXPENSIFY_CARD, { ...parameters, feedCountry }, {
+            optimisticData,
+            successData,
+            failureData,
         });
         return;
     }
     // eslint-disable-next-line rulesdir/no-multiple-api-calls
-    API.write(types_1.WRITE_COMMANDS.CREATE_ADMIN_ISSUED_VIRTUAL_CARD, __assign(__assign({}, parameters), { policyID: policyID }), {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+    API.write(types_1.WRITE_COMMANDS.CREATE_ADMIN_ISSUED_VIRTUAL_CARD, { ...parameters, policyID }, {
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 function openCardDetailsPage(cardID) {
-    var authToken = NetworkStore.getAuthToken();
+    const authToken = NetworkStore.getAuthToken();
     if (!authToken) {
         return;
     }
-    var parameters = {
-        authToken: authToken,
-        cardID: cardID,
+    const parameters = {
+        authToken,
+        cardID,
     };
     API.read(types_1.READ_COMMANDS.OPEN_CARD_DETAILS_PAGE, parameters);
 }
 function toggleContinuousReconciliation(workspaceAccountID, shouldUseContinuousReconciliation, connectionName, oldConnectionName) {
-    var parameters = shouldUseContinuousReconciliation
+    const parameters = shouldUseContinuousReconciliation
         ? {
-            workspaceAccountID: workspaceAccountID,
-            shouldUseContinuousReconciliation: shouldUseContinuousReconciliation,
+            workspaceAccountID,
+            shouldUseContinuousReconciliation,
             expensifyCardContinuousReconciliationConnection: connectionName,
         }
         : {
-            workspaceAccountID: workspaceAccountID,
-            shouldUseContinuousReconciliation: shouldUseContinuousReconciliation,
+            workspaceAccountID,
+            shouldUseContinuousReconciliation,
         };
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION}${workspaceAccountID}`,
             value: shouldUseContinuousReconciliation,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION}${workspaceAccountID}`,
             value: connectionName,
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION}${workspaceAccountID}`,
             value: shouldUseContinuousReconciliation,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION}${workspaceAccountID}`,
             value: connectionName,
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION).concat(workspaceAccountID),
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_USE_CONTINUOUS_RECONCILIATION}${workspaceAccountID}`,
             value: !shouldUseContinuousReconciliation,
         },
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION).concat(workspaceAccountID),
-            value: oldConnectionName !== null && oldConnectionName !== void 0 ? oldConnectionName : null,
+            key: `${ONYXKEYS_1.default.COLLECTION.EXPENSIFY_CARD_CONTINUOUS_RECONCILIATION_CONNECTION}${workspaceAccountID}`,
+            value: oldConnectionName ?? null,
         },
     ];
     API.write(types_1.WRITE_COMMANDS.TOGGLE_CARD_CONTINUOUS_RECONCILIATION, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 function updateSelectedFeed(feed, policyID) {
@@ -838,7 +827,7 @@ function updateSelectedFeed(feed, policyID) {
     react_native_onyx_1.default.update([
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_FEED}${policyID}`,
             value: feed,
         },
     ]);
@@ -850,15 +839,15 @@ function updateSelectedExpensifyCardFeed(feed, policyID) {
     react_native_onyx_1.default.update([
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_EXPENSIFY_CARD_FEED).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.LAST_SELECTED_EXPENSIFY_CARD_FEED}${policyID}`,
             value: feed,
         },
     ]);
 }
 function queueExpensifyCardForBilling(feedCountry, domainAccountID) {
-    var parameters = {
-        feedCountry: feedCountry,
-        domainAccountID: domainAccountID,
+    const parameters = {
+        feedCountry,
+        domainAccountID,
     };
     API.write(types_1.WRITE_COMMANDS.QUEUE_EXPENSIFY_CARD_FOR_BILLING, parameters);
 }

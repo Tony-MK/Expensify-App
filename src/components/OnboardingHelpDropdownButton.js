@@ -1,44 +1,42 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var date_fns_1 = require("date-fns");
-var react_1 = require("react");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Link_1 = require("@libs/actions/Link");
-var ScheduleCall_1 = require("@libs/actions/ScheduleCall");
-var DateUtils_1 = require("@libs/DateUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var ButtonWithDropdownMenu_1 = require("./ButtonWithDropdownMenu");
-var Expensicons_1 = require("./Icon/Expensicons");
-var Illustrations = require("./Icon/Illustrations");
-function OnboardingHelpDropdownButton(_a) {
-    var _b;
-    var reportID = _a.reportID, shouldUseNarrowLayout = _a.shouldUseNarrowLayout, shouldShowRegisterForWebinar = _a.shouldShowRegisterForWebinar, shouldShowGuideBooking = _a.shouldShowGuideBooking, hasActiveScheduledCall = _a.hasActiveScheduledCall;
-    var translate = (0, useLocalize_1.default)().translate;
-    var accountID = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: function (session) { return session === null || session === void 0 ? void 0 : session.accountID; }, canBeMissing: false })[0];
-    var latestScheduledCall = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(reportID), {
-        selector: function (reportNameValuePairs) { var _a; return (_a = reportNameValuePairs === null || reportNameValuePairs === void 0 ? void 0 : reportNameValuePairs.calendlyCalls) === null || _a === void 0 ? void 0 : _a.at(-1); },
+const date_fns_1 = require("date-fns");
+const react_1 = require("react");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Link_1 = require("@libs/actions/Link");
+const ScheduleCall_1 = require("@libs/actions/ScheduleCall");
+const DateUtils_1 = require("@libs/DateUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const ButtonWithDropdownMenu_1 = require("./ButtonWithDropdownMenu");
+const Expensicons_1 = require("./Icon/Expensicons");
+const Illustrations = require("./Icon/Illustrations");
+function OnboardingHelpDropdownButton({ reportID, shouldUseNarrowLayout, shouldShowRegisterForWebinar, shouldShowGuideBooking, hasActiveScheduledCall }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const [accountID] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: (session) => session?.accountID, canBeMissing: false });
+    const [latestScheduledCall] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${reportID}`, {
+        selector: (reportNameValuePairs) => reportNameValuePairs?.calendlyCalls?.at(-1),
         canBeMissing: true,
-    })[0];
-    var styles = (0, useThemeStyles_1.default)();
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var userTimezone = ((_b = currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.timezone) === null || _b === void 0 ? void 0 : _b.selected) ? currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.timezone.selected : CONST_1.default.DEFAULT_TIME_ZONE.selected;
+    });
+    const styles = (0, useThemeStyles_1.default)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const userTimezone = currentUserPersonalDetails?.timezone?.selected ? currentUserPersonalDetails?.timezone.selected : CONST_1.default.DEFAULT_TIME_ZONE.selected;
     if (!reportID || !accountID) {
         return null;
     }
-    var options = [];
+    const options = [];
     if (!hasActiveScheduledCall && shouldShowGuideBooking) {
         options.push({
             text: translate('getAssistancePage.scheduleACall'),
             icon: Expensicons_1.CalendarSolid,
             value: CONST_1.default.ONBOARDING_HELP.SCHEDULE_CALL,
-            onSelected: function () {
+            onSelected: () => {
                 (0, ScheduleCall_1.clearBookingDraft)();
                 Navigation_1.default.navigate(ROUTES_1.default.SCHEDULE_CALL_BOOK.getRoute(reportID));
             },
@@ -46,9 +44,9 @@ function OnboardingHelpDropdownButton(_a) {
     }
     if (hasActiveScheduledCall && latestScheduledCall) {
         options.push({
-            text: "".concat(DateUtils_1.default.formatInTimeZoneWithFallback(latestScheduledCall.eventTime, userTimezone, CONST_1.default.DATE.WEEKDAY_TIME_FORMAT), ", ").concat(DateUtils_1.default.formatInTimeZoneWithFallback(latestScheduledCall.eventTime, userTimezone, CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT)),
+            text: `${DateUtils_1.default.formatInTimeZoneWithFallback(latestScheduledCall.eventTime, userTimezone, CONST_1.default.DATE.WEEKDAY_TIME_FORMAT)}, ${DateUtils_1.default.formatInTimeZoneWithFallback(latestScheduledCall.eventTime, userTimezone, CONST_1.default.DATE.MONTH_DAY_YEAR_FORMAT)}`,
             value: CONST_1.default.ONBOARDING_HELP.EVENT_TIME,
-            description: "".concat(DateUtils_1.default.formatInTimeZoneWithFallback(latestScheduledCall.eventTime, userTimezone, CONST_1.default.DATE.LOCAL_TIME_FORMAT), " - ").concat(DateUtils_1.default.formatInTimeZoneWithFallback((0, date_fns_1.addMinutes)(latestScheduledCall.eventTime, 30), userTimezone, CONST_1.default.DATE.LOCAL_TIME_FORMAT), " ").concat(DateUtils_1.default.getZoneAbbreviation(new Date(latestScheduledCall.eventTime), userTimezone)),
+            description: `${DateUtils_1.default.formatInTimeZoneWithFallback(latestScheduledCall.eventTime, userTimezone, CONST_1.default.DATE.LOCAL_TIME_FORMAT)} - ${DateUtils_1.default.formatInTimeZoneWithFallback((0, date_fns_1.addMinutes)(latestScheduledCall.eventTime, 30), userTimezone, CONST_1.default.DATE.LOCAL_TIME_FORMAT)} ${DateUtils_1.default.getZoneAbbreviation(new Date(latestScheduledCall.eventTime), userTimezone)}`,
             descriptionTextStyle: [styles.themeTextColor, styles.ml2],
             displayInDefaultIconColor: true,
             icon: Illustrations.HeadSet,
@@ -62,13 +60,13 @@ function OnboardingHelpDropdownButton(_a) {
         options.push({
             text: translate('common.reschedule'),
             value: CONST_1.default.ONBOARDING_HELP.RESCHEDULE,
-            onSelected: function () { return (0, ScheduleCall_1.rescheduleBooking)(latestScheduledCall); },
+            onSelected: () => (0, ScheduleCall_1.rescheduleBooking)(latestScheduledCall),
             icon: Expensicons_1.CalendarSolid,
         });
         options.push({
             text: translate('common.cancel'),
             value: CONST_1.default.ONBOARDING_HELP.CANCEL,
-            onSelected: function () { return (0, ScheduleCall_1.cancelBooking)(latestScheduledCall); },
+            onSelected: () => (0, ScheduleCall_1.cancelBooking)(latestScheduledCall),
             icon: Expensicons_1.Close,
         });
     }
@@ -78,7 +76,7 @@ function OnboardingHelpDropdownButton(_a) {
             icon: Expensicons_1.Monitor,
             shouldShowButtonRightIcon: true,
             value: CONST_1.default.ONBOARDING_HELP.REGISTER_FOR_WEBINAR,
-            onSelected: function () {
+            onSelected: () => {
                 (0, Link_1.openExternalLink)(CONST_1.default.REGISTER_FOR_WEBINAR_URL);
             },
         });
@@ -86,10 +84,9 @@ function OnboardingHelpDropdownButton(_a) {
     if (options.length === 0) {
         return null;
     }
-    return (<ButtonWithDropdownMenu_1.default onPress={function (_event, value) {
-            var _a;
-            var option = options.find(function (opt) { return opt.value === value; });
-            (_a = option === null || option === void 0 ? void 0 : option.onSelected) === null || _a === void 0 ? void 0 : _a.call(option);
+    return (<ButtonWithDropdownMenu_1.default onPress={(_event, value) => {
+            const option = options.find((opt) => opt.value === value);
+            option?.onSelected?.();
         }} pressOnEnter success={!!hasActiveScheduledCall} buttonSize={CONST_1.default.DROPDOWN_BUTTON_SIZE.MEDIUM} options={options} shouldUseOptionIcon isSplitButton={false} customText={hasActiveScheduledCall ? translate('scheduledCall.callScheduled') : translate('getAssistancePage.onboardingHelp')} wrapperStyle={shouldUseNarrowLayout && styles.earlyDiscountButton}/>);
 }
 exports.default = OnboardingHelpDropdownButton;

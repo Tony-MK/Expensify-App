@@ -1,53 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Expensicons = require("@components/Icon/Expensicons");
-var SearchContext_1 = require("@components/Search/SearchContext");
-var VideoPlayer_1 = require("@components/VideoPlayer");
-var IconButton_1 = require("@components/VideoPlayer/IconButton");
-var PlaybackContext_1 = require("@components/VideoPlayerContexts/PlaybackContext");
-var useCheckIfRouteHasRemainedUnchanged_1 = require("@hooks/useCheckIfRouteHasRemainedUnchanged");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useThumbnailDimensions_1 = require("@hooks/useThumbnailDimensions");
-var Navigation_1 = require("@navigation/Navigation");
-var ROUTES_1 = require("@src/ROUTES");
-var VideoPlayerThumbnail_1 = require("./VideoPlayerThumbnail");
-var isOnAttachmentRoute = function () { return Navigation_1.default.getActiveRouteWithoutParams() === "/".concat(ROUTES_1.default.ATTACHMENTS.route); };
-function VideoPlayerPreview(_a) {
-    var videoUrl = _a.videoUrl, thumbnailUrl = _a.thumbnailUrl, reportID = _a.reportID, fileName = _a.fileName, videoDimensions = _a.videoDimensions, videoDuration = _a.videoDuration, onShowModalPress = _a.onShowModalPress, isDeleted = _a.isDeleted;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _b = (0, PlaybackContext_1.usePlaybackContext)(), currentlyPlayingURL = _b.currentlyPlayingURL, currentRouteReportID = _b.currentRouteReportID, updateCurrentURLAndReportID = _b.updateCurrentURLAndReportID;
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Expensicons = require("@components/Icon/Expensicons");
+const SearchContext_1 = require("@components/Search/SearchContext");
+const VideoPlayer_1 = require("@components/VideoPlayer");
+const IconButton_1 = require("@components/VideoPlayer/IconButton");
+const PlaybackContext_1 = require("@components/VideoPlayerContexts/PlaybackContext");
+const useCheckIfRouteHasRemainedUnchanged_1 = require("@hooks/useCheckIfRouteHasRemainedUnchanged");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useThumbnailDimensions_1 = require("@hooks/useThumbnailDimensions");
+const Navigation_1 = require("@navigation/Navigation");
+const ROUTES_1 = require("@src/ROUTES");
+const VideoPlayerThumbnail_1 = require("./VideoPlayerThumbnail");
+const isOnAttachmentRoute = () => Navigation_1.default.getActiveRouteWithoutParams() === `/${ROUTES_1.default.ATTACHMENTS.route}`;
+function VideoPlayerPreview({ videoUrl, thumbnailUrl, reportID, fileName, videoDimensions, videoDuration, onShowModalPress, isDeleted }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { currentlyPlayingURL, currentRouteReportID, updateCurrentURLAndReportID } = (0, PlaybackContext_1.usePlaybackContext)();
     /* This needs to be isSmallScreenWidth because we want to be able to play video in chat (not in attachment modal) when preview is inside an RHP */
     // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-    var isSmallScreenWidth = (0, useResponsiveLayout_1.default)().isSmallScreenWidth;
-    var _c = (0, react_1.useState)(true), isThumbnail = _c[0], setIsThumbnail = _c[1];
-    var _d = (0, react_1.useState)(videoDimensions), measuredDimensions = _d[0], setMeasuredDimensions = _d[1];
-    var thumbnailDimensionsStyles = (0, useThumbnailDimensions_1.default)(measuredDimensions.width, measuredDimensions.height).thumbnailDimensionsStyles;
-    var isOnSearch = (0, SearchContext_1.useSearchContext)().isOnSearch;
-    var navigation = (0, native_1.useNavigation)();
+    const { isSmallScreenWidth } = (0, useResponsiveLayout_1.default)();
+    const [isThumbnail, setIsThumbnail] = (0, react_1.useState)(true);
+    const [measuredDimensions, setMeasuredDimensions] = (0, react_1.useState)(videoDimensions);
+    const { thumbnailDimensionsStyles } = (0, useThumbnailDimensions_1.default)(measuredDimensions.width, measuredDimensions.height);
+    const { isOnSearch } = (0, SearchContext_1.useSearchContext)();
+    const navigation = (0, native_1.useNavigation)();
     // We want to play the video only when the user is on the page where it was initially rendered
-    var doesUserRemainOnFirstRenderRoute = (0, useCheckIfRouteHasRemainedUnchanged_1.default)(videoUrl);
+    const doesUserRemainOnFirstRenderRoute = (0, useCheckIfRouteHasRemainedUnchanged_1.default)(videoUrl);
     // `onVideoLoaded` is passed to VideoPlayerPreview's `Video` element which is displayed only on web.
     // VideoReadyForDisplayEvent type is lacking srcElement, that's why it's added here
-    var onVideoLoaded = function (event) {
+    const onVideoLoaded = (event) => {
         setMeasuredDimensions({ width: event.srcElement.videoWidth, height: event.srcElement.videoHeight });
     };
-    var handleOnPress = function () {
+    const handleOnPress = () => {
         updateCurrentURLAndReportID(videoUrl, reportID);
         if (isSmallScreenWidth) {
             onShowModalPress();
         }
     };
-    (0, react_1.useEffect)(function () {
-        return navigation.addListener('blur', function () { return !isOnAttachmentRoute() && setIsThumbnail(true); });
+    (0, react_1.useEffect)(() => {
+        return navigation.addListener('blur', () => !isOnAttachmentRoute() && setIsThumbnail(true));
     }, [navigation]);
-    (0, react_1.useEffect)(function () {
-        var isFocused = doesUserRemainOnFirstRenderRoute();
+    (0, react_1.useEffect)(() => {
+        const isFocused = doesUserRemainOnFirstRenderRoute();
         if (videoUrl !== currentlyPlayingURL || reportID !== currentRouteReportID || !isFocused) {
             return;
         }

@@ -2,29 +2,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SearchRouterContextProvider = SearchRouterContextProvider;
 exports.useSearchRouterContext = useSearchRouterContext;
-var react_1 = require("react");
-var isSearchTopmostFullScreenRoute_1 = require("@libs/Navigation/helpers/isSearchTopmostFullScreenRoute");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Modal_1 = require("@userActions/Modal");
-var NAVIGATORS_1 = require("@src/NAVIGATORS");
-var SCREENS_1 = require("@src/SCREENS");
-var defaultSearchContext = {
+const react_1 = require("react");
+const isSearchTopmostFullScreenRoute_1 = require("@libs/Navigation/helpers/isSearchTopmostFullScreenRoute");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Modal_1 = require("@userActions/Modal");
+const NAVIGATORS_1 = require("@src/NAVIGATORS");
+const SCREENS_1 = require("@src/SCREENS");
+const defaultSearchContext = {
     isSearchRouterDisplayed: false,
-    openSearchRouter: function () { },
-    closeSearchRouter: function () { },
-    toggleSearch: function () { },
-    registerSearchPageInput: function () { },
-    unregisterSearchPageInput: function () { },
+    openSearchRouter: () => { },
+    closeSearchRouter: () => { },
+    toggleSearch: () => { },
+    registerSearchPageInput: () => { },
+    unregisterSearchPageInput: () => { },
 };
-var Context = react_1.default.createContext(defaultSearchContext);
-var isBrowserWithHistory = typeof window !== 'undefined' && typeof window.history !== 'undefined';
-var canListenPopState = typeof window !== 'undefined' && typeof window.addEventListener === 'function';
-function SearchRouterContextProvider(_a) {
-    var children = _a.children;
-    var _b = (0, react_1.useState)(false), isSearchRouterDisplayed = _b[0], setIsSearchRouterDisplayed = _b[1];
-    var searchRouterDisplayedRef = (0, react_1.useRef)(false);
-    var searchPageInputRef = (0, react_1.useRef)(undefined);
-    (0, react_1.useEffect)(function () {
+const Context = react_1.default.createContext(defaultSearchContext);
+const isBrowserWithHistory = typeof window !== 'undefined' && typeof window.history !== 'undefined';
+const canListenPopState = typeof window !== 'undefined' && typeof window.addEventListener === 'function';
+function SearchRouterContextProvider({ children }) {
+    const [isSearchRouterDisplayed, setIsSearchRouterDisplayed] = (0, react_1.useState)(false);
+    const searchRouterDisplayedRef = (0, react_1.useRef)(false);
+    const searchPageInputRef = (0, react_1.useRef)(undefined);
+    (0, react_1.useEffect)(() => {
         if (!canListenPopState) {
             return;
         }
@@ -36,9 +35,9 @@ function SearchRouterContextProvider(_a) {
          * This creates a proper browser history integration where modal state
          * is part of the navigation history
          */
-        var handlePopState = function (event) {
-            var state = event.state;
-            if (state === null || state === void 0 ? void 0 : state.isSearchModalOpen) {
+        const handlePopState = (event) => {
+            const state = event.state;
+            if (state?.isSearchModalOpen) {
                 setIsSearchRouterDisplayed(true);
                 searchRouterDisplayedRef.current = true;
             }
@@ -48,24 +47,24 @@ function SearchRouterContextProvider(_a) {
             }
         };
         window.addEventListener('popstate', handlePopState);
-        return function () { return window.removeEventListener('popstate', handlePopState); };
+        return () => window.removeEventListener('popstate', handlePopState);
     }, []);
-    var routerContext = (0, react_1.useMemo)(function () {
-        var openSearchRouter = function () {
+    const routerContext = (0, react_1.useMemo)(() => {
+        const openSearchRouter = () => {
             if (isBrowserWithHistory) {
                 window.history.pushState({ isSearchModalOpen: true }, '');
             }
-            (0, Modal_1.close)(function () {
+            (0, Modal_1.close)(() => {
                 setIsSearchRouterDisplayed(true);
                 searchRouterDisplayedRef.current = true;
             }, false, true);
         };
-        var closeSearchRouter = function () {
+        const closeSearchRouter = () => {
             setIsSearchRouterDisplayed(false);
             searchRouterDisplayedRef.current = false;
             if (isBrowserWithHistory) {
-                var state = window.history.state;
-                if (state === null || state === void 0 ? void 0 : state.isSearchModalOpen) {
+                const state = window.history.state;
+                if (state?.isSearchModalOpen) {
                     window.history.replaceState({ isSearchModalOpen: false }, '');
                 }
             }
@@ -73,11 +72,10 @@ function SearchRouterContextProvider(_a) {
         // There are callbacks that live outside of React render-loop and interact with SearchRouter
         // So we need a function that is based on ref to correctly open/close it
         // When user is on `/search` page we focus the Input instead of showing router
-        var toggleSearch = function () {
-            var _a, _b, _c;
-            var searchFullScreenRoutes = (_a = Navigation_1.navigationRef.getRootState()) === null || _a === void 0 ? void 0 : _a.routes.findLast(function (route) { return route.name === NAVIGATORS_1.default.SEARCH_FULLSCREEN_NAVIGATOR; });
-            var lastRoute = (_c = (_b = searchFullScreenRoutes === null || searchFullScreenRoutes === void 0 ? void 0 : searchFullScreenRoutes.state) === null || _b === void 0 ? void 0 : _b.routes) === null || _c === void 0 ? void 0 : _c.at(-1);
-            var isUserOnSearchPage = (0, isSearchTopmostFullScreenRoute_1.default)() && (lastRoute === null || lastRoute === void 0 ? void 0 : lastRoute.name) === SCREENS_1.default.SEARCH.ROOT;
+        const toggleSearch = () => {
+            const searchFullScreenRoutes = Navigation_1.navigationRef.getRootState()?.routes.findLast((route) => route.name === NAVIGATORS_1.default.SEARCH_FULLSCREEN_NAVIGATOR);
+            const lastRoute = searchFullScreenRoutes?.state?.routes?.at(-1);
+            const isUserOnSearchPage = (0, isSearchTopmostFullScreenRoute_1.default)() && lastRoute?.name === SCREENS_1.default.SEARCH.ROOT;
             if (isUserOnSearchPage && searchPageInputRef.current) {
                 if (searchPageInputRef.current.isFocused()) {
                     searchPageInputRef.current.blur();
@@ -93,19 +91,19 @@ function SearchRouterContextProvider(_a) {
                 openSearchRouter();
             }
         };
-        var registerSearchPageInput = function (ref) {
+        const registerSearchPageInput = (ref) => {
             searchPageInputRef.current = ref;
         };
-        var unregisterSearchPageInput = function () {
+        const unregisterSearchPageInput = () => {
             searchPageInputRef.current = undefined;
         };
         return {
-            isSearchRouterDisplayed: isSearchRouterDisplayed,
-            openSearchRouter: openSearchRouter,
-            closeSearchRouter: closeSearchRouter,
-            toggleSearch: toggleSearch,
-            registerSearchPageInput: registerSearchPageInput,
-            unregisterSearchPageInput: unregisterSearchPageInput,
+            isSearchRouterDisplayed,
+            openSearchRouter,
+            closeSearchRouter,
+            toggleSearch,
+            registerSearchPageInput,
+            unregisterSearchPageInput,
         };
     }, [isSearchRouterDisplayed, setIsSearchRouterDisplayed]);
     return <Context.Provider value={routerContext}>{children}</Context.Provider>;

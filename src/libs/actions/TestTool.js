@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.shouldShowProfileTool = shouldShowProfileTool;
-var throttle_1 = require("lodash/throttle");
-var Browser_1 = require("@libs/Browser");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var navigationRef_1 = require("@libs/Navigation/navigationRef");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-var SCREENS_1 = require("@src/SCREENS");
-var Modal_1 = require("./Modal");
+const throttle_1 = require("lodash/throttle");
+const Browser_1 = require("@libs/Browser");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const navigationRef_1 = require("@libs/Navigation/navigationRef");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+const SCREENS_1 = require("@src/SCREENS");
+const Modal_1 = require("./Modal");
 /**
  * Get the backTo parameter from the current test tools modal route
  */
 function getBackToParam() {
-    var _a;
-    var route = (_a = navigationRef_1.default.current) === null || _a === void 0 ? void 0 : _a.getCurrentRoute();
-    if ((route === null || route === void 0 ? void 0 : route.name) === SCREENS_1.default.TEST_TOOLS_MODAL.ROOT && route.params) {
+    const route = navigationRef_1.default.current?.getCurrentRoute();
+    if (route?.name === SCREENS_1.default.TEST_TOOLS_MODAL.ROOT && route.params) {
         return route.params.backTo;
     }
     return undefined;
@@ -24,9 +23,9 @@ function getBackToParam() {
  * Toggle the test tools modal open or closed.
  * Throttle the toggle to make the modal stay open if you accidentally tap an extra time, which is easy to do.
  */
-var throttledToggle = (0, throttle_1.default)(function () {
-    var currentRoute = Navigation_1.default.getActiveRoute();
-    var backTo = getBackToParam();
+const throttledToggle = (0, throttle_1.default)(() => {
+    const currentRoute = Navigation_1.default.getActiveRoute();
+    const backTo = getBackToParam();
     if (currentRoute.includes(ROUTES_1.default.TEST_TOOLS_MODAL.route)) {
         if (backTo) {
             Navigation_1.default.goBack(backTo);
@@ -36,8 +35,8 @@ var throttledToggle = (0, throttle_1.default)(function () {
         }
         return;
     }
-    var openTestToolsModal = function () {
-        setTimeout(function () { return Navigation_1.default.navigate(ROUTES_1.default.TEST_TOOLS_MODAL.getRoute(Navigation_1.default.getActiveRoute())); }, CONST_1.default.MODAL.ANIMATION_TIMING.DEFAULT_IN);
+    const openTestToolsModal = () => {
+        setTimeout(() => Navigation_1.default.navigate(ROUTES_1.default.TEST_TOOLS_MODAL.getRoute(Navigation_1.default.getActiveRoute())), CONST_1.default.MODAL.ANIMATION_TIMING.DEFAULT_IN);
     };
     // Dismiss any current modal before showing test tools modal
     // We need to handle test drive modal differently using Navigation.goBack() to properly clean up its navigation state
@@ -47,7 +46,7 @@ var throttledToggle = (0, throttle_1.default)(function () {
         openTestToolsModal();
     }
     else {
-        (0, Modal_1.close)(function () {
+        (0, Modal_1.close)(() => {
             openTestToolsModal();
         });
     }
@@ -56,8 +55,8 @@ function toggleTestToolsModal() {
     throttledToggle();
 }
 function shouldShowProfileTool() {
-    var browser = (0, Browser_1.getBrowser)();
-    var isSafariOrFirefox = browser === CONST_1.default.BROWSER.SAFARI || browser === CONST_1.default.BROWSER.FIREFOX;
+    const browser = (0, Browser_1.getBrowser)();
+    const isSafariOrFirefox = browser === CONST_1.default.BROWSER.SAFARI || browser === CONST_1.default.BROWSER.FIREFOX;
     if (isSafariOrFirefox || (0, Browser_1.isChromeIOS)()) {
         return false;
     }

@@ -1,99 +1,97 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
-var Button_1 = require("@components/Button");
-var FixedFooter_1 = require("@components/FixedFooter");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var MoneyRequestView_1 = require("@components/ReportActionItem/MoneyRequestView");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
-var Text_1 = require("@components/Text");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useReviewDuplicatesNavigation_1 = require("@hooks/useReviewDuplicatesNavigation");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var IOU = require("@src/libs/actions/IOU");
-var ReportActionsUtils = require("@src/libs/ReportActionsUtils");
-var ReportUtils = require("@src/libs/ReportUtils");
-var ReportUtils_1 = require("@src/libs/ReportUtils");
-var TransactionUtils = require("@src/libs/TransactionUtils");
-var TransactionUtils_1 = require("@src/libs/TransactionUtils");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
+const Button_1 = require("@components/Button");
+const FixedFooter_1 = require("@components/FixedFooter");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const MoneyRequestView_1 = require("@components/ReportActionItem/MoneyRequestView");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const ShowContextMenuContext_1 = require("@components/ShowContextMenuContext");
+const Text_1 = require("@components/Text");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useReviewDuplicatesNavigation_1 = require("@hooks/useReviewDuplicatesNavigation");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const getNonEmptyStringOnyxID_1 = require("@libs/getNonEmptyStringOnyxID");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const IOU = require("@src/libs/actions/IOU");
+const ReportActionsUtils = require("@src/libs/ReportActionsUtils");
+const ReportUtils = require("@src/libs/ReportUtils");
+const ReportUtils_1 = require("@src/libs/ReportUtils");
+const TransactionUtils = require("@src/libs/TransactionUtils");
+const TransactionUtils_1 = require("@src/libs/TransactionUtils");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const isLoadingOnyxValue_1 = require("@src/types/utils/isLoadingOnyxValue");
 function Confirmation() {
-    var _a;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var route = (0, native_1.useRoute)();
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var _b = (0, useOnyx_1.default)(ONYXKEYS_1.default.REVIEW_DUPLICATES, { canBeMissing: true }), reviewDuplicates = _b[0], reviewDuplicatesResult = _b[1];
-    var newTransaction = (0, react_1.useMemo)(function () { return TransactionUtils.buildNewTransactionAfterReviewingDuplicates(reviewDuplicates); }, [reviewDuplicates]);
-    var transactionID = TransactionUtils.getTransactionID(route.params.threadReportID);
-    var allReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false })[0];
-    var transaction = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), { canBeMissing: true })[0];
-    var transactionViolations = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS).concat((0, getNonEmptyStringOnyxID_1.default)(transactionID)), {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const route = (0, native_1.useRoute)();
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const [reviewDuplicates, reviewDuplicatesResult] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REVIEW_DUPLICATES, { canBeMissing: true });
+    const newTransaction = (0, react_1.useMemo)(() => TransactionUtils.buildNewTransactionAfterReviewingDuplicates(reviewDuplicates), [reviewDuplicates]);
+    const transactionID = TransactionUtils.getTransactionID(route.params.threadReportID);
+    const [allReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: false });
+    const [transaction] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, { canBeMissing: true });
+    const [transactionViolations] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.TRANSACTION_VIOLATIONS}${(0, getNonEmptyStringOnyxID_1.default)(transactionID)}`, {
         canBeMissing: false,
-    })[0];
-    var allDuplicateIDs = (0, react_1.useMemo)(function () { var _a, _b, _c; return (_c = (_b = (_a = transactionViolations === null || transactionViolations === void 0 ? void 0 : transactionViolations.find(function (violation) { return violation.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION; })) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.duplicates) !== null && _c !== void 0 ? _c : []; }, [transactionViolations]);
-    var allDuplicates = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
-        selector: function (allTransactions) { return allDuplicateIDs.map(function (id) { return allTransactions === null || allTransactions === void 0 ? void 0 : allTransactions["".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(id)]; }); },
+    });
+    const allDuplicateIDs = (0, react_1.useMemo)(() => transactionViolations?.find((violation) => violation.name === CONST_1.default.VIOLATIONS.DUPLICATED_TRANSACTION)?.data?.duplicates ?? [], [transactionViolations]);
+    const [allDuplicates] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
+        selector: (allTransactions) => allDuplicateIDs.map((id) => allTransactions?.[`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${id}`]),
         canBeMissing: true,
-    }, [allDuplicateIDs])[0];
-    var compareResult = TransactionUtils.compareDuplicateTransactionFields(transaction, allDuplicates, reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.reportID);
-    var goBack = (0, useReviewDuplicatesNavigation_1.default)(Object.keys((_a = compareResult.change) !== null && _a !== void 0 ? _a : {}), 'confirmation', route.params.threadReportID, route.params.backTo).goBack;
-    var _c = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(route.params.threadReportID), { canBeMissing: true }), report = _c[0], reportResult = _c[1];
-    var iouReport = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(newTransaction === null || newTransaction === void 0 ? void 0 : newTransaction.reportID), { canBeMissing: true })[0];
-    var reportActions = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS).concat(newTransaction === null || newTransaction === void 0 ? void 0 : newTransaction.reportID), { canBeMissing: true })[0];
-    var reportAction = Object.values(reportActions !== null && reportActions !== void 0 ? reportActions : {}).find(function (action) { var _a; return ReportActionsUtils.isMoneyRequestAction(action) && ((_a = ReportActionsUtils.getOriginalMessage(action)) === null || _a === void 0 ? void 0 : _a.IOUTransactionID) === (reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.transactionID); });
-    var duplicates = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
-        selector: function (allTransactions) { return reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.duplicates.map(function (id) { return allTransactions === null || allTransactions === void 0 ? void 0 : allTransactions["".concat(ONYXKEYS_1.default.COLLECTION.TRANSACTION).concat(id)]; }); },
+    }, [allDuplicateIDs]);
+    const compareResult = TransactionUtils.compareDuplicateTransactionFields(transaction, allDuplicates, reviewDuplicates?.reportID);
+    const { goBack } = (0, useReviewDuplicatesNavigation_1.default)(Object.keys(compareResult.change ?? {}), 'confirmation', route.params.threadReportID, route.params.backTo);
+    const [report, reportResult] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT}${route.params.threadReportID}`, { canBeMissing: true });
+    const [iouReport] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT}${newTransaction?.reportID}`, { canBeMissing: true });
+    const [reportActions] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_ACTIONS}${newTransaction?.reportID}`, { canBeMissing: true });
+    const reportAction = Object.values(reportActions ?? {}).find((action) => ReportActionsUtils.isMoneyRequestAction(action) && ReportActionsUtils.getOriginalMessage(action)?.IOUTransactionID === reviewDuplicates?.transactionID);
+    const [duplicates] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.TRANSACTION, {
+        selector: (allTransactions) => reviewDuplicates?.duplicates.map((id) => allTransactions?.[`${ONYXKEYS_1.default.COLLECTION.TRANSACTION}${id}`]),
         canBeMissing: true,
-    }, [reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.duplicates])[0];
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(report === null || report === void 0 ? void 0 : report.policyID), { canBeMissing: true })[0];
-    var transactionsMergeParams = (0, react_1.useMemo)(function () { return TransactionUtils.buildMergeDuplicatesParams(reviewDuplicates, duplicates !== null && duplicates !== void 0 ? duplicates : [], newTransaction); }, [duplicates, reviewDuplicates, newTransaction]);
-    var isReportOwner = (iouReport === null || iouReport === void 0 ? void 0 : iouReport.ownerAccountID) === (currentUserPersonalDetails === null || currentUserPersonalDetails === void 0 ? void 0 : currentUserPersonalDetails.accountID);
-    var mergeDuplicates = (0, react_1.useCallback)(function () {
-        var _a;
-        var transactionThreadReportID = (_a = reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID) !== null && _a !== void 0 ? _a : (0, ReportUtils_1.generateReportID)();
-        if (!(reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID)) {
+    }, [reviewDuplicates?.duplicates]);
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${report?.policyID}`, { canBeMissing: true });
+    const transactionsMergeParams = (0, react_1.useMemo)(() => TransactionUtils.buildMergeDuplicatesParams(reviewDuplicates, duplicates ?? [], newTransaction), [duplicates, reviewDuplicates, newTransaction]);
+    const isReportOwner = iouReport?.ownerAccountID === currentUserPersonalDetails?.accountID;
+    const mergeDuplicates = (0, react_1.useCallback)(() => {
+        const transactionThreadReportID = reportAction?.childReportID ?? (0, ReportUtils_1.generateReportID)();
+        if (!reportAction?.childReportID) {
             transactionsMergeParams.transactionThreadReportID = transactionThreadReportID;
         }
         IOU.mergeDuplicates(transactionsMergeParams);
         Navigation_1.default.dismissModal();
-    }, [reportAction === null || reportAction === void 0 ? void 0 : reportAction.childReportID, transactionsMergeParams]);
-    var resolveDuplicates = (0, react_1.useCallback)(function () {
+    }, [reportAction?.childReportID, transactionsMergeParams]);
+    const resolveDuplicates = (0, react_1.useCallback)(() => {
         IOU.resolveDuplicates(transactionsMergeParams);
         Navigation_1.default.dismissModal();
     }, [transactionsMergeParams]);
-    var contextValue = (0, react_1.useMemo)(function () { return ({
+    const contextValue = (0, react_1.useMemo)(() => ({
         transactionThreadReport: report,
         action: reportAction,
-        report: report,
-        checkIfContextMenuActive: function () { },
-        onShowContextMenu: function () { },
+        report,
+        checkIfContextMenuActive: () => { },
+        onShowContextMenu: () => { },
         isReportArchived: false,
         anchor: null,
         isDisabled: false,
-    }); }, [report, reportAction]);
-    var reportTransactionID = (report === null || report === void 0 ? void 0 : report.reportID) ? (0, TransactionUtils_1.getTransactionID)(report.reportID) : undefined;
-    var doesTransactionBelongToReport = (reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.transactionID) === reportTransactionID || (reportTransactionID && (reviewDuplicates === null || reviewDuplicates === void 0 ? void 0 : reviewDuplicates.duplicates.includes(reportTransactionID)));
+    }), [report, reportAction]);
+    const reportTransactionID = report?.reportID ? (0, TransactionUtils_1.getTransactionID)(report.reportID) : undefined;
+    const doesTransactionBelongToReport = reviewDuplicates?.transactionID === reportTransactionID || (reportTransactionID && reviewDuplicates?.duplicates.includes(reportTransactionID));
     // eslint-disable-next-line rulesdir/no-negated-variables
-    var shouldShowNotFoundPage = (0, EmptyObject_1.isEmptyObject)(report) ||
+    const shouldShowNotFoundPage = (0, EmptyObject_1.isEmptyObject)(report) ||
         !ReportUtils.isValidReport(report) ||
         ReportUtils.isReportNotFound(report) ||
-        (reviewDuplicatesResult.status === 'loaded' && (!(newTransaction === null || newTransaction === void 0 ? void 0 : newTransaction.transactionID) || !doesTransactionBelongToReport));
-    if ((0, isLoadingOnyxValue_1.default)(reviewDuplicatesResult, reportResult) || !(newTransaction === null || newTransaction === void 0 ? void 0 : newTransaction.transactionID)) {
+        (reviewDuplicatesResult.status === 'loaded' && (!newTransaction?.transactionID || !doesTransactionBelongToReport));
+    if ((0, isLoadingOnyxValue_1.default)(reviewDuplicatesResult, reportResult) || !newTransaction?.transactionID) {
         return <FullscreenLoadingIndicator_1.default />;
     }
     return (<ScreenWrapper_1.default testID={Confirmation.displayName} shouldShowOfflineIndicator>
@@ -113,7 +111,7 @@ function Confirmation() {
                         </ShowContextMenuContext_1.ShowContextMenuContext.Provider>
                     </ScrollView_1.default>
                     <FixedFooter_1.default style={styles.mtAuto}>
-                        <Button_1.default text={translate('common.confirm')} success onPress={function () {
+                        <Button_1.default text={translate('common.confirm')} success onPress={() => {
             if (!isReportOwner) {
                 resolveDuplicates();
                 return;

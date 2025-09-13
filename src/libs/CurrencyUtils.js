@@ -15,15 +15,15 @@ exports.isValidCurrencyCode = isValidCurrencyCode;
 exports.convertToShortDisplayString = convertToShortDisplayString;
 exports.getCurrency = getCurrency;
 exports.sanitizeCurrencyCode = sanitizeCurrencyCode;
-var react_native_onyx_1 = require("react-native-onyx");
-var CONST_1 = require("@src/CONST");
-var IntlStore_1 = require("@src/languages/IntlStore");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var NumberFormatUtils_1 = require("./NumberFormatUtils");
-var currencyList = {};
+const react_native_onyx_1 = require("react-native-onyx");
+const CONST_1 = require("@src/CONST");
+const IntlStore_1 = require("@src/languages/IntlStore");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const NumberFormatUtils_1 = require("./NumberFormatUtils");
+let currencyList = {};
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.CURRENCY_LIST,
-    callback: function (val) {
+    callback: (val) => {
         if (!val || Object.keys(val).length === 0) {
             return;
         }
@@ -37,15 +37,12 @@ react_native_onyx_1.default.connect({
  *
  * @param currency - IOU currency
  */
-function getCurrencyDecimals(currency) {
-    var _a;
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    var decimals = (_a = currencyList === null || currencyList === void 0 ? void 0 : currencyList[currency]) === null || _a === void 0 ? void 0 : _a.decimals;
-    return decimals !== null && decimals !== void 0 ? decimals : 2;
+function getCurrencyDecimals(currency = CONST_1.default.CURRENCY.USD) {
+    const decimals = currencyList?.[currency]?.decimals;
+    return decimals ?? 2;
 }
-function getCurrency(currency) {
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    var currencyItem = currencyList === null || currencyList === void 0 ? void 0 : currencyList[currency];
+function getCurrency(currency = CONST_1.default.CURRENCY.USD) {
+    const currencyItem = currencyList?.[currency];
     return currencyItem;
 }
 /**
@@ -54,27 +51,24 @@ function getCurrency(currency) {
  *
  * @param currency - IOU currency
  */
-function getCurrencyUnit(currency) {
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    return Math.pow(10, getCurrencyDecimals(currency));
+function getCurrencyUnit(currency = CONST_1.default.CURRENCY.USD) {
+    return 10 ** getCurrencyDecimals(currency);
 }
 /**
  * Get localized currency symbol for currency(ISO 4217) Code
  */
 function getLocalizedCurrencySymbol(currencyCode) {
-    var _a;
-    var parts = (0, NumberFormatUtils_1.formatToParts)(IntlStore_1.default.getCurrentLocale(), 0, {
+    const parts = (0, NumberFormatUtils_1.formatToParts)(IntlStore_1.default.getCurrentLocale(), 0, {
         style: 'currency',
         currency: currencyCode,
     });
-    return (_a = parts.find(function (part) { return part.type === 'currency'; })) === null || _a === void 0 ? void 0 : _a.value;
+    return parts.find((part) => part.type === 'currency')?.value;
 }
 /**
  * Get the currency symbol for a currency(ISO 4217) Code
  */
 function getCurrencySymbol(currencyCode) {
-    var _a;
-    return (_a = currencyList === null || currencyList === void 0 ? void 0 : currencyList[currencyCode]) === null || _a === void 0 ? void 0 : _a.symbol;
+    return currencyList?.[currencyCode]?.symbol;
 }
 /**
  * Takes an amount as a floating point number and converts it to an integer equivalent to the amount in "cents".
@@ -91,9 +85,8 @@ function convertToBackendAmount(amountAsFloat) {
  *
  * @note we do not support any currencies with more than two decimal places.
  */
-function convertToFrontendAmountAsInteger(amountAsInt, currency) {
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    var decimals = getCurrencyDecimals(currency);
+function convertToFrontendAmountAsInteger(amountAsInt, currency = CONST_1.default.CURRENCY.USD) {
+    const decimals = getCurrencyDecimals(currency);
     return Number((Math.trunc(amountAsInt) / 100.0).toFixed(decimals));
 }
 /**
@@ -101,13 +94,11 @@ function convertToFrontendAmountAsInteger(amountAsInt, currency) {
  *
  * @note we do not support any currencies with more than two decimal places.
  */
-function convertToFrontendAmountAsString(amountAsInt, currency, withDecimals) {
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    if (withDecimals === void 0) { withDecimals = true; }
+function convertToFrontendAmountAsString(amountAsInt, currency = CONST_1.default.CURRENCY.USD, withDecimals = true) {
     if (amountAsInt === null || amountAsInt === undefined) {
         return '';
     }
-    var decimals = withDecimals ? getCurrencyDecimals(currency) : 0;
+    const decimals = withDecimals ? getCurrencyDecimals(currency) : 0;
     return convertToFrontendAmountAsInteger(amountAsInt, currency).toFixed(decimals);
 }
 /**
@@ -117,14 +108,12 @@ function convertToFrontendAmountAsString(amountAsInt, currency, withDecimals) {
  * @param amountInCents – should be an integer. Anything after a decimal place will be dropped.
  * @param currency - IOU currency
  */
-function convertToDisplayString(amountInCents, currency) {
-    if (amountInCents === void 0) { amountInCents = 0; }
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    var convertedAmount = convertToFrontendAmountAsInteger(amountInCents, currency);
+function convertToDisplayString(amountInCents = 0, currency = CONST_1.default.CURRENCY.USD) {
+    const convertedAmount = convertToFrontendAmountAsInteger(amountInCents, currency);
     /**
      * Fallback currency to USD if it empty string or undefined
      */
-    var currencyWithFallback = currency;
+    let currencyWithFallback = currency;
     if (!currency) {
         currencyWithFallback = CONST_1.default.CURRENCY.USD;
     }
@@ -145,13 +134,11 @@ function convertToDisplayString(amountInCents, currency) {
  * @param amountInCents – should be an integer. Anything after a decimal place will be dropped.
  * @param currency - IOU currency
  */
-function convertToShortDisplayString(amountInCents, currency) {
-    if (amountInCents === void 0) { amountInCents = 0; }
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    var convertedAmount = convertToFrontendAmountAsInteger(amountInCents, currency);
+function convertToShortDisplayString(amountInCents = 0, currency = CONST_1.default.CURRENCY.USD) {
+    const convertedAmount = convertToFrontendAmountAsInteger(amountInCents, currency);
     return (0, NumberFormatUtils_1.format)(IntlStore_1.default.getCurrentLocale(), convertedAmount, {
         style: 'currency',
-        currency: currency,
+        currency,
         // There will be no decimals displayed (e.g. $9)
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
@@ -163,13 +150,11 @@ function convertToShortDisplayString(amountInCents, currency) {
  * @param amount – should be a float.
  * @param currency - IOU currency
  */
-function convertAmountToDisplayString(amount, currency) {
-    if (amount === void 0) { amount = 0; }
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    var convertedAmount = amount / 100.0;
+function convertAmountToDisplayString(amount = 0, currency = CONST_1.default.CURRENCY.USD) {
+    const convertedAmount = amount / 100.0;
     return (0, NumberFormatUtils_1.format)(IntlStore_1.default.getCurrentLocale(), convertedAmount, {
         style: 'currency',
-        currency: currency,
+        currency,
         minimumFractionDigits: CONST_1.default.MIN_TAX_RATE_DECIMAL_PLACES,
         maximumFractionDigits: CONST_1.default.MAX_TAX_RATE_DECIMAL_PLACES,
     });
@@ -177,41 +162,38 @@ function convertAmountToDisplayString(amount, currency) {
 /**
  * Acts the same as `convertAmountToDisplayString` but the result string does not contain currency
  */
-function convertToDisplayStringWithoutCurrency(amountInCents, currency) {
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
-    var convertedAmount = convertToFrontendAmountAsInteger(amountInCents, currency);
+function convertToDisplayStringWithoutCurrency(amountInCents, currency = CONST_1.default.CURRENCY.USD) {
+    const convertedAmount = convertToFrontendAmountAsInteger(amountInCents, currency);
     return (0, NumberFormatUtils_1.formatToParts)(IntlStore_1.default.getCurrentLocale(), convertedAmount, {
         style: 'currency',
-        currency: currency,
+        currency,
         // We are forcing the number of decimals because we override the default number of decimals in the backend for some currencies
         // See: https://github.com/Expensify/PHP-Libs/pull/834
         minimumFractionDigits: getCurrencyDecimals(currency),
         // For currencies that have decimal places > 2, floor to 2 instead as we don't support more than 2 decimal places.
         maximumFractionDigits: 2,
     })
-        .filter(function (x) { return x.type !== 'currency'; })
-        .filter(function (x) { return x.type !== 'literal' || x.value.trim().length !== 0; })
-        .map(function (x) { return x.value; })
+        .filter((x) => x.type !== 'currency')
+        .filter((x) => x.type !== 'literal' || x.value.trim().length !== 0)
+        .map((x) => x.value)
         .join('');
 }
 /**
  * Checks if passed currency code is a valid currency based on currency list
  */
 function isValidCurrencyCode(currencyCode) {
-    var currency = currencyList === null || currencyList === void 0 ? void 0 : currencyList[currencyCode];
+    const currency = currencyList?.[currencyCode];
     return !!currency;
 }
 function sanitizeCurrencyCode(currencyCode) {
     return isValidCurrencyCode(currencyCode) ? currencyCode : CONST_1.default.CURRENCY.USD;
 }
 function getCurrencyKeyByCountryCode(currencies, countryCode) {
-    var _a;
     if (!currencies || !countryCode) {
         return CONST_1.default.CURRENCY.USD;
     }
-    for (var _i = 0, _b = Object.entries(currencies); _i < _b.length; _i++) {
-        var _c = _b[_i], key = _c[0], value = _c[1];
-        if ((_a = value === null || value === void 0 ? void 0 : value.countries) === null || _a === void 0 ? void 0 : _a.includes(countryCode)) {
+    for (const [key, value] of Object.entries(currencies)) {
+        if (value?.countries?.includes(countryCode)) {
             return key;
         }
     }

@@ -7,5 +7,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Opposite to web where we need to create a new Image object and get dimensions from it
  *
  */
-var getImageResolution = function (file) { var _a, _b; return Promise.resolve({ width: (_a = file.width) !== null && _a !== void 0 ? _a : 0, height: (_b = file.height) !== null && _b !== void 0 ? _b : 0 }); };
+const getImageResolution = (file) => Promise.resolve({ width: file.width ?? 0, height: file.height ?? 0 });
 exports.default = getImageResolution;

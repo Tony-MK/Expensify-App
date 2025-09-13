@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var getSearchPageNarrowHeaderStyles = function () { return ({
+const getSearchPageNarrowHeaderStyles = () => ({
     zIndex: 10,
-}); };
+});
 exports.default = getSearchPageNarrowHeaderStyles;

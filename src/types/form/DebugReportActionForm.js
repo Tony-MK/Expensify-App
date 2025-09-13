@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     REPORT_ACTION_ID: 'reportActionID',
     SEQUENCE_NUMBER: 'sequenceNumber',
     ACTION_NAME: 'actionName',

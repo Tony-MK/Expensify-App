@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("react-native");
-var CONST_1 = require("@src/CONST");
-var shouldReportActivity_1 = require("./shouldReportActivity");
-var appState = CONST_1.default.APP_STATE.ACTIVE;
+const react_native_1 = require("react-native");
+const CONST_1 = require("@src/CONST");
+const shouldReportActivity_1 = require("./shouldReportActivity");
+let appState = CONST_1.default.APP_STATE.ACTIVE;
 /**
  * Listener that will only fire the callback when the user has become active.
  * @returns callback to unsubscribe
@@ -15,8 +15,8 @@ function addBecameActiveListener(callback) {
         }
         appState = state;
     }
-    var appStateChangeSubscription = react_native_1.AppState.addEventListener('change', appStateChangeCallback);
-    return function () {
+    const appStateChangeSubscription = react_native_1.AppState.addEventListener('change', appStateChangeCallback);
+    return () => {
         if (!appStateChangeSubscription) {
             return;
         }
@@ -24,5 +24,5 @@ function addBecameActiveListener(callback) {
     };
 }
 exports.default = {
-    addBecameActiveListener: addBecameActiveListener,
+    addBecameActiveListener,
 };

@@ -1,37 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useWorkspaceCardList = exports.useCardList = exports.useAllReportsTransactionsAndViolations = exports.usePolicyTags = exports.usePolicyCategories = exports.useSession = exports.useBlockedFromConcierge = exports.PersonalDetailsContext = exports.useBetaConfiguration = exports.useBetas = exports.BetaConfigurationContext = exports.BetasContext = exports.usePersonalDetails = void 0;
-var react_1 = require("react");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ComposeProviders_1 = require("./ComposeProviders");
-var createOnyxContext_1 = require("./createOnyxContext");
+const react_1 = require("react");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ComposeProviders_1 = require("./ComposeProviders");
+const createOnyxContext_1 = require("./createOnyxContext");
 /**
  * IMPORTANT: this should only be used for components that are rendered in a list (e.g. FlatList, SectionList, etc.)
  * Set up any providers for individual keys. This should only be used in cases where many components will subscribe to
  * the same key (e.g. FlatList renderItem components)
  */
-var _a = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST), PersonalDetailsProvider = _a[0], PersonalDetailsContext = _a[1], usePersonalDetails = _a[2];
+const [PersonalDetailsProvider, PersonalDetailsContext, usePersonalDetails] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.PERSONAL_DETAILS_LIST);
 exports.PersonalDetailsContext = PersonalDetailsContext;
 exports.usePersonalDetails = usePersonalDetails;
-var _b = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.NVP_BLOCKED_FROM_CONCIERGE), BlockedFromConciergeProvider = _b[0], useBlockedFromConcierge = _b[2];
+const [BlockedFromConciergeProvider, , useBlockedFromConcierge] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.NVP_BLOCKED_FROM_CONCIERGE);
 exports.useBlockedFromConcierge = useBlockedFromConcierge;
-var _c = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.BETAS), BetasProvider = _c[0], BetasContext = _c[1], useBetas = _c[2];
+const [BetasProvider, BetasContext, useBetas] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.BETAS);
 exports.BetasContext = BetasContext;
 exports.useBetas = useBetas;
-var _d = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.BETA_CONFIGURATION), BetaConfigurationProvider = _d[0], BetaConfigurationContext = _d[1], useBetaConfiguration = _d[2];
+const [BetaConfigurationProvider, BetaConfigurationContext, useBetaConfiguration] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.BETA_CONFIGURATION);
 exports.BetaConfigurationContext = BetaConfigurationContext;
 exports.useBetaConfiguration = useBetaConfiguration;
-var _e = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.SESSION), SessionProvider = _e[0], useSession = _e[2];
+const [SessionProvider, , useSession] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.SESSION);
 exports.useSession = useSession;
-var _f = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES), PolicyCategoriesProvider = _f[0], usePolicyCategories = _f[2];
+const [PolicyCategoriesProvider, , usePolicyCategories] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY_CATEGORIES);
 exports.usePolicyCategories = usePolicyCategories;
-var _g = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY_TAGS), PolicyTagsProvider = _g[0], usePolicyTags = _g[2];
+const [PolicyTagsProvider, , usePolicyTags] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY_TAGS);
 exports.usePolicyTags = usePolicyTags;
-var _h = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_TRANSACTIONS_AND_VIOLATIONS), ReportTransactionsAndViolationsProvider = _h[0], useAllReportsTransactionsAndViolations = _h[2];
+const [ReportTransactionsAndViolationsProvider, , useAllReportsTransactionsAndViolations] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.DERIVED.REPORT_TRANSACTIONS_AND_VIOLATIONS);
 exports.useAllReportsTransactionsAndViolations = useAllReportsTransactionsAndViolations;
-var _j = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.CARD_LIST), CardListProvider = _j[0], useCardList = _j[2];
+const [CardListProvider, , useCardList] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.CARD_LIST);
 exports.useCardList = useCardList;
-var _k = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST), WorkspaceCardListProvider = _k[0], useWorkspaceCardList = _k[2];
+const [WorkspaceCardListProvider, , useWorkspaceCardList] = (0, createOnyxContext_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST);
 exports.useWorkspaceCardList = useWorkspaceCardList;
 function OnyxListItemProvider(props) {
     return (<ComposeProviders_1.default components={[

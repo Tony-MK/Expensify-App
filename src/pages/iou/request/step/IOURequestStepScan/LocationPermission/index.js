@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requestLocationPermission = requestLocationPermission;
 exports.getLocationPermission = getLocationPermission;
-var react_native_permissions_1 = require("react-native-permissions");
-var CONST_1 = require("@src/CONST");
+const react_native_permissions_1 = require("react-native-permissions");
+const CONST_1 = require("@src/CONST");
 function requestLocationPermission() {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function () { return resolve(react_native_permissions_1.RESULTS.GRANTED); }, function (error) { return resolve(error.TIMEOUT || error.POSITION_UNAVAILABLE ? react_native_permissions_1.RESULTS.BLOCKED : react_native_permissions_1.RESULTS.DENIED); }, {
+            navigator.geolocation.getCurrentPosition(() => resolve(react_native_permissions_1.RESULTS.GRANTED), (error) => resolve(error.TIMEOUT || error.POSITION_UNAVAILABLE ? react_native_permissions_1.RESULTS.BLOCKED : react_native_permissions_1.RESULTS.DENIED), {
                 timeout: CONST_1.default.GPS.TIMEOUT,
                 enableHighAccuracy: true,
             });
@@ -18,9 +18,9 @@ function requestLocationPermission() {
     });
 }
 function getLocationPermission() {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         if (navigator.geolocation) {
-            navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+            navigator.permissions.query({ name: 'geolocation' }).then((result) => {
                 if (result.state === 'prompt') {
                     resolve(react_native_permissions_1.RESULTS.DENIED);
                     return;

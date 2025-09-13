@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ImportSpreadsheet_1 = require("@libs/actions/ImportSpreadsheet");
+const react_1 = require("react");
+const ImportSpreadsheet_1 = require("@libs/actions/ImportSpreadsheet");
 function useCloseImportPage() {
-    var isClosing = (0, react_1.useRef)(false);
-    var setIsClosing = (0, react_1.useCallback)(function (value) {
+    const isClosing = (0, react_1.useRef)(false);
+    const setIsClosing = (0, react_1.useCallback)((value) => {
         isClosing.current = value;
     }, []);
-    (0, react_1.useEffect)(function () {
-        return function () {
+    (0, react_1.useEffect)(() => {
+        return () => {
             if (!isClosing.current) {
                 return;
             }
             (0, ImportSpreadsheet_1.closeImportPage)();
         };
     }, []);
-    return { setIsClosing: setIsClosing };
+    return { setIsClosing };
 }
 exports.default = useCloseImportPage;

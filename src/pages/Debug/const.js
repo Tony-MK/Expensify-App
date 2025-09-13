@@ -1,14 +1,13 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DETAILS_DISABLED_KEYS = exports.DETAILS_DATETIME_FIELDS = exports.DETAILS_CONSTANT_FIELDS = void 0;
-var CONST_1 = require("@src/CONST");
-var DebugReportActionForm_1 = require("@src/types/form/DebugReportActionForm");
-var DebugReportForm_1 = require("@src/types/form/DebugReportForm");
-var DebugTransactionForm_1 = require("@src/types/form/DebugTransactionForm");
-var DebugTransactionViolationForm_1 = require("@src/types/form/DebugTransactionViolationForm");
-var DETAILS_CONSTANT_FIELDS = (_a = {},
-    _a[CONST_1.default.DEBUG.FORMS.REPORT] = [
+const CONST_1 = require("@src/CONST");
+const DebugReportActionForm_1 = require("@src/types/form/DebugReportActionForm");
+const DebugReportForm_1 = require("@src/types/form/DebugReportForm");
+const DebugTransactionForm_1 = require("@src/types/form/DebugTransactionForm");
+const DebugTransactionViolationForm_1 = require("@src/types/form/DebugTransactionViolationForm");
+const DETAILS_CONSTANT_FIELDS = {
+    [CONST_1.default.DEBUG.FORMS.REPORT]: [
         {
             fieldName: DebugReportForm_1.default.CHAT_TYPE,
             options: CONST_1.default.REPORT.CHAT_TYPE,
@@ -46,7 +45,7 @@ var DETAILS_CONSTANT_FIELDS = (_a = {},
             options: CONST_1.default.REPORT.STATUS_NUM,
         },
     ],
-    _a[CONST_1.default.DEBUG.FORMS.REPORT_ACTION] = [
+    [CONST_1.default.DEBUG.FORMS.REPORT_ACTION]: [
         {
             fieldName: DebugReportActionForm_1.default.ACTION_NAME,
             options: CONST_1.default.REPORT.ACTIONS.TYPE,
@@ -64,7 +63,7 @@ var DETAILS_CONSTANT_FIELDS = (_a = {},
             options: CONST_1.default.REPORT.NOTIFICATION_PREFERENCE,
         },
     ],
-    _a[CONST_1.default.DEBUG.FORMS.TRANSACTION] = [
+    [CONST_1.default.DEBUG.FORMS.TRANSACTION]: [
         {
             fieldName: DebugTransactionForm_1.default.IOU_REQUEST_TYPE,
             options: CONST_1.default.IOU.REQUEST_TYPE,
@@ -100,7 +99,7 @@ var DETAILS_CONSTANT_FIELDS = (_a = {},
             fieldName: DebugTransactionForm_1.default.TAG,
         },
     ],
-    _a[CONST_1.default.DEBUG.FORMS.TRANSACTION_VIOLATION] = [
+    [CONST_1.default.DEBUG.FORMS.TRANSACTION_VIOLATION]: [
         {
             fieldName: DebugTransactionViolationForm_1.default.NAME,
             options: CONST_1.default.VIOLATIONS,
@@ -110,9 +109,9 @@ var DETAILS_CONSTANT_FIELDS = (_a = {},
             options: CONST_1.default.VIOLATION_TYPES,
         },
     ],
-    _a);
+};
 exports.DETAILS_CONSTANT_FIELDS = DETAILS_CONSTANT_FIELDS;
-var DETAILS_DATETIME_FIELDS = [
+const DETAILS_DATETIME_FIELDS = [
     DebugReportActionForm_1.default.CREATED,
     DebugReportActionForm_1.default.LAST_MODIFIED,
     DebugReportForm_1.default.LAST_READ_TIME,
@@ -121,7 +120,7 @@ var DETAILS_DATETIME_FIELDS = [
     DebugTransactionForm_1.default.MODIFIED_CREATED,
 ];
 exports.DETAILS_DATETIME_FIELDS = DETAILS_DATETIME_FIELDS;
-var DETAILS_DISABLED_KEYS = [
+const DETAILS_DISABLED_KEYS = [
     DebugReportActionForm_1.default.REPORT_ACTION_ID,
     DebugReportForm_1.default.REPORT_ID,
     DebugReportForm_1.default.POLICY_ID,

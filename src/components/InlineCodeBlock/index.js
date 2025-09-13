@@ -1,21 +1,10 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var EmojiWithTooltip_1 = require("@components/EmojiWithTooltip");
-var Text_1 = require("@components/Text");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const EmojiWithTooltip_1 = require("@components/EmojiWithTooltip");
+const Text_1 = require("@components/Text");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
 /**
  * This function is used to render elements based on the provided defaultRendererProps and styles.
  * It iterates over the children of the tnode object in defaultRendererProps, and for each child,
@@ -29,7 +18,7 @@ var useThemeStyles_1 = require("@hooks/useThemeStyles");
  * @returns The array of elements to be rendered.
  */
 function renderElements(defaultRendererProps, textStyles, styles) {
-    var elements = [];
+    const elements = [];
     if ('data' in defaultRendererProps.tnode) {
         elements.push(defaultRendererProps.tnode.data);
         return elements;
@@ -37,7 +26,7 @@ function renderElements(defaultRendererProps, textStyles, styles) {
     if (!defaultRendererProps.tnode.children) {
         return elements;
     }
-    defaultRendererProps.tnode.children.forEach(function (child) {
+    defaultRendererProps.tnode.children.forEach((child) => {
         if (!('data' in child)) {
             return;
         }
@@ -50,12 +39,11 @@ function renderElements(defaultRendererProps, textStyles, styles) {
     });
     return elements;
 }
-function InlineCodeBlock(_a) {
-    var TDefaultRenderer = _a.TDefaultRenderer, textStyle = _a.textStyle, defaultRendererProps = _a.defaultRendererProps, boxModelStyle = _a.boxModelStyle;
-    var styles = (0, useThemeStyles_1.default)();
-    var flattenTextStyle = react_native_1.StyleSheet.flatten(textStyle);
-    var textDecorationLine = flattenTextStyle.textDecorationLine, textStyles = __rest(flattenTextStyle, ["textDecorationLine"]);
-    var elements = renderElements(defaultRendererProps, textStyles, styles);
+function InlineCodeBlock({ TDefaultRenderer, textStyle, defaultRendererProps, boxModelStyle }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const flattenTextStyle = react_native_1.StyleSheet.flatten(textStyle);
+    const { textDecorationLine, ...textStyles } = flattenTextStyle;
+    const elements = renderElements(defaultRendererProps, textStyles, styles);
     return (<TDefaultRenderer 
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...defaultRendererProps}>

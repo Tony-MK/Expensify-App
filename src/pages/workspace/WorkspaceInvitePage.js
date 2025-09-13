@@ -1,140 +1,119 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var OptionListContextProvider_1 = require("@components/OptionListContextProvider");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SelectionList_1 = require("@components/SelectionList");
-var InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
-var withNavigationTransitionEnd_1 = require("@components/withNavigationTransitionEnd");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Member_1 = require("@libs/actions/Policy/Member");
-var Policy_1 = require("@libs/actions/Policy/Policy");
-var Report_1 = require("@libs/actions/Report");
-var types_1 = require("@libs/API/types");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var HttpUtils_1 = require("@libs/HttpUtils");
-var LoginUtils_1 = require("@libs/LoginUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var OptionsListUtils_1 = require("@libs/OptionsListUtils");
-var PhoneNumber_1 = require("@libs/PhoneNumber");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var AccessOrNotFoundWrapper_1 = require("./AccessOrNotFoundWrapper");
-var withPolicyAndFullscreenLoading_1 = require("./withPolicyAndFullscreenLoading");
-function WorkspaceInvitePage(_a) {
-    var route = _a.route, policy = _a.policy;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _b = (0, useDebouncedState_1.default)(''), searchTerm = _b[0], debouncedSearchTerm = _b[1], setSearchTerm = _b[2];
-    var _c = (0, react_1.useState)([]), selectedOptions = _c[0], setSelectedOptions = _c[1];
-    var _d = (0, react_1.useState)([]), personalDetails = _d[0], setPersonalDetails = _d[1];
-    var _e = (0, react_1.useState)([]), usersToInvite = _e[0], setUsersToInvite = _e[1];
-    var _f = (0, react_1.useState)(false), didScreenTransitionEnd = _f[0], setDidScreenTransitionEnd = _f[1];
-    var isSearchingForReports = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true })[0];
-    var countryCode = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false })[0];
-    var firstRenderRef = (0, react_1.useRef)(true);
-    var betas = (0, useOnyx_1.default)(ONYXKEYS_1.default.BETAS, { canBeMissing: false })[0];
-    var invitedEmailsToAccountIDsDraft = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.WORKSPACE_INVITE_MEMBERS_DRAFT).concat(route.params.policyID.toString()), { canBeMissing: true })[0];
-    var openWorkspaceInvitePage = function () {
-        var policyMemberEmailsToAccountIDs = (0, PolicyUtils_1.getMemberAccountIDsForWorkspace)(policy === null || policy === void 0 ? void 0 : policy.employeeList);
+const react_1 = require("react");
+const FormAlertWithSubmitButton_1 = require("@components/FormAlertWithSubmitButton");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const OptionListContextProvider_1 = require("@components/OptionListContextProvider");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SelectionList_1 = require("@components/SelectionList");
+const InviteMemberListItem_1 = require("@components/SelectionList/InviteMemberListItem");
+const withNavigationTransitionEnd_1 = require("@components/withNavigationTransitionEnd");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Member_1 = require("@libs/actions/Policy/Member");
+const Policy_1 = require("@libs/actions/Policy/Policy");
+const Report_1 = require("@libs/actions/Report");
+const types_1 = require("@libs/API/types");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const HttpUtils_1 = require("@libs/HttpUtils");
+const LoginUtils_1 = require("@libs/LoginUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const OptionsListUtils_1 = require("@libs/OptionsListUtils");
+const PhoneNumber_1 = require("@libs/PhoneNumber");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const AccessOrNotFoundWrapper_1 = require("./AccessOrNotFoundWrapper");
+const withPolicyAndFullscreenLoading_1 = require("./withPolicyAndFullscreenLoading");
+function WorkspaceInvitePage({ route, policy }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [searchTerm, debouncedSearchTerm, setSearchTerm] = (0, useDebouncedState_1.default)('');
+    const [selectedOptions, setSelectedOptions] = (0, react_1.useState)([]);
+    const [personalDetails, setPersonalDetails] = (0, react_1.useState)([]);
+    const [usersToInvite, setUsersToInvite] = (0, react_1.useState)([]);
+    const [didScreenTransitionEnd, setDidScreenTransitionEnd] = (0, react_1.useState)(false);
+    const [isSearchingForReports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_SEARCHING_FOR_REPORTS, { initWithStoredValues: false, canBeMissing: true });
+    const [countryCode] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COUNTRY_CODE, { canBeMissing: false });
+    const firstRenderRef = (0, react_1.useRef)(true);
+    const [betas] = (0, useOnyx_1.default)(ONYXKEYS_1.default.BETAS, { canBeMissing: false });
+    const [invitedEmailsToAccountIDsDraft] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.WORKSPACE_INVITE_MEMBERS_DRAFT}${route.params.policyID.toString()}`, { canBeMissing: true });
+    const openWorkspaceInvitePage = () => {
+        const policyMemberEmailsToAccountIDs = (0, PolicyUtils_1.getMemberAccountIDsForWorkspace)(policy?.employeeList);
         (0, Policy_1.openWorkspaceInvitePage)(route.params.policyID, Object.keys(policyMemberEmailsToAccountIDs));
     };
-    var _g = (0, OptionListContextProvider_1.useOptionsList)({
+    const { options, areOptionsInitialized } = (0, OptionListContextProvider_1.useOptionsList)({
         shouldInitialize: didScreenTransitionEnd,
-    }), options = _g.options, areOptionsInitialized = _g.areOptionsInitialized;
-    (0, react_1.useEffect)(function () {
+    });
+    (0, react_1.useEffect)(() => {
         (0, Policy_1.clearErrors)(route.params.policyID);
         openWorkspaceInvitePage();
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- policyID changes remount the component
     }, []);
     (0, useNetwork_1.default)({ onReconnect: openWorkspaceInvitePage });
-    var excludedUsers = (0, react_1.useMemo)(function () {
-        var ineligibleInvites = (0, PolicyUtils_1.getIneligibleInvitees)(policy === null || policy === void 0 ? void 0 : policy.employeeList);
-        return ineligibleInvites.reduce(function (acc, login) {
+    const excludedUsers = (0, react_1.useMemo)(() => {
+        const ineligibleInvites = (0, PolicyUtils_1.getIneligibleInvitees)(policy?.employeeList);
+        return ineligibleInvites.reduce((acc, login) => {
             acc[login] = true;
             return acc;
         }, {});
-    }, [policy === null || policy === void 0 ? void 0 : policy.employeeList]);
-    var defaultOptions = (0, react_1.useMemo)(function () {
+    }, [policy?.employeeList]);
+    const defaultOptions = (0, react_1.useMemo)(() => {
         if (!areOptionsInitialized) {
             return { recentReports: [], personalDetails: [], userToInvite: null, currentUserOption: null };
         }
-        var inviteOptions = (0, OptionsListUtils_1.getMemberInviteOptions)(options.personalDetails, betas !== null && betas !== void 0 ? betas : [], excludedUsers, true);
-        return __assign(__assign({}, inviteOptions), { recentReports: [], currentUserOption: null });
+        const inviteOptions = (0, OptionsListUtils_1.getMemberInviteOptions)(options.personalDetails, betas ?? [], excludedUsers, true);
+        return { ...inviteOptions, recentReports: [], currentUserOption: null };
     }, [areOptionsInitialized, betas, excludedUsers, options.personalDetails]);
-    var inviteOptions = (0, react_1.useMemo)(function () { return (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchTerm, countryCode, { excludeLogins: excludedUsers }); }, [debouncedSearchTerm, defaultOptions, excludedUsers, countryCode]);
-    (0, react_1.useEffect)(function () {
+    const inviteOptions = (0, react_1.useMemo)(() => (0, OptionsListUtils_1.filterAndOrderOptions)(defaultOptions, debouncedSearchTerm, countryCode, { excludeLogins: excludedUsers }), [debouncedSearchTerm, defaultOptions, excludedUsers, countryCode]);
+    (0, react_1.useEffect)(() => {
         if (!areOptionsInitialized) {
             return;
         }
-        var newUsersToInviteDict = {};
-        var newPersonalDetailsDict = {};
-        var newSelectedOptionsDict = {};
+        const newUsersToInviteDict = {};
+        const newPersonalDetailsDict = {};
+        const newSelectedOptionsDict = {};
         // Update selectedOptions with the latest personalDetails and policyEmployeeList information
-        var detailsMap = {};
-        inviteOptions.personalDetails.forEach(function (detail) {
+        const detailsMap = {};
+        inviteOptions.personalDetails.forEach((detail) => {
             if (!detail.login) {
                 return;
             }
             detailsMap[detail.login] = (0, OptionsListUtils_1.formatMemberForList)(detail);
         });
-        var newSelectedOptions = [];
+        const newSelectedOptions = [];
         if (firstRenderRef.current) {
             // We only want to add the saved selected user on first render
             firstRenderRef.current = false;
-            Object.keys(invitedEmailsToAccountIDsDraft !== null && invitedEmailsToAccountIDsDraft !== void 0 ? invitedEmailsToAccountIDsDraft : {}).forEach(function (login) {
+            Object.keys(invitedEmailsToAccountIDsDraft ?? {}).forEach((login) => {
                 if (!(login in detailsMap)) {
                     return;
                 }
-                newSelectedOptions.push(__assign(__assign({}, detailsMap[login]), { isSelected: true }));
+                newSelectedOptions.push({ ...detailsMap[login], isSelected: true });
             });
         }
-        selectedOptions.forEach(function (option) {
-            newSelectedOptions.push(option.login && option.login in detailsMap ? __assign(__assign({}, detailsMap[option.login]), { isSelected: true }) : option);
+        selectedOptions.forEach((option) => {
+            newSelectedOptions.push(option.login && option.login in detailsMap ? { ...detailsMap[option.login], isSelected: true } : option);
         });
-        var userToInvite = inviteOptions.userToInvite;
+        const userToInvite = inviteOptions.userToInvite;
         // Only add the user to the invites list if it is valid
-        if (typeof (userToInvite === null || userToInvite === void 0 ? void 0 : userToInvite.accountID) === 'number') {
+        if (typeof userToInvite?.accountID === 'number') {
             newUsersToInviteDict[userToInvite.accountID] = userToInvite;
         }
         // Add all personal details to the new dict
-        inviteOptions.personalDetails.forEach(function (details) {
+        inviteOptions.personalDetails.forEach((details) => {
             if (typeof details.accountID !== 'number') {
                 return;
             }
             newPersonalDetailsDict[details.accountID] = details;
         });
         // Add all selected options to the new dict
-        newSelectedOptions.forEach(function (option) {
+        newSelectedOptions.forEach((option) => {
             if (typeof option.accountID !== 'number') {
                 return;
             }
@@ -145,21 +124,20 @@ function WorkspaceInvitePage(_a) {
         setPersonalDetails(Object.values(newPersonalDetailsDict));
         setSelectedOptions(Object.values(newSelectedOptionsDict));
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- we don't want to recalculate when selectedOptions change
-    }, [options.personalDetails, policy === null || policy === void 0 ? void 0 : policy.employeeList, betas, debouncedSearchTerm, excludedUsers, areOptionsInitialized, inviteOptions.personalDetails, inviteOptions.userToInvite]);
-    var sections = (0, react_1.useMemo)(function () {
-        var sectionsArr = [];
+    }, [options.personalDetails, policy?.employeeList, betas, debouncedSearchTerm, excludedUsers, areOptionsInitialized, inviteOptions.personalDetails, inviteOptions.userToInvite]);
+    const sections = (0, react_1.useMemo)(() => {
+        const sectionsArr = [];
         if (!areOptionsInitialized) {
             return [];
         }
         // Filter all options that is a part of the search term or in the personal details
-        var filterSelectedOptions = selectedOptions;
+        let filterSelectedOptions = selectedOptions;
         if (debouncedSearchTerm !== '') {
-            filterSelectedOptions = selectedOptions.filter(function (option) {
-                var _a, _b;
-                var accountID = option.accountID;
-                var isOptionInPersonalDetails = Object.values(personalDetails).some(function (personalDetail) { return personalDetail.accountID === accountID; });
-                var searchValue = (0, OptionsListUtils_1.getSearchValueForPhoneOrEmail)(debouncedSearchTerm, countryCode);
-                var isPartOfSearchTerm = !!((_a = option.text) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(searchValue)) || !!((_b = option.login) === null || _b === void 0 ? void 0 : _b.toLowerCase().includes(searchValue));
+            filterSelectedOptions = selectedOptions.filter((option) => {
+                const accountID = option.accountID;
+                const isOptionInPersonalDetails = Object.values(personalDetails).some((personalDetail) => personalDetail.accountID === accountID);
+                const searchValue = (0, OptionsListUtils_1.getSearchValueForPhoneOrEmail)(debouncedSearchTerm, countryCode);
+                const isPartOfSearchTerm = !!option.text?.toLowerCase().includes(searchValue) || !!option.login?.toLowerCase().includes(searchValue);
                 return isPartOfSearchTerm || isOptionInPersonalDetails;
             });
         }
@@ -169,22 +147,16 @@ function WorkspaceInvitePage(_a) {
             shouldShow: true,
         });
         // Filtering out selected users from the search results
-        var selectedLogins = selectedOptions.map(function (_a) {
-            var login = _a.login;
-            return login;
-        });
-        var personalDetailsWithoutSelected = Object.values(personalDetails).filter(function (_a) {
-            var login = _a.login;
-            return !selectedLogins.some(function (selectedLogin) { return selectedLogin === login; });
-        });
-        var personalDetailsFormatted = personalDetailsWithoutSelected.map(function (item) { return (0, OptionsListUtils_1.formatMemberForList)(item); });
+        const selectedLogins = selectedOptions.map(({ login }) => login);
+        const personalDetailsWithoutSelected = Object.values(personalDetails).filter(({ login }) => !selectedLogins.some((selectedLogin) => selectedLogin === login));
+        const personalDetailsFormatted = personalDetailsWithoutSelected.map((item) => (0, OptionsListUtils_1.formatMemberForList)(item));
         sectionsArr.push({
             title: translate('common.contacts'),
             data: personalDetailsFormatted,
             shouldShow: !(0, EmptyObject_1.isEmptyObject)(personalDetailsFormatted),
         });
-        Object.values(usersToInvite).forEach(function (userToInvite) {
-            var hasUnselectedUserToInvite = !selectedLogins.some(function (selectedLogin) { return selectedLogin === userToInvite.login; });
+        Object.values(usersToInvite).forEach((userToInvite) => {
+            const hasUnselectedUserToInvite = !selectedLogins.some((selectedLogin) => selectedLogin === userToInvite.login);
             if (hasUnselectedUserToInvite) {
                 sectionsArr.push({
                     title: undefined,
@@ -195,34 +167,33 @@ function WorkspaceInvitePage(_a) {
         });
         return sectionsArr;
     }, [areOptionsInitialized, selectedOptions, debouncedSearchTerm, personalDetails, translate, usersToInvite, countryCode]);
-    var toggleOption = function (option) {
+    const toggleOption = (option) => {
         (0, Policy_1.clearErrors)(route.params.policyID);
-        var isOptionInList = selectedOptions.some(function (selectedOption) { return selectedOption.login === option.login; });
-        var newSelectedOptions;
+        const isOptionInList = selectedOptions.some((selectedOption) => selectedOption.login === option.login);
+        let newSelectedOptions;
         if (isOptionInList) {
-            newSelectedOptions = selectedOptions.filter(function (selectedOption) { return selectedOption.login !== option.login; });
+            newSelectedOptions = selectedOptions.filter((selectedOption) => selectedOption.login !== option.login);
         }
         else {
-            newSelectedOptions = __spreadArray(__spreadArray([], selectedOptions, true), [__assign(__assign({}, option), { isSelected: true })], false);
+            newSelectedOptions = [...selectedOptions, { ...option, isSelected: true }];
         }
         setSelectedOptions(newSelectedOptions);
     };
-    var inviteUser = (0, react_1.useCallback)(function () {
-        var errors = {};
+    const inviteUser = (0, react_1.useCallback)(() => {
+        const errors = {};
         if (selectedOptions.length <= 0) {
             errors.noUserSelected = 'true';
         }
         (0, Policy_1.setWorkspaceErrors)(route.params.policyID, errors);
-        var isValid = (0, EmptyObject_1.isEmptyObject)(errors);
+        const isValid = (0, EmptyObject_1.isEmptyObject)(errors);
         if (!isValid) {
             return;
         }
         HttpUtils_1.default.cancelPendingRequests(types_1.READ_COMMANDS.SEARCH_FOR_REPORTS);
-        var invitedEmailsToAccountIDs = {};
-        selectedOptions.forEach(function (option) {
-            var _a, _b;
-            var login = (_a = option.login) !== null && _a !== void 0 ? _a : '';
-            var accountID = (_b = option.accountID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID;
+        const invitedEmailsToAccountIDs = {};
+        selectedOptions.forEach((option) => {
+            const login = option.login ?? '';
+            const accountID = option.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID;
             if (!login.toLowerCase().trim() || !accountID) {
                 return;
             }
@@ -231,9 +202,9 @@ function WorkspaceInvitePage(_a) {
         (0, Member_1.setWorkspaceInviteMembersDraft)(route.params.policyID, invitedEmailsToAccountIDs);
         Navigation_1.default.navigate(ROUTES_1.default.WORKSPACE_INVITE_MESSAGE.getRoute(route.params.policyID, Navigation_1.default.getActiveRoute()));
     }, [route.params.policyID, selectedOptions]);
-    var _h = (0, react_1.useMemo)(function () { var _a; return [(_a = policy === null || policy === void 0 ? void 0 : policy.name) !== null && _a !== void 0 ? _a : '', !(0, EmptyObject_1.isEmptyObject)(policy === null || policy === void 0 ? void 0 : policy.errors) || !!(policy === null || policy === void 0 ? void 0 : policy.alertMessage)]; }, [policy]), policyName = _h[0], shouldShowAlertPrompt = _h[1];
-    var headerMessage = (0, react_1.useMemo)(function () {
-        var searchValue = debouncedSearchTerm.trim().toLowerCase();
+    const [policyName, shouldShowAlertPrompt] = (0, react_1.useMemo)(() => [policy?.name ?? '', !(0, EmptyObject_1.isEmptyObject)(policy?.errors) || !!policy?.alertMessage], [policy]);
+    const headerMessage = (0, react_1.useMemo)(() => {
+        const searchValue = debouncedSearchTerm.trim().toLowerCase();
         if (usersToInvite.length === 0 && CONST_1.default.EXPENSIFY_EMAILS_OBJECT[searchValue]) {
             return translate('messages.errorMessageInvalidEmail');
         }
@@ -243,20 +214,17 @@ function WorkspaceInvitePage(_a) {
         }
         return (0, OptionsListUtils_1.getHeaderMessage)(personalDetails.length !== 0, usersToInvite.length > 0, searchValue);
     }, [excludedUsers, translate, debouncedSearchTerm, policyName, usersToInvite, personalDetails.length]);
-    var footerContent = (0, react_1.useMemo)(function () {
-        var _a;
-        return (<FormAlertWithSubmitButton_1.default isDisabled={!selectedOptions.length} isAlertVisible={shouldShowAlertPrompt} buttonText={translate('common.next')} onSubmit={inviteUser} message={(_a = policy === null || policy === void 0 ? void 0 : policy.alertMessage) !== null && _a !== void 0 ? _a : ''} containerStyles={[styles.flexReset, styles.flexGrow0, styles.flexShrink0, styles.flexBasisAuto]} enabledWhenOffline/>);
-    }, [inviteUser, policy === null || policy === void 0 ? void 0 : policy.alertMessage, selectedOptions.length, shouldShowAlertPrompt, styles.flexBasisAuto, styles.flexGrow0, styles.flexReset, styles.flexShrink0, translate]);
-    (0, react_1.useEffect)(function () {
+    const footerContent = (0, react_1.useMemo)(() => (<FormAlertWithSubmitButton_1.default isDisabled={!selectedOptions.length} isAlertVisible={shouldShowAlertPrompt} buttonText={translate('common.next')} onSubmit={inviteUser} message={policy?.alertMessage ?? ''} containerStyles={[styles.flexReset, styles.flexGrow0, styles.flexShrink0, styles.flexBasisAuto]} enabledWhenOffline/>), [inviteUser, policy?.alertMessage, selectedOptions.length, shouldShowAlertPrompt, styles.flexBasisAuto, styles.flexGrow0, styles.flexReset, styles.flexShrink0, translate]);
+    (0, react_1.useEffect)(() => {
         (0, Report_1.searchInServer)(debouncedSearchTerm);
     }, [debouncedSearchTerm]);
     return (<AccessOrNotFoundWrapper_1.default policyID={route.params.policyID} accessVariants={[CONST_1.default.POLICY.ACCESS_VARIANTS.ADMIN]} fullPageNotFoundViewProps={{ subtitleKey: (0, EmptyObject_1.isEmptyObject)(policy) ? undefined : 'workspace.common.notAuthorized', onLinkPress: PolicyUtils_1.goBackFromInvalidPolicy }}>
-            <ScreenWrapper_1.default shouldEnableMaxHeight shouldUseCachedViewportHeight testID={WorkspaceInvitePage.displayName} enableEdgeToEdgeBottomSafeAreaPadding onEntryTransitionEnd={function () { return setDidScreenTransitionEnd(true); }}>
-                <HeaderWithBackButton_1.default title={translate('workspace.invite.invitePeople')} subtitle={policyName} onBackButtonPress={function () {
+            <ScreenWrapper_1.default shouldEnableMaxHeight shouldUseCachedViewportHeight testID={WorkspaceInvitePage.displayName} enableEdgeToEdgeBottomSafeAreaPadding onEntryTransitionEnd={() => setDidScreenTransitionEnd(true)}>
+                <HeaderWithBackButton_1.default title={translate('workspace.invite.invitePeople')} subtitle={policyName} onBackButtonPress={() => {
             (0, Policy_1.clearErrors)(route.params.policyID);
             Navigation_1.default.goBack();
         }}/>
-                <SelectionList_1.default canSelectMultiple sections={sections} ListItem={InviteMemberListItem_1.default} textInputLabel={translate('selectionList.nameEmailOrPhoneNumber')} textInputValue={searchTerm} onChangeText={function (value) {
+                <SelectionList_1.default canSelectMultiple sections={sections} ListItem={InviteMemberListItem_1.default} textInputLabel={translate('selectionList.nameEmailOrPhoneNumber')} textInputValue={searchTerm} onChangeText={(value) => {
             setSearchTerm(value);
         }} headerMessage={headerMessage} onSelectRow={toggleOption} onConfirm={inviteUser} showScrollIndicator showLoadingPlaceholder={!areOptionsInitialized || !didScreenTransitionEnd} shouldPreventDefaultFocusOnSelectRow={!(0, DeviceCapabilities_1.canUseTouchScreen)()} footerContent={footerContent} isLoadingNewOptions={!!isSearchingForReports} addBottomSafeAreaPadding/>
             </ScreenWrapper_1.default>

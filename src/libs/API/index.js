@@ -1,26 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.write = write;
 exports.makeRequestWithSideEffects = makeRequestWithSideEffects;
@@ -28,19 +6,19 @@ exports.read = read;
 exports.paginate = paginate;
 exports.writeWithNoDuplicatesConflictAction = writeWithNoDuplicatesConflictAction;
 exports.writeWithNoDuplicatesEnableFeatureConflicts = writeWithNoDuplicatesEnableFeatureConflicts;
-var react_native_onyx_1 = require("react-native-onyx");
-var RequestConflictUtils_1 = require("@libs/actions/RequestConflictUtils");
-var Log_1 = require("@libs/Log");
-var Middleware_1 = require("@libs/Middleware");
-var NetworkStore_1 = require("@libs/Network/NetworkStore");
-var SequentialQueue_1 = require("@libs/Network/SequentialQueue");
-var OptimisticReportNames = require("@libs/OptimisticReportNames");
-var OptimisticReportNamesConnectionManager_1 = require("@libs/OptimisticReportNamesConnectionManager");
-var Pusher_1 = require("@libs/Pusher");
-var Request_1 = require("@libs/Request");
-var PersistedRequests_1 = require("@userActions/PersistedRequests");
-var CONST_1 = require("@src/CONST");
-var types_1 = require("./types");
+const react_native_onyx_1 = require("react-native-onyx");
+const RequestConflictUtils_1 = require("@libs/actions/RequestConflictUtils");
+const Log_1 = require("@libs/Log");
+const Middleware_1 = require("@libs/Middleware");
+const NetworkStore_1 = require("@libs/Network/NetworkStore");
+const SequentialQueue_1 = require("@libs/Network/SequentialQueue");
+const OptimisticReportNames = require("@libs/OptimisticReportNames");
+const OptimisticReportNamesConnectionManager_1 = require("@libs/OptimisticReportNamesConnectionManager");
+const Pusher_1 = require("@libs/Pusher");
+const Request_1 = require("@libs/Request");
+const PersistedRequests_1 = require("@userActions/PersistedRequests");
+const CONST_1 = require("@src/CONST");
+const types_1 = require("./types");
 // Setup API middlewares. Each request made will pass through a series of middleware functions that will get called in sequence (each one passing the result of the previous to the next).
 // Note: The ordering here is intentional as we want to Log, Recheck Connection, Reauthenticate, and Save the Response in Onyx. Errors thrown in one middleware will bubble to the next.
 // e.g. an error thrown in Logging or Reauthenticate logic will be caught by the next middleware or the SequentialQueue which retries failing requests.
@@ -59,26 +37,24 @@ var types_1 = require("./types");
 // middlewares after this, because the SequentialQueue depends on the result of this middleware to pause the queue (if needed) to bring the app to an up-to-date state.
 (0, Request_1.use)(Middleware_1.SaveResponseInOnyx);
 // Initialize OptimisticReportNames context on module load
-(0, OptimisticReportNamesConnectionManager_1.initialize)().catch(function () {
+(0, OptimisticReportNamesConnectionManager_1.initialize)().catch(() => {
     Log_1.default.warn('Failed to initialize OptimisticReportNames context');
 });
-var requestIndex = 0;
+let requestIndex = 0;
 /**
  * Prepare the request to be sent. Bind data together with request metadata and apply optimistic Onyx data.
  */
-function prepareRequest(command, type, params, onyxData, conflictResolver) {
-    if (onyxData === void 0) { onyxData = {}; }
-    if (conflictResolver === void 0) { conflictResolver = {}; }
-    Log_1.default.info('[API] Preparing request', false, { command: command, type: type });
-    var shouldApplyOptimisticData = true;
-    if (conflictResolver === null || conflictResolver === void 0 ? void 0 : conflictResolver.checkAndFixConflictingRequest) {
-        var requests = (0, PersistedRequests_1.getAll)();
-        var conflictAction = conflictResolver.checkAndFixConflictingRequest(requests).conflictAction;
+function prepareRequest(command, type, params, onyxData = {}, conflictResolver = {}) {
+    Log_1.default.info('[API] Preparing request', false, { command, type });
+    let shouldApplyOptimisticData = true;
+    if (conflictResolver?.checkAndFixConflictingRequest) {
+        const requests = (0, PersistedRequests_1.getAll)();
+        const { conflictAction } = conflictResolver.checkAndFixConflictingRequest(requests);
         shouldApplyOptimisticData = conflictAction.type !== 'noAction';
     }
-    var optimisticData = onyxData.optimisticData, onyxDataWithoutOptimisticData = __rest(onyxData, ["optimisticData"]);
+    const { optimisticData, ...onyxDataWithoutOptimisticData } = onyxData;
     if (optimisticData && shouldApplyOptimisticData) {
-        Log_1.default.info('[API] Applying optimistic data', false, { command: command, type: type });
+        Log_1.default.info('[API] Applying optimistic data', false, { command, type });
         // Process optimistic data through report name middleware
         // Skip for OpenReport command to avoid unnecessary processing
         if (command === types_1.WRITE_COMMANDS.OPEN_REPORT) {
@@ -86,30 +62,40 @@ function prepareRequest(command, type, params, onyxData, conflictResolver) {
         }
         else {
             try {
-                var context = (0, OptimisticReportNamesConnectionManager_1.getUpdateContext)();
-                var processedOptimisticData = OptimisticReportNames.updateOptimisticReportNamesFromUpdates(optimisticData, context);
+                const context = (0, OptimisticReportNamesConnectionManager_1.getUpdateContext)();
+                const processedOptimisticData = OptimisticReportNames.updateOptimisticReportNamesFromUpdates(optimisticData, context);
                 react_native_onyx_1.default.update(processedOptimisticData);
             }
             catch (error) {
-                Log_1.default.hmmm('[API] Failed to process optimistic report names', { error: error });
+                Log_1.default.hmmm('[API] Failed to process optimistic report names', { error });
                 // Fallback to original optimistic data if processing fails
                 react_native_onyx_1.default.update(optimisticData);
             }
         }
     }
-    var isWriteRequest = type === CONST_1.default.API_REQUEST_TYPE.WRITE;
-    var pusherSocketID = Pusher_1.default.getPusherSocketID();
+    const isWriteRequest = type === CONST_1.default.API_REQUEST_TYPE.WRITE;
+    let pusherSocketID = Pusher_1.default.getPusherSocketID();
     if (pusherSocketID === 'null' && isWriteRequest) {
-        Log_1.default.alert("Pusher socket ID is 'null'. This should not happen.", { command: command, pusherSocketID: pusherSocketID }, true);
+        Log_1.default.alert("Pusher socket ID is 'null'. This should not happen.", { command, pusherSocketID }, true);
         pusherSocketID = undefined;
     }
     // Prepare the data we'll send to the API
-    var data = __assign(__assign({}, params), { apiRequestType: type, 
+    const data = {
+        ...params,
+        apiRequestType: type,
         // We send the pusherSocketID with all write requests so that the api can include it in push events to prevent Pusher from sending the events to the requesting client. The push event
         // is sent back to the requesting client in the response data instead, which prevents a replay effect in the UI. See https://github.com/Expensify/App/issues/12775.
-        pusherSocketID: isWriteRequest ? pusherSocketID : undefined });
+        pusherSocketID: isWriteRequest ? pusherSocketID : undefined,
+    };
     // Assemble all request metadata (used by middlewares, and for persisted requests stored in Onyx)
-    var request = __assign(__assign({ command: command, data: data, initiatedOffline: (0, NetworkStore_1.isOffline)(), requestID: requestIndex++ }, onyxDataWithoutOptimisticData), conflictResolver);
+    const request = {
+        command,
+        data,
+        initiatedOffline: (0, NetworkStore_1.isOffline)(),
+        requestID: requestIndex++,
+        ...onyxDataWithoutOptimisticData,
+        ...conflictResolver,
+    };
     if (isWriteRequest) {
         // This should be removed once we are no longer using deprecatedAPI https://github.com/Expensify/Expensify/issues/215650
         request.data.shouldRetry = true;
@@ -138,22 +124,18 @@ function processRequest(request, type) {
  * All calls to API.write() will be persisted to disk as JSON with the params, successData, and failureData (or finallyData, if included in place of the former two values).
  * This is so that if the network is unavailable or the app is closed, we can send the WRITE request later.
  */
-function write(command, apiCommandParameters, onyxData, conflictResolver) {
-    if (onyxData === void 0) { onyxData = {}; }
-    if (conflictResolver === void 0) { conflictResolver = {}; }
-    Log_1.default.info('[API] Called API write', false, __assign({ command: command }, apiCommandParameters));
-    var request = prepareRequest(command, CONST_1.default.API_REQUEST_TYPE.WRITE, apiCommandParameters, onyxData, conflictResolver);
+function write(command, apiCommandParameters, onyxData = {}, conflictResolver = {}) {
+    Log_1.default.info('[API] Called API write', false, { command, ...apiCommandParameters });
+    const request = prepareRequest(command, CONST_1.default.API_REQUEST_TYPE.WRITE, apiCommandParameters, onyxData, conflictResolver);
     return processRequest(request, CONST_1.default.API_REQUEST_TYPE.WRITE);
 }
 /**
  * This function is used to write data to the API while ensuring that there are no duplicate requests in the queue.
  * If a duplicate request is found, it resolves the conflict by replacing the duplicated request with the new one.
  */
-function writeWithNoDuplicatesConflictAction(command, apiCommandParameters, onyxData, requestMatcher) {
-    if (onyxData === void 0) { onyxData = {}; }
-    if (requestMatcher === void 0) { requestMatcher = function (request) { return request.command === command; }; }
-    var conflictResolver = {
-        checkAndFixConflictingRequest: function (persistedRequests) { return (0, RequestConflictUtils_1.resolveDuplicationConflictAction)(persistedRequests, requestMatcher); },
+function writeWithNoDuplicatesConflictAction(command, apiCommandParameters, onyxData = {}, requestMatcher = (request) => request.command === command) {
+    const conflictResolver = {
+        checkAndFixConflictingRequest: (persistedRequests) => (0, RequestConflictUtils_1.resolveDuplicationConflictAction)(persistedRequests, requestMatcher),
     };
     return write(command, apiCommandParameters, onyxData, conflictResolver);
 }
@@ -161,10 +143,9 @@ function writeWithNoDuplicatesConflictAction(command, apiCommandParameters, onyx
  * This function is used to write data to the API while ensuring that there are no conflicts with enabling policy features.
  * If a conflict is found, it resolves the conflict by deleting the duplicated request.
  */
-function writeWithNoDuplicatesEnableFeatureConflicts(command, apiCommandParameters, onyxData) {
-    if (onyxData === void 0) { onyxData = {}; }
-    var conflictResolver = {
-        checkAndFixConflictingRequest: function (persistedRequests) { return (0, RequestConflictUtils_1.resolveEnableFeatureConflicts)(command, persistedRequests, apiCommandParameters); },
+function writeWithNoDuplicatesEnableFeatureConflicts(command, apiCommandParameters, onyxData = {}) {
+    const conflictResolver = {
+        checkAndFixConflictingRequest: (persistedRequests) => (0, RequestConflictUtils_1.resolveEnableFeatureConflicts)(command, persistedRequests, apiCommandParameters),
     };
     return write(command, apiCommandParameters, onyxData, conflictResolver);
 }
@@ -176,10 +157,9 @@ function writeWithNoDuplicatesEnableFeatureConflicts(command, apiCommandParamete
  * Using this method is discouraged and will throw an ESLint error. Use it sparingly and only when all other alternatives have been exhausted.
  * It is best to discuss it in Slack anytime you are tempted to use this method.
  */
-function makeRequestWithSideEffects(command, apiCommandParameters, onyxData) {
-    if (onyxData === void 0) { onyxData = {}; }
-    Log_1.default.info('[API] Called API makeRequestWithSideEffects', false, __assign({ command: command }, apiCommandParameters));
-    var request = prepareRequest(command, CONST_1.default.API_REQUEST_TYPE.MAKE_REQUEST_WITH_SIDE_EFFECTS, apiCommandParameters, onyxData);
+function makeRequestWithSideEffects(command, apiCommandParameters, onyxData = {}) {
+    Log_1.default.info('[API] Called API makeRequestWithSideEffects', false, { command, ...apiCommandParameters });
+    const request = prepareRequest(command, CONST_1.default.API_REQUEST_TYPE.MAKE_REQUEST_WITH_SIDE_EFFECTS, apiCommandParameters, onyxData);
     // Return a promise containing the response from HTTPS
     return processRequest(request, CONST_1.default.API_REQUEST_TYPE.MAKE_REQUEST_WITH_SIDE_EFFECTS);
 }
@@ -190,33 +170,35 @@ function makeRequestWithSideEffects(command, apiCommandParameters, onyxData) {
  */
 function waitForWrites(command) {
     if ((0, PersistedRequests_1.getLength)() > 0) {
-        Log_1.default.info("[API] '".concat(command, "' is waiting on ").concat((0, PersistedRequests_1.getLength)(), " write commands"));
+        Log_1.default.info(`[API] '${command}' is waiting on ${(0, PersistedRequests_1.getLength)()} write commands`);
     }
     return (0, SequentialQueue_1.waitForIdle)();
 }
 /**
  * Requests made with this method are not be persisted to disk. If there is no network connectivity, the request is ignored and discarded.
  */
-function read(command, apiCommandParameters, onyxData) {
-    if (onyxData === void 0) { onyxData = {}; }
-    Log_1.default.info('[API] Called API.read', false, __assign({ command: command }, apiCommandParameters));
+function read(command, apiCommandParameters, onyxData = {}) {
+    Log_1.default.info('[API] Called API.read', false, { command, ...apiCommandParameters });
     // Apply optimistic updates of read requests immediately
-    var request = prepareRequest(command, CONST_1.default.API_REQUEST_TYPE.READ, apiCommandParameters, onyxData);
+    const request = prepareRequest(command, CONST_1.default.API_REQUEST_TYPE.READ, apiCommandParameters, onyxData);
     // Sign in with shortLivedAuthToken command shouldn't be blocked by write commands
     if (command === types_1.READ_COMMANDS.SIGN_IN_WITH_SHORT_LIVED_AUTH_TOKEN || command === types_1.READ_COMMANDS.SIGN_IN_WITH_SUPPORT_AUTH_TOKEN) {
         processRequest(request, CONST_1.default.API_REQUEST_TYPE.READ);
         return;
     }
-    waitForWrites(command).then(function () {
+    waitForWrites(command).then(() => {
         processRequest(request, CONST_1.default.API_REQUEST_TYPE.READ);
     });
 }
-function paginate(type, command, apiCommandParameters, onyxData, config, conflictResolver) {
-    if (conflictResolver === void 0) { conflictResolver = {}; }
-    Log_1.default.info('[API] Called API.paginate', false, __assign({ command: command }, apiCommandParameters));
-    var request = __assign(__assign(__assign({}, prepareRequest(command, type, apiCommandParameters, onyxData, conflictResolver)), config), {
-        isPaginated: true,
-    });
+function paginate(type, command, apiCommandParameters, onyxData, config, conflictResolver = {}) {
+    Log_1.default.info('[API] Called API.paginate', false, { command, ...apiCommandParameters });
+    const request = {
+        ...prepareRequest(command, type, apiCommandParameters, onyxData, conflictResolver),
+        ...config,
+        ...{
+            isPaginated: true,
+        },
+    };
     switch (type) {
         case CONST_1.default.API_REQUEST_TYPE.WRITE:
             processRequest(request, type);
@@ -224,7 +206,7 @@ function paginate(type, command, apiCommandParameters, onyxData, config, conflic
         case CONST_1.default.API_REQUEST_TYPE.MAKE_REQUEST_WITH_SIDE_EFFECTS:
             return processRequest(request, type);
         case CONST_1.default.API_REQUEST_TYPE.READ:
-            waitForWrites(command).then(function () { return processRequest(request, type); });
+            waitForWrites(command).then(() => processRequest(request, type));
             return;
         default:
             throw new Error('Unknown API request type');

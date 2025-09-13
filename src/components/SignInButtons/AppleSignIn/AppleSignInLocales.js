@@ -1,12 +1,11 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var LOCALES_1 = require("@src/CONST/LOCALES");
+const LOCALES_1 = require("@src/CONST/LOCALES");
 /**
  * The set of locales supported by Apple Sign In.
  * Reference: https://developer.apple.com/documentation/signinwithapple/incorporating-sign-in-with-apple-into-other-platforms
  */
-var APPLE_SIGN_IN_LOCALES = {
+const APPLE_SIGN_IN_LOCALES = {
     ar_SA: 'ar_SA',
     ca_ES: 'ca_ES',
     cs_CZ: 'cs_CZ',
@@ -45,16 +44,16 @@ var APPLE_SIGN_IN_LOCALES = {
     zh_HK: 'zh_HK',
     zh_TW: 'zh_TW',
 };
-var MAP_EXFY_LOCALE_TO_APPLE_LOCALE = (_a = {},
-    _a[LOCALES_1.LOCALES.DE] = APPLE_SIGN_IN_LOCALES.de_DE,
-    _a[LOCALES_1.LOCALES.EN] = APPLE_SIGN_IN_LOCALES.en_US,
-    _a[LOCALES_1.LOCALES.ES] = APPLE_SIGN_IN_LOCALES.es_ES,
-    _a[LOCALES_1.LOCALES.FR] = APPLE_SIGN_IN_LOCALES.fr_FR,
-    _a[LOCALES_1.LOCALES.IT] = APPLE_SIGN_IN_LOCALES.it_IT,
-    _a[LOCALES_1.LOCALES.JA] = APPLE_SIGN_IN_LOCALES.ja_JP,
-    _a[LOCALES_1.LOCALES.NL] = APPLE_SIGN_IN_LOCALES.nl_NL,
-    _a[LOCALES_1.LOCALES.PL] = APPLE_SIGN_IN_LOCALES.pl_PL,
-    _a[LOCALES_1.LOCALES.PT_BR] = APPLE_SIGN_IN_LOCALES.pt_BR,
-    _a[LOCALES_1.LOCALES.ZH_HANS] = APPLE_SIGN_IN_LOCALES.zh_CN,
-    _a);
+const MAP_EXFY_LOCALE_TO_APPLE_LOCALE = {
+    [LOCALES_1.LOCALES.DE]: APPLE_SIGN_IN_LOCALES.de_DE,
+    [LOCALES_1.LOCALES.EN]: APPLE_SIGN_IN_LOCALES.en_US,
+    [LOCALES_1.LOCALES.ES]: APPLE_SIGN_IN_LOCALES.es_ES,
+    [LOCALES_1.LOCALES.FR]: APPLE_SIGN_IN_LOCALES.fr_FR,
+    [LOCALES_1.LOCALES.IT]: APPLE_SIGN_IN_LOCALES.it_IT,
+    [LOCALES_1.LOCALES.JA]: APPLE_SIGN_IN_LOCALES.ja_JP,
+    [LOCALES_1.LOCALES.NL]: APPLE_SIGN_IN_LOCALES.nl_NL,
+    [LOCALES_1.LOCALES.PL]: APPLE_SIGN_IN_LOCALES.pl_PL,
+    [LOCALES_1.LOCALES.PT_BR]: APPLE_SIGN_IN_LOCALES.pt_BR,
+    [LOCALES_1.LOCALES.ZH_HANS]: APPLE_SIGN_IN_LOCALES.zh_CN,
+};
 exports.default = MAP_EXFY_LOCALE_TO_APPLE_LOCALE;

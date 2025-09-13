@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var variables_1 = require("@styles/variables");
-var IMAGE_TYPES = ['jpg', 'jpeg', 'png'];
-var MAX_IMAGE_HEIGHT = 180;
-var MAX_IMAGE_WIDTH = 340;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const variables_1 = require("@styles/variables");
+const IMAGE_TYPES = ['jpg', 'jpeg', 'png'];
+const MAX_IMAGE_HEIGHT = 180;
+const MAX_IMAGE_WIDTH = 340;
 function filterNonUniqueLinks(linkMetadata) {
-    var linksMap = new Map();
-    var result = [];
-    linkMetadata.forEach(function (item) {
+    const linksMap = new Map();
+    const result = [];
+    linkMetadata.forEach((item) => {
         if (!item.url || linksMap.has(item.url)) {
             return;
         }
@@ -23,19 +23,18 @@ function filterNonUniqueLinks(linkMetadata) {
     });
     return result;
 }
-function LinkPreviewer(_a) {
-    var _b = _a.linkMetadata, linkMetadata = _b === void 0 ? [] : _b, _c = _a.maxAmountOfPreviews, maxAmountOfPreviews = _c === void 0 ? -1 : _c;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var uniqueLinks = filterNonUniqueLinks(linkMetadata);
-    var maxAmountOfLinks = maxAmountOfPreviews >= 0 ? Math.min(maxAmountOfPreviews, linkMetadata.length) : linkMetadata.length;
-    var linksToShow = uniqueLinks.slice(0, maxAmountOfLinks);
-    return linksToShow.map(function (linkData) {
+function LinkPreviewer({ linkMetadata = [], maxAmountOfPreviews = -1 }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const uniqueLinks = filterNonUniqueLinks(linkMetadata);
+    const maxAmountOfLinks = maxAmountOfPreviews >= 0 ? Math.min(maxAmountOfPreviews, linkMetadata.length) : linkMetadata.length;
+    const linksToShow = uniqueLinks.slice(0, maxAmountOfLinks);
+    return linksToShow.map((linkData) => {
         if (!linkData && Array.isArray(linkData)) {
             return;
         }
-        var description = linkData.description, image = linkData.image, title = linkData.title, logo = linkData.logo, publisher = linkData.publisher, url = linkData.url;
+        const { description, image, title, logo, publisher, url } = linkData;
         return (<react_native_1.View style={styles.linkPreviewWrapper} key={url}>
                 <react_native_1.View style={styles.flexRow}>
                     {!!logo && (<react_native_1.Image style={styles.linkPreviewLogoImage} source={{ uri: logo.url }}/>)}
@@ -47,7 +46,7 @@ function LinkPreviewer(_a) {
                         {title}
                     </TextLink_1.default>)}
                 {!!description && <Text_1.default fontSize={variables_1.default.fontSizeNormal}>{description}</Text_1.default>}
-                {!!(image === null || image === void 0 ? void 0 : image.type) && IMAGE_TYPES.includes(image.type) && !!image.width && !!image.height && (<react_native_1.Image style={[
+                {!!image?.type && IMAGE_TYPES.includes(image.type) && !!image.width && !!image.height && (<react_native_1.Image style={[
                     styles.linkPreviewImage,
                     {
                         aspectRatio: image.width / image.height,

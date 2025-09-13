@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var expensify_common_1 = require("expensify-common");
-var StringUtils_1 = require("./StringUtils");
-var getStyledTextArray = function (name, prefix) {
-    var texts = [];
-    var prefixLowercase = prefix.toLowerCase();
-    var prefixLocation = StringUtils_1.default.normalizeAccents(name)
+const expensify_common_1 = require("expensify-common");
+const StringUtils_1 = require("./StringUtils");
+const getStyledTextArray = (name, prefix) => {
+    const texts = [];
+    const prefixLowercase = prefix.toLowerCase();
+    const prefixLocation = StringUtils_1.default.normalizeAccents(name)
         .toLowerCase()
         .search(expensify_common_1.Str.escapeForRegExp(StringUtils_1.default.normalizeAccents(prefixLowercase)));
     if (prefixLocation === 0 && prefix.length === name.length) {

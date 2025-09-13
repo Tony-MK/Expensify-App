@@ -10,19 +10,19 @@ exports.areEmailsFromSamePrivateDomain = areEmailsFromSamePrivateDomain;
 exports.postSAMLLogin = postSAMLLogin;
 exports.handleSAMLLoginError = handleSAMLLoginError;
 exports.formatE164PhoneNumber = formatE164PhoneNumber;
-var expensify_common_1 = require("expensify-common");
-var react_native_onyx_1 = require("react-native-onyx");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var Session_1 = require("./actions/Session");
-var Navigation_1 = require("./Navigation/Navigation");
-var PhoneNumber_1 = require("./PhoneNumber");
-var countryCodeByIPOnyx;
+const expensify_common_1 = require("expensify-common");
+const react_native_onyx_1 = require("react-native-onyx");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const Session_1 = require("./actions/Session");
+const Navigation_1 = require("./Navigation/Navigation");
+const PhoneNumber_1 = require("./PhoneNumber");
+let countryCodeByIPOnyx;
 react_native_onyx_1.default.connect({
     key: ONYXKEYS_1.default.COUNTRY_CODE,
-    callback: function (val) { return (countryCodeByIPOnyx = val !== null && val !== void 0 ? val : 1); },
+    callback: (val) => (countryCodeByIPOnyx = val ?? 1),
 });
 /**
  * Remove the special chars from the phone number
@@ -37,11 +37,11 @@ function appendCountryCode(phone) {
     if (phone.startsWith('+')) {
         return phone;
     }
-    var phoneWithCountryCode = "+".concat(countryCodeByIPOnyx).concat(phone);
+    const phoneWithCountryCode = `+${countryCodeByIPOnyx}${phone}`;
     if ((0, PhoneNumber_1.parsePhoneNumber)(phoneWithCountryCode).possible) {
         return phoneWithCountryCode;
     }
-    return "+".concat(phone);
+    return `+${phone}`;
 }
 /**
  * MIGRATION STEP 1: Temporary function for transitioning away from Onyx.connect to useOnyx
@@ -67,17 +67,17 @@ function appendCountryCodeWithCountryCode(phone, countryCode) {
     if (phone.startsWith('+')) {
         return phone;
     }
-    var phoneWithCountryCode = "+".concat(countryCode).concat(phone);
+    const phoneWithCountryCode = `+${countryCode}${phone}`;
     if ((0, PhoneNumber_1.parsePhoneNumber)(phoneWithCountryCode).possible) {
         return phoneWithCountryCode;
     }
-    return "+".concat(phone);
+    return `+${phone}`;
 }
 /**
  * Check email is public domain or not
  */
 function isEmailPublicDomain(email) {
-    var emailDomain = expensify_common_1.Str.extractEmailDomain(email).toLowerCase();
+    const emailDomain = expensify_common_1.Str.extractEmailDomain(email).toLowerCase();
     return expensify_common_1.PUBLIC_DOMAINS_SET.has(emailDomain);
 }
 /**
@@ -85,10 +85,9 @@ function isEmailPublicDomain(email) {
  * @returns a valid phone number formatted
  */
 function validateNumber(values) {
-    var _a;
-    var parsedPhoneNumber = (0, PhoneNumber_1.parsePhoneNumber)(values);
+    const parsedPhoneNumber = (0, PhoneNumber_1.parsePhoneNumber)(values);
     if (parsedPhoneNumber.possible && expensify_common_1.Str.isValidE164Phone(values.slice(0))) {
-        return "".concat((_a = parsedPhoneNumber.number) === null || _a === void 0 ? void 0 : _a.e164).concat(CONST_1.default.SMS.DOMAIN);
+        return `${parsedPhoneNumber.number?.e164}${CONST_1.default.SMS.DOMAIN}`;
     }
     return '';
 }
@@ -114,9 +113,9 @@ function areEmailsFromSamePrivateDomain(email1, email2) {
 function postSAMLLogin(body) {
     return fetch(CONFIG_1.default.EXPENSIFY.SAML_URL, {
         method: CONST_1.default.NETWORK.METHOD.POST,
-        body: body,
+        body,
         credentials: 'omit',
-    }).then(function (response) {
+    }).then((response) => {
         if (!response.ok) {
             throw new Error('An error occurred while logging in. Please try again');
         }
@@ -131,8 +130,7 @@ function handleSAMLLoginError(errorMessage, shouldClearSignInData) {
     Navigation_1.default.goBack(ROUTES_1.default.HOME);
 }
 function formatE164PhoneNumber(phoneNumber) {
-    var _a;
-    var phoneNumberWithCountryCode = appendCountryCode(phoneNumber);
-    var parsedPhoneNumber = (0, PhoneNumber_1.parsePhoneNumber)(phoneNumberWithCountryCode);
-    return (_a = parsedPhoneNumber.number) === null || _a === void 0 ? void 0 : _a.e164;
+    const phoneNumberWithCountryCode = appendCountryCode(phoneNumber);
+    const parsedPhoneNumber = (0, PhoneNumber_1.parsePhoneNumber)(phoneNumberWithCountryCode);
+    return parsedPhoneNumber.number?.e164;
 }

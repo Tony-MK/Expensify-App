@@ -1,41 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var ValidateCodeActionModal_1 = require("@components/ValidateCodeActionModal");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var User_1 = require("@libs/actions/User");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var Delegate_1 = require("@userActions/Delegate");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-function DelegateMagicCodeModal(_a) {
-    var _b, _c, _d, _e, _f, _g;
-    var login = _a.login, role = _a.role, onClose = _a.onClose, isValidateCodeActionModalVisible = _a.isValidateCodeActionModalVisible, shouldHandleNavigationBack = _a.shouldHandleNavigationBack, disableAnimation = _a.disableAnimation;
-    var translate = (0, useLocalize_1.default)().translate;
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var validateCodeAction = (0, useOnyx_1.default)(ONYXKEYS_1.default.VALIDATE_ACTION_CODE, { canBeMissing: true })[0];
-    var currentDelegate = (_c = (_b = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _b === void 0 ? void 0 : _b.delegates) === null || _c === void 0 ? void 0 : _c.find(function (d) { return d.email === login; });
-    var addDelegateErrors = (_f = (_e = (_d = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _d === void 0 ? void 0 : _d.errorFields) === null || _e === void 0 ? void 0 : _e.addDelegate) === null || _f === void 0 ? void 0 : _f[login];
-    var validateLoginError = (0, ErrorUtils_1.getLatestError)(addDelegateErrors);
-    (0, react_1.useEffect)(function () {
-        var _a;
-        if (!currentDelegate || !!((_a = currentDelegate.pendingFields) === null || _a === void 0 ? void 0 : _a.email) || !!addDelegateErrors) {
+const react_1 = require("react");
+const ValidateCodeActionModal_1 = require("@components/ValidateCodeActionModal");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const User_1 = require("@libs/actions/User");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const Delegate_1 = require("@userActions/Delegate");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+function DelegateMagicCodeModal({ login, role, onClose, isValidateCodeActionModalVisible, shouldHandleNavigationBack, disableAnimation }) {
+    const { translate } = (0, useLocalize_1.default)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const [validateCodeAction] = (0, useOnyx_1.default)(ONYXKEYS_1.default.VALIDATE_ACTION_CODE, { canBeMissing: true });
+    const currentDelegate = account?.delegatedAccess?.delegates?.find((d) => d.email === login);
+    const addDelegateErrors = account?.delegatedAccess?.errorFields?.addDelegate?.[login];
+    const validateLoginError = (0, ErrorUtils_1.getLatestError)(addDelegateErrors);
+    (0, react_1.useEffect)(() => {
+        if (!currentDelegate || !!currentDelegate.pendingFields?.email || !!addDelegateErrors) {
             return;
         }
         // Dismiss modal on successful magic code verification
         Navigation_1.default.goBack(ROUTES_1.default.SETTINGS_SECURITY);
     }, [login, currentDelegate, role, addDelegateErrors]);
-    var clearError = function () {
-        var _a;
-        if ((0, EmptyObject_1.isEmptyObject)(validateLoginError) && (0, EmptyObject_1.isEmptyObject)(validateCodeAction === null || validateCodeAction === void 0 ? void 0 : validateCodeAction.errorFields)) {
+    const clearError = () => {
+        if ((0, EmptyObject_1.isEmptyObject)(validateLoginError) && (0, EmptyObject_1.isEmptyObject)(validateCodeAction?.errorFields)) {
             return;
         }
-        (0, Delegate_1.clearDelegateErrorsByField)((_a = currentDelegate === null || currentDelegate === void 0 ? void 0 : currentDelegate.email) !== null && _a !== void 0 ? _a : '', 'addDelegate');
+        (0, Delegate_1.clearDelegateErrorsByField)(currentDelegate?.email ?? '', 'addDelegate');
     };
-    return (<ValidateCodeActionModal_1.default disableAnimation={disableAnimation} shouldHandleNavigationBack={shouldHandleNavigationBack} clearError={clearError} onClose={onClose} validateCodeActionErrorField="addDelegate" validateError={validateLoginError} isVisible={isValidateCodeActionModalVisible} title={translate('delegate.makeSureItIsYou')} sendValidateCode={function () { return (0, User_1.requestValidateCodeAction)(); }} handleSubmitForm={function (validateCode) { return (0, Delegate_1.addDelegate)(login, role, validateCode); }} descriptionPrimary={translate('delegate.enterMagicCode', { contactMethod: (_g = account === null || account === void 0 ? void 0 : account.primaryLogin) !== null && _g !== void 0 ? _g : '' })}/>);
+    return (<ValidateCodeActionModal_1.default disableAnimation={disableAnimation} shouldHandleNavigationBack={shouldHandleNavigationBack} clearError={clearError} onClose={onClose} validateCodeActionErrorField="addDelegate" validateError={validateLoginError} isVisible={isValidateCodeActionModalVisible} title={translate('delegate.makeSureItIsYou')} sendValidateCode={() => (0, User_1.requestValidateCodeAction)()} handleSubmitForm={(validateCode) => (0, Delegate_1.addDelegate)(login, role, validateCode)} descriptionPrimary={translate('delegate.enterMagicCode', { contactMethod: account?.primaryLogin ?? '' })}/>);
 }
 DelegateMagicCodeModal.displayName = 'DelegateMagicCodeModal';
 exports.default = DelegateMagicCodeModal;

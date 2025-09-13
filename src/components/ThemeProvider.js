@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useDebouncedState_1 = require("@hooks/useDebouncedState");
-var useThemePreferenceWithStaticOverride_1 = require("@hooks/useThemePreferenceWithStaticOverride");
-var DomUtils_1 = require("@libs/DomUtils");
+const react_1 = require("react");
+const useDebouncedState_1 = require("@hooks/useDebouncedState");
+const useThemePreferenceWithStaticOverride_1 = require("@hooks/useThemePreferenceWithStaticOverride");
+const DomUtils_1 = require("@libs/DomUtils");
 // eslint-disable-next-line no-restricted-imports
-var theme_1 = require("@styles/theme");
-var ThemeContext_1 = require("@styles/theme/context/ThemeContext");
-function ThemeProvider(_a) {
-    var children = _a.children, staticThemePreference = _a.theme;
-    var themePreference = (0, useThemePreferenceWithStaticOverride_1.default)(staticThemePreference);
-    var _b = (0, useDebouncedState_1.default)(themePreference), debouncedTheme = _b[1], setDebouncedTheme = _b[2];
-    (0, react_1.useEffect)(function () {
+const theme_1 = require("@styles/theme");
+const ThemeContext_1 = require("@styles/theme/context/ThemeContext");
+function ThemeProvider({ children, theme: staticThemePreference }) {
+    const themePreference = (0, useThemePreferenceWithStaticOverride_1.default)(staticThemePreference);
+    const [, debouncedTheme, setDebouncedTheme] = (0, useDebouncedState_1.default)(themePreference);
+    (0, react_1.useEffect)(() => {
         setDebouncedTheme(themePreference);
     }, [setDebouncedTheme, themePreference]);
-    var theme = (0, react_1.useMemo)(function () { return theme_1.default[debouncedTheme]; }, [debouncedTheme]);
-    (0, react_1.useEffect)(function () {
+    const theme = (0, react_1.useMemo)(() => theme_1.default[debouncedTheme], [debouncedTheme]);
+    (0, react_1.useEffect)(() => {
         /*
          * For static themes we don't want to apply the autofill input style globally
          * SignInPageLayout uses static theme and handles this differently.

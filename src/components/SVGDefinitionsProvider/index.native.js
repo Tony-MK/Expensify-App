@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function SVGDefinitionsProvider(_a) {
-    var children = _a.children;
+function SVGDefinitionsProvider({ children }) {
     return children;
 }
 exports.default = SVGDefinitionsProvider;

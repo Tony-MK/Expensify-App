@@ -9,11 +9,11 @@ exports.updateSubscriptionType = updateSubscriptionType;
 exports.clearOutstandingBalance = clearOutstandingBalance;
 exports.cancelBillingSubscription = cancelBillingSubscription;
 exports.requestTaxExempt = requestTaxExempt;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
  * Fetches data when the user opens the SubscriptionSettingsPage
  */
@@ -21,12 +21,12 @@ function openSubscriptionPage() {
     API.read(types_1.READ_COMMANDS.OPEN_SUBSCRIPTION_PAGE, null);
 }
 function updateSubscriptionType(type) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
             value: {
-                type: type,
+                type,
                 pendingFields: {
                     type: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                 },
@@ -34,12 +34,12 @@ function updateSubscriptionType(type) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
             value: {
-                type: type,
+                type,
                 pendingFields: {
                     type: null,
                 },
@@ -47,7 +47,7 @@ function updateSubscriptionType(type) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
@@ -59,22 +59,22 @@ function updateSubscriptionType(type) {
             },
         },
     ];
-    var parameters = {
-        type: type,
+    const parameters = {
+        type,
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_SUBSCRIPTION_TYPE, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 function updateSubscriptionAutoRenew(autoRenew, disableAutoRenewReason, disableAutoRenewAdditionalNote) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
             value: {
-                autoRenew: autoRenew,
+                autoRenew,
                 pendingFields: {
                     autoRenew: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                 },
@@ -82,7 +82,7 @@ function updateSubscriptionAutoRenew(autoRenew, disableAutoRenewReason, disableA
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
@@ -94,7 +94,7 @@ function updateSubscriptionAutoRenew(autoRenew, disableAutoRenewReason, disableA
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
@@ -106,24 +106,24 @@ function updateSubscriptionAutoRenew(autoRenew, disableAutoRenewReason, disableA
             },
         },
     ];
-    var parameters = {
-        autoRenew: autoRenew,
-        disableAutoRenewReason: disableAutoRenewReason,
-        disableAutoRenewAdditionalNote: disableAutoRenewAdditionalNote,
+    const parameters = {
+        autoRenew,
+        disableAutoRenewReason,
+        disableAutoRenewAdditionalNote,
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_SUBSCRIPTION_AUTO_RENEW, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 function updateSubscriptionAddNewUsersAutomatically(addNewUsersAutomatically) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
             value: {
-                addNewUsersAutomatically: addNewUsersAutomatically,
+                addNewUsersAutomatically,
                 pendingFields: {
                     addNewUsersAutomatically: CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.UPDATE,
                 },
@@ -131,7 +131,7 @@ function updateSubscriptionAddNewUsersAutomatically(addNewUsersAutomatically) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
@@ -143,7 +143,7 @@ function updateSubscriptionAddNewUsersAutomatically(addNewUsersAutomatically) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.NVP_PRIVATE_SUBSCRIPTION,
@@ -155,17 +155,17 @@ function updateSubscriptionAddNewUsersAutomatically(addNewUsersAutomatically) {
             },
         },
     ];
-    var parameters = {
-        addNewUsersAutomatically: addNewUsersAutomatically,
+    const parameters = {
+        addNewUsersAutomatically,
     };
     API.write(types_1.WRITE_COMMANDS.UPDATE_SUBSCRIPTION_ADD_NEW_USERS_AUTOMATICALLY, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 function updateSubscriptionSize(newSubscriptionSize, currentSubscriptionSize) {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -219,7 +219,7 @@ function clearUpdateSubscriptionSizeError() {
     });
 }
 function clearOutstandingBalance() {
-    var onyxData = {
+    const onyxData = {
         optimisticData: [
             {
                 onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
@@ -265,9 +265,9 @@ function clearOutstandingBalance() {
     API.write(types_1.WRITE_COMMANDS.CLEAR_OUTSTANDING_BALANCE, null, onyxData);
 }
 function cancelBillingSubscription(cancellationReason, cancellationNote) {
-    var parameters = {
-        cancellationReason: cancellationReason,
-        cancellationNote: cancellationNote,
+    const parameters = {
+        cancellationReason,
+        cancellationNote,
     };
     API.write(types_1.WRITE_COMMANDS.CANCEL_BILLING_SUBSCRIPTION, parameters);
 }

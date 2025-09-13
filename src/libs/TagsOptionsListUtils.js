@@ -1,52 +1,32 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTagsOptions = getTagsOptions;
 exports.getTagListSections = getTagListSections;
 exports.hasEnabledTags = hasEnabledTags;
 exports.sortTags = sortTags;
 exports.getTagVisibility = getTagVisibility;
-var CONST_1 = require("@src/CONST");
-var Localize_1 = require("./Localize");
-var OptionsListUtils_1 = require("./OptionsListUtils");
-var PolicyUtils_1 = require("./PolicyUtils");
-var tokenizedSearch_1 = require("./tokenizedSearch");
-var TransactionUtils_1 = require("./TransactionUtils");
+const CONST_1 = require("@src/CONST");
+const Localize_1 = require("./Localize");
+const OptionsListUtils_1 = require("./OptionsListUtils");
+const PolicyUtils_1 = require("./PolicyUtils");
+const tokenizedSearch_1 = require("./tokenizedSearch");
+const TransactionUtils_1 = require("./TransactionUtils");
 /**
  * Transforms the provided tags into option objects.
  *
  * @param tags - an initial tag array
  */
 function getTagsOptions(tags, selectedOptions) {
-    return tags.map(function (tag) {
+    return tags.map((tag) => {
         // This is to remove unnecessary escaping backslash in tag name sent from backend.
-        var cleanedName = (0, PolicyUtils_1.getCleanedTagName)(tag.name);
+        const cleanedName = (0, PolicyUtils_1.getCleanedTagName)(tag.name);
         return {
             text: cleanedName,
             keyForList: tag.name,
             searchText: tag.name,
             tooltipText: cleanedName,
             isDisabled: !tag.enabled || tag.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE,
-            isSelected: selectedOptions === null || selectedOptions === void 0 ? void 0 : selectedOptions.some(function (selectedTag) { return selectedTag.name === tag.name; }),
+            isSelected: selectedOptions?.some((selectedTag) => selectedTag.name === tag.name),
             pendingAction: tag.pendingAction,
         };
     });
@@ -54,22 +34,21 @@ function getTagsOptions(tags, selectedOptions) {
 /**
  * Build the section list for tags
  */
-function getTagListSections(_a) {
-    var tags = _a.tags, localeCompare = _a.localeCompare, _b = _a.recentlyUsedTags, recentlyUsedTags = _b === void 0 ? [] : _b, _c = _a.selectedOptions, selectedOptions = _c === void 0 ? [] : _c, _d = _a.searchValue, searchValue = _d === void 0 ? '' : _d, _e = _a.maxRecentReportsToShow, maxRecentReportsToShow = _e === void 0 ? CONST_1.default.IOU.MAX_RECENT_REPORTS_TO_SHOW : _e;
-    var tagSections = [];
-    var sortedTags = sortTags(tags, localeCompare);
-    var selectedOptionNames = selectedOptions.map(function (selectedOption) { return selectedOption.name; });
-    var enabledTags = sortedTags.filter(function (tag) { return tag.enabled; });
-    var enabledTagsNames = enabledTags.map(function (tag) { return tag.name; });
-    var enabledTagsWithoutSelectedOptions = enabledTags.filter(function (tag) { return !selectedOptionNames.includes(tag.name); });
-    var selectedTagsWithDisabledState = [];
-    var numberOfTags = enabledTags.length;
-    selectedOptions.forEach(function (tag) {
+function getTagListSections({ tags, localeCompare, recentlyUsedTags = [], selectedOptions = [], searchValue = '', maxRecentReportsToShow = CONST_1.default.IOU.MAX_RECENT_REPORTS_TO_SHOW, }) {
+    const tagSections = [];
+    const sortedTags = sortTags(tags, localeCompare);
+    const selectedOptionNames = selectedOptions.map((selectedOption) => selectedOption.name);
+    const enabledTags = sortedTags.filter((tag) => tag.enabled);
+    const enabledTagsNames = enabledTags.map((tag) => tag.name);
+    const enabledTagsWithoutSelectedOptions = enabledTags.filter((tag) => !selectedOptionNames.includes(tag.name));
+    const selectedTagsWithDisabledState = [];
+    const numberOfTags = enabledTags.length;
+    selectedOptions.forEach((tag) => {
         if (enabledTagsNames.includes(tag.name)) {
-            selectedTagsWithDisabledState.push(__assign(__assign({}, tag), { enabled: true }));
+            selectedTagsWithDisabledState.push({ ...tag, enabled: true });
             return;
         }
-        selectedTagsWithDisabledState.push(__assign(__assign({}, tag), { enabled: false }));
+        selectedTagsWithDisabledState.push({ ...tag, enabled: false });
     });
     // If all tags are disabled but there's a previously selected tag, show only the selected tag
     if (numberOfTags === 0 && selectedOptions.length > 0) {
@@ -82,7 +61,10 @@ function getTagListSections(_a) {
         return tagSections;
     }
     if (searchValue) {
-        var tagsForSearch = __spreadArray(__spreadArray([], (0, tokenizedSearch_1.default)(selectedTagsWithDisabledState, searchValue, function (tag) { return [(0, PolicyUtils_1.getCleanedTagName)(tag.name)]; }), true), (0, tokenizedSearch_1.default)(enabledTagsWithoutSelectedOptions, searchValue, function (tag) { return [(0, PolicyUtils_1.getCleanedTagName)(tag.name)]; }), true);
+        const tagsForSearch = [
+            ...(0, tokenizedSearch_1.default)(selectedTagsWithDisabledState, searchValue, (tag) => [(0, PolicyUtils_1.getCleanedTagName)(tag.name)]),
+            ...(0, tokenizedSearch_1.default)(enabledTagsWithoutSelectedOptions, searchValue, (tag) => [(0, PolicyUtils_1.getCleanedTagName)(tag.name)]),
+        ];
         tagSections.push({
             // "Search" section
             title: '',
@@ -96,16 +78,16 @@ function getTagListSections(_a) {
             // "All" section when items amount less than the threshold
             title: '',
             shouldShow: false,
-            data: getTagsOptions(__spreadArray(__spreadArray([], selectedTagsWithDisabledState, true), enabledTagsWithoutSelectedOptions, true), selectedOptions),
+            data: getTagsOptions([...selectedTagsWithDisabledState, ...enabledTagsWithoutSelectedOptions], selectedOptions),
         });
         return tagSections;
     }
-    var filteredRecentlyUsedTags = recentlyUsedTags
-        .filter(function (recentlyUsedTag) {
-        var tagObject = sortedTags.find(function (tag) { return tag.name === recentlyUsedTag; });
-        return !!(tagObject === null || tagObject === void 0 ? void 0 : tagObject.enabled) && !selectedOptionNames.includes(recentlyUsedTag) && (tagObject === null || tagObject === void 0 ? void 0 : tagObject.pendingAction) !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
+    const filteredRecentlyUsedTags = recentlyUsedTags
+        .filter((recentlyUsedTag) => {
+        const tagObject = sortedTags.find((tag) => tag.name === recentlyUsedTag);
+        return !!tagObject?.enabled && !selectedOptionNames.includes(recentlyUsedTag) && tagObject?.pendingAction !== CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE;
     })
-        .map(function (tag) { return ({ name: tag, enabled: true }); });
+        .map((tag) => ({ name: tag, enabled: true }));
     if (selectedOptions.length) {
         tagSections.push({
             // "Selected" section
@@ -115,7 +97,7 @@ function getTagListSections(_a) {
         });
     }
     if (filteredRecentlyUsedTags.length > 0) {
-        var cutRecentlyUsedTags = filteredRecentlyUsedTags.slice(0, maxRecentReportsToShow);
+        const cutRecentlyUsedTags = filteredRecentlyUsedTags.slice(0, maxRecentReportsToShow);
         tagSections.push({
             // "Recent" section
             title: (0, Localize_1.translateLocal)('common.recent'),
@@ -135,12 +117,9 @@ function getTagListSections(_a) {
  * Verifies that there is at least one enabled tag
  */
 function hasEnabledTags(policyTagList) {
-    var policyTagValueList = policyTagList
-        .filter(function (tag) { return tag && tag.tags; })
-        .map(function (_a) {
-        var tags = _a.tags;
-        return Object.values(tags);
-    })
+    const policyTagValueList = policyTagList
+        .filter((tag) => tag && tag.tags)
+        .map(({ tags }) => Object.values(tags))
         .flat();
     return (0, OptionsListUtils_1.hasEnabledOptions)(policyTagValueList);
 }
@@ -148,27 +127,25 @@ function hasEnabledTags(policyTagList) {
  * Sorts tags alphabetically by name.
  */
 function sortTags(tags, localeCompare) {
-    return Object.values(tags !== null && tags !== void 0 ? tags : {}).sort(function (a, b) { return localeCompare(a.name, b.name); });
+    return Object.values(tags ?? {}).sort((a, b) => localeCompare(a.name, b.name));
 }
 /**
  * Calculate tag visibility for each tag list
  */
-function getTagVisibility(_a) {
-    var shouldShowTags = _a.shouldShowTags, policy = _a.policy, policyTags = _a.policyTags, transaction = _a.transaction;
-    var hasDependentTags = (0, PolicyUtils_1.hasDependentTags)(policy, policyTags);
-    var isMultilevelTags = (0, PolicyUtils_1.isMultiLevelTags)(policyTags);
-    var policyTagLists = (0, PolicyUtils_1.getTagLists)(policyTags);
-    return policyTagLists.map(function (_a, index) {
-        var tags = _a.tags, required = _a.required;
-        var isTagRequired = required !== null && required !== void 0 ? required : false;
-        var shouldShow = false;
+function getTagVisibility({ shouldShowTags, policy, policyTags, transaction, }) {
+    const hasDependentTags = (0, PolicyUtils_1.hasDependentTags)(policy, policyTags);
+    const isMultilevelTags = (0, PolicyUtils_1.isMultiLevelTags)(policyTags);
+    const policyTagLists = (0, PolicyUtils_1.getTagLists)(policyTags);
+    return policyTagLists.map(({ tags, required }, index) => {
+        const isTagRequired = required ?? false;
+        let shouldShow = false;
         if (shouldShowTags) {
             if (hasDependentTags) {
                 if (index === 0) {
                     shouldShow = true;
                 }
                 else {
-                    var prevTagValue = (0, TransactionUtils_1.getTagForDisplay)(transaction, index - 1);
+                    const prevTagValue = (0, TransactionUtils_1.getTagForDisplay)(transaction, index - 1);
                     shouldShow = !!prevTagValue;
                 }
             }
@@ -177,8 +154,8 @@ function getTagVisibility(_a) {
             }
         }
         return {
-            isTagRequired: isTagRequired,
-            shouldShow: shouldShow,
+            isTagRequired,
+            shouldShow,
         };
     });
 }

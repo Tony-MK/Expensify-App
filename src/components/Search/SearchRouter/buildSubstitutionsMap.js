@@ -1,19 +1,10 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildSubstitutionsMap = buildSubstitutionsMap;
-var autocompleteParser_1 = require("@libs/SearchParser/autocompleteParser");
-var SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
-var CONST_1 = require("@src/CONST");
-var getSubstitutionsKey = function (filterKey, value) { return "".concat(filterKey, ":").concat(value); };
+const autocompleteParser_1 = require("@libs/SearchParser/autocompleteParser");
+const SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
+const CONST_1 = require("@src/CONST");
+const getSubstitutionsKey = (filterKey, value) => `${filterKey}:${value}`;
 /**
  * Given a plaintext query and specific entities data,
  * this function will build the substitutions map from scratch for this query
@@ -31,30 +22,24 @@ var getSubstitutionsKey = function (filterKey, value) { return "".concat(filterK
  * }
  */
 function buildSubstitutionsMap(query, personalDetails, reports, allTaxRates, cardList, cardFeeds, policies) {
-    var parsedQuery = (0, autocompleteParser_1.parse)(query);
-    var searchAutocompleteQueryRanges = parsedQuery.ranges;
+    const parsedQuery = (0, autocompleteParser_1.parse)(query);
+    const searchAutocompleteQueryRanges = parsedQuery.ranges;
     if (searchAutocompleteQueryRanges.length === 0) {
         return {};
     }
-    var substitutionsMap = searchAutocompleteQueryRanges.reduce(function (map, range) {
-        var filterKey = range.key, filterValue = range.value;
+    const substitutionsMap = searchAutocompleteQueryRanges.reduce((map, range) => {
+        const { key: filterKey, value: filterValue } = range;
         if (filterKey === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.TAX_RATE) {
-            var taxRateID_1 = filterValue;
-            var taxRates = Object.entries(allTaxRates)
-                .filter(function (_a) {
-                var IDs = _a[1];
-                return IDs.includes(taxRateID_1);
-            })
-                .map(function (_a) {
-                var name = _a[0];
-                return name;
-            });
-            var taxRateNames = taxRates.length > 0 ? taxRates : [taxRateID_1];
-            var uniqueTaxRateNames = __spreadArray([], new Set(taxRateNames), true);
-            uniqueTaxRateNames.forEach(function (taxRateName) {
-                var substitutionKey = getSubstitutionsKey(filterKey, taxRateName);
+            const taxRateID = filterValue;
+            const taxRates = Object.entries(allTaxRates)
+                .filter(([, IDs]) => IDs.includes(taxRateID))
+                .map(([name]) => name);
+            const taxRateNames = taxRates.length > 0 ? taxRates : [taxRateID];
+            const uniqueTaxRateNames = [...new Set(taxRateNames)];
+            uniqueTaxRateNames.forEach((taxRateName) => {
+                const substitutionKey = getSubstitutionsKey(filterKey, taxRateName);
                 // eslint-disable-next-line no-param-reassign
-                map[substitutionKey] = taxRateID_1;
+                map[substitutionKey] = taxRateID;
             });
         }
         else if (filterKey === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.FROM ||
@@ -68,10 +53,10 @@ function buildSubstitutionsMap(query, personalDetails, reports, allTaxRates, car
             filterKey === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.EXPORTER ||
             filterKey === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.PAYER ||
             filterKey === CONST_1.default.SEARCH.SYNTAX_FILTER_KEYS.ATTENDEE) {
-            var displayValue = (0, SearchQueryUtils_1.getFilterDisplayValue)(filterKey, filterValue, personalDetails, reports, cardList, cardFeeds, policies);
+            const displayValue = (0, SearchQueryUtils_1.getFilterDisplayValue)(filterKey, filterValue, personalDetails, reports, cardList, cardFeeds, policies);
             // If displayValue === filterValue, then it means there is nothing to substitute, so we don't add any key to map
             if (displayValue !== filterValue) {
-                var substitutionKey = getSubstitutionsKey(filterKey, displayValue);
+                const substitutionKey = getSubstitutionsKey(filterKey, displayValue);
                 // eslint-disable-next-line no-param-reassign
                 map[substitutionKey] = filterValue;
             }

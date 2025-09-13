@@ -1,79 +1,65 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var debounce_1 = require("lodash/debounce");
-var isEmpty_1 = require("lodash/isEmpty");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var Checkbox_1 = require("@components/Checkbox");
-var FixedFooter_1 = require("@components/FixedFooter");
-var OptionsListSkeletonView_1 = require("@components/OptionsListSkeletonView");
-var Pressable_1 = require("@components/Pressable");
-var SectionList_1 = require("@components/SectionList");
-var Text_1 = require("@components/Text");
-var TextInput_1 = require("@components/TextInput");
-var useActiveElementRole_1 = require("@hooks/useActiveElementRole");
-var useArrowKeyFocusManager_1 = require("@hooks/useArrowKeyFocusManager");
-var useKeyboardShortcut_1 = require("@hooks/useKeyboardShortcut");
-var useKeyboardState_1 = require("@hooks/useKeyboardState");
-var useLocalize_1 = require("@hooks/useLocalize");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
-var useScrollEnabled_1 = require("@hooks/useScrollEnabled");
-var useSingleExecution_1 = require("@hooks/useSingleExecution");
-var useSyncFocusImplementation_1 = require("@hooks/useSyncFocus/useSyncFocusImplementation");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var getSectionsWithIndexOffset_1 = require("@libs/getSectionsWithIndexOffset");
-var KeyDownPressListener_1 = require("@libs/KeyboardShortcut/KeyDownPressListener");
-var Log_1 = require("@libs/Log");
-var variables_1 = require("@styles/variables");
-var CONST_1 = require("@src/CONST");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var arraysEqual_1 = require("@src/utils/arraysEqual");
-var BaseSelectionListItemRenderer_1 = require("./BaseSelectionListItemRenderer");
-var FocusAwareCellRendererComponent_1 = require("./FocusAwareCellRendererComponent");
-var getDefaultItemHeight = function () { return variables_1.default.optionRowHeight; };
-function BaseSelectionList(_a) {
-    var sections = _a.sections, ListItem = _a.ListItem, shouldUseUserSkeletonView = _a.shouldUseUserSkeletonView, _b = _a.canSelectMultiple, canSelectMultiple = _b === void 0 ? false : _b, onSelectRow = _a.onSelectRow, _c = _a.shouldSingleExecuteRowSelect, shouldSingleExecuteRowSelect = _c === void 0 ? false : _c, onCheckboxPress = _a.onCheckboxPress, onSelectAll = _a.onSelectAll, onDismissError = _a.onDismissError, _d = _a.getItemHeight, getItemHeight = _d === void 0 ? getDefaultItemHeight : _d, _e = _a.textInputLabel, textInputLabel = _e === void 0 ? '' : _e, _f = _a.textInputPlaceholder, textInputPlaceholder = _f === void 0 ? '' : _f, _g = _a.textInputValue, textInputValue = _g === void 0 ? '' : _g, textInputStyle = _a.textInputStyle, textInputHint = _a.textInputHint, textInputMaxLength = _a.textInputMaxLength, _h = _a.inputMode, inputMode = _h === void 0 ? CONST_1.default.INPUT_MODE.TEXT : _h, onChangeText = _a.onChangeText, _j = _a.initiallyFocusedOptionKey, initiallyFocusedOptionKey = _j === void 0 ? '' : _j, onScroll = _a.onScroll, onScrollBeginDrag = _a.onScrollBeginDrag, _k = _a.headerMessage, headerMessage = _k === void 0 ? '' : _k, _l = _a.confirmButtonText, confirmButtonText = _l === void 0 ? '' : _l, onConfirm = _a.onConfirm, headerContent = _a.headerContent, footerContent = _a.footerContent, listFooterContent = _a.listFooterContent, footerContentAbovePagination = _a.footerContentAbovePagination, listEmptyContent = _a.listEmptyContent, _m = _a.showScrollIndicator, showScrollIndicator = _m === void 0 ? true : _m, _o = _a.showLoadingPlaceholder, showLoadingPlaceholder = _o === void 0 ? false : _o, _p = _a.LoadingPlaceholderComponent, LoadingPlaceholderComponent = _p === void 0 ? OptionsListSkeletonView_1.default : _p, _q = _a.showConfirmButton, showConfirmButton = _q === void 0 ? false : _q, _r = _a.isConfirmButtonDisabled, isConfirmButtonDisabled = _r === void 0 ? false : _r, _s = _a.shouldUseDefaultTheme, shouldUseDefaultTheme = _s === void 0 ? false : _s, _t = _a.shouldPreventDefaultFocusOnSelectRow, shouldPreventDefaultFocusOnSelectRow = _t === void 0 ? false : _t, containerStyle = _a.containerStyle, sectionListStyle = _a.sectionListStyle, _u = _a.disableKeyboardShortcuts, disableKeyboardShortcuts = _u === void 0 ? false : _u, children = _a.children, autoCorrect = _a.autoCorrect, _v = _a.shouldStopPropagation, shouldStopPropagation = _v === void 0 ? false : _v, _w = _a.shouldPreventDefault, shouldPreventDefault = _w === void 0 ? true : _w, _x = _a.shouldShowTooltips, shouldShowTooltips = _x === void 0 ? true : _x, _y = _a.shouldUseDynamicMaxToRenderPerBatch, shouldUseDynamicMaxToRenderPerBatch = _y === void 0 ? false : _y, rightHandSideComponent = _a.rightHandSideComponent, _z = _a.isLoadingNewOptions, isLoadingNewOptions = _z === void 0 ? false : _z, onLayout = _a.onLayout, customListHeader = _a.customListHeader, _0 = _a.customListHeaderHeight, customListHeaderHeight = _0 === void 0 ? 0 : _0, listHeaderWrapperStyle = _a.listHeaderWrapperStyle, _1 = _a.isRowMultilineSupported, isRowMultilineSupported = _1 === void 0 ? false : _1, _2 = _a.isAlternateTextMultilineSupported, isAlternateTextMultilineSupported = _2 === void 0 ? false : _2, _3 = _a.alternateTextNumberOfLines, alternateTextNumberOfLines = _3 === void 0 ? 2 : _3, textInputRef = _a.textInputRef, headerMessageStyle = _a.headerMessageStyle, confirmButtonStyles = _a.confirmButtonStyles, _4 = _a.shouldHideListOnInitialRender, shouldHideListOnInitialRender = _4 === void 0 ? true : _4, textInputIconLeft = _a.textInputIconLeft, sectionTitleStyles = _a.sectionTitleStyles, _5 = _a.textInputAutoFocus, textInputAutoFocus = _5 === void 0 ? true : _5, _6 = _a.shouldShowTextInputAfterHeader, shouldShowTextInputAfterHeader = _6 === void 0 ? false : _6, _7 = _a.shouldShowHeaderMessageAfterHeader, shouldShowHeaderMessageAfterHeader = _7 === void 0 ? false : _7, _8 = _a.includeSafeAreaPaddingBottom, includeSafeAreaPaddingBottom = _8 === void 0 ? true : _8, _9 = _a.shouldTextInputInterceptSwipe, shouldTextInputInterceptSwipe = _9 === void 0 ? false : _9, listHeaderContent = _a.listHeaderContent, onEndReached = _a.onEndReached, onEndReachedThreshold = _a.onEndReachedThreshold, _10 = _a.windowSize, windowSize = _10 === void 0 ? 5 : _10, _11 = _a.updateCellsBatchingPeriod, updateCellsBatchingPeriod = _11 === void 0 ? 50 : _11, _12 = _a.removeClippedSubviews, removeClippedSubviews = _12 === void 0 ? true : _12, _13 = _a.shouldDelayFocus, shouldDelayFocus = _13 === void 0 ? true : _13, _14 = _a.onArrowFocus, onArrowFocus = _14 === void 0 ? function () { } : _14, _15 = _a.shouldUpdateFocusedIndex, shouldUpdateFocusedIndex = _15 === void 0 ? false : _15, onLongPressRow = _a.onLongPressRow, _16 = _a.shouldShowTextInput, shouldShowTextInput = _16 === void 0 ? !!textInputLabel || !!textInputIconLeft : _16, _17 = _a.shouldShowListEmptyContent, shouldShowListEmptyContent = _17 === void 0 ? true : _17, listItemWrapperStyle = _a.listItemWrapperStyle, _18 = _a.shouldIgnoreFocus, shouldIgnoreFocus = _18 === void 0 ? false : _18, scrollEventThrottle = _a.scrollEventThrottle, contentContainerStyle = _a.contentContainerStyle, _19 = _a.shouldKeepFocusedItemAtTopOfViewableArea, shouldKeepFocusedItemAtTopOfViewableArea = _19 === void 0 ? false : _19, _20 = _a.shouldDebounceScrolling, shouldDebounceScrolling = _20 === void 0 ? false : _20, _21 = _a.shouldPreventActiveCellVirtualization, shouldPreventActiveCellVirtualization = _21 === void 0 ? false : _21, _22 = _a.shouldScrollToFocusedIndex, shouldScrollToFocusedIndex = _22 === void 0 ? true : _22, isSmallScreenWidth = _a.isSmallScreenWidth, onContentSizeChange = _a.onContentSizeChange, listItemTitleStyles = _a.listItemTitleStyles, _23 = _a.initialNumToRender, initialNumToRender = _23 === void 0 ? 12 : _23, listItemTitleContainerStyles = _a.listItemTitleContainerStyles, _24 = _a.isScreenFocused, isScreenFocused = _24 === void 0 ? false : _24, _25 = _a.shouldSubscribeToArrowKeyEvents, shouldSubscribeToArrowKeyEvents = _25 === void 0 ? true : _25, _26 = _a.shouldClearInputOnSelect, shouldClearInputOnSelect = _26 === void 0 ? true : _26, addBottomSafeAreaPadding = _a.addBottomSafeAreaPadding, addOfflineIndicatorBottomSafeAreaPadding = _a.addOfflineIndicatorBottomSafeAreaPadding, fixedNumItemsForLoader = _a.fixedNumItemsForLoader, loaderSpeed = _a.loaderSpeed, errorText = _a.errorText, shouldUseDefaultRightHandSideCheckmark = _a.shouldUseDefaultRightHandSideCheckmark, _27 = _a.selectedItems, selectedItems = _27 === void 0 ? [] : _27, isSelected = _a.isSelected, canShowProductTrainingTooltip = _a.canShowProductTrainingTooltip, renderScrollComponent = _a.renderScrollComponent, ref = _a.ref;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var listRef = (0, react_1.useRef)(null);
-    var innerTextInputRef = (0, react_1.useRef)(null);
-    var hasKeyBeenPressed = (0, react_1.useRef)(false);
-    var focusTimeoutRef = (0, react_1.useRef)(null);
-    var shouldShowSelectAll = !!onSelectAll;
-    var activeElementRole = (0, useActiveElementRole_1.default)();
-    var isFocused = (0, native_1.useIsFocused)();
-    var scrollEnabled = (0, useScrollEnabled_1.default)();
-    var _28 = (0, react_1.useState)(shouldUseDynamicMaxToRenderPerBatch ? 0 : CONST_1.default.MAX_TO_RENDER_PER_BATCH.DEFAULT), maxToRenderPerBatch = _28[0], setMaxToRenderPerBatch = _28[1];
-    var _29 = (0, react_1.useState)(true), isInitialSectionListRender = _29[0], setIsInitialSectionListRender = _29[1];
-    var isKeyboardShown = (0, useKeyboardState_1.default)().isKeyboardShown;
-    var _30 = (0, react_1.useState)(null), itemsToHighlight = _30[0], setItemsToHighlight = _30[1];
-    var itemFocusTimeoutRef = (0, react_1.useRef)(null);
-    var isItemSelected = (0, react_1.useCallback)(function (item) { var _a, _b, _c; return (_a = item.isSelected) !== null && _a !== void 0 ? _a : (((_b = isSelected === null || isSelected === void 0 ? void 0 : isSelected(item)) !== null && _b !== void 0 ? _b : selectedItems.includes((_c = item.keyForList) !== null && _c !== void 0 ? _c : '')) && canSelectMultiple); }, [isSelected, selectedItems, canSelectMultiple]);
+const native_1 = require("@react-navigation/native");
+const debounce_1 = require("lodash/debounce");
+const isEmpty_1 = require("lodash/isEmpty");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const Checkbox_1 = require("@components/Checkbox");
+const FixedFooter_1 = require("@components/FixedFooter");
+const OptionsListSkeletonView_1 = require("@components/OptionsListSkeletonView");
+const Pressable_1 = require("@components/Pressable");
+const SectionList_1 = require("@components/SectionList");
+const Text_1 = require("@components/Text");
+const TextInput_1 = require("@components/TextInput");
+const useActiveElementRole_1 = require("@hooks/useActiveElementRole");
+const useArrowKeyFocusManager_1 = require("@hooks/useArrowKeyFocusManager");
+const useKeyboardShortcut_1 = require("@hooks/useKeyboardShortcut");
+const useKeyboardState_1 = require("@hooks/useKeyboardState");
+const useLocalize_1 = require("@hooks/useLocalize");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useSafeAreaPaddings_1 = require("@hooks/useSafeAreaPaddings");
+const useScrollEnabled_1 = require("@hooks/useScrollEnabled");
+const useSingleExecution_1 = require("@hooks/useSingleExecution");
+const useSyncFocusImplementation_1 = require("@hooks/useSyncFocus/useSyncFocusImplementation");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const getSectionsWithIndexOffset_1 = require("@libs/getSectionsWithIndexOffset");
+const KeyDownPressListener_1 = require("@libs/KeyboardShortcut/KeyDownPressListener");
+const Log_1 = require("@libs/Log");
+const variables_1 = require("@styles/variables");
+const CONST_1 = require("@src/CONST");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const arraysEqual_1 = require("@src/utils/arraysEqual");
+const BaseSelectionListItemRenderer_1 = require("./BaseSelectionListItemRenderer");
+const FocusAwareCellRendererComponent_1 = require("./FocusAwareCellRendererComponent");
+const getDefaultItemHeight = () => variables_1.default.optionRowHeight;
+function BaseSelectionList({ sections, ListItem, shouldUseUserSkeletonView, canSelectMultiple = false, onSelectRow, shouldSingleExecuteRowSelect = false, onCheckboxPress, onSelectAll, onDismissError, getItemHeight = getDefaultItemHeight, textInputLabel = '', textInputPlaceholder = '', textInputValue = '', textInputStyle, textInputHint, textInputMaxLength, inputMode = CONST_1.default.INPUT_MODE.TEXT, onChangeText, initiallyFocusedOptionKey = '', onScroll, onScrollBeginDrag, headerMessage = '', confirmButtonText = '', onConfirm, headerContent, footerContent, listFooterContent, footerContentAbovePagination, listEmptyContent, showScrollIndicator = true, showLoadingPlaceholder = false, LoadingPlaceholderComponent = OptionsListSkeletonView_1.default, showConfirmButton = false, isConfirmButtonDisabled = false, shouldUseDefaultTheme = false, shouldPreventDefaultFocusOnSelectRow = false, containerStyle, sectionListStyle, disableKeyboardShortcuts = false, children, autoCorrect, shouldStopPropagation = false, shouldPreventDefault = true, shouldShowTooltips = true, shouldUseDynamicMaxToRenderPerBatch = false, rightHandSideComponent, isLoadingNewOptions = false, onLayout, customListHeader, customListHeaderHeight = 0, listHeaderWrapperStyle, isRowMultilineSupported = false, isAlternateTextMultilineSupported = false, alternateTextNumberOfLines = 2, textInputRef, headerMessageStyle, confirmButtonStyles, shouldHideListOnInitialRender = true, textInputIconLeft, sectionTitleStyles, textInputAutoFocus = true, shouldShowTextInputAfterHeader = false, shouldShowHeaderMessageAfterHeader = false, includeSafeAreaPaddingBottom = true, shouldTextInputInterceptSwipe = false, listHeaderContent, onEndReached, onEndReachedThreshold, windowSize = 5, updateCellsBatchingPeriod = 50, removeClippedSubviews = true, shouldDelayFocus = true, onArrowFocus = () => { }, shouldUpdateFocusedIndex = false, onLongPressRow, shouldShowTextInput = !!textInputLabel || !!textInputIconLeft, shouldShowListEmptyContent = true, listItemWrapperStyle, shouldIgnoreFocus = false, scrollEventThrottle, contentContainerStyle, shouldKeepFocusedItemAtTopOfViewableArea = false, shouldDebounceScrolling = false, shouldPreventActiveCellVirtualization = false, shouldScrollToFocusedIndex = true, isSmallScreenWidth, onContentSizeChange, listItemTitleStyles, initialNumToRender = 12, listItemTitleContainerStyles, isScreenFocused = false, shouldSubscribeToArrowKeyEvents = true, shouldClearInputOnSelect = true, addBottomSafeAreaPadding, addOfflineIndicatorBottomSafeAreaPadding, fixedNumItemsForLoader, loaderSpeed, errorText, shouldUseDefaultRightHandSideCheckmark, selectedItems = [], isSelected, canShowProductTrainingTooltip, renderScrollComponent, ref, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const listRef = (0, react_1.useRef)(null);
+    const innerTextInputRef = (0, react_1.useRef)(null);
+    const hasKeyBeenPressed = (0, react_1.useRef)(false);
+    const focusTimeoutRef = (0, react_1.useRef)(null);
+    const shouldShowSelectAll = !!onSelectAll;
+    const activeElementRole = (0, useActiveElementRole_1.default)();
+    const isFocused = (0, native_1.useIsFocused)();
+    const scrollEnabled = (0, useScrollEnabled_1.default)();
+    const [maxToRenderPerBatch, setMaxToRenderPerBatch] = (0, react_1.useState)(shouldUseDynamicMaxToRenderPerBatch ? 0 : CONST_1.default.MAX_TO_RENDER_PER_BATCH.DEFAULT);
+    const [isInitialSectionListRender, setIsInitialSectionListRender] = (0, react_1.useState)(true);
+    const { isKeyboardShown } = (0, useKeyboardState_1.default)();
+    const [itemsToHighlight, setItemsToHighlight] = (0, react_1.useState)(null);
+    const itemFocusTimeoutRef = (0, react_1.useRef)(null);
+    const isItemSelected = (0, react_1.useCallback)((item) => item.isSelected ?? ((isSelected?.(item) ?? selectedItems.includes(item.keyForList ?? '')) && canSelectMultiple), [isSelected, selectedItems, canSelectMultiple]);
     /** Calculates on which page is selected item so we can scroll to it on first render  */
-    var calculateInitialCurrentPage = (0, react_1.useCallback)(function () {
+    const calculateInitialCurrentPage = (0, react_1.useCallback)(() => {
         if (canSelectMultiple || sections.length === 0) {
             return 1;
         }
-        var currentIndex = 0;
-        for (var _i = 0, sections_1 = sections; _i < sections_1.length; _i++) {
-            var section = sections_1[_i];
+        let currentIndex = 0;
+        for (const section of sections) {
             if (section.data) {
-                for (var _a = 0, _b = section.data; _a < _b.length; _a++) {
-                    var item = _b[_a];
+                for (const item of section.data) {
                     if (isItemSelected(item)) {
                         return Math.floor(currentIndex / CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH) + 1;
                     }
@@ -83,22 +69,22 @@ function BaseSelectionList(_a) {
         }
         return 1;
     }, [canSelectMultiple, isItemSelected, sections]);
-    var _31 = (0, react_1.useState)(function () { return calculateInitialCurrentPage(); }), currentPage = _31[0], setCurrentPage = _31[1];
-    var isTextInputFocusedRef = (0, react_1.useRef)(false);
-    var singleExecution = (0, useSingleExecution_1.default)().singleExecution;
-    var _32 = (0, react_1.useState)({}), itemHeights = _32[0], setItemHeights = _32[1];
-    var pendingScrollIndexRef = (0, react_1.useRef)(null);
-    var onItemLayout = function (event, itemKey) {
+    const [currentPage, setCurrentPage] = (0, react_1.useState)(() => calculateInitialCurrentPage());
+    const isTextInputFocusedRef = (0, react_1.useRef)(false);
+    const { singleExecution } = (0, useSingleExecution_1.default)();
+    const [itemHeights, setItemHeights] = (0, react_1.useState)({});
+    const pendingScrollIndexRef = (0, react_1.useRef)(null);
+    const onItemLayout = (event, itemKey) => {
         if (!itemKey) {
             return;
         }
-        var height = event.nativeEvent.layout.height;
-        setItemHeights(function (prevHeights) {
-            var _a;
-            return (__assign(__assign({}, prevHeights), (_a = {}, _a[itemKey] = height, _a)));
-        });
+        const { height } = event.nativeEvent.layout;
+        setItemHeights((prevHeights) => ({
+            ...prevHeights,
+            [itemKey]: height,
+        }));
     };
-    var canShowProductTrainingTooltipMemo = (0, react_1.useMemo)(function () {
+    const canShowProductTrainingTooltipMemo = (0, react_1.useMemo)(() => {
         return canShowProductTrainingTooltip && isFocused;
     }, [canShowProductTrainingTooltip, isFocused]);
     /**
@@ -109,25 +95,28 @@ function BaseSelectionList(_a) {
      * - `itemLayouts`: Contains the layout information for each item, header and footer in the list,
      * so we can calculate the position of any given item when scrolling programmatically
      */
-    var flattenedSections = (0, react_1.useMemo)(function () {
-        var allOptions = [];
-        var disabledOptionsIndexes = [];
-        var disabledArrowKeyOptionsIndexes = [];
-        var disabledIndex = 0;
+    const flattenedSections = (0, react_1.useMemo)(() => {
+        const allOptions = [];
+        const disabledOptionsIndexes = [];
+        const disabledArrowKeyOptionsIndexes = [];
+        let disabledIndex = 0;
         // need to account that the list might have some extra content above it
-        var offset = customListHeader ? customListHeaderHeight : 0;
-        var itemLayouts = [{ length: 0, offset: offset }];
-        var selectedOptions = [];
-        sections.forEach(function (section, sectionIndex) {
-            var _a;
-            var sectionHeaderHeight = !!section.title || !!section.CustomSectionHeader ? variables_1.default.optionsListSectionHeaderHeight : 0;
-            itemLayouts.push({ length: sectionHeaderHeight, offset: offset });
+        let offset = customListHeader ? customListHeaderHeight : 0;
+        const itemLayouts = [{ length: 0, offset }];
+        const selectedOptions = [];
+        sections.forEach((section, sectionIndex) => {
+            const sectionHeaderHeight = !!section.title || !!section.CustomSectionHeader ? variables_1.default.optionsListSectionHeaderHeight : 0;
+            itemLayouts.push({ length: sectionHeaderHeight, offset });
             offset += sectionHeaderHeight;
-            (_a = section.data) === null || _a === void 0 ? void 0 : _a.forEach(function (item, optionIndex) {
+            section.data?.forEach((item, optionIndex) => {
                 // Add item to the general flattened array
-                allOptions.push(__assign(__assign({}, item), { sectionIndex: sectionIndex, index: optionIndex }));
+                allOptions.push({
+                    ...item,
+                    sectionIndex,
+                    index: optionIndex,
+                });
                 // If disabled, add to the disabled indexes array
-                var isItemDisabled = !!section.isDisabled || (item.isDisabled && !isItemSelected(item));
+                const isItemDisabled = !!section.isDisabled || (item.isDisabled && !isItemSelected(item));
                 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 if (isItemDisabled || item.isDisabledCheckbox) {
                     disabledOptionsIndexes.push(disabledIndex);
@@ -137,65 +126,66 @@ function BaseSelectionList(_a) {
                 }
                 disabledIndex += 1;
                 // Account for the height of the item in getItemLayout
-                var fullItemHeight = (item === null || item === void 0 ? void 0 : item.keyForList) && itemHeights[item.keyForList] ? itemHeights[item.keyForList] : getItemHeight(item);
-                itemLayouts.push({ length: fullItemHeight, offset: offset });
+                const fullItemHeight = item?.keyForList && itemHeights[item.keyForList] ? itemHeights[item.keyForList] : getItemHeight(item);
+                itemLayouts.push({ length: fullItemHeight, offset });
                 offset += fullItemHeight;
-                if (isItemSelected(item) && !selectedOptions.find(function (option) { return option.keyForList === item.keyForList; })) {
+                if (isItemSelected(item) && !selectedOptions.find((option) => option.keyForList === item.keyForList)) {
                     selectedOptions.push(item);
                 }
             });
             // We're not rendering any section footer, but we need to push to the array
             // because React Native accounts for it in getItemLayout
-            itemLayouts.push({ length: 0, offset: offset });
+            itemLayouts.push({ length: 0, offset });
         });
         // We're not rendering the list footer, but we need to push to the array
         // because React Native accounts for it in getItemLayout
-        itemLayouts.push({ length: 0, offset: offset });
+        itemLayouts.push({ length: 0, offset });
         if (selectedOptions.length > 1 && !canSelectMultiple) {
             Log_1.default.alert('Dev error: SelectionList - multiple items are selected but prop `canSelectMultiple` is false. Please enable `canSelectMultiple` or make your list have only 1 item with `isSelected: true`.');
         }
-        var totalSelectable = allOptions.length - disabledOptionsIndexes.length;
+        const totalSelectable = allOptions.length - disabledOptionsIndexes.length;
         return {
-            allOptions: allOptions,
-            selectedOptions: selectedOptions,
-            disabledOptionsIndexes: disabledOptionsIndexes,
-            disabledArrowKeyOptionsIndexes: disabledArrowKeyOptionsIndexes,
-            itemLayouts: itemLayouts,
+            allOptions,
+            selectedOptions,
+            disabledOptionsIndexes,
+            disabledArrowKeyOptionsIndexes,
+            itemLayouts,
             allSelected: selectedOptions.length > 0 && selectedOptions.length === totalSelectable,
             someSelected: selectedOptions.length > 0 && selectedOptions.length < totalSelectable,
         };
     }, [customListHeader, customListHeaderHeight, sections, canSelectMultiple, isItemSelected, itemHeights, getItemHeight]);
-    var incrementPage = (0, react_1.useCallback)(function () {
+    const incrementPage = (0, react_1.useCallback)(() => {
         if (flattenedSections.allOptions.length <= CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH * currentPage) {
             return;
         }
-        setCurrentPage(function (prev) { return prev + 1; });
+        setCurrentPage((prev) => prev + 1);
     }, [flattenedSections.allOptions.length, currentPage]);
-    var slicedSections = (0, react_1.useMemo)(function () {
-        var remainingOptionsLimit = CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH * currentPage;
-        return (0, getSectionsWithIndexOffset_1.default)(sections.map(function (section) {
-            var data = !(0, isEmpty_1.default)(section.data) && remainingOptionsLimit > 0 ? section.data.slice(0, remainingOptionsLimit) : [];
+    const slicedSections = (0, react_1.useMemo)(() => {
+        let remainingOptionsLimit = CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH * currentPage;
+        return (0, getSectionsWithIndexOffset_1.default)(sections.map((section) => {
+            const data = !(0, isEmpty_1.default)(section.data) && remainingOptionsLimit > 0 ? section.data.slice(0, remainingOptionsLimit) : [];
             remainingOptionsLimit -= data.length;
-            return __assign(__assign({}, section), { data: data });
+            return {
+                ...section,
+                data,
+            };
         }));
     }, [sections, currentPage]);
     // Disable `Enter` shortcut if the active element is a button or checkbox
-    var disableEnterShortcut = activeElementRole && [CONST_1.default.ROLE.BUTTON, CONST_1.default.ROLE.CHECKBOX].includes(activeElementRole);
+    const disableEnterShortcut = activeElementRole && [CONST_1.default.ROLE.BUTTON, CONST_1.default.ROLE.CHECKBOX].includes(activeElementRole);
     /**
      * Scrolls to the desired item index in the section list
      *
      * @param index - the index of the item to scroll to
      * @param animated - whether to animate the scroll
      */
-    var scrollToIndex = (0, react_1.useCallback)(function (index, animated) {
-        var _a, _b;
-        if (animated === void 0) { animated = true; }
-        var item = flattenedSections.allOptions.at(index);
+    const scrollToIndex = (0, react_1.useCallback)((index, animated = true) => {
+        const item = flattenedSections.allOptions.at(index);
         if (!listRef.current || !item || index === -1) {
             return;
         }
         // Calculate which page is needed to show this index
-        var requiredPage = Math.ceil((index + 1) / CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH);
+        const requiredPage = Math.ceil((index + 1) / CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH);
         // If the required page is beyond the current page, load all pages up to it,
         // then return early and let the scroll happen after the page update
         if (requiredPage > currentPage) {
@@ -203,27 +193,27 @@ function BaseSelectionList(_a) {
             setCurrentPage(requiredPage);
             return;
         }
-        var itemIndex = (_a = item.index) !== null && _a !== void 0 ? _a : -1;
-        var sectionIndex = (_b = item.sectionIndex) !== null && _b !== void 0 ? _b : -1;
-        var viewOffsetToKeepFocusedItemAtTopOfViewableArea = 0;
+        const itemIndex = item.index ?? -1;
+        const sectionIndex = item.sectionIndex ?? -1;
+        let viewOffsetToKeepFocusedItemAtTopOfViewableArea = 0;
         // Since there are always two items above the focused item in viewable area, and items can grow beyond the screen size
         // in searchType chat, the focused item may move out of view. To prevent this, we will ensure that the focused item remains at
         // the top of the viewable area at all times by adjusting the viewOffset.
         if (shouldKeepFocusedItemAtTopOfViewableArea) {
-            var firstPreviousItem = index > 0 ? flattenedSections.allOptions.at(index - 1) : undefined;
-            var firstPreviousItemHeight = firstPreviousItem && firstPreviousItem.keyForList ? itemHeights[firstPreviousItem.keyForList] : 0;
-            var secondPreviousItem = index > 1 ? flattenedSections.allOptions.at(index - 2) : undefined;
-            var secondPreviousItemHeight = secondPreviousItem && (secondPreviousItem === null || secondPreviousItem === void 0 ? void 0 : secondPreviousItem.keyForList) ? itemHeights[secondPreviousItem.keyForList] : 0;
+            const firstPreviousItem = index > 0 ? flattenedSections.allOptions.at(index - 1) : undefined;
+            const firstPreviousItemHeight = firstPreviousItem && firstPreviousItem.keyForList ? itemHeights[firstPreviousItem.keyForList] : 0;
+            const secondPreviousItem = index > 1 ? flattenedSections.allOptions.at(index - 2) : undefined;
+            const secondPreviousItemHeight = secondPreviousItem && secondPreviousItem?.keyForList ? itemHeights[secondPreviousItem.keyForList] : 0;
             viewOffsetToKeepFocusedItemAtTopOfViewableArea = firstPreviousItemHeight + secondPreviousItemHeight;
         }
-        listRef.current.scrollToLocation({ sectionIndex: sectionIndex, itemIndex: itemIndex, animated: animated, viewOffset: variables_1.default.contentHeaderHeight - viewOffsetToKeepFocusedItemAtTopOfViewableArea });
+        listRef.current.scrollToLocation({ sectionIndex, itemIndex, animated, viewOffset: variables_1.default.contentHeaderHeight - viewOffsetToKeepFocusedItemAtTopOfViewableArea });
         pendingScrollIndexRef.current = null;
     }, 
     // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     [flattenedSections.allOptions, currentPage]);
     // this function is used specifically for scrolling to the focused input to prevent it from appearing below opened keyboard
     // and ensures the entire list item element is visible, not just the input field inside it
-    var scrollToFocusedInput = (0, react_1.useCallback)(function (index) {
+    const scrollToFocusedInput = (0, react_1.useCallback)((index) => {
         if (!listRef.current) {
             return;
         }
@@ -239,8 +229,8 @@ function BaseSelectionList(_a) {
             viewPosition: 1.0, // Item position: 1.0 = bottom of screen
         });
     }, []);
-    var _33 = (0, react_1.useState)(flattenedSections.disabledArrowKeyOptionsIndexes), disabledArrowKeyIndexes = _33[0], setDisabledArrowKeyIndexes = _33[1];
-    (0, react_1.useEffect)(function () {
+    const [disabledArrowKeyIndexes, setDisabledArrowKeyIndexes] = (0, react_1.useState)(flattenedSections.disabledArrowKeyOptionsIndexes);
+    (0, react_1.useEffect)(() => {
         if ((0, arraysEqual_1.default)(disabledArrowKeyIndexes, flattenedSections.disabledArrowKeyOptionsIndexes)) {
             return;
         }
@@ -248,19 +238,19 @@ function BaseSelectionList(_a) {
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, [flattenedSections.disabledArrowKeyOptionsIndexes]);
     /** Check whether there is a need to scroll to an item and if all items are loaded */
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (pendingScrollIndexRef.current === null) {
             return;
         }
-        var indexToScroll = pendingScrollIndexRef.current;
-        var targetItem = flattenedSections.allOptions.at(indexToScroll);
+        const indexToScroll = pendingScrollIndexRef.current;
+        const targetItem = flattenedSections.allOptions.at(indexToScroll);
         if (targetItem && indexToScroll < CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH * currentPage) {
             pendingScrollIndexRef.current = null;
             scrollToIndex(indexToScroll, true);
         }
     }, [currentPage, scrollToIndex, flattenedSections.allOptions]);
-    var debouncedScrollToIndex = (0, react_1.useMemo)(function () { return (0, debounce_1.default)(scrollToIndex, CONST_1.default.TIMING.LIST_SCROLLING_DEBOUNCE_TIME, { leading: true, trailing: true }); }, [scrollToIndex]);
-    var setHasKeyBeenPressed = (0, react_1.useCallback)(function () {
+    const debouncedScrollToIndex = (0, react_1.useMemo)(() => (0, debounce_1.default)(scrollToIndex, CONST_1.default.TIMING.LIST_SCROLLING_DEBOUNCE_TIME, { leading: true, trailing: true }), [scrollToIndex]);
+    const setHasKeyBeenPressed = (0, react_1.useCallback)(() => {
         if (hasKeyBeenPressed.current) {
             return;
         }
@@ -269,32 +259,40 @@ function BaseSelectionList(_a) {
         hasKeyBeenPressed.current = true;
     }, []);
     // If `initiallyFocusedOptionKey` is not passed, we fall back to `-1`, to avoid showing the highlight on the first member
-    var _34 = (0, useArrowKeyFocusManager_1.default)(__assign(__assign({ initialFocusedIndex: flattenedSections.allOptions.findIndex(function (option) { return option.keyForList === initiallyFocusedOptionKey; }), maxIndex: Math.min(flattenedSections.allOptions.length - 1, CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH * currentPage - 1), disabledIndexes: disabledArrowKeyIndexes, isActive: shouldSubscribeToArrowKeyEvents && isFocused, onFocusedIndexChange: function (index) {
-            var focusedItem = flattenedSections.allOptions.at(index);
+    const [focusedIndex, setFocusedIndex] = (0, useArrowKeyFocusManager_1.default)({
+        initialFocusedIndex: flattenedSections.allOptions.findIndex((option) => option.keyForList === initiallyFocusedOptionKey),
+        maxIndex: Math.min(flattenedSections.allOptions.length - 1, CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH * currentPage - 1),
+        disabledIndexes: disabledArrowKeyIndexes,
+        isActive: shouldSubscribeToArrowKeyEvents && isFocused,
+        onFocusedIndexChange: (index) => {
+            const focusedItem = flattenedSections.allOptions.at(index);
             if (focusedItem) {
                 onArrowFocus(focusedItem);
             }
             if (shouldScrollToFocusedIndex) {
                 (shouldDebounceScrolling ? debouncedScrollToIndex : scrollToIndex)(index, true);
             }
-        } }, (!hasKeyBeenPressed.current && { setHasKeyBeenPressed: setHasKeyBeenPressed })), { isFocused: isFocused })), focusedIndex = _34[0], setFocusedIndex = _34[1];
-    (0, react_1.useEffect)(function () {
+        },
+        ...(!hasKeyBeenPressed.current && { setHasKeyBeenPressed }),
+        isFocused,
+    });
+    (0, react_1.useEffect)(() => {
         (0, KeyDownPressListener_1.addKeyDownPressListener)(setHasKeyBeenPressed);
-        return function () { return (0, KeyDownPressListener_1.removeKeyDownPressListener)(setHasKeyBeenPressed); };
+        return () => (0, KeyDownPressListener_1.removeKeyDownPressListener)(setHasKeyBeenPressed);
     }, [setHasKeyBeenPressed]);
-    var selectedItemIndex = (0, react_1.useMemo)(function () { return (initiallyFocusedOptionKey ? flattenedSections.allOptions.findIndex(isItemSelected) : -1); }, [flattenedSections.allOptions, initiallyFocusedOptionKey, isItemSelected]);
-    (0, react_1.useEffect)(function () {
+    const selectedItemIndex = (0, react_1.useMemo)(() => (initiallyFocusedOptionKey ? flattenedSections.allOptions.findIndex(isItemSelected) : -1), [flattenedSections.allOptions, initiallyFocusedOptionKey, isItemSelected]);
+    (0, react_1.useEffect)(() => {
         if (selectedItemIndex === -1 || selectedItemIndex === focusedIndex || textInputValue) {
             return;
         }
         setFocusedIndex(selectedItemIndex);
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, [selectedItemIndex]);
-    var clearInputAfterSelect = (0, react_1.useCallback)(function () {
+    const clearInputAfterSelect = (0, react_1.useCallback)(() => {
         if (!shouldClearInputOnSelect) {
             return;
         }
-        onChangeText === null || onChangeText === void 0 ? void 0 : onChangeText('');
+        onChangeText?.('');
     }, [onChangeText, shouldClearInputOnSelect]);
     /**
      * Logic to run when a row is selected, either with click/press or keyboard hotkeys.
@@ -302,7 +300,7 @@ function BaseSelectionList(_a) {
      * @param item - the list item
      * @param indexToFocus - the list item index to focus
      */
-    var selectRow = (0, react_1.useCallback)(function (item, indexToFocus) {
+    const selectRow = (0, react_1.useCallback)((item, indexToFocus) => {
         if (!isFocused && !isScreenFocused) {
             return;
         }
@@ -317,7 +315,7 @@ function BaseSelectionList(_a) {
             }
             else if (isSmallScreenWidth) {
                 if (!item.isDisabledCheckbox) {
-                    onCheckboxPress === null || onCheckboxPress === void 0 ? void 0 : onCheckboxPress(item);
+                    onCheckboxPress?.(item);
                 }
                 return;
             }
@@ -345,21 +343,21 @@ function BaseSelectionList(_a) {
         onCheckboxPress,
         setFocusedIndex,
     ]);
-    var selectAllRow = function () {
-        onSelectAll === null || onSelectAll === void 0 ? void 0 : onSelectAll();
+    const selectAllRow = () => {
+        onSelectAll?.();
         if (shouldShowTextInput && shouldPreventDefaultFocusOnSelectRow && innerTextInputRef.current) {
             innerTextInputRef.current.focus();
         }
     };
-    var getFocusedOption = (0, react_1.useCallback)(function () {
-        var focusedOption = focusedIndex !== -1 ? flattenedSections.allOptions.at(focusedIndex) : undefined;
+    const getFocusedOption = (0, react_1.useCallback)(() => {
+        const focusedOption = focusedIndex !== -1 ? flattenedSections.allOptions.at(focusedIndex) : undefined;
         if (!focusedOption || (focusedOption.isDisabled && !isItemSelected(focusedOption))) {
             return;
         }
         return focusedOption;
     }, [flattenedSections.allOptions, focusedIndex, isItemSelected]);
-    var selectFocusedOption = function () {
-        var focusedOption = getFocusedOption();
+    const selectFocusedOption = () => {
+        const focusedOption = getFocusedOption();
         if (!focusedOption) {
             return;
         }
@@ -379,8 +377,8 @@ function BaseSelectionList(_a) {
      *
      *     [{header}, {sectionHeader}, {item}, {item}, {sectionHeader}, {item}, {item}, {footer}]
      */
-    var getItemLayout = function (data, flatDataArrayIndex) {
-        var targetItem = flattenedSections.itemLayouts.at(flatDataArrayIndex);
+    const getItemLayout = (data, flatDataArrayIndex) => {
+        const targetItem = flattenedSections.itemLayouts.at(flatDataArrayIndex);
         if (!targetItem || flatDataArrayIndex === -1) {
             return {
                 length: 0,
@@ -394,8 +392,7 @@ function BaseSelectionList(_a) {
             index: flatDataArrayIndex,
         };
     };
-    var renderSectionHeader = function (_a) {
-        var section = _a.section;
+    const renderSectionHeader = ({ section }) => {
         if (section.CustomSectionHeader) {
             return <section.CustomSectionHeader section={section}/>;
         }
@@ -411,13 +408,11 @@ function BaseSelectionList(_a) {
                 <Text_1.default style={[styles.ph5, styles.textLabelSupporting]}>{section.title}</Text_1.default>
             </react_native_1.View>);
     };
-    var header = function () {
-        var _a;
-        return (<>
+    const header = () => (<>
             {!headerMessage && canSelectMultiple && shouldShowSelectAll && (<react_native_1.View style={[styles.userSelectNone, styles.peopleRow, styles.ph5, styles.pb3, listHeaderWrapperStyle, styles.selectionListStickyHeader]}>
                     <react_native_1.View style={[styles.flexRow, styles.alignItemsCenter]}>
                         <Checkbox_1.default accessibilityLabel={translate('workspace.people.selectAll')} isChecked={flattenedSections.allSelected} isIndeterminate={flattenedSections.someSelected} onPress={selectAllRow} disabled={flattenedSections.allOptions.length === flattenedSections.disabledOptionsIndexes.length}/>
-                        {!customListHeader && (<Pressable_1.PressableWithFeedback style={[styles.userSelectNone, styles.flexRow, styles.alignItemsCenter]} onPress={selectAllRow} accessibilityLabel={translate('workspace.people.selectAll')} role="button" accessibilityState={{ checked: flattenedSections.allSelected }} disabled={flattenedSections.allOptions.length === flattenedSections.disabledOptionsIndexes.length} dataSet={_a = {}, _a[CONST_1.default.SELECTION_SCRAPER_HIDDEN_ELEMENT] = true, _a} onMouseDown={shouldPreventDefaultFocusOnSelectRow ? function (e) { return e.preventDefault(); } : undefined}>
+                        {!customListHeader && (<Pressable_1.PressableWithFeedback style={[styles.userSelectNone, styles.flexRow, styles.alignItemsCenter]} onPress={selectAllRow} accessibilityLabel={translate('workspace.people.selectAll')} role="button" accessibilityState={{ checked: flattenedSections.allSelected }} disabled={flattenedSections.allOptions.length === flattenedSections.disabledOptionsIndexes.length} dataSet={{ [CONST_1.default.SELECTION_SCRAPER_HIDDEN_ELEMENT]: true }} onMouseDown={shouldPreventDefaultFocusOnSelectRow ? (e) => e.preventDefault() : undefined}>
                                 <Text_1.default style={[styles.textStrong, styles.ph3]}>{translate('workspace.people.selectAll')}</Text_1.default>
                             </Pressable_1.PressableWithFeedback>)}
                     </react_native_1.View>
@@ -425,20 +420,21 @@ function BaseSelectionList(_a) {
                 </react_native_1.View>)}
             {!headerMessage && !canSelectMultiple && customListHeader}
         </>);
-    };
-    var renderItem = function (_a) {
-        var _b, _c;
-        var item = _a.item, index = _a.index, section = _a.section;
-        var normalizedIndex = index + ((_b = section === null || section === void 0 ? void 0 : section.indexOffset) !== null && _b !== void 0 ? _b : 0);
-        var isDisabled = !!section.isDisabled || item.isDisabled;
-        var selected = isItemSelected(item);
-        var isItemFocused = (!isDisabled || selected) && focusedIndex === normalizedIndex;
-        var isItemHighlighted = !!(itemsToHighlight === null || itemsToHighlight === void 0 ? void 0 : itemsToHighlight.has((_c = item.keyForList) !== null && _c !== void 0 ? _c : ''));
-        return (<react_native_1.View onLayout={function (event) { return onItemLayout(event, item === null || item === void 0 ? void 0 : item.keyForList); }}>
-                <BaseSelectionListItemRenderer_1.default ListItem={ListItem} item={__assign({ shouldAnimateInHighlight: isItemHighlighted, isSelected: selected }, item)} shouldUseDefaultRightHandSideCheckmark={shouldUseDefaultRightHandSideCheckmark} index={index} isFocused={isItemFocused} isDisabled={isDisabled} showTooltip={shouldShowTooltips} canSelectMultiple={canSelectMultiple} onLongPressRow={onLongPressRow} shouldSingleExecuteRowSelect={shouldSingleExecuteRowSelect} selectRow={selectRow} onCheckboxPress={onCheckboxPress} onDismissError={onDismissError} shouldPreventDefaultFocusOnSelectRow={shouldPreventDefaultFocusOnSelectRow} rightHandSideComponent={rightHandSideComponent} isMultilineSupported={isRowMultilineSupported} isAlternateTextMultilineSupported={isAlternateTextMultilineSupported} alternateTextNumberOfLines={alternateTextNumberOfLines} shouldIgnoreFocus={shouldIgnoreFocus} setFocusedIndex={setFocusedIndex} normalizedIndex={normalizedIndex} shouldSyncFocus={!isTextInputFocusedRef.current && hasKeyBeenPressed.current} wrapperStyle={listItemWrapperStyle} titleStyles={listItemTitleStyles} singleExecution={singleExecution} titleContainerStyles={listItemTitleContainerStyles} canShowProductTrainingTooltip={canShowProductTrainingTooltipMemo}/>
+    const renderItem = ({ item, index, section }) => {
+        const normalizedIndex = index + (section?.indexOffset ?? 0);
+        const isDisabled = !!section.isDisabled || item.isDisabled;
+        const selected = isItemSelected(item);
+        const isItemFocused = (!isDisabled || selected) && focusedIndex === normalizedIndex;
+        const isItemHighlighted = !!itemsToHighlight?.has(item.keyForList ?? '');
+        return (<react_native_1.View onLayout={(event) => onItemLayout(event, item?.keyForList)}>
+                <BaseSelectionListItemRenderer_1.default ListItem={ListItem} item={{
+                shouldAnimateInHighlight: isItemHighlighted,
+                isSelected: selected,
+                ...item,
+            }} shouldUseDefaultRightHandSideCheckmark={shouldUseDefaultRightHandSideCheckmark} index={index} isFocused={isItemFocused} isDisabled={isDisabled} showTooltip={shouldShowTooltips} canSelectMultiple={canSelectMultiple} onLongPressRow={onLongPressRow} shouldSingleExecuteRowSelect={shouldSingleExecuteRowSelect} selectRow={selectRow} onCheckboxPress={onCheckboxPress} onDismissError={onDismissError} shouldPreventDefaultFocusOnSelectRow={shouldPreventDefaultFocusOnSelectRow} rightHandSideComponent={rightHandSideComponent} isMultilineSupported={isRowMultilineSupported} isAlternateTextMultilineSupported={isAlternateTextMultilineSupported} alternateTextNumberOfLines={alternateTextNumberOfLines} shouldIgnoreFocus={shouldIgnoreFocus} setFocusedIndex={setFocusedIndex} normalizedIndex={normalizedIndex} shouldSyncFocus={!isTextInputFocusedRef.current && hasKeyBeenPressed.current} wrapperStyle={listItemWrapperStyle} titleStyles={listItemTitleStyles} singleExecution={singleExecution} titleContainerStyles={listItemTitleContainerStyles} canShowProductTrainingTooltip={canShowProductTrainingTooltipMemo}/>
             </react_native_1.View>);
     };
-    var renderListEmptyContent = function () {
+    const renderListEmptyContent = () => {
         if (showLoadingPlaceholder) {
             return (<LoadingPlaceholderComponent fixedNumItems={fixedNumItemsForLoader} shouldStyleAsTable={shouldUseUserSkeletonView} speed={loaderSpeed}/>);
         }
@@ -447,15 +443,15 @@ function BaseSelectionList(_a) {
         }
         return null;
     };
-    var textInputKeyPress = (0, react_1.useCallback)(function (event) {
-        var key = event.nativeEvent.key;
+    const textInputKeyPress = (0, react_1.useCallback)((event) => {
+        const key = event.nativeEvent.key;
         if (key === CONST_1.default.KEYBOARD_SHORTCUTS.TAB.shortcutKey) {
-            useSyncFocusImplementation_1.focusedItemRef === null || useSyncFocusImplementation_1.focusedItemRef === void 0 ? void 0 : useSyncFocusImplementation_1.focusedItemRef.focus();
+            useSyncFocusImplementation_1.focusedItemRef?.focus();
         }
     }, []);
-    var renderInput = function () {
+    const renderInput = () => {
         return (<react_native_1.View style={[styles.ph5, styles.pb3, textInputStyle]}>
-                <TextInput_1.default onKeyPress={textInputKeyPress} ref={function (element) {
+                <TextInput_1.default onKeyPress={textInputKeyPress} ref={(element) => {
                 innerTextInputRef.current = element;
                 if (!textInputRef) {
                     return;
@@ -467,13 +463,13 @@ function BaseSelectionList(_a) {
                     // eslint-disable-next-line no-param-reassign
                     textInputRef.current = element;
                 }
-            }} onFocus={function () { return (isTextInputFocusedRef.current = true); }} onBlur={function () { return (isTextInputFocusedRef.current = false); }} label={textInputLabel} accessibilityLabel={textInputLabel} hint={textInputHint} role={CONST_1.default.ROLE.PRESENTATION} value={textInputValue} placeholder={textInputPlaceholder} autoCorrect={autoCorrect} maxLength={textInputMaxLength} onChangeText={onChangeText} inputMode={inputMode} selectTextOnFocus spellCheck={false} iconLeft={textInputIconLeft} onSubmitEditing={selectFocusedOption} blurOnSubmit={!!flattenedSections.allOptions.length} isLoading={isLoadingNewOptions} testID="selection-list-text-input" shouldInterceptSwipe={shouldTextInputInterceptSwipe} errorText={errorText}/>
+            }} onFocus={() => (isTextInputFocusedRef.current = true)} onBlur={() => (isTextInputFocusedRef.current = false)} label={textInputLabel} accessibilityLabel={textInputLabel} hint={textInputHint} role={CONST_1.default.ROLE.PRESENTATION} value={textInputValue} placeholder={textInputPlaceholder} autoCorrect={autoCorrect} maxLength={textInputMaxLength} onChangeText={onChangeText} inputMode={inputMode} selectTextOnFocus spellCheck={false} iconLeft={textInputIconLeft} onSubmitEditing={selectFocusedOption} blurOnSubmit={!!flattenedSections.allOptions.length} isLoading={isLoadingNewOptions} testID="selection-list-text-input" shouldInterceptSwipe={shouldTextInputInterceptSwipe} errorText={errorText}/>
             </react_native_1.View>);
     };
-    var scrollToFocusedIndexOnFirstRender = (0, react_1.useCallback)(function (nativeEvent) {
+    const scrollToFocusedIndexOnFirstRender = (0, react_1.useCallback)((nativeEvent) => {
         if (shouldUseDynamicMaxToRenderPerBatch) {
-            var listHeight = nativeEvent.nativeEvent.layout.height;
-            var itemHeight = nativeEvent.nativeEvent.layout.y;
+            const listHeight = nativeEvent.nativeEvent.layout.height;
+            const itemHeight = nativeEvent.nativeEvent.layout.y;
             setMaxToRenderPerBatch((Math.ceil(listHeight / itemHeight) || 0) + CONST_1.default.MAX_TO_RENDER_PER_BATCH.DEFAULT);
         }
         if (!isInitialSectionListRender) {
@@ -484,23 +480,23 @@ function BaseSelectionList(_a) {
         }
         setIsInitialSectionListRender(false);
     }, [focusedIndex, isInitialSectionListRender, scrollToIndex, shouldUseDynamicMaxToRenderPerBatch, shouldScrollToFocusedIndex]);
-    var onSectionListLayout = (0, react_1.useCallback)(function (nativeEvent) {
-        onLayout === null || onLayout === void 0 ? void 0 : onLayout(nativeEvent);
+    const onSectionListLayout = (0, react_1.useCallback)((nativeEvent) => {
+        onLayout?.(nativeEvent);
         scrollToFocusedIndexOnFirstRender(nativeEvent);
     }, [onLayout, scrollToFocusedIndexOnFirstRender]);
-    var updateAndScrollToFocusedIndex = (0, react_1.useCallback)(function (newFocusedIndex) {
+    const updateAndScrollToFocusedIndex = (0, react_1.useCallback)((newFocusedIndex) => {
         setFocusedIndex(newFocusedIndex);
         scrollToIndex(newFocusedIndex, true);
     }, [scrollToIndex, setFocusedIndex]);
     /** Function to focus text input */
-    var focusTextInput = (0, react_1.useCallback)(function () {
+    const focusTextInput = (0, react_1.useCallback)(() => {
         if (!innerTextInputRef.current) {
             return;
         }
         innerTextInputRef.current.focus();
     }, []);
     /** Focuses the text input when the component comes into focus and after any navigation animations finish. */
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
         if (textInputAutoFocus && shouldShowTextInput) {
             if (shouldDelayFocus) {
                 focusTimeoutRef.current = setTimeout(focusTextInput, CONST_1.default.ANIMATED_TRANSITION);
@@ -509,19 +505,19 @@ function BaseSelectionList(_a) {
                 requestAnimationFrame(focusTextInput);
             }
         }
-        return function () { return focusTimeoutRef.current && clearTimeout(focusTimeoutRef.current); };
+        return () => focusTimeoutRef.current && clearTimeout(focusTimeoutRef.current);
     }, [shouldShowTextInput, textInputAutoFocus, shouldDelayFocus, focusTextInput]));
-    var prevTextInputValue = (0, usePrevious_1.default)(textInputValue);
-    var prevSelectedOptionsLength = (0, usePrevious_1.default)(flattenedSections.selectedOptions.length);
-    var prevAllOptionsLength = (0, usePrevious_1.default)(flattenedSections.allOptions.length);
-    (0, react_1.useEffect)(function () {
+    const prevTextInputValue = (0, usePrevious_1.default)(textInputValue);
+    const prevSelectedOptionsLength = (0, usePrevious_1.default)(flattenedSections.selectedOptions.length);
+    const prevAllOptionsLength = (0, usePrevious_1.default)(flattenedSections.allOptions.length);
+    (0, react_1.useEffect)(() => {
         if (prevTextInputValue === textInputValue) {
             return;
         }
         // Reset the current page to 1 when the user types something
         setCurrentPage(1);
     }, [textInputValue, prevTextInputValue]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // Avoid changing focus if the textInputValue remains unchanged.
         if ((prevTextInputValue === textInputValue && flattenedSections.selectedOptions.length === prevSelectedOptionsLength) ||
             flattenedSections.allOptions.length === 0 ||
@@ -530,10 +526,10 @@ function BaseSelectionList(_a) {
         }
         // Handle clearing search
         if (prevTextInputValue !== '' && textInputValue === '') {
-            var foundSelectedItemIndex = flattenedSections.allOptions.findIndex(isItemSelected);
-            var singleSectionList = slicedSections.length < 2;
+            const foundSelectedItemIndex = flattenedSections.allOptions.findIndex(isItemSelected);
+            const singleSectionList = slicedSections.length < 2;
             if (foundSelectedItemIndex !== -1 && singleSectionList && !canSelectMultiple) {
-                var requiredPage = Math.ceil((foundSelectedItemIndex + 1) / CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH);
+                const requiredPage = Math.ceil((foundSelectedItemIndex + 1) / CONST_1.default.MAX_SELECTION_LIST_PAGE_LENGTH);
                 setCurrentPage(requiredPage);
                 updateAndScrollToFocusedIndex(foundSelectedItemIndex);
                 return;
@@ -541,7 +537,7 @@ function BaseSelectionList(_a) {
         }
         // Remove the focus if the search input is empty and prev search input not empty or selected options length is changed (and allOptions length remains the same)
         // else focus on the first non disabled item
-        var newSelectedIndex = ((0, isEmpty_1.default)(prevTextInputValue) && textInputValue === '') ||
+        const newSelectedIndex = ((0, isEmpty_1.default)(prevTextInputValue) && textInputValue === '') ||
             (flattenedSections.selectedOptions.length !== prevSelectedOptionsLength && prevAllOptionsLength === flattenedSections.allOptions.length)
             ? -1
             : 0;
@@ -560,36 +556,36 @@ function BaseSelectionList(_a) {
         isItemSelected,
         slicedSections.length,
     ]);
-    (0, react_1.useEffect)(function () { return function () {
+    (0, react_1.useEffect)(() => () => {
         if (!itemFocusTimeoutRef.current) {
             return;
         }
         clearTimeout(itemFocusTimeoutRef.current);
-    }; }, []);
+    }, []);
     /**
      * Highlights the items and scrolls to the first item present in the items list.
      *
      * @param items - The list of items to highlight.
      * @param timeout - The timeout in milliseconds before removing the highlight.
      */
-    var scrollAndHighlightItem = (0, react_1.useCallback)(function (items) {
-        var newItemsToHighlight = new Set();
-        items.forEach(function (item) {
+    const scrollAndHighlightItem = (0, react_1.useCallback)((items) => {
+        const newItemsToHighlight = new Set();
+        items.forEach((item) => {
             newItemsToHighlight.add(item);
         });
-        var index = flattenedSections.allOptions.findIndex(function (option) { var _a; return newItemsToHighlight.has((_a = option.keyForList) !== null && _a !== void 0 ? _a : ''); });
+        const index = flattenedSections.allOptions.findIndex((option) => newItemsToHighlight.has(option.keyForList ?? ''));
         scrollToIndex(index);
         setItemsToHighlight(newItemsToHighlight);
         if (itemFocusTimeoutRef.current) {
             clearTimeout(itemFocusTimeoutRef.current);
         }
-        var duration = CONST_1.default.ANIMATED_HIGHLIGHT_ENTRY_DELAY +
+        const duration = CONST_1.default.ANIMATED_HIGHLIGHT_ENTRY_DELAY +
             CONST_1.default.ANIMATED_HIGHLIGHT_ENTRY_DURATION +
             CONST_1.default.ANIMATED_HIGHLIGHT_START_DELAY +
             CONST_1.default.ANIMATED_HIGHLIGHT_START_DURATION +
             CONST_1.default.ANIMATED_HIGHLIGHT_END_DELAY +
             CONST_1.default.ANIMATED_HIGHLIGHT_END_DURATION;
-        itemFocusTimeoutRef.current = setTimeout(function () {
+        itemFocusTimeoutRef.current = setTimeout(() => {
             setItemsToHighlight(null);
         }, duration);
     }, [flattenedSections.allOptions, scrollToIndex]);
@@ -598,30 +594,30 @@ function BaseSelectionList(_a) {
      *
      * @param isTextInputFocused - Is external TextInput focused.
      */
-    var updateExternalTextInputFocus = (0, react_1.useCallback)(function (isTextInputFocused) {
+    const updateExternalTextInputFocus = (0, react_1.useCallback)((isTextInputFocused) => {
         isTextInputFocusedRef.current = isTextInputFocused;
     }, []);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        scrollAndHighlightItem: scrollAndHighlightItem,
-        clearInputAfterSelect: clearInputAfterSelect,
-        updateAndScrollToFocusedIndex: updateAndScrollToFocusedIndex,
-        updateExternalTextInputFocus: updateExternalTextInputFocus,
-        scrollToIndex: scrollToIndex,
-        getFocusedOption: getFocusedOption,
-        focusTextInput: focusTextInput,
-        scrollToFocusedInput: scrollToFocusedInput,
-    }); }, [scrollAndHighlightItem, clearInputAfterSelect, updateAndScrollToFocusedIndex, updateExternalTextInputFocus, scrollToIndex, getFocusedOption, focusTextInput, scrollToFocusedInput]);
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        scrollAndHighlightItem,
+        clearInputAfterSelect,
+        updateAndScrollToFocusedIndex,
+        updateExternalTextInputFocus,
+        scrollToIndex,
+        getFocusedOption,
+        focusTextInput,
+        scrollToFocusedInput,
+    }), [scrollAndHighlightItem, clearInputAfterSelect, updateAndScrollToFocusedIndex, updateExternalTextInputFocus, scrollToIndex, getFocusedOption, focusTextInput, scrollToFocusedInput]);
     /** Selects row when pressing Enter */
     (0, useKeyboardShortcut_1.default)(CONST_1.default.KEYBOARD_SHORTCUTS.ENTER, selectFocusedOption, {
         captureOnInputs: true,
         shouldBubble: !flattenedSections.allOptions.at(focusedIndex) || focusedIndex === -1,
-        shouldStopPropagation: shouldStopPropagation,
-        shouldPreventDefault: shouldPreventDefault,
+        shouldStopPropagation,
+        shouldPreventDefault,
         isActive: !disableKeyboardShortcuts && !disableEnterShortcut && isFocused && focusedIndex >= 0,
     });
     /** Calls confirm action when pressing CTRL (CMD) + Enter */
-    (0, useKeyboardShortcut_1.default)(CONST_1.default.KEYBOARD_SHORTCUTS.CTRL_ENTER, function (e) {
-        var focusedOption = focusedIndex !== -1 ? flattenedSections.allOptions.at(focusedIndex) : undefined;
+    (0, useKeyboardShortcut_1.default)(CONST_1.default.KEYBOARD_SHORTCUTS.CTRL_ENTER, (e) => {
+        const focusedOption = focusedIndex !== -1 ? flattenedSections.allOptions.at(focusedIndex) : undefined;
         if (onConfirm) {
             onConfirm(e, focusedOption);
             return;
@@ -632,15 +628,13 @@ function BaseSelectionList(_a) {
         shouldBubble: !flattenedSections.allOptions.at(focusedIndex) || focusedIndex === -1,
         isActive: !disableKeyboardShortcuts && isFocused && !isConfirmButtonDisabled,
     });
-    var headerMessageContent = function () {
-        return (!isLoadingNewOptions || headerMessage !== translate('common.noResultsFound') || (flattenedSections.allOptions.length === 0 && !showLoadingPlaceholder)) &&
-            !!headerMessage && (<react_native_1.View style={headerMessageStyle !== null && headerMessageStyle !== void 0 ? headerMessageStyle : [styles.ph5, styles.pb5]}>
+    const headerMessageContent = () => (!isLoadingNewOptions || headerMessage !== translate('common.noResultsFound') || (flattenedSections.allOptions.length === 0 && !showLoadingPlaceholder)) &&
+        !!headerMessage && (<react_native_1.View style={headerMessageStyle ?? [styles.ph5, styles.pb5]}>
                 <Text_1.default style={[styles.textLabel, styles.colorMuted, styles.minHeight5]}>{headerMessage}</Text_1.default>
             </react_native_1.View>);
-    };
-    var safeAreaPaddingBottomStyle = (0, useSafeAreaPaddings_1.default)().safeAreaPaddingBottomStyle;
-    var paddingBottomStyle = (0, react_1.useMemo)(function () { return (!isKeyboardShown || !!footerContent) && includeSafeAreaPaddingBottom && safeAreaPaddingBottomStyle; }, [footerContent, includeSafeAreaPaddingBottom, isKeyboardShown, safeAreaPaddingBottomStyle]);
-    var shouldHideContentBottomSafeAreaPadding = showConfirmButton || !!footerContent;
+    const { safeAreaPaddingBottomStyle } = (0, useSafeAreaPaddings_1.default)();
+    const paddingBottomStyle = (0, react_1.useMemo)(() => (!isKeyboardShown || !!footerContent) && includeSafeAreaPaddingBottom && safeAreaPaddingBottomStyle, [footerContent, includeSafeAreaPaddingBottom, isKeyboardShown, safeAreaPaddingBottomStyle]);
+    const shouldHideContentBottomSafeAreaPadding = showConfirmButton || !!footerContent;
     // TODO: test _every_ component that uses SelectionList
     return (<react_native_1.View style={[styles.flex1, !addBottomSafeAreaPadding && paddingBottomStyle, containerStyle]}>
             {shouldShowTextInput && !shouldShowTextInputAfterHeader && renderInput()}
@@ -650,10 +644,10 @@ function BaseSelectionList(_a) {
             {!!headerContent && headerContent}
             {flattenedSections.allOptions.length === 0 && (showLoadingPlaceholder || shouldShowListEmptyContent) ? (renderListEmptyContent()) : (<>
                     {!listHeaderContent && header()}
-                    <SectionList_1.default renderScrollComponent={renderScrollComponent} removeClippedSubviews={removeClippedSubviews} ref={listRef} sections={slicedSections} stickySectionHeadersEnabled={false} renderSectionHeader={function (arg) { return (<>
+                    <SectionList_1.default renderScrollComponent={renderScrollComponent} removeClippedSubviews={removeClippedSubviews} ref={listRef} sections={slicedSections} stickySectionHeadersEnabled={false} renderSectionHeader={(arg) => (<>
                                 {renderSectionHeader(arg)}
                                 {listHeaderContent && header()}
-                            </>); }} renderItem={renderItem} getItemLayout={getItemLayout} onScroll={onScroll} onScrollBeginDrag={onScrollBeginDrag} onContentSizeChange={onContentSizeChange} keyExtractor={function (item, index) { var _a; return (_a = item.keyForList) !== null && _a !== void 0 ? _a : "".concat(index); }} extraData={focusedIndex} 
+                            </>)} renderItem={renderItem} getItemLayout={getItemLayout} onScroll={onScroll} onScrollBeginDrag={onScrollBeginDrag} onContentSizeChange={onContentSizeChange} keyExtractor={(item, index) => item.keyForList ?? `${index}`} extraData={focusedIndex} 
         // the only valid values on the new arch are "white", "black", and "default", other values will cause a crash
         indicatorStyle="white" keyboardShouldPersistTaps="always" showsVerticalScrollIndicator={showScrollIndicator} initialNumToRender={initialNumToRender} maxToRenderPerBatch={maxToRenderPerBatch} windowSize={windowSize} updateCellsBatchingPeriod={updateCellsBatchingPeriod} viewabilityConfig={{ viewAreaCoveragePercentThreshold: 95 }} testID="selection-list" onLayout={onSectionListLayout} style={[(!maxToRenderPerBatch || (shouldHideListOnInitialRender && isInitialSectionListRender)) && styles.opacity0, sectionListStyle]} ListHeaderComponent={shouldShowTextInput && shouldShowTextInputAfterHeader ? (<>
                                     {listHeaderContent}
@@ -662,7 +656,7 @@ function BaseSelectionList(_a) {
                                 </>) : (listHeaderContent)} scrollEnabled={scrollEnabled} ListFooterComponent={<>
                                 {footerContentAbovePagination}
                                 {listFooterContent}
-                            </>} onEndReached={onEndReached !== null && onEndReached !== void 0 ? onEndReached : incrementPage} onEndReachedThreshold={onEndReachedThreshold} scrollEventThrottle={scrollEventThrottle} addBottomSafeAreaPadding={!shouldHideContentBottomSafeAreaPadding && addBottomSafeAreaPadding} addOfflineIndicatorBottomSafeAreaPadding={!shouldHideContentBottomSafeAreaPadding && addOfflineIndicatorBottomSafeAreaPadding} contentContainerStyle={contentContainerStyle} CellRendererComponent={shouldPreventActiveCellVirtualization ? FocusAwareCellRendererComponent_1.default : undefined}/>
+                            </>} onEndReached={onEndReached ?? incrementPage} onEndReachedThreshold={onEndReachedThreshold} scrollEventThrottle={scrollEventThrottle} addBottomSafeAreaPadding={!shouldHideContentBottomSafeAreaPadding && addBottomSafeAreaPadding} addOfflineIndicatorBottomSafeAreaPadding={!shouldHideContentBottomSafeAreaPadding && addOfflineIndicatorBottomSafeAreaPadding} contentContainerStyle={contentContainerStyle} CellRendererComponent={shouldPreventActiveCellVirtualization ? FocusAwareCellRendererComponent_1.default : undefined}/>
                     {children}
                 </>)}
             {showConfirmButton && (<FixedFooter_1.default style={styles.mtAuto} addBottomSafeAreaPadding={addBottomSafeAreaPadding} addOfflineIndicatorBottomSafeAreaPadding={addOfflineIndicatorBottomSafeAreaPadding}>

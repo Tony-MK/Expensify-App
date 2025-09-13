@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // this is needed because before, the Logging queue would get flushed while tests were running,
 // causing unexpected calls to HttpUtils.xhr() which would cause mock mismatches and flaky tests.
 exports.default = {
-    info: function (message) { return console.debug("[info] ".concat(message, " (mocked)")); },
-    alert: function (message) { return console.debug("[alert] ".concat(message, " (mocked)")); },
-    warn: function (message) { return console.debug("[warn] ".concat(message, " (mocked)")); },
-    hmmm: function (message) { return console.debug("[hmmm] ".concat(message, " (mocked)")); },
+    info: (message) => console.debug(`[info] ${message} (mocked)`),
+    alert: (message) => console.debug(`[alert] ${message} (mocked)`),
+    warn: (message) => console.debug(`[warn] ${message} (mocked)`),
+    hmmm: (message) => console.debug(`[hmmm] ${message} (mocked)`),
 };

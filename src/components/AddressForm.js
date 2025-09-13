@@ -1,44 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var CONST_1 = require("@src/CONST");
-var HomeAddressForm_1 = require("@src/types/form/HomeAddressForm");
-var AddressSearch_1 = require("./AddressSearch");
-var CountrySelector_1 = require("./CountrySelector");
-var FormProvider_1 = require("./Form/FormProvider");
-var InputWrapper_1 = require("./Form/InputWrapper");
-var StateSelector_1 = require("./StateSelector");
-var TextInput_1 = require("./TextInput");
-function AddressForm(_a) {
-    var _b, _c;
-    var _d = _a.city, city = _d === void 0 ? '' : _d, _e = _a.country, country = _e === void 0 ? '' : _e, formID = _a.formID, _f = _a.onAddressChanged, onAddressChanged = _f === void 0 ? function () { } : _f, onSubmit = _a.onSubmit, _g = _a.shouldSaveDraft, shouldSaveDraft = _g === void 0 ? false : _g, _h = _a.state, state = _h === void 0 ? '' : _h, _j = _a.street1, street1 = _j === void 0 ? '' : _j, _k = _a.street2, street2 = _k === void 0 ? '' : _k, _l = _a.submitButtonText, submitButtonText = _l === void 0 ? '' : _l, _m = _a.zip, zip = _m === void 0 ? '' : _m;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var zipSampleFormat = (_c = (country && ((_b = CONST_1.default.COUNTRY_ZIP_REGEX_DATA[country]) === null || _b === void 0 ? void 0 : _b.samples))) !== null && _c !== void 0 ? _c : '';
-    var zipFormat = translate('common.zipCodeExampleFormat', { zipSampleFormat: zipSampleFormat });
-    var isUSAForm = country === CONST_1.default.COUNTRY.US;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const CONST_1 = require("@src/CONST");
+const HomeAddressForm_1 = require("@src/types/form/HomeAddressForm");
+const AddressSearch_1 = require("./AddressSearch");
+const CountrySelector_1 = require("./CountrySelector");
+const FormProvider_1 = require("./Form/FormProvider");
+const InputWrapper_1 = require("./Form/InputWrapper");
+const StateSelector_1 = require("./StateSelector");
+const TextInput_1 = require("./TextInput");
+function AddressForm({ city = '', country = '', formID, onAddressChanged = () => { }, onSubmit, shouldSaveDraft = false, state = '', street1 = '', street2 = '', submitButtonText = '', zip = '', }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const zipSampleFormat = (country && CONST_1.default.COUNTRY_ZIP_REGEX_DATA[country]?.samples) ?? '';
+    const zipFormat = translate('common.zipCodeExampleFormat', { zipSampleFormat });
+    const isUSAForm = country === CONST_1.default.COUNTRY.US;
     /**
      * @param translate - translate function
      * @param isUSAForm - selected country ISO code is US
      * @param values - form input values
      * @returns - An object containing the errors for each inputID
      */
-    var validator = (0, react_1.useCallback)(function (values) {
-        var _a, _b, _c, _d, _e, _f, _g;
-        var errors = {};
-        var requiredFields = ['addressLine1', 'city', 'country', 'state'];
+    const validator = (0, react_1.useCallback)((values) => {
+        const errors = {};
+        const requiredFields = ['addressLine1', 'city', 'country', 'state'];
         // Check "State" dropdown is a valid state if selected Country is USA
         if (values.country === CONST_1.default.COUNTRY.US && !values.state) {
             errors.state = translate('common.error.fieldRequired');
         }
         // Add "Field required" errors if any required field is empty
-        requiredFields.forEach(function (fieldKey) {
-            var _a;
-            var fieldValue = (_a = values[fieldKey]) !== null && _a !== void 0 ? _a : '';
+        requiredFields.forEach((fieldKey) => {
+            const fieldValue = values[fieldKey] ?? '';
             if ((0, ValidationUtils_1.isRequiredFulfilled)(fieldValue)) {
                 return;
             }
@@ -63,13 +59,13 @@ function AddressForm(_a) {
             });
         }
         // If no country is selected, default value is an empty string and there's no related regex data so we default to an empty object
-        var countryRegexDetails = (values.country ? (_a = CONST_1.default.COUNTRY_ZIP_REGEX_DATA) === null || _a === void 0 ? void 0 : _a[values.country] : {});
+        const countryRegexDetails = (values.country ? CONST_1.default.COUNTRY_ZIP_REGEX_DATA?.[values.country] : {});
         // The postal code system might not exist for a country, so no regex either for them.
-        var countrySpecificZipRegex = countryRegexDetails === null || countryRegexDetails === void 0 ? void 0 : countryRegexDetails.regex;
-        var countryZipFormat = (_b = countryRegexDetails === null || countryRegexDetails === void 0 ? void 0 : countryRegexDetails.samples) !== null && _b !== void 0 ? _b : '';
+        const countrySpecificZipRegex = countryRegexDetails?.regex;
+        const countryZipFormat = countryRegexDetails?.samples ?? '';
         if (countrySpecificZipRegex) {
-            if (!countrySpecificZipRegex.test((_c = values.zipPostCode) === null || _c === void 0 ? void 0 : _c.trim().toUpperCase())) {
-                if ((0, ValidationUtils_1.isRequiredFulfilled)((_d = values.zipPostCode) === null || _d === void 0 ? void 0 : _d.trim())) {
+            if (!countrySpecificZipRegex.test(values.zipPostCode?.trim().toUpperCase())) {
+                if ((0, ValidationUtils_1.isRequiredFulfilled)(values.zipPostCode?.trim())) {
                     errors.zipPostCode = translate('privatePersonalDetails.error.incorrectZipFormat', { zipFormat: countryZipFormat });
                 }
                 else {
@@ -77,14 +73,14 @@ function AddressForm(_a) {
                 }
             }
         }
-        else if (!CONST_1.default.GENERIC_ZIP_CODE_REGEX.test((_g = (_f = (_e = values === null || values === void 0 ? void 0 : values.zipPostCode) === null || _e === void 0 ? void 0 : _e.trim()) === null || _f === void 0 ? void 0 : _f.toUpperCase()) !== null && _g !== void 0 ? _g : '')) {
+        else if (!CONST_1.default.GENERIC_ZIP_CODE_REGEX.test(values?.zipPostCode?.trim()?.toUpperCase() ?? '')) {
             errors.zipPostCode = translate('privatePersonalDetails.error.incorrectZipFormat');
         }
         return errors;
     }, [translate]);
     return (<FormProvider_1.default style={[styles.flexGrow1, styles.mh5]} formID={formID} validate={validator} onSubmit={onSubmit} submitButtonText={submitButtonText} enabledWhenOffline addBottomSafeAreaPadding>
             <react_native_1.View>
-                <InputWrapper_1.default InputComponent={AddressSearch_1.default} inputID={HomeAddressForm_1.default.ADDRESS_LINE_1} label={translate('common.addressLine', { lineNumber: 1 })} onValueChange={function (data, key) {
+                <InputWrapper_1.default InputComponent={AddressSearch_1.default} inputID={HomeAddressForm_1.default.ADDRESS_LINE_1} label={translate('common.addressLine', { lineNumber: 1 })} onValueChange={(data, key) => {
             onAddressChanged(data, key);
         }} defaultValue={street1} renamedInputKeys={{
             street: HomeAddressForm_1.default.ADDRESS_LINE_1,

@@ -1,30 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useOnyx_1 = require("@hooks/useOnyx");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var UserUtils_1 = require("@libs/UserUtils");
-var AttachmentModalContainer_1 = require("@pages/media/AttachmentModalScreen/AttachmentModalContainer");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function WorkspaceAvatarModalContent(_a) {
-    var _b, _c;
-    var navigation = _a.navigation, route = _a.route;
-    var policyID = route.params.policyID;
-    var policy = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID), { canBeMissing: false })[0];
-    var _d = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true })[0], isLoadingApp = _d === void 0 ? true : _d;
-    var avatarURL = (_b = policy === null || policy === void 0 ? void 0 : policy.avatarURL) !== null && _b !== void 0 ? _b : (0, ReportUtils_1.getDefaultWorkspaceAvatar)((_c = policy === null || policy === void 0 ? void 0 : policy.name) !== null && _c !== void 0 ? _c : '');
-    var contentProps = (0, react_1.useMemo)(function () {
-        var _a;
-        return ({
-            source: (0, UserUtils_1.getFullSizeAvatar)(avatarURL, 0),
-            headerTitle: policy === null || policy === void 0 ? void 0 : policy.name,
-            isWorkspaceAvatar: true,
-            originalFileName: (_a = policy === null || policy === void 0 ? void 0 : policy.originalFileName) !== null && _a !== void 0 ? _a : policy === null || policy === void 0 ? void 0 : policy.id,
-            shouldShowNotFoundPage: !Object.keys(policy !== null && policy !== void 0 ? policy : {}).length && !isLoadingApp,
-            isLoading: !Object.keys(policy !== null && policy !== void 0 ? policy : {}).length && !!isLoadingApp,
-            maybeIcon: true,
-        });
-    }, [avatarURL, isLoadingApp, policy]);
+const react_1 = require("react");
+const useOnyx_1 = require("@hooks/useOnyx");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const UserUtils_1 = require("@libs/UserUtils");
+const AttachmentModalContainer_1 = require("@pages/media/AttachmentModalScreen/AttachmentModalContainer");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function WorkspaceAvatarModalContent({ navigation, route }) {
+    const { policyID } = route.params;
+    const [policy] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`, { canBeMissing: false });
+    const [isLoadingApp = true] = (0, useOnyx_1.default)(ONYXKEYS_1.default.IS_LOADING_APP, { canBeMissing: true });
+    const avatarURL = policy?.avatarURL ?? (0, ReportUtils_1.getDefaultWorkspaceAvatar)(policy?.name ?? '');
+    const contentProps = (0, react_1.useMemo)(() => ({
+        source: (0, UserUtils_1.getFullSizeAvatar)(avatarURL, 0),
+        headerTitle: policy?.name,
+        isWorkspaceAvatar: true,
+        originalFileName: policy?.originalFileName ?? policy?.id,
+        shouldShowNotFoundPage: !Object.keys(policy ?? {}).length && !isLoadingApp,
+        isLoading: !Object.keys(policy ?? {}).length && !!isLoadingApp,
+        maybeIcon: true,
+    }), [avatarURL, isLoadingApp, policy]);
     return (<AttachmentModalContainer_1.default navigation={navigation} contentProps={contentProps}/>);
 }
 WorkspaceAvatarModalContent.displayName = 'WorkspaceAvatarModalContent';

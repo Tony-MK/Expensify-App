@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useStepFormSubmit;
-var react_1 = require("react");
-var FormActions = require("@userActions/FormActions");
+const react_1 = require("react");
+const FormActions = require("@userActions/FormActions");
 /**
  * Hook for handling submit method in substeps.
  * When user is in editing mode, we should save values only when user confirms the change
@@ -11,11 +11,10 @@ var FormActions = require("@userActions/FormActions");
  * @param fieldIds - field IDs for particular step
  * @param shouldSaveDraft - if we should save draft values
  */
-function useStepFormSubmit(_a) {
-    var formId = _a.formId, onNext = _a.onNext, fieldIds = _a.fieldIds, shouldSaveDraft = _a.shouldSaveDraft;
-    return (0, react_1.useCallback)(function (values) {
+function useStepFormSubmit({ formId, onNext, fieldIds, shouldSaveDraft }) {
+    return (0, react_1.useCallback)((values) => {
         if (shouldSaveDraft) {
-            var stepValues = fieldIds.reduce(function (acc, key) {
+            const stepValues = fieldIds.reduce((acc, key) => {
                 acc[key] = values[key];
                 return acc;
             }, {});

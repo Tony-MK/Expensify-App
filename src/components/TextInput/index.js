@@ -1,46 +1,32 @@
 "use strict";
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Browser_1 = require("@libs/Browser");
-var DomUtils_1 = require("@libs/DomUtils");
-var Visibility_1 = require("@libs/Visibility");
-var BaseTextInput_1 = require("./BaseTextInput");
-var styleConst = require("./styleConst");
-function TextInput(_a) {
-    var _b;
-    var ref = _a.ref, props = __rest(_a, ["ref"]);
-    var styles = (0, useThemeStyles_1.default)();
-    var textInputRef = (0, react_1.useRef)(null);
-    var removeVisibilityListenerRef = (0, react_1.useRef)(null);
-    (0, react_1.useEffect)(function () {
-        var _a, _b;
-        var removeVisibilityListener = removeVisibilityListenerRef.current;
+const react_1 = require("react");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Browser_1 = require("@libs/Browser");
+const DomUtils_1 = require("@libs/DomUtils");
+const Visibility_1 = require("@libs/Visibility");
+const BaseTextInput_1 = require("./BaseTextInput");
+const styleConst = require("./styleConst");
+function TextInput({ ref, ...props }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const textInputRef = (0, react_1.useRef)(null);
+    const removeVisibilityListenerRef = (0, react_1.useRef)(null);
+    (0, react_1.useEffect)(() => {
+        let removeVisibilityListener = removeVisibilityListenerRef.current;
         if (props.disableKeyboard) {
-            (_a = textInputRef.current) === null || _a === void 0 ? void 0 : _a.setAttribute('inputmode', 'none');
+            textInputRef.current?.setAttribute('inputmode', 'none');
         }
         if (props.name) {
-            (_b = textInputRef.current) === null || _b === void 0 ? void 0 : _b.setAttribute('name', props.name);
+            textInputRef.current?.setAttribute('name', props.name);
         }
-        removeVisibilityListener = Visibility_1.default.onVisibilityChange(function () {
+        removeVisibilityListener = Visibility_1.default.onVisibilityChange(() => {
             if (!(0, Browser_1.isMobileChrome)() || !Visibility_1.default.isVisible() || !textInputRef.current || DomUtils_1.default.getActiveElement() !== textInputRef.current) {
                 return;
             }
             textInputRef.current.blur();
             textInputRef.current.focus();
         });
-        return function () {
+        return () => {
             if (!removeVisibilityListener) {
                 return;
             }
@@ -48,18 +34,18 @@ function TextInput(_a) {
         };
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, []);
-    var isLabeledMultiline = !!((_b = props.label) === null || _b === void 0 ? void 0 : _b.length) && props.multiline;
-    var labelAnimationStyle = {
+    const isLabeledMultiline = !!props.label?.length && props.multiline;
+    const labelAnimationStyle = {
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        '--active-label-translate-y': "".concat(styleConst.ACTIVE_LABEL_TRANSLATE_Y, "px"),
+        '--active-label-translate-y': `${styleConst.ACTIVE_LABEL_TRANSLATE_Y}px`,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        '--active-label-scale': "".concat(styleConst.ACTIVE_LABEL_SCALE),
+        '--active-label-scale': `${styleConst.ACTIVE_LABEL_SCALE}`,
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        '--label-transition-duration': "".concat(styleConst.LABEL_ANIMATION_DURATION, "ms"),
+        '--label-transition-duration': `${styleConst.LABEL_ANIMATION_DURATION}ms`,
     };
     return (<BaseTextInput_1.default 
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props} ref={function (element) {
+    {...props} ref={(element) => {
             textInputRef.current = element;
             if (!ref) {
                 return;

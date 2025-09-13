@@ -1,195 +1,91 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __asyncValues = (this && this.__asyncValues) || function (o) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var openai_1 = require("openai");
-var sanitizeJSONStringValues_1 = require("@github/libs/sanitizeJSONStringValues");
-var retryWithBackoff_1 = require("@scripts/utils/retryWithBackoff");
-var OpenAIUtils = /** @class */ (function () {
-    function OpenAIUtils(apiKey) {
-        this.client = new openai_1.default({ apiKey: apiKey });
+const openai_1 = require("openai");
+const sanitizeJSONStringValues_1 = require("@github/libs/sanitizeJSONStringValues");
+const retryWithBackoff_1 = require("@scripts/utils/retryWithBackoff");
+class OpenAIUtils {
+    constructor(apiKey) {
+        this.client = new openai_1.default({ apiKey });
     }
     /**
      * Prompt the Chat Completions API.
      */
-    OpenAIUtils.prototype.promptChatCompletions = function (_a) {
-        return __awaiter(this, arguments, void 0, function (_b) {
-            var messages, response, result;
-            var _this = this;
-            var _c, _d, _e;
-            var userPrompt = _b.userPrompt, _f = _b.systemPrompt, systemPrompt = _f === void 0 ? '' : _f, _g = _b.model, model = _g === void 0 ? 'gpt-4o' : _g;
-            return __generator(this, function (_h) {
-                switch (_h.label) {
-                    case 0:
-                        messages = [{ role: 'user', content: userPrompt }];
-                        if (systemPrompt) {
-                            messages.unshift({ role: 'system', content: systemPrompt });
-                        }
-                        return [4 /*yield*/, (0, retryWithBackoff_1.default)(function () {
-                                return _this.client.chat.completions.create({
-                                    model: model,
-                                    messages: messages,
-                                    temperature: 0.3,
-                                });
-                            }, { isRetryable: function (err) { return OpenAIUtils.isRetryableError(err); } })];
-                    case 1:
-                        response = _h.sent();
-                        result = (_e = (_d = (_c = response.choices.at(0)) === null || _c === void 0 ? void 0 : _c.message) === null || _d === void 0 ? void 0 : _d.content) === null || _e === void 0 ? void 0 : _e.trim();
-                        if (!result) {
-                            throw new Error('Error getting chat completion response from OpenAI');
-                        }
-                        return [2 /*return*/, result];
-                }
-            });
-        });
-    };
+    async promptChatCompletions({ userPrompt, systemPrompt = '', model = 'gpt-4o' }) {
+        const messages = [{ role: 'user', content: userPrompt }];
+        if (systemPrompt) {
+            messages.unshift({ role: 'system', content: systemPrompt });
+        }
+        const response = await (0, retryWithBackoff_1.default)(() => this.client.chat.completions.create({
+            model,
+            messages,
+            temperature: 0.3,
+        }), { isRetryable: (err) => OpenAIUtils.isRetryableError(err) });
+        const result = response.choices.at(0)?.message?.content?.trim();
+        if (!result) {
+            throw new Error('Error getting chat completion response from OpenAI');
+        }
+        return result;
+    }
     /**
      * Prompt a pre-defined assistant.
      */
-    OpenAIUtils.prototype.promptAssistant = function (assistantID, userMessage) {
-        return __awaiter(this, void 0, void 0, function () {
-            var thread, run, response, count, _a, _b, _c, message, e_1_1;
-            var _this = this;
-            var _d, e_1, _e, _f;
-            return __generator(this, function (_g) {
-                switch (_g.label) {
-                    case 0: return [4 /*yield*/, (0, retryWithBackoff_1.default)(function () {
-                            // eslint-disable-next-line deprecation/deprecation
-                            return _this.client.beta.threads.create({
-                                messages: [{ role: OpenAIUtils.USER, content: userMessage }],
-                            });
-                        }, { isRetryable: function (err) { return OpenAIUtils.isRetryableError(err); } })];
-                    case 1:
-                        thread = _g.sent();
-                        return [4 /*yield*/, (0, retryWithBackoff_1.default)(function () {
-                                // eslint-disable-next-line deprecation/deprecation
-                                return _this.client.beta.threads.runs.create(thread.id, {
-                                    // eslint-disable-next-line @typescript-eslint/naming-convention
-                                    assistant_id: assistantID,
-                                });
-                            }, { isRetryable: function (err) { return OpenAIUtils.isRetryableError(err); } })];
-                    case 2:
-                        run = _g.sent();
-                        response = '';
-                        count = 0;
-                        _g.label = 3;
-                    case 3:
-                        if (!(!response && count < OpenAIUtils.MAX_POLL_COUNT)) return [3 /*break*/, 18];
-                        return [4 /*yield*/, this.client.beta.threads.runs.retrieve(run.id, { thread_id: thread.id })];
-                    case 4:
-                        // eslint-disable-next-line @typescript-eslint/naming-convention, deprecation/deprecation
-                        run = _g.sent();
-                        if (!(run.status !== OpenAIUtils.OPENAI_RUN_COMPLETED)) return [3 /*break*/, 6];
-                        count++;
-                        return [4 /*yield*/, new Promise(function (resolve) {
-                                setTimeout(resolve, OpenAIUtils.POLL_RATE);
-                            })];
-                    case 5:
-                        _g.sent();
-                        return [3 /*break*/, 3];
-                    case 6:
-                        _g.trys.push([6, 11, 12, 17]);
-                        _a = true, _b = (e_1 = void 0, __asyncValues(this.client.beta.threads.messages.list(thread.id)));
-                        _g.label = 7;
-                    case 7: return [4 /*yield*/, _b.next()];
-                    case 8:
-                        if (!(_c = _g.sent(), _d = _c.done, !_d)) return [3 /*break*/, 10];
-                        _f = _c.value;
-                        _a = false;
-                        message = _f;
-                        if (message.role !== OpenAIUtils.ASSISTANT) {
-                            return [3 /*break*/, 9];
-                        }
-                        response += message.content
-                            .map(function (contentBlock) { return OpenAIUtils.isTextContentBlock(contentBlock) && contentBlock.text.value; })
-                            .join('\n')
-                            .trim();
-                        console.log('Parsed assistant response:', response);
-                        _g.label = 9;
-                    case 9:
-                        _a = true;
-                        return [3 /*break*/, 7];
-                    case 10: return [3 /*break*/, 17];
-                    case 11:
-                        e_1_1 = _g.sent();
-                        e_1 = { error: e_1_1 };
-                        return [3 /*break*/, 17];
-                    case 12:
-                        _g.trys.push([12, , 15, 16]);
-                        if (!(!_a && !_d && (_e = _b.return))) return [3 /*break*/, 14];
-                        return [4 /*yield*/, _e.call(_b)];
-                    case 13:
-                        _g.sent();
-                        _g.label = 14;
-                    case 14: return [3 /*break*/, 16];
-                    case 15:
-                        if (e_1) throw e_1.error;
-                        return [7 /*endfinally*/];
-                    case 16: return [7 /*endfinally*/];
-                    case 17:
-                        if (!response) {
-                            throw new Error('Assistant response is empty or had no text content. This is unexpected.');
-                        }
-                        return [3 /*break*/, 3];
-                    case 18: return [2 /*return*/, response];
+    async promptAssistant(assistantID, userMessage) {
+        // 1. Create a thread
+        const thread = await (0, retryWithBackoff_1.default)(() => 
+        // eslint-disable-next-line deprecation/deprecation
+        this.client.beta.threads.create({
+            messages: [{ role: OpenAIUtils.USER, content: userMessage }],
+        }), { isRetryable: (err) => OpenAIUtils.isRetryableError(err) });
+        // 2. Create a run on the thread
+        let run = await (0, retryWithBackoff_1.default)(() => 
+        // eslint-disable-next-line deprecation/deprecation
+        this.client.beta.threads.runs.create(thread.id, {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            assistant_id: assistantID,
+        }), { isRetryable: (err) => OpenAIUtils.isRetryableError(err) });
+        // 3. Poll for completion
+        let response = '';
+        let count = 0;
+        while (!response && count < OpenAIUtils.MAX_POLL_COUNT) {
+            // eslint-disable-next-line @typescript-eslint/naming-convention, deprecation/deprecation
+            run = await this.client.beta.threads.runs.retrieve(run.id, { thread_id: thread.id });
+            if (run.status !== OpenAIUtils.OPENAI_RUN_COMPLETED) {
+                count++;
+                await new Promise((resolve) => {
+                    setTimeout(resolve, OpenAIUtils.POLL_RATE);
+                });
+                continue;
+            }
+            // eslint-disable-next-line deprecation/deprecation
+            for await (const message of this.client.beta.threads.messages.list(thread.id)) {
+                if (message.role !== OpenAIUtils.ASSISTANT) {
+                    continue;
                 }
-            });
-        });
-    };
-    OpenAIUtils.isTextContentBlock = function (block) {
+                response += message.content
+                    .map((contentBlock) => OpenAIUtils.isTextContentBlock(contentBlock) && contentBlock.text.value)
+                    .join('\n')
+                    .trim();
+                console.log('Parsed assistant response:', response);
+            }
+            if (!response) {
+                throw new Error('Assistant response is empty or had no text content. This is unexpected.');
+            }
+        }
+        return response;
+    }
+    static isTextContentBlock(block) {
         return block.type === 'text';
-    };
-    OpenAIUtils.isRetryableError = function (error) {
+    }
+    static isRetryableError(error) {
         // Handle known/predictable API errors
         if (error instanceof openai_1.default.APIError) {
             // Only retry 429 (rate limit) or 5xx errors
-            var status_1 = error.status;
-            return !!status_1 && (status_1 === 429 || status_1 >= 500);
+            const status = error.status;
+            return !!status && (status === 429 || status >= 500);
         }
         // Handle random/unpredictable network errors
         if (error instanceof Error) {
-            var msg = error.message.toLowerCase();
+            const msg = error.message.toLowerCase();
             return (msg.includes('timeout') ||
                 msg.includes('socket hang up') ||
                 msg.includes('fetch failed') ||
@@ -203,10 +99,10 @@ var OpenAIUtils = /** @class */ (function () {
             );
         }
         return false;
-    };
-    OpenAIUtils.prototype.parseAssistantResponse = function (response) {
-        var sanitized = (0, sanitizeJSONStringValues_1.default)(response);
-        var parsed;
+    }
+    parseAssistantResponse(response) {
+        const sanitized = (0, sanitizeJSONStringValues_1.default)(response);
+        let parsed;
         try {
             parsed = JSON.parse(sanitized);
         }
@@ -219,31 +115,30 @@ var OpenAIUtils = /** @class */ (function () {
             return null;
         }
         return parsed;
-    };
-    /**
-     * How frequently to poll a thread to wait for it to be done.
-     */
-    OpenAIUtils.POLL_RATE = 1500;
-    /**
-     * The maximum amount of time to wait for a thread to produce a response.
-     */
-    OpenAIUtils.POLL_TIMEOUT = 90000;
-    /**
-     * The role of the `user` in the OpenAI model.
-     */
-    OpenAIUtils.USER = 'user';
-    /**
-     * The role of the `assistant` in the OpenAI model.
-     */
-    OpenAIUtils.ASSISTANT = 'assistant';
-    /**
-     * The status of a completed run in the OpenAI model.
-     */
-    OpenAIUtils.OPENAI_RUN_COMPLETED = 'completed';
-    /**
-     * The maximum number of requests to make when polling for thread completion.
-     */
-    OpenAIUtils.MAX_POLL_COUNT = Math.floor(OpenAIUtils.POLL_TIMEOUT / OpenAIUtils.POLL_RATE);
-    return OpenAIUtils;
-}());
+    }
+}
+/**
+ * How frequently to poll a thread to wait for it to be done.
+ */
+OpenAIUtils.POLL_RATE = 1500;
+/**
+ * The maximum amount of time to wait for a thread to produce a response.
+ */
+OpenAIUtils.POLL_TIMEOUT = 90000;
+/**
+ * The role of the `user` in the OpenAI model.
+ */
+OpenAIUtils.USER = 'user';
+/**
+ * The role of the `assistant` in the OpenAI model.
+ */
+OpenAIUtils.ASSISTANT = 'assistant';
+/**
+ * The status of a completed run in the OpenAI model.
+ */
+OpenAIUtils.OPENAI_RUN_COMPLETED = 'completed';
+/**
+ * The maximum number of requests to make when polling for thread completion.
+ */
+OpenAIUtils.MAX_POLL_COUNT = Math.floor(OpenAIUtils.POLL_TIMEOUT / OpenAIUtils.POLL_RATE);
 exports.default = OpenAIUtils;

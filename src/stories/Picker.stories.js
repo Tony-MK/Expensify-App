@@ -1,26 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Disabled = exports.ErrorStory = exports.PickerWithValue = exports.Default = void 0;
-var react_1 = require("react");
-var Picker_1 = require("@components/Picker");
+const react_1 = require("react");
+const Picker_1 = require("@components/Picker");
 /**
  * We use the Component Story Format for writing stories. Follow the docs here:
  *
  * https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
  */
-var story = {
+const story = {
     title: 'Components/Picker',
     component: Picker_1.default,
 };
 function Template(props) {
-    var _a = (0, react_1.useState)(''), value = _a[0], setValue = _a[1];
-    return (<Picker_1.default value={value} onInputChange={function (e) { return setValue(e); }} 
+    const [value, setValue] = (0, react_1.useState)('');
+    return (<Picker_1.default value={value} onInputChange={(e) => setValue(e)} 
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}/>);
 }
 // Arguments can be passed to the component by binding
 // See: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-var Default = Template.bind({});
+const Default = Template.bind({});
 exports.Default = Default;
 Default.args = {
     label: 'Default picker',
@@ -36,7 +36,7 @@ Default.args = {
         },
     ],
 };
-var PickerWithValue = Template.bind({});
+const PickerWithValue = Template.bind({});
 exports.PickerWithValue = PickerWithValue;
 PickerWithValue.args = {
     label: 'Picker with defined value',
@@ -53,7 +53,7 @@ PickerWithValue.args = {
         },
     ],
 };
-var ErrorStory = Template.bind({});
+const ErrorStory = Template.bind({});
 exports.ErrorStory = ErrorStory;
 ErrorStory.args = {
     label: 'Picker with error',
@@ -70,7 +70,7 @@ ErrorStory.args = {
         },
     ],
 };
-var Disabled = Template.bind({});
+const Disabled = Template.bind({});
 exports.Disabled = Disabled;
 Disabled.args = {
     label: 'Picker disabled',

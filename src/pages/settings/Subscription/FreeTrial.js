@@ -1,28 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Badge_1 = require("@components/Badge");
-var Button_1 = require("@components/Button");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-function FreeTrial(_a) {
-    var badgeStyles = _a.badgeStyles, _b = _a.pressable, pressable = _b === void 0 ? false : _b, _c = _a.addSpacing, addSpacing = _c === void 0 ? false : _c, _d = _a.success, success = _d === void 0 ? true : _d, _e = _a.inARow, inARow = _e === void 0 ? false : _e;
-    var styles = (0, useThemeStyles_1.default)();
-    var policies = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true })[0];
-    var firstDayFreeTrial = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_FIRST_DAY_FREE_TRIAL, { canBeMissing: true })[0];
-    var lastDayFreeTrial = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_DAY_FREE_TRIAL, { canBeMissing: true })[0];
-    var privateSubscription = (0, usePrivateSubscription_1.default)();
-    var _f = (0, react_1.useState)(undefined), freeTrialText = _f[0], setFreeTrialText = _f[1];
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    (0, react_1.useEffect)(function () {
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Badge_1 = require("@components/Badge");
+const Button_1 = require("@components/Button");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const SubscriptionUtils_1 = require("@libs/SubscriptionUtils");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+function FreeTrial({ badgeStyles, pressable = false, addSpacing = false, success = true, inARow = false }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const [policies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true });
+    const [firstDayFreeTrial] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_FIRST_DAY_FREE_TRIAL, { canBeMissing: true });
+    const [lastDayFreeTrial] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_LAST_DAY_FREE_TRIAL, { canBeMissing: true });
+    const privateSubscription = (0, usePrivateSubscription_1.default)();
+    const [freeTrialText, setFreeTrialText] = (0, react_1.useState)(undefined);
+    const { isOffline } = (0, useNetwork_1.default)();
+    (0, react_1.useEffect)(() => {
         if (!privateSubscription && !isOffline) {
             return;
         }
@@ -31,7 +30,7 @@ function FreeTrial(_a) {
     if (!freeTrialText) {
         return null;
     }
-    var freeTrial = pressable ? (<Button_1.default icon={Expensicons_1.Star} success={success} text={freeTrialText} iconWrapperStyles={[styles.mw100]} onPress={function () { return Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_SUBSCRIPTION.getRoute(Navigation_1.default.getActiveRoute())); }}/>) : (<Badge_1.default success={success} text={freeTrialText} badgeStyles={badgeStyles}/>);
+    const freeTrial = pressable ? (<Button_1.default icon={Expensicons_1.Star} success={success} text={freeTrialText} iconWrapperStyles={[styles.mw100]} onPress={() => Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_SUBSCRIPTION.getRoute(Navigation_1.default.getActiveRoute()))}/>) : (<Badge_1.default success={success} text={freeTrialText} badgeStyles={badgeStyles}/>);
     return addSpacing ? <react_native_1.View style={inARow ? [styles.pb3, styles.w50, styles.pl1] : [styles.pb3, styles.ph5]}>{freeTrial}</react_native_1.View> : freeTrial;
 }
 FreeTrial.displayName = 'FreeTrial';

@@ -3,16 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.acceptSpotnanaTerms = acceptSpotnanaTerms;
 exports.cleanupTravelProvisioningSession = cleanupTravelProvisioningSession;
 exports.requestTravelAccess = requestTravelAccess;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 /**
  * Accept Spotnana terms and conditions to receive a proper token used for authenticating further actions
  */
 function acceptSpotnanaTerms(domain) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: 'merge',
             key: ONYXKEYS_1.default.NVP_TRAVEL_SETTINGS,
@@ -29,7 +29,7 @@ function acceptSpotnanaTerms(domain) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: 'merge',
             key: ONYXKEYS_1.default.TRAVEL_PROVISIONING,
@@ -38,7 +38,7 @@ function acceptSpotnanaTerms(domain) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: 'merge',
             key: ONYXKEYS_1.default.TRAVEL_PROVISIONING,
@@ -48,11 +48,11 @@ function acceptSpotnanaTerms(domain) {
             },
         },
     ];
-    var params = { domain: domain };
-    API.write(types_1.WRITE_COMMANDS.ACCEPT_SPOTNANA_TERMS, params, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    const params = { domain };
+    API.write(types_1.WRITE_COMMANDS.ACCEPT_SPOTNANA_TERMS, params, { optimisticData, successData, failureData });
 }
 function requestTravelAccess() {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: 'merge',
             key: ONYXKEYS_1.default.NVP_TRAVEL_SETTINGS,
@@ -61,7 +61,7 @@ function requestTravelAccess() {
             },
         },
     ];
-    API.write(types_1.WRITE_COMMANDS.TRAVEL_SIGNUP_REQUEST, null, { optimisticData: optimisticData });
+    API.write(types_1.WRITE_COMMANDS.TRAVEL_SIGNUP_REQUEST, null, { optimisticData });
 }
 function cleanupTravelProvisioningSession() {
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.TRAVEL_PROVISIONING, null);

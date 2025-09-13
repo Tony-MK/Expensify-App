@@ -1,66 +1,53 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MergeTransactionStackNavigator = exports.ScheduleCallModalStackNavigator = exports.AddUnreportedExpenseModalStackNavigator = exports.ConsoleModalStackNavigator = exports.WorkspaceDuplicateModalStackNavigator = exports.WorkspaceConfirmationModalStackNavigator = exports.DebugModalStackNavigator = exports.MissingPersonalDetailsModalStackNavigator = exports.SearchSavedSearchModalStackNavigator = exports.ShareModalStackNavigator = exports.SearchAdvancedFiltersModalStackNavigator = exports.RestrictedActionModalStackNavigator = exports.SearchReportModalStackNavigator = exports.TransactionDuplicateStackNavigator = exports.WalletStatementStackNavigator = exports.TaskModalStackNavigator = exports.SplitDetailsModalStackNavigator = exports.DomainCardModalStackNavigator = exports.ExpensifyCardModalStackNavigator = exports.TagsModalStackNavigator = exports.CategoriesModalStackNavigator = exports.SignInModalStackNavigator = exports.TwoFactorAuthenticatorStackNavigator = exports.SettingsModalStackNavigator = exports.RoomMembersModalStackNavigator = exports.ReportSettingsModalStackNavigator = exports.ReportParticipantsModalStackNavigator = exports.ReportChangeApproverModalStackNavigator = exports.ReportChangeWorkspaceModalStackNavigator = exports.ReportDetailsModalStackNavigator = exports.ReportDescriptionModalStackNavigator = exports.NewReportWorkspaceSelectionModalStackNavigator = exports.TravelModalStackNavigator = exports.ReferralModalStackNavigator = exports.ProfileModalStackNavigator = exports.PrivateNotesModalStackNavigator = exports.NewTeachersUniteNavigator = exports.NewTaskModalStackNavigator = exports.NewChatModalStackNavigator = exports.MoneyRequestModalStackNavigator = exports.FlagCommentStackNavigator = exports.EnablePaymentsStackNavigator = exports.EditRequestStackNavigator = exports.AddPersonalBankAccountModalStackNavigator = void 0;
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Overlay_1 = require("@libs/Navigation/AppNavigator/Navigators/Overlay");
-var createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
-var animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
-var SCREENS_1 = require("@src/SCREENS");
-var useModalStackScreenOptions_1 = require("./useModalStackScreenOptions");
-var OPTIONS_PER_SCREEN = (_a = {},
-    _a[SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.MERGE_RESULT] = {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const WideRHPContextProvider_1 = require("@components/WideRHPContextProvider");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Overlay_1 = require("@libs/Navigation/AppNavigator/Navigators/Overlay");
+const createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
+const animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
+const SCREENS_1 = require("@src/SCREENS");
+const useModalStackScreenOptions_1 = require("./useModalStackScreenOptions");
+const OPTIONS_PER_SCREEN = {
+    [SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.MERGE_RESULT]: {
         animationTypeForReplace: 'push',
     },
-    _a[SCREENS_1.default.SEARCH.REPORT_RHP] = {
+    [SCREENS_1.default.SEARCH.REPORT_RHP]: {
         animation: animation_1.default.NONE,
     },
-    _a[SCREENS_1.default.SEARCH.MONEY_REQUEST_REPORT_HOLD_TRANSACTIONS] = {
+    [SCREENS_1.default.SEARCH.MONEY_REQUEST_REPORT_HOLD_TRANSACTIONS]: {
         animation: animation_1.default.NONE,
     },
-    _a[SCREENS_1.default.SEARCH.TRANSACTION_HOLD_REASON_RHP] = {
+    [SCREENS_1.default.SEARCH.TRANSACTION_HOLD_REASON_RHP]: {
         animation: animation_1.default.NONE,
     },
-    _a[SCREENS_1.default.SEARCH.TRANSACTIONS_CHANGE_REPORT_SEARCH_RHP] = {
+    [SCREENS_1.default.SEARCH.TRANSACTIONS_CHANGE_REPORT_SEARCH_RHP]: {
         animation: animation_1.default.NONE,
     },
-    _a);
+};
 /**
  * Create a modal stack navigator with an array of sub-screens.
  *
  * @param screens key/value pairs where the key is the name of the screen and the value is a function that returns the lazy-loaded component
  */
 function createModalStackNavigator(screens) {
-    var ModalStackNavigator = (0, createPlatformStackNavigator_1.default)();
+    const ModalStackNavigator = (0, createPlatformStackNavigator_1.default)();
     function ModalStack() {
-        var styles = (0, useThemeStyles_1.default)();
-        var screenOptions = (0, useModalStackScreenOptions_1.default)();
-        var _a = (0, react_1.useContext)(WideRHPContextProvider_1.WideRHPContext), secondOverlayProgress = _a.secondOverlayProgress, shouldRenderSecondaryOverlay = _a.shouldRenderSecondaryOverlay;
-        var route = (0, native_1.useRoute)();
+        const styles = (0, useThemeStyles_1.default)();
+        const screenOptions = (0, useModalStackScreenOptions_1.default)();
+        const { secondOverlayProgress, shouldRenderSecondaryOverlay } = (0, react_1.useContext)(WideRHPContextProvider_1.WideRHPContext);
+        const route = (0, native_1.useRoute)();
         // We have to use the isSmallScreenWidth instead of shouldUseNarrow layout, because we want to have information about screen width without the context of side modal.
         // eslint-disable-next-line rulesdir/prefer-shouldUseNarrowLayout-instead-of-isSmallScreenWidth
-        var isSmallScreenWidth = (0, useResponsiveLayout_1.default)().isSmallScreenWidth;
-        var getScreenOptions = (0, react_1.useCallback)(function (_a) {
-            var optionRoute = _a.route;
+        const { isSmallScreenWidth } = (0, useResponsiveLayout_1.default)();
+        const getScreenOptions = (0, react_1.useCallback)(({ route: optionRoute }) => {
             // Extend common options if they are defined for the screen.
             if (OPTIONS_PER_SCREEN[optionRoute.name]) {
-                return __assign(__assign({}, screenOptions({ route: optionRoute })), OPTIONS_PER_SCREEN[optionRoute.name]);
+                return { ...screenOptions({ route: optionRoute }), ...OPTIONS_PER_SCREEN[optionRoute.name] };
             }
             return screenOptions({ route: optionRoute });
         }, [screenOptions]);
@@ -68,9 +55,9 @@ function createModalStackNavigator(screens) {
         // This container is necessary to hide card translation during transition. Without it the user would see un-clipped cards.
         <react_native_1.View style={styles.modalStackNavigatorContainer(isSmallScreenWidth)}>
                 <ModalStackNavigator.Navigator>
-                    {Object.keys(screens).map(function (name) { return (<ModalStackNavigator.Screen key={name} name={name} getComponent={screens[name]} 
+                    {Object.keys(screens).map((name) => (<ModalStackNavigator.Screen key={name} name={name} getComponent={screens[name]} 
             // For some reason, screenOptions is not working with function as options so we have to pass it to every screen.
-            options={getScreenOptions}/>); })}
+            options={getScreenOptions}/>))}
                 </ModalStackNavigator.Navigator>
                 {!isSmallScreenWidth && shouldRenderSecondaryOverlay && route.name === SCREENS_1.default.RIGHT_MODAL.SEARCH_REPORT ? (
             // This overlay is necessary to cover the gap under the narrow format RHP screen
@@ -80,838 +67,660 @@ function createModalStackNavigator(screens) {
     ModalStack.displayName = 'ModalStack';
     return ModalStack;
 }
-var MoneyRequestModalStackNavigator = createModalStackNavigator((_b = {},
-    _b[SCREENS_1.default.MONEY_REQUEST.START] = function () { return require('../../../../pages/iou/request/IOURequestRedirectToStartPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.CREATE] = function () { return require('../../../../pages/iou/request/IOURequestStartPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_CONFIRMATION] = function () { return require('../../../../pages/iou/request/step/IOURequestStepConfirmation').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_AMOUNT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepAmount').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_TAX_AMOUNT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepTaxAmountPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_TAX_RATE] = function () { return require('../../../../pages/iou/request/step/IOURequestStepTaxRatePage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_CATEGORY] = function () { return require('../../../../pages/iou/request/step/IOURequestStepCategory').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_CURRENCY] = function () { return require('../../../../pages/iou/request/step/IOURequestStepCurrency').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DATE] = function () { return require('../../../../pages/iou/request/step/IOURequestStepDate').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DESCRIPTION] = function () { return require('../../../../pages/iou/request/step/IOURequestStepDescription').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE] = function () { return require('../../../../pages/iou/request/step/IOURequestStepDistance').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE_RATE] = function () { return require('@pages/iou/request/step/IOURequestStepDistanceRate').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_MERCHANT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepMerchant').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_PARTICIPANTS] = function () { return require('../../../../pages/iou/request/step/IOURequestStepParticipants').default; },
-    _b[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_ROOT] = function () { return require('../../../../pages/workspace/categories/WorkspaceCategoriesPage').default; },
-    _b[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_ROOT] = function () { return require('../../../../pages/workspace/tags/WorkspaceTagsPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.EDIT_REPORT] = function () { return require('../../../../pages/iou/request/step/IOURequestEditReport').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_SCAN] = function () { return require('../../../../pages/iou/request/step/IOURequestStepScan').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_TAG] = function () { return require('../../../../pages/iou/request/step/IOURequestStepTag').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_WAYPOINT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepWaypoint').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_SPLIT_PAYER] = function () { return require('../../../../pages/iou/request/step/IOURequestStepSplitPayer').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_SEND_FROM] = function () { return require('../../../../pages/iou/request/step/IOURequestStepSendFrom').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_REPORT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepReport').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_COMPANY_INFO] = function () { return require('../../../../pages/iou/request/step/IOURequestStepCompanyInfo').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.HOLD] = function () { return require('../../../../pages/iou/HoldReasonPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.REJECT] = function () { return require('../../../../pages/iou/RejectReasonPage').default; },
-    _b[SCREENS_1.default.IOU_SEND.ADD_BANK_ACCOUNT] = function () { return require('../../../../pages/AddPersonalBankAccountPage').default; },
-    _b[SCREENS_1.default.IOU_SEND.ADD_DEBIT_CARD] = function () { return require('../../../../pages/settings/Wallet/AddDebitCardPage').default; },
-    _b[SCREENS_1.default.IOU_SEND.ENABLE_PAYMENTS] = function () { return require('../../../../pages/EnablePayments/EnablePaymentsPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STATE_SELECTOR] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/StateSelectionPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_ATTENDEES] = function () { return require('../../../../pages/iou/request/step/IOURequestStepAttendees').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_ACCOUNTANT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepAccountant').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_UPGRADE] = function () { return require('../../../../pages/iou/request/step/IOURequestStepUpgrade').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DESTINATION] = function () { return require('../../../../pages/iou/request/step/IOURequestStepDestination').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_TIME] = function () { return require('../../../../pages/iou/request/step/IOURequestStepTime').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_SUBRATE] = function () { return require('../../../../pages/iou/request/step/IOURequestStepSubrate').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DESTINATION_EDIT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepDestination').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_TIME_EDIT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepTime').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_SUBRATE_EDIT] = function () { return require('../../../../pages/iou/request/step/IOURequestStepSubrate').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.RECEIPT_VIEW] = function () { return require('../../../../pages/iou/request/step/IOURequestStepScan/ReceiptView').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.SPLIT_EXPENSE] = function () { return require('../../../../pages/iou/SplitExpensePage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.SPLIT_EXPENSE_EDIT] = function () { return require('../../../../pages/iou/SplitExpenseEditPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.DISTANCE_CREATE] = function () { return require('../../../../pages/iou/request/DistanceRequestStartPage').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE_MAP] = function () { return require('../../../../pages/iou/request/step/IOURequestStepDistanceMap').default; },
-    _b[SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE_MANUAL] = function () { return require('../../../../pages/iou/request/step/IOURequestStepDistanceManual').default; },
-    _b));
+const MoneyRequestModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.MONEY_REQUEST.START]: () => require('../../../../pages/iou/request/IOURequestRedirectToStartPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.CREATE]: () => require('../../../../pages/iou/request/IOURequestStartPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_CONFIRMATION]: () => require('../../../../pages/iou/request/step/IOURequestStepConfirmation').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_AMOUNT]: () => require('../../../../pages/iou/request/step/IOURequestStepAmount').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_TAX_AMOUNT]: () => require('../../../../pages/iou/request/step/IOURequestStepTaxAmountPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_TAX_RATE]: () => require('../../../../pages/iou/request/step/IOURequestStepTaxRatePage').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_CATEGORY]: () => require('../../../../pages/iou/request/step/IOURequestStepCategory').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_CURRENCY]: () => require('../../../../pages/iou/request/step/IOURequestStepCurrency').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DATE]: () => require('../../../../pages/iou/request/step/IOURequestStepDate').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DESCRIPTION]: () => require('../../../../pages/iou/request/step/IOURequestStepDescription').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE]: () => require('../../../../pages/iou/request/step/IOURequestStepDistance').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE_RATE]: () => require('@pages/iou/request/step/IOURequestStepDistanceRate').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_MERCHANT]: () => require('../../../../pages/iou/request/step/IOURequestStepMerchant').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_PARTICIPANTS]: () => require('../../../../pages/iou/request/step/IOURequestStepParticipants').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_ROOT]: () => require('../../../../pages/workspace/categories/WorkspaceCategoriesPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_ROOT]: () => require('../../../../pages/workspace/tags/WorkspaceTagsPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.EDIT_REPORT]: () => require('../../../../pages/iou/request/step/IOURequestEditReport').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_SCAN]: () => require('../../../../pages/iou/request/step/IOURequestStepScan').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_TAG]: () => require('../../../../pages/iou/request/step/IOURequestStepTag').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_WAYPOINT]: () => require('../../../../pages/iou/request/step/IOURequestStepWaypoint').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_SPLIT_PAYER]: () => require('../../../../pages/iou/request/step/IOURequestStepSplitPayer').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_SEND_FROM]: () => require('../../../../pages/iou/request/step/IOURequestStepSendFrom').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_REPORT]: () => require('../../../../pages/iou/request/step/IOURequestStepReport').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_COMPANY_INFO]: () => require('../../../../pages/iou/request/step/IOURequestStepCompanyInfo').default,
+    [SCREENS_1.default.MONEY_REQUEST.HOLD]: () => require('../../../../pages/iou/HoldReasonPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.REJECT]: () => require('../../../../pages/iou/RejectReasonPage').default,
+    [SCREENS_1.default.IOU_SEND.ADD_BANK_ACCOUNT]: () => require('../../../../pages/AddPersonalBankAccountPage').default,
+    [SCREENS_1.default.IOU_SEND.ADD_DEBIT_CARD]: () => require('../../../../pages/settings/Wallet/AddDebitCardPage').default,
+    [SCREENS_1.default.IOU_SEND.ENABLE_PAYMENTS]: () => require('../../../../pages/EnablePayments/EnablePaymentsPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.STATE_SELECTOR]: () => require('../../../../pages/settings/Profile/PersonalDetails/StateSelectionPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_ATTENDEES]: () => require('../../../../pages/iou/request/step/IOURequestStepAttendees').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_ACCOUNTANT]: () => require('../../../../pages/iou/request/step/IOURequestStepAccountant').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_UPGRADE]: () => require('../../../../pages/iou/request/step/IOURequestStepUpgrade').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DESTINATION]: () => require('../../../../pages/iou/request/step/IOURequestStepDestination').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_TIME]: () => require('../../../../pages/iou/request/step/IOURequestStepTime').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_SUBRATE]: () => require('../../../../pages/iou/request/step/IOURequestStepSubrate').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DESTINATION_EDIT]: () => require('../../../../pages/iou/request/step/IOURequestStepDestination').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_TIME_EDIT]: () => require('../../../../pages/iou/request/step/IOURequestStepTime').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_SUBRATE_EDIT]: () => require('../../../../pages/iou/request/step/IOURequestStepSubrate').default,
+    [SCREENS_1.default.MONEY_REQUEST.RECEIPT_VIEW]: () => require('../../../../pages/iou/request/step/IOURequestStepScan/ReceiptView').default,
+    [SCREENS_1.default.MONEY_REQUEST.SPLIT_EXPENSE]: () => require('../../../../pages/iou/SplitExpensePage').default,
+    [SCREENS_1.default.MONEY_REQUEST.SPLIT_EXPENSE_EDIT]: () => require('../../../../pages/iou/SplitExpenseEditPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.DISTANCE_CREATE]: () => require('../../../../pages/iou/request/DistanceRequestStartPage').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE_MAP]: () => require('../../../../pages/iou/request/step/IOURequestStepDistanceMap').default,
+    [SCREENS_1.default.MONEY_REQUEST.STEP_DISTANCE_MANUAL]: () => require('../../../../pages/iou/request/step/IOURequestStepDistanceManual').default,
+});
 exports.MoneyRequestModalStackNavigator = MoneyRequestModalStackNavigator;
-var TravelModalStackNavigator = createModalStackNavigator((_c = {},
-    _c[SCREENS_1.default.TRAVEL.MY_TRIPS] = function () { return require('../../../../pages/Travel/MyTripsPage').default; },
-    _c[SCREENS_1.default.TRAVEL.TRAVEL_DOT_LINK_WEB_VIEW] = function () { return require('../../../../pages/Travel/TravelDotLinkWebview').default; },
-    _c[SCREENS_1.default.TRAVEL.TCS] = function () { return require('../../../../pages/Travel/TravelTerms').default; },
-    _c[SCREENS_1.default.TRAVEL.UPGRADE] = function () { return require('../../../../pages/Travel/TravelUpgrade').default; },
-    _c[SCREENS_1.default.TRAVEL.TRIP_SUMMARY] = function () { return require('../../../../pages/Travel/TripSummaryPage').default; },
-    _c[SCREENS_1.default.TRAVEL.TRIP_DETAILS] = function () { return require('../../../../pages/Travel/TripDetailsPage').default; },
-    _c[SCREENS_1.default.TRAVEL.DOMAIN_SELECTOR] = function () { return require('../../../../pages/Travel/DomainSelectorPage').default; },
-    _c[SCREENS_1.default.TRAVEL.DOMAIN_PERMISSION_INFO] = function () { return require('../../../../pages/Travel/DomainPermissionInfoPage').default; },
-    _c[SCREENS_1.default.TRAVEL.PUBLIC_DOMAIN_ERROR] = function () { return require('../../../../pages/Travel/PublicDomainErrorPage').default; },
-    _c[SCREENS_1.default.TRAVEL.WORKSPACE_ADDRESS] = function () { return require('../../../../pages/Travel/WorkspaceAddressForTravelPage').default; },
-    _c));
+const TravelModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.TRAVEL.MY_TRIPS]: () => require('../../../../pages/Travel/MyTripsPage').default,
+    [SCREENS_1.default.TRAVEL.TRAVEL_DOT_LINK_WEB_VIEW]: () => require('../../../../pages/Travel/TravelDotLinkWebview').default,
+    [SCREENS_1.default.TRAVEL.TCS]: () => require('../../../../pages/Travel/TravelTerms').default,
+    [SCREENS_1.default.TRAVEL.UPGRADE]: () => require('../../../../pages/Travel/TravelUpgrade').default,
+    [SCREENS_1.default.TRAVEL.TRIP_SUMMARY]: () => require('../../../../pages/Travel/TripSummaryPage').default,
+    [SCREENS_1.default.TRAVEL.TRIP_DETAILS]: () => require('../../../../pages/Travel/TripDetailsPage').default,
+    [SCREENS_1.default.TRAVEL.DOMAIN_SELECTOR]: () => require('../../../../pages/Travel/DomainSelectorPage').default,
+    [SCREENS_1.default.TRAVEL.DOMAIN_PERMISSION_INFO]: () => require('../../../../pages/Travel/DomainPermissionInfoPage').default,
+    [SCREENS_1.default.TRAVEL.PUBLIC_DOMAIN_ERROR]: () => require('../../../../pages/Travel/PublicDomainErrorPage').default,
+    [SCREENS_1.default.TRAVEL.WORKSPACE_ADDRESS]: () => require('../../../../pages/Travel/WorkspaceAddressForTravelPage').default,
+});
 exports.TravelModalStackNavigator = TravelModalStackNavigator;
-var SplitDetailsModalStackNavigator = createModalStackNavigator((_d = {},
-    _d[SCREENS_1.default.SPLIT_DETAILS.ROOT] = function () { return require('../../../../pages/iou/SplitBillDetailsPage').default; },
-    _d));
+const SplitDetailsModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SPLIT_DETAILS.ROOT]: () => require('../../../../pages/iou/SplitBillDetailsPage').default,
+});
 exports.SplitDetailsModalStackNavigator = SplitDetailsModalStackNavigator;
-var ProfileModalStackNavigator = createModalStackNavigator((_e = {},
-    _e[SCREENS_1.default.PROFILE_ROOT] = function () { return require('../../../../pages/ProfilePage').default; },
-    _e));
+const ProfileModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.PROFILE_ROOT]: () => require('../../../../pages/ProfilePage').default,
+});
 exports.ProfileModalStackNavigator = ProfileModalStackNavigator;
-var NewReportWorkspaceSelectionModalStackNavigator = createModalStackNavigator((_f = {},
-    _f[SCREENS_1.default.NEW_REPORT_WORKSPACE_SELECTION.ROOT] = function () { return require('../../../../pages/NewReportWorkspaceSelectionPage').default; },
-    _f));
+const NewReportWorkspaceSelectionModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.NEW_REPORT_WORKSPACE_SELECTION.ROOT]: () => require('../../../../pages/NewReportWorkspaceSelectionPage').default,
+});
 exports.NewReportWorkspaceSelectionModalStackNavigator = NewReportWorkspaceSelectionModalStackNavigator;
-var ReportDetailsModalStackNavigator = createModalStackNavigator((_g = {},
-    _g[SCREENS_1.default.REPORT_DETAILS.ROOT] = function () { return require('../../../../pages/ReportDetailsPage').default; },
-    _g[SCREENS_1.default.REPORT_DETAILS.SHARE_CODE] = function () { return require('../../../../pages/home/report/ReportDetailsShareCodePage').default; },
-    _g[SCREENS_1.default.REPORT_DETAILS.EXPORT] = function () { return require('../../../../pages/home/report/ReportDetailsExportPage').default; },
-    _g));
+const ReportDetailsModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.REPORT_DETAILS.ROOT]: () => require('../../../../pages/ReportDetailsPage').default,
+    [SCREENS_1.default.REPORT_DETAILS.SHARE_CODE]: () => require('../../../../pages/home/report/ReportDetailsShareCodePage').default,
+    [SCREENS_1.default.REPORT_DETAILS.EXPORT]: () => require('../../../../pages/home/report/ReportDetailsExportPage').default,
+});
 exports.ReportDetailsModalStackNavigator = ReportDetailsModalStackNavigator;
-var ReportChangeWorkspaceModalStackNavigator = createModalStackNavigator((_h = {},
-    _h[SCREENS_1.default.REPORT_CHANGE_WORKSPACE.ROOT] = function () { return require('../../../../pages/ReportChangeWorkspacePage').default; },
-    _h));
+const ReportChangeWorkspaceModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.REPORT_CHANGE_WORKSPACE.ROOT]: () => require('../../../../pages/ReportChangeWorkspacePage').default,
+});
 exports.ReportChangeWorkspaceModalStackNavigator = ReportChangeWorkspaceModalStackNavigator;
-var ReportChangeApproverModalStackNavigator = createModalStackNavigator((_j = {},
-    _j[SCREENS_1.default.REPORT_CHANGE_APPROVER.ROOT] = function () { return require('../../../../pages/ReportChangeApproverPage').default; },
-    _j[SCREENS_1.default.REPORT_CHANGE_APPROVER.ADD_APPROVER] = function () { return require('../../../../pages/ReportAddApproverPage').default; },
-    _j));
+const ReportChangeApproverModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.REPORT_CHANGE_APPROVER.ROOT]: () => require('../../../../pages/ReportChangeApproverPage').default,
+    [SCREENS_1.default.REPORT_CHANGE_APPROVER.ADD_APPROVER]: () => require('../../../../pages/ReportAddApproverPage').default,
+});
 exports.ReportChangeApproverModalStackNavigator = ReportChangeApproverModalStackNavigator;
-var ReportSettingsModalStackNavigator = createModalStackNavigator((_k = {},
-    _k[SCREENS_1.default.REPORT_SETTINGS.ROOT] = function () { return require('../../../../pages/settings/Report/ReportSettingsPage').default; },
-    _k[SCREENS_1.default.REPORT_SETTINGS.NAME] = function () { return require('../../../../pages/settings/Report/NamePage').default; },
-    _k[SCREENS_1.default.REPORT_SETTINGS.NOTIFICATION_PREFERENCES] = function () { return require('../../../../pages/settings/Report/NotificationPreferencePage').default; },
-    _k[SCREENS_1.default.REPORT_SETTINGS.WRITE_CAPABILITY] = function () { return require('../../../../pages/settings/Report/WriteCapabilityPage').default; },
-    _k[SCREENS_1.default.REPORT_SETTINGS.VISIBILITY] = function () { return require('../../../../pages/settings/Report/VisibilityPage').default; },
-    _k));
+const ReportSettingsModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.REPORT_SETTINGS.ROOT]: () => require('../../../../pages/settings/Report/ReportSettingsPage').default,
+    [SCREENS_1.default.REPORT_SETTINGS.NAME]: () => require('../../../../pages/settings/Report/NamePage').default,
+    [SCREENS_1.default.REPORT_SETTINGS.NOTIFICATION_PREFERENCES]: () => require('../../../../pages/settings/Report/NotificationPreferencePage').default,
+    [SCREENS_1.default.REPORT_SETTINGS.WRITE_CAPABILITY]: () => require('../../../../pages/settings/Report/WriteCapabilityPage').default,
+    [SCREENS_1.default.REPORT_SETTINGS.VISIBILITY]: () => require('../../../../pages/settings/Report/VisibilityPage').default,
+});
 exports.ReportSettingsModalStackNavigator = ReportSettingsModalStackNavigator;
-var WorkspaceConfirmationModalStackNavigator = createModalStackNavigator((_l = {},
-    _l[SCREENS_1.default.WORKSPACE_CONFIRMATION.ROOT] = function () { return require('../../../../pages/workspace/WorkspaceConfirmationPage').default; },
-    _l));
+const WorkspaceConfirmationModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.WORKSPACE_CONFIRMATION.ROOT]: () => require('../../../../pages/workspace/WorkspaceConfirmationPage').default,
+});
 exports.WorkspaceConfirmationModalStackNavigator = WorkspaceConfirmationModalStackNavigator;
-var WorkspaceDuplicateModalStackNavigator = createModalStackNavigator((_m = {},
-    _m[SCREENS_1.default.WORKSPACE_DUPLICATE.ROOT] = function () { return require('../../../../pages/workspace/duplicate/WorkspaceDuplicatePage').default; },
-    _m[SCREENS_1.default.WORKSPACE_DUPLICATE.SELECT_FEATURES] = function () { return require('../../../../pages/workspace/duplicate/WorkspaceDuplicateSelectFeaturesPage').default; },
-    _m));
+const WorkspaceDuplicateModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.WORKSPACE_DUPLICATE.ROOT]: () => require('../../../../pages/workspace/duplicate/WorkspaceDuplicatePage').default,
+    [SCREENS_1.default.WORKSPACE_DUPLICATE.SELECT_FEATURES]: () => require('../../../../pages/workspace/duplicate/WorkspaceDuplicateSelectFeaturesPage').default,
+});
 exports.WorkspaceDuplicateModalStackNavigator = WorkspaceDuplicateModalStackNavigator;
-var TaskModalStackNavigator = createModalStackNavigator((_o = {},
-    _o[SCREENS_1.default.TASK.TITLE] = function () { return require('../../../../pages/tasks/TaskTitlePage').default; },
-    _o[SCREENS_1.default.TASK.ASSIGNEE] = function () { return require('../../../../pages/tasks/TaskAssigneeSelectorModal').default; },
-    _o));
+const TaskModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.TASK.TITLE]: () => require('../../../../pages/tasks/TaskTitlePage').default,
+    [SCREENS_1.default.TASK.ASSIGNEE]: () => require('../../../../pages/tasks/TaskAssigneeSelectorModal').default,
+});
 exports.TaskModalStackNavigator = TaskModalStackNavigator;
-var ReportDescriptionModalStackNavigator = createModalStackNavigator((_p = {},
-    _p[SCREENS_1.default.REPORT_DESCRIPTION_ROOT] = function () { return require('../../../../pages/ReportDescriptionPage').default; },
-    _p));
+const ReportDescriptionModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.REPORT_DESCRIPTION_ROOT]: () => require('../../../../pages/ReportDescriptionPage').default,
+});
 exports.ReportDescriptionModalStackNavigator = ReportDescriptionModalStackNavigator;
-var CategoriesModalStackNavigator = createModalStackNavigator((_q = {},
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_SETTINGS] = function () { return require('../../../../pages/workspace/categories/WorkspaceCategoriesSettingsPage').default; },
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_CREATE] = function () { return require('../../../../pages/workspace/categories/CreateCategoryPage').default; },
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_EDIT] = function () { return require('../../../../pages/workspace/categories/EditCategoryPage').default; },
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_SETTINGS] = function () { return require('../../../../pages/workspace/categories/CategorySettingsPage').default; },
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_IMPORT] = function () { return require('../../../../pages/workspace/categories/ImportCategoriesPage').default; },
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_IMPORTED] = function () { return require('../../../../pages/workspace/categories/ImportedCategoriesPage').default; },
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_PAYROLL_CODE] = function () { return require('../../../../pages/workspace/categories/CategoryPayrollCodePage').default; },
-    _q[SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_GL_CODE] = function () { return require('../../../../pages/workspace/categories/CategoryGLCodePage').default; },
-    _q));
+const CategoriesModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_SETTINGS]: () => require('../../../../pages/workspace/categories/WorkspaceCategoriesSettingsPage').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_CREATE]: () => require('../../../../pages/workspace/categories/CreateCategoryPage').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_EDIT]: () => require('../../../../pages/workspace/categories/EditCategoryPage').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_SETTINGS]: () => require('../../../../pages/workspace/categories/CategorySettingsPage').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_IMPORT]: () => require('../../../../pages/workspace/categories/ImportCategoriesPage').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORIES_IMPORTED]: () => require('../../../../pages/workspace/categories/ImportedCategoriesPage').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_PAYROLL_CODE]: () => require('../../../../pages/workspace/categories/CategoryPayrollCodePage').default,
+    [SCREENS_1.default.SETTINGS_CATEGORIES.SETTINGS_CATEGORY_GL_CODE]: () => require('../../../../pages/workspace/categories/CategoryGLCodePage').default,
+});
 exports.CategoriesModalStackNavigator = CategoriesModalStackNavigator;
-var TagsModalStackNavigator = createModalStackNavigator((_r = {},
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_SETTINGS] = function () { return require('../../../../pages/workspace/tags/WorkspaceTagsSettingsPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_EDIT] = function () { return require('../../../../pages/workspace/tags/WorkspaceEditTagsPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_IMPORT] = function () { return require('../../../../pages/workspace/tags/ImportTagsPage').default; },
-    _r[SCREENS_1.default.WORKSPACE.TAGS_IMPORT_OPTIONS] = function () { return require('../../../../pages/workspace/tags/ImportTagsOptionsPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_IMPORTED] = function () { return require('../../../../pages/workspace/tags/ImportedTagsPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_SETTINGS] = function () { return require('../../../../pages/workspace/tags/TagSettingsPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_LIST_VIEW] = function () { return require('../../../../pages/workspace/tags/WorkspaceViewTagsPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_CREATE] = function () { return require('../../../../pages/workspace/tags/WorkspaceCreateTagPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_EDIT] = function () { return require('../../../../pages/workspace/tags/EditTagPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_APPROVER] = function () { return require('../../../../pages/workspace/tags/TagApproverPage').default; },
-    _r[SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_GL_CODE] = function () { return require('../../../../pages/workspace/tags/TagGLCodePage').default; },
-    _r));
+const TagsModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_SETTINGS]: () => require('../../../../pages/workspace/tags/WorkspaceTagsSettingsPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_EDIT]: () => require('../../../../pages/workspace/tags/WorkspaceEditTagsPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_IMPORT]: () => require('../../../../pages/workspace/tags/ImportTagsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_IMPORT_OPTIONS]: () => require('../../../../pages/workspace/tags/ImportTagsOptionsPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAGS_IMPORTED]: () => require('../../../../pages/workspace/tags/ImportedTagsPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_SETTINGS]: () => require('../../../../pages/workspace/tags/TagSettingsPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_LIST_VIEW]: () => require('../../../../pages/workspace/tags/WorkspaceViewTagsPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_CREATE]: () => require('../../../../pages/workspace/tags/WorkspaceCreateTagPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_EDIT]: () => require('../../../../pages/workspace/tags/EditTagPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_APPROVER]: () => require('../../../../pages/workspace/tags/TagApproverPage').default,
+    [SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_GL_CODE]: () => require('../../../../pages/workspace/tags/TagGLCodePage').default,
+});
 exports.TagsModalStackNavigator = TagsModalStackNavigator;
-var ExpensifyCardModalStackNavigator = createModalStackNavigator((_s = {},
-    _s[SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_DETAILS] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardDetailsPage').default; },
-    _s[SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_NAME] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardNamePage').default; },
-    _s[SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_LIMIT] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitPage').default; },
-    _s[SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_LIMIT_TYPE] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitTypePage').default; },
-    _s));
+const ExpensifyCardModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_DETAILS]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardDetailsPage').default,
+    [SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_NAME]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardNamePage').default,
+    [SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_LIMIT]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitPage').default,
+    [SCREENS_1.default.EXPENSIFY_CARD.EXPENSIFY_CARD_LIMIT_TYPE]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitTypePage').default,
+});
 exports.ExpensifyCardModalStackNavigator = ExpensifyCardModalStackNavigator;
-var DomainCardModalStackNavigator = createModalStackNavigator((_t = {},
-    _t[SCREENS_1.default.DOMAIN_CARD.DOMAIN_CARD_DETAIL] = function () { return require('../../../../pages/settings/Wallet/ExpensifyCardPage').default; },
-    _t[SCREENS_1.default.DOMAIN_CARD.DOMAIN_CARD_REPORT_FRAUD] = function () { return require('../../../../pages/settings/Wallet/ReportVirtualCardFraudPage').default; },
-    _t));
+const DomainCardModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.DOMAIN_CARD.DOMAIN_CARD_DETAIL]: () => require('../../../../pages/settings/Wallet/ExpensifyCardPage').default,
+    [SCREENS_1.default.DOMAIN_CARD.DOMAIN_CARD_REPORT_FRAUD]: () => require('../../../../pages/settings/Wallet/ReportVirtualCardFraudPage').default,
+});
 exports.DomainCardModalStackNavigator = DomainCardModalStackNavigator;
-var ReportParticipantsModalStackNavigator = createModalStackNavigator((_u = {},
-    _u[SCREENS_1.default.REPORT_PARTICIPANTS.ROOT] = function () { return require('../../../../pages/ReportParticipantsPage').default; },
-    _u[SCREENS_1.default.REPORT_PARTICIPANTS.INVITE] = function () { return require('../../../../pages/InviteReportParticipantsPage').default; },
-    _u[SCREENS_1.default.REPORT_PARTICIPANTS.DETAILS] = function () { return require('../../../../pages/ReportParticipantDetailsPage').default; },
-    _u[SCREENS_1.default.REPORT_PARTICIPANTS.ROLE] = function () { return require('../../../../pages/ReportParticipantRoleSelectionPage').default; },
-    _u));
+const ReportParticipantsModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.REPORT_PARTICIPANTS.ROOT]: () => require('../../../../pages/ReportParticipantsPage').default,
+    [SCREENS_1.default.REPORT_PARTICIPANTS.INVITE]: () => require('../../../../pages/InviteReportParticipantsPage').default,
+    [SCREENS_1.default.REPORT_PARTICIPANTS.DETAILS]: () => require('../../../../pages/ReportParticipantDetailsPage').default,
+    [SCREENS_1.default.REPORT_PARTICIPANTS.ROLE]: () => require('../../../../pages/ReportParticipantRoleSelectionPage').default,
+});
 exports.ReportParticipantsModalStackNavigator = ReportParticipantsModalStackNavigator;
-var RoomMembersModalStackNavigator = createModalStackNavigator((_v = {},
-    _v[SCREENS_1.default.ROOM_MEMBERS.ROOT] = function () { return require('../../../../pages/RoomMembersPage').default; },
-    _v[SCREENS_1.default.ROOM_MEMBERS.INVITE] = function () { return require('../../../../pages/RoomInvitePage').default; },
-    _v[SCREENS_1.default.ROOM_MEMBERS.DETAILS] = function () { return require('../../../../pages/RoomMemberDetailsPage').default; },
-    _v));
+const RoomMembersModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.ROOM_MEMBERS.ROOT]: () => require('../../../../pages/RoomMembersPage').default,
+    [SCREENS_1.default.ROOM_MEMBERS.INVITE]: () => require('../../../../pages/RoomInvitePage').default,
+    [SCREENS_1.default.ROOM_MEMBERS.DETAILS]: () => require('../../../../pages/RoomMemberDetailsPage').default,
+});
 exports.RoomMembersModalStackNavigator = RoomMembersModalStackNavigator;
-var NewChatModalStackNavigator = createModalStackNavigator((_w = {},
-    _w[SCREENS_1.default.NEW_CHAT.ROOT] = function () { return require('../../../../pages/NewChatSelectorPage').default; },
-    _w[SCREENS_1.default.NEW_CHAT.NEW_CHAT_CONFIRM] = function () { return require('../../../../pages/NewChatConfirmPage').default; },
-    _w[SCREENS_1.default.NEW_CHAT.NEW_CHAT_EDIT_NAME] = function () { return require('../../../../pages/GroupChatNameEditPage').default; },
-    _w));
+const NewChatModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.NEW_CHAT.ROOT]: () => require('../../../../pages/NewChatSelectorPage').default,
+    [SCREENS_1.default.NEW_CHAT.NEW_CHAT_CONFIRM]: () => require('../../../../pages/NewChatConfirmPage').default,
+    [SCREENS_1.default.NEW_CHAT.NEW_CHAT_EDIT_NAME]: () => require('../../../../pages/GroupChatNameEditPage').default,
+});
 exports.NewChatModalStackNavigator = NewChatModalStackNavigator;
-var NewTaskModalStackNavigator = createModalStackNavigator((_x = {},
-    _x[SCREENS_1.default.NEW_TASK.ROOT] = function () { return require('../../../../pages/tasks/NewTaskPage').default; },
-    _x[SCREENS_1.default.NEW_TASK.TASK_ASSIGNEE_SELECTOR] = function () { return require('../../../../pages/tasks/TaskAssigneeSelectorModal').default; },
-    _x[SCREENS_1.default.NEW_TASK.TASK_SHARE_DESTINATION_SELECTOR] = function () { return require('../../../../pages/tasks/TaskShareDestinationSelectorModal').default; },
-    _x[SCREENS_1.default.NEW_TASK.DETAILS] = function () { return require('../../../../pages/tasks/NewTaskDetailsPage').default; },
-    _x[SCREENS_1.default.NEW_TASK.TITLE] = function () { return require('../../../../pages/tasks/NewTaskTitlePage').default; },
-    _x[SCREENS_1.default.NEW_TASK.DESCRIPTION] = function () { return require('../../../../pages/tasks/NewTaskDescriptionPage').default; },
-    _x));
+const NewTaskModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.NEW_TASK.ROOT]: () => require('../../../../pages/tasks/NewTaskPage').default,
+    [SCREENS_1.default.NEW_TASK.TASK_ASSIGNEE_SELECTOR]: () => require('../../../../pages/tasks/TaskAssigneeSelectorModal').default,
+    [SCREENS_1.default.NEW_TASK.TASK_SHARE_DESTINATION_SELECTOR]: () => require('../../../../pages/tasks/TaskShareDestinationSelectorModal').default,
+    [SCREENS_1.default.NEW_TASK.DETAILS]: () => require('../../../../pages/tasks/NewTaskDetailsPage').default,
+    [SCREENS_1.default.NEW_TASK.TITLE]: () => require('../../../../pages/tasks/NewTaskTitlePage').default,
+    [SCREENS_1.default.NEW_TASK.DESCRIPTION]: () => require('../../../../pages/tasks/NewTaskDescriptionPage').default,
+});
 exports.NewTaskModalStackNavigator = NewTaskModalStackNavigator;
-var NewTeachersUniteNavigator = createModalStackNavigator((_y = {},
-    _y[SCREENS_1.default.SAVE_THE_WORLD.ROOT] = function () { return require('../../../../pages/TeachersUnite/SaveTheWorldPage').default; },
-    _y[SCREENS_1.default.I_KNOW_A_TEACHER] = function () { return require('../../../../pages/TeachersUnite/KnowATeacherPage').default; },
-    _y[SCREENS_1.default.INTRO_SCHOOL_PRINCIPAL] = function () { return require('../../../../pages/TeachersUnite/ImTeacherPage').default; },
-    _y[SCREENS_1.default.I_AM_A_TEACHER] = function () { return require('../../../../pages/TeachersUnite/ImTeacherPage').default; },
-    _y));
+const NewTeachersUniteNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SAVE_THE_WORLD.ROOT]: () => require('../../../../pages/TeachersUnite/SaveTheWorldPage').default,
+    [SCREENS_1.default.I_KNOW_A_TEACHER]: () => require('../../../../pages/TeachersUnite/KnowATeacherPage').default,
+    [SCREENS_1.default.INTRO_SCHOOL_PRINCIPAL]: () => require('../../../../pages/TeachersUnite/ImTeacherPage').default,
+    [SCREENS_1.default.I_AM_A_TEACHER]: () => require('../../../../pages/TeachersUnite/ImTeacherPage').default,
+});
 exports.NewTeachersUniteNavigator = NewTeachersUniteNavigator;
-var ConsoleModalStackNavigator = createModalStackNavigator((_z = {},
-    _z[SCREENS_1.default.PUBLIC_CONSOLE_DEBUG] = function () { return require('../../../../pages/settings/AboutPage/ConsolePage').default; },
-    _z));
+const ConsoleModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.PUBLIC_CONSOLE_DEBUG]: () => require('../../../../pages/settings/AboutPage/ConsolePage').default,
+});
 exports.ConsoleModalStackNavigator = ConsoleModalStackNavigator;
-var SettingsModalStackNavigator = createModalStackNavigator((_0 = {},
-    _0[SCREENS_1.default.SETTINGS.SHARE_CODE] = function () { return require('../../../../pages/ShareCodePage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.PRONOUNS] = function () { return require('../../../../pages/settings/Profile/PronounsPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.DISPLAY_NAME] = function () { return require('../../../../pages/settings/Profile/DisplayNamePage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.TIMEZONE] = function () { return require('../../../../pages/settings/Profile/TimezoneInitialPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.TIMEZONE_SELECT] = function () { return require('../../../../pages/settings/Profile/TimezoneSelectPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.LEGAL_NAME] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/LegalNamePage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.DATE_OF_BIRTH] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/DateOfBirthPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.PHONE_NUMBER] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/PhoneNumberPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.ADDRESS] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/PersonalAddressPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.ADDRESS_COUNTRY] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/CountrySelectionPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.ADDRESS_STATE] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/StateSelectionPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.CONTACT_METHODS] = function () { return require('../../../../pages/settings/Profile/Contacts/ContactMethodsPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.CONTACT_METHOD_DETAILS] = function () { return require('../../../../pages/settings/Profile/Contacts/ContactMethodDetailsPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.NEW_CONTACT_METHOD] = function () { return require('../../../../pages/settings/Profile/Contacts/NewContactMethodPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.CONTACT_METHOD_VERIFY_ACCOUNT] = function () { return require('../../../../pages/settings/Profile/Contacts/VerifyAccountPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PREFERENCES.PRIORITY_MODE] = function () { return require('../../../../pages/settings/Preferences/PriorityModePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.ROOT] = function () { return require('../../../../pages/workspace/accounting/PolicyAccountingPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PREFERENCES.LANGUAGE] = function () { return require('../../../../pages/settings/Preferences/LanguagePage').default; },
-    _0[SCREENS_1.default.SETTINGS.PREFERENCES.THEME] = function () { return require('../../../../pages/settings/Preferences/ThemePage').default; },
-    _0[SCREENS_1.default.SETTINGS.PREFERENCES.PAYMENT_CURRENCY] = function () { return require('../../../../pages/settings/Preferences/PaymentCurrencyPage').default; },
-    _0[SCREENS_1.default.SETTINGS.CLOSE] = function () { return require('../../../../pages/settings/Security/CloseAccountPage').default; },
-    _0[SCREENS_1.default.SETTINGS.APP_DOWNLOAD_LINKS] = function () { return require('../../../../pages/settings/AppDownloadLinks').default; },
-    _0[SCREENS_1.default.SETTINGS.CONSOLE] = function () { return require('../../../../pages/settings/AboutPage/ConsolePage').default; },
-    _0[SCREENS_1.default.SETTINGS.SHARE_LOG] = function () { return require('../../../../pages/settings/AboutPage/ShareLogPage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.CARDS_DIGITAL_DETAILS_UPDATE_ADDRESS] = function () { return require('../../../../pages/settings/Profile/PersonalDetails/PersonalAddressPage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.DOMAIN_CARD] = function () { return require('../../../../pages/settings/Wallet/ExpensifyCardPage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.REPORT_VIRTUAL_CARD_FRAUD] = function () { return require('../../../../pages/settings/Wallet/ReportVirtualCardFraudPage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.REPORT_VIRTUAL_CARD_FRAUD_CONFIRMATION] = function () { return require('../../../../pages/settings/Wallet/ReportVirtualCardFraudConfirmationPage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.CARD_ACTIVATE] = function () { return require('../../../../pages/settings/Wallet/ActivatePhysicalCardPage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.TRANSFER_BALANCE] = function () { return require('../../../../pages/settings/Wallet/TransferBalancePage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.CHOOSE_TRANSFER_ACCOUNT] = function () { return require('../../../../pages/settings/Wallet/ChooseTransferAccountPage').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.ENABLE_PAYMENTS] = function () { return require('../../../../pages/EnablePayments/EnablePayments').default; },
-    _0[SCREENS_1.default.SETTINGS.WALLET.ENABLE_GLOBAL_REIMBURSEMENTS] = function () { return require('../../../../pages/settings/Wallet/EnableGlobalReimbursements').default; },
-    _0[SCREENS_1.default.SETTINGS.ADD_DEBIT_CARD] = function () { return require('../../../../pages/settings/Wallet/AddDebitCardPage').default; },
-    _0[SCREENS_1.default.SETTINGS.ADD_BANK_ACCOUNT] = function () { return require('../../../../pages/settings/Wallet/InternationalDepositAccount').default; },
-    _0[SCREENS_1.default.SETTINGS.ADD_US_BANK_ACCOUNT] = function () { return require('../../../../pages/AddPersonalBankAccountPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.STATUS] = function () { return require('../../../../pages/settings/Profile/CustomStatus/StatusPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.STATUS_CLEAR_AFTER] = function () { return require('../../../../pages/settings/Profile/CustomStatus/StatusClearAfterPage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.STATUS_CLEAR_AFTER_DATE] = function () { return require('../../../../pages/settings/Profile/CustomStatus/SetDatePage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.STATUS_CLEAR_AFTER_TIME] = function () { return require('../../../../pages/settings/Profile/CustomStatus/SetTimePage').default; },
-    _0[SCREENS_1.default.SETTINGS.PROFILE.VACATION_DELEGATE] = function () { return require('../../../../pages/settings/Profile/CustomStatus/VacationDelegatePage').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.SIZE] = function () { return require('../../../../pages/settings/Subscription/SubscriptionSize').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.SETTINGS_DETAILS] = function () { return require('../../../../pages/settings/Subscription/SubscriptionSettings').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.DISABLE_AUTO_RENEW_SURVEY] = function () { return require('../../../../pages/settings/Subscription/DisableAutoRenewSurveyPage').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.REQUEST_EARLY_CANCELLATION] = function () { return require('../../../../pages/settings/Subscription/RequestEarlyCancellationPage').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.SUBSCRIPTION_DOWNGRADE_BLOCKED] = function () {
-        return require('../../../../pages/settings/Subscription/SubscriptionPlan/SubscriptionPlanDowngradeBlockedPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.INVITE] = function () { return require('../../../../pages/workspace/WorkspaceInvitePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.MEMBERS_IMPORT] = function () { return require('../../../../pages/workspace/members/ImportMembersPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.MEMBERS_IMPORTED] = function () { return require('../../../../pages/workspace/members/ImportedMembersPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.MEMBERS_IMPORTED_CONFIRMATION] = function () { return require('../../../../pages/workspace/members/ImportedMembersConfirmationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_NEW] = function () { return require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsCreatePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_EDIT] = function () { return require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsEditPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_EXPENSES_FROM] = function () {
-        return require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsExpensesFromPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_APPROVER] = function () { return require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsApproverPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.INVITE_MESSAGE] = function () { return require('../../../../pages/workspace/WorkspaceInviteMessagePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.INVITE_MESSAGE_ROLE] = function () { return require('../../../../pages/workspace/WorkspaceInviteMessageRolePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.WORKFLOWS_PAYER] = function () { return require('../../../../pages/workspace/workflows/WorkspaceWorkflowsPayerPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.NAME] = function () { return require('../../../../pages/workspace/WorkspaceNamePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.DESCRIPTION] = function () { return require('../../../../pages/workspace/WorkspaceOverviewDescriptionPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.SHARE] = function () { return require('../../../../pages/workspace/WorkspaceOverviewSharePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CURRENCY] = function () { return require('../../../../pages/workspace/WorkspaceOverviewCurrencyPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_SETTINGS] = function () { return require('../../../../pages/workspace/categories/CategorySettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ADDRESS] = function () { return require('../../../../pages/workspace/WorkspaceOverviewAddressPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PLAN] = function () { return require('../../../../pages/workspace/WorkspaceOverviewPlanTypePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORIES_SETTINGS] = function () { return require('../../../../pages/workspace/categories/WorkspaceCategoriesSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORIES_IMPORT] = function () { return require('../../../../pages/workspace/categories/ImportCategoriesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORIES_IMPORTED] = function () { return require('../../../../pages/workspace/categories/ImportedCategoriesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.UPGRADE] = function () { return require('../../../../pages/workspace/upgrade/WorkspaceUpgradePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.DOWNGRADE] = function () { return require('../../../../pages/workspace/downgrade/WorkspaceDowngradePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PAY_AND_DOWNGRADE] = function () { return require('../../../../pages/workspace/downgrade/PayAndDowngradePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.MEMBER_DETAILS] = function () { return require('../../../../pages/workspace/members/WorkspaceMemberDetailsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.MEMBER_CUSTOM_FIELD] = function () { return require('../../../../pages/workspace/members/WorkspaceMemberCustomFieldPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.MEMBER_NEW_CARD] = function () { return require('../../../../pages/workspace/members/WorkspaceMemberNewCardPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.OWNER_CHANGE_CHECK] = function () { return require('@pages/workspace/members/WorkspaceOwnerChangeWrapperPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.OWNER_CHANGE_SUCCESS] = function () { return require('../../../../pages/workspace/members/WorkspaceOwnerChangeSuccessPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.OWNER_CHANGE_ERROR] = function () { return require('../../../../pages/workspace/members/WorkspaceOwnerChangeErrorPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_CREATE] = function () { return require('../../../../pages/workspace/categories/CreateCategoryPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_EDIT] = function () { return require('../../../../pages/workspace/categories/EditCategoryPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_PAYROLL_CODE] = function () { return require('../../../../pages/workspace/categories/CategoryPayrollCodePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_GL_CODE] = function () { return require('../../../../pages/workspace/categories/CategoryGLCodePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_DEFAULT_TAX_RATE] = function () { return require('../../../../pages/workspace/categories/CategoryDefaultTaxRatePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_FLAG_AMOUNTS_OVER] = function () { return require('../../../../pages/workspace/categories/CategoryFlagAmountsOverPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_DESCRIPTION_HINT] = function () { return require('../../../../pages/workspace/categories/CategoryDescriptionHintPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_REQUIRE_RECEIPTS_OVER] = function () { return require('../../../../pages/workspace/categories/CategoryRequireReceiptsOverPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CATEGORY_APPROVER] = function () { return require('../../../../pages/workspace/categories/CategoryApproverPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.CREATE_DISTANCE_RATE] = function () { return require('../../../../pages/workspace/distanceRates/CreateDistanceRatePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.DISTANCE_RATES_SETTINGS] = function () { return require('../../../../pages/workspace/distanceRates/PolicyDistanceRatesSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.DISTANCE_RATE_DETAILS] = function () { return require('../../../../pages/workspace/distanceRates/PolicyDistanceRateDetailsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.DISTANCE_RATE_EDIT] = function () { return require('../../../../pages/workspace/distanceRates/PolicyDistanceRateEditPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.DISTANCE_RATE_NAME_EDIT] = function () { return require('../../../../pages/workspace/distanceRates/PolicyDistanceRateNameEditPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.DISTANCE_RATE_TAX_RECLAIMABLE_ON_EDIT] = function () {
-        return require('../../../../pages/workspace/distanceRates/PolicyDistanceRateTaxReclaimableEditPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.DISTANCE_RATE_TAX_RATE_EDIT] = function () { return require('../../../../pages/workspace/distanceRates/PolicyDistanceRateTaxRateEditPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAGS_IMPORT] = function () { return require('../../../../pages/workspace/tags/ImportTagsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAGS_IMPORT_OPTIONS] = function () { return require('../../../../pages/workspace/tags/ImportTagsOptionsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAGS_IMPORT_MULTI_LEVEL_SETTINGS] = function () { return require('../../../../pages/workspace/tags/ImportMultiLevelTagsSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAGS_IMPORTED] = function () { return require('../../../../pages/workspace/tags/ImportedTagsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAGS_IMPORTED_MULTI_LEVEL] = function () { return require('../../../../pages/workspace/tags/ImportedMultiLevelTagsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAGS_SETTINGS] = function () { return require('../../../../pages/workspace/tags/WorkspaceTagsSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAG_SETTINGS] = function () { return require('../../../../pages/workspace/tags/TagSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAG_LIST_VIEW] = function () { return require('../../../../pages/workspace/tags/WorkspaceViewTagsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAGS_EDIT] = function () { return require('../../../../pages/workspace/tags/WorkspaceEditTagsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAG_CREATE] = function () { return require('../../../../pages/workspace/tags/WorkspaceCreateTagPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAG_EDIT] = function () { return require('../../../../pages/workspace/tags/EditTagPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAG_APPROVER] = function () { return require('../../../../pages/workspace/tags/TagApproverPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAG_GL_CODE] = function () { return require('../../../../pages/workspace/tags/TagGLCodePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAXES_SETTINGS] = function () { return require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAXES_SETTINGS_CUSTOM_TAX_NAME] = function () { return require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsCustomTaxName').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAXES_SETTINGS_FOREIGN_CURRENCY_DEFAULT] = function () { return require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsForeignCurrency').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAXES_SETTINGS_WORKSPACE_CURRENCY_DEFAULT] = function () { return require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsWorkspaceCurrency').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksExportConfigurationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_DATE_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksExportDateSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_INVOICE_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksExportInvoiceAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksOutOfPocketExpenseAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksOutOfPocketExpenseConfigurationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksOutOfPocketExpenseEntitySelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksNonReimbursableDefaultVendorSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT] = function () {
-        return require('@pages/workspace/accounting/qbo/export/QuickbooksCompanyCardExpenseAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT_COMPANY_CARD_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksCompanyCardExpenseAccountSelectCardPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_AUTO_SYNC] = function () { return require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAutoSyncPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_ACCOUNTING_METHOD] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAccountingMethodPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksCompanyCardExpenseAccountPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_PREFERRED_EXPORTER] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/export/QuickbooksPreferredExporterConfigurationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopCompanyCardExpenseAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT_COMPANY_CARD_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopCompanyCardExpenseAccountSelectCardPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopNonReimbursableDefaultVendorSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopCompanyCardExpenseAccountPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_DATE_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopExportDateSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_PREFERRED_EXPORTER] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopPreferredExporterConfigurationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopOutOfPocketExpenseAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopOutOfPocketExpenseConfigurationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopOutOfPocketExpenseEntitySelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT] = function () { return require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopExportPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_ADVANCED] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/advanced/QuickbooksDesktopAdvancedPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_SETUP_MODAL] = function () { return require('../../../../pages/workspace/accounting/qbd/QuickBooksDesktopSetupPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_SETUP_REQUIRED_DEVICE_MODAL] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/RequireQuickBooksDesktopPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_TRIGGER_FIRST_SYNC] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/QuickBooksDesktopSetupFlowSyncPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_IMPORT] = function () { return require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopImportPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CHART_OF_ACCOUNTS] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopChartOfAccountsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CLASSES] = function () { return require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopClassesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CLASSES_DISPLAYED_AS] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopClassesDisplayedAsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CUSTOMERS] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopCustomersPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CUSTOMERS_DISPLAYED_AS] = function () {
-        return require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopCustomersDisplayedAsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_ITEMS] = function () { return require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopItemsPage').default; },
-    _0[SCREENS_1.default.REIMBURSEMENT_ACCOUNT] = function () { return require('../../../../pages/ReimbursementAccount/ReimbursementAccountPage').default; },
-    _0[SCREENS_1.default.REIMBURSEMENT_ACCOUNT_ENTER_SIGNER_INFO] = function () { return require('../../../../pages/ReimbursementAccount/EnterSignerInfo').default; },
-    _0[SCREENS_1.default.SETTINGS.REPORT_CARD_LOST_OR_DAMAGED] = function () { return require('../../../../pages/settings/Wallet/ReportCardLostPage').default; },
-    _0[SCREENS_1.default.KEYBOARD_SHORTCUTS] = function () { return require('../../../../pages/KeyboardShortcutsPage').default; },
-    _0[SCREENS_1.default.SETTINGS.EXIT_SURVEY.REASON] = function () { return require('../../../../pages/settings/ExitSurvey/ExitSurveyReasonPage').default; },
-    _0[SCREENS_1.default.SETTINGS.EXIT_SURVEY.RESPONSE] = function () { return require('../../../../pages/settings/ExitSurvey/ExitSurveyResponsePage').default; },
-    _0[SCREENS_1.default.SETTINGS.EXIT_SURVEY.CONFIRM] = function () { return require('../../../../pages/settings/ExitSurvey/ExitSurveyConfirmPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_IMPORT] = function () { return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksImportPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CHART_OF_ACCOUNTS] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksChartOfAccountsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CUSTOMERS] = function () { return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksCustomersPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_TAXES] = function () { return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksTaxesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_LOCATIONS] = function () { return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksLocationsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CLASSES] = function () { return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksClassesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CLASSES_DISPLAYED_AS] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksClassesDisplayedAsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CUSTOMERS_DISPLAYED_AS] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksCustomersDisplayedAsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_LOCATIONS_DISPLAYED_AS] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/import/QuickbooksLocationsDisplayedAsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_ADVANCED] = function () { return require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAdvancedPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_ACCOUNT_SELECTOR] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_INVOICE_ACCOUNT_SELECTOR] = function () {
-        return require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksInvoiceAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_IMPORT] = function () { return require('../../../../pages/workspace/accounting/xero/XeroImportPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_ORGANIZATION] = function () { return require('../../../../pages/workspace/accounting/xero/XeroOrganizationConfigurationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_CHART_OF_ACCOUNTS] = function () { return require('../../../../pages/workspace/accounting/xero/import/XeroChartOfAccountsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_CUSTOMER] = function () { return require('../../../../pages/workspace/accounting/xero/import/XeroCustomerConfigurationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_TAXES] = function () { return require('../../../../pages/workspace/accounting/xero/XeroTaxesConfigurationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_TRACKING_CATEGORIES] = function () { return require('../../../../pages/workspace/accounting/xero/XeroTrackingCategoryConfigurationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_MAP_TRACKING_CATEGORY] = function () {
-        return require('../../../../pages/workspace/accounting/xero/XeroMapTrackingCategoryConfigurationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT] = function () { return require('../../../../pages/workspace/accounting/xero/export/XeroExportConfigurationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT_PURCHASE_BILL_DATE_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/xero/export/XeroPurchaseBillDateSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT_BANK_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/xero/export/XeroBankAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_ADVANCED] = function () { return require('../../../../pages/workspace/accounting/xero/advanced/XeroAdvancedPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_AUTO_SYNC] = function () { return require('../../../../pages/workspace/accounting/xero/advanced/XeroAutoSyncPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_ACCOUNTING_METHOD] = function () { return require('../../../../pages/workspace/accounting/xero/advanced/XeroAccountingMethodPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_BILL_STATUS_SELECTOR] = function () {
-        return require('../../../../pages/workspace/accounting/xero/export/XeroPurchaseBillStatusSelectorPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_INVOICE_ACCOUNT_SELECTOR] = function () {
-        return require('../../../../pages/workspace/accounting/xero/advanced/XeroInvoiceAccountSelectorPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT_PREFERRED_EXPORTER_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/xero/export/XeroPreferredExporterSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_BILL_PAYMENT_ACCOUNT_SELECTOR] = function () {
-        return require('../../../../pages/workspace/accounting/xero/advanced/XeroBillPaymentAccountSelectorPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_SUBSIDIARY_SELECTOR] = function () { return require('../../../../pages/workspace/accounting/netsuite/NetSuiteSubsidiarySelector').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_REUSE_EXISTING_CONNECTIONS] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/NetSuiteTokenInput/NetSuiteExistingConnectionsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_TOKEN_INPUT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/NetSuiteTokenInput/NetSuiteTokenInputPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT] = function () { return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_MAPPING] = function () { return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportMappingPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_FIELD] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_FIELD_VIEW] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldView').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_FIELD_EDIT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldEdit').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_LIST_ADD] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldNew/NetSuiteImportAddCustomListPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_SEGMENT_ADD] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldNew/NetSuiteImportAddCustomSegmentPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomersOrProjectsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomersOrProjectSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT] = function () { return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportConfigurationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_PREFERRED_EXPORTER_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuitePreferredExporterSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_DATE_SELECT] = function () { return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteDateSelectPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES] = function () { return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_DESTINATION_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesDestinationSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_VENDOR_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesVendorSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_PAYABLE_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesPayableAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_JOURNAL_POSTING_PREFERENCE_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesJournalPostingPreferenceSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_RECEIVABLE_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteReceivableAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_INVOICE_ITEM_PREFERENCE_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteInvoiceItemPreferenceSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_INVOICE_ITEM_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteInvoiceItemSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_TAX_POSTING_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteTaxPostingAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_PROVINCIAL_TAX_POSTING_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteProvincialTaxPostingAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_ADVANCED] = function () { return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteAdvancedPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_REIMBURSEMENT_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteReimbursementAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_COLLECTION_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteCollectionAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPENSE_REPORT_APPROVAL_LEVEL_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteExpenseReportApprovalLevelSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_VENDOR_BILL_APPROVAL_LEVEL_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteVendorBillApprovalLevelSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_JOURNAL_ENTRY_APPROVAL_LEVEL_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteJournalEntryApprovalLevelSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_APPROVAL_ACCOUNT_SELECT] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteApprovalAccountSelectPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_CUSTOM_FORM_ID] = function () { return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteCustomFormIDPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_AUTO_SYNC] = function () { return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteAutoSyncPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_ACCOUNTING_METHOD] = function () {
-        return require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteAccountingMethodPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_PREREQUISITES] = function () { return require('../../../../pages/workspace/accounting/intacct/SageIntacctPrerequisitesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.ENTER_SAGE_INTACCT_CREDENTIALS] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/EnterSageIntacctCredentialsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.EXISTING_SAGE_INTACCT_CONNECTIONS] = function () { return require('../../../../pages/workspace/accounting/intacct/ExistingConnectionsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ENTITY] = function () { return require('../../../../pages/workspace/accounting/intacct/SageIntacctEntityPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_EXPORT] = function () { return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctExportPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_PREFERRED_EXPORTER] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctPreferredExporterPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_EXPORT_DATE] = function () { return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctDatePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_REIMBURSABLE_EXPENSES] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctReimbursableExpensesPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctNonReimbursableExpensesPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_REIMBURSABLE_DESTINATION] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctReimbursableExpensesDestinationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_NON_REIMBURSABLE_DESTINATION] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctNonReimbursableExpensesDestinationPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_DEFAULT_VENDOR] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctDefaultVendorPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_NON_REIMBURSABLE_CREDIT_CARD_ACCOUNT] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/export/SageIntacctNonReimbursableCreditCardAccountPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ADVANCED] = function () { return require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctAdvancedPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_AUTO_SYNC] = function () { return require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctAutoSyncPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ACCOUNTING_METHOD] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctAccountingMethodPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_PAYMENT_ACCOUNT] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctPaymentAccountPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.CARD_RECONCILIATION] = function () { return require('../../../../pages/workspace/accounting/reconciliation/CardReconciliationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.RECONCILIATION_ACCOUNT_SETTINGS] = function () {
-        return require('../../../../pages/workspace/accounting/reconciliation/ReconciliationAccountSettingsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.WORKFLOWS_AUTO_REPORTING_FREQUENCY] = function () { return require('../../../../pages/workspace/workflows/WorkspaceAutoReportingFrequencyPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.WORKFLOWS_AUTO_REPORTING_MONTHLY_OFFSET] = function () { return require('../../../../pages/workspace/workflows/WorkspaceAutoReportingMonthlyOffsetPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAX_EDIT] = function () { return require('../../../../pages/workspace/taxes/WorkspaceEditTaxPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAX_NAME] = function () { return require('../../../../pages/workspace/taxes/NamePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAX_VALUE] = function () { return require('../../../../pages/workspace/taxes/ValuePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAX_CREATE] = function () { return require('../../../../pages/workspace/taxes/WorkspaceCreateTaxPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.TAX_CODE] = function () { return require('../../../../pages/workspace/taxes/WorkspaceTaxCodePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.INVOICES_COMPANY_NAME] = function () { return require('../../../../pages/workspace/invoices/WorkspaceInvoicingDetailsName').default; },
-    _0[SCREENS_1.default.WORKSPACE.INVOICES_COMPANY_WEBSITE] = function () { return require('../../../../pages/workspace/invoices/WorkspaceInvoicingDetailsWebsite').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_ASSIGN_CARD] = function () { return require('../../../../pages/workspace/companyCards/assignCard/AssignCardFeedPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SELECT_FEED] = function () { return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardFeedSelectorPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_BANK_CONNECTION] = function () { return require('../../../../pages/workspace/companyCards/BankConnection').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_ADD_NEW] = function () { return require('../../../../pages/workspace/companyCards/addNew/AddNewCardPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_TRANSACTION_START_DATE] = function () {
-        return require('../../../../pages/workspace/companyCards/assignCard/TransactionStartDateSelectorPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARD_DETAILS] = function () { return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardDetailsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARD_NAME] = function () { return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardEditCardNamePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARD_EXPORT] = function () { return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardAccountSelectCardPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_ISSUE_NEW] = function () { return require('../../../../pages/workspace/expensifyCard/issueNew/IssueNewCardPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SETTINGS] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceCardSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SETTINGS_ACCOUNT] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceSettlementAccountPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SETTINGS_FREQUENCY] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceSettlementFrequencyPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SELECT_FEED] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardSelectorPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_BANK_ACCOUNT] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardBankAccounts').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_DETAILS] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardDetailsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_NAME] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardNamePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_LIMIT] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_LIMIT_TYPE] = function () { return require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitTypePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SETTINGS] = function () { return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardsSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SETTINGS_FEED_NAME] = function () { return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardsSettingsFeedNamePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SETTINGS_STATEMENT_CLOSE_DATE] = function () {
-        return require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardStatementCloseDatePage').default;
-    },
-    _0[SCREENS_1.default.SETTINGS.SAVE_THE_WORLD] = function () { return require('../../../../pages/TeachersUnite/SaveTheWorldPage').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.CHANGE_PAYMENT_CURRENCY] = function () { return require('../../../../pages/settings/PaymentCard/ChangeCurrency').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.CHANGE_BILLING_CURRENCY] = function () { return require('../../../../pages/settings/Subscription/PaymentCard/ChangeBillingCurrency').default; },
-    _0[SCREENS_1.default.SETTINGS.SUBSCRIPTION.ADD_PAYMENT_CARD] = function () { return require('../../../../pages/settings/Subscription/PaymentCard').default; },
-    _0[SCREENS_1.default.SETTINGS.ADD_PAYMENT_CARD_CHANGE_CURRENCY] = function () { return require('../../../../pages/settings/PaymentCard/ChangeCurrency').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORT_FIELDS_CREATE] = function () { return require('../../../../pages/workspace/reports/CreateReportFieldsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORT_FIELDS_SETTINGS] = function () { return require('../../../../pages/workspace/reports/ReportFieldsSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORT_FIELDS_LIST_VALUES] = function () { return require('../../../../pages/workspace/reports/ReportFieldsListValuesPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORT_FIELDS_ADD_VALUE] = function () { return require('../../../../pages/workspace/reports/ReportFieldsAddListValuePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORT_FIELDS_VALUE_SETTINGS] = function () { return require('../../../../pages/workspace/reports/ReportFieldsValueSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORT_FIELDS_EDIT_INITIAL_VALUE] = function () { return require('../../../../pages/workspace/reports/ReportFieldsInitialValuePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORT_FIELDS_EDIT_VALUE] = function () { return require('../../../../pages/workspace/reports/ReportFieldsEditValuePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_IMPORT] = function () { return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctImportPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_TOGGLE_MAPPING] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctToggleMappingsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_MAPPING_TYPE] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctMappingsTypePage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_IMPORT_TAX] = function () { return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctImportTaxPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_IMPORT_TAX_MAPPING] = function () {
+const SettingsModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SETTINGS.SHARE_CODE]: () => require('../../../../pages/ShareCodePage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.PRONOUNS]: () => require('../../../../pages/settings/Profile/PronounsPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.DISPLAY_NAME]: () => require('../../../../pages/settings/Profile/DisplayNamePage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.TIMEZONE]: () => require('../../../../pages/settings/Profile/TimezoneInitialPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.TIMEZONE_SELECT]: () => require('../../../../pages/settings/Profile/TimezoneSelectPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.LEGAL_NAME]: () => require('../../../../pages/settings/Profile/PersonalDetails/LegalNamePage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.DATE_OF_BIRTH]: () => require('../../../../pages/settings/Profile/PersonalDetails/DateOfBirthPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.PHONE_NUMBER]: () => require('../../../../pages/settings/Profile/PersonalDetails/PhoneNumberPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.ADDRESS]: () => require('../../../../pages/settings/Profile/PersonalDetails/PersonalAddressPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.ADDRESS_COUNTRY]: () => require('../../../../pages/settings/Profile/PersonalDetails/CountrySelectionPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.ADDRESS_STATE]: () => require('../../../../pages/settings/Profile/PersonalDetails/StateSelectionPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.CONTACT_METHODS]: () => require('../../../../pages/settings/Profile/Contacts/ContactMethodsPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.CONTACT_METHOD_DETAILS]: () => require('../../../../pages/settings/Profile/Contacts/ContactMethodDetailsPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.NEW_CONTACT_METHOD]: () => require('../../../../pages/settings/Profile/Contacts/NewContactMethodPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.CONTACT_METHOD_VERIFY_ACCOUNT]: () => require('../../../../pages/settings/Profile/Contacts/VerifyAccountPage').default,
+    [SCREENS_1.default.SETTINGS.PREFERENCES.PRIORITY_MODE]: () => require('../../../../pages/settings/Preferences/PriorityModePage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.ROOT]: () => require('../../../../pages/workspace/accounting/PolicyAccountingPage').default,
+    [SCREENS_1.default.SETTINGS.PREFERENCES.LANGUAGE]: () => require('../../../../pages/settings/Preferences/LanguagePage').default,
+    [SCREENS_1.default.SETTINGS.PREFERENCES.THEME]: () => require('../../../../pages/settings/Preferences/ThemePage').default,
+    [SCREENS_1.default.SETTINGS.PREFERENCES.PAYMENT_CURRENCY]: () => require('../../../../pages/settings/Preferences/PaymentCurrencyPage').default,
+    [SCREENS_1.default.SETTINGS.CLOSE]: () => require('../../../../pages/settings/Security/CloseAccountPage').default,
+    [SCREENS_1.default.SETTINGS.APP_DOWNLOAD_LINKS]: () => require('../../../../pages/settings/AppDownloadLinks').default,
+    [SCREENS_1.default.SETTINGS.CONSOLE]: () => require('../../../../pages/settings/AboutPage/ConsolePage').default,
+    [SCREENS_1.default.SETTINGS.SHARE_LOG]: () => require('../../../../pages/settings/AboutPage/ShareLogPage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.CARDS_DIGITAL_DETAILS_UPDATE_ADDRESS]: () => require('../../../../pages/settings/Profile/PersonalDetails/PersonalAddressPage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.DOMAIN_CARD]: () => require('../../../../pages/settings/Wallet/ExpensifyCardPage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.REPORT_VIRTUAL_CARD_FRAUD]: () => require('../../../../pages/settings/Wallet/ReportVirtualCardFraudPage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.REPORT_VIRTUAL_CARD_FRAUD_CONFIRMATION]: () => require('../../../../pages/settings/Wallet/ReportVirtualCardFraudConfirmationPage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.CARD_ACTIVATE]: () => require('../../../../pages/settings/Wallet/ActivatePhysicalCardPage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.TRANSFER_BALANCE]: () => require('../../../../pages/settings/Wallet/TransferBalancePage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.CHOOSE_TRANSFER_ACCOUNT]: () => require('../../../../pages/settings/Wallet/ChooseTransferAccountPage').default,
+    [SCREENS_1.default.SETTINGS.WALLET.ENABLE_PAYMENTS]: () => require('../../../../pages/EnablePayments/EnablePayments').default,
+    [SCREENS_1.default.SETTINGS.WALLET.ENABLE_GLOBAL_REIMBURSEMENTS]: () => require('../../../../pages/settings/Wallet/EnableGlobalReimbursements').default,
+    [SCREENS_1.default.SETTINGS.ADD_DEBIT_CARD]: () => require('../../../../pages/settings/Wallet/AddDebitCardPage').default,
+    [SCREENS_1.default.SETTINGS.ADD_BANK_ACCOUNT]: () => require('../../../../pages/settings/Wallet/InternationalDepositAccount').default,
+    [SCREENS_1.default.SETTINGS.ADD_US_BANK_ACCOUNT]: () => require('../../../../pages/AddPersonalBankAccountPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.STATUS]: () => require('../../../../pages/settings/Profile/CustomStatus/StatusPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.STATUS_CLEAR_AFTER]: () => require('../../../../pages/settings/Profile/CustomStatus/StatusClearAfterPage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.STATUS_CLEAR_AFTER_DATE]: () => require('../../../../pages/settings/Profile/CustomStatus/SetDatePage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.STATUS_CLEAR_AFTER_TIME]: () => require('../../../../pages/settings/Profile/CustomStatus/SetTimePage').default,
+    [SCREENS_1.default.SETTINGS.PROFILE.VACATION_DELEGATE]: () => require('../../../../pages/settings/Profile/CustomStatus/VacationDelegatePage').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.SIZE]: () => require('../../../../pages/settings/Subscription/SubscriptionSize').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.SETTINGS_DETAILS]: () => require('../../../../pages/settings/Subscription/SubscriptionSettings').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.DISABLE_AUTO_RENEW_SURVEY]: () => require('../../../../pages/settings/Subscription/DisableAutoRenewSurveyPage').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.REQUEST_EARLY_CANCELLATION]: () => require('../../../../pages/settings/Subscription/RequestEarlyCancellationPage').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.SUBSCRIPTION_DOWNGRADE_BLOCKED]: () => require('../../../../pages/settings/Subscription/SubscriptionPlan/SubscriptionPlanDowngradeBlockedPage').default,
+    [SCREENS_1.default.WORKSPACE.INVITE]: () => require('../../../../pages/workspace/WorkspaceInvitePage').default,
+    [SCREENS_1.default.WORKSPACE.MEMBERS_IMPORT]: () => require('../../../../pages/workspace/members/ImportMembersPage').default,
+    [SCREENS_1.default.WORKSPACE.MEMBERS_IMPORTED]: () => require('../../../../pages/workspace/members/ImportedMembersPage').default,
+    [SCREENS_1.default.WORKSPACE.MEMBERS_IMPORTED_CONFIRMATION]: () => require('../../../../pages/workspace/members/ImportedMembersConfirmationPage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_NEW]: () => require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsCreatePage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_EDIT]: () => require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsEditPage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_EXPENSES_FROM]: () => require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsExpensesFromPage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS_APPROVALS_APPROVER]: () => require('../../../../pages/workspace/workflows/approvals/WorkspaceWorkflowsApprovalsApproverPage').default,
+    [SCREENS_1.default.WORKSPACE.INVITE_MESSAGE]: () => require('../../../../pages/workspace/WorkspaceInviteMessagePage').default,
+    [SCREENS_1.default.WORKSPACE.INVITE_MESSAGE_ROLE]: () => require('../../../../pages/workspace/WorkspaceInviteMessageRolePage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS_PAYER]: () => require('../../../../pages/workspace/workflows/WorkspaceWorkflowsPayerPage').default,
+    [SCREENS_1.default.WORKSPACE.NAME]: () => require('../../../../pages/workspace/WorkspaceNamePage').default,
+    [SCREENS_1.default.WORKSPACE.DESCRIPTION]: () => require('../../../../pages/workspace/WorkspaceOverviewDescriptionPage').default,
+    [SCREENS_1.default.WORKSPACE.SHARE]: () => require('../../../../pages/workspace/WorkspaceOverviewSharePage').default,
+    [SCREENS_1.default.WORKSPACE.CURRENCY]: () => require('../../../../pages/workspace/WorkspaceOverviewCurrencyPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_SETTINGS]: () => require('../../../../pages/workspace/categories/CategorySettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.ADDRESS]: () => require('../../../../pages/workspace/WorkspaceOverviewAddressPage').default,
+    [SCREENS_1.default.WORKSPACE.PLAN]: () => require('../../../../pages/workspace/WorkspaceOverviewPlanTypePage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORIES_SETTINGS]: () => require('../../../../pages/workspace/categories/WorkspaceCategoriesSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORIES_IMPORT]: () => require('../../../../pages/workspace/categories/ImportCategoriesPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORIES_IMPORTED]: () => require('../../../../pages/workspace/categories/ImportedCategoriesPage').default,
+    [SCREENS_1.default.WORKSPACE.UPGRADE]: () => require('../../../../pages/workspace/upgrade/WorkspaceUpgradePage').default,
+    [SCREENS_1.default.WORKSPACE.DOWNGRADE]: () => require('../../../../pages/workspace/downgrade/WorkspaceDowngradePage').default,
+    [SCREENS_1.default.WORKSPACE.PAY_AND_DOWNGRADE]: () => require('../../../../pages/workspace/downgrade/PayAndDowngradePage').default,
+    [SCREENS_1.default.WORKSPACE.MEMBER_DETAILS]: () => require('../../../../pages/workspace/members/WorkspaceMemberDetailsPage').default,
+    [SCREENS_1.default.WORKSPACE.MEMBER_CUSTOM_FIELD]: () => require('../../../../pages/workspace/members/WorkspaceMemberCustomFieldPage').default,
+    [SCREENS_1.default.WORKSPACE.MEMBER_NEW_CARD]: () => require('../../../../pages/workspace/members/WorkspaceMemberNewCardPage').default,
+    [SCREENS_1.default.WORKSPACE.OWNER_CHANGE_CHECK]: () => require('@pages/workspace/members/WorkspaceOwnerChangeWrapperPage').default,
+    [SCREENS_1.default.WORKSPACE.OWNER_CHANGE_SUCCESS]: () => require('../../../../pages/workspace/members/WorkspaceOwnerChangeSuccessPage').default,
+    [SCREENS_1.default.WORKSPACE.OWNER_CHANGE_ERROR]: () => require('../../../../pages/workspace/members/WorkspaceOwnerChangeErrorPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_CREATE]: () => require('../../../../pages/workspace/categories/CreateCategoryPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_EDIT]: () => require('../../../../pages/workspace/categories/EditCategoryPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_PAYROLL_CODE]: () => require('../../../../pages/workspace/categories/CategoryPayrollCodePage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_GL_CODE]: () => require('../../../../pages/workspace/categories/CategoryGLCodePage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_DEFAULT_TAX_RATE]: () => require('../../../../pages/workspace/categories/CategoryDefaultTaxRatePage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_FLAG_AMOUNTS_OVER]: () => require('../../../../pages/workspace/categories/CategoryFlagAmountsOverPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_DESCRIPTION_HINT]: () => require('../../../../pages/workspace/categories/CategoryDescriptionHintPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_REQUIRE_RECEIPTS_OVER]: () => require('../../../../pages/workspace/categories/CategoryRequireReceiptsOverPage').default,
+    [SCREENS_1.default.WORKSPACE.CATEGORY_APPROVER]: () => require('../../../../pages/workspace/categories/CategoryApproverPage').default,
+    [SCREENS_1.default.WORKSPACE.CREATE_DISTANCE_RATE]: () => require('../../../../pages/workspace/distanceRates/CreateDistanceRatePage').default,
+    [SCREENS_1.default.WORKSPACE.DISTANCE_RATES_SETTINGS]: () => require('../../../../pages/workspace/distanceRates/PolicyDistanceRatesSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.DISTANCE_RATE_DETAILS]: () => require('../../../../pages/workspace/distanceRates/PolicyDistanceRateDetailsPage').default,
+    [SCREENS_1.default.WORKSPACE.DISTANCE_RATE_EDIT]: () => require('../../../../pages/workspace/distanceRates/PolicyDistanceRateEditPage').default,
+    [SCREENS_1.default.WORKSPACE.DISTANCE_RATE_NAME_EDIT]: () => require('../../../../pages/workspace/distanceRates/PolicyDistanceRateNameEditPage').default,
+    [SCREENS_1.default.WORKSPACE.DISTANCE_RATE_TAX_RECLAIMABLE_ON_EDIT]: () => require('../../../../pages/workspace/distanceRates/PolicyDistanceRateTaxReclaimableEditPage').default,
+    [SCREENS_1.default.WORKSPACE.DISTANCE_RATE_TAX_RATE_EDIT]: () => require('../../../../pages/workspace/distanceRates/PolicyDistanceRateTaxRateEditPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_IMPORT]: () => require('../../../../pages/workspace/tags/ImportTagsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_IMPORT_OPTIONS]: () => require('../../../../pages/workspace/tags/ImportTagsOptionsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_IMPORT_MULTI_LEVEL_SETTINGS]: () => require('../../../../pages/workspace/tags/ImportMultiLevelTagsSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_IMPORTED]: () => require('../../../../pages/workspace/tags/ImportedTagsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_IMPORTED_MULTI_LEVEL]: () => require('../../../../pages/workspace/tags/ImportedMultiLevelTagsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_SETTINGS]: () => require('../../../../pages/workspace/tags/WorkspaceTagsSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAG_SETTINGS]: () => require('../../../../pages/workspace/tags/TagSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAG_LIST_VIEW]: () => require('../../../../pages/workspace/tags/WorkspaceViewTagsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAGS_EDIT]: () => require('../../../../pages/workspace/tags/WorkspaceEditTagsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAG_CREATE]: () => require('../../../../pages/workspace/tags/WorkspaceCreateTagPage').default,
+    [SCREENS_1.default.WORKSPACE.TAG_EDIT]: () => require('../../../../pages/workspace/tags/EditTagPage').default,
+    [SCREENS_1.default.WORKSPACE.TAG_APPROVER]: () => require('../../../../pages/workspace/tags/TagApproverPage').default,
+    [SCREENS_1.default.WORKSPACE.TAG_GL_CODE]: () => require('../../../../pages/workspace/tags/TagGLCodePage').default,
+    [SCREENS_1.default.WORKSPACE.TAXES_SETTINGS]: () => require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.TAXES_SETTINGS_CUSTOM_TAX_NAME]: () => require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsCustomTaxName').default,
+    [SCREENS_1.default.WORKSPACE.TAXES_SETTINGS_FOREIGN_CURRENCY_DEFAULT]: () => require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsForeignCurrency').default,
+    [SCREENS_1.default.WORKSPACE.TAXES_SETTINGS_WORKSPACE_CURRENCY_DEFAULT]: () => require('../../../../pages/workspace/taxes/WorkspaceTaxesSettingsWorkspaceCurrency').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksExportConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_DATE_SELECT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksExportDateSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_INVOICE_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksExportInvoiceAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksOutOfPocketExpenseAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksOutOfPocketExpenseConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksOutOfPocketExpenseEntitySelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksNonReimbursableDefaultVendorSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT]: () => require('@pages/workspace/accounting/qbo/export/QuickbooksCompanyCardExpenseAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT_COMPANY_CARD_SELECT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksCompanyCardExpenseAccountSelectCardPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_AUTO_SYNC]: () => require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAutoSyncPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_ACCOUNTING_METHOD]: () => require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAccountingMethodPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksCompanyCardExpenseAccountPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_EXPORT_PREFERRED_EXPORTER]: () => require('../../../../pages/workspace/accounting/qbo/export/QuickbooksPreferredExporterConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopCompanyCardExpenseAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT_COMPANY_CARD_SELECT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopCompanyCardExpenseAccountSelectCardPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopNonReimbursableDefaultVendorSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopCompanyCardExpenseAccountPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_DATE_SELECT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopExportDateSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_PREFERRED_EXPORTER]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopPreferredExporterConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopOutOfPocketExpenseAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopOutOfPocketExpenseConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopOutOfPocketExpenseEntitySelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_EXPORT]: () => require('../../../../pages/workspace/accounting/qbd/export/QuickbooksDesktopExportPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_ADVANCED]: () => require('../../../../pages/workspace/accounting/qbd/advanced/QuickbooksDesktopAdvancedPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_SETUP_MODAL]: () => require('../../../../pages/workspace/accounting/qbd/QuickBooksDesktopSetupPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_SETUP_REQUIRED_DEVICE_MODAL]: () => require('../../../../pages/workspace/accounting/qbd/RequireQuickBooksDesktopPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_TRIGGER_FIRST_SYNC]: () => require('../../../../pages/workspace/accounting/qbd/QuickBooksDesktopSetupFlowSyncPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_IMPORT]: () => require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopImportPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CHART_OF_ACCOUNTS]: () => require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopChartOfAccountsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CLASSES]: () => require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopClassesPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CLASSES_DISPLAYED_AS]: () => require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopClassesDisplayedAsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CUSTOMERS]: () => require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopCustomersPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_CUSTOMERS_DISPLAYED_AS]: () => require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopCustomersDisplayedAsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_DESKTOP_ITEMS]: () => require('../../../../pages/workspace/accounting/qbd/import/QuickbooksDesktopItemsPage').default,
+    [SCREENS_1.default.REIMBURSEMENT_ACCOUNT]: () => require('../../../../pages/ReimbursementAccount/ReimbursementAccountPage').default,
+    [SCREENS_1.default.REIMBURSEMENT_ACCOUNT_ENTER_SIGNER_INFO]: () => require('../../../../pages/ReimbursementAccount/EnterSignerInfo').default,
+    [SCREENS_1.default.SETTINGS.REPORT_CARD_LOST_OR_DAMAGED]: () => require('../../../../pages/settings/Wallet/ReportCardLostPage').default,
+    [SCREENS_1.default.KEYBOARD_SHORTCUTS]: () => require('../../../../pages/KeyboardShortcutsPage').default,
+    [SCREENS_1.default.SETTINGS.EXIT_SURVEY.REASON]: () => require('../../../../pages/settings/ExitSurvey/ExitSurveyReasonPage').default,
+    [SCREENS_1.default.SETTINGS.EXIT_SURVEY.RESPONSE]: () => require('../../../../pages/settings/ExitSurvey/ExitSurveyResponsePage').default,
+    [SCREENS_1.default.SETTINGS.EXIT_SURVEY.CONFIRM]: () => require('../../../../pages/settings/ExitSurvey/ExitSurveyConfirmPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_IMPORT]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksImportPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CHART_OF_ACCOUNTS]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksChartOfAccountsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CUSTOMERS]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksCustomersPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_TAXES]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksTaxesPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_LOCATIONS]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksLocationsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CLASSES]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksClassesPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CLASSES_DISPLAYED_AS]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksClassesDisplayedAsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_CUSTOMERS_DISPLAYED_AS]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksCustomersDisplayedAsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_LOCATIONS_DISPLAYED_AS]: () => require('../../../../pages/workspace/accounting/qbo/import/QuickbooksLocationsDisplayedAsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_ADVANCED]: () => require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAdvancedPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_ACCOUNT_SELECTOR]: () => require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.QUICKBOOKS_ONLINE_INVOICE_ACCOUNT_SELECTOR]: () => require('../../../../pages/workspace/accounting/qbo/advanced/QuickbooksInvoiceAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_IMPORT]: () => require('../../../../pages/workspace/accounting/xero/XeroImportPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_ORGANIZATION]: () => require('../../../../pages/workspace/accounting/xero/XeroOrganizationConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_CHART_OF_ACCOUNTS]: () => require('../../../../pages/workspace/accounting/xero/import/XeroChartOfAccountsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_CUSTOMER]: () => require('../../../../pages/workspace/accounting/xero/import/XeroCustomerConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_TAXES]: () => require('../../../../pages/workspace/accounting/xero/XeroTaxesConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_TRACKING_CATEGORIES]: () => require('../../../../pages/workspace/accounting/xero/XeroTrackingCategoryConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_MAP_TRACKING_CATEGORY]: () => require('../../../../pages/workspace/accounting/xero/XeroMapTrackingCategoryConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT]: () => require('../../../../pages/workspace/accounting/xero/export/XeroExportConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT_PURCHASE_BILL_DATE_SELECT]: () => require('../../../../pages/workspace/accounting/xero/export/XeroPurchaseBillDateSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT_BANK_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/xero/export/XeroBankAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_ADVANCED]: () => require('../../../../pages/workspace/accounting/xero/advanced/XeroAdvancedPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_AUTO_SYNC]: () => require('../../../../pages/workspace/accounting/xero/advanced/XeroAutoSyncPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_ACCOUNTING_METHOD]: () => require('../../../../pages/workspace/accounting/xero/advanced/XeroAccountingMethodPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_BILL_STATUS_SELECTOR]: () => require('../../../../pages/workspace/accounting/xero/export/XeroPurchaseBillStatusSelectorPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_INVOICE_ACCOUNT_SELECTOR]: () => require('../../../../pages/workspace/accounting/xero/advanced/XeroInvoiceAccountSelectorPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_EXPORT_PREFERRED_EXPORTER_SELECT]: () => require('../../../../pages/workspace/accounting/xero/export/XeroPreferredExporterSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.XERO_BILL_PAYMENT_ACCOUNT_SELECTOR]: () => require('../../../../pages/workspace/accounting/xero/advanced/XeroBillPaymentAccountSelectorPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_SUBSIDIARY_SELECTOR]: () => require('../../../../pages/workspace/accounting/netsuite/NetSuiteSubsidiarySelector').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_REUSE_EXISTING_CONNECTIONS]: () => require('../../../../pages/workspace/accounting/netsuite/NetSuiteTokenInput/NetSuiteExistingConnectionsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_TOKEN_INPUT]: () => require('../../../../pages/workspace/accounting/netsuite/NetSuiteTokenInput/NetSuiteTokenInputPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_MAPPING]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportMappingPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_FIELD]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_FIELD_VIEW]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldView').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_FIELD_EDIT]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldEdit').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_LIST_ADD]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldNew/NetSuiteImportAddCustomListPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOM_SEGMENT_ADD]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomFieldNew/NetSuiteImportAddCustomSegmentPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomersOrProjectsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/import/NetSuiteImportCustomersOrProjectSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportConfigurationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_PREFERRED_EXPORTER_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuitePreferredExporterSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_DATE_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteDateSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_DESTINATION_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesDestinationSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_VENDOR_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesVendorSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_PAYABLE_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesPayableAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPORT_EXPENSES_JOURNAL_POSTING_PREFERENCE_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteExportExpensesJournalPostingPreferenceSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_RECEIVABLE_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteReceivableAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_INVOICE_ITEM_PREFERENCE_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteInvoiceItemPreferenceSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_INVOICE_ITEM_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteInvoiceItemSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_TAX_POSTING_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteTaxPostingAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_PROVINCIAL_TAX_POSTING_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/export/NetSuiteProvincialTaxPostingAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_ADVANCED]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteAdvancedPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_REIMBURSEMENT_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteReimbursementAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_COLLECTION_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteCollectionAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_EXPENSE_REPORT_APPROVAL_LEVEL_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteExpenseReportApprovalLevelSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_VENDOR_BILL_APPROVAL_LEVEL_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteVendorBillApprovalLevelSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_JOURNAL_ENTRY_APPROVAL_LEVEL_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteJournalEntryApprovalLevelSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_APPROVAL_ACCOUNT_SELECT]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteApprovalAccountSelectPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_CUSTOM_FORM_ID]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteCustomFormIDPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_AUTO_SYNC]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteAutoSyncPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.NETSUITE_ACCOUNTING_METHOD]: () => require('../../../../pages/workspace/accounting/netsuite/advanced/NetSuiteAccountingMethodPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_PREREQUISITES]: () => require('../../../../pages/workspace/accounting/intacct/SageIntacctPrerequisitesPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.ENTER_SAGE_INTACCT_CREDENTIALS]: () => require('../../../../pages/workspace/accounting/intacct/EnterSageIntacctCredentialsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.EXISTING_SAGE_INTACCT_CONNECTIONS]: () => require('../../../../pages/workspace/accounting/intacct/ExistingConnectionsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ENTITY]: () => require('../../../../pages/workspace/accounting/intacct/SageIntacctEntityPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_EXPORT]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctExportPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_PREFERRED_EXPORTER]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctPreferredExporterPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_EXPORT_DATE]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctDatePage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_REIMBURSABLE_EXPENSES]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctReimbursableExpensesPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctNonReimbursableExpensesPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_REIMBURSABLE_DESTINATION]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctReimbursableExpensesDestinationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_NON_REIMBURSABLE_DESTINATION]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctNonReimbursableExpensesDestinationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_DEFAULT_VENDOR]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctDefaultVendorPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_NON_REIMBURSABLE_CREDIT_CARD_ACCOUNT]: () => require('../../../../pages/workspace/accounting/intacct/export/SageIntacctNonReimbursableCreditCardAccountPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ADVANCED]: () => require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctAdvancedPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_AUTO_SYNC]: () => require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctAutoSyncPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ACCOUNTING_METHOD]: () => require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctAccountingMethodPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_PAYMENT_ACCOUNT]: () => require('../../../../pages/workspace/accounting/intacct/advanced/SageIntacctPaymentAccountPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.CARD_RECONCILIATION]: () => require('../../../../pages/workspace/accounting/reconciliation/CardReconciliationPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.RECONCILIATION_ACCOUNT_SETTINGS]: () => require('../../../../pages/workspace/accounting/reconciliation/ReconciliationAccountSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS_AUTO_REPORTING_FREQUENCY]: () => require('../../../../pages/workspace/workflows/WorkspaceAutoReportingFrequencyPage').default,
+    [SCREENS_1.default.WORKSPACE.WORKFLOWS_AUTO_REPORTING_MONTHLY_OFFSET]: () => require('../../../../pages/workspace/workflows/WorkspaceAutoReportingMonthlyOffsetPage').default,
+    [SCREENS_1.default.WORKSPACE.TAX_EDIT]: () => require('../../../../pages/workspace/taxes/WorkspaceEditTaxPage').default,
+    [SCREENS_1.default.WORKSPACE.TAX_NAME]: () => require('../../../../pages/workspace/taxes/NamePage').default,
+    [SCREENS_1.default.WORKSPACE.TAX_VALUE]: () => require('../../../../pages/workspace/taxes/ValuePage').default,
+    [SCREENS_1.default.WORKSPACE.TAX_CREATE]: () => require('../../../../pages/workspace/taxes/WorkspaceCreateTaxPage').default,
+    [SCREENS_1.default.WORKSPACE.TAX_CODE]: () => require('../../../../pages/workspace/taxes/WorkspaceTaxCodePage').default,
+    [SCREENS_1.default.WORKSPACE.INVOICES_COMPANY_NAME]: () => require('../../../../pages/workspace/invoices/WorkspaceInvoicingDetailsName').default,
+    [SCREENS_1.default.WORKSPACE.INVOICES_COMPANY_WEBSITE]: () => require('../../../../pages/workspace/invoices/WorkspaceInvoicingDetailsWebsite').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_ASSIGN_CARD]: () => require('../../../../pages/workspace/companyCards/assignCard/AssignCardFeedPage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SELECT_FEED]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardFeedSelectorPage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_BANK_CONNECTION]: () => require('../../../../pages/workspace/companyCards/BankConnection').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_ADD_NEW]: () => require('../../../../pages/workspace/companyCards/addNew/AddNewCardPage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_TRANSACTION_START_DATE]: () => require('../../../../pages/workspace/companyCards/assignCard/TransactionStartDateSelectorPage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARD_DETAILS]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardDetailsPage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARD_NAME]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardEditCardNamePage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARD_EXPORT]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardAccountSelectCardPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_ISSUE_NEW]: () => require('../../../../pages/workspace/expensifyCard/issueNew/IssueNewCardPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SETTINGS]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceCardSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SETTINGS_ACCOUNT]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceSettlementAccountPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SETTINGS_FREQUENCY]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceSettlementFrequencyPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_SELECT_FEED]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardSelectorPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_BANK_ACCOUNT]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardBankAccounts').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_DETAILS]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceExpensifyCardDetailsPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_NAME]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardNamePage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_LIMIT]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitPage').default,
+    [SCREENS_1.default.WORKSPACE.EXPENSIFY_CARD_LIMIT_TYPE]: () => require('../../../../pages/workspace/expensifyCard/WorkspaceEditCardLimitTypePage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SETTINGS]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardsSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SETTINGS_FEED_NAME]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardsSettingsFeedNamePage').default,
+    [SCREENS_1.default.WORKSPACE.COMPANY_CARDS_SETTINGS_STATEMENT_CLOSE_DATE]: () => require('../../../../pages/workspace/companyCards/WorkspaceCompanyCardStatementCloseDatePage').default,
+    [SCREENS_1.default.SETTINGS.SAVE_THE_WORLD]: () => require('../../../../pages/TeachersUnite/SaveTheWorldPage').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.CHANGE_PAYMENT_CURRENCY]: () => require('../../../../pages/settings/PaymentCard/ChangeCurrency').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.CHANGE_BILLING_CURRENCY]: () => require('../../../../pages/settings/Subscription/PaymentCard/ChangeBillingCurrency').default,
+    [SCREENS_1.default.SETTINGS.SUBSCRIPTION.ADD_PAYMENT_CARD]: () => require('../../../../pages/settings/Subscription/PaymentCard').default,
+    [SCREENS_1.default.SETTINGS.ADD_PAYMENT_CARD_CHANGE_CURRENCY]: () => require('../../../../pages/settings/PaymentCard/ChangeCurrency').default,
+    [SCREENS_1.default.WORKSPACE.REPORT_FIELDS_CREATE]: () => require('../../../../pages/workspace/reports/CreateReportFieldsPage').default,
+    [SCREENS_1.default.WORKSPACE.REPORT_FIELDS_SETTINGS]: () => require('../../../../pages/workspace/reports/ReportFieldsSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.REPORT_FIELDS_LIST_VALUES]: () => require('../../../../pages/workspace/reports/ReportFieldsListValuesPage').default,
+    [SCREENS_1.default.WORKSPACE.REPORT_FIELDS_ADD_VALUE]: () => require('../../../../pages/workspace/reports/ReportFieldsAddListValuePage').default,
+    [SCREENS_1.default.WORKSPACE.REPORT_FIELDS_VALUE_SETTINGS]: () => require('../../../../pages/workspace/reports/ReportFieldsValueSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.REPORT_FIELDS_EDIT_INITIAL_VALUE]: () => require('../../../../pages/workspace/reports/ReportFieldsInitialValuePage').default,
+    [SCREENS_1.default.WORKSPACE.REPORT_FIELDS_EDIT_VALUE]: () => require('../../../../pages/workspace/reports/ReportFieldsEditValuePage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_IMPORT]: () => require('../../../../pages/workspace/accounting/intacct/import/SageIntacctImportPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_TOGGLE_MAPPING]: () => require('../../../../pages/workspace/accounting/intacct/import/SageIntacctToggleMappingsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_MAPPING_TYPE]: () => require('../../../../pages/workspace/accounting/intacct/import/SageIntacctMappingsTypePage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_IMPORT_TAX]: () => require('../../../../pages/workspace/accounting/intacct/import/SageIntacctImportTaxPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_IMPORT_TAX_MAPPING]: () => {
         return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctImportTaxMappingPage').default;
     },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_USER_DIMENSIONS] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctUserDimensionsPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ADD_USER_DIMENSION] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctAddUserDimensionPage').default;
-    },
-    _0[SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_EDIT_USER_DIMENSION] = function () {
-        return require('../../../../pages/workspace/accounting/intacct/import/SageIntacctEditUserDimensionsPage').default;
-    },
-    _0[SCREENS_1.default.SETTINGS.DELEGATE.VERIFY_ACCOUNT] = function () { return require('../../../../pages/settings/Security/AddDelegate/VerifyAccountPage').default; },
-    _0[SCREENS_1.default.SETTINGS.DELEGATE.ADD_DELEGATE] = function () { return require('../../../../pages/settings/Security/AddDelegate/AddDelegatePage').default; },
-    _0[SCREENS_1.default.SETTINGS.DELEGATE.DELEGATE_ROLE] = function () { return require('../../../../pages/settings/Security/AddDelegate/SelectDelegateRolePage').default; },
-    _0[SCREENS_1.default.SETTINGS.DELEGATE.UPDATE_DELEGATE_ROLE] = function () {
-        return require('../../../../pages/settings/Security/AddDelegate/UpdateDelegateRole/UpdateDelegateRolePage').default;
-    },
-    _0[SCREENS_1.default.SETTINGS.DELEGATE.DELEGATE_CONFIRM] = function () { return require('../../../../pages/settings/Security/AddDelegate/ConfirmDelegatePage').default; },
-    _0[SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.ACCOUNT_DETAILS] = function () { return require('../../../../pages/settings/Security/MergeAccounts/AccountDetailsPage').default; },
-    _0[SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.ACCOUNT_VALIDATE] = function () { return require('../../../../pages/settings/Security/MergeAccounts/AccountValidatePage').default; },
-    _0[SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.MERGE_RESULT] = function () { return require('../../../../pages/settings/Security/MergeAccounts/MergeResultPage').default; },
-    _0[SCREENS_1.default.SETTINGS.LOCK.LOCK_ACCOUNT] = function () { return require('../../../../pages/settings/Security/LockAccount/LockAccountPage').default; },
-    _0[SCREENS_1.default.SETTINGS.LOCK.UNLOCK_ACCOUNT] = function () { return require('../../../../pages/settings/Security/LockAccount/UnlockAccountPage').default; },
-    _0[SCREENS_1.default.SETTINGS.LOCK.FAILED_TO_LOCK_ACCOUNT] = function () { return require('../../../../pages/settings/Security/LockAccount/FailedToLockAccountPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.REPORTS_DEFAULT_TITLE] = function () { return require('../../../../pages/workspace/reports/ReportsDefaultTitle').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_AUTO_APPROVE_REPORTS_UNDER] = function () { return require('../../../../pages/workspace/rules/RulesAutoApproveReportsUnderPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_RANDOM_REPORT_AUDIT] = function () { return require('../../../../pages/workspace/rules/RulesRandomReportAuditPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_AUTO_PAY_REPORTS_UNDER] = function () { return require('../../../../pages/workspace/rules/RulesAutoPayReportsUnderPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_RECEIPT_REQUIRED_AMOUNT] = function () { return require('../../../../pages/workspace/rules/RulesReceiptRequiredAmountPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_MAX_EXPENSE_AMOUNT] = function () { return require('../../../../pages/workspace/rules/RulesMaxExpenseAmountPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_MAX_EXPENSE_AGE] = function () { return require('../../../../pages/workspace/rules/RulesMaxExpenseAgePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_BILLABLE_DEFAULT] = function () { return require('../../../../pages/workspace/rules/RulesBillableDefaultPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_REIMBURSABLE_DEFAULT] = function () { return require('../../../../pages/workspace/rules/RulesReimbursableDefaultPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_CUSTOM] = function () { return require('../../../../pages/workspace/rules/RulesCustomPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RULES_PROHIBITED_DEFAULT] = function () { return require('../../../../pages/workspace/rules/RulesProhibitedDefaultPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_IMPORT] = function () { return require('../../../../pages/workspace/perDiem/ImportPerDiemPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_IMPORTED] = function () { return require('../../../../pages/workspace/perDiem/ImportedPerDiemPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_SETTINGS] = function () { return require('../../../../pages/workspace/perDiem/WorkspacePerDiemSettingsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_DETAILS] = function () { return require('../../../../pages/workspace/perDiem/WorkspacePerDiemDetailsPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_DESTINATION] = function () { return require('../../../../pages/workspace/perDiem/EditPerDiemDestinationPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_SUBRATE] = function () { return require('../../../../pages/workspace/perDiem/EditPerDiemSubratePage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_AMOUNT] = function () { return require('../../../../pages/workspace/perDiem/EditPerDiemAmountPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_CURRENCY] = function () { return require('../../../../pages/workspace/perDiem/EditPerDiemCurrencyPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RECEIPT_PARTNERS_INVITE] = function () { return require('../../../../pages/workspace/receiptPartners/InviteReceiptPartnerPolicyPage').default; },
-    _0[SCREENS_1.default.WORKSPACE.RECEIPT_PARTNERS_INVITE_EDIT] = function () { return require('../../../../pages/workspace/receiptPartners/EditInviteReceiptPartnerPolicyPage').default; },
-    _0));
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_USER_DIMENSIONS]: () => require('../../../../pages/workspace/accounting/intacct/import/SageIntacctUserDimensionsPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_ADD_USER_DIMENSION]: () => require('../../../../pages/workspace/accounting/intacct/import/SageIntacctAddUserDimensionPage').default,
+    [SCREENS_1.default.WORKSPACE.ACCOUNTING.SAGE_INTACCT_EDIT_USER_DIMENSION]: () => require('../../../../pages/workspace/accounting/intacct/import/SageIntacctEditUserDimensionsPage').default,
+    [SCREENS_1.default.SETTINGS.DELEGATE.VERIFY_ACCOUNT]: () => require('../../../../pages/settings/Security/AddDelegate/VerifyAccountPage').default,
+    [SCREENS_1.default.SETTINGS.DELEGATE.ADD_DELEGATE]: () => require('../../../../pages/settings/Security/AddDelegate/AddDelegatePage').default,
+    [SCREENS_1.default.SETTINGS.DELEGATE.DELEGATE_ROLE]: () => require('../../../../pages/settings/Security/AddDelegate/SelectDelegateRolePage').default,
+    [SCREENS_1.default.SETTINGS.DELEGATE.UPDATE_DELEGATE_ROLE]: () => require('../../../../pages/settings/Security/AddDelegate/UpdateDelegateRole/UpdateDelegateRolePage').default,
+    [SCREENS_1.default.SETTINGS.DELEGATE.DELEGATE_CONFIRM]: () => require('../../../../pages/settings/Security/AddDelegate/ConfirmDelegatePage').default,
+    [SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.ACCOUNT_DETAILS]: () => require('../../../../pages/settings/Security/MergeAccounts/AccountDetailsPage').default,
+    [SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.ACCOUNT_VALIDATE]: () => require('../../../../pages/settings/Security/MergeAccounts/AccountValidatePage').default,
+    [SCREENS_1.default.SETTINGS.MERGE_ACCOUNTS.MERGE_RESULT]: () => require('../../../../pages/settings/Security/MergeAccounts/MergeResultPage').default,
+    [SCREENS_1.default.SETTINGS.LOCK.LOCK_ACCOUNT]: () => require('../../../../pages/settings/Security/LockAccount/LockAccountPage').default,
+    [SCREENS_1.default.SETTINGS.LOCK.UNLOCK_ACCOUNT]: () => require('../../../../pages/settings/Security/LockAccount/UnlockAccountPage').default,
+    [SCREENS_1.default.SETTINGS.LOCK.FAILED_TO_LOCK_ACCOUNT]: () => require('../../../../pages/settings/Security/LockAccount/FailedToLockAccountPage').default,
+    [SCREENS_1.default.WORKSPACE.REPORTS_DEFAULT_TITLE]: () => require('../../../../pages/workspace/reports/ReportsDefaultTitle').default,
+    [SCREENS_1.default.WORKSPACE.RULES_AUTO_APPROVE_REPORTS_UNDER]: () => require('../../../../pages/workspace/rules/RulesAutoApproveReportsUnderPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_RANDOM_REPORT_AUDIT]: () => require('../../../../pages/workspace/rules/RulesRandomReportAuditPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_AUTO_PAY_REPORTS_UNDER]: () => require('../../../../pages/workspace/rules/RulesAutoPayReportsUnderPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_RECEIPT_REQUIRED_AMOUNT]: () => require('../../../../pages/workspace/rules/RulesReceiptRequiredAmountPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_MAX_EXPENSE_AMOUNT]: () => require('../../../../pages/workspace/rules/RulesMaxExpenseAmountPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_MAX_EXPENSE_AGE]: () => require('../../../../pages/workspace/rules/RulesMaxExpenseAgePage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_BILLABLE_DEFAULT]: () => require('../../../../pages/workspace/rules/RulesBillableDefaultPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_REIMBURSABLE_DEFAULT]: () => require('../../../../pages/workspace/rules/RulesReimbursableDefaultPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_CUSTOM]: () => require('../../../../pages/workspace/rules/RulesCustomPage').default,
+    [SCREENS_1.default.WORKSPACE.RULES_PROHIBITED_DEFAULT]: () => require('../../../../pages/workspace/rules/RulesProhibitedDefaultPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_IMPORT]: () => require('../../../../pages/workspace/perDiem/ImportPerDiemPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_IMPORTED]: () => require('../../../../pages/workspace/perDiem/ImportedPerDiemPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_SETTINGS]: () => require('../../../../pages/workspace/perDiem/WorkspacePerDiemSettingsPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_DETAILS]: () => require('../../../../pages/workspace/perDiem/WorkspacePerDiemDetailsPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_DESTINATION]: () => require('../../../../pages/workspace/perDiem/EditPerDiemDestinationPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_SUBRATE]: () => require('../../../../pages/workspace/perDiem/EditPerDiemSubratePage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_AMOUNT]: () => require('../../../../pages/workspace/perDiem/EditPerDiemAmountPage').default,
+    [SCREENS_1.default.WORKSPACE.PER_DIEM_EDIT_CURRENCY]: () => require('../../../../pages/workspace/perDiem/EditPerDiemCurrencyPage').default,
+    [SCREENS_1.default.WORKSPACE.RECEIPT_PARTNERS_INVITE]: () => require('../../../../pages/workspace/receiptPartners/InviteReceiptPartnerPolicyPage').default,
+    [SCREENS_1.default.WORKSPACE.RECEIPT_PARTNERS_INVITE_EDIT]: () => require('../../../../pages/workspace/receiptPartners/EditInviteReceiptPartnerPolicyPage').default,
+});
 exports.SettingsModalStackNavigator = SettingsModalStackNavigator;
-var TwoFactorAuthenticatorStackNavigator = createModalStackNavigator((_1 = {},
-    _1[SCREENS_1.default.TWO_FACTOR_AUTH.ROOT] = function () { return require('../../../../pages/settings/Security/TwoFactorAuth/TwoFactorAuthPage').default; },
-    _1[SCREENS_1.default.TWO_FACTOR_AUTH.VERIFY] = function () { return require('../../../../pages/settings/Security/TwoFactorAuth/VerifyPage').default; },
-    _1[SCREENS_1.default.TWO_FACTOR_AUTH.DISABLED] = function () { return require('../../../../pages/settings/Security/TwoFactorAuth/DisabledPage').default; },
-    _1[SCREENS_1.default.TWO_FACTOR_AUTH.DISABLE] = function () { return require('../../../../pages/settings/Security/TwoFactorAuth/DisablePage').default; },
-    _1[SCREENS_1.default.TWO_FACTOR_AUTH.SUCCESS] = function () { return require('../../../../pages/settings/Security/TwoFactorAuth/SuccessPage').default; },
-    _1));
+const TwoFactorAuthenticatorStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.TWO_FACTOR_AUTH.ROOT]: () => require('../../../../pages/settings/Security/TwoFactorAuth/TwoFactorAuthPage').default,
+    [SCREENS_1.default.TWO_FACTOR_AUTH.VERIFY]: () => require('../../../../pages/settings/Security/TwoFactorAuth/VerifyPage').default,
+    [SCREENS_1.default.TWO_FACTOR_AUTH.DISABLED]: () => require('../../../../pages/settings/Security/TwoFactorAuth/DisabledPage').default,
+    [SCREENS_1.default.TWO_FACTOR_AUTH.DISABLE]: () => require('../../../../pages/settings/Security/TwoFactorAuth/DisablePage').default,
+    [SCREENS_1.default.TWO_FACTOR_AUTH.SUCCESS]: () => require('../../../../pages/settings/Security/TwoFactorAuth/SuccessPage').default,
+});
 exports.TwoFactorAuthenticatorStackNavigator = TwoFactorAuthenticatorStackNavigator;
-var EnablePaymentsStackNavigator = createModalStackNavigator((_2 = {},
-    _2[SCREENS_1.default.ENABLE_PAYMENTS_ROOT] = function () { return require('../../../../pages/EnablePayments/EnablePaymentsPage').default; },
-    _2));
+const EnablePaymentsStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.ENABLE_PAYMENTS_ROOT]: () => require('../../../../pages/EnablePayments/EnablePaymentsPage').default,
+});
 exports.EnablePaymentsStackNavigator = EnablePaymentsStackNavigator;
-var AddPersonalBankAccountModalStackNavigator = createModalStackNavigator((_3 = {},
-    _3[SCREENS_1.default.ADD_PERSONAL_BANK_ACCOUNT_ROOT] = function () { return require('../../../../pages/AddPersonalBankAccountPage').default; },
-    _3));
+const AddPersonalBankAccountModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.ADD_PERSONAL_BANK_ACCOUNT_ROOT]: () => require('../../../../pages/AddPersonalBankAccountPage').default,
+});
 exports.AddPersonalBankAccountModalStackNavigator = AddPersonalBankAccountModalStackNavigator;
-var WalletStatementStackNavigator = createModalStackNavigator((_4 = {},
-    _4[SCREENS_1.default.WALLET_STATEMENT_ROOT] = function () { return require('../../../../pages/wallet/WalletStatementPage').default; },
-    _4));
+const WalletStatementStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.WALLET_STATEMENT_ROOT]: () => require('../../../../pages/wallet/WalletStatementPage').default,
+});
 exports.WalletStatementStackNavigator = WalletStatementStackNavigator;
-var FlagCommentStackNavigator = createModalStackNavigator((_5 = {},
-    _5[SCREENS_1.default.FLAG_COMMENT_ROOT] = function () { return require('../../../../pages/FlagCommentPage').default; },
-    _5));
+const FlagCommentStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.FLAG_COMMENT_ROOT]: () => require('../../../../pages/FlagCommentPage').default,
+});
 exports.FlagCommentStackNavigator = FlagCommentStackNavigator;
-var EditRequestStackNavigator = createModalStackNavigator((_6 = {},
-    _6[SCREENS_1.default.EDIT_REQUEST.REPORT_FIELD] = function () { return require('../../../../pages/EditReportFieldPage').default; },
-    _6));
+const EditRequestStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.EDIT_REQUEST.REPORT_FIELD]: () => require('../../../../pages/EditReportFieldPage').default,
+});
 exports.EditRequestStackNavigator = EditRequestStackNavigator;
-var PrivateNotesModalStackNavigator = createModalStackNavigator((_7 = {},
-    _7[SCREENS_1.default.PRIVATE_NOTES.LIST] = function () { return require('../../../../pages/PrivateNotes/PrivateNotesListPage').default; },
-    _7[SCREENS_1.default.PRIVATE_NOTES.EDIT] = function () { return require('../../../../pages/PrivateNotes/PrivateNotesEditPage').default; },
-    _7));
+const PrivateNotesModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.PRIVATE_NOTES.LIST]: () => require('../../../../pages/PrivateNotes/PrivateNotesListPage').default,
+    [SCREENS_1.default.PRIVATE_NOTES.EDIT]: () => require('../../../../pages/PrivateNotes/PrivateNotesEditPage').default,
+});
 exports.PrivateNotesModalStackNavigator = PrivateNotesModalStackNavigator;
-var SignInModalStackNavigator = createModalStackNavigator((_8 = {},
-    _8[SCREENS_1.default.SIGN_IN_ROOT] = function () { return require('../../../../pages/signin/SignInModal').default; },
-    _8));
+const SignInModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SIGN_IN_ROOT]: () => require('../../../../pages/signin/SignInModal').default,
+});
 exports.SignInModalStackNavigator = SignInModalStackNavigator;
-var ReferralModalStackNavigator = createModalStackNavigator((_9 = {},
-    _9[SCREENS_1.default.REFERRAL_DETAILS] = function () { return require('../../../../pages/ReferralDetailsPage').default; },
-    _9));
+const ReferralModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.REFERRAL_DETAILS]: () => require('../../../../pages/ReferralDetailsPage').default,
+});
 exports.ReferralModalStackNavigator = ReferralModalStackNavigator;
-var TransactionDuplicateStackNavigator = createModalStackNavigator((_10 = {},
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.REVIEW] = function () { return require('../../../../pages/TransactionDuplicate/Review').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.MERCHANT] = function () { return require('../../../../pages/TransactionDuplicate/ReviewMerchant').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.CATEGORY] = function () { return require('../../../../pages/TransactionDuplicate/ReviewCategory').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.TAG] = function () { return require('../../../../pages/TransactionDuplicate/ReviewTag').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.DESCRIPTION] = function () { return require('../../../../pages/TransactionDuplicate/ReviewDescription').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.TAX_CODE] = function () { return require('../../../../pages/TransactionDuplicate/ReviewTaxCode').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.BILLABLE] = function () { return require('../../../../pages/TransactionDuplicate/ReviewBillable').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.REIMBURSABLE] = function () { return require('../../../../pages/TransactionDuplicate/ReviewReimbursable').default; },
-    _10[SCREENS_1.default.TRANSACTION_DUPLICATE.CONFIRMATION] = function () { return require('../../../../pages/TransactionDuplicate/Confirmation').default; },
-    _10));
+const TransactionDuplicateStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.REVIEW]: () => require('../../../../pages/TransactionDuplicate/Review').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.MERCHANT]: () => require('../../../../pages/TransactionDuplicate/ReviewMerchant').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.CATEGORY]: () => require('../../../../pages/TransactionDuplicate/ReviewCategory').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.TAG]: () => require('../../../../pages/TransactionDuplicate/ReviewTag').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.DESCRIPTION]: () => require('../../../../pages/TransactionDuplicate/ReviewDescription').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.TAX_CODE]: () => require('../../../../pages/TransactionDuplicate/ReviewTaxCode').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.BILLABLE]: () => require('../../../../pages/TransactionDuplicate/ReviewBillable').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.REIMBURSABLE]: () => require('../../../../pages/TransactionDuplicate/ReviewReimbursable').default,
+    [SCREENS_1.default.TRANSACTION_DUPLICATE.CONFIRMATION]: () => require('../../../../pages/TransactionDuplicate/Confirmation').default,
+});
 exports.TransactionDuplicateStackNavigator = TransactionDuplicateStackNavigator;
-var MergeTransactionStackNavigator = createModalStackNavigator((_11 = {},
-    _11[SCREENS_1.default.MERGE_TRANSACTION.LIST_PAGE] = function () { return require('../../../../pages/TransactionMerge/MergeTransactionsListPage').default; },
-    _11[SCREENS_1.default.MERGE_TRANSACTION.RECEIPT_PAGE] = function () { return require('../../../../pages/TransactionMerge/ReceiptReviewPage').default; },
-    _11[SCREENS_1.default.MERGE_TRANSACTION.DETAILS_PAGE] = function () { return require('../../../../pages/TransactionMerge/DetailsReviewPage').default; },
-    _11[SCREENS_1.default.MERGE_TRANSACTION.CONFIRMATION_PAGE] = function () { return require('../../../../pages/TransactionMerge/ConfirmationPage').default; },
-    _11));
+const MergeTransactionStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.MERGE_TRANSACTION.LIST_PAGE]: () => require('../../../../pages/TransactionMerge/MergeTransactionsListPage').default,
+    [SCREENS_1.default.MERGE_TRANSACTION.RECEIPT_PAGE]: () => require('../../../../pages/TransactionMerge/ReceiptReviewPage').default,
+    [SCREENS_1.default.MERGE_TRANSACTION.DETAILS_PAGE]: () => require('../../../../pages/TransactionMerge/DetailsReviewPage').default,
+    [SCREENS_1.default.MERGE_TRANSACTION.CONFIRMATION_PAGE]: () => require('../../../../pages/TransactionMerge/ConfirmationPage').default,
+});
 exports.MergeTransactionStackNavigator = MergeTransactionStackNavigator;
-var SearchReportModalStackNavigator = createModalStackNavigator((_12 = {},
-    _12[SCREENS_1.default.SEARCH.REPORT_RHP] = function () { return require('../../../../pages/home/ReportScreen').default; },
-    _12[SCREENS_1.default.SEARCH.MONEY_REQUEST_REPORT_HOLD_TRANSACTIONS] = function () { return require('../../../../pages/Search/SearchHoldReasonPage').default; },
-    _12[SCREENS_1.default.SEARCH.TRANSACTION_HOLD_REASON_RHP] = function () { return require('../../../../pages/Search/SearchHoldReasonPage').default; },
-    _12[SCREENS_1.default.SEARCH.TRANSACTIONS_CHANGE_REPORT_SEARCH_RHP] = function () { return require('../../../../pages/Search/SearchTransactionsChangeReport').default; },
-    _12));
+const SearchReportModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SEARCH.REPORT_RHP]: () => require('../../../../pages/home/ReportScreen').default,
+    [SCREENS_1.default.SEARCH.MONEY_REQUEST_REPORT_HOLD_TRANSACTIONS]: () => require('../../../../pages/Search/SearchHoldReasonPage').default,
+    [SCREENS_1.default.SEARCH.TRANSACTION_HOLD_REASON_RHP]: () => require('../../../../pages/Search/SearchHoldReasonPage').default,
+    [SCREENS_1.default.SEARCH.TRANSACTIONS_CHANGE_REPORT_SEARCH_RHP]: () => require('../../../../pages/Search/SearchTransactionsChangeReport').default,
+});
 exports.SearchReportModalStackNavigator = SearchReportModalStackNavigator;
-var SearchAdvancedFiltersModalStackNavigator = createModalStackNavigator((_13 = {},
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TYPE_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTypePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_GROUP_BY_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersGroupByPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_STATUS_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersStatusPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_DATE_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersDatePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_SUBMITTED_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersSubmittedPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_APPROVED_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersApprovedPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_PAID_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersPaidPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_EXPORTED_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersExportedPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_POSTED_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersPostedPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WITHDRAWN_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersWithdrawnPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_CURRENCY_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersCurrencyPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_GROUP_CURRENCY_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersGroupCurrencyPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_DESCRIPTION_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersDescriptionPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_MERCHANT_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersMerchantPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_REPORT_ID_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersReportIDPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_AMOUNT_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersAmountPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TOTAL_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTotalPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_CATEGORY_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersCategoryPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_KEYWORD_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersKeywordPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_CARD_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersCardPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TAX_RATE_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTaxRatePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_EXPENSE_TYPE_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersExpenseTypePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WITHDRAWAL_TYPE_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersWithdrawalTypePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TAG_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTagPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_HAS_RHP] = function () { return require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersHasPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_FROM_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersFromPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TO_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersToPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_IN_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersInPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TITLE_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersTitlePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_ASSIGNEE_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersAssigneePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_BILLABLE_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersBillablePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_REIMBURSABLE_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersReimbursablePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WORKSPACE_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersWorkspacePage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_PURCHASE_AMOUNT_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersPurchaseAmountPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_PURCHASE_CURRENCY_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersPurchaseCurrencyPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WITHDRAWAL_ID_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersWithdrawalIDPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_ACTION_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersActionPage').default; },
-    _13[SCREENS_1.default.SEARCH.ADVANCED_FILTERS_ATTENDEE_RHP] = function () { return require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersAttendeePage').default; },
-    _13));
+const SearchAdvancedFiltersModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TYPE_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTypePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_GROUP_BY_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersGroupByPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_STATUS_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersStatusPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_DATE_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersDatePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_SUBMITTED_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersSubmittedPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_APPROVED_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersApprovedPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_PAID_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersPaidPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_EXPORTED_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersExportedPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_POSTED_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersPostedPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WITHDRAWN_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersWithdrawnPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_CURRENCY_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersCurrencyPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_GROUP_CURRENCY_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersGroupCurrencyPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_DESCRIPTION_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersDescriptionPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_MERCHANT_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersMerchantPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_REPORT_ID_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersReportIDPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_AMOUNT_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersAmountPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TOTAL_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTotalPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_CATEGORY_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersCategoryPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_KEYWORD_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersKeywordPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_CARD_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersCardPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TAX_RATE_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTaxRatePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_EXPENSE_TYPE_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersExpenseTypePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WITHDRAWAL_TYPE_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersWithdrawalTypePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TAG_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersTagPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_HAS_RHP]: () => require('../../../../pages/Search/SearchAdvancedFiltersPage/SearchFiltersHasPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_FROM_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersFromPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TO_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersToPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_IN_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersInPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TITLE_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersTitlePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_ASSIGNEE_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersAssigneePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_BILLABLE_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersBillablePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_REIMBURSABLE_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersReimbursablePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WORKSPACE_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersWorkspacePage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_PURCHASE_AMOUNT_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersPurchaseAmountPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_PURCHASE_CURRENCY_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersPurchaseCurrencyPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_WITHDRAWAL_ID_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersWithdrawalIDPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_ACTION_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersActionPage').default,
+    [SCREENS_1.default.SEARCH.ADVANCED_FILTERS_ATTENDEE_RHP]: () => require('@pages/Search/SearchAdvancedFiltersPage/SearchFiltersAttendeePage').default,
+});
 exports.SearchAdvancedFiltersModalStackNavigator = SearchAdvancedFiltersModalStackNavigator;
-var SearchSavedSearchModalStackNavigator = createModalStackNavigator((_14 = {},
-    _14[SCREENS_1.default.SEARCH.SAVED_SEARCH_RENAME_RHP] = function () { return require('../../../../pages/Search/SavedSearchRenamePage').default; },
-    _14));
+const SearchSavedSearchModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SEARCH.SAVED_SEARCH_RENAME_RHP]: () => require('../../../../pages/Search/SavedSearchRenamePage').default,
+});
 exports.SearchSavedSearchModalStackNavigator = SearchSavedSearchModalStackNavigator;
-var RestrictedActionModalStackNavigator = createModalStackNavigator((_15 = {},
-    _15[SCREENS_1.default.RESTRICTED_ACTION_ROOT] = function () { return require('../../../../pages/RestrictedAction/Workspace/WorkspaceRestrictedActionPage').default; },
-    _15));
+const RestrictedActionModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.RESTRICTED_ACTION_ROOT]: () => require('../../../../pages/RestrictedAction/Workspace/WorkspaceRestrictedActionPage').default,
+});
 exports.RestrictedActionModalStackNavigator = RestrictedActionModalStackNavigator;
-var ShareModalStackNavigator = createModalStackNavigator((_16 = {},
-    _16[SCREENS_1.default.SHARE.ROOT] = function () { return require('@pages/Share/ShareRootPage').default; },
-    _16[SCREENS_1.default.SHARE.SHARE_DETAILS] = function () { return require('@pages/Share/ShareDetailsPage').default; },
-    _16[SCREENS_1.default.SHARE.SUBMIT_DETAILS] = function () { return require('@pages/Share/SubmitDetailsPage').default; },
-    _16));
+const ShareModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SHARE.ROOT]: () => require('@pages/Share/ShareRootPage').default,
+    [SCREENS_1.default.SHARE.SHARE_DETAILS]: () => require('@pages/Share/ShareDetailsPage').default,
+    [SCREENS_1.default.SHARE.SUBMIT_DETAILS]: () => require('@pages/Share/SubmitDetailsPage').default,
+});
 exports.ShareModalStackNavigator = ShareModalStackNavigator;
-var MissingPersonalDetailsModalStackNavigator = createModalStackNavigator((_17 = {},
-    _17[SCREENS_1.default.MISSING_PERSONAL_DETAILS_ROOT] = function () { return require('../../../../pages/MissingPersonalDetails').default; },
-    _17));
+const MissingPersonalDetailsModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.MISSING_PERSONAL_DETAILS_ROOT]: () => require('../../../../pages/MissingPersonalDetails').default,
+});
 exports.MissingPersonalDetailsModalStackNavigator = MissingPersonalDetailsModalStackNavigator;
-var AddUnreportedExpenseModalStackNavigator = createModalStackNavigator((_18 = {},
-    _18[SCREENS_1.default.ADD_UNREPORTED_EXPENSES_ROOT] = function () { return require('../../../../pages/AddUnreportedExpense').default; },
-    _18));
+const AddUnreportedExpenseModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.ADD_UNREPORTED_EXPENSES_ROOT]: () => require('../../../../pages/AddUnreportedExpense').default,
+});
 exports.AddUnreportedExpenseModalStackNavigator = AddUnreportedExpenseModalStackNavigator;
-var DebugModalStackNavigator = createModalStackNavigator((_19 = {},
-    _19[SCREENS_1.default.DEBUG.REPORT] = function () { return require('../../../../pages/Debug/Report/DebugReportPage').default; },
-    _19[SCREENS_1.default.DEBUG.REPORT_ACTION] = function () { return require('../../../../pages/Debug/ReportAction/DebugReportActionPage').default; },
-    _19[SCREENS_1.default.DEBUG.REPORT_ACTION_CREATE] = function () { return require('../../../../pages/Debug/ReportAction/DebugReportActionCreatePage').default; },
-    _19[SCREENS_1.default.DEBUG.DETAILS_CONSTANT_PICKER_PAGE] = function () { return require('../../../../pages/Debug/DebugDetailsConstantPickerPage').default; },
-    _19[SCREENS_1.default.DEBUG.DETAILS_DATE_TIME_PICKER_PAGE] = function () { return require('../../../../pages/Debug/DebugDetailsDateTimePickerPage').default; },
-    _19[SCREENS_1.default.DEBUG.TRANSACTION] = function () { return require('../../../../pages/Debug/Transaction/DebugTransactionPage').default; },
-    _19[SCREENS_1.default.DEBUG.TRANSACTION_VIOLATION_CREATE] = function () { return require('../../../../pages/Debug/TransactionViolation/DebugTransactionViolationCreatePage').default; },
-    _19[SCREENS_1.default.DEBUG.TRANSACTION_VIOLATION] = function () { return require('../../../../pages/Debug/TransactionViolation/DebugTransactionViolationPage').default; },
-    _19));
+const DebugModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.DEBUG.REPORT]: () => require('../../../../pages/Debug/Report/DebugReportPage').default,
+    [SCREENS_1.default.DEBUG.REPORT_ACTION]: () => require('../../../../pages/Debug/ReportAction/DebugReportActionPage').default,
+    [SCREENS_1.default.DEBUG.REPORT_ACTION_CREATE]: () => require('../../../../pages/Debug/ReportAction/DebugReportActionCreatePage').default,
+    [SCREENS_1.default.DEBUG.DETAILS_CONSTANT_PICKER_PAGE]: () => require('../../../../pages/Debug/DebugDetailsConstantPickerPage').default,
+    [SCREENS_1.default.DEBUG.DETAILS_DATE_TIME_PICKER_PAGE]: () => require('../../../../pages/Debug/DebugDetailsDateTimePickerPage').default,
+    [SCREENS_1.default.DEBUG.TRANSACTION]: () => require('../../../../pages/Debug/Transaction/DebugTransactionPage').default,
+    [SCREENS_1.default.DEBUG.TRANSACTION_VIOLATION_CREATE]: () => require('../../../../pages/Debug/TransactionViolation/DebugTransactionViolationCreatePage').default,
+    [SCREENS_1.default.DEBUG.TRANSACTION_VIOLATION]: () => require('../../../../pages/Debug/TransactionViolation/DebugTransactionViolationPage').default,
+});
 exports.DebugModalStackNavigator = DebugModalStackNavigator;
-var ScheduleCallModalStackNavigator = createModalStackNavigator((_20 = {},
-    _20[SCREENS_1.default.SCHEDULE_CALL.BOOK] = function () { return require('../../../../pages/ScheduleCall/ScheduleCallPage').default; },
-    _20[SCREENS_1.default.SCHEDULE_CALL.CONFIRMATION] = function () { return require('../../../../pages/ScheduleCall/ScheduleCallConfirmationPage').default; },
-    _20));
+const ScheduleCallModalStackNavigator = createModalStackNavigator({
+    [SCREENS_1.default.SCHEDULE_CALL.BOOK]: () => require('../../../../pages/ScheduleCall/ScheduleCallPage').default,
+    [SCREENS_1.default.SCHEDULE_CALL.CONFIRMATION]: () => require('../../../../pages/ScheduleCall/ScheduleCallConfirmationPage').default,
+});
 exports.ScheduleCallModalStackNavigator = ScheduleCallModalStackNavigator;

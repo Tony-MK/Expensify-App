@@ -1,46 +1,45 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useAutoFocusInput;
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var ComposerFocusManager_1 = require("@libs/ComposerFocusManager");
-var InputUtils_1 = require("@libs/InputUtils");
-var isWindowReadyToFocus_1 = require("@libs/isWindowReadyToFocus");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var SplashScreenStateContext_1 = require("@src/SplashScreenStateContext");
-var useOnyx_1 = require("./useOnyx");
-var useSidePanel_1 = require("./useSidePanel");
-function useAutoFocusInput(isMultiline) {
-    if (isMultiline === void 0) { isMultiline = false; }
-    var _a = (0, react_1.useState)(false), isInputInitialized = _a[0], setIsInputInitialized = _a[1];
-    var _b = (0, react_1.useState)(false), isScreenTransitionEnded = _b[0], setIsScreenTransitionEnded = _b[1];
-    var modal = (0, useOnyx_1.default)(ONYXKEYS_1.default.MODAL, { canBeMissing: true })[0];
-    var isPopoverVisible = (modal === null || modal === void 0 ? void 0 : modal.willAlertModalBecomeVisible) && (modal === null || modal === void 0 ? void 0 : modal.isPopover);
-    var splashScreenState = (0, SplashScreenStateContext_1.useSplashScreenStateContext)().splashScreenState;
-    var inputRef = (0, react_1.useRef)(null);
-    var focusTimeoutRef = (0, react_1.useRef)(null);
-    (0, react_1.useEffect)(function () {
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const ComposerFocusManager_1 = require("@libs/ComposerFocusManager");
+const InputUtils_1 = require("@libs/InputUtils");
+const isWindowReadyToFocus_1 = require("@libs/isWindowReadyToFocus");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const SplashScreenStateContext_1 = require("@src/SplashScreenStateContext");
+const useOnyx_1 = require("./useOnyx");
+const useSidePanel_1 = require("./useSidePanel");
+function useAutoFocusInput(isMultiline = false) {
+    const [isInputInitialized, setIsInputInitialized] = (0, react_1.useState)(false);
+    const [isScreenTransitionEnded, setIsScreenTransitionEnded] = (0, react_1.useState)(false);
+    const [modal] = (0, useOnyx_1.default)(ONYXKEYS_1.default.MODAL, { canBeMissing: true });
+    const isPopoverVisible = modal?.willAlertModalBecomeVisible && modal?.isPopover;
+    const { splashScreenState } = (0, SplashScreenStateContext_1.useSplashScreenStateContext)();
+    const inputRef = (0, react_1.useRef)(null);
+    const focusTimeoutRef = (0, react_1.useRef)(null);
+    (0, react_1.useEffect)(() => {
         if (!isScreenTransitionEnded || !isInputInitialized || !inputRef.current || splashScreenState !== CONST_1.default.BOOT_SPLASH_STATE.HIDDEN || isPopoverVisible) {
             return;
         }
-        var focusTaskHandle = react_native_1.InteractionManager.runAfterInteractions(function () {
+        const focusTaskHandle = react_native_1.InteractionManager.runAfterInteractions(() => {
             if (inputRef.current && isMultiline) {
                 (0, InputUtils_1.moveSelectionToEnd)(inputRef.current);
             }
-            (0, isWindowReadyToFocus_1.default)().then(function () { var _a; return (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focus(); });
+            (0, isWindowReadyToFocus_1.default)().then(() => inputRef.current?.focus());
             setIsScreenTransitionEnded(false);
         });
-        return function () {
+        return () => {
             focusTaskHandle.cancel();
         };
     }, [isMultiline, isScreenTransitionEnded, isInputInitialized, splashScreenState, isPopoverVisible]);
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
-        focusTimeoutRef.current = setTimeout(function () {
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
+        focusTimeoutRef.current = setTimeout(() => {
             setIsScreenTransitionEnded(true);
         }, CONST_1.default.ANIMATED_TRANSITION);
-        return function () {
+        return () => {
             setIsScreenTransitionEnded(false);
             if (!focusTimeoutRef.current) {
                 return;
@@ -49,14 +48,14 @@ function useAutoFocusInput(isMultiline) {
         };
     }, []));
     // Trigger focus when Side Panel transition ends
-    var _c = (0, useSidePanel_1.default)(), isSidePanelTransitionEnded = _c.isSidePanelTransitionEnded, shouldHideSidePanel = _c.shouldHideSidePanel;
-    (0, react_1.useEffect)(function () {
+    const { isSidePanelTransitionEnded, shouldHideSidePanel } = (0, useSidePanel_1.default)();
+    (0, react_1.useEffect)(() => {
         if (!shouldHideSidePanel) {
             return;
         }
-        Promise.all([ComposerFocusManager_1.default.isReadyToFocus(), (0, isWindowReadyToFocus_1.default)()]).then(function () { return setIsScreenTransitionEnded(isSidePanelTransitionEnded); });
+        Promise.all([ComposerFocusManager_1.default.isReadyToFocus(), (0, isWindowReadyToFocus_1.default)()]).then(() => setIsScreenTransitionEnded(isSidePanelTransitionEnded));
     }, [isSidePanelTransitionEnded, shouldHideSidePanel]);
-    var inputCallbackRef = function (ref) {
+    const inputCallbackRef = (ref) => {
         inputRef.current = ref;
         if (isInputInitialized) {
             return;
@@ -66,5 +65,5 @@ function useAutoFocusInput(isMultiline) {
         }
         setIsInputInitialized(true);
     };
-    return { inputCallbackRef: inputCallbackRef, inputRef: inputRef };
+    return { inputCallbackRef, inputRef };
 }

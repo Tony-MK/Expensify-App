@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getQBONonReimbursableExportAccountType = getQBONonReimbursableExportAccountType;
 exports.getQBDNonReimbursableExportAccountType = getQBDNonReimbursableExportAccountType;
-var CONST_1 = require("@src/CONST");
-var Localize_1 = require("./Localize");
+const CONST_1 = require("@src/CONST");
+const Localize_1 = require("./Localize");
 function getQBONonReimbursableExportAccountType(exportDestination) {
     switch (exportDestination) {
         case CONST_1.default.QUICKBOOKS_NON_REIMBURSABLE_EXPORT_ACCOUNT_TYPE.DEBIT_CARD:

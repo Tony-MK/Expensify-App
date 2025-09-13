@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var initialState = {
+const react_1 = require("react");
+const initialState = {
     isSelectedPaymentMethodDefault: false,
     selectedPaymentMethod: {},
     formattedSelectedPaymentMethod: {
@@ -11,14 +11,14 @@ var initialState = {
     selectedPaymentMethodType: '',
 };
 function usePaymentMethodState() {
-    var _a = (0, react_1.useState)(initialState), paymentMethod = _a[0], setPaymentMethod = _a[1];
-    var resetSelectedPaymentMethodData = (0, react_1.useCallback)(function () {
+    const [paymentMethod, setPaymentMethod] = (0, react_1.useState)(initialState);
+    const resetSelectedPaymentMethodData = (0, react_1.useCallback)(() => {
         setPaymentMethod(initialState);
     }, [setPaymentMethod]);
     return {
-        paymentMethod: paymentMethod,
-        setPaymentMethod: setPaymentMethod,
-        resetSelectedPaymentMethodData: resetSelectedPaymentMethodData,
+        paymentMethod,
+        setPaymentMethod,
+        resetSelectedPaymentMethodData,
     };
 }
 exports.default = usePaymentMethodState;

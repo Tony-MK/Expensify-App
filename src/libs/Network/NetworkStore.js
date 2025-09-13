@@ -17,22 +17,22 @@ exports.isSupportAuthToken = isSupportAuthToken;
 exports.isSupportRequest = isSupportRequest;
 exports.getLastShortAuthToken = getLastShortAuthToken;
 exports.setLastShortAuthToken = setLastShortAuthToken;
-var react_native_onyx_1 = require("react-native-onyx");
-var types_1 = require("@libs/API/types");
-var Log_1 = require("@libs/Log");
-var CONFIG_1 = require("@src/CONFIG");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var credentials;
-var lastShortAuthToken;
-var authToken;
-var authTokenType;
-var currentUserEmail = null;
-var offline = false;
-var authenticating = false;
-var shouldUseNewPartnerName;
+const react_native_onyx_1 = require("react-native-onyx");
+const types_1 = require("@libs/API/types");
+const Log_1 = require("@libs/Log");
+const CONFIG_1 = require("@src/CONFIG");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+let credentials;
+let lastShortAuthToken;
+let authToken;
+let authTokenType;
+let currentUserEmail = null;
+let offline = false;
+let authenticating = false;
+let shouldUseNewPartnerName;
 // Allow code that is outside of the network listen for when a reconnection happens so that it can execute any side-effects (like flushing the sequential network queue)
-var reconnectCallback;
+let reconnectCallback;
 function triggerReconnectCallback() {
     if (typeof reconnectCallback !== 'function') {
         return;
@@ -42,12 +42,12 @@ function triggerReconnectCallback() {
 function onReconnection(callbackFunction) {
     reconnectCallback = callbackFunction;
 }
-var resolveIsReadyPromise;
-var isReadyPromise = new Promise(function (resolve) {
+let resolveIsReadyPromise;
+let isReadyPromise = new Promise((resolve) => {
     resolveIsReadyPromise = resolve;
 });
-var resolveShouldUseNewPartnerNamePromise;
-var shouldUseNewPartnerNamePromise = new Promise(function (resolve) {
+let resolveShouldUseNewPartnerNamePromise;
+const shouldUseNewPartnerNamePromise = new Promise((resolve) => {
     resolveShouldUseNewPartnerNamePromise = resolve;
     // On non-hybrid app variants we can resolve immediately.
     if (!CONFIG_1.default.IS_HYBRID_APP) {
@@ -66,37 +66,35 @@ function checkRequiredData() {
 }
 function resetHasReadRequiredDataFromStorage() {
     // Create a new promise and a new resolve function
-    isReadyPromise = new Promise(function (resolve) {
+    isReadyPromise = new Promise((resolve) => {
         resolveIsReadyPromise = resolve;
     });
 }
 // Use connectWithoutView since this doesn't affect to any UI
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.SESSION,
-    callback: function (val) {
-        var _a, _b, _c;
-        authToken = (_a = val === null || val === void 0 ? void 0 : val.authToken) !== null && _a !== void 0 ? _a : null;
-        authTokenType = (_b = val === null || val === void 0 ? void 0 : val.authTokenType) !== null && _b !== void 0 ? _b : null;
-        currentUserEmail = (_c = val === null || val === void 0 ? void 0 : val.email) !== null && _c !== void 0 ? _c : null;
+    callback: (val) => {
+        authToken = val?.authToken ?? null;
+        authTokenType = val?.authTokenType ?? null;
+        currentUserEmail = val?.email ?? null;
         checkRequiredData();
     },
 });
 // Use connectWithoutView since this doesn't affect to any UI
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.CREDENTIALS,
-    callback: function (val) {
-        credentials = val !== null && val !== void 0 ? val : null;
+    callback: (val) => {
+        credentials = val ?? null;
         checkRequiredData();
     },
 });
 if (CONFIG_1.default.IS_HYBRID_APP) {
     react_native_onyx_1.default.connectWithoutView({
         key: ONYXKEYS_1.default.HYBRID_APP,
-        callback: function (val) {
-            var _a;
+        callback: (val) => {
             // If this value is not set, we can assume that we are using old partner name.
-            shouldUseNewPartnerName = (_a = val === null || val === void 0 ? void 0 : val.shouldUseNewPartnerName) !== null && _a !== void 0 ? _a : false;
-            Log_1.default.info("[HybridApp] User requests should use ".concat((val === null || val === void 0 ? void 0 : val.shouldUseNewPartnerName) ? 'new' : 'old', " partner name"));
+            shouldUseNewPartnerName = val?.shouldUseNewPartnerName ?? false;
+            Log_1.default.info(`[HybridApp] User requests should use ${val?.shouldUseNewPartnerName ? 'new' : 'old'} partner name`);
             resolveShouldUseNewPartnerNamePromise();
         },
     });
@@ -106,7 +104,7 @@ if (CONFIG_1.default.IS_HYBRID_APP) {
 // Use connectWithoutView since this doesn't affect to any UI
 react_native_onyx_1.default.connectWithoutView({
     key: ONYXKEYS_1.default.NETWORK,
-    callback: function (network) {
+    callback: (network) => {
         if (!network) {
             return;
         }
@@ -164,7 +162,7 @@ function isSupportRequest(command) {
         types_1.READ_COMMANDS.OPEN_WORKSPACE_MEMBERS_PAGE,
         types_1.READ_COMMANDS.SEARCH_FOR_REPORTS,
         types_1.READ_COMMANDS.OPEN_SEARCH_PAGE,
-    ].some(function (cmd) { return cmd === command; });
+    ].some((cmd) => cmd === command);
 }
 function isSupportAuthToken() {
     return authTokenType === CONST_1.default.AUTH_TOKEN_TYPES.SUPPORT;

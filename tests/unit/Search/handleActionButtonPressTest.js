@@ -1,22 +1,10 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_onyx_1 = require("react-native-onyx");
-var Search_1 = require("@libs/actions/Search");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const Search_1 = require("@libs/actions/Search");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 jest.mock('@src/components/ConfirmedRoute.tsx');
-var mockReportItemWithHold = {
+const mockReportItemWithHold = {
     groupedBy: 'reports',
     shouldAnimateInHighlight: false,
     accountID: 1206,
@@ -211,52 +199,66 @@ var mockReportItemWithHold = {
     ],
     isSelected: false,
 };
-var updatedMockReportItem = __assign(__assign({}, mockReportItemWithHold), { transactions: mockReportItemWithHold.transactions.map(function (transaction, index) {
+const updatedMockReportItem = {
+    ...mockReportItemWithHold,
+    transactions: mockReportItemWithHold.transactions.map((transaction, index) => {
         if (index === 0) {
-            return __assign(__assign({}, transaction), { comment: {
+            return {
+                ...transaction,
+                comment: {
                     comment: '',
-                } });
+                },
+            };
         }
         return transaction;
-    }) });
-var mockSnapshotForItem = {
-    // @ts-expect-error: Allow partial record in snapshot update for testing
-    data: (_a = {},
-        _a["".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(mockReportItemWithHold === null || mockReportItemWithHold === void 0 ? void 0 : mockReportItemWithHold.policyID)] = __assign({}, (mockReportItemWithHold.policyID
-            ? (_b = {},
-                _b[String(mockReportItemWithHold.policyID)] = __assign({ type: 'policy', id: String(mockReportItemWithHold.policyID), role: 'admin', owner: 'apb@apb.com' }, mockReportItemWithHold),
-                _b) : {})),
-        _a),
+    }),
 };
-var mockLastPaymentMethod = {
+const mockSnapshotForItem = {
+    // @ts-expect-error: Allow partial record in snapshot update for testing
+    data: {
+        [`${ONYXKEYS_1.default.COLLECTION.POLICY}${mockReportItemWithHold?.policyID}`]: {
+            ...(mockReportItemWithHold.policyID
+                ? {
+                    [String(mockReportItemWithHold.policyID)]: {
+                        type: 'policy',
+                        id: String(mockReportItemWithHold.policyID),
+                        role: 'admin',
+                        owner: 'apb@apb.com',
+                        ...mockReportItemWithHold,
+                    },
+                }
+                : {}),
+        },
+    },
+};
+const mockLastPaymentMethod = {
     expense: 'Elsewhere',
     lastUsed: 'Elsewhere',
 };
-describe('handleActionButtonPress', function () {
-    var _a, _b, _c, _d;
-    var searchHash = 1;
-    beforeAll(function () {
-        react_native_onyx_1.default.merge("".concat(ONYXKEYS_1.default.COLLECTION.SNAPSHOT).concat(searchHash), 
+describe('handleActionButtonPress', () => {
+    const searchHash = 1;
+    beforeAll(() => {
+        react_native_onyx_1.default.merge(`${ONYXKEYS_1.default.COLLECTION.SNAPSHOT}${searchHash}`, 
         // @ts-expect-error: Allow partial record in snapshot update for testing
         mockSnapshotForItem);
         react_native_onyx_1.default.merge(ONYXKEYS_1.default.NVP_LAST_PAYMENT_METHOD, mockLastPaymentMethod);
     });
-    var snapshotReport = (_b = (_a = mockSnapshotForItem === null || mockSnapshotForItem === void 0 ? void 0 : mockSnapshotForItem.data) === null || _a === void 0 ? void 0 : _a["".concat(ONYXKEYS_1.default.COLLECTION.REPORT).concat(mockReportItemWithHold.reportID)]) !== null && _b !== void 0 ? _b : {};
-    var snapshotPolicy = (_d = (_c = mockSnapshotForItem === null || mockSnapshotForItem === void 0 ? void 0 : mockSnapshotForItem.data) === null || _c === void 0 ? void 0 : _c["".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(mockReportItemWithHold.policyID)]) !== null && _d !== void 0 ? _d : {};
-    test('Should navigate to item when report has one transaction on hold', function () {
-        var goToItem = jest.fn(function () { });
+    const snapshotReport = mockSnapshotForItem?.data?.[`${ONYXKEYS_1.default.COLLECTION.REPORT}${mockReportItemWithHold.reportID}`] ?? {};
+    const snapshotPolicy = mockSnapshotForItem?.data?.[`${ONYXKEYS_1.default.COLLECTION.POLICY}${mockReportItemWithHold.policyID}`] ?? {};
+    test('Should navigate to item when report has one transaction on hold', () => {
+        const goToItem = jest.fn(() => { });
         // @ts-expect-error: Allow partial record in snapshot update for testing
         (0, Search_1.handleActionButtonPress)(searchHash, mockReportItemWithHold, goToItem, false, snapshotReport, snapshotPolicy, mockLastPaymentMethod);
         expect(goToItem).toHaveBeenCalledTimes(1);
     });
-    test('Should not navigate to item when the hold is removed', function () {
-        var goToItem = jest.fn(function () { });
+    test('Should not navigate to item when the hold is removed', () => {
+        const goToItem = jest.fn(() => { });
         // @ts-expect-error: Allow partial record in snapshot update for testing
         (0, Search_1.handleActionButtonPress)(searchHash, updatedMockReportItem, goToItem, false, snapshotReport, snapshotPolicy, mockLastPaymentMethod);
         expect(goToItem).toHaveBeenCalledTimes(0);
     });
-    test('Should run goToItem callback when user is in mobile selection mode', function () {
-        var goToItem = jest.fn(function () { });
+    test('Should run goToItem callback when user is in mobile selection mode', () => {
+        const goToItem = jest.fn(() => { });
         // @ts-expect-error: Allow partial record in snapshot update for testing
         (0, Search_1.handleActionButtonPress)(searchHash, updatedMockReportItem, goToItem, true, snapshotReport, snapshotPolicy, mockLastPaymentMethod);
         expect(goToItem).toHaveBeenCalledTimes(1);

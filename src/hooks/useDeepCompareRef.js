@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useDeepCompareRef;
-var fast_equals_1 = require("fast-equals");
-var react_1 = require("react");
+const fast_equals_1 = require("fast-equals");
+const react_1 = require("react");
 /**
  * This hook returns a reference to the provided value,
  * but only updates that reference if a deep comparison indicates that the value has changed.
@@ -18,7 +18,7 @@ var react_1 = require("react");
  * }, [deepComparedArray]);
  */
 function useDeepCompareRef(value) {
-    var ref = (0, react_1.useRef)(undefined);
+    const ref = (0, react_1.useRef)(undefined);
     // eslint-disable-next-line react-compiler/react-compiler
     if (!(0, fast_equals_1.deepEqual)(value, ref.current)) {
         // eslint-disable-next-line react-compiler/react-compiler

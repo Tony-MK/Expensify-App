@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 function addTrailingForwardSlash(url) {
     if (!url.endsWith('/')) {
-        return "".concat(url, "/");
+        return `${url}/`;
     }
     return url;
 }

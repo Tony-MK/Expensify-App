@@ -1,72 +1,61 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FixedFooter_1 = require("@components/FixedFooter");
-var FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SearchFilterPageFooterButtons_1 = require("@components/Search/SearchFilterPageFooterButtons");
-var SelectionList_1 = require("@components/SelectionList");
-var MultiSelectListItem_1 = require("@components/SelectionList/MultiSelectListItem");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Search_1 = require("@libs/actions/Search");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var SearchUIUtils_1 = require("@libs/SearchUIUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FixedFooter_1 = require("@components/FixedFooter");
+const FullscreenLoadingIndicator_1 = require("@components/FullscreenLoadingIndicator");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SearchFilterPageFooterButtons_1 = require("@components/Search/SearchFilterPageFooterButtons");
+const SelectionList_1 = require("@components/SelectionList");
+const MultiSelectListItem_1 = require("@components/SelectionList/MultiSelectListItem");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Search_1 = require("@libs/actions/Search");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const SearchUIUtils_1 = require("@libs/SearchUIUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
 function SearchFiltersStatusPage() {
-    var _a;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _b = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true }), searchAdvancedFiltersForm = _b[0], searchAdvancedFiltersFormResult = _b[1];
-    var currentType = (_a = searchAdvancedFiltersForm === null || searchAdvancedFiltersForm === void 0 ? void 0 : searchAdvancedFiltersForm.type) !== null && _a !== void 0 ? _a : CONST_1.default.SEARCH.DATA_TYPES.EXPENSE;
-    var currentGroupBy = searchAdvancedFiltersForm === null || searchAdvancedFiltersForm === void 0 ? void 0 : searchAdvancedFiltersForm.groupBy;
-    var _c = (0, react_1.useState)(function () {
-        if (!(searchAdvancedFiltersForm === null || searchAdvancedFiltersForm === void 0 ? void 0 : searchAdvancedFiltersForm.status) || searchAdvancedFiltersForm.status === CONST_1.default.SEARCH.STATUS.EXPENSE.ALL) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [searchAdvancedFiltersForm, searchAdvancedFiltersFormResult] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true });
+    const currentType = searchAdvancedFiltersForm?.type ?? CONST_1.default.SEARCH.DATA_TYPES.EXPENSE;
+    const currentGroupBy = searchAdvancedFiltersForm?.groupBy;
+    const [selectedItems, setSelectedItems] = (0, react_1.useState)(() => {
+        if (!searchAdvancedFiltersForm?.status || searchAdvancedFiltersForm.status === CONST_1.default.SEARCH.STATUS.EXPENSE.ALL) {
             return [];
         }
         if (typeof searchAdvancedFiltersForm.status === 'string') {
             return searchAdvancedFiltersForm.status.split(',');
         }
         return searchAdvancedFiltersForm.status;
-    }), selectedItems = _c[0], setSelectedItems = _c[1];
-    var items = (0, react_1.useMemo)(function () { return (0, SearchUIUtils_1.getStatusOptions)(currentType, currentGroupBy); }, [currentGroupBy, currentType]);
-    var listData = (0, react_1.useMemo)(function () {
-        return items.map(function (statusOption) { return ({
+    });
+    const items = (0, react_1.useMemo)(() => (0, SearchUIUtils_1.getStatusOptions)(currentType, currentGroupBy), [currentGroupBy, currentType]);
+    const listData = (0, react_1.useMemo)(() => {
+        return items.map((statusOption) => ({
             text: statusOption.text,
             keyForList: statusOption.value,
             isSelected: selectedItems.includes(statusOption.value),
-        }); });
+        }));
     }, [items, selectedItems]);
-    var updateSelectedItems = (0, react_1.useCallback)(function (listItem) {
-        var _a;
+    const updateSelectedItems = (0, react_1.useCallback)((listItem) => {
         if (listItem.isSelected) {
-            setSelectedItems(selectedItems.filter(function (i) { return i !== listItem.keyForList; }));
+            setSelectedItems(selectedItems.filter((i) => i !== listItem.keyForList));
             return;
         }
-        var newItem = (_a = items.find(function (i) { return i.value === listItem.keyForList; })) === null || _a === void 0 ? void 0 : _a.value;
+        const newItem = items.find((i) => i.value === listItem.keyForList)?.value;
         if (newItem) {
-            setSelectedItems(__spreadArray(__spreadArray([], selectedItems, true), [newItem], false));
+            setSelectedItems([...selectedItems, newItem]);
         }
     }, [items, selectedItems]);
-    var resetChanges = (0, react_1.useCallback)(function () {
+    const resetChanges = (0, react_1.useCallback)(() => {
         setSelectedItems([]);
     }, []);
-    var applyChanges = (0, react_1.useCallback)(function () {
-        var newStatus = selectedItems.length ? selectedItems : CONST_1.default.SEARCH.STATUS.EXPENSE.ALL;
+    const applyChanges = (0, react_1.useCallback)(() => {
+        const newStatus = selectedItems.length ? selectedItems : CONST_1.default.SEARCH.STATUS.EXPENSE.ALL;
         (0, Search_1.updateAdvancedFilters)({
             status: newStatus,
         });
@@ -76,7 +65,7 @@ function SearchFiltersStatusPage() {
         return <FullscreenLoadingIndicator_1.default />;
     }
     return (<ScreenWrapper_1.default testID={SearchFiltersStatusPage.displayName} shouldShowOfflineIndicatorInWideScreen offlineIndicatorStyle={styles.mtAuto} shouldEnableMaxHeight>
-            <HeaderWithBackButton_1.default title={translate('common.status')} onBackButtonPress={function () {
+            <HeaderWithBackButton_1.default title={translate('common.status')} onBackButtonPress={() => {
             Navigation_1.default.goBack(ROUTES_1.default.SEARCH_ADVANCED_FILTERS.getRoute());
         }}/>
             <react_native_1.View style={[styles.flex1]}>

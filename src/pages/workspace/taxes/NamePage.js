@@ -1,52 +1,49 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var TaxRate_1 = require("@libs/actions/TaxRate");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var WorkspaceTaxNameForm_1 = require("@src/types/form/WorkspaceTaxNameForm");
-function NamePage(_a) {
-    var _b;
-    var _c = _a.route.params, policyID = _c.policyID, taxID = _c.taxID, policy = _a.policy;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var currentTaxRate = (0, PolicyUtils_1.getTaxByID)(policy, taxID);
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var _d = (0, react_1.useState)((_b = currentTaxRate === null || currentTaxRate === void 0 ? void 0 : currentTaxRate.name) !== null && _b !== void 0 ? _b : ''), name = _d[0], setName = _d[1];
-    var goBack = (0, react_1.useCallback)(function () { return Navigation_1.default.goBack(ROUTES_1.default.WORKSPACE_TAX_EDIT.getRoute(policyID, taxID)); }, [policyID, taxID]);
-    var submit = function () {
-        var _a, _b;
-        var taxName = name.trim();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const TaxRate_1 = require("@libs/actions/TaxRate");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const withPolicyAndFullscreenLoading_1 = require("@pages/workspace/withPolicyAndFullscreenLoading");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const WorkspaceTaxNameForm_1 = require("@src/types/form/WorkspaceTaxNameForm");
+function NamePage({ route: { params: { policyID, taxID }, }, policy, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const currentTaxRate = (0, PolicyUtils_1.getTaxByID)(policy, taxID);
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const [name, setName] = (0, react_1.useState)(currentTaxRate?.name ?? '');
+    const goBack = (0, react_1.useCallback)(() => Navigation_1.default.goBack(ROUTES_1.default.WORKSPACE_TAX_EDIT.getRoute(policyID, taxID)), [policyID, taxID]);
+    const submit = () => {
+        const taxName = name.trim();
         // Do not call the API if the edited tax name is the same as the current tag name
-        if ((currentTaxRate === null || currentTaxRate === void 0 ? void 0 : currentTaxRate.name) !== taxName && ((_a = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _a === void 0 ? void 0 : _a.taxes[taxID])) {
-            (0, TaxRate_1.renamePolicyTax)(policyID, taxID, taxName, (_b = policy === null || policy === void 0 ? void 0 : policy.taxRates) === null || _b === void 0 ? void 0 : _b.taxes[taxID]);
+        if (currentTaxRate?.name !== taxName && policy?.taxRates?.taxes[taxID]) {
+            (0, TaxRate_1.renamePolicyTax)(policyID, taxID, taxName, policy?.taxRates?.taxes[taxID]);
         }
         goBack();
     };
-    var validate = (0, react_1.useCallback)(function (values) {
+    const validate = (0, react_1.useCallback)((values) => {
         if (!policy) {
             return {};
         }
-        if (values[WorkspaceTaxNameForm_1.default.NAME] === (currentTaxRate === null || currentTaxRate === void 0 ? void 0 : currentTaxRate.name)) {
+        if (values[WorkspaceTaxNameForm_1.default.NAME] === currentTaxRate?.name) {
             return {};
         }
         return (0, TaxRate_1.validateTaxName)(policy, values);
-    }, [currentTaxRate === null || currentTaxRate === void 0 ? void 0 : currentTaxRate.name, policy]);
+    }, [currentTaxRate?.name, policy]);
     if (!currentTaxRate) {
         return <NotFoundPage_1.default />;
     }

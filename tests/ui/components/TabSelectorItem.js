@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_1 = require("@testing-library/react-native");
-var react_1 = require("react");
-var TabSelectorItem_1 = require("@components/TabSelector/TabSelectorItem");
-var Tooltip_1 = require("@components/Tooltip");
+const react_native_1 = require("@testing-library/react-native");
+const react_1 = require("react");
+const TabSelectorItem_1 = require("@components/TabSelector/TabSelectorItem");
+const Tooltip_1 = require("@components/Tooltip");
 // Mock the Tooltip component since it uses portals which aren't supported in RNTL
 jest.mock('@components/Tooltip');
-describe('TabSelectorItem Component', function () {
-    var title = 'Test Tab';
-    beforeEach(function () {
+describe('TabSelectorItem Component', () => {
+    const title = 'Test Tab';
+    beforeEach(() => {
         jest.clearAllMocks();
     });
-    it('should show tooltip for inactive tab with hidden label', function () {
+    it('should show tooltip for inactive tab with hidden label', () => {
         // Given an inactive tab with a hidden label
         (0, react_native_1.render)(<TabSelectorItem_1.default title={title} shouldShowLabelWhenInactive={false} isActive={false}/>);
         // Then the tooltip should be rendered with correct content because the label is hidden
@@ -20,7 +20,7 @@ describe('TabSelectorItem Component', function () {
             text: title,
         }), undefined);
     });
-    it('should not show tooltip for active tab', function () {
+    it('should not show tooltip for active tab', () => {
         // Given an active tab
         (0, react_native_1.render)(<TabSelectorItem_1.default title={title} shouldShowLabelWhenInactive={false} isActive/>);
         // When hovering over the tab button
@@ -30,7 +30,7 @@ describe('TabSelectorItem Component', function () {
             text: title,
         }), undefined);
     });
-    it('should not show tooltip when label is visible', function () {
+    it('should not show tooltip when label is visible', () => {
         // Given an inactive tab with visible label
         (0, react_native_1.render)(<TabSelectorItem_1.default title={title} shouldShowLabelWhenInactive isActive={false}/>);
         // When hovering over the tab button

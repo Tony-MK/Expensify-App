@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var canFocusInputOnScreenFocus = function () { return false; };
+const canFocusInputOnScreenFocus = () => false;
 exports.default = canFocusInputOnScreenFocus;

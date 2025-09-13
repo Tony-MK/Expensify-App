@@ -1,36 +1,24 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FontUtils_1 = require("@styles/utils/FontUtils");
-var variables_1 = require("@styles/variables");
-var useTheme_1 = require("./useTheme");
-var defaultEmptyArray = [];
-function useMarkdownStyle(hasMessageOnlyEmojis, excludeStyles) {
-    if (excludeStyles === void 0) { excludeStyles = defaultEmptyArray; }
-    var theme = (0, useTheme_1.default)();
-    var emojiFontSize = hasMessageOnlyEmojis ? variables_1.default.fontSizeOnlyEmojis : variables_1.default.fontSizeEmojisWithinText;
+const react_1 = require("react");
+const FontUtils_1 = require("@styles/utils/FontUtils");
+const variables_1 = require("@styles/variables");
+const useTheme_1 = require("./useTheme");
+const defaultEmptyArray = [];
+function useMarkdownStyle(hasMessageOnlyEmojis, excludeStyles = defaultEmptyArray) {
+    const theme = (0, useTheme_1.default)();
+    const emojiFontSize = hasMessageOnlyEmojis ? variables_1.default.fontSizeOnlyEmojis : variables_1.default.fontSizeEmojisWithinText;
     // this map is used to reset the styles that are not needed - passing undefined value can break the native side
-    var nonStylingDefaultValues = (0, react_1.useMemo)(function () { return ({
+    const nonStylingDefaultValues = (0, react_1.useMemo)(() => ({
         color: theme.text,
         backgroundColor: 'transparent',
         marginLeft: 0,
         paddingLeft: 0,
         borderColor: 'transparent',
         borderWidth: 0,
-    }); }, [theme]);
-    var markdownStyle = (0, react_1.useMemo)(function () {
-        var styling = {
+    }), [theme]);
+    const markdownStyle = (0, react_1.useMemo)(() => {
+        const styling = {
             syntax: {
                 color: theme.syntax,
             },
@@ -40,7 +28,11 @@ function useMarkdownStyle(hasMessageOnlyEmojis, excludeStyles) {
             h1: {
                 fontSize: variables_1.default.fontSizeLarge,
             },
-            emoji: __assign(__assign({}, FontUtils_1.default.fontFamily.platform.CUSTOM_EMOJI_FONT), { fontSize: emojiFontSize, lineHeight: variables_1.default.lineHeightXLarge }),
+            emoji: {
+                ...FontUtils_1.default.fontFamily.platform.CUSTOM_EMOJI_FONT,
+                fontSize: emojiFontSize,
+                lineHeight: variables_1.default.lineHeightXLarge,
+            },
             blockquote: {
                 borderColor: theme.border,
                 borderWidth: 4,
@@ -62,7 +54,15 @@ function useMarkdownStyle(hasMessageOnlyEmojis, excludeStyles) {
                 backgroundColor: theme.textBackground,
                 h1NestedFontSize: 15,
             },
-            pre: __assign(__assign({}, FontUtils_1.default.fontFamily.platform.MONOSPACE), { fontSize: 13, color: theme.text, paddingVertical: 8, paddingHorizontal: 12, borderColor: theme.border, backgroundColor: theme.textBackground }),
+            pre: {
+                ...FontUtils_1.default.fontFamily.platform.MONOSPACE,
+                fontSize: 13,
+                color: theme.text,
+                paddingVertical: 8,
+                paddingHorizontal: 12,
+                borderColor: theme.border,
+                backgroundColor: theme.textBackground,
+            },
             mentionHere: {
                 color: theme.ourMentionText,
                 backgroundColor: theme.ourMentionBG,
@@ -87,17 +87,16 @@ function useMarkdownStyle(hasMessageOnlyEmojis, excludeStyles) {
             },
             loadingIndicator: {
                 primaryColor: theme.spinner,
-                secondaryColor: "".concat(theme.spinner, "33"),
+                secondaryColor: `${theme.spinner}33`,
             },
             loadingIndicatorContainer: {},
         };
         if (excludeStyles.length) {
-            excludeStyles.forEach(function (key) {
-                var style = styling[key];
+            excludeStyles.forEach((key) => {
+                const style = styling[key];
                 if (style) {
-                    Object.keys(style).forEach(function (styleKey) {
-                        var _a;
-                        style[styleKey] = (_a = nonStylingDefaultValues[styleKey]) !== null && _a !== void 0 ? _a : style[styleKey];
+                    Object.keys(style).forEach((styleKey) => {
+                        style[styleKey] = nonStylingDefaultValues[styleKey] ?? style[styleKey];
                     });
                 }
             });

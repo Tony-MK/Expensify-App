@@ -15,12 +15,12 @@ exports.hashText = hashText;
 exports.isDefaultAvatar = isDefaultAvatar;
 exports.getContactMethod = getContactMethod;
 exports.isCurrentUserValidated = isCurrentUserValidated;
-var expensify_common_1 = require("expensify-common");
-var defaultAvatars = require("@components/Icon/DefaultAvatars");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var CONST_1 = require("@src/CONST");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var hashCode_1 = require("./hashCode");
+const expensify_common_1 = require("expensify-common");
+const defaultAvatars = require("@components/Icon/DefaultAvatars");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const CONST_1 = require("@src/CONST");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const hashCode_1 = require("./hashCode");
 /**
  * Searches through given loginList for any contact method / login with an error.
  *
@@ -43,7 +43,7 @@ var hashCode_1 = require("./hashCode");
  * }}
  */
 function hasLoginListError(loginList) {
-    return Object.values(loginList !== null && loginList !== void 0 ? loginList : {}).some(function (loginData) { var _a; return Object.values((_a = loginData.errorFields) !== null && _a !== void 0 ? _a : {}).some(function (field) { return Object.keys(field !== null && field !== void 0 ? field : {}).length > 0; }); });
+    return Object.values(loginList ?? {}).some((loginData) => Object.values(loginData.errorFields ?? {}).some((field) => Object.keys(field ?? {}).length > 0));
 }
 /**
  * Searches through given loginList for any contact method / login that requires
@@ -51,17 +51,16 @@ function hasLoginListError(loginList) {
  * has an unvalidated contact method.
  */
 function hasLoginListInfo(loginList, email) {
-    return Object.values(loginList !== null && loginList !== void 0 ? loginList : {}).some(function (login) { return email !== login.partnerUserID && !login.validatedDate; });
+    return Object.values(loginList ?? {}).some((login) => email !== login.partnerUserID && !login.validatedDate);
 }
 /**
  * Checks if the current user has a validated the primary contact method
  */
 function isCurrentUserValidated(loginList, email) {
-    var _a;
     if (!loginList || !email) {
         return false;
     }
-    return !!((_a = loginList === null || loginList === void 0 ? void 0 : loginList[email]) === null || _a === void 0 ? void 0 : _a.validatedDate);
+    return !!loginList?.[email]?.validatedDate;
 }
 /**
  * Gets the appropriate brick road indicator status for a given loginList.
@@ -81,9 +80,8 @@ function getLoginListBrickRoadIndicator(loginList, email) {
  * Error status is higher priority, so we check for that first.
  */
 function getProfilePageBrickRoadIndicator(loginList, privatePersonalDetails, vacationDelegate, email) {
-    var _a;
-    var hasPhoneNumberError = !!((_a = privatePersonalDetails === null || privatePersonalDetails === void 0 ? void 0 : privatePersonalDetails.errorFields) === null || _a === void 0 ? void 0 : _a.phoneNumber);
-    if (hasLoginListError(loginList) || hasPhoneNumberError || !(0, EmptyObject_1.isEmptyObject)(vacationDelegate === null || vacationDelegate === void 0 ? void 0 : vacationDelegate.errors)) {
+    const hasPhoneNumberError = !!privatePersonalDetails?.errorFields?.phoneNumber;
+    if (hasLoginListError(loginList) || hasPhoneNumberError || !(0, EmptyObject_1.isEmptyObject)(vacationDelegate?.errors)) {
         return CONST_1.default.BRICK_ROAD_INDICATOR_STATUS.ERROR;
     }
     if (hasLoginListInfo(loginList, email)) {
@@ -101,18 +99,17 @@ function hashText(text, range) {
  * Generate a random accountID base on searchValue.
  */
 function generateAccountID(searchValue) {
-    return hashText(searchValue, Math.pow(2, 32));
+    return hashText(searchValue, 2 ** 32);
 }
-function getAccountIDHashBucket(accountID, avatarURL) {
+function getAccountIDHashBucket(accountID = -1, avatarURL) {
     // There are 24 possible default avatars, so we choose which one this user has based
     // on a simple modulo operation of their login number. Note that Avatar count starts at 1.
-    if (accountID === void 0) { accountID = -1; }
     // When creating a chat the backend response will return the actual user ID.
     // But the avatar link still corresponds to the original ID-generated link. So we extract the SVG image number from the backend's link instead of using the user ID directly
-    var accountIDHashBucket;
+    let accountIDHashBucket;
     if (avatarURL) {
-        var match = avatarURL.match(/(default-avatar_|avatar_)(\d+)(?=\.)/);
-        var lastDigit = match && parseInt(match[2], 10);
+        const match = avatarURL.match(/(default-avatar_|avatar_)(\d+)(?=\.)/);
+        const lastDigit = match && parseInt(match[2], 10);
         accountIDHashBucket = lastDigit;
     }
     else if (accountID > 0) {
@@ -123,31 +120,29 @@ function getAccountIDHashBucket(accountID, avatarURL) {
 /**
  * Helper method to return the default avatar associated with the given accountID
  */
-function getDefaultAvatar(accountID, avatarURL) {
-    if (accountID === void 0) { accountID = -1; }
+function getDefaultAvatar(accountID = -1, avatarURL) {
     if (accountID === CONST_1.default.ACCOUNT_ID.CONCIERGE) {
         return Expensicons_1.ConciergeAvatar;
     }
     if (accountID === CONST_1.default.ACCOUNT_ID.NOTIFICATIONS) {
         return Expensicons_1.NotificationsAvatar;
     }
-    var accountIDHashBucket = getAccountIDHashBucket(accountID, avatarURL);
+    const accountIDHashBucket = getAccountIDHashBucket(accountID, avatarURL);
     if (!accountIDHashBucket) {
         return;
     }
-    return defaultAvatars["Avatar".concat(accountIDHashBucket)];
+    return defaultAvatars[`Avatar${accountIDHashBucket}`];
 }
 /**
  * Helper method to return default avatar URL associated with the accountID
  */
-function getDefaultAvatarURL(accountID, avatarURL) {
-    if (accountID === void 0) { accountID = ''; }
+function getDefaultAvatarURL(accountID = '', avatarURL) {
     if (Number(accountID) === CONST_1.default.ACCOUNT_ID.CONCIERGE) {
         return CONST_1.default.CONCIERGE_ICON_URL;
     }
-    var accountIDHashBucket = getAccountIDHashBucket(Number(accountID) || -1, avatarURL);
-    var avatarPrefix = "default-avatar";
-    return "".concat(CONST_1.default.CLOUDFRONT_URL, "/images/avatars/").concat(avatarPrefix, "_").concat(accountIDHashBucket, ".png");
+    const accountIDHashBucket = getAccountIDHashBucket(Number(accountID) || -1, avatarURL);
+    const avatarPrefix = `default-avatar`;
+    return `${CONST_1.default.CLOUDFRONT_URL}/images/avatars/${avatarPrefix}_${accountIDHashBucket}.png`;
 }
 /**
  * * Given a user's avatar path, returns true if URL points to a default avatar, false otherwise
@@ -190,7 +185,7 @@ function getAvatarUrl(avatarSource, accountID) {
  * This removes that part of the URL so the full version of the image can load.
  */
 function getFullSizeAvatar(avatarSource, accountID) {
-    var source = getAvatar(avatarSource, accountID);
+    const source = getAvatar(avatarSource, accountID);
     if (typeof source !== 'string') {
         return source;
     }
@@ -201,7 +196,7 @@ function getFullSizeAvatar(avatarSource, accountID) {
  * source URL (before the file type) if it doesn't exist there already.
  */
 function getSmallSizeAvatar(avatarSource, accountID) {
-    var source = getAvatar(avatarSource, accountID);
+    const source = getAvatar(avatarSource, accountID);
     if (typeof source !== 'string') {
         return source;
     }
@@ -210,23 +205,22 @@ function getSmallSizeAvatar(avatarSource, accountID) {
         return source;
     }
     // If image source already has _128 at the end, the given avatar URL is already what we want to use here.
-    var lastPeriodIndex = source.lastIndexOf('.');
+    const lastPeriodIndex = source.lastIndexOf('.');
     if (source.substring(lastPeriodIndex - 4, lastPeriodIndex) === '_128') {
         return source;
     }
-    return "".concat(source.substring(0, lastPeriodIndex), "_128").concat(source.substring(lastPeriodIndex));
+    return `${source.substring(0, lastPeriodIndex)}_128${source.substring(lastPeriodIndex)}`;
 }
 /**
  * Gets the secondary phone login number
  */
 function getSecondaryPhoneLogin(loginList) {
-    var parsedLoginList = Object.keys(loginList !== null && loginList !== void 0 ? loginList : {}).map(function (login) { return expensify_common_1.Str.removeSMSDomain(login); });
-    return parsedLoginList.find(function (login) { return expensify_common_1.Str.isValidE164Phone(login); });
+    const parsedLoginList = Object.keys(loginList ?? {}).map((login) => expensify_common_1.Str.removeSMSDomain(login));
+    return parsedLoginList.find((login) => expensify_common_1.Str.isValidE164Phone(login));
 }
 /**
  * Gets the contact method
  */
 function getContactMethod(primaryLogin, email) {
-    var _a;
-    return (_a = primaryLogin !== null && primaryLogin !== void 0 ? primaryLogin : email) !== null && _a !== void 0 ? _a : '';
+    return primaryLogin ?? email ?? '';
 }

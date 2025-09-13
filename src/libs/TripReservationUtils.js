@@ -1,24 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTripReservationIcon = getTripReservationIcon;
 exports.getTripEReceiptIcon = getTripEReceiptIcon;
@@ -28,9 +8,9 @@ exports.getTripTotal = getTripTotal;
 exports.getReservationDetailsFromSequence = getReservationDetailsFromSequence;
 exports.formatAirportInfo = formatAirportInfo;
 exports.getPNRReservationDataFromTripReport = getPNRReservationDataFromTripReport;
-var Expensicons = require("@src/components/Icon/Expensicons");
-var CONST_1 = require("@src/CONST");
-var ReportUtils_1 = require("./ReportUtils");
+const Expensicons = require("@src/components/Icon/Expensicons");
+const CONST_1 = require("@src/CONST");
+const ReportUtils_1 = require("./ReportUtils");
 function getTripReservationIcon(reservationType) {
     switch (reservationType) {
         case CONST_1.default.RESERVATION_TYPE.FLIGHT:
@@ -47,21 +27,17 @@ function getTripReservationIcon(reservationType) {
 }
 function getReservationsFromTripTransactions(transactions) {
     return transactions
-        .flatMap(function (item) {
-        var _a, _b, _c;
-        return (_c = (_b = (_a = item === null || item === void 0 ? void 0 : item.receipt) === null || _a === void 0 ? void 0 : _a.reservationList) === null || _b === void 0 ? void 0 : _b.map(function (reservation, reservationIndex) { return ({
-            reservation: reservation,
-            transactionID: item.transactionID,
-            reportID: item.reportID,
-            reservationIndex: reservationIndex,
-            sequenceIndex: reservationIndex,
-        }); })) !== null && _c !== void 0 ? _c : [];
-    })
-        .sort(function (a, b) { return new Date(a.reservation.start.date).getTime() - new Date(b.reservation.start.date).getTime(); });
+        .flatMap((item) => item?.receipt?.reservationList?.map((reservation, reservationIndex) => ({
+        reservation,
+        transactionID: item.transactionID,
+        reportID: item.reportID,
+        reservationIndex,
+        sequenceIndex: reservationIndex,
+    })) ?? [])
+        .sort((a, b) => new Date(a.reservation.start.date).getTime() - new Date(b.reservation.start.date).getTime());
 }
 function getTripEReceiptIcon(transaction) {
-    var _a, _b, _c;
-    var reservationType = transaction ? (_c = (_b = (_a = transaction.receipt) === null || _a === void 0 ? void 0 : _a.reservationList) === null || _b === void 0 ? void 0 : _b[0]) === null || _c === void 0 ? void 0 : _c.type : '';
+    const reservationType = transaction ? transaction.receipt?.reservationList?.[0]?.type : '';
     switch (reservationType) {
         case CONST_1.default.RESERVATION_TYPE.FLIGHT:
         case CONST_1.default.RESERVATION_TYPE.CAR:
@@ -76,46 +52,44 @@ function getTripEReceiptIcon(transaction) {
  * Extracts the confirmation code from a reservation
  */
 function getTripReservationCode(reservation) {
-    var _a, _b;
-    return "".concat(reservation.confirmations && ((_a = reservation.confirmations) === null || _a === void 0 ? void 0 : _a.length) > 0 ? "".concat((_b = reservation.confirmations.at(0)) === null || _b === void 0 ? void 0 : _b.value, " \u2022 ") : '');
+    return `${reservation.confirmations && reservation.confirmations?.length > 0 ? `${reservation.confirmations.at(0)?.value} • ` : ''}`;
 }
 function parseDurationToSeconds(duration) {
-    var regex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
-    var matches = duration.match(regex);
+    const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
+    const matches = duration.match(regex);
     if (!matches) {
         return 0;
     }
-    var hours = parseInt(matches[1] || '0', 10);
-    var minutes = parseInt(matches[2] || '0', 10);
-    var seconds = parseInt(matches[3] || '0', 10);
+    const hours = parseInt(matches[1] || '0', 10);
+    const minutes = parseInt(matches[2] || '0', 10);
+    const seconds = parseInt(matches[3] || '0', 10);
     return hours * 3600 + minutes * 60 + seconds;
 }
 function getSeatByLegAndFlight(travelerInfo, legIdx, flightIdx) {
-    var _a, _b;
-    var seats = (_b = (_a = travelerInfo.booking) === null || _a === void 0 ? void 0 : _a.seats) === null || _b === void 0 ? void 0 : _b.filter(function (seat) { return seat.legIdx === legIdx && seat.flightIdx === flightIdx; });
+    const seats = travelerInfo.booking?.seats?.filter((seat) => seat.legIdx === legIdx && seat.flightIdx === flightIdx);
     if (seats && seats.length > 0) {
         return seats.join(', ');
     }
     return '';
 }
 function getTravelerName(traveler) {
-    if (!(traveler === null || traveler === void 0 ? void 0 : traveler.name)) {
+    if (!traveler?.name) {
         return '';
     }
-    var name = traveler.name.family1;
+    let name = traveler.name.family1;
     if (traveler.name.family2) {
-        name += " ".concat(traveler.name.family2);
+        name += ` ${traveler.name.family2}`;
     }
     if (traveler.name.middle) {
-        name += " ".concat(traveler.name.middle);
+        name += ` ${traveler.name.middle}`;
     }
     if (traveler.name.given) {
-        name += " ".concat(traveler.name.given);
+        name += ` ${traveler.name.given}`;
     }
     return name.trim();
 }
 function getAddressFromLocation(location, type) {
-    var address = '';
+    let address = '';
     if (location.addressLines) {
         address += location.addressLines.join(', ');
     }
@@ -123,92 +97,89 @@ function getAddressFromLocation(location, type) {
         return address.trim();
     }
     if (location.postalCode) {
-        address += " ".concat(location.postalCode);
+        address += ` ${location.postalCode}`;
     }
     if (location.locality) {
-        address += ", ".concat(location.locality);
+        address += `, ${location.locality}`;
     }
     if (location.administrativeArea) {
-        address += ", ".concat(location.administrativeArea);
+        address += `, ${location.administrativeArea}`;
     }
     if (location.regionCode) {
-        address += ", ".concat(location.regionCode);
+        address += `, ${location.regionCode}`;
     }
     return address.trim();
 }
 function findTravelerInfo(travelers, userId) {
-    var _a;
-    return (_a = travelers.find(function (travelerData) { return travelerData.userId.id === userId; })) === null || _a === void 0 ? void 0 : _a.personalInfo;
+    return travelers.find((travelerData) => travelerData.userId.id === userId)?.personalInfo;
 }
 function getAirReservations(pnr, travelers) {
-    var _a, _b, _c, _d;
-    var reservationList = [];
+    const reservationList = [];
     if (!pnr.data.airPnr) {
         return [];
     }
-    var pnrData = pnr.data.airPnr;
-    var airlineInfo = (_b = (_a = pnr.data.additionalMetadata) === null || _a === void 0 ? void 0 : _a.airlineInfo) !== null && _b !== void 0 ? _b : [];
-    var airports = (_d = (_c = pnr.data.additionalMetadata) === null || _c === void 0 ? void 0 : _c.airportInfo) !== null && _d !== void 0 ? _d : [];
-    pnrData.travelerInfos.forEach(function (travelerInfo) {
-        travelerInfo.tickets.forEach(function (ticket) {
-            var flightCoupons = ticket.flightCoupons;
-            flightCoupons.forEach(function (flightDetails, index) {
-                var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
-                var legIdx = flightDetails.legIdx;
-                var flightIdx = flightDetails.flightIdx;
-                var flightObject = (_b = (_a = pnrData.legs) === null || _a === void 0 ? void 0 : _a.at(legIdx)) === null || _b === void 0 ? void 0 : _b.flights.at(flightIdx);
-                var airlineCode = flightObject === null || flightObject === void 0 ? void 0 : flightObject.marketing.airlineCode;
-                var longAirlineName = (_d = (_c = airlineInfo.find(function (info) { return info.airlineCode === airlineCode; })) === null || _c === void 0 ? void 0 : _c.airlineName) !== null && _d !== void 0 ? _d : airlineCode;
-                var company = {
-                    shortName: airlineCode !== null && airlineCode !== void 0 ? airlineCode : '',
+    const pnrData = pnr.data.airPnr;
+    const airlineInfo = pnr.data.additionalMetadata?.airlineInfo ?? [];
+    const airports = pnr.data.additionalMetadata?.airportInfo ?? [];
+    pnrData.travelerInfos.forEach((travelerInfo) => {
+        travelerInfo.tickets.forEach((ticket) => {
+            const flightCoupons = ticket.flightCoupons;
+            flightCoupons.forEach((flightDetails, index) => {
+                const legIdx = flightDetails.legIdx;
+                const flightIdx = flightDetails.flightIdx;
+                const flightObject = pnrData.legs?.at(legIdx)?.flights.at(flightIdx);
+                const airlineCode = flightObject?.marketing.airlineCode;
+                const longAirlineName = airlineInfo.find((info) => info.airlineCode === airlineCode)?.airlineName ?? airlineCode;
+                const company = {
+                    shortName: airlineCode ?? '',
                     phone: '',
-                    longName: longAirlineName !== null && longAirlineName !== void 0 ? longAirlineName : '',
+                    longName: longAirlineName ?? '',
                 };
-                var origin = flightObject === null || flightObject === void 0 ? void 0 : flightObject.origin;
-                var originAirport = airports.find(function (airport) { return airport.airportCode === origin; });
-                var start = {
-                    date: (_f = (_e = flightObject === null || flightObject === void 0 ? void 0 : flightObject.departureDateTime) === null || _e === void 0 ? void 0 : _e.iso8601) !== null && _f !== void 0 ? _f : '',
+                const origin = flightObject?.origin;
+                const originAirport = airports.find((airport) => airport.airportCode === origin);
+                const start = {
+                    date: flightObject?.departureDateTime?.iso8601 ?? '',
                     timezoneOffset: '',
                     shortName: origin,
-                    longName: (_g = originAirport === null || originAirport === void 0 ? void 0 : originAirport.airportName) !== null && _g !== void 0 ? _g : origin,
-                    cityName: "".concat(originAirport === null || originAirport === void 0 ? void 0 : originAirport.cityName, ", ").concat(originAirport === null || originAirport === void 0 ? void 0 : originAirport.stateCode, ", ").concat(originAirport === null || originAirport === void 0 ? void 0 : originAirport.countryName),
+                    longName: originAirport?.airportName ?? origin,
+                    cityName: `${originAirport?.cityName}, ${originAirport?.stateCode}, ${originAirport?.countryName}`,
                 };
-                var dest = flightObject === null || flightObject === void 0 ? void 0 : flightObject.destination;
-                var destAirport = airports.find(function (airport) { return airport.airportCode === dest; });
-                var end = {
-                    date: (_j = (_h = flightObject === null || flightObject === void 0 ? void 0 : flightObject.arrivalDateTime) === null || _h === void 0 ? void 0 : _h.iso8601) !== null && _j !== void 0 ? _j : '',
+                const dest = flightObject?.destination;
+                const destAirport = airports.find((airport) => airport.airportCode === dest);
+                const end = {
+                    date: flightObject?.arrivalDateTime?.iso8601 ?? '',
                     timezoneOffset: '',
                     shortName: dest,
-                    longName: (_k = destAirport === null || destAirport === void 0 ? void 0 : destAirport.airportName) !== null && _k !== void 0 ? _k : dest,
-                    cityName: "".concat(destAirport === null || destAirport === void 0 ? void 0 : destAirport.cityName, ", ").concat(destAirport === null || destAirport === void 0 ? void 0 : destAirport.stateCode, ", ").concat(destAirport === null || destAirport === void 0 ? void 0 : destAirport.countryName),
+                    longName: destAirport?.airportName ?? dest,
+                    cityName: `${destAirport?.cityName}, ${destAirport?.stateCode}, ${destAirport?.countryName}`,
                 };
-                var route = {
-                    number: (_l = flightObject === null || flightObject === void 0 ? void 0 : flightObject.marketing.num) !== null && _l !== void 0 ? _l : '',
-                    airlineCode: "".concat(flightObject === null || flightObject === void 0 ? void 0 : flightObject.marketing.airlineCode).concat(flightObject === null || flightObject === void 0 ? void 0 : flightObject.marketing.num),
-                    class: flightObject === null || flightObject === void 0 ? void 0 : flightObject.cabin,
+                const route = {
+                    number: flightObject?.marketing.num ?? '',
+                    airlineCode: `${flightObject?.marketing.airlineCode}${flightObject?.marketing.num}`,
+                    class: flightObject?.cabin,
                 };
-                var confirmations = [
+                const confirmations = [
                     {
                         name: 'Confirmation Number',
-                        value: (_m = flightObject === null || flightObject === void 0 ? void 0 : flightObject.vendorConfirmationNumber) !== null && _m !== void 0 ? _m : '',
+                        value: flightObject?.vendorConfirmationNumber ?? '',
                     },
                 ];
-                var traveler = findTravelerInfo(travelers, travelerInfo.userId.id);
-                var reservationObject = {
-                    company: company,
-                    start: start,
-                    end: end,
-                    route: route,
+                const traveler = findTravelerInfo(travelers, travelerInfo.userId.id);
+                const reservationObject = {
+                    company,
+                    start,
+                    end,
+                    route,
                     legId: legIdx,
-                    confirmations: confirmations,
-                    arrivalGate: flightObject === null || flightObject === void 0 ? void 0 : flightObject.arrivalGate,
+                    confirmations,
+                    arrivalGate: flightObject?.arrivalGate,
                     seatNumber: getSeatByLegAndFlight(travelerInfo, legIdx, flightIdx),
                     type: CONST_1.default.RESERVATION_TYPE.FLIGHT,
-                    duration: parseDurationToSeconds((_o = flightObject === null || flightObject === void 0 ? void 0 : flightObject.duration.iso8601) !== null && _o !== void 0 ? _o : ''),
+                    duration: parseDurationToSeconds(flightObject?.duration.iso8601 ?? ''),
                     reservationID: pnr.pnrId,
                     travelerPersonalInfo: {
                         name: getTravelerName(traveler),
-                        email: (_p = traveler === null || traveler === void 0 ? void 0 : traveler.email) !== null && _p !== void 0 ? _p : '',
+                        email: traveler?.email ?? '',
                     },
                 };
                 reservationList.push({ reservation: reservationObject, reservationIndex: index });
@@ -218,33 +189,32 @@ function getAirReservations(pnr, travelers) {
     return reservationList;
 }
 function getHotelReservations(pnr, travelers) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    var reservationList = [];
+    const reservationList = [];
     if (!pnr.data.hotelPnr) {
         return [];
     }
-    var pnrData = pnr.data.hotelPnr;
-    var confirmations = [
+    const pnrData = pnr.data.hotelPnr;
+    const confirmations = [
         {
             name: 'Confirmation Number',
             value: pnrData.vendorConfirmationNumber,
         },
     ];
-    var travelerInfo = pnrData.travelerInfos.at(0);
-    var traveler = findTravelerInfo(travelers, travelerInfo === null || travelerInfo === void 0 ? void 0 : travelerInfo.userId.id);
+    const travelerInfo = pnrData.travelerInfos.at(0);
+    const traveler = findTravelerInfo(travelers, travelerInfo?.userId.id);
     reservationList.push({
         reservationIndex: 0,
         reservation: {
             reservationID: pnr.pnrId,
             start: {
-                date: (_a = pnrData.checkInDateTime) === null || _a === void 0 ? void 0 : _a.iso8601,
+                date: pnrData.checkInDateTime?.iso8601,
                 address: getAddressFromLocation(pnrData.hotelInfo.address),
                 longName: pnrData.hotelInfo.name,
                 shortName: pnrData.hotelInfo.chainCode,
                 cityName: pnrData.hotelInfo.chainName,
             },
             end: {
-                date: (_b = pnrData.checkOutDateTime) === null || _b === void 0 ? void 0 : _b.iso8601,
+                date: pnrData.checkOutDateTime?.iso8601,
                 address: getAddressFromLocation(pnrData.hotelInfo.address),
                 longName: pnrData.hotelInfo.name,
                 shortName: pnrData.hotelInfo.chainCode,
@@ -255,75 +225,73 @@ function getHotelReservations(pnr, travelers) {
             duration: 0,
             numberOfRooms: pnrData.numberOfRooms,
             roomClass: pnrData.room.roomName,
-            cancellationPolicy: (_d = (_c = pnrData.room.cancellationPolicy) === null || _c === void 0 ? void 0 : _c.policy) !== null && _d !== void 0 ? _d : null,
-            cancellationDeadline: (_g = (_f = (_e = pnrData.room.cancellationPolicy) === null || _e === void 0 ? void 0 : _e.deadline) === null || _f === void 0 ? void 0 : _f.iso8601) !== null && _g !== void 0 ? _g : null,
-            confirmations: confirmations,
+            cancellationPolicy: pnrData.room.cancellationPolicy?.policy ?? null,
+            cancellationDeadline: pnrData.room.cancellationPolicy?.deadline?.iso8601 ?? null,
+            confirmations,
             travelerPersonalInfo: {
                 name: getTravelerName(traveler),
-                email: (_h = traveler === null || traveler === void 0 ? void 0 : traveler.email) !== null && _h !== void 0 ? _h : '',
+                email: traveler?.email ?? '',
             },
         },
     });
     return reservationList;
 }
 function getCarReservations(pnr, travelers) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
-    var reservationList = [];
+    const reservationList = [];
     if (!pnr.data.carPnr) {
         return [];
     }
-    var pnrData = pnr.data.carPnr;
-    var confirmations = [
+    const pnrData = pnr.data.carPnr;
+    const confirmations = [
         {
             name: 'Confirmation Number',
             value: pnrData.vendorConfirmationNumber,
         },
     ];
-    var traveler = (_a = travelers.at(0)) === null || _a === void 0 ? void 0 : _a.personalInfo;
-    var pickupLocation = pnrData.carInfo.pickupLocation.address;
-    var dropLocation = pnrData.carInfo.dropOffLocation.address;
+    const traveler = travelers.at(0)?.personalInfo;
+    const pickupLocation = pnrData.carInfo.pickupLocation.address;
+    const dropLocation = pnrData.carInfo.dropOffLocation.address;
     reservationList.push({
         reservationIndex: 0,
         reservation: {
             reservationID: pnr.pnrId,
             start: {
-                date: (_b = pnrData.pickupDateTime) === null || _b === void 0 ? void 0 : _b.iso8601,
+                date: pnrData.pickupDateTime?.iso8601,
                 location: getAddressFromLocation(pickupLocation, CONST_1.default.RESERVATION_TYPE.CAR),
             },
             end: {
-                date: (_c = pnrData.dropOffDateTime) === null || _c === void 0 ? void 0 : _c.iso8601,
+                date: pnrData.dropOffDateTime?.iso8601,
                 location: getAddressFromLocation(dropLocation, CONST_1.default.RESERVATION_TYPE.CAR),
             },
             type: CONST_1.default.RESERVATION_TYPE.CAR,
-            confirmations: confirmations,
+            confirmations,
             vendor: pnrData.carInfo.vendor.name,
             carInfo: { name: pnrData.carInfo.carSpec.displayName, engine: pnrData.carInfo.carSpec.engineType },
-            cancellationPolicy: (_e = (_d = pnrData.cancellationPolicy) === null || _d === void 0 ? void 0 : _d.policy) !== null && _e !== void 0 ? _e : null,
-            cancellationDeadline: (_g = (_f = pnrData.cancellationPolicy) === null || _f === void 0 ? void 0 : _f.deadline.iso8601) !== null && _g !== void 0 ? _g : null,
+            cancellationPolicy: pnrData.cancellationPolicy?.policy ?? null,
+            cancellationDeadline: pnrData.cancellationPolicy?.deadline.iso8601 ?? null,
             duration: 0,
             travelerPersonalInfo: {
                 name: getTravelerName(traveler),
-                email: (_h = traveler === null || traveler === void 0 ? void 0 : traveler.email) !== null && _h !== void 0 ? _h : '',
+                email: traveler?.email ?? '',
             },
         },
     });
     return reservationList;
 }
 function getRailReservations(pnr, travelers) {
-    var reservationList = [];
+    const reservationList = [];
     if (!pnr.data.railPnr) {
         return [];
     }
-    var pnrData = pnr.data.railPnr;
-    pnrData.tickets.forEach(function (ticket) {
-        ticket.legs.forEach(function (legIdx, legIndex) {
-            var _a, _b, _c, _d, _e, _f;
+    const pnrData = pnr.data.railPnr;
+    pnrData.tickets.forEach((ticket) => {
+        ticket.legs.forEach((legIdx, legIndex) => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            var leg = pnrData.legInfos.at(legIdx);
+            const leg = pnrData.legInfos.at(legIdx);
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            var travelerIdx = ticket.passengerRefs.at(legIndex);
-            var travelerInfo = pnrData.passengerInfos.at(travelerIdx);
-            var traveler = findTravelerInfo(travelers, travelerInfo === null || travelerInfo === void 0 ? void 0 : travelerInfo.userOrgId.userId.id);
+            const travelerIdx = ticket.passengerRefs.at(legIndex);
+            const travelerInfo = pnrData.passengerInfos.at(travelerIdx);
+            const traveler = findTravelerInfo(travelers, travelerInfo?.userOrgId.userId.id);
             reservationList.push({
                 reservationIndex: legIndex,
                 reservation: {
@@ -342,7 +310,7 @@ function getRailReservations(pnr, travelers) {
                         cityName: leg.destinationInfo.cityName,
                     },
                     route: {
-                        name: "".concat(leg.vehicle.carrierName, " ").concat(leg.vehicle.timetableId),
+                        name: `${leg.vehicle.carrierName} ${leg.vehicle.timetableId}`,
                         airlineCode: leg.vehicle.carrierName,
                         number: leg.vehicle.timetableId,
                     },
@@ -351,15 +319,15 @@ function getRailReservations(pnr, travelers) {
                     confirmations: [
                         {
                             name: 'Confirmation Number',
-                            value: (_a = leg.ticketNumber) !== null && _a !== void 0 ? _a : '',
+                            value: leg.ticketNumber ?? '',
                         },
                     ],
                     vendor: leg.vendorName,
-                    coachNumber: (_c = (_b = leg.allocatedSpaces) === null || _b === void 0 ? void 0 : _b.at(0)) === null || _c === void 0 ? void 0 : _c.coachNumber,
-                    seatNumber: (_e = (_d = leg.allocatedSpaces) === null || _d === void 0 ? void 0 : _d.at(0)) === null || _e === void 0 ? void 0 : _e.seatNumber,
+                    coachNumber: leg.allocatedSpaces?.at(0)?.coachNumber,
+                    seatNumber: leg.allocatedSpaces?.at(0)?.seatNumber,
                     travelerPersonalInfo: {
                         name: getTravelerName(traveler),
-                        email: (_f = traveler === null || traveler === void 0 ? void 0 : traveler.email) !== null && _f !== void 0 ? _f : '',
+                        email: traveler?.email ?? '',
                     },
                 },
             });
@@ -368,28 +336,31 @@ function getRailReservations(pnr, travelers) {
     return reservationList;
 }
 function getReservationsFromSpotnanaPayload(reportID, tripData) {
-    if (!(tripData === null || tripData === void 0 ? void 0 : tripData.pnrs)) {
+    if (!tripData?.pnrs) {
         return [];
     }
-    var reservations = tripData.pnrs
-        .flatMap(function (pnr) {
-        var _a;
-        var travelers = (_a = pnr.data.pnrTravelers) !== null && _a !== void 0 ? _a : [];
-        var reservationList = __spreadArray(__spreadArray(__spreadArray(__spreadArray([], getAirReservations(pnr, travelers), true), getHotelReservations(pnr, travelers), true), getCarReservations(pnr, travelers), true), getRailReservations(pnr, travelers), true);
-        return reservationList.map(function (reservationData) { return ({
+    const reservations = tripData.pnrs
+        .flatMap((pnr) => {
+        const travelers = pnr.data.pnrTravelers ?? [];
+        const reservationList = [
+            ...getAirReservations(pnr, travelers),
+            ...getHotelReservations(pnr, travelers),
+            ...getCarReservations(pnr, travelers),
+            ...getRailReservations(pnr, travelers),
+        ];
+        return reservationList.map((reservationData) => ({
             reservation: reservationData.reservation,
-            reportID: reportID,
+            reportID,
             transactionID: '0',
             sequenceIndex: 0,
             reservationIndex: reservationData.reservationIndex,
-        }); });
+        }));
     })
-        .map(function (reservationData, index) { return (__assign(__assign({}, reservationData), { sequenceIndex: index })); });
-    return reservations.sort(function (a, b) { return new Date(a.reservation.start.date).getTime() - new Date(b.reservation.start.date).getTime(); });
+        .map((reservationData, index) => ({ ...reservationData, sequenceIndex: index }));
+    return reservations.sort((a, b) => new Date(a.reservation.start.date).getTime() - new Date(b.reservation.start.date).getTime());
 }
 function getReservationsFromTripReport(tripReport, transactions) {
-    var _a;
-    if ((_a = tripReport === null || tripReport === void 0 ? void 0 : tripReport.tripData) === null || _a === void 0 ? void 0 : _a.payload) {
+    if (tripReport?.tripData?.payload) {
         return getReservationsFromSpotnanaPayload(tripReport.reportID, tripReport.tripData.payload);
     }
     if (transactions) {
@@ -397,64 +368,64 @@ function getReservationsFromTripReport(tripReport, transactions) {
     }
     return [];
 }
-function formatAirportInfo(reservationTimeDetails, hideAirportCode) {
-    if (hideAirportCode === void 0) { hideAirportCode = false; }
-    var longName = (reservationTimeDetails === null || reservationTimeDetails === void 0 ? void 0 : reservationTimeDetails.longName) ? "".concat(reservationTimeDetails === null || reservationTimeDetails === void 0 ? void 0 : reservationTimeDetails.longName, " ") : '';
-    var shortName = (reservationTimeDetails === null || reservationTimeDetails === void 0 ? void 0 : reservationTimeDetails.shortName) ? "".concat(reservationTimeDetails === null || reservationTimeDetails === void 0 ? void 0 : reservationTimeDetails.shortName) : '';
-    shortName = longName && shortName ? "(".concat(shortName, ")") : shortName;
-    return !hideAirportCode ? "".concat(longName).concat(shortName) : longName;
+function formatAirportInfo(reservationTimeDetails, hideAirportCode = false) {
+    const longName = reservationTimeDetails?.longName ? `${reservationTimeDetails?.longName} ` : '';
+    let shortName = reservationTimeDetails?.shortName ? `${reservationTimeDetails?.shortName}` : '';
+    shortName = longName && shortName ? `(${shortName})` : shortName;
+    return !hideAirportCode ? `${longName}${shortName}` : longName;
 }
 function getPNRReservationDataFromTripReport(tripReport, transactions) {
-    var reservations = getReservationsFromTripReport(tripReport, transactions);
+    const reservations = getReservationsFromTripReport(tripReport, transactions);
     if (reservations.length === 0) {
         return [];
     }
-    var pnrMap = new Map();
-    reservations.forEach(function (reservation) {
-        var _a;
+    const pnrMap = new Map();
+    reservations.forEach((reservation) => {
         // eslint-disable-next-line rulesdir/no-default-id-values
-        var pnrID = (_a = reservation.reservation.reservationID) !== null && _a !== void 0 ? _a : '';
+        const pnrID = reservation.reservation.reservationID ?? '';
         if (!pnrMap.has(pnrID)) {
             pnrMap.set(pnrID, {
-                pnrID: pnrID,
+                pnrID,
                 totalFareAmount: 0,
                 currency: '',
                 reservations: [],
             });
         }
-        var reservationData = pnrMap.get(pnrID);
+        const reservationData = pnrMap.get(pnrID);
         if (reservationData) {
             reservationData.reservations.push(reservation);
         }
     });
-    return Array.from(pnrMap.values()).map(function (pnrData) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
-        var pnrPayloadData = (_c = (_b = (_a = tripReport === null || tripReport === void 0 ? void 0 : tripReport.tripData) === null || _a === void 0 ? void 0 : _a.payload) === null || _b === void 0 ? void 0 : _b.pnrs) === null || _c === void 0 ? void 0 : _c.find(function (pnr) { return pnrData.pnrID === pnr.pnrId; });
-        return __assign(__assign({}, pnrData), { totalFareAmount: (((_g = (_f = (_e = (_d = pnrPayloadData === null || pnrPayloadData === void 0 ? void 0 : pnrPayloadData.data) === null || _d === void 0 ? void 0 : _d.totalFareAmount) === null || _e === void 0 ? void 0 : _e.base) === null || _f === void 0 ? void 0 : _f.amount) !== null && _g !== void 0 ? _g : 0) + ((_l = (_k = (_j = (_h = pnrPayloadData === null || pnrPayloadData === void 0 ? void 0 : pnrPayloadData.data) === null || _h === void 0 ? void 0 : _h.totalFareAmount) === null || _j === void 0 ? void 0 : _j.tax) === null || _k === void 0 ? void 0 : _k.amount) !== null && _l !== void 0 ? _l : 0)) * 100, currency: (_q = (_p = (_o = (_m = pnrPayloadData === null || pnrPayloadData === void 0 ? void 0 : pnrPayloadData.data) === null || _m === void 0 ? void 0 : _m.totalFareAmount) === null || _o === void 0 ? void 0 : _o.base) === null || _p === void 0 ? void 0 : _p.currencyCode) !== null && _q !== void 0 ? _q : '' });
+    return Array.from(pnrMap.values()).map((pnrData) => {
+        const pnrPayloadData = tripReport?.tripData?.payload?.pnrs?.find((pnr) => pnrData.pnrID === pnr.pnrId);
+        return {
+            ...pnrData,
+            totalFareAmount: ((pnrPayloadData?.data?.totalFareAmount?.base?.amount ?? 0) + (pnrPayloadData?.data?.totalFareAmount?.tax?.amount ?? 0)) * 100,
+            currency: pnrPayloadData?.data?.totalFareAmount?.base?.currencyCode ?? '',
+        };
     });
 }
 function getTripTotal(tripReport) {
-    var _a, _b, _c, _d, _e, _f;
-    if ((_a = tripReport === null || tripReport === void 0 ? void 0 : tripReport.tripData) === null || _a === void 0 ? void 0 : _a.payload) {
+    if (tripReport?.tripData?.payload) {
         return {
-            totalDisplaySpend: ((_d = (_c = (_b = tripReport.tripData.payload.tripPaymentInfo) === null || _b === void 0 ? void 0 : _b.totalFare) === null || _c === void 0 ? void 0 : _c.amount) !== null && _d !== void 0 ? _d : 0) * 100,
-            currency: (_f = (_e = tripReport.tripData.payload.tripPaymentInfo) === null || _e === void 0 ? void 0 : _e.totalFare) === null || _f === void 0 ? void 0 : _f.currencyCode,
+            totalDisplaySpend: (tripReport.tripData.payload.tripPaymentInfo?.totalFare?.amount ?? 0) * 100,
+            currency: tripReport.tripData.payload.tripPaymentInfo?.totalFare?.currencyCode,
         };
     }
     return (0, ReportUtils_1.getMoneyRequestSpendBreakdown)(tripReport);
 }
 function getReservationDetailsFromSequence(tripReservations, sequenceIndex) {
-    var reservationDataIndex = tripReservations === null || tripReservations === void 0 ? void 0 : tripReservations.findIndex(function (reservation) { return reservation.sequenceIndex === sequenceIndex; });
-    var reservationData = tripReservations.at(reservationDataIndex);
-    var prevReservationData = Number(reservationData === null || reservationData === void 0 ? void 0 : reservationData.reservationIndex) > 0 ? tripReservations === null || tripReservations === void 0 ? void 0 : tripReservations.at(reservationDataIndex - 1) : undefined;
-    var reservation = reservationData === null || reservationData === void 0 ? void 0 : reservationData.reservation;
-    var prevReservation = prevReservationData === null || prevReservationData === void 0 ? void 0 : prevReservationData.reservation;
-    var reservationType = reservation === null || reservation === void 0 ? void 0 : reservation.type;
-    var reservationIcon = getTripReservationIcon(reservation === null || reservation === void 0 ? void 0 : reservation.type);
+    const reservationDataIndex = tripReservations?.findIndex((reservation) => reservation.sequenceIndex === sequenceIndex);
+    const reservationData = tripReservations.at(reservationDataIndex);
+    const prevReservationData = Number(reservationData?.reservationIndex) > 0 ? tripReservations?.at(reservationDataIndex - 1) : undefined;
+    const reservation = reservationData?.reservation;
+    const prevReservation = prevReservationData?.reservation;
+    const reservationType = reservation?.type;
+    const reservationIcon = getTripReservationIcon(reservation?.type);
     return {
-        reservation: reservation,
-        prevReservation: prevReservation,
-        reservationType: reservationType,
-        reservationIcon: reservationIcon,
+        reservation,
+        prevReservation,
+        reservationType,
+        reservationIcon,
     };
 }

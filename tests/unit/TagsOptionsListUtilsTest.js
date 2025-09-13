@@ -1,31 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var TagsOptionsListUtils_1 = require("@libs/TagsOptionsListUtils");
-var CONST_1 = require("@src/CONST");
-var IntlStore_1 = require("@src/languages/IntlStore");
-var policies_1 = require("../utils/collections/policies");
-var transaction_1 = require("../utils/collections/transaction");
-var TestHelper_1 = require("../utils/TestHelper");
-var waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
-describe('TagsOptionsListUtils', function () {
-    beforeAll(function () {
+const TagsOptionsListUtils_1 = require("@libs/TagsOptionsListUtils");
+const CONST_1 = require("@src/CONST");
+const IntlStore_1 = require("@src/languages/IntlStore");
+const policies_1 = require("../utils/collections/policies");
+const transaction_1 = require("../utils/collections/transaction");
+const TestHelper_1 = require("../utils/TestHelper");
+const waitForBatchedUpdates_1 = require("../utils/waitForBatchedUpdates");
+describe('TagsOptionsListUtils', () => {
+    beforeAll(() => {
         IntlStore_1.default.load(CONST_1.default.LOCALES.EN);
         return (0, waitForBatchedUpdates_1.default)();
     });
-    it('getTagListSections()', function () {
-        var search = 'ing';
-        var emptySearch = '';
-        var wrongSearch = 'bla bla';
-        var employeeSearch = 'Employee Office';
-        var recentlyUsedTags = ['Engineering', 'HR'];
-        var selectedOptions = [
+    it('getTagListSections()', () => {
+        const search = 'ing';
+        const emptySearch = '';
+        const wrongSearch = 'bla bla';
+        const employeeSearch = 'Employee Office';
+        const recentlyUsedTags = ['Engineering', 'HR'];
+        const selectedOptions = [
             {
                 name: 'Medical',
                 enabled: true,
                 accountID: undefined,
             },
         ];
-        var smallTagsList = {
+        const smallTagsList = {
             Engineering: {
                 enabled: false,
                 name: 'Engineering',
@@ -53,7 +53,7 @@ describe('TagsOptionsListUtils', function () {
                 accountID: undefined,
             },
         };
-        var smallResultList = [
+        const smallResultList = [
             {
                 title: '',
                 shouldShow: false,
@@ -98,7 +98,7 @@ describe('TagsOptionsListUtils', function () {
                 ],
             },
         ];
-        var smallSearchResultList = [
+        const smallSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -115,7 +115,7 @@ describe('TagsOptionsListUtils', function () {
                 ],
             },
         ];
-        var employeeSearchResultList = [
+        const employeeSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -132,14 +132,14 @@ describe('TagsOptionsListUtils', function () {
                 ],
             },
         ];
-        var smallWrongSearchResultList = [
+        const smallWrongSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
                 data: [],
             },
         ];
-        var largeTagsList = {
+        const largeTagsList = {
             Engineering: {
                 enabled: false,
                 name: 'Engineering',
@@ -197,7 +197,7 @@ describe('TagsOptionsListUtils', function () {
                 accountID: undefined,
             },
         };
-        var largeResultList = [
+        const largeResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -299,7 +299,7 @@ describe('TagsOptionsListUtils', function () {
                 ],
             },
         ];
-        var largeSearchResultList = [
+        const largeSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
@@ -325,47 +325,47 @@ describe('TagsOptionsListUtils', function () {
                 ],
             },
         ];
-        var largeWrongSearchResultList = [
+        const largeWrongSearchResultList = [
             {
                 title: '',
                 shouldShow: true,
                 data: [],
             },
         ];
-        var smallResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: emptySearch, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
+        const smallResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: emptySearch, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
         expect(smallResult).toStrictEqual(smallResultList);
-        var smallSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: search, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
+        const smallSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: search, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
         expect(smallSearchResult).toStrictEqual(smallSearchResultList);
-        var employeeSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: employeeSearch, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
+        const employeeSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: employeeSearch, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
         expect(employeeSearchResult).toStrictEqual(employeeSearchResultList);
-        var smallWrongSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: wrongSearch, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
+        const smallWrongSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: wrongSearch, tags: smallTagsList, localeCompare: TestHelper_1.localeCompare });
         expect(smallWrongSearchResult).toStrictEqual(smallWrongSearchResultList);
-        var largeResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: emptySearch, selectedOptions: selectedOptions, tags: largeTagsList, recentlyUsedTags: recentlyUsedTags, localeCompare: TestHelper_1.localeCompare });
+        const largeResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: emptySearch, selectedOptions, tags: largeTagsList, recentlyUsedTags, localeCompare: TestHelper_1.localeCompare });
         expect(largeResult).toStrictEqual(largeResultList);
-        var largeSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: search, selectedOptions: selectedOptions, tags: largeTagsList, recentlyUsedTags: recentlyUsedTags, localeCompare: TestHelper_1.localeCompare });
+        const largeSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({ searchValue: search, selectedOptions, tags: largeTagsList, recentlyUsedTags, localeCompare: TestHelper_1.localeCompare });
         expect(largeSearchResult).toStrictEqual(largeSearchResultList);
-        var largeWrongSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({
+        const largeWrongSearchResult = (0, TagsOptionsListUtils_1.getTagListSections)({
             searchValue: wrongSearch,
-            selectedOptions: selectedOptions,
+            selectedOptions,
             tags: largeTagsList,
-            recentlyUsedTags: recentlyUsedTags,
+            recentlyUsedTags,
             localeCompare: TestHelper_1.localeCompare,
         });
         expect(largeWrongSearchResult).toStrictEqual(largeWrongSearchResultList);
     });
-    it('sortTags', function () {
-        var createTagObjects = function (names) { return names.map(function (name) { return ({ name: name, enabled: true }); }); };
-        var unorderedTagNames = ['10bc', 'b', '0a', '1', '中国', 'b10', '!', '2', '0', '@', 'a1', 'a', '3', 'b1', '日本', '$', '20', '20a', '#', 'a20', 'c', '10'];
-        var expectedOrderNames = ['!', '@', '#', '$', '0', '0a', '1', '2', '3', '10', '10bc', '20', '20a', 'a', 'a1', 'a20', 'b', 'b1', 'b10', 'c', '中国', '日本'];
-        var unorderedTags = createTagObjects(unorderedTagNames);
-        var expectedOrder = createTagObjects(expectedOrderNames);
+    it('sortTags', () => {
+        const createTagObjects = (names) => names.map((name) => ({ name, enabled: true }));
+        const unorderedTagNames = ['10bc', 'b', '0a', '1', '中国', 'b10', '!', '2', '0', '@', 'a1', 'a', '3', 'b1', '日本', '$', '20', '20a', '#', 'a20', 'c', '10'];
+        const expectedOrderNames = ['!', '@', '#', '$', '0', '0a', '1', '2', '3', '10', '10bc', '20', '20a', 'a', 'a1', 'a20', 'b', 'b1', 'b10', 'c', '中国', '日本'];
+        const unorderedTags = createTagObjects(unorderedTagNames);
+        const expectedOrder = createTagObjects(expectedOrderNames);
         expect((0, TagsOptionsListUtils_1.sortTags)(unorderedTags, TestHelper_1.localeCompare)).toStrictEqual(expectedOrder);
-        var unorderedTagNames2 = ['0', 'a1', '1', 'b1', '3', '10', 'b10', 'a', '2', 'c', '20', 'a20', 'b'];
-        var expectedOrderNames2 = ['0', '1', '2', '3', '10', '20', 'a', 'a1', 'a20', 'b', 'b1', 'b10', 'c'];
-        var unorderedTags2 = createTagObjects(unorderedTagNames2);
-        var expectedOrder2 = createTagObjects(expectedOrderNames2);
+        const unorderedTagNames2 = ['0', 'a1', '1', 'b1', '3', '10', 'b10', 'a', '2', 'c', '20', 'a20', 'b'];
+        const expectedOrderNames2 = ['0', '1', '2', '3', '10', '20', 'a', 'a1', 'a20', 'b', 'b1', 'b10', 'c'];
+        const unorderedTags2 = createTagObjects(unorderedTagNames2);
+        const expectedOrder2 = createTagObjects(expectedOrderNames2);
         expect((0, TagsOptionsListUtils_1.sortTags)(unorderedTags2, TestHelper_1.localeCompare)).toStrictEqual(expectedOrder2);
-        var unorderedTagNames3 = [
+        const unorderedTagNames3 = [
             '61',
             '39',
             '97',
@@ -467,7 +467,7 @@ describe('TagsOptionsListUtils', function () {
             '40',
             '92',
         ];
-        var expectedOrderNames3 = [
+        const expectedOrderNames3 = [
             '1',
             '2',
             '3',
@@ -569,13 +569,12 @@ describe('TagsOptionsListUtils', function () {
             '99',
             '100',
         ];
-        var unorderedTags3 = createTagObjects(unorderedTagNames3);
-        var expectedOrder3 = createTagObjects(expectedOrderNames3);
+        const unorderedTags3 = createTagObjects(unorderedTagNames3);
+        const expectedOrder3 = createTagObjects(expectedOrderNames3);
         expect((0, TagsOptionsListUtils_1.sortTags)(unorderedTags3, TestHelper_1.localeCompare)).toStrictEqual(expectedOrder3);
     });
-    it('sortTags by object works the same', function () {
-        var _a, _b, _c;
-        var tagsObject = {
+    it('sortTags by object works the same', () => {
+        const tagsObject = {
             name: 'Tag',
             orderWeight: 0,
             required: false,
@@ -594,17 +593,17 @@ describe('TagsOptionsListUtils', function () {
                 },
             },
         };
-        var sorted = (0, TagsOptionsListUtils_1.sortTags)(tagsObject.tags, TestHelper_1.localeCompare);
+        const sorted = (0, TagsOptionsListUtils_1.sortTags)(tagsObject.tags, TestHelper_1.localeCompare);
         expect(Array.isArray(sorted)).toBe(true);
         // Expect to be sorted alphabetically
-        expect((_a = sorted.at(0)) === null || _a === void 0 ? void 0 : _a.name).toBe('Car');
-        expect((_b = sorted.at(1)) === null || _b === void 0 ? void 0 : _b.name).toBe('DisabledTag');
-        expect((_c = sorted.at(2)) === null || _c === void 0 ? void 0 : _c.name).toBe('OfficeSupplies');
+        expect(sorted.at(0)?.name).toBe('Car');
+        expect(sorted.at(1)?.name).toBe('DisabledTag');
+        expect(sorted.at(2)?.name).toBe('OfficeSupplies');
     });
-    describe('getTagVisibility', function () {
-        var mockPolicy = (0, policies_1.default)(1, 'corporate', 'Test Policy');
-        var mockTransaction = (0, transaction_1.default)(1);
-        var mockPolicyTags = {
+    describe('getTagVisibility', () => {
+        const mockPolicy = (0, policies_1.default)(1, 'corporate', 'Test Policy');
+        const mockTransaction = (0, transaction_1.default)(1);
+        const mockPolicyTags = {
             tagList1: {
                 name: 'Category',
                 required: true,
@@ -624,8 +623,8 @@ describe('TagsOptionsListUtils', function () {
                 orderWeight: 1,
             },
         };
-        it('should hide all tags when shouldShowTags is false', function () {
-            var result = (0, TagsOptionsListUtils_1.getTagVisibility)({
+        it('should hide all tags when shouldShowTags is false', () => {
+            const result = (0, TagsOptionsListUtils_1.getTagVisibility)({
                 shouldShowTags: false,
                 policy: mockPolicy,
                 policyTags: mockPolicyTags,
@@ -636,8 +635,8 @@ describe('TagsOptionsListUtils', function () {
                 { isTagRequired: false, shouldShow: false },
             ]);
         });
-        it('should show all tags when shouldShowTags is true and no dependent/multilevel tags', function () {
-            var result = (0, TagsOptionsListUtils_1.getTagVisibility)({
+        it('should show all tags when shouldShowTags is true and no dependent/multilevel tags', () => {
+            const result = (0, TagsOptionsListUtils_1.getTagVisibility)({
                 shouldShowTags: true,
                 policy: mockPolicy,
                 policyTags: mockPolicyTags,
@@ -648,8 +647,8 @@ describe('TagsOptionsListUtils', function () {
                 { isTagRequired: false, shouldShow: true },
             ]);
         });
-        it('should show tags when multilevel tags are enabled and have enabled options', function () {
-            var policyTagsWithEnabledOptions = {
+        it('should show tags when multilevel tags are enabled and have enabled options', () => {
+            const policyTagsWithEnabledOptions = {
                 tagList1: {
                     name: 'Category',
                     required: true,
@@ -669,7 +668,7 @@ describe('TagsOptionsListUtils', function () {
                     orderWeight: 1,
                 },
             };
-            var result = (0, TagsOptionsListUtils_1.getTagVisibility)({
+            const result = (0, TagsOptionsListUtils_1.getTagVisibility)({
                 shouldShowTags: true,
                 policy: mockPolicy,
                 policyTags: policyTagsWithEnabledOptions,
@@ -680,8 +679,8 @@ describe('TagsOptionsListUtils', function () {
                 { isTagRequired: false, shouldShow: true },
             ]);
         });
-        it('should hide tags when multilevel tags are enabled but have no enabled options', function () {
-            var policyTagsWithDisabledOptions = {
+        it('should hide tags when multilevel tags are enabled but have no enabled options', () => {
+            const policyTagsWithDisabledOptions = {
                 tagList1: {
                     name: 'Category',
                     required: true,
@@ -701,7 +700,7 @@ describe('TagsOptionsListUtils', function () {
                     orderWeight: 1,
                 },
             };
-            var result = (0, TagsOptionsListUtils_1.getTagVisibility)({
+            const result = (0, TagsOptionsListUtils_1.getTagVisibility)({
                 shouldShowTags: true,
                 policy: mockPolicy,
                 policyTags: policyTagsWithDisabledOptions,
@@ -712,8 +711,8 @@ describe('TagsOptionsListUtils', function () {
                 { isTagRequired: false, shouldShow: false },
             ]);
         });
-        it('should handle empty policyTags', function () {
-            var result = (0, TagsOptionsListUtils_1.getTagVisibility)({
+        it('should handle empty policyTags', () => {
+            const result = (0, TagsOptionsListUtils_1.getTagVisibility)({
                 shouldShowTags: true,
                 policy: mockPolicy,
                 policyTags: undefined,
@@ -721,8 +720,8 @@ describe('TagsOptionsListUtils', function () {
             });
             expect(result).toEqual([]);
         });
-        it('should handle undefined policy', function () {
-            var result = (0, TagsOptionsListUtils_1.getTagVisibility)({
+        it('should handle undefined policy', () => {
+            const result = (0, TagsOptionsListUtils_1.getTagVisibility)({
                 shouldShowTags: true,
                 policy: undefined,
                 policyTags: mockPolicyTags,
@@ -733,8 +732,8 @@ describe('TagsOptionsListUtils', function () {
                 { isTagRequired: false, shouldShow: true },
             ]);
         });
-        it('should handle undefined transaction', function () {
-            var result = (0, TagsOptionsListUtils_1.getTagVisibility)({
+        it('should handle undefined transaction', () => {
+            const result = (0, TagsOptionsListUtils_1.getTagVisibility)({
                 shouldShowTags: true,
                 policy: mockPolicy,
                 policyTags: mockPolicyTags,

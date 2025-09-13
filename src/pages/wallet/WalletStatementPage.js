@@ -1,65 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var date_fns_1 = require("date-fns");
-var expensify_common_1 = require("expensify-common");
-var react_1 = require("react");
-var FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var WalletStatementModal_1 = require("@components/WalletStatementModal");
-var useEnvironment_1 = require("@hooks/useEnvironment");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var useThemePreference_1 = require("@hooks/useThemePreference");
-var Environment_1 = require("@libs/Environment/Environment");
-var fileDownload_1 = require("@libs/fileDownload");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var UrlUtils_1 = require("@libs/UrlUtils");
-var User_1 = require("@userActions/User");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function WalletStatementPage(_a) {
-    var _b, _c;
-    var route = _a.route;
-    var walletStatement = (0, useOnyx_1.default)(ONYXKEYS_1.default.WALLET_STATEMENT, { canBeMissing: true })[0];
-    var themePreference = (0, useThemePreference_1.default)();
-    var yearMonth = (_b = route.params.yearMonth) !== null && _b !== void 0 ? _b : null;
-    var isWalletStatementGenerating = (_c = walletStatement === null || walletStatement === void 0 ? void 0 : walletStatement.isGenerating) !== null && _c !== void 0 ? _c : false;
-    var prevIsWalletStatementGenerating = (0, usePrevious_1.default)(isWalletStatementGenerating);
-    var _d = (0, react_1.useState)(isWalletStatementGenerating), isDownloading = _d[0], setIsDownloading = _d[1];
-    var translate = (0, useLocalize_1.default)().translate;
-    var environment = (0, useEnvironment_1.default)().environment;
-    var isOffline = (0, useNetwork_1.default)().isOffline;
-    var baseURL = (0, UrlUtils_1.default)((0, Environment_1.getOldDotURLFromEnvironment)(environment));
-    (0, react_1.useEffect)(function () {
-        var currentYearMonth = (0, date_fns_1.format)(new Date(), CONST_1.default.DATE.YEAR_MONTH_FORMAT);
+const date_fns_1 = require("date-fns");
+const expensify_common_1 = require("expensify-common");
+const react_1 = require("react");
+const FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const WalletStatementModal_1 = require("@components/WalletStatementModal");
+const useEnvironment_1 = require("@hooks/useEnvironment");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const useThemePreference_1 = require("@hooks/useThemePreference");
+const Environment_1 = require("@libs/Environment/Environment");
+const fileDownload_1 = require("@libs/fileDownload");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const UrlUtils_1 = require("@libs/UrlUtils");
+const User_1 = require("@userActions/User");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function WalletStatementPage({ route }) {
+    const [walletStatement] = (0, useOnyx_1.default)(ONYXKEYS_1.default.WALLET_STATEMENT, { canBeMissing: true });
+    const themePreference = (0, useThemePreference_1.default)();
+    const yearMonth = route.params.yearMonth ?? null;
+    const isWalletStatementGenerating = walletStatement?.isGenerating ?? false;
+    const prevIsWalletStatementGenerating = (0, usePrevious_1.default)(isWalletStatementGenerating);
+    const [isDownloading, setIsDownloading] = (0, react_1.useState)(isWalletStatementGenerating);
+    const { translate } = (0, useLocalize_1.default)();
+    const { environment } = (0, useEnvironment_1.default)();
+    const { isOffline } = (0, useNetwork_1.default)();
+    const baseURL = (0, UrlUtils_1.default)((0, Environment_1.getOldDotURLFromEnvironment)(environment));
+    (0, react_1.useEffect)(() => {
+        const currentYearMonth = (0, date_fns_1.format)(new Date(), CONST_1.default.DATE.YEAR_MONTH_FORMAT);
         if (!yearMonth || yearMonth.length !== 6 || yearMonth > currentYearMonth) {
             Navigation_1.default.dismissModal();
         }
         // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- we want this effect to run only on mount
     }, []);
-    var processDownload = (0, react_1.useCallback)(function () {
+    const processDownload = (0, react_1.useCallback)(() => {
         if (isWalletStatementGenerating) {
             return;
         }
         setIsDownloading(true);
-        if (walletStatement === null || walletStatement === void 0 ? void 0 : walletStatement[yearMonth]) {
+        if (walletStatement?.[yearMonth]) {
             // We already have a file URL for this statement, so we can download it immediately
-            var downloadFileName = "Expensify_Statement_".concat(yearMonth, ".pdf");
-            var fileName = walletStatement[yearMonth];
-            var pdfURL = "".concat(baseURL, "secure?secureType=pdfreport&filename=").concat(fileName, "&downloadName=").concat(downloadFileName);
-            (0, fileDownload_1.default)(pdfURL, downloadFileName).finally(function () { return setIsDownloading(false); });
+            const downloadFileName = `Expensify_Statement_${yearMonth}.pdf`;
+            const fileName = walletStatement[yearMonth];
+            const pdfURL = `${baseURL}secure?secureType=pdfreport&filename=${fileName}&downloadName=${downloadFileName}`;
+            (0, fileDownload_1.default)(pdfURL, downloadFileName).finally(() => setIsDownloading(false));
             return;
         }
         (0, User_1.generateStatementPDF)(yearMonth);
     }, [baseURL, isWalletStatementGenerating, walletStatement, yearMonth]);
     // eslint-disable-next-line rulesdir/prefer-early-return
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         // If the statement generate is complete, download it automatically.
         if (prevIsWalletStatementGenerating && !isWalletStatementGenerating) {
-            if (walletStatement === null || walletStatement === void 0 ? void 0 : walletStatement[yearMonth]) {
+            if (walletStatement?.[yearMonth]) {
                 processDownload();
             }
             else {
@@ -67,11 +65,11 @@ function WalletStatementPage(_a) {
             }
         }
     }, [prevIsWalletStatementGenerating, isWalletStatementGenerating, processDownload, walletStatement, yearMonth]);
-    var year = (yearMonth === null || yearMonth === void 0 ? void 0 : yearMonth.substring(0, 4)) || (0, date_fns_1.getYear)(new Date());
-    var month = (yearMonth === null || yearMonth === void 0 ? void 0 : yearMonth.substring(4)) || (0, date_fns_1.getMonth)(new Date());
-    var monthName = (0, date_fns_1.format)(new Date(Number(year), Number(month) - 1), CONST_1.default.DATE.MONTH_FORMAT);
-    var title = translate('statementPage.title', { year: year, monthName: monthName });
-    var url = "".concat(baseURL, "statement.php?period=").concat(yearMonth).concat(themePreference === CONST_1.default.THEME.DARK ? '&isDarkMode=true' : '');
+    const year = yearMonth?.substring(0, 4) || (0, date_fns_1.getYear)(new Date());
+    const month = yearMonth?.substring(4) || (0, date_fns_1.getMonth)(new Date());
+    const monthName = (0, date_fns_1.format)(new Date(Number(year), Number(month) - 1), CONST_1.default.DATE.MONTH_FORMAT);
+    const title = translate('statementPage.title', { year, monthName });
+    const url = `${baseURL}statement.php?period=${yearMonth}${themePreference === CONST_1.default.THEME.DARK ? '&isDarkMode=true' : ''}`;
     return (<ScreenWrapper_1.default shouldShowOfflineIndicator={false} enableEdgeToEdgeBottomSafeAreaPadding testID={WalletStatementPage.displayName}>
             <HeaderWithBackButton_1.default title={expensify_common_1.Str.recapitalize(title)} shouldShowDownloadButton={!isOffline || isDownloading} isDownloading={isDownloading} onDownloadButtonPress={processDownload}/>
             <FullPageOfflineBlockingView_1.default addBottomSafeAreaPadding>

@@ -1,27 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
+const react_1 = require("react");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
 function useReviewDuplicatesNavigation(stepNames, currentScreenName, threadReportID, backTo) {
-    var _a = (0, react_1.useState)(), nextScreen = _a[0], setNextScreen = _a[1];
-    var _b = (0, react_1.useState)(), prevScreen = _b[0], setPrevScreen = _b[1];
-    var _c = (0, react_1.useState)(0), currentScreenIndex = _c[0], setCurrentScreenIndex = _c[1];
-    var intersection = (0, react_1.useMemo)(function () { return CONST_1.default.REVIEW_DUPLICATES_ORDER.filter(function (element) { return stepNames.includes(element); }); }, [stepNames]);
-    (0, react_1.useEffect)(function () {
+    const [nextScreen, setNextScreen] = (0, react_1.useState)();
+    const [prevScreen, setPrevScreen] = (0, react_1.useState)();
+    const [currentScreenIndex, setCurrentScreenIndex] = (0, react_1.useState)(0);
+    const intersection = (0, react_1.useMemo)(() => CONST_1.default.REVIEW_DUPLICATES_ORDER.filter((element) => stepNames.includes(element)), [stepNames]);
+    (0, react_1.useEffect)(() => {
         if (currentScreenName === 'confirmation') {
             setPrevScreen(intersection.at(-1));
             return;
         }
-        var currentIndex = intersection.indexOf(currentScreenName);
-        var nextScreenIndex = currentIndex + 1;
-        var prevScreenIndex = currentIndex - 1;
+        const currentIndex = intersection.indexOf(currentScreenName);
+        const nextScreenIndex = currentIndex + 1;
+        const prevScreenIndex = currentIndex - 1;
         setCurrentScreenIndex(currentIndex);
         setNextScreen(intersection.at(nextScreenIndex));
         setPrevScreen(prevScreenIndex !== -1 ? intersection.at(prevScreenIndex) : undefined);
     }, [currentScreenName, intersection]);
-    var goBack = function () {
+    const goBack = () => {
         switch (prevScreen) {
             case 'merchant':
                 Navigation_1.default.goBack(ROUTES_1.default.TRANSACTION_DUPLICATE_REVIEW_MERCHANT_PAGE.getRoute(threadReportID, backTo));
@@ -49,7 +49,7 @@ function useReviewDuplicatesNavigation(stepNames, currentScreenName, threadRepor
                 break;
         }
     };
-    var navigateToNextScreen = function () {
+    const navigateToNextScreen = () => {
         switch (nextScreen) {
             case 'merchant':
                 Navigation_1.default.navigate(ROUTES_1.default.TRANSACTION_DUPLICATE_REVIEW_MERCHANT_PAGE.getRoute(threadReportID, backTo));
@@ -77,6 +77,6 @@ function useReviewDuplicatesNavigation(stepNames, currentScreenName, threadRepor
                 break;
         }
     };
-    return { navigateToNextScreen: navigateToNextScreen, goBack: goBack, currentScreenIndex: currentScreenIndex };
+    return { navigateToNextScreen, goBack, currentScreenIndex };
 }
 exports.default = useReviewDuplicatesNavigation;

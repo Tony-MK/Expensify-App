@@ -7,16 +7,16 @@ exports.isEmpty = isEmpty;
 exports.process = process;
 exports.enqueue = enqueue;
 exports.clear = clear;
-var react_native_onyx_1 = require("react-native-onyx");
-var Log_1 = require("@libs/Log");
-var SequentialQueue = require("@libs/Network/SequentialQueue");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var OnyxUpdatesFromServer_1 = require("@src/types/onyx/OnyxUpdatesFromServer");
+const react_native_onyx_1 = require("react-native-onyx");
+const Log_1 = require("@libs/Log");
+const SequentialQueue = require("@libs/Network/SequentialQueue");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const OnyxUpdatesFromServer_1 = require("@src/types/onyx/OnyxUpdatesFromServer");
 // eslint-disable-next-line import/no-cycle
-var _1 = require(".");
-var missingOnyxUpdatesQueryPromise;
-var deferredUpdates = {};
+const _1 = require(".");
+let missingOnyxUpdatesQueryPromise;
+let deferredUpdates = {};
 /**
  * Returns the promise that fetches the missing onyx updates
  * @returns the promise
@@ -36,13 +36,11 @@ function setMissingOnyxUpdatesQueryPromise(promise) {
  * @returns
  */
 function getUpdates(options) {
-    if ((options === null || options === void 0 ? void 0 : options.minUpdateID) == null) {
+    if (options?.minUpdateID == null) {
         return deferredUpdates;
     }
-    return Object.entries(deferredUpdates).reduce(function (acc, _a) {
-        var _b;
-        var lastUpdateID = _a[0], update = _a[1];
-        if (Number(lastUpdateID) > ((_b = options.minUpdateID) !== null && _b !== void 0 ? _b : CONST_1.default.DEFAULT_NUMBER_ID)) {
+    return Object.entries(deferredUpdates).reduce((acc, [lastUpdateID, update]) => {
+        if (Number(lastUpdateID) > (options.minUpdateID ?? CONST_1.default.DEFAULT_NUMBER_ID)) {
             acc[Number(lastUpdateID)] = update;
         }
         return acc;
@@ -60,7 +58,7 @@ function isEmpty() {
  */
 function process() {
     if (missingOnyxUpdatesQueryPromise) {
-        missingOnyxUpdatesQueryPromise.finally(function () { return _1.validateAndApplyDeferredUpdates; });
+        missingOnyxUpdatesQueryPromise.finally(() => _1.validateAndApplyDeferredUpdates);
     }
     missingOnyxUpdatesQueryPromise = (0, _1.validateAndApplyDeferredUpdates)();
 }
@@ -70,15 +68,14 @@ function process() {
  * @param options additional flags to change the behaviour of this function
  */
 function enqueue(updates, options) {
-    var _a;
-    if ((_a = options === null || options === void 0 ? void 0 : options.shouldPauseSequentialQueue) !== null && _a !== void 0 ? _a : true) {
+    if (options?.shouldPauseSequentialQueue ?? true) {
         Log_1.default.info('[DeferredOnyxUpdates] Pausing SequentialQueue');
         SequentialQueue.pause();
     }
     // We check here if the "updates" param is a single update.
     // If so, we only need to insert one update into the deferred updates queue.
     if ((0, OnyxUpdatesFromServer_1.isValidOnyxUpdateFromServer)(updates)) {
-        var lastUpdateID = Number(updates.lastUpdateID);
+        const lastUpdateID = Number(updates.lastUpdateID);
         // Prioritize HTTPS since it provides complete request information for updating in the correct logical order
         if (deferredUpdates[lastUpdateID] && updates.type !== CONST_1.default.ONYX_UPDATE_TYPES.HTTPS) {
             return;
@@ -87,9 +84,8 @@ function enqueue(updates, options) {
     }
     else {
         // If the "updates" param is an object, we need to insert multiple updates into the deferred updates queue.
-        Object.entries(updates).forEach(function (_a) {
-            var lastUpdateIDString = _a[0], update = _a[1];
-            var lastUpdateID = Number(lastUpdateIDString);
+        Object.entries(updates).forEach(([lastUpdateIDString, update]) => {
+            const lastUpdateID = Number(lastUpdateIDString);
             if (deferredUpdates[lastUpdateID]) {
                 return;
             }
@@ -102,12 +98,11 @@ function enqueue(updates, options) {
  * @param options additional flags to change the behaviour of this function
  */
 function clear(options) {
-    var _a, _b;
     deferredUpdates = {};
-    if ((_a = options === null || options === void 0 ? void 0 : options.shouldResetGetMissingOnyxUpdatesPromise) !== null && _a !== void 0 ? _a : true) {
+    if (options?.shouldResetGetMissingOnyxUpdatesPromise ?? true) {
         missingOnyxUpdatesQueryPromise = undefined;
     }
-    if ((_b = options === null || options === void 0 ? void 0 : options.shouldUnpauseSequentialQueue) !== null && _b !== void 0 ? _b : true) {
+    if (options?.shouldUnpauseSequentialQueue ?? true) {
         react_native_onyx_1.default.set(ONYXKEYS_1.default.ONYX_UPDATES_FROM_SERVER, null);
         SequentialQueue.unpause();
     }

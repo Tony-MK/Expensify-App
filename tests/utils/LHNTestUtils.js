@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fakePersonalDetails = void 0;
 exports.getDefaultRenderedSidebarLinks = getDefaultRenderedSidebarLinks;
@@ -24,28 +13,36 @@ exports.getFakePolicy = getFakePolicy;
 exports.getFakeAdvancedReportAction = getFakeAdvancedReportAction;
 exports.getFakeTransactionViolation = getFakeTransactionViolation;
 exports.getFakeTransaction = getFakeTransaction;
-var react_native_1 = require("@testing-library/react-native");
-var react_1 = require("react");
-var ComposeProviders_1 = require("@components/ComposeProviders");
-var LocaleContextProvider_1 = require("@components/LocaleContextProvider");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var withEnvironment_1 = require("@components/withEnvironment");
-var useCurrentReportID_1 = require("@hooks/useCurrentReportID");
-var useSidebarOrderedReports_1 = require("@hooks/useSidebarOrderedReports");
-var DateUtils_1 = require("@libs/DateUtils");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var ReportActionItemSingle_1 = require("@pages/home/report/ReportActionItemSingle");
-var SidebarLinksData_1 = require("@pages/home/sidebar/SidebarLinksData");
-var CONST_1 = require("@src/CONST");
-var waitForBatchedUpdatesWithAct_1 = require("./waitForBatchedUpdatesWithAct");
-jest.mock('@react-navigation/native', function () {
-    var actualNav = jest.requireActual('@react-navigation/native');
-    return __assign(__assign({}, actualNav), { useNavigationState: function () { return true; }, useRoute: jest.fn(), useFocusEffect: jest.fn(), useIsFocused: function () { return true; }, useNavigation: function () { return ({
+const react_native_1 = require("@testing-library/react-native");
+const react_1 = require("react");
+const ComposeProviders_1 = require("@components/ComposeProviders");
+const LocaleContextProvider_1 = require("@components/LocaleContextProvider");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const withEnvironment_1 = require("@components/withEnvironment");
+const useCurrentReportID_1 = require("@hooks/useCurrentReportID");
+const useSidebarOrderedReports_1 = require("@hooks/useSidebarOrderedReports");
+const DateUtils_1 = require("@libs/DateUtils");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const ReportActionItemSingle_1 = require("@pages/home/report/ReportActionItemSingle");
+const SidebarLinksData_1 = require("@pages/home/sidebar/SidebarLinksData");
+const CONST_1 = require("@src/CONST");
+const waitForBatchedUpdatesWithAct_1 = require("./waitForBatchedUpdatesWithAct");
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native');
+    return {
+        ...actualNav,
+        useNavigationState: () => true,
+        useRoute: jest.fn(),
+        useFocusEffect: jest.fn(),
+        useIsFocused: () => true,
+        useNavigation: () => ({
             navigate: jest.fn(),
             addListener: jest.fn(),
-        }); }, createNavigationContainerRef: jest.fn() });
+        }),
+        createNavigationContainerRef: jest.fn(),
+    };
 });
-var fakePersonalDetails = {
+const fakePersonalDetails = {
     1: {
         accountID: 1,
         login: 'email1@test.com',
@@ -119,20 +116,16 @@ var fakePersonalDetails = {
     },
 };
 exports.fakePersonalDetails = fakePersonalDetails;
-var lastFakeReportID = 0;
-var lastFakeReportActionID = 0;
-var lastFakeTransactionID = 0;
+let lastFakeReportID = 0;
+let lastFakeReportActionID = 0;
+let lastFakeTransactionID = 0;
 /**
  * @param millisecondsInThePast the number of milliseconds in the past for the last message timestamp (to order reports by most recent messages)
  */
-function getFakeReport(participantAccountIDs, millisecondsInThePast, isUnread, adminIDs) {
-    if (participantAccountIDs === void 0) { participantAccountIDs = [1, 2]; }
-    if (millisecondsInThePast === void 0) { millisecondsInThePast = 0; }
-    if (isUnread === void 0) { isUnread = false; }
-    if (adminIDs === void 0) { adminIDs = []; }
-    var lastVisibleActionCreated = DateUtils_1.default.getDBTime(Date.now() - millisecondsInThePast);
-    var participants = (0, ReportUtils_1.buildParticipantsFromAccountIDs)(participantAccountIDs);
-    adminIDs.forEach(function (id) {
+function getFakeReport(participantAccountIDs = [1, 2], millisecondsInThePast = 0, isUnread = false, adminIDs = []) {
+    const lastVisibleActionCreated = DateUtils_1.default.getDBTime(Date.now() - millisecondsInThePast);
+    const participants = (0, ReportUtils_1.buildParticipantsFromAccountIDs)(participantAccountIDs);
+    adminIDs.forEach((id) => {
         participants[id] = {
             notificationPreference: 'always',
             role: CONST_1.default.REPORT.ROLE.ADMIN,
@@ -140,29 +133,27 @@ function getFakeReport(participantAccountIDs, millisecondsInThePast, isUnread, a
     });
     return {
         type: CONST_1.default.REPORT.TYPE.CHAT,
-        reportID: "".concat(++lastFakeReportID),
+        reportID: `${++lastFakeReportID}`,
         reportName: 'Report',
-        lastVisibleActionCreated: lastVisibleActionCreated,
+        lastVisibleActionCreated,
         lastReadTime: isUnread ? DateUtils_1.default.subtractMillisecondsFromDateTime(lastVisibleActionCreated, 1) : lastVisibleActionCreated,
-        participants: participants,
+        participants,
     };
 }
 /**
  * @param millisecondsInThePast the number of milliseconds in the past for the last message timestamp (to order reports by most recent messages)
  */
-function getFakeReportAction(actor, millisecondsInThePast) {
-    if (actor === void 0) { actor = 'email1@test.com'; }
-    if (millisecondsInThePast === void 0) { millisecondsInThePast = 0; }
-    var timestamp = Date.now() - millisecondsInThePast;
-    var created = DateUtils_1.default.getDBTime(timestamp);
-    var reportActionID = ++lastFakeReportActionID;
+function getFakeReportAction(actor = 'email1@test.com', millisecondsInThePast = 0) {
+    const timestamp = Date.now() - millisecondsInThePast;
+    const created = DateUtils_1.default.getDBTime(timestamp);
+    const reportActionID = ++lastFakeReportActionID;
     return {
-        actor: actor,
+        actor,
         actorAccountID: 1,
-        reportActionID: "".concat(reportActionID),
+        reportActionID: `${reportActionID}`,
         actionName: CONST_1.default.REPORT.ACTIONS.TYPE.CREATED,
         shouldShow: true,
-        created: created,
+        created,
         person: [
             {
                 type: 'TEXT',
@@ -188,34 +179,43 @@ function getFakeReportAction(actor, millisecondsInThePast) {
         },
     };
 }
-function getFakeTransaction(expenseReportID, amount, currency) {
-    if (amount === void 0) { amount = 1; }
-    if (currency === void 0) { currency = CONST_1.default.CURRENCY.USD; }
+function getFakeTransaction(expenseReportID, amount = 1, currency = CONST_1.default.CURRENCY.USD) {
     return {
-        transactionID: "".concat(++lastFakeTransactionID),
-        amount: amount,
-        currency: currency,
+        transactionID: `${++lastFakeTransactionID}`,
+        amount,
+        currency,
         reportID: expenseReportID,
     };
 }
 function getAdvancedFakeReport(isArchived, isUserCreatedPolicyRoom, hasAddWorkspaceError, isUnread, isPinned) {
-    return __assign(__assign({}, getFakeReport([1, 2], 0, isUnread)), { type: CONST_1.default.REPORT.TYPE.CHAT, chatType: isUserCreatedPolicyRoom ? CONST_1.default.REPORT.CHAT_TYPE.POLICY_ROOM : CONST_1.default.REPORT.CHAT_TYPE.POLICY_ADMINS, statusNum: isArchived ? CONST_1.default.REPORT.STATUS_NUM.CLOSED : 0, stateNum: isArchived ? CONST_1.default.REPORT.STATE_NUM.APPROVED : 0, errorFields: hasAddWorkspaceError ? { 1708946640843000: { addWorkspaceRoom: 'blah' } } : undefined, isPinned: isPinned });
+    return {
+        ...getFakeReport([1, 2], 0, isUnread),
+        type: CONST_1.default.REPORT.TYPE.CHAT,
+        chatType: isUserCreatedPolicyRoom ? CONST_1.default.REPORT.CHAT_TYPE.POLICY_ROOM : CONST_1.default.REPORT.CHAT_TYPE.POLICY_ADMINS,
+        statusNum: isArchived ? CONST_1.default.REPORT.STATUS_NUM.CLOSED : 0,
+        stateNum: isArchived ? CONST_1.default.REPORT.STATE_NUM.APPROVED : 0,
+        errorFields: hasAddWorkspaceError ? { 1708946640843000: { addWorkspaceRoom: 'blah' } } : undefined,
+        isPinned,
+    };
 }
 /**
  * @param millisecondsInThePast the number of milliseconds in the past for the last message timestamp (to order reports by most recent messages)
  */
-function getFakeReportWithPolicy(participantAccountIDs, millisecondsInThePast, isUnread) {
-    if (participantAccountIDs === void 0) { participantAccountIDs = [1, 2]; }
-    if (millisecondsInThePast === void 0) { millisecondsInThePast = 0; }
-    if (isUnread === void 0) { isUnread = false; }
-    return __assign(__assign({}, getFakeReport(participantAccountIDs, millisecondsInThePast, isUnread)), { type: CONST_1.default.REPORT.TYPE.CHAT, chatType: CONST_1.default.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT, policyID: '08CE60F05A5D86E1', oldPolicyName: '', isOwnPolicyExpenseChat: false, ownerAccountID: participantAccountIDs.at(0) });
-}
-function getFakePolicy(id, name) {
-    if (id === void 0) { id = '1'; }
-    if (name === void 0) { name = 'Workspace-Test-001'; }
+function getFakeReportWithPolicy(participantAccountIDs = [1, 2], millisecondsInThePast = 0, isUnread = false) {
     return {
-        id: id,
-        name: name,
+        ...getFakeReport(participantAccountIDs, millisecondsInThePast, isUnread),
+        type: CONST_1.default.REPORT.TYPE.CHAT,
+        chatType: CONST_1.default.REPORT.CHAT_TYPE.POLICY_EXPENSE_CHAT,
+        policyID: '08CE60F05A5D86E1',
+        oldPolicyName: '',
+        isOwnPolicyExpenseChat: false,
+        ownerAccountID: participantAccountIDs.at(0),
+    };
+}
+function getFakePolicy(id = '1', name = 'Workspace-Test-001') {
+    return {
+        id,
+        name,
         isFromFullPolicy: false,
         role: 'admin',
         type: CONST_1.default.POLICY.TYPE.TEAM,
@@ -237,25 +237,23 @@ function getFakePolicy(id, name) {
         approvalMode: 'BASIC',
     };
 }
-function getFakeTransactionViolation(violationName, showInReview) {
-    if (showInReview === void 0) { showInReview = true; }
+function getFakeTransactionViolation(violationName, showInReview = true) {
     return {
         type: CONST_1.default.VIOLATION_TYPES.VIOLATION,
         name: violationName,
-        showInReview: showInReview,
+        showInReview,
     };
 }
 /**
  * @param millisecondsInThePast the number of milliseconds in the past for the last message timestamp (to order reports by most recent messages)
  */
-function getFakeAdvancedReportAction(actionName, actor, millisecondsInThePast) {
-    if (actionName === void 0) { actionName = 'IOU'; }
-    if (actor === void 0) { actor = 'email1@test.com'; }
-    if (millisecondsInThePast === void 0) { millisecondsInThePast = 0; }
-    return __assign(__assign({}, getFakeReportAction(actor, millisecondsInThePast)), { actionName: actionName });
+function getFakeAdvancedReportAction(actionName = 'IOU', actor = 'email1@test.com', millisecondsInThePast = 0) {
+    return {
+        ...getFakeReportAction(actor, millisecondsInThePast),
+        actionName,
+    };
 }
-function MockedSidebarLinks(_a) {
-    var _b = _a.currentReportID, currentReportID = _b === void 0 ? '' : _b;
+function MockedSidebarLinks({ currentReportID = '' }) {
     return (<ComposeProviders_1.default components={[OnyxListItemProvider_1.default, LocaleContextProvider_1.LocaleContextProvider]}>
             {/*
          * Only required to make unit tests work, since we
@@ -276,13 +274,12 @@ function MockedSidebarLinks(_a) {
             </useSidebarOrderedReports_1.SidebarOrderedReportsContextProvider>
         </ComposeProviders_1.default>);
 }
-function getDefaultRenderedSidebarLinks(currentReportID) {
+function getDefaultRenderedSidebarLinks(currentReportID = '') {
     // A try-catch block needs to be added to the rendering so that any errors that happen while the component
     // renders are caught and logged to the console. Without the try-catch block, Jest might only report the error
     // as "The above error occurred in your component", without providing specific details. By using a try-catch block,
     // any errors are caught and logged, allowing you to identify the exact error that might be causing a rendering issue
     // when developing tests.
-    if (currentReportID === void 0) { currentReportID = ''; }
     try {
         // Wrap the SideBarLinks inside of LocaleContextProvider so that all the locale props
         // are passed to the component. If this is not done, then all the locale props are missing
@@ -308,14 +305,13 @@ function internalRender(component) {
         console.error(error);
     }
 }
-function MockedReportActionItemSingle(_a) {
-    var report = _a.report, reportAction = _a.reportAction;
+function MockedReportActionItemSingle({ report, reportAction }) {
     return (<ComposeProviders_1.default components={[OnyxListItemProvider_1.default, LocaleContextProvider_1.LocaleContextProvider, withEnvironment_1.EnvironmentProvider, useCurrentReportID_1.CurrentReportIDContextProvider]}>
             <ReportActionItemSingle_1.default action={reportAction} report={report} showHeader hasBeenFlagged={false} iouReport={undefined} isHovered={false}/>
         </ComposeProviders_1.default>);
 }
 function getDefaultRenderedReportActionItemSingle(report, reportAction) {
-    var currentReport = report !== null && report !== void 0 ? report : getFakeReport();
-    var currentReportAction = reportAction !== null && reportAction !== void 0 ? reportAction : getFakeAdvancedReportAction();
+    const currentReport = report ?? getFakeReport();
+    const currentReportAction = reportAction ?? getFakeAdvancedReportAction();
     internalRender(<MockedReportActionItemSingle report={currentReport} reportAction={currentReportAction}/>);
 }

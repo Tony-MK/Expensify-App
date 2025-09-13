@@ -2,16 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNewSubscriptionRenewalDate = getNewSubscriptionRenewalDate;
 exports.formatSubscriptionEndDate = formatSubscriptionEndDate;
-var date_fns_1 = require("date-fns");
-var CONST_1 = require("@src/CONST");
+const date_fns_1 = require("date-fns");
+const CONST_1 = require("@src/CONST");
 function appendMidnightTime(date) {
-    return "".concat(date, "T00:00:00");
+    return `${date}T00:00:00`;
 }
 function formatSubscriptionEndDate(date) {
     if (!date) {
         return '';
     }
-    var dateWithMidnightTime = appendMidnightTime(date);
+    const dateWithMidnightTime = appendMidnightTime(date);
     return (0, date_fns_1.format)(new Date(dateWithMidnightTime), CONST_1.default.DATE.MONTH_DAY_YEAR_ABBR_FORMAT);
 }
 function getNewSubscriptionRenewalDate() {

@@ -1,10 +1,9 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var SCREENS_1 = require("@src/SCREENS");
+const SCREENS_1 = require("@src/SCREENS");
 // This file is used to define RHP screens that are in relation to the search screen.
-var SEARCH_TO_RHP = (_a = {},
-    _a[SCREENS_1.default.SEARCH.ROOT] = [
+const SEARCH_TO_RHP = {
+    [SCREENS_1.default.SEARCH.ROOT]: [
         SCREENS_1.default.SEARCH.ADVANCED_FILTERS_TYPE_RHP,
         SCREENS_1.default.SEARCH.ADVANCED_FILTERS_GROUP_BY_RHP,
         SCREENS_1.default.SEARCH.ADVANCED_FILTERS_STATUS_RHP,
@@ -47,5 +46,5 @@ var SEARCH_TO_RHP = (_a = {},
         SCREENS_1.default.SEARCH.ADVANCED_FILTERS_PURCHASE_CURRENCY_RHP,
         SCREENS_1.default.SEARCH.SAVED_SEARCH_RENAME_RHP,
     ],
-    _a);
+};
 exports.default = SEARCH_TO_RHP;

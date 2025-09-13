@@ -4,13 +4,12 @@ exports.requestValidationCodeForAccountMerge = requestValidationCodeForAccountMe
 exports.clearGetValidateCodeForAccountMerge = clearGetValidateCodeForAccountMerge;
 exports.mergeWithValidateCode = mergeWithValidateCode;
 exports.clearMergeWithValidateCode = clearMergeWithValidateCode;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function requestValidationCodeForAccountMerge(email, validateCodeResent) {
-    if (validateCodeResent === void 0) { validateCodeResent = false; }
-    var optimisticData = [
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function requestValidationCodeForAccountMerge(email, validateCodeResent = false) {
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.ACCOUNT,
@@ -24,7 +23,7 @@ function requestValidationCodeForAccountMerge(email, validateCodeResent) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.ACCOUNT,
@@ -32,13 +31,13 @@ function requestValidationCodeForAccountMerge(email, validateCodeResent) {
                 getValidateCodeForAccountMerge: {
                     isLoading: false,
                     validateCodeSent: !validateCodeResent,
-                    validateCodeResent: validateCodeResent,
+                    validateCodeResent,
                     errors: null,
                 },
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.ACCOUNT,
@@ -51,10 +50,10 @@ function requestValidationCodeForAccountMerge(email, validateCodeResent) {
             },
         },
     ];
-    var parameters = {
-        email: email,
+    const parameters = {
+        email,
     };
-    API.write(types_1.WRITE_COMMANDS.GET_VALIDATE_CODE_FOR_ACCOUNT_MERGE, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.GET_VALIDATE_CODE_FOR_ACCOUNT_MERGE, parameters, { optimisticData, successData, failureData });
 }
 function clearGetValidateCodeForAccountMerge() {
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.ACCOUNT, {
@@ -67,7 +66,7 @@ function clearGetValidateCodeForAccountMerge() {
     });
 }
 function mergeWithValidateCode(email, validateCode) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.ACCOUNT,
@@ -80,7 +79,7 @@ function mergeWithValidateCode(email, validateCode) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.ACCOUNT,
@@ -93,7 +92,7 @@ function mergeWithValidateCode(email, validateCode) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.ACCOUNT,
@@ -105,11 +104,11 @@ function mergeWithValidateCode(email, validateCode) {
             },
         },
     ];
-    var parameters = {
-        email: email,
-        validateCode: validateCode,
+    const parameters = {
+        email,
+        validateCode,
     };
-    API.write(types_1.WRITE_COMMANDS.MERGE_WITH_VALIDATE_CODE, parameters, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.write(types_1.WRITE_COMMANDS.MERGE_WITH_VALIDATE_CODE, parameters, { optimisticData, successData, failureData });
 }
 function clearMergeWithValidateCode() {
     react_native_onyx_1.default.merge(ONYXKEYS_1.default.ACCOUNT, {

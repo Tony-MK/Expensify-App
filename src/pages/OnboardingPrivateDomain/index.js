@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var OnboardingWrapper_1 = require("@components/OnboardingWrapper");
-var BaseOnboardingPrivateDomain_1 = require("./BaseOnboardingPrivateDomain");
+const react_1 = require("react");
+const OnboardingWrapper_1 = require("@components/OnboardingWrapper");
+const BaseOnboardingPrivateDomain_1 = require("./BaseOnboardingPrivateDomain");
 function OnboardingPrivateDomain(props) {
     return (<OnboardingWrapper_1.default>
             <BaseOnboardingPrivateDomain_1.default shouldUseNativeStyles={false} 

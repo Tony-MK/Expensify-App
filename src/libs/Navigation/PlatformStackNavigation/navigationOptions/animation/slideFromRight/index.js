@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var __1 = require("..");
-var slideFromRight = { animation: __1.InternalPlatformAnimations.SLIDE_FROM_RIGHT, gestureDirection: 'horizontal' };
+const __1 = require("..");
+const slideFromRight = { animation: __1.InternalPlatformAnimations.SLIDE_FROM_RIGHT, gestureDirection: 'horizontal' };
 exports.default = slideFromRight;

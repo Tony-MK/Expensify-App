@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NarrowPaneContextProvider = NarrowPaneContextProvider;
-var react_1 = require("react");
-var NarrowPaneContext = (0, react_1.createContext)({ isInNarrowPane: false });
-var IS_IN_NARROW_PANE_CONTEXT_VALUE = {
+const react_1 = require("react");
+const NarrowPaneContext = (0, react_1.createContext)({ isInNarrowPane: false });
+const IS_IN_NARROW_PANE_CONTEXT_VALUE = {
     isInNarrowPane: true,
 };
-function NarrowPaneContextProvider(_a) {
-    var children = _a.children;
+function NarrowPaneContextProvider({ children }) {
     return <NarrowPaneContext.Provider value={IS_IN_NARROW_PANE_CONTEXT_VALUE}>{children}</NarrowPaneContext.Provider>;
 }
 exports.default = NarrowPaneContext;

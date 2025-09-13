@@ -1,26 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = useWaitForNavigation;
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
 /**
  * Returns a promise that resolves when navigation finishes.
  * Only use when navigating by react-navigation
  */
 function useWaitForNavigation() {
-    var resolvePromises = (0, react_1.useRef)([]);
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
-        return function () {
-            resolvePromises.current.forEach(function (resolve) {
+    const resolvePromises = (0, react_1.useRef)([]);
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
+        return () => {
+            resolvePromises.current.forEach((resolve) => {
                 resolve();
             });
             resolvePromises.current = [];
         };
     }, []));
-    return function (navigate) { return function () {
+    return (navigate) => () => {
         navigate();
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             resolvePromises.current.push(resolve);
         });
-    }; };
+    };
 }

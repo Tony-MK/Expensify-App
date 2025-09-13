@@ -1,60 +1,60 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var en_1 = require("@assets/emojis/en");
-var StringUtils_1 = require("@libs/StringUtils");
-describe('libs/StringUtils.isEmptyString', function () {
-    it('basic tests', function () {
+const en_1 = require("@assets/emojis/en");
+const StringUtils_1 = require("@libs/StringUtils");
+describe('libs/StringUtils.isEmptyString', () => {
+    it('basic tests', () => {
         expect(StringUtils_1.default.isEmptyString('test')).toBe(false);
         expect(StringUtils_1.default.isEmptyString('test test')).toBe(false);
         expect(StringUtils_1.default.isEmptyString('test test test')).toBe(false);
         expect(StringUtils_1.default.isEmptyString(' ')).toBe(true);
     });
-    it('trim spaces', function () {
+    it('trim spaces', () => {
         expect(StringUtils_1.default.isEmptyString(' test')).toBe(false);
         expect(StringUtils_1.default.isEmptyString('test ')).toBe(false);
         expect(StringUtils_1.default.isEmptyString(' test ')).toBe(false);
     });
-    it('remove invisible characters', function () {
+    it('remove invisible characters', () => {
         expect(StringUtils_1.default.isEmptyString('\u200B')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u200B')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u200B ')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u200B \u200B')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u200B \u200B ')).toBe(true);
     });
-    it('remove invisible characters (Cc)', function () {
+    it('remove invisible characters (Cc)', () => {
         expect(StringUtils_1.default.isEmptyString('\u0000')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u0001')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u0009')).toBe(true);
     });
-    it('remove invisible characters (Cf)', function () {
+    it('remove invisible characters (Cf)', () => {
         expect(StringUtils_1.default.isEmptyString('\u200E')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u200F')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u2060')).toBe(true);
     });
-    it('remove invisible characters (Cs)', function () {
+    it('remove invisible characters (Cs)', () => {
         expect(StringUtils_1.default.isEmptyString('\uD800')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\uD801')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\uD802')).toBe(true);
     });
-    it('remove invisible characters (Co)', function () {
+    it('remove invisible characters (Co)', () => {
         expect(StringUtils_1.default.isEmptyString('\uE000')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\uE001')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\uE002')).toBe(true);
     });
-    it('remove invisible characters (Zl)', function () {
+    it('remove invisible characters (Zl)', () => {
         expect(StringUtils_1.default.isEmptyString('\u2028')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u2029')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u202A')).toBe(true);
     });
-    it('basic check emojis not removed', function () {
+    it('basic check emojis not removed', () => {
         expect(StringUtils_1.default.isEmptyString('😀')).toBe(false);
     });
-    it('all emojis not removed', function () {
-        Object.keys(en_1.default).forEach(function (key) {
+    it('all emojis not removed', () => {
+        Object.keys(en_1.default).forEach((key) => {
             expect(StringUtils_1.default.isEmptyString(key)).toBe(false);
         });
     });
-    it('remove invisible characters (edit pad)', function () {
+    it('remove invisible characters (edit pad)', () => {
         expect(StringUtils_1.default.isEmptyString('\u0020')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u00A0')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\u2000')).toBe(true);
@@ -73,7 +73,7 @@ describe('libs/StringUtils.isEmptyString', function () {
         expect(StringUtils_1.default.isEmptyString('\u3000')).toBe(true);
         expect(StringUtils_1.default.isEmptyString(' ')).toBe(true);
     });
-    it('other tests', function () {
+    it('other tests', () => {
         expect(StringUtils_1.default.isEmptyString('\u200D')).toBe(true);
         expect(StringUtils_1.default.isEmptyString('\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F')).toBe(false);
         expect(StringUtils_1.default.isEmptyString('\uD83C')).toBe(true);

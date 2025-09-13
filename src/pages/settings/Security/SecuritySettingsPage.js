@@ -1,105 +1,104 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var debounce_1 = require("lodash/debounce");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Expensicons = require("@components/Icon/Expensicons");
-var Expensicons_1 = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var LockedAccountModalProvider_1 = require("@components/LockedAccountModalProvider");
-var LottieAnimations_1 = require("@components/LottieAnimations");
-var MenuItem_1 = require("@components/MenuItem");
-var MenuItemList_1 = require("@components/MenuItemList");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var PopoverMenu_1 = require("@components/PopoverMenu");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Section_1 = require("@components/Section");
-var Text_1 = require("@components/Text");
-var TextLink_1 = require("@components/TextLink");
-var useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
-var useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var useWaitForNavigation_1 = require("@hooks/useWaitForNavigation");
-var useWindowDimensions_1 = require("@hooks/useWindowDimensions");
-var Delegate_1 = require("@libs/actions/Delegate");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var getClickedTargetLocation_1 = require("@libs/getClickedTargetLocation");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
-var Modal_1 = require("@userActions/Modal");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const debounce_1 = require("lodash/debounce");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const DelegateNoAccessModalProvider_1 = require("@components/DelegateNoAccessModalProvider");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Expensicons = require("@components/Icon/Expensicons");
+const Expensicons_1 = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const LockedAccountModalProvider_1 = require("@components/LockedAccountModalProvider");
+const LottieAnimations_1 = require("@components/LottieAnimations");
+const MenuItem_1 = require("@components/MenuItem");
+const MenuItemList_1 = require("@components/MenuItemList");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const PopoverMenu_1 = require("@components/PopoverMenu");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Section_1 = require("@components/Section");
+const Text_1 = require("@components/Text");
+const TextLink_1 = require("@components/TextLink");
+const useCurrentUserPersonalDetails_1 = require("@hooks/useCurrentUserPersonalDetails");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrivateSubscription_1 = require("@hooks/usePrivateSubscription");
+const useResponsiveLayout_1 = require("@hooks/useResponsiveLayout");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const useWaitForNavigation_1 = require("@hooks/useWaitForNavigation");
+const useWindowDimensions_1 = require("@hooks/useWindowDimensions");
+const Delegate_1 = require("@libs/actions/Delegate");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const getClickedTargetLocation_1 = require("@libs/getClickedTargetLocation");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PersonalDetailsUtils_1 = require("@libs/PersonalDetailsUtils");
+const Modal_1 = require("@userActions/Modal");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
 function SecuritySettingsPage() {
-    var _a, _b, _c, _d, _e, _f;
-    var styles = (0, useThemeStyles_1.default)();
-    var _g = (0, useLocalize_1.default)(), translate = _g.translate, formatPhoneNumber = _g.formatPhoneNumber;
-    var waitForNavigate = (0, useWaitForNavigation_1.default)();
-    var shouldUseNarrowLayout = (0, useResponsiveLayout_1.default)().shouldUseNarrowLayout;
-    var windowWidth = (0, useWindowDimensions_1.default)().windowWidth;
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true })[0];
-    var currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
-    var privateSubscription = (0, usePrivateSubscription_1.default)();
-    var isUserValidated = account === null || account === void 0 ? void 0 : account.validated;
-    var delegateButtonRef = (0, react_1.useRef)(null);
-    var _h = (0, react_1.useState)(false), shouldShowDelegatePopoverMenu = _h[0], setShouldShowDelegatePopoverMenu = _h[1];
-    var _j = (0, react_1.useState)(false), shouldShowRemoveDelegateModal = _j[0], setShouldShowRemoveDelegateModal = _j[1];
-    var _k = (0, react_1.useState)(), selectedDelegate = _k[0], setSelectedDelegate = _k[1];
-    var _l = (0, react_1.useState)(), selectedEmail = _l[0], setSelectedEmail = _l[1];
-    var errorFields = (_b = (_a = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _a === void 0 ? void 0 : _a.errorFields) !== null && _b !== void 0 ? _b : {};
-    var _m = (0, react_1.useState)({
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate, formatPhoneNumber } = (0, useLocalize_1.default)();
+    const waitForNavigate = (0, useWaitForNavigation_1.default)();
+    const { shouldUseNarrowLayout } = (0, useResponsiveLayout_1.default)();
+    const { windowWidth } = (0, useWindowDimensions_1.default)();
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: true });
+    const currentUserPersonalDetails = (0, useCurrentUserPersonalDetails_1.default)();
+    const privateSubscription = (0, usePrivateSubscription_1.default)();
+    const isUserValidated = account?.validated;
+    const delegateButtonRef = (0, react_1.useRef)(null);
+    const [shouldShowDelegatePopoverMenu, setShouldShowDelegatePopoverMenu] = (0, react_1.useState)(false);
+    const [shouldShowRemoveDelegateModal, setShouldShowRemoveDelegateModal] = (0, react_1.useState)(false);
+    const [selectedDelegate, setSelectedDelegate] = (0, react_1.useState)();
+    const [selectedEmail, setSelectedEmail] = (0, react_1.useState)();
+    const errorFields = account?.delegatedAccess?.errorFields ?? {};
+    const [anchorPosition, setAnchorPosition] = (0, react_1.useState)({
         horizontal: 0,
         vertical: 0,
-    }), anchorPosition = _m[0], setAnchorPosition = _m[1];
-    var _o = (0, react_1.useContext)(LockedAccountModalProvider_1.LockedAccountContext), isAccountLocked = _o.isAccountLocked, showLockedAccountModal = _o.showLockedAccountModal;
-    var _p = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext), isDelegateAccessRestricted = _p.isDelegateAccessRestricted, showDelegateNoAccessModal = _p.showDelegateNoAccessModal;
-    var delegates = (_d = (_c = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _c === void 0 ? void 0 : _c.delegates) !== null && _d !== void 0 ? _d : [];
-    var delegators = (_f = (_e = account === null || account === void 0 ? void 0 : account.delegatedAccess) === null || _e === void 0 ? void 0 : _e.delegators) !== null && _f !== void 0 ? _f : [];
-    var hasDelegates = delegates.length > 0;
-    var hasDelegators = delegators.length > 0;
-    var setMenuPosition = (0, react_1.useCallback)(function () {
+    });
+    const { isAccountLocked, showLockedAccountModal } = (0, react_1.useContext)(LockedAccountModalProvider_1.LockedAccountContext);
+    const { isDelegateAccessRestricted, showDelegateNoAccessModal } = (0, react_1.useContext)(DelegateNoAccessModalProvider_1.DelegateNoAccessContext);
+    const delegates = account?.delegatedAccess?.delegates ?? [];
+    const delegators = account?.delegatedAccess?.delegators ?? [];
+    const hasDelegates = delegates.length > 0;
+    const hasDelegators = delegators.length > 0;
+    const setMenuPosition = (0, react_1.useCallback)(() => {
         if (!delegateButtonRef.current) {
             return;
         }
-        var position = (0, getClickedTargetLocation_1.default)(delegateButtonRef.current);
+        const position = (0, getClickedTargetLocation_1.default)(delegateButtonRef.current);
         setAnchorPosition({
             horizontal: position.right - position.left,
             vertical: position.y + position.height,
         });
     }, [delegateButtonRef]);
-    var showPopoverMenu = function (nativeEvent, delegate) {
-        delegateButtonRef.current = nativeEvent === null || nativeEvent === void 0 ? void 0 : nativeEvent.currentTarget;
+    const showPopoverMenu = (nativeEvent, delegate) => {
+        delegateButtonRef.current = nativeEvent?.currentTarget;
         setMenuPosition();
         setShouldShowDelegatePopoverMenu(true);
         setSelectedDelegate(delegate);
         setSelectedEmail(delegate.email);
     };
-    (0, react_1.useLayoutEffect)(function () {
-        var popoverPositionListener = react_native_1.Dimensions.addEventListener('change', function () {
+    (0, react_1.useLayoutEffect)(() => {
+        const popoverPositionListener = react_native_1.Dimensions.addEventListener('change', () => {
             (0, debounce_1.default)(setMenuPosition, CONST_1.default.TIMING.RESIZE_DEBOUNCE_TIME)();
         });
-        return function () {
+        return () => {
             if (!popoverPositionListener) {
                 return;
             }
             popoverPositionListener.remove();
         };
     }, [setMenuPosition]);
-    var securityMenuItems = (0, react_1.useMemo)(function () {
-        var baseMenuItems = [
+    const securityMenuItems = (0, react_1.useMemo)(() => {
+        const baseMenuItems = [
             {
                 translationKey: 'twoFactorAuth.headerTitle',
                 icon: Expensicons.Shield,
-                action: function () {
+                action: () => {
                     if (isDelegateAccessRestricted) {
                         showDelegateNoAccessModal();
                         return;
@@ -114,8 +113,7 @@ function SecuritySettingsPage() {
             {
                 translationKey: 'mergeAccountsPage.mergeAccount',
                 icon: Expensicons.ArrowCollapse,
-                action: function () {
-                    var _a;
+                action: () => {
                     if (isDelegateAccessRestricted) {
                         showDelegateNoAccessModal();
                         return;
@@ -124,8 +122,8 @@ function SecuritySettingsPage() {
                         showLockedAccountModal();
                         return;
                     }
-                    if ((privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.type) === CONST_1.default.SUBSCRIPTION.TYPE.INVOICING) {
-                        Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS_RESULT.getRoute((_a = currentUserPersonalDetails.login) !== null && _a !== void 0 ? _a : '', CONST_1.default.MERGE_ACCOUNT_RESULTS.ERR_INVOICING, ROUTES_1.default.SETTINGS_SECURITY));
+                    if (privateSubscription?.type === CONST_1.default.SUBSCRIPTION.TYPE.INVOICING) {
+                        Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS_RESULT.getRoute(currentUserPersonalDetails.login ?? '', CONST_1.default.MERGE_ACCOUNT_RESULTS.ERR_INVOICING, ROUTES_1.default.SETTINGS_SECURITY));
                         return;
                     }
                     Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_MERGE_ACCOUNTS.route);
@@ -136,20 +134,20 @@ function SecuritySettingsPage() {
             baseMenuItems.push({
                 translationKey: 'lockAccountPage.unlockAccount',
                 icon: Expensicons.UserLock,
-                action: waitForNavigate(function () { return Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_UNLOCK_ACCOUNT); }),
+                action: waitForNavigate(() => Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_UNLOCK_ACCOUNT)),
             });
         }
         else {
             baseMenuItems.push({
                 translationKey: 'lockAccountPage.reportSuspiciousActivity',
                 icon: Expensicons.UserLock,
-                action: waitForNavigate(function () { return Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_LOCK_ACCOUNT); }),
+                action: waitForNavigate(() => Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_LOCK_ACCOUNT)),
             });
         }
         baseMenuItems.push({
             translationKey: 'closeAccountPage.closeAccount',
             icon: Expensicons.ClosedSign,
-            action: function () {
+            action: () => {
                 if (isDelegateAccessRestricted) {
                     showDelegateNoAccessModal();
                     return;
@@ -161,7 +159,7 @@ function SecuritySettingsPage() {
                 Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_CLOSE);
             },
         });
-        return baseMenuItems.map(function (item) { return ({
+        return baseMenuItems.map((item) => ({
             key: item.translationKey,
             title: translate(item.translationKey),
             icon: item.icon,
@@ -169,101 +167,92 @@ function SecuritySettingsPage() {
             shouldShowRightIcon: true,
             link: '',
             wrapperStyle: [styles.sectionMenuItemTopDescription],
-        }); });
+        }));
     }, [
         isAccountLocked,
         isDelegateAccessRestricted,
         showDelegateNoAccessModal,
         showLockedAccountModal,
-        privateSubscription === null || privateSubscription === void 0 ? void 0 : privateSubscription.type,
+        privateSubscription?.type,
         currentUserPersonalDetails.login,
         waitForNavigate,
         translate,
         styles.sectionMenuItemTopDescription,
     ]);
-    var delegateMenuItems = (0, react_1.useMemo)(function () {
-        return delegates
-            .filter(function (d) { return !d.optimisticAccountID; })
-            .map(function (_a) {
-            var _b, _c, _d, _e;
-            var email = _a.email, role = _a.role, pendingAction = _a.pendingAction, pendingFields = _a.pendingFields;
-            var personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(email);
-            var addDelegateErrors = (_b = errorFields === null || errorFields === void 0 ? void 0 : errorFields.addDelegate) === null || _b === void 0 ? void 0 : _b[email];
-            var error = (0, ErrorUtils_1.getLatestError)(addDelegateErrors);
-            var onPress = function (e) {
-                if ((0, EmptyObject_1.isEmptyObject)(pendingAction)) {
-                    showPopoverMenu(e, { email: email, role: role });
-                    return;
-                }
-                if (!role) {
-                    Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_ROLE.getRoute(email));
-                    return;
-                }
-                if ((pendingFields === null || pendingFields === void 0 ? void 0 : pendingFields.role) && !(pendingFields === null || pendingFields === void 0 ? void 0 : pendingFields.email)) {
-                    Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_UPDATE_DELEGATE_ROLE.getRoute(email, role));
-                    return;
-                }
-                Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_CONFIRM.getRoute(email, role, true));
-            };
-            var formattedEmail = formatPhoneNumber(email);
-            return {
-                title: (_c = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.displayName) !== null && _c !== void 0 ? _c : formattedEmail,
-                description: (personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.displayName) ? formattedEmail : '',
-                badgeText: translate('delegate.role', { role: role }),
-                avatarID: (_d = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.accountID) !== null && _d !== void 0 ? _d : CONST_1.default.DEFAULT_NUMBER_ID,
-                icon: (_e = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.avatar) !== null && _e !== void 0 ? _e : Expensicons_1.FallbackAvatar,
-                iconType: CONST_1.default.ICON_TYPE_AVATAR,
-                numberOfLinesDescription: 1,
-                wrapperStyle: [styles.sectionMenuItemTopDescription],
-                iconRight: Expensicons.ThreeDots,
-                shouldShowRightIcon: true,
-                pendingAction: pendingAction,
-                shouldForceOpacity: !!pendingAction,
-                onPendingActionDismiss: function () { return (0, Delegate_1.clearDelegateErrorsByField)(email, 'addDelegate'); },
-                error: error,
-                onPress: onPress,
-                success: selectedEmail === email,
-            };
-        });
-    }, 
+    const delegateMenuItems = (0, react_1.useMemo)(() => delegates
+        .filter((d) => !d.optimisticAccountID)
+        .map(({ email, role, pendingAction, pendingFields }) => {
+        const personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(email);
+        const addDelegateErrors = errorFields?.addDelegate?.[email];
+        const error = (0, ErrorUtils_1.getLatestError)(addDelegateErrors);
+        const onPress = (e) => {
+            if ((0, EmptyObject_1.isEmptyObject)(pendingAction)) {
+                showPopoverMenu(e, { email, role });
+                return;
+            }
+            if (!role) {
+                Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_ROLE.getRoute(email));
+                return;
+            }
+            if (pendingFields?.role && !pendingFields?.email) {
+                Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_UPDATE_DELEGATE_ROLE.getRoute(email, role));
+                return;
+            }
+            Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_CONFIRM.getRoute(email, role, true));
+        };
+        const formattedEmail = formatPhoneNumber(email);
+        return {
+            title: personalDetail?.displayName ?? formattedEmail,
+            description: personalDetail?.displayName ? formattedEmail : '',
+            badgeText: translate('delegate.role', { role }),
+            avatarID: personalDetail?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID,
+            icon: personalDetail?.avatar ?? Expensicons_1.FallbackAvatar,
+            iconType: CONST_1.default.ICON_TYPE_AVATAR,
+            numberOfLinesDescription: 1,
+            wrapperStyle: [styles.sectionMenuItemTopDescription],
+            iconRight: Expensicons.ThreeDots,
+            shouldShowRightIcon: true,
+            pendingAction,
+            shouldForceOpacity: !!pendingAction,
+            onPendingActionDismiss: () => (0, Delegate_1.clearDelegateErrorsByField)(email, 'addDelegate'),
+            error,
+            onPress,
+            success: selectedEmail === email,
+        };
+    }), 
     // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     [delegates, translate, styles, personalDetails, errorFields, windowWidth, selectedEmail]);
-    var delegatorMenuItems = (0, react_1.useMemo)(function () {
-        return delegators.map(function (_a) {
-            var _b, _c, _d;
-            var email = _a.email, role = _a.role;
-            var personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(email);
-            var formattedEmail = formatPhoneNumber(email);
-            return {
-                title: (_b = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.displayName) !== null && _b !== void 0 ? _b : formattedEmail,
-                description: (personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.displayName) ? formattedEmail : '',
-                badgeText: translate('delegate.role', { role: role }),
-                avatarID: (_c = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.accountID) !== null && _c !== void 0 ? _c : CONST_1.default.DEFAULT_NUMBER_ID,
-                icon: (_d = personalDetail === null || personalDetail === void 0 ? void 0 : personalDetail.avatar) !== null && _d !== void 0 ? _d : Expensicons_1.FallbackAvatar,
-                iconType: CONST_1.default.ICON_TYPE_AVATAR,
-                numberOfLinesDescription: 1,
-                wrapperStyle: [styles.sectionMenuItemTopDescription],
-                interactive: false,
-            };
-        });
-    }, 
+    const delegatorMenuItems = (0, react_1.useMemo)(() => delegators.map(({ email, role }) => {
+        const personalDetail = (0, PersonalDetailsUtils_1.getPersonalDetailByEmail)(email);
+        const formattedEmail = formatPhoneNumber(email);
+        return {
+            title: personalDetail?.displayName ?? formattedEmail,
+            description: personalDetail?.displayName ? formattedEmail : '',
+            badgeText: translate('delegate.role', { role }),
+            avatarID: personalDetail?.accountID ?? CONST_1.default.DEFAULT_NUMBER_ID,
+            icon: personalDetail?.avatar ?? Expensicons_1.FallbackAvatar,
+            iconType: CONST_1.default.ICON_TYPE_AVATAR,
+            numberOfLinesDescription: 1,
+            wrapperStyle: [styles.sectionMenuItemTopDescription],
+            interactive: false,
+        };
+    }), 
     // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     [delegators, styles, translate, personalDetails]);
-    var delegatePopoverMenuItems = [
+    const delegatePopoverMenuItems = [
         {
             text: translate('delegate.changeAccessLevel'),
             icon: Expensicons.Pencil,
-            onPress: function () {
-                var _a, _b;
+            onPress: () => {
                 if (isDelegateAccessRestricted) {
-                    (0, Modal_1.close)(function () { return showDelegateNoAccessModal(); });
+                    (0, Modal_1.close)(() => showDelegateNoAccessModal());
                     return;
                 }
                 if (isAccountLocked) {
-                    (0, Modal_1.close)(function () { return showLockedAccountModal(); });
+                    (0, Modal_1.close)(() => showLockedAccountModal());
                     return;
                 }
-                Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_UPDATE_DELEGATE_ROLE.getRoute((_a = selectedDelegate === null || selectedDelegate === void 0 ? void 0 : selectedDelegate.email) !== null && _a !== void 0 ? _a : '', (_b = selectedDelegate === null || selectedDelegate === void 0 ? void 0 : selectedDelegate.role) !== null && _b !== void 0 ? _b : ''));
+                Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_UPDATE_DELEGATE_ROLE.getRoute(selectedDelegate?.email ?? '', selectedDelegate?.role ?? ''));
                 setShouldShowDelegatePopoverMenu(false);
                 setSelectedDelegate(undefined);
                 setSelectedEmail(undefined);
@@ -272,16 +261,16 @@ function SecuritySettingsPage() {
         {
             text: translate('delegate.removeCopilot'),
             icon: Expensicons.Trashcan,
-            onPress: function () {
+            onPress: () => {
                 if (isDelegateAccessRestricted) {
-                    (0, Modal_1.close)(function () { return showDelegateNoAccessModal(); });
+                    (0, Modal_1.close)(() => showDelegateNoAccessModal());
                     return;
                 }
                 if (isAccountLocked) {
-                    (0, Modal_1.close)(function () { return showLockedAccountModal(); });
+                    (0, Modal_1.close)(() => showLockedAccountModal());
                     return;
                 }
-                (0, Modal_1.close)(function () {
+                (0, Modal_1.close)(() => {
                     setShouldShowDelegatePopoverMenu(false);
                     setShouldShowRemoveDelegateModal(true);
                     setSelectedEmail(undefined);
@@ -289,13 +278,11 @@ function SecuritySettingsPage() {
             },
         },
     ];
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         (0, Delegate_1.openSecuritySettingsPage)();
     }, []);
     return (<ScreenWrapper_1.default testID={SecuritySettingsPage.displayName} includeSafeAreaPaddingBottom={false} shouldEnablePickerAvoiding={false} shouldShowOfflineIndicatorInWideScreen>
-            {function (_a) {
-            var safeAreaPaddingBottomStyle = _a.safeAreaPaddingBottomStyle;
-            return (<>
+            {({ safeAreaPaddingBottomStyle }) => (<>
                     <HeaderWithBackButton_1.default title={translate('initialSettingsPage.security')} shouldShowBackButton={shouldUseNarrowLayout} onBackButtonPress={Navigation_1.default.popToSidebar} icon={Illustrations.LockClosed} shouldUseHeadlineHeader shouldDisplaySearchRouter/>
                     <ScrollView_1.default contentContainerStyle={styles.pt3}>
                         <react_native_1.View style={[styles.flex1, shouldUseNarrowLayout ? styles.workspaceSectionMobile : styles.workspaceSection]}>
@@ -303,28 +290,28 @@ function SecuritySettingsPage() {
                                 <MenuItemList_1.default menuItems={securityMenuItems} shouldUseSingleExecution/>
                             </Section_1.default>
                             <react_native_1.View style={safeAreaPaddingBottomStyle}>
-                                <Section_1.default title={translate('delegate.copilotDelegatedAccess')} renderSubtitle={function () { return (<Text_1.default style={[styles.flexRow, styles.alignItemsCenter, styles.w100, styles.mt2]}>
+                                <Section_1.default title={translate('delegate.copilotDelegatedAccess')} renderSubtitle={() => (<Text_1.default style={[styles.flexRow, styles.alignItemsCenter, styles.w100, styles.mt2]}>
                                             <Text_1.default style={[styles.textNormal, styles.colorMuted]}>{translate('delegate.copilotDelegatedAccessDescription')} </Text_1.default>
                                             <TextLink_1.default style={[styles.link]} href={CONST_1.default.COPILOT_HELP_URL}>
                                                 {translate('common.learnMore')}
                                             </TextLink_1.default>
                                             .
-                                        </Text_1.default>); }} isCentralPane subtitleMuted titleStyles={styles.accountSettingsSectionTitle} childrenStyles={styles.pt5}>
+                                        </Text_1.default>)} isCentralPane subtitleMuted titleStyles={styles.accountSettingsSectionTitle} childrenStyles={styles.pt5}>
                                     {hasDelegates && (<>
                                             <Text_1.default style={[styles.textLabelSupporting, styles.pv1]}>{translate('delegate.membersCanAccessYourAccount')}</Text_1.default>
                                             <MenuItemList_1.default menuItems={delegateMenuItems}/>
                                         </>)}
-                                    {!isDelegateAccessRestricted && (<MenuItem_1.default title={translate('delegate.addCopilot')} icon={Expensicons.UserPlus} onPress={function () {
-                        if (!isUserValidated) {
-                            Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_VERIFY_ACCOUNT);
-                            return;
-                        }
-                        if (isAccountLocked) {
-                            showLockedAccountModal();
-                            return;
-                        }
-                        Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_ADD_DELEGATE);
-                    }} shouldShowRightIcon wrapperStyle={[styles.sectionMenuItemTopDescription, hasDelegators && styles.mb6]}/>)}
+                                    {!isDelegateAccessRestricted && (<MenuItem_1.default title={translate('delegate.addCopilot')} icon={Expensicons.UserPlus} onPress={() => {
+                    if (!isUserValidated) {
+                        Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_DELEGATE_VERIFY_ACCOUNT);
+                        return;
+                    }
+                    if (isAccountLocked) {
+                        showLockedAccountModal();
+                        return;
+                    }
+                    Navigation_1.default.navigate(ROUTES_1.default.SETTINGS_ADD_DELEGATE);
+                }} shouldShowRightIcon wrapperStyle={[styles.sectionMenuItemTopDescription, hasDelegators && styles.mb6]}/>)}
                                     {hasDelegators && (<>
                                             <Text_1.default style={[styles.textLabelSupporting, styles.pv1]}>{translate('delegate.youCanAccessTheseAccounts')}</Text_1.default>
                                             <MenuItemList_1.default menuItems={delegatorMenuItems}/>
@@ -332,28 +319,26 @@ function SecuritySettingsPage() {
                                 </Section_1.default>
                             </react_native_1.View>
                             <PopoverMenu_1.default isVisible={shouldShowDelegatePopoverMenu} anchorRef={delegateButtonRef} anchorPosition={{
-                    horizontal: anchorPosition.horizontal,
-                    vertical: anchorPosition.vertical,
-                }} anchorAlignment={{
-                    horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.LEFT,
-                    vertical: CONST_1.default.MODAL.ANCHOR_ORIGIN_VERTICAL.TOP,
-                }} menuItems={delegatePopoverMenuItems} onClose={function () {
-                    setShouldShowDelegatePopoverMenu(false);
-                    setSelectedEmail(undefined);
-                }}/>
-                            <ConfirmModal_1.default isVisible={shouldShowRemoveDelegateModal} title={translate('delegate.removeCopilot')} prompt={translate('delegate.removeCopilotConfirmation')} danger onConfirm={function () {
-                    var _a;
-                    (0, Delegate_1.removeDelegate)((_a = selectedDelegate === null || selectedDelegate === void 0 ? void 0 : selectedDelegate.email) !== null && _a !== void 0 ? _a : '');
-                    setShouldShowRemoveDelegateModal(false);
-                    setSelectedDelegate(undefined);
-                }} onCancel={function () {
-                    setShouldShowRemoveDelegateModal(false);
-                    setSelectedDelegate(undefined);
-                }} confirmText={translate('delegate.removeCopilot')} cancelText={translate('common.cancel')} shouldShowCancelButton/>
+                horizontal: anchorPosition.horizontal,
+                vertical: anchorPosition.vertical,
+            }} anchorAlignment={{
+                horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.LEFT,
+                vertical: CONST_1.default.MODAL.ANCHOR_ORIGIN_VERTICAL.TOP,
+            }} menuItems={delegatePopoverMenuItems} onClose={() => {
+                setShouldShowDelegatePopoverMenu(false);
+                setSelectedEmail(undefined);
+            }}/>
+                            <ConfirmModal_1.default isVisible={shouldShowRemoveDelegateModal} title={translate('delegate.removeCopilot')} prompt={translate('delegate.removeCopilotConfirmation')} danger onConfirm={() => {
+                (0, Delegate_1.removeDelegate)(selectedDelegate?.email ?? '');
+                setShouldShowRemoveDelegateModal(false);
+                setSelectedDelegate(undefined);
+            }} onCancel={() => {
+                setShouldShowRemoveDelegateModal(false);
+                setSelectedDelegate(undefined);
+            }} confirmText={translate('delegate.removeCopilot')} cancelText={translate('common.cancel')} shouldShowCancelButton/>
                         </react_native_1.View>
                     </ScrollView_1.default>
-                </>);
-        }}
+                </>)}
         </ScreenWrapper_1.default>);
 }
 SecuritySettingsPage.displayName = 'SettingSecurityPage';

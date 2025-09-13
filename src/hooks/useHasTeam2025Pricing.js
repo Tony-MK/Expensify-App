@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var date_fns_1 = require("date-fns");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var useOnyx_1 = require("./useOnyx");
+const date_fns_1 = require("date-fns");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const useOnyx_1 = require("./useOnyx");
 function useHasTeam2025Pricing() {
-    var firstPolicyDate = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIVATE_FIRST_POLICY_CREATED_DATE, { canBeMissing: true })[0];
-    var hasManualTeam2025Pricing = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIVATE_MANUAL_TEAM_2025_PRICING, { canBeMissing: true })[0];
+    const [firstPolicyDate] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIVATE_FIRST_POLICY_CREATED_DATE, { canBeMissing: true });
+    const [hasManualTeam2025Pricing] = (0, useOnyx_1.default)(ONYXKEYS_1.default.NVP_PRIVATE_MANUAL_TEAM_2025_PRICING, { canBeMissing: true });
     if (hasManualTeam2025Pricing) {
         return true;
     }

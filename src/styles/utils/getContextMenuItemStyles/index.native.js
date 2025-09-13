@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var getContextMenuItemStyles = function (styles) { return [styles.popoverMenuItem]; };
+const getContextMenuItemStyles = (styles) => [styles.popoverMenuItem];
 exports.default = getContextMenuItemStyles;

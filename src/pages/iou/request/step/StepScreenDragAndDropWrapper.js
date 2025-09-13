@@ -1,30 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Provider_1 = require("@components/DragAndDrop/Provider");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
-var callOrReturn_1 = require("@src/types/utils/callOrReturn");
-function StepScreenDragAndDropWrapper(_a) {
-    var testID = _a.testID, headerTitle = _a.headerTitle, onBackButtonPress = _a.onBackButtonPress, onEntryTransitionEnd = _a.onEntryTransitionEnd, children = _a.children, shouldShowWrapper = _a.shouldShowWrapper;
-    var styles = (0, useThemeStyles_1.default)();
-    var _b = (0, react_1.useState)(false), isDraggingOver = _b[0], setIsDraggingOver = _b[1];
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Provider_1 = require("@components/DragAndDrop/Provider");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const DeviceCapabilities_1 = require("@libs/DeviceCapabilities");
+const callOrReturn_1 = require("@src/types/utils/callOrReturn");
+function StepScreenDragAndDropWrapper({ testID, headerTitle, onBackButtonPress, onEntryTransitionEnd, children, shouldShowWrapper }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const [isDraggingOver, setIsDraggingOver] = (0, react_1.useState)(false);
     if (!shouldShowWrapper) {
         return (0, callOrReturn_1.default)(children, false);
     }
     return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom={false} shouldEnableKeyboardAvoidingView={false} onEntryTransitionEnd={onEntryTransitionEnd} testID={testID} shouldEnableMaxHeight={(0, DeviceCapabilities_1.canUseTouchScreen)()} headerGapStyles={isDraggingOver ? styles.dropWrapper : []}>
-            {function (_a) {
-            var safeAreaPaddingBottomStyle = _a.safeAreaPaddingBottomStyle;
-            return (<Provider_1.default setIsDraggingOver={setIsDraggingOver}>
+            {({ safeAreaPaddingBottomStyle }) => (<Provider_1.default setIsDraggingOver={setIsDraggingOver}>
                     <react_native_1.View style={[styles.flex1, safeAreaPaddingBottomStyle]}>
                         <HeaderWithBackButton_1.default title={headerTitle} onBackButtonPress={onBackButtonPress}/>
                         {(0, callOrReturn_1.default)(children, isDraggingOver)}
                     </react_native_1.View>
-                </Provider_1.default>);
-        }}
+                </Provider_1.default>)}
         </ScreenWrapper_1.default>);
 }
 StepScreenDragAndDropWrapper.displayName = 'StepScreenDragAndDropWrapper';

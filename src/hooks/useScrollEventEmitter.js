@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var CONST_1 = require("@src/CONST");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const CONST_1 = require("@src/CONST");
 /**
  * This hook tracks scroll events and emits a "scrolling" event when scrolling starts and ends.
  */
-var useScrollEventEmitter = function () {
-    var isScrollingRef = (0, react_1.useRef)(false);
-    var timeoutRef = (0, react_1.useRef)(null);
-    var triggerScrollEvent = (0, react_1.useCallback)(function () {
-        var emitScrolling = function (isScrolling) {
+const useScrollEventEmitter = () => {
+    const isScrollingRef = (0, react_1.useRef)(false);
+    const timeoutRef = (0, react_1.useRef)(null);
+    const triggerScrollEvent = (0, react_1.useCallback)(() => {
+        const emitScrolling = (isScrolling) => {
             react_native_1.DeviceEventEmitter.emit(CONST_1.default.EVENTS.SCROLLING, {
-                isScrolling: isScrolling,
+                isScrolling,
             });
         };
         // Start emitting the scrolling event when the scroll begins
@@ -24,14 +24,14 @@ var useScrollEventEmitter = function () {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-        timeoutRef.current = setTimeout(function () {
+        timeoutRef.current = setTimeout(() => {
             emitScrolling(false);
             isScrollingRef.current = false;
         }, 250);
     }, []);
     // Cleanup timeout on unmount
-    (0, react_1.useEffect)(function () {
-        return function () {
+    (0, react_1.useEffect)(() => {
+        return () => {
             if (!timeoutRef.current) {
                 return;
             }

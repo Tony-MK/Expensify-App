@@ -1,76 +1,54 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
-var _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FEATURE_IDS = exports.TASK_TO_FEATURE = exports.CONTINUATION_DETECTION_SEARCH_FILTER_KEYS = void 0;
 /* eslint-disable @typescript-eslint/naming-convention */
-var date_fns_1 = require("date-fns");
-var sub_1 = require("date-fns/sub");
-var react_native_config_1 = require("react-native-config");
-var KeyCommand = require("react-native-key-command");
-var UrlUtils_1 = require("@libs/UrlUtils");
-var variables_1 = require("@styles/variables");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var SCREENS_1 = require("@src/SCREENS");
-var LOCALES_1 = require("./LOCALES");
+const date_fns_1 = require("date-fns");
+const sub_1 = require("date-fns/sub");
+const react_native_config_1 = require("react-native-config");
+const KeyCommand = require("react-native-key-command");
+const UrlUtils_1 = require("@libs/UrlUtils");
+const variables_1 = require("@styles/variables");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const SCREENS_1 = require("@src/SCREENS");
+const LOCALES_1 = require("./LOCALES");
 // Creating a default array and object this way because objects ({}) and arrays ([]) are not stable types.
 // Freezing the array ensures that it cannot be unintentionally modified.
-var EMPTY_ARRAY = Object.freeze([]);
-var EMPTY_OBJECT = Object.freeze({});
+const EMPTY_ARRAY = Object.freeze([]);
+const EMPTY_OBJECT = Object.freeze({});
 // Using 28 days to align with OldDot and because all months are guaranteed to be at least 28 days.
-var MONTH_DAYS = Object.freeze(__spreadArray([], Array(28).keys(), true).map(function (i) { return i + 1; }));
-var DEFAULT_NUMBER_ID = 0;
-var CLOUDFRONT_DOMAIN = 'cloudfront.net';
-var CLOUDFRONT_URL = "https://d2k5nsl2zxldvw.".concat(CLOUDFRONT_DOMAIN);
-var ACTIVE_EXPENSIFY_URL = (0, UrlUtils_1.default)((_r = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.NEW_EXPENSIFY_URL) !== null && _r !== void 0 ? _r : 'https://new.expensify.com');
-var USE_EXPENSIFY_URL = 'https://use.expensify.com';
-var EXPENSIFY_MOBILE_URL = 'https://expensify.com/mobile';
-var EXPENSIFY_URL = 'https://www.expensify.com';
-var UBER_CONNECT_URL = 'https://business-integrations.uber.com/connect';
-var PLATFORM_OS_MACOS = 'Mac OS';
-var PLATFORM_IOS = 'iOS';
-var ANDROID_PACKAGE_NAME = 'org.me.mobiexpensifyg';
-var CURRENT_YEAR = new Date().getFullYear();
-var PULL_REQUEST_NUMBER = (_s = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.PULL_REQUEST_NUMBER) !== null && _s !== void 0 ? _s : '';
-var MAX_DATE = (0, date_fns_1.add)(new Date(), { years: 1 });
-var MIN_DATE = (0, sub_1.sub)(new Date(), { years: 20 });
-var EXPENSIFY_POLICY_DOMAIN = 'expensify-policy';
-var EXPENSIFY_POLICY_DOMAIN_EXTENSION = '.exfy';
-var keyModifierControl = (_u = (_t = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _t === void 0 ? void 0 : _t.keyModifierControl) !== null && _u !== void 0 ? _u : 'keyModifierControl';
-var keyModifierCommand = (_w = (_v = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _v === void 0 ? void 0 : _v.keyModifierCommand) !== null && _w !== void 0 ? _w : 'keyModifierCommand';
-var keyModifierShift = (_y = (_x = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _x === void 0 ? void 0 : _x.keyModifierShift) !== null && _y !== void 0 ? _y : 'keyModifierShift';
-var keyModifierShiftControl = (_0 = (_z = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _z === void 0 ? void 0 : _z.keyModifierShiftControl) !== null && _0 !== void 0 ? _0 : 'keyModifierShiftControl';
-var keyModifierShiftCommand = (_2 = (_1 = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _1 === void 0 ? void 0 : _1.keyModifierShiftCommand) !== null && _2 !== void 0 ? _2 : 'keyModifierShiftCommand';
-var keyInputEscape = (_4 = (_3 = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _3 === void 0 ? void 0 : _3.keyInputEscape) !== null && _4 !== void 0 ? _4 : 'keyInputEscape';
-var keyInputEnter = (_6 = (_5 = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _5 === void 0 ? void 0 : _5.keyInputEnter) !== null && _6 !== void 0 ? _6 : 'keyInputEnter';
-var keyInputUpArrow = (_8 = (_7 = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _7 === void 0 ? void 0 : _7.keyInputUpArrow) !== null && _8 !== void 0 ? _8 : 'keyInputUpArrow';
-var keyInputDownArrow = (_10 = (_9 = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _9 === void 0 ? void 0 : _9.keyInputDownArrow) !== null && _10 !== void 0 ? _10 : 'keyInputDownArrow';
-var keyInputLeftArrow = (_12 = (_11 = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _11 === void 0 ? void 0 : _11.keyInputLeftArrow) !== null && _12 !== void 0 ? _12 : 'keyInputLeftArrow';
-var keyInputRightArrow = (_14 = (_13 = KeyCommand === null || KeyCommand === void 0 ? void 0 : KeyCommand.constants) === null || _13 === void 0 ? void 0 : _13.keyInputRightArrow) !== null && _14 !== void 0 ? _14 : 'keyInputRightArrow';
-var keyInputSpace = ' ';
+const MONTH_DAYS = Object.freeze([...Array(28).keys()].map((i) => i + 1));
+const DEFAULT_NUMBER_ID = 0;
+const CLOUDFRONT_DOMAIN = 'cloudfront.net';
+const CLOUDFRONT_URL = `https://d2k5nsl2zxldvw.${CLOUDFRONT_DOMAIN}`;
+const ACTIVE_EXPENSIFY_URL = (0, UrlUtils_1.default)(react_native_config_1.default?.NEW_EXPENSIFY_URL ?? 'https://new.expensify.com');
+const USE_EXPENSIFY_URL = 'https://use.expensify.com';
+const EXPENSIFY_MOBILE_URL = 'https://expensify.com/mobile';
+const EXPENSIFY_URL = 'https://www.expensify.com';
+const UBER_CONNECT_URL = 'https://business-integrations.uber.com/connect';
+const PLATFORM_OS_MACOS = 'Mac OS';
+const PLATFORM_IOS = 'iOS';
+const ANDROID_PACKAGE_NAME = 'org.me.mobiexpensifyg';
+const CURRENT_YEAR = new Date().getFullYear();
+const PULL_REQUEST_NUMBER = react_native_config_1.default?.PULL_REQUEST_NUMBER ?? '';
+const MAX_DATE = (0, date_fns_1.add)(new Date(), { years: 1 });
+const MIN_DATE = (0, sub_1.sub)(new Date(), { years: 20 });
+const EXPENSIFY_POLICY_DOMAIN = 'expensify-policy';
+const EXPENSIFY_POLICY_DOMAIN_EXTENSION = '.exfy';
+const keyModifierControl = KeyCommand?.constants?.keyModifierControl ?? 'keyModifierControl';
+const keyModifierCommand = KeyCommand?.constants?.keyModifierCommand ?? 'keyModifierCommand';
+const keyModifierShift = KeyCommand?.constants?.keyModifierShift ?? 'keyModifierShift';
+const keyModifierShiftControl = KeyCommand?.constants?.keyModifierShiftControl ?? 'keyModifierShiftControl';
+const keyModifierShiftCommand = KeyCommand?.constants?.keyModifierShiftCommand ?? 'keyModifierShiftCommand';
+const keyInputEscape = KeyCommand?.constants?.keyInputEscape ?? 'keyInputEscape';
+const keyInputEnter = KeyCommand?.constants?.keyInputEnter ?? 'keyInputEnter';
+const keyInputUpArrow = KeyCommand?.constants?.keyInputUpArrow ?? 'keyInputUpArrow';
+const keyInputDownArrow = KeyCommand?.constants?.keyInputDownArrow ?? 'keyInputDownArrow';
+const keyInputLeftArrow = KeyCommand?.constants?.keyInputLeftArrow ?? 'keyInputLeftArrow';
+const keyInputRightArrow = KeyCommand?.constants?.keyInputRightArrow ?? 'keyInputRightArrow';
+const keyInputSpace = ' ';
 // describes if a shortcut key can cause navigation
-var KEYBOARD_SHORTCUT_NAVIGATION_TYPE = 'NAVIGATION_SHORTCUT';
-var chatTypes = {
+const KEYBOARD_SHORTCUT_NAVIGATION_TYPE = 'NAVIGATION_SHORTCUT';
+const chatTypes = {
     POLICY_ANNOUNCE: 'policyAnnounce',
     POLICY_ADMINS: 'policyAdmins',
     TRIP_ROOM: 'tripRoom',
@@ -82,7 +60,7 @@ var chatTypes = {
     INVOICE: 'invoice',
     SYSTEM: 'system',
 };
-var ONBOARDING_ACCOUNTING_MAPPING = {
+const ONBOARDING_ACCOUNTING_MAPPING = {
     quickbooksOnline: 'QuickBooks Online',
     xero: 'Xero',
     netsuite: 'NetSuite',
@@ -93,55 +71,58 @@ var ONBOARDING_ACCOUNTING_MAPPING = {
     microsoftDynamics: 'Microsoft Dynamics',
     other: 'accounting software',
 };
-var connectionsVideoPaths = (_a = {},
-    _a[ONBOARDING_ACCOUNTING_MAPPING.quickbooksOnline] = 'videos/walkthrough-connect_to_qbo-v2.mp4',
-    _a[ONBOARDING_ACCOUNTING_MAPPING.xero] = 'videos/walkthrough-connect_to_xero-v2.mp4',
-    _a[ONBOARDING_ACCOUNTING_MAPPING.netsuite] = 'videos/walkthrough-connect_to_netsuite-v2.mp4',
-    _a);
+const connectionsVideoPaths = {
+    [ONBOARDING_ACCOUNTING_MAPPING.quickbooksOnline]: 'videos/walkthrough-connect_to_qbo-v2.mp4',
+    [ONBOARDING_ACCOUNTING_MAPPING.xero]: 'videos/walkthrough-connect_to_xero-v2.mp4',
+    [ONBOARDING_ACCOUNTING_MAPPING.netsuite]: 'videos/walkthrough-connect_to_netsuite-v2.mp4',
+};
 // Explicit type annotation is required
-var cardActiveStates = [2, 3, 4, 7];
-var brokenConnectionScrapeStatuses = [200, 531, 530, 500, 666];
+const cardActiveStates = [2, 3, 4, 7];
+const brokenConnectionScrapeStatuses = [200, 531, 530, 500, 666];
 // Hide not issued or not activated cards (states 2, 4) from card filter options in search, as no transactions can be made on cards in these states
-var cardHiddenFromSearchStates = [2, 4];
-var selectableOnboardingChoices = {
+const cardHiddenFromSearchStates = [2, 4];
+const selectableOnboardingChoices = {
     PERSONAL_SPEND: 'newDotPersonalSpend',
     MANAGE_TEAM: 'newDotManageTeam',
     EMPLOYER: 'newDotEmployer',
     CHAT_SPLIT: 'newDotSplitChat',
     LOOKING_AROUND: 'newDotLookingAround',
 };
-var backendOnboardingChoices = {
+const backendOnboardingChoices = {
     ADMIN: 'newDotAdmin',
     SUBMIT: 'newDotSubmit',
     TRACK_WORKSPACE: 'newDotTrackWorkspace',
     TEST_DRIVE_RECEIVER: 'testDriveReceiver',
 };
-var onboardingChoices = __assign(__assign({}, selectableOnboardingChoices), backendOnboardingChoices);
-var createExpenseOnboardingChoices = {
+const onboardingChoices = {
+    ...selectableOnboardingChoices,
+    ...backendOnboardingChoices,
+};
+const createExpenseOnboardingChoices = {
     PERSONAL_SPEND: selectableOnboardingChoices.PERSONAL_SPEND,
     EMPLOYER: selectableOnboardingChoices.EMPLOYER,
     SUBMIT: backendOnboardingChoices.SUBMIT,
 };
-var signupQualifiers = {
+const signupQualifiers = {
     INDIVIDUAL: 'individual',
     VSB: 'vsb',
     SMB: 'smb',
 };
-var onboardingInviteTypes = {
+const onboardingInviteTypes = {
     IOU: 'iou',
     INVOICE: 'invoice',
     CHAT: 'chat',
     WORKSPACE: 'workspace',
 };
-var onboardingCompanySize = {
+const onboardingCompanySize = {
     MICRO: '1-10',
     SMALL: '11-50',
     MEDIUM_SMALL: '51-100',
     MEDIUM: '101-1000',
     LARGE: '1001+',
 };
-var EMAIL_WITH_OPTIONAL_DOMAIN = /(?=((?=[\w'#%+-]+(?:\.[\w'#%+-]+)*@?)[\w.'#%+-]{1,64}(?:@(?:(?=[a-z\d]+(?:-+[a-z\d]+)*\.)(?:[a-z\d-]{1,63}\.)+[a-z]{2,63}))?(?= |_|\b))(?<end>.*))\S{3,254}(?=\k<end>$)/;
-var EMAIL = {
+const EMAIL_WITH_OPTIONAL_DOMAIN = /(?=((?=[\w'#%+-]+(?:\.[\w'#%+-]+)*@?)[\w.'#%+-]{1,64}(?:@(?:(?=[a-z\d]+(?:-+[a-z\d]+)*\.)(?:[a-z\d-]{1,63}\.)+[a-z]{2,63}))?(?= |_|\b))(?<end>.*))\S{3,254}(?=\k<end>$)/;
+const EMAIL = {
     ACCOUNTING: 'accounting@expensify.com',
     ACCOUNTS_PAYABLE: 'accountspayable@expensify.com',
     ADMIN: 'admin@expensify.com',
@@ -166,7 +147,7 @@ var EMAIL = {
     TEAM: 'team@expensify.com',
     MANAGER_MCTEST: 'manager_mctest@expensify.com',
 };
-var CONST = {
+const CONST = {
     HEIC_SIGNATURES: [
         '6674797068656963', // 'ftypheic' - Indicates standard HEIC file
         '6674797068656978', // 'ftypheix' - Indicates a variation of HEIC
@@ -188,7 +169,7 @@ var CONST = {
     // Note: Group and Self-DM excluded as these are not tied to a Workspace
     WORKSPACE_ROOM_TYPES: [chatTypes.POLICY_ADMINS, chatTypes.POLICY_ANNOUNCE, chatTypes.DOMAIN_ALL, chatTypes.POLICY_ROOM, chatTypes.POLICY_EXPENSE_CHAT, chatTypes.INVOICE],
     CUSTOM_FIELD_KEYS: { customField1: 'employeeUserID', customField2: 'employeePayrollID' },
-    ANDROID_PACKAGE_NAME: ANDROID_PACKAGE_NAME,
+    ANDROID_PACKAGE_NAME,
     WORKSPACE_ENABLE_FEATURE_REDIRECT_DELAY: 100,
     ANIMATED_HIGHLIGHT_ENTRY_DELAY: 50,
     ANIMATED_HIGHLIGHT_ENTRY_DURATION: 300,
@@ -322,7 +303,7 @@ var CONST = {
     REPORT_DESCRIPTION: {
         MAX_LENGTH: 1000,
     },
-    PULL_REQUEST_NUMBER: PULL_REQUEST_NUMBER,
+    PULL_REQUEST_NUMBER,
     // Regex to get link in href prop inside of <a/> component
     REGEX_LINK_IN_ANCHOR: /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/gi,
     // Regex to read violation value from string given by backend
@@ -342,8 +323,8 @@ var CONST = {
         // Numbers were arbitrarily picked.
         MIN_YEAR: CURRENT_YEAR - 100,
         MAX_YEAR: CURRENT_YEAR + 100,
-        MAX_DATE: MAX_DATE,
-        MIN_DATE: MIN_DATE,
+        MAX_DATE,
+        MIN_DATE,
     },
     DATE_BIRTH: {
         MIN_AGE: 0,
@@ -372,12 +353,12 @@ var CONST = {
         },
     },
     NEW_EXPENSIFY_URL: ACTIVE_EXPENSIFY_URL,
-    UBER_CONNECT_URL: UBER_CONNECT_URL,
+    UBER_CONNECT_URL,
     FREE_TRIAL_MARKDOWN: "# Your free trial has started! Let's get you set up.\n👋 Hey there, I'm your Expensify setup specialist. I've already created a workspace to help manage your team's receipts and expenses. To make the most of your 30-day free trial, just follow the remaining setup steps below!",
     APP_DOWNLOAD_LINKS: {
-        ANDROID: "https://play.google.com/store/apps/details?id=".concat(ANDROID_PACKAGE_NAME),
+        ANDROID: `https://play.google.com/store/apps/details?id=${ANDROID_PACKAGE_NAME}`,
         IOS: 'https://apps.apple.com/us/app/expensify-travel-expense/id471713959',
-        DESKTOP: "".concat(ACTIVE_EXPENSIFY_URL, "NewExpensify.dmg"),
+        DESKTOP: `${ACTIVE_EXPENSIFY_URL}NewExpensify.dmg`,
         OLD_DOT_ANDROID: 'https://play.google.com/store/apps/details?id=org.me.mobiexpensifyg&hl=en_US&pli=1',
         OLD_DOT_IOS: 'https://apps.apple.com/us/app/expensify-expense-tracker/id471713959',
     },
@@ -403,7 +384,7 @@ var CONST = {
         ORDINAL_DAY_OF_MONTH: 'do',
         MONTH_DAY_YEAR_ORDINAL_FORMAT: 'MMMM do, yyyy',
         SECONDS_PER_DAY: 24 * 60 * 60,
-        MONTH_DAYS: MONTH_DAYS,
+        MONTH_DAYS,
     },
     SMS: {
         DOMAIN: '@expensify.sms',
@@ -694,12 +675,11 @@ var CONST = {
         MOBILE_WEB: 'mobileweb',
     },
     PLATFORM_SPECIFIC_KEYS: {
-        CTRL: (_b = {
-                DEFAULT: 'control'
-            },
-            _b[PLATFORM_OS_MACOS] = 'meta',
-            _b[PLATFORM_IOS] = 'meta',
-            _b),
+        CTRL: {
+            DEFAULT: 'control',
+            [PLATFORM_OS_MACOS]: 'meta',
+            [PLATFORM_IOS]: 'meta',
+        },
         SHIFT: {
             DEFAULT: 'shift',
         },
@@ -720,124 +700,113 @@ var CONST = {
             descriptionKey: 'search',
             shortcutKey: 'K',
             modifiers: ['CTRL'],
-            trigger: (_c = {
-                    DEFAULT: { input: 'k', modifierFlags: keyModifierControl }
-                },
-                _c[PLATFORM_OS_MACOS] = { input: 'k', modifierFlags: keyModifierCommand },
-                _c[PLATFORM_IOS] = { input: 'k', modifierFlags: keyModifierCommand },
-                _c),
+            trigger: {
+                DEFAULT: { input: 'k', modifierFlags: keyModifierControl },
+                [PLATFORM_OS_MACOS]: { input: 'k', modifierFlags: keyModifierCommand },
+                [PLATFORM_IOS]: { input: 'k', modifierFlags: keyModifierCommand },
+            },
             type: KEYBOARD_SHORTCUT_NAVIGATION_TYPE,
         },
         NEW_CHAT: {
             descriptionKey: 'newChat',
             shortcutKey: 'K',
             modifiers: ['CTRL', 'SHIFT'],
-            trigger: (_d = {
-                    DEFAULT: { input: 'k', modifierFlags: keyModifierShiftControl }
-                },
-                _d[PLATFORM_OS_MACOS] = { input: 'k', modifierFlags: keyModifierShiftCommand },
-                _d[PLATFORM_IOS] = { input: 'k', modifierFlags: keyModifierShiftCommand },
-                _d),
+            trigger: {
+                DEFAULT: { input: 'k', modifierFlags: keyModifierShiftControl },
+                [PLATFORM_OS_MACOS]: { input: 'k', modifierFlags: keyModifierShiftCommand },
+                [PLATFORM_IOS]: { input: 'k', modifierFlags: keyModifierShiftCommand },
+            },
             type: KEYBOARD_SHORTCUT_NAVIGATION_TYPE,
         },
         SHORTCUTS: {
             descriptionKey: 'openShortcutDialog',
             shortcutKey: 'J',
             modifiers: ['CTRL'],
-            trigger: (_e = {
-                    DEFAULT: { input: 'j', modifierFlags: keyModifierControl }
-                },
-                _e[PLATFORM_OS_MACOS] = { input: 'j', modifierFlags: keyModifierCommand },
-                _e[PLATFORM_IOS] = { input: 'j', modifierFlags: keyModifierCommand },
-                _e),
+            trigger: {
+                DEFAULT: { input: 'j', modifierFlags: keyModifierControl },
+                [PLATFORM_OS_MACOS]: { input: 'j', modifierFlags: keyModifierCommand },
+                [PLATFORM_IOS]: { input: 'j', modifierFlags: keyModifierCommand },
+            },
         },
         ESCAPE: {
             descriptionKey: 'escape',
             shortcutKey: 'Escape',
             modifiers: [],
-            trigger: (_f = {
-                    DEFAULT: { input: keyInputEscape }
-                },
-                _f[PLATFORM_OS_MACOS] = { input: keyInputEscape },
-                _f[PLATFORM_IOS] = { input: keyInputEscape },
-                _f),
+            trigger: {
+                DEFAULT: { input: keyInputEscape },
+                [PLATFORM_OS_MACOS]: { input: keyInputEscape },
+                [PLATFORM_IOS]: { input: keyInputEscape },
+            },
         },
         ENTER: {
             descriptionKey: null,
             shortcutKey: 'Enter',
             modifiers: [],
-            trigger: (_g = {
-                    DEFAULT: { input: keyInputEnter }
-                },
-                _g[PLATFORM_OS_MACOS] = { input: keyInputEnter },
-                _g[PLATFORM_IOS] = { input: keyInputEnter },
-                _g),
+            trigger: {
+                DEFAULT: { input: keyInputEnter },
+                [PLATFORM_OS_MACOS]: { input: keyInputEnter },
+                [PLATFORM_IOS]: { input: keyInputEnter },
+            },
         },
         CTRL_ENTER: {
             descriptionKey: null,
             shortcutKey: 'Enter',
             modifiers: ['CTRL'],
-            trigger: (_h = {
-                    DEFAULT: { input: keyInputEnter, modifierFlags: keyModifierControl }
-                },
-                _h[PLATFORM_OS_MACOS] = { input: keyInputEnter, modifierFlags: keyModifierCommand },
-                _h[PLATFORM_IOS] = { input: keyInputEnter, modifierFlags: keyModifierCommand },
-                _h),
+            trigger: {
+                DEFAULT: { input: keyInputEnter, modifierFlags: keyModifierControl },
+                [PLATFORM_OS_MACOS]: { input: keyInputEnter, modifierFlags: keyModifierCommand },
+                [PLATFORM_IOS]: { input: keyInputEnter, modifierFlags: keyModifierCommand },
+            },
         },
         COPY: {
             descriptionKey: 'copy',
             shortcutKey: 'C',
             modifiers: ['CTRL'],
-            trigger: (_j = {
-                    DEFAULT: { input: 'c', modifierFlags: keyModifierControl }
-                },
-                _j[PLATFORM_OS_MACOS] = { input: 'c', modifierFlags: keyModifierCommand },
-                _j[PLATFORM_IOS] = { input: 'c', modifierFlags: keyModifierCommand },
-                _j),
+            trigger: {
+                DEFAULT: { input: 'c', modifierFlags: keyModifierControl },
+                [PLATFORM_OS_MACOS]: { input: 'c', modifierFlags: keyModifierCommand },
+                [PLATFORM_IOS]: { input: 'c', modifierFlags: keyModifierCommand },
+            },
         },
         ARROW_UP: {
             descriptionKey: null,
             shortcutKey: 'ArrowUp',
             modifiers: [],
-            trigger: (_k = {
-                    DEFAULT: { input: keyInputUpArrow }
-                },
-                _k[PLATFORM_OS_MACOS] = { input: keyInputUpArrow },
-                _k[PLATFORM_IOS] = { input: keyInputUpArrow },
-                _k),
+            trigger: {
+                DEFAULT: { input: keyInputUpArrow },
+                [PLATFORM_OS_MACOS]: { input: keyInputUpArrow },
+                [PLATFORM_IOS]: { input: keyInputUpArrow },
+            },
         },
         ARROW_DOWN: {
             descriptionKey: null,
             shortcutKey: 'ArrowDown',
             modifiers: [],
-            trigger: (_l = {
-                    DEFAULT: { input: keyInputDownArrow }
-                },
-                _l[PLATFORM_OS_MACOS] = { input: keyInputDownArrow },
-                _l[PLATFORM_IOS] = { input: keyInputDownArrow },
-                _l),
+            trigger: {
+                DEFAULT: { input: keyInputDownArrow },
+                [PLATFORM_OS_MACOS]: { input: keyInputDownArrow },
+                [PLATFORM_IOS]: { input: keyInputDownArrow },
+            },
         },
         ARROW_LEFT: {
             descriptionKey: null,
             shortcutKey: 'ArrowLeft',
             modifiers: [],
-            trigger: (_m = {
-                    DEFAULT: { input: keyInputLeftArrow }
-                },
-                _m[PLATFORM_OS_MACOS] = { input: keyInputLeftArrow },
-                _m[PLATFORM_IOS] = { input: keyInputLeftArrow },
-                _m),
+            trigger: {
+                DEFAULT: { input: keyInputLeftArrow },
+                [PLATFORM_OS_MACOS]: { input: keyInputLeftArrow },
+                [PLATFORM_IOS]: { input: keyInputLeftArrow },
+            },
         },
         ARROW_RIGHT: {
             descriptionKey: null,
             shortcutKey: 'ArrowRight',
             modifiers: [],
-            trigger: (_o = {
-                    DEFAULT: { input: keyInputRightArrow }
-                },
-                _o[PLATFORM_OS_MACOS] = { input: keyInputRightArrow },
-                _o[PLATFORM_IOS] = { input: keyInputRightArrow },
-                _o),
+            trigger: {
+                DEFAULT: { input: keyInputRightArrow },
+                [PLATFORM_OS_MACOS]: { input: keyInputRightArrow },
+                [PLATFORM_IOS]: { input: keyInputRightArrow },
+            },
         },
         TAB: {
             descriptionKey: null,
@@ -848,12 +817,11 @@ var CONST = {
             descriptionKey: 'openDebug',
             shortcutKey: 'D',
             modifiers: ['CTRL'],
-            trigger: (_p = {
-                    DEFAULT: { input: 'd', modifierFlags: keyModifierControl }
-                },
-                _p[PLATFORM_OS_MACOS] = { input: 'd', modifierFlags: keyModifierCommand },
-                _p[PLATFORM_IOS] = { input: 'd', modifierFlags: keyModifierCommand },
-                _p),
+            trigger: {
+                DEFAULT: { input: 'd', modifierFlags: keyModifierControl },
+                [PLATFORM_OS_MACOS]: { input: 'd', modifierFlags: keyModifierCommand },
+                [PLATFORM_IOS]: { input: 'd', modifierFlags: keyModifierCommand },
+            },
         },
         BACKSPACE: {
             descriptionKey: null,
@@ -893,32 +861,32 @@ var CONST = {
     TRIAL_DURATION_DAYS: 8,
     EXAMPLE_PHONE_NUMBER: '+15005550006',
     CONCIERGE_CHAT_NAME: 'Concierge',
-    CLOUDFRONT_URL: CLOUDFRONT_URL,
-    connectionsVideoPaths: connectionsVideoPaths,
-    EMPTY_ARRAY: EMPTY_ARRAY,
-    EMPTY_OBJECT: EMPTY_OBJECT,
-    DEFAULT_NUMBER_ID: DEFAULT_NUMBER_ID,
+    CLOUDFRONT_URL,
+    connectionsVideoPaths,
+    EMPTY_ARRAY,
+    EMPTY_OBJECT,
+    DEFAULT_NUMBER_ID,
     FAKE_REPORT_ID: 'FAKE_REPORT_ID',
-    USE_EXPENSIFY_URL: USE_EXPENSIFY_URL,
-    EXPENSIFY_URL: EXPENSIFY_URL,
-    EXPENSIFY_MOBILE_URL: EXPENSIFY_MOBILE_URL,
+    USE_EXPENSIFY_URL,
+    EXPENSIFY_URL,
+    EXPENSIFY_MOBILE_URL,
     GOOGLE_MEET_URL_ANDROID: 'https://meet.google.com',
     GOOGLE_DOC_IMAGE_LINK_MATCH: 'googleusercontent.com',
     IMAGE_BASE64_MATCH: 'base64',
     DEEPLINK_BASE_URL: 'new-expensify://',
     PDF_VIEWER_URL: '/pdf/web/viewer.html',
     CLOUDFRONT_DOMAIN_REGEX: /^https:\/\/\w+\.cloudfront\.net/i,
-    EXPENSIFY_ICON_URL: "".concat(CLOUDFRONT_URL, "/images/favicon-2019.png"),
-    CONCIERGE_ICON_URL_2021: "".concat(CLOUDFRONT_URL, "/images/icons/concierge_2021.png"),
-    CONCIERGE_ICON_URL: "".concat(CLOUDFRONT_URL, "/images/icons/concierge_2022.png"),
-    COMPANY_CARD_PLAID: "".concat(CLOUDFRONT_URL, "/images/plaid/"),
+    EXPENSIFY_ICON_URL: `${CLOUDFRONT_URL}/images/favicon-2019.png`,
+    CONCIERGE_ICON_URL_2021: `${CLOUDFRONT_URL}/images/icons/concierge_2021.png`,
+    CONCIERGE_ICON_URL: `${CLOUDFRONT_URL}/images/icons/concierge_2022.png`,
+    COMPANY_CARD_PLAID: `${CLOUDFRONT_URL}/images/plaid/`,
     UPWORK_URL: 'https://github.com/Expensify/App/issues?q=is%3Aopen+is%3Aissue+label%3A%22Help+Wanted%22',
     DEEP_DIVE_EXPENSIFY_CARD: 'https://community.expensify.com/discussion/4848/deep-dive-expensify-card-and-quickbooks-online-auto-reconciliation-how-it-works',
     DEEP_DIVE_ERECEIPTS: 'https://community.expensify.com/discussion/5542/deep-dive-what-are-ereceipts/',
     DEEP_DIVE_PER_DIEM: 'https://community.expensify.com/discussion/4772/how-to-add-a-single-rate-per-diem',
     SET_NOTIFICATION_LINK: 'https://community.expensify.com/discussion/5651/deep-dive-best-practices-when-youre-running-into-trouble-receiving-emails-from-expensify',
     GITHUB_URL: 'https://github.com/Expensify/App',
-    HELP_LINK_URL: "".concat(USE_EXPENSIFY_URL, "/usa-patriot-act"),
+    HELP_LINK_URL: `${USE_EXPENSIFY_URL}/usa-patriot-act`,
     REGISTRATION_NUMBER_HELP_URL: {
         AU: 'https://help.expensify.com/articles/new-expensify/wallet-and-payments/Global-Reimbursement-Australia',
         CA: 'https://help.expensify.com/articles/new-expensify/wallet-and-payments/Global-Reimbursement-Canada',
@@ -926,17 +894,17 @@ var CONST = {
         UK: 'https://help.expensify.com/articles/new-expensify/wallet-and-payments/Global-Reimbursement-United-Kingdom',
         US: 'https://help.expensify.com/articles/new-expensify/wallet-and-payments/Global-Reimbursement-United-States',
     },
-    ELECTRONIC_DISCLOSURES_URL: "".concat(USE_EXPENSIFY_URL, "/esignagreement"),
+    ELECTRONIC_DISCLOSURES_URL: `${USE_EXPENSIFY_URL}/esignagreement`,
     GITHUB_RELEASE_URL: 'https://api.github.com/repos/expensify/app/releases/latest',
     ADD_SECONDARY_LOGIN_URL: encodeURI('settings?param={"section":"account","openModal":"secondaryLogin"}'),
     MANAGE_CARDS_URL: 'domain_companycards',
-    FEES_URL: "".concat(EXPENSIFY_URL, "/fees"),
-    SAVE_WITH_EXPENSIFY_URL: "".concat(USE_EXPENSIFY_URL, "/savings-calculator"),
+    FEES_URL: `${EXPENSIFY_URL}/fees`,
+    SAVE_WITH_EXPENSIFY_URL: `${USE_EXPENSIFY_URL}/savings-calculator`,
     CFPB_PREPAID_URL: 'https://cfpb.gov/prepaid',
     STAGING_NEW_EXPENSIFY_URL: 'https://staging.new.expensify.com',
-    PR_TESTING_NEW_EXPENSIFY_URL: "https://".concat(react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.PULL_REQUEST_NUMBER, ".pr-testing.expensify.com"),
+    PR_TESTING_NEW_EXPENSIFY_URL: `https://${react_native_config_1.default?.PULL_REQUEST_NUMBER}.pr-testing.expensify.com`,
     NEWHELP_URL: 'https://help.expensify.com',
-    WHATS_NEW_URL: "".concat(USE_EXPENSIFY_URL, "/blog?category=Product%20Updates"),
+    WHATS_NEW_URL: `${USE_EXPENSIFY_URL}/blog?category=Product%20Updates`,
     INTERNAL_DEV_EXPENSIFY_URL: 'https://www.expensify.com.dev',
     IMPORT_TAGS_EXPENSIFY_URL: 'https://help.expensify.com/articles/expensify-classic/workspaces/Create-tags#import-a-spreadsheet-1',
     IMPORT_TAGS_EXPENSIFY_URL_DEPENDENT_TAGS: 'https://help.expensify.com/articles/expensify-classic/workspaces/Create-tags#multi-level-tags',
@@ -948,12 +916,12 @@ var CONST = {
     ONFIDO_PRIVACY_POLICY_URL: 'https://onfido.com/privacy/',
     ONFIDO_TERMS_OF_SERVICE_URL: 'https://onfido.com/terms-of-service/',
     LIST_OF_RESTRICTED_BUSINESSES: 'https://help.expensify.com/articles/expensify-classic/bank-accounts-and-payments/bank-accounts/Connect-US-Business-Bank-Account#are-there-certain-industries-or-businesses-for-which-expensify-cannot-process-automatic-in-app-payments',
-    TRAVEL_TERMS_URL: "".concat(EXPENSIFY_URL, "/travelterms"),
+    TRAVEL_TERMS_URL: `${EXPENSIFY_URL}/travelterms`,
     EXPENSIFY_PACKAGE_FOR_SAGE_INTACCT: 'https://www.expensify.com/tools/integrations/downloadPackage',
     EXPENSIFY_PACKAGE_FOR_SAGE_INTACCT_FILE_NAME: 'ExpensifyPackageForSageIntacct',
     SAGE_INTACCT_INSTRUCTIONS: 'https://help.expensify.com/articles/expensify-classic/integrations/accounting-integrations/Sage-Intacct',
     HOW_TO_CONNECT_TO_SAGE_INTACCT: 'https://help.expensify.com/articles/expensify-classic/integrations/accounting-integrations/Sage-Intacct#how-to-connect-to-sage-intacct',
-    PRICING: "https://www.expensify.com/pricing",
+    PRICING: `https://www.expensify.com/pricing`,
     COMPANY_CARDS_HELP: 'https://help.expensify.com/articles/expensify-classic/connect-credit-cards/company-cards/Commercial-Card-Feeds',
     COMPANY_CARDS_MASTERCARD_COMMERCIAL_CARDS: 'https://help.expensify.com/articles/new-expensify/connect-credit-cards/company-cards/Commercial-feeds#how-to-set-up-a-mastercard-commercial-feed',
     COMPANY_CARDS_DELIVERY_FILE_HELP: {
@@ -976,7 +944,7 @@ var CONST = {
     MERGE_ACCOUNT_HELP_URL: 'https://help.expensify.com/articles/new-expensify/settings/Merge-Accounts',
     CONNECT_A_BUSINESS_BANK_ACCOUNT_HELP_URL: 'https://help.expensify.com/articles/new-expensify/expenses-&-payments/Connect-a-Business-Bank-Account',
     REGISTER_FOR_WEBINAR_URL: 'https://events.zoom.us/eo/Aif1I8qCi1GZ7KnLnd1vwGPmeukSRoPjFpyFAZ2udQWn0-B86e1Z~AggLXsr32QYFjq8BlYLZ5I06Dg',
-    TEST_RECEIPT_URL: "".concat(CLOUDFRONT_URL, "/images/fake-receipt__tacotodds.png"),
+    TEST_RECEIPT_URL: `${CLOUDFRONT_URL}/images/fake-receipt__tacotodds.png`,
     // Use Environment.getEnvironmentURL to get the complete URL with port number
     DEV_NEW_EXPENSIFY_URL: 'https://dev.new.expensify.com:',
     STORYLANE: {
@@ -988,23 +956,23 @@ var CONST = {
         EMPLOYEE_TOUR_MOBILE: 'https://app.storylane.io/share/wckqdetaacgy?embed=inline',
     },
     OLD_DOT_PUBLIC_URLS: {
-        TERMS_URL: "".concat(EXPENSIFY_URL, "/terms"),
-        PRIVACY_URL: "".concat(EXPENSIFY_URL, "/privacy"),
-        LICENSES_URL: "".concat(USE_EXPENSIFY_URL, "/licenses"),
-        ACH_TERMS_URL: "".concat(EXPENSIFY_URL, "/achterms"),
-        WALLET_AGREEMENT_URL: "".concat(EXPENSIFY_URL, "/expensify-payments-wallet-terms-of-service"),
-        BANCORP_WALLET_AGREEMENT_URL: "".concat(EXPENSIFY_URL, "/bancorp-bank-wallet-terms-of-service"),
-        EXPENSIFY_APPROVED_PROGRAM_URL: "".concat(USE_EXPENSIFY_URL, "/accountants-program"),
+        TERMS_URL: `${EXPENSIFY_URL}/terms`,
+        PRIVACY_URL: `${EXPENSIFY_URL}/privacy`,
+        LICENSES_URL: `${USE_EXPENSIFY_URL}/licenses`,
+        ACH_TERMS_URL: `${EXPENSIFY_URL}/achterms`,
+        WALLET_AGREEMENT_URL: `${EXPENSIFY_URL}/expensify-payments-wallet-terms-of-service`,
+        BANCORP_WALLET_AGREEMENT_URL: `${EXPENSIFY_URL}/bancorp-bank-wallet-terms-of-service`,
+        EXPENSIFY_APPROVED_PROGRAM_URL: `${USE_EXPENSIFY_URL}/accountants-program`,
     },
     OLDDOT_URLS: {
         ADMIN_POLICIES_URL: 'admin_policies',
         ADMIN_DOMAINS_URL: 'admin_domains',
         INBOX: 'inbox',
-        POLICY_CONNECTIONS_URL: function (policyID) { return "policy?param={\"policyID\":\"".concat(policyID, "\"}#connections"); },
+        POLICY_CONNECTIONS_URL: (policyID) => `policy?param={"policyID":"${policyID}"}#connections`,
         SIGN_OUT: 'signout',
     },
-    EXPENSIFY_POLICY_DOMAIN: EXPENSIFY_POLICY_DOMAIN,
-    EXPENSIFY_POLICY_DOMAIN_EXTENSION: EXPENSIFY_POLICY_DOMAIN_EXTENSION,
+    EXPENSIFY_POLICY_DOMAIN,
+    EXPENSIFY_POLICY_DOMAIN_EXTENSION,
     SIGN_IN_FORM_WIDTH: 300,
     REQUEST_CODE_DELAY: 30,
     DEEPLINK_PROMPT_DENYLIST: [SCREENS_1.default.HOME, SCREENS_1.default.SIGN_IN_WITH_APPLE_DESKTOP, SCREENS_1.default.SIGN_IN_WITH_GOOGLE_DESKTOP],
@@ -1349,7 +1317,16 @@ var CONST = {
             BILL: 'bill',
         },
         CHAT_TYPE: chatTypes,
-        HELP_TYPE: __assign(__assign({}, chatTypes), { CHAT_CONCIERGE: 'concierge', EXPENSE_REPORT: 'expenseReport', EXPENSE: 'expense', CHAT: 'chat', IOU: 'iou', TASK: 'task', INVOICE: 'invoice' }),
+        HELP_TYPE: {
+            ...chatTypes,
+            CHAT_CONCIERGE: 'concierge',
+            EXPENSE_REPORT: 'expenseReport',
+            EXPENSE: 'expense',
+            CHAT: 'chat',
+            IOU: 'iou',
+            TASK: 'task',
+            INVOICE: 'invoice',
+        },
         WORKSPACE_CHAT_ROOMS: {
             ANNOUNCE: '#announce',
             ADMINS: '#admins',
@@ -1958,7 +1935,7 @@ var CONST = {
     SEARCH_SKELETON_VIEW_ITEM_HEIGHT: 108,
     EXPENSIFY_PARTNER_NAME: 'expensify.com',
     EXPENSIFY_MERCHANT: 'Expensify, Inc.',
-    EMAIL: EMAIL,
+    EMAIL,
     FULLSTORY: {
         CLASS: {
             MASK: 'fs-mask',
@@ -2399,25 +2376,25 @@ var CONST = {
         INDEX_LIST: ['1', '2', '3', '4'],
     },
     ACCOUNT_ID: {
-        ACCOUNTING: Number((_15 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_ACCOUNTING) !== null && _15 !== void 0 ? _15 : 9645353),
-        ACCOUNTS_PAYABLE: Number((_16 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_ACCOUNTS_PAYABLE) !== null && _16 !== void 0 ? _16 : 10903701),
-        ADMIN: Number((_17 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_ADMIN) !== null && _17 !== void 0 ? _17 : -1),
-        BILLS: Number((_18 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_BILLS) !== null && _18 !== void 0 ? _18 : 1371),
-        CHRONOS: Number((_19 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_CHRONOS) !== null && _19 !== void 0 ? _19 : 10027416),
-        CONCIERGE: Number((_20 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_CONCIERGE) !== null && _20 !== void 0 ? _20 : 8392101),
-        CONTRIBUTORS: Number((_21 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_CONTRIBUTORS) !== null && _21 !== void 0 ? _21 : 9675014),
-        FIRST_RESPONDER: Number((_22 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_FIRST_RESPONDER) !== null && _22 !== void 0 ? _22 : 9375152),
-        HELP: Number((_23 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_HELP) !== null && _23 !== void 0 ? _23 : -1),
-        INTEGRATION_TESTING_CREDS: Number((_24 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_INTEGRATION_TESTING_CREDS) !== null && _24 !== void 0 ? _24 : -1),
-        NOTIFICATIONS: Number((_25 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_NOTIFICATIONS) !== null && _25 !== void 0 ? _25 : 11665625),
-        PAYROLL: Number((_26 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_PAYROLL) !== null && _26 !== void 0 ? _26 : 9679724),
-        QA: Number((_27 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_QA) !== null && _27 !== void 0 ? _27 : 3126513),
-        QA_TRAVIS: Number((_28 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_QA_TRAVIS) !== null && _28 !== void 0 ? _28 : 8595733),
-        RECEIPTS: Number((_29 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_RECEIPTS) !== null && _29 !== void 0 ? _29 : -1),
-        REWARDS: Number((_30 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_REWARDS) !== null && _30 !== void 0 ? _30 : 11023767), // rewards@expensify.com
-        STUDENT_AMBASSADOR: Number((_31 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_STUDENT_AMBASSADOR) !== null && _31 !== void 0 ? _31 : 10476956),
-        SVFG: Number((_32 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_SVFG) !== null && _32 !== void 0 ? _32 : 2012843),
-        MANAGER_MCTEST: Number((_33 = react_native_config_1.default === null || react_native_config_1.default === void 0 ? void 0 : react_native_config_1.default.EXPENSIFY_ACCOUNT_ID_MANAGER_MCTEST) !== null && _33 !== void 0 ? _33 : 18964612),
+        ACCOUNTING: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_ACCOUNTING ?? 9645353),
+        ACCOUNTS_PAYABLE: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_ACCOUNTS_PAYABLE ?? 10903701),
+        ADMIN: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_ADMIN ?? -1),
+        BILLS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_BILLS ?? 1371),
+        CHRONOS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_CHRONOS ?? 10027416),
+        CONCIERGE: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_CONCIERGE ?? 8392101),
+        CONTRIBUTORS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_CONTRIBUTORS ?? 9675014),
+        FIRST_RESPONDER: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_FIRST_RESPONDER ?? 9375152),
+        HELP: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_HELP ?? -1),
+        INTEGRATION_TESTING_CREDS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_INTEGRATION_TESTING_CREDS ?? -1),
+        NOTIFICATIONS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_NOTIFICATIONS ?? 11665625),
+        PAYROLL: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_PAYROLL ?? 9679724),
+        QA: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_QA ?? 3126513),
+        QA_TRAVIS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_QA_TRAVIS ?? 8595733),
+        RECEIPTS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_RECEIPTS ?? -1),
+        REWARDS: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_REWARDS ?? 11023767), // rewards@expensify.com
+        STUDENT_AMBASSADOR: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_STUDENT_AMBASSADOR ?? 10476956),
+        SVFG: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_SVFG ?? 2012843),
+        MANAGER_MCTEST: Number(react_native_config_1.default?.EXPENSIFY_ACCOUNT_ID_MANAGER_MCTEST ?? 18964612),
     },
     ENVIRONMENT: {
         DEV: 'development',
@@ -3319,74 +3296,73 @@ var CONST = {
         },
     },
     get SUBSCRIPTION_PRICES() {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
-        return _a = {},
-            _a[this.PAYMENT_CARD_CURRENCY.USD] = (_b = {},
-                _b[this.POLICY.TYPE.CORPORATE] = (_c = {},
-                    _c[this.SUBSCRIPTION.TYPE.ANNUAL] = 900,
-                    _c[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 1800,
-                    _c[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _c),
-                _b[this.POLICY.TYPE.TEAM] = (_d = {},
-                    _d[this.SUBSCRIPTION.TYPE.ANNUAL] = 500,
-                    _d[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 1000,
-                    _d[this.SUBSCRIPTION.PRICING_TYPE_2025] = 500,
-                    _d[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _d),
-                _b),
-            _a[this.PAYMENT_CARD_CURRENCY.AUD] = (_e = {},
-                _e[this.POLICY.TYPE.CORPORATE] = (_f = {},
-                    _f[this.SUBSCRIPTION.TYPE.ANNUAL] = 1500,
-                    _f[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 3000,
-                    _f[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _f),
-                _e[this.POLICY.TYPE.TEAM] = (_g = {},
-                    _g[this.SUBSCRIPTION.TYPE.ANNUAL] = 700,
-                    _g[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 1400,
-                    _g[this.SUBSCRIPTION.PRICING_TYPE_2025] = 800,
-                    _g[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _g),
-                _e),
-            _a[this.PAYMENT_CARD_CURRENCY.GBP] = (_h = {},
-                _h[this.POLICY.TYPE.CORPORATE] = (_j = {},
-                    _j[this.SUBSCRIPTION.TYPE.ANNUAL] = 700,
-                    _j[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 1400,
-                    _j[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _j),
-                _h[this.POLICY.TYPE.TEAM] = (_k = {},
-                    _k[this.SUBSCRIPTION.TYPE.ANNUAL] = 400,
-                    _k[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 800,
-                    _k[this.SUBSCRIPTION.PRICING_TYPE_2025] = 500,
-                    _k[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _k),
-                _h),
-            _a[this.PAYMENT_CARD_CURRENCY.NZD] = (_l = {},
-                _l[this.POLICY.TYPE.CORPORATE] = (_m = {},
-                    _m[this.SUBSCRIPTION.TYPE.ANNUAL] = 1600,
-                    _m[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 3200,
-                    _m[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _m),
-                _l[this.POLICY.TYPE.TEAM] = (_o = {},
-                    _o[this.SUBSCRIPTION.TYPE.ANNUAL] = 800,
-                    _o[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 1600,
-                    _o[this.SUBSCRIPTION.PRICING_TYPE_2025] = 900,
-                    _o[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _o),
-                _l),
-            _a[this.PAYMENT_CARD_CURRENCY.EUR] = (_p = {},
-                _p[this.POLICY.TYPE.CORPORATE] = (_q = {},
-                    _q[this.SUBSCRIPTION.TYPE.ANNUAL] = 800,
-                    _q[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 1600,
-                    _q[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _q),
-                _p[this.POLICY.TYPE.TEAM] = (_r = {},
-                    _r[this.SUBSCRIPTION.TYPE.ANNUAL] = 500,
-                    _r[this.SUBSCRIPTION.TYPE.PAY_PER_USE] = 1000,
-                    _r[this.SUBSCRIPTION.PRICING_TYPE_2025] = 500,
-                    _r[this.SUBSCRIPTION.TYPE.INVOICING] = 0,
-                    _r),
-                _p),
-            _a;
+        return {
+            [this.PAYMENT_CARD_CURRENCY.USD]: {
+                [this.POLICY.TYPE.CORPORATE]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 900,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 1800,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+                [this.POLICY.TYPE.TEAM]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 500,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 1000,
+                    [this.SUBSCRIPTION.PRICING_TYPE_2025]: 500,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+            },
+            [this.PAYMENT_CARD_CURRENCY.AUD]: {
+                [this.POLICY.TYPE.CORPORATE]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 1500,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 3000,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+                [this.POLICY.TYPE.TEAM]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 700,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 1400,
+                    [this.SUBSCRIPTION.PRICING_TYPE_2025]: 800,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+            },
+            [this.PAYMENT_CARD_CURRENCY.GBP]: {
+                [this.POLICY.TYPE.CORPORATE]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 700,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 1400,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+                [this.POLICY.TYPE.TEAM]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 400,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 800,
+                    [this.SUBSCRIPTION.PRICING_TYPE_2025]: 500,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+            },
+            [this.PAYMENT_CARD_CURRENCY.NZD]: {
+                [this.POLICY.TYPE.CORPORATE]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 1600,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 3200,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+                [this.POLICY.TYPE.TEAM]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 800,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 1600,
+                    [this.SUBSCRIPTION.PRICING_TYPE_2025]: 900,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+            },
+            [this.PAYMENT_CARD_CURRENCY.EUR]: {
+                [this.POLICY.TYPE.CORPORATE]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 800,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 1600,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+                [this.POLICY.TYPE.TEAM]: {
+                    [this.SUBSCRIPTION.TYPE.ANNUAL]: 500,
+                    [this.SUBSCRIPTION.TYPE.PAY_PER_USE]: 1000,
+                    [this.SUBSCRIPTION.PRICING_TYPE_2025]: 500,
+                    [this.SUBSCRIPTION.TYPE.INVOICING]: 0,
+                },
+            },
+        };
     },
     REGEX: {
         SPECIAL_CHARS_WITHOUT_NEWLINE: /((?!\n)[()-\s\t])/g,
@@ -3435,16 +3411,16 @@ var CONST = {
         SPECIAL_CHAR: /[,/?"{}[\]()&^%;`$=#<>!*]/g,
         FIRST_SPACE: /.+?(?=\s)/,
         get SPECIAL_CHAR_OR_EMOJI() {
-            return new RegExp("[~\\n\\s]|(_\\b(?!$))|".concat(this.SPECIAL_CHAR.source, "|").concat(this.EMOJI.source), 'gu');
+            return new RegExp(`[~\\n\\s]|(_\\b(?!$))|${this.SPECIAL_CHAR.source}|${this.EMOJI.source}`, 'gu');
         },
         get SPACE_OR_EMOJI() {
-            return new RegExp("(\\s+|(?:".concat(this.EMOJI.source, ")+)"), 'gu');
+            return new RegExp(`(\\s+|(?:${this.EMOJI.source})+)`, 'gu');
         },
         // Define the regular expression pattern to find a potential end of a mention suggestion:
         // It might be a space, a newline character, an emoji, or a special character (excluding underscores & tildes, which might be used in usernames)
         get MENTION_BREAKER() {
             // currently breaks on newline **or** whitespace **or** punctuation/emojis
-            return new RegExp("[\\n\\s]|".concat(this.SPECIAL_CHAR_MENTION_BREAKER.source, "|").concat(this.EMOJI.source), 'gu');
+            return new RegExp(`[\\n\\s]|${this.SPECIAL_CHAR_MENTION_BREAKER.source}|${this.EMOJI.source}`, 'gu');
         },
         get ALL_EMOJIS() {
             return new RegExp(this.EMOJIS, this.EMOJIS.flags.concat('g'));
@@ -3468,7 +3444,7 @@ var CONST = {
         DISTANCE_MERCHANT: /^[0-9.]+ \w+ @ (-|-\()?[^0-9.\s]{1,3} ?[0-9.]+\)? \/ \w+$/,
         WHITESPACE: /\s+/g,
         get EXPENSIFY_POLICY_DOMAIN_NAME() {
-            return new RegExp("".concat(EXPENSIFY_POLICY_DOMAIN, "([a-zA-Z0-9]+)\\").concat(EXPENSIFY_POLICY_DOMAIN_EXTENSION));
+            return new RegExp(`${EXPENSIFY_POLICY_DOMAIN}([a-zA-Z0-9]+)\\${EXPENSIFY_POLICY_DOMAIN_EXTENSION}`);
         },
         /**
          * Matching task rule by group
@@ -3476,14 +3452,13 @@ var CONST = {
          * Group 2: Optional email group between \s+....\s* start rule with @+valid email or short mention
          * Group 3: Title is remaining characters
          */
-        TASK_TITLE_WITH_OPTIONAL_SHORT_MENTION: "^\\[\\]\\s+(?:@(?:".concat(EMAIL_WITH_OPTIONAL_DOMAIN.source, "))?\\s*([\\s\\S]*)"),
+        TASK_TITLE_WITH_OPTIONAL_SHORT_MENTION: `^\\[\\]\\s+(?:@(?:${EMAIL_WITH_OPTIONAL_DOMAIN.source}))?\\s*([\\s\\S]*)`,
     },
     PRONOUNS: {
         PREFIX: '__predefined_',
         SELF_SELECT: '__predefined_selfSelect',
     },
-    EXPENSIFY_EMAILS_OBJECT: Object.entries(EMAIL).reduce(function (prev, _a) {
-        var email = _a[1];
+    EXPENSIFY_EMAILS_OBJECT: Object.entries(EMAIL).reduce((prev, [, email]) => {
         // eslint-disable-next-line no-param-reassign
         prev[email] = true;
         return prev;
@@ -3529,7 +3504,7 @@ var CONST = {
             this.ACCOUNT_ID.STUDENT_AMBASSADOR,
             this.ACCOUNT_ID.SVFG,
             this.ACCOUNT_ID.MANAGER_MCTEST,
-        ].filter(function (id) { return id !== -1; });
+        ].filter((id) => id !== -1);
     },
     // Emails that profile view is prohibited
     get RESTRICTED_EMAILS() {
@@ -3629,20 +3604,20 @@ var CONST = {
         REPORT: 'report',
     },
     FOOTER: {
-        EXPENSE_MANAGEMENT_URL: "".concat(USE_EXPENSIFY_URL, "/expense-management"),
-        SPEND_MANAGEMENT_URL: "".concat(USE_EXPENSIFY_URL, "/spend-management"),
-        EXPENSE_REPORTS_URL: "".concat(USE_EXPENSIFY_URL, "/expense-reports"),
-        COMPANY_CARD_URL: "".concat(USE_EXPENSIFY_URL, "/company-credit-card"),
-        RECEIPT_SCANNING_URL: "".concat(USE_EXPENSIFY_URL, "/receipt-scanning-app"),
-        BILL_PAY_URL: "".concat(USE_EXPENSIFY_URL, "/bills"),
-        INVOICES_URL: "".concat(USE_EXPENSIFY_URL, "/invoices"),
-        PAYROLL_URL: "".concat(USE_EXPENSIFY_URL, "/payroll"),
-        TRAVEL_URL: "".concat(USE_EXPENSIFY_URL, "/travel"),
-        EXPENSIFY_APPROVED_URL: "".concat(USE_EXPENSIFY_URL, "/accountants"),
+        EXPENSE_MANAGEMENT_URL: `${USE_EXPENSIFY_URL}/expense-management`,
+        SPEND_MANAGEMENT_URL: `${USE_EXPENSIFY_URL}/spend-management`,
+        EXPENSE_REPORTS_URL: `${USE_EXPENSIFY_URL}/expense-reports`,
+        COMPANY_CARD_URL: `${USE_EXPENSIFY_URL}/company-credit-card`,
+        RECEIPT_SCANNING_URL: `${USE_EXPENSIFY_URL}/receipt-scanning-app`,
+        BILL_PAY_URL: `${USE_EXPENSIFY_URL}/bills`,
+        INVOICES_URL: `${USE_EXPENSIFY_URL}/invoices`,
+        PAYROLL_URL: `${USE_EXPENSIFY_URL}/payroll`,
+        TRAVEL_URL: `${USE_EXPENSIFY_URL}/travel`,
+        EXPENSIFY_APPROVED_URL: `${USE_EXPENSIFY_URL}/accountants`,
         PRESS_KIT_URL: 'https://we.are.expensify.com/press-kit',
-        SUPPORT_URL: "".concat(USE_EXPENSIFY_URL, "/support"),
-        TERMS_URL: "".concat(EXPENSIFY_URL, "/terms"),
-        PRIVACY_URL: "".concat(EXPENSIFY_URL, "/privacy"),
+        SUPPORT_URL: `${USE_EXPENSIFY_URL}/support`,
+        TERMS_URL: `${EXPENSIFY_URL}/terms`,
+        PRIVACY_URL: `${EXPENSIFY_URL}/privacy`,
         ABOUT_URL: 'https://we.are.expensify.com/how-we-got-here',
         BLOG_URL: 'https://blog.expensify.com/',
         JOBS_URL: 'https://we.are.expensify.com/apply',
@@ -4886,7 +4861,7 @@ var CONST = {
     BOOK_TRAVEL_DEMO_URL: 'https://calendly.com/d/ck2z-xsh-q97/expensify-travel-demo-travel-page',
     TRAVEL_DOT_URL: 'https://travel.expensify.com',
     STAGING_TRAVEL_DOT_URL: 'https://staging.travel.expensify.com',
-    TRIP_ID_PATH: function (tripID) { return (tripID ? "trips/".concat(tripID) : undefined); },
+    TRIP_ID_PATH: (tripID) => (tripID ? `trips/${tripID}` : undefined),
     TRIP_SUPPORT: '/support',
     SPOTNANA_TMC_ID: '8e8e7258-1cf3-48c0-9cd1-fe78a6e31eed',
     STAGING_SPOTNANA_TMC_ID: '7a290c6e-5328-4107-aff6-e48765845b81',
@@ -5162,8 +5137,8 @@ var CONST = {
             TRACK_EXPENSE: 'track-expenses',
         },
         'track-expenses': {
-            VIDEO_URL: "".concat(CLOUDFRONT_URL, "/videos/guided-setup-track-business-v2.mp4"),
-            LEARN_MORE_LINK: "".concat(USE_EXPENSIFY_URL, "/track-expenses"),
+            VIDEO_URL: `${CLOUDFRONT_URL}/videos/guided-setup-track-business-v2.mp4`,
+            LEARN_MORE_LINK: `${USE_EXPENSIFY_URL}/track-expenses`,
         },
         TEST_DRIVE_COVER_ASPECT_RATIO: 1000 / 508,
     },
@@ -5211,30 +5186,29 @@ var CONST = {
      * Bank account names (user friendly)
      */
     get BANK_NAMES_USER_FRIENDLY() {
-        var _a;
-        return _a = {},
-            _a[this.BANK_NAMES.EXPENSIFY] = 'Expensify',
-            _a[this.BANK_NAMES.AMERICAN_EXPRESS] = 'American Express',
-            _a[this.BANK_NAMES.BANK_OF_AMERICA] = 'Bank of America',
-            _a[this.BANK_NAMES.BB_T] = 'Truist',
-            _a[this.BANK_NAMES.CAPITAL_ONE] = 'Capital One',
-            _a[this.BANK_NAMES.CHASE] = 'Chase',
-            _a[this.BANK_NAMES.CHARLES_SCHWAB] = 'Charles Schwab',
-            _a[this.BANK_NAMES.CITIBANK] = 'Citibank',
-            _a[this.BANK_NAMES.CITIZENS_BANK] = 'Citizens',
-            _a[this.BANK_NAMES.DISCOVER] = 'Discover',
-            _a[this.BANK_NAMES.FIDELITY] = 'Fidelity',
-            _a[this.BANK_NAMES.GENERIC_BANK] = 'Bank',
-            _a[this.BANK_NAMES.HUNTINGTON_BANK] = 'Huntington',
-            _a[this.BANK_NAMES.HUNTINGTON_NATIONAL] = 'Huntington National',
-            _a[this.BANK_NAMES.NAVY_FEDERAL_CREDIT_UNION] = 'Navy Federal Credit Union',
-            _a[this.BANK_NAMES.PNC] = 'PNC',
-            _a[this.BANK_NAMES.REGIONS_BANK] = 'Regions',
-            _a[this.BANK_NAMES.SUNTRUST] = 'SunTrust',
-            _a[this.BANK_NAMES.TD_BANK] = 'TD Bank',
-            _a[this.BANK_NAMES.US_BANK] = 'U.S. Bank',
-            _a[this.BANK_NAMES.USAA] = 'USAA',
-            _a;
+        return {
+            [this.BANK_NAMES.EXPENSIFY]: 'Expensify',
+            [this.BANK_NAMES.AMERICAN_EXPRESS]: 'American Express',
+            [this.BANK_NAMES.BANK_OF_AMERICA]: 'Bank of America',
+            [this.BANK_NAMES.BB_T]: 'Truist',
+            [this.BANK_NAMES.CAPITAL_ONE]: 'Capital One',
+            [this.BANK_NAMES.CHASE]: 'Chase',
+            [this.BANK_NAMES.CHARLES_SCHWAB]: 'Charles Schwab',
+            [this.BANK_NAMES.CITIBANK]: 'Citibank',
+            [this.BANK_NAMES.CITIZENS_BANK]: 'Citizens',
+            [this.BANK_NAMES.DISCOVER]: 'Discover',
+            [this.BANK_NAMES.FIDELITY]: 'Fidelity',
+            [this.BANK_NAMES.GENERIC_BANK]: 'Bank',
+            [this.BANK_NAMES.HUNTINGTON_BANK]: 'Huntington',
+            [this.BANK_NAMES.HUNTINGTON_NATIONAL]: 'Huntington National',
+            [this.BANK_NAMES.NAVY_FEDERAL_CREDIT_UNION]: 'Navy Federal Credit Union',
+            [this.BANK_NAMES.PNC]: 'PNC',
+            [this.BANK_NAMES.REGIONS_BANK]: 'Regions',
+            [this.BANK_NAMES.SUNTRUST]: 'SunTrust',
+            [this.BANK_NAMES.TD_BANK]: 'TD Bank',
+            [this.BANK_NAMES.US_BANK]: 'U.S. Bank',
+            [this.BANK_NAMES.USAA]: 'USAA',
+        };
     },
     /**
      * Constants for maxToRenderPerBatch parameter that is used for FlatList or SectionList. This controls the amount of items rendered per batch, which is the next chunk of items
@@ -5373,15 +5347,15 @@ var CONST = {
     },
     MINI_CONTEXT_MENU_MAX_ITEMS: 4,
     EXPENSIFY_ICON_NAME: 'Expensify',
-    WELCOME_VIDEO_URL: "".concat(CLOUDFRONT_URL, "/videos/intro-1280.mp4"),
-    ONBOARDING_CHOICES: __assign({}, onboardingChoices),
-    SELECTABLE_ONBOARDING_CHOICES: __assign({}, selectableOnboardingChoices),
-    CREATE_EXPENSE_ONBOARDING_CHOICES: __assign({}, createExpenseOnboardingChoices),
-    ONBOARDING_SIGNUP_QUALIFIERS: __assign({}, signupQualifiers),
-    ONBOARDING_INVITE_TYPES: __assign({}, onboardingInviteTypes),
-    ONBOARDING_COMPANY_SIZE: __assign({}, onboardingCompanySize),
+    WELCOME_VIDEO_URL: `${CLOUDFRONT_URL}/videos/intro-1280.mp4`,
+    ONBOARDING_CHOICES: { ...onboardingChoices },
+    SELECTABLE_ONBOARDING_CHOICES: { ...selectableOnboardingChoices },
+    CREATE_EXPENSE_ONBOARDING_CHOICES: { ...createExpenseOnboardingChoices },
+    ONBOARDING_SIGNUP_QUALIFIERS: { ...signupQualifiers },
+    ONBOARDING_INVITE_TYPES: { ...onboardingInviteTypes },
+    ONBOARDING_COMPANY_SIZE: { ...onboardingCompanySize },
     ACTIONABLE_TRACK_EXPENSE_WHISPER_MESSAGE: 'What would you like to do with this expense?',
-    ONBOARDING_ACCOUNTING_MAPPING: ONBOARDING_ACCOUNTING_MAPPING,
+    ONBOARDING_ACCOUNTING_MAPPING,
     REPORT_FIELD_TITLE_FIELD_ID: 'text_title',
     MOBILE_PAGINATION_SIZE: 15,
     WEB_PAGINATION_SIZE: 30,
@@ -5441,7 +5415,668 @@ var CONST = {
         },
     },
     /* If we update these values, let's ensure this logic is consistent with the logic in the backend (Auth), since we're using the same method to calculate the rate value in distance requests created via Concierge. */
-    CURRENCY_TO_DEFAULT_MILEAGE_RATE: JSON.parse("{\n        \"AED\": {\n            \"rate\": 414,\n            \"unit\": \"km\"\n        },\n        \"AFN\": {\n            \"rate\": 8851,\n            \"unit\": \"km\"\n        },\n        \"ALL\": {\n            \"rate\": 10783,\n            \"unit\": \"km\"\n        },\n        \"AMD\": {\n            \"rate\": 45116,\n            \"unit\": \"km\"\n        },\n        \"ANG\": {\n            \"rate\": 203,\n            \"unit\": \"km\"\n        },\n        \"AOA\": {\n            \"rate\": 102929,\n            \"unit\": \"km\"\n        },\n        \"ARS\": {\n            \"rate\": 118428,\n            \"unit\": \"km\"\n        },\n        \"AUD\": {\n            \"rate\": 88,\n            \"unit\": \"km\"\n        },\n        \"AWG\": {\n            \"rate\": 203,\n            \"unit\": \"km\"\n        },\n        \"AZN\": {\n            \"rate\": 192,\n            \"unit\": \"km\"\n        },\n        \"BAM\": {\n            \"rate\": 212,\n            \"unit\": \"km\"\n        },\n        \"BBD\": {\n            \"rate\": 225,\n            \"unit\": \"km\"\n        },\n        \"BDT\": {\n            \"rate\": 13697,\n            \"unit\": \"km\"\n        },\n        \"BGN\": {\n            \"rate\": 211,\n            \"unit\": \"km\"\n        },\n        \"BHD\": {\n            \"rate\": 42,\n            \"unit\": \"km\"\n        },\n        \"BIF\": {\n            \"rate\": 331847,\n            \"unit\": \"km\"\n        },\n        \"BMD\": {\n            \"rate\": 113,\n            \"unit\": \"km\"\n        },\n        \"BND\": {\n            \"rate\": 153,\n            \"unit\": \"km\"\n        },\n        \"BOB\": {\n            \"rate\": 779,\n            \"unit\": \"km\"\n        },\n        \"BRL\": {\n            \"rate\": 660,\n            \"unit\": \"km\"\n        },\n        \"BSD\": {\n            \"rate\": 113,\n            \"unit\": \"km\"\n        },\n        \"BTN\": {\n            \"rate\": 9761,\n            \"unit\": \"km\"\n        },\n        \"BWP\": {\n            \"rate\": 1569,\n            \"unit\": \"km\"\n        },\n        \"BYN\": {\n            \"rate\": 369,\n            \"unit\": \"km\"\n        },\n        \"BYR\": {\n            \"rate\": 2255979,\n            \"unit\": \"km\"\n        },\n        \"BZD\": {\n            \"rate\": 227,\n            \"unit\": \"km\"\n        },\n        \"CAD\": {\n            \"rate\": 72,\n            \"unit\": \"km\"\n        },\n        \"CDF\": {\n            \"rate\": 321167,\n            \"unit\": \"km\"\n        },\n        \"CHF\": {\n            \"rate\": 76,\n            \"unit\": \"km\"\n        },\n        \"CLP\": {\n            \"rate\": 111689,\n            \"unit\": \"km\"\n        },\n        \"CNY\": {\n            \"rate\": 808,\n            \"unit\": \"km\"\n        },\n        \"COP\": {\n            \"rate\": 473791,\n            \"unit\": \"km\"\n        },\n        \"CRC\": {\n            \"rate\": 57190,\n            \"unit\": \"km\"\n        },\n        \"CUC\": {\n            \"rate\": 113,\n            \"unit\": \"km\"\n        },\n        \"CUP\": {\n            \"rate\": 2902,\n            \"unit\": \"km\"\n        },\n        \"CVE\": {\n            \"rate\": 11961,\n            \"unit\": \"km\"\n        },\n        \"CZK\": {\n            \"rate\": 2715,\n            \"unit\": \"km\"\n        },\n        \"DJF\": {\n            \"rate\": 19956,\n            \"unit\": \"km\"\n        },\n        \"DKK\": {\n            \"rate\": 381,\n            \"unit\": \"km\"\n        },\n        \"DOP\": {\n            \"rate\": 6948,\n            \"unit\": \"km\"\n        },\n        \"DZD\": {\n            \"rate\": 15226,\n            \"unit\": \"km\"\n        },\n        \"EEK\": {\n            \"rate\": 1646,\n            \"unit\": \"km\"\n        },\n        \"EGP\": {\n            \"rate\": 5657,\n            \"unit\": \"km\"\n        },\n        \"ERN\": {\n            \"rate\": 1690,\n            \"unit\": \"km\"\n        },\n        \"ETB\": {\n            \"rate\": 14326,\n            \"unit\": \"km\"\n        },\n        \"EUR\": {\n            \"rate\": 30,\n            \"unit\": \"km\"\n        },\n        \"FJD\": {\n            \"rate\": 264,\n            \"unit\": \"km\"\n        },\n        \"FKP\": {\n            \"rate\": 90,\n            \"unit\": \"km\"\n        },\n        \"GBP\": {\n            \"rate\": 45,\n            \"unit\": \"mi\"\n        },\n        \"GEL\": {\n            \"rate\": 323,\n            \"unit\": \"km\"\n        },\n        \"GHS\": {\n            \"rate\": 1724,\n            \"unit\": \"km\"\n        },\n        \"GIP\": {\n            \"rate\": 90,\n            \"unit\": \"km\"\n        },\n        \"GMD\": {\n            \"rate\": 8111,\n            \"unit\": \"km\"\n        },\n        \"GNF\": {\n            \"rate\": 974619,\n            \"unit\": \"km\"\n        },\n        \"GTQ\": {\n            \"rate\": 872,\n            \"unit\": \"km\"\n        },\n        \"GYD\": {\n            \"rate\": 23585,\n            \"unit\": \"km\"\n        },\n        \"HKD\": {\n            \"rate\": 877,\n            \"unit\": \"km\"\n        },\n        \"HNL\": {\n            \"rate\": 2881,\n            \"unit\": \"km\"\n        },\n        \"HRK\": {\n            \"rate\": 814,\n            \"unit\": \"km\"\n        },\n        \"HTG\": {\n            \"rate\": 14734,\n            \"unit\": \"km\"\n        },\n        \"HUF\": {\n            \"rate\": 44127,\n            \"unit\": \"km\"\n        },\n        \"IDR\": {\n            \"rate\": 1830066,\n            \"unit\": \"km\"\n        },\n        \"ILS\": {\n            \"rate\": 540,\n            \"unit\": \"km\"\n        },\n        \"INR\": {\n            \"rate\": 9761,\n            \"unit\": \"km\"\n        },\n        \"IQD\": {\n            \"rate\": 147577,\n            \"unit\": \"km\"\n        },\n        \"IRR\": {\n            \"rate\": 4741290,\n            \"unit\": \"km\"\n        },\n        \"ISK\": {\n            \"rate\": 15772,\n            \"unit\": \"km\"\n        },\n        \"JMD\": {\n            \"rate\": 17738,\n            \"unit\": \"km\"\n        },\n        \"JOD\": {\n            \"rate\": 80,\n            \"unit\": \"km\"\n        },\n        \"JPY\": {\n            \"rate\": 17542,\n            \"unit\": \"km\"\n        },\n        \"KES\": {\n            \"rate\": 14589,\n            \"unit\": \"km\"\n        },\n        \"KGS\": {\n            \"rate\": 9852,\n            \"unit\": \"km\"\n        },\n        \"KHR\": {\n            \"rate\": 453066,\n            \"unit\": \"km\"\n        },\n        \"KMF\": {\n            \"rate\": 53269,\n            \"unit\": \"km\"\n        },\n        \"KPW\": {\n            \"rate\": 101389,\n            \"unit\": \"km\"\n        },\n        \"KRW\": {\n            \"rate\": 162705,\n            \"unit\": \"km\"\n        },\n        \"KWD\": {\n            \"rate\": 35,\n            \"unit\": \"km\"\n        },\n        \"KYD\": {\n            \"rate\": 93,\n            \"unit\": \"km\"\n        },\n        \"KZT\": {\n            \"rate\": 58319,\n            \"unit\": \"km\"\n        },\n        \"LAK\": {\n            \"rate\": 2452802,\n            \"unit\": \"km\"\n        },\n        \"LBP\": {\n            \"rate\": 10093809,\n            \"unit\": \"km\"\n        },\n        \"LKR\": {\n            \"rate\": 33423,\n            \"unit\": \"km\"\n        },\n        \"LRD\": {\n            \"rate\": 22185,\n            \"unit\": \"km\"\n        },\n        \"LSL\": {\n            \"rate\": 2099,\n            \"unit\": \"km\"\n        },\n        \"LTL\": {\n            \"rate\": 364,\n            \"unit\": \"km\"\n        },\n        \"LVL\": {\n            \"rate\": 74,\n            \"unit\": \"km\"\n        },\n        \"LYD\": {\n            \"rate\": 554,\n            \"unit\": \"km\"\n        },\n        \"MAD\": {\n            \"rate\": 1127,\n            \"unit\": \"km\"\n        },\n        \"MDL\": {\n            \"rate\": 2084,\n            \"unit\": \"km\"\n        },\n        \"MGA\": {\n            \"rate\": 529635,\n            \"unit\": \"km\"\n        },\n        \"MKD\": {\n            \"rate\": 6650,\n            \"unit\": \"km\"\n        },\n        \"MMK\": {\n            \"rate\": 236413,\n            \"unit\": \"km\"\n        },\n        \"MNT\": {\n            \"rate\": 382799,\n            \"unit\": \"km\"\n        },\n        \"MOP\": {\n            \"rate\": 904,\n            \"unit\": \"km\"\n        },\n        \"MRO\": {\n            \"rate\": 40234,\n            \"unit\": \"km\"\n        },\n        \"MRU\": {\n            \"rate\": 4506,\n            \"unit\": \"km\"\n        },\n        \"MUR\": {\n            \"rate\": 5226,\n            \"unit\": \"km\"\n        },\n        \"MVR\": {\n            \"rate\": 1735,\n            \"unit\": \"km\"\n        },\n        \"MWK\": {\n            \"rate\": 195485,\n            \"unit\": \"km\"\n        },\n        \"MXN\": {\n            \"rate\": 93,\n            \"unit\": \"km\"\n        },\n        \"MYR\": {\n            \"rate\": 494,\n            \"unit\": \"km\"\n        },\n        \"MZN\": {\n            \"rate\": 7199,\n            \"unit\": \"km\"\n        },\n        \"NAD\": {\n            \"rate\": 2099,\n            \"unit\": \"km\"\n        },\n        \"NGN\": {\n            \"rate\": 174979,\n            \"unit\": \"km\"\n        },\n        \"NIO\": {\n            \"rate\": 4147,\n            \"unit\": \"km\"\n        },\n        \"NOK\": {\n            \"rate\": 350,\n            \"unit\": \"km\"\n        },\n        \"NPR\": {\n            \"rate\": 15617,\n            \"unit\": \"km\"\n        },\n        \"NZD\": {\n            \"rate\": 104,\n            \"unit\": \"km\"\n        },\n        \"OMR\": {\n            \"rate\": 43,\n            \"unit\": \"km\"\n        },\n        \"PAB\": {\n            \"rate\": 113,\n            \"unit\": \"km\"\n        },\n        \"PEN\": {\n            \"rate\": 420,\n            \"unit\": \"km\"\n        },\n        \"PGK\": {\n            \"rate\": 455,\n            \"unit\": \"km\"\n        },\n        \"PHP\": {\n            \"rate\": 6582,\n            \"unit\": \"km\"\n        },\n        \"PKR\": {\n            \"rate\": 31411,\n            \"unit\": \"km\"\n        },\n        \"PLN\": {\n            \"rate\": 89,\n            \"unit\": \"km\"\n        },\n        \"PYG\": {\n            \"rate\": 890772,\n            \"unit\": \"km\"\n        },\n        \"QAR\": {\n            \"rate\": 410,\n            \"unit\": \"km\"\n        },\n        \"RON\": {\n            \"rate\": 538,\n            \"unit\": \"km\"\n        },\n        \"RSD\": {\n            \"rate\": 12656,\n            \"unit\": \"km\"\n        },\n        \"RUB\": {\n            \"rate\": 11182,\n            \"unit\": \"km\"\n        },\n        \"RWF\": {\n            \"rate\": 156589,\n            \"unit\": \"km\"\n        },\n        \"SAR\": {\n            \"rate\": 423,\n            \"unit\": \"km\"\n        },\n        \"SBD\": {\n            \"rate\": 951,\n            \"unit\": \"km\"\n        },\n        \"SCR\": {\n            \"rate\": 1611,\n            \"unit\": \"km\"\n        },\n        \"SDG\": {\n            \"rate\": 67705,\n            \"unit\": \"km\"\n        },\n        \"SEK\": {\n            \"rate\": 250,\n            \"unit\": \"km\"\n        },\n        \"SGD\": {\n            \"rate\": 151,\n            \"unit\": \"km\"\n        },\n        \"SHP\": {\n            \"rate\": 90,\n            \"unit\": \"km\"\n        },\n        \"SLL\": {\n            \"rate\": 2362357,\n            \"unit\": \"km\"\n        },\n        \"SLE\": {\n            \"rate\": 2363,\n            \"unit\": \"km\"\n        },\n        \"SOS\": {\n            \"rate\": 64374,\n            \"unit\": \"km\"\n        },\n        \"SRD\": {\n            \"rate\": 3954,\n            \"unit\": \"km\"\n        },\n        \"STD\": {\n            \"rate\": 2510095,\n            \"unit\": \"km\"\n        },\n        \"STN\": {\n            \"rate\": 2683,\n            \"unit\": \"km\"\n        },\n        \"SVC\": {\n            \"rate\": 987,\n            \"unit\": \"km\"\n        },\n        \"SYP\": {\n            \"rate\": 1464664,\n            \"unit\": \"km\"\n        },\n        \"SZL\": {\n            \"rate\": 2099,\n            \"unit\": \"km\"\n        },\n        \"THB\": {\n            \"rate\": 3801,\n            \"unit\": \"km\"\n        },\n        \"TJS\": {\n            \"rate\": 1228,\n            \"unit\": \"km\"\n        },\n        \"TMT\": {\n            \"rate\": 394,\n            \"unit\": \"km\"\n        },\n        \"TND\": {\n            \"rate\": 360,\n            \"unit\": \"km\"\n        },\n        \"TOP\": {\n            \"rate\": 274,\n            \"unit\": \"km\"\n        },\n        \"TRY\": {\n            \"rate\": 4035,\n            \"unit\": \"km\"\n        },\n        \"TTD\": {\n            \"rate\": 763,\n            \"unit\": \"km\"\n        },\n        \"TWD\": {\n            \"rate\": 3703,\n            \"unit\": \"km\"\n        },\n        \"TZS\": {\n            \"rate\": 286235,\n            \"unit\": \"km\"\n        },\n        \"UAH\": {\n            \"rate\": 4725,\n            \"unit\": \"km\"\n        },\n        \"UGX\": {\n            \"rate\": 416016,\n            \"unit\": \"km\"\n        },\n        \"USD\": {\n            \"rate\": 70,\n            \"unit\": \"mi\"\n        },\n        \"UYU\": {\n            \"rate\": 4888,\n            \"unit\": \"km\"\n        },\n        \"UZS\": {\n            \"rate\": 1462038,\n            \"unit\": \"km\"\n        },\n        \"VEB\": {\n            \"rate\": 709737,\n            \"unit\": \"km\"\n        },\n        \"VEF\": {\n            \"rate\": 27993155,\n            \"unit\": \"km\"\n        },\n        \"VES\": {\n            \"rate\": 6457,\n            \"unit\": \"km\"\n        },\n        \"VND\": {\n            \"rate\": 2825526,\n            \"unit\": \"km\"\n        },\n        \"VUV\": {\n            \"rate\": 13358,\n            \"unit\": \"km\"\n        },\n        \"WST\": {\n            \"rate\": 315,\n            \"unit\": \"km\"\n        },\n        \"XAF\": {\n            \"rate\": 70811,\n            \"unit\": \"km\"\n        },\n        \"XCD\": {\n            \"rate\": 304,\n            \"unit\": \"km\"\n        },\n        \"XOF\": {\n            \"rate\": 70811,\n            \"unit\": \"km\"\n        },\n        \"XPF\": {\n            \"rate\": 12875,\n            \"unit\": \"km\"\n        },\n        \"YER\": {\n            \"rate\": 28003,\n            \"unit\": \"km\"\n        },\n        \"ZAR\": {\n            \"rate\": 484,\n            \"unit\": \"km\"\n        },\n        \"ZMK\": {\n            \"rate\": 591756,\n            \"unit\": \"km\"\n        },\n        \"ZMW\": {\n            \"rate\": 3148,\n            \"unit\": \"km\"\n        }\n    }"),
+    CURRENCY_TO_DEFAULT_MILEAGE_RATE: JSON.parse(`{
+        "AED": {
+            "rate": 414,
+            "unit": "km"
+        },
+        "AFN": {
+            "rate": 8851,
+            "unit": "km"
+        },
+        "ALL": {
+            "rate": 10783,
+            "unit": "km"
+        },
+        "AMD": {
+            "rate": 45116,
+            "unit": "km"
+        },
+        "ANG": {
+            "rate": 203,
+            "unit": "km"
+        },
+        "AOA": {
+            "rate": 102929,
+            "unit": "km"
+        },
+        "ARS": {
+            "rate": 118428,
+            "unit": "km"
+        },
+        "AUD": {
+            "rate": 88,
+            "unit": "km"
+        },
+        "AWG": {
+            "rate": 203,
+            "unit": "km"
+        },
+        "AZN": {
+            "rate": 192,
+            "unit": "km"
+        },
+        "BAM": {
+            "rate": 212,
+            "unit": "km"
+        },
+        "BBD": {
+            "rate": 225,
+            "unit": "km"
+        },
+        "BDT": {
+            "rate": 13697,
+            "unit": "km"
+        },
+        "BGN": {
+            "rate": 211,
+            "unit": "km"
+        },
+        "BHD": {
+            "rate": 42,
+            "unit": "km"
+        },
+        "BIF": {
+            "rate": 331847,
+            "unit": "km"
+        },
+        "BMD": {
+            "rate": 113,
+            "unit": "km"
+        },
+        "BND": {
+            "rate": 153,
+            "unit": "km"
+        },
+        "BOB": {
+            "rate": 779,
+            "unit": "km"
+        },
+        "BRL": {
+            "rate": 660,
+            "unit": "km"
+        },
+        "BSD": {
+            "rate": 113,
+            "unit": "km"
+        },
+        "BTN": {
+            "rate": 9761,
+            "unit": "km"
+        },
+        "BWP": {
+            "rate": 1569,
+            "unit": "km"
+        },
+        "BYN": {
+            "rate": 369,
+            "unit": "km"
+        },
+        "BYR": {
+            "rate": 2255979,
+            "unit": "km"
+        },
+        "BZD": {
+            "rate": 227,
+            "unit": "km"
+        },
+        "CAD": {
+            "rate": 72,
+            "unit": "km"
+        },
+        "CDF": {
+            "rate": 321167,
+            "unit": "km"
+        },
+        "CHF": {
+            "rate": 76,
+            "unit": "km"
+        },
+        "CLP": {
+            "rate": 111689,
+            "unit": "km"
+        },
+        "CNY": {
+            "rate": 808,
+            "unit": "km"
+        },
+        "COP": {
+            "rate": 473791,
+            "unit": "km"
+        },
+        "CRC": {
+            "rate": 57190,
+            "unit": "km"
+        },
+        "CUC": {
+            "rate": 113,
+            "unit": "km"
+        },
+        "CUP": {
+            "rate": 2902,
+            "unit": "km"
+        },
+        "CVE": {
+            "rate": 11961,
+            "unit": "km"
+        },
+        "CZK": {
+            "rate": 2715,
+            "unit": "km"
+        },
+        "DJF": {
+            "rate": 19956,
+            "unit": "km"
+        },
+        "DKK": {
+            "rate": 381,
+            "unit": "km"
+        },
+        "DOP": {
+            "rate": 6948,
+            "unit": "km"
+        },
+        "DZD": {
+            "rate": 15226,
+            "unit": "km"
+        },
+        "EEK": {
+            "rate": 1646,
+            "unit": "km"
+        },
+        "EGP": {
+            "rate": 5657,
+            "unit": "km"
+        },
+        "ERN": {
+            "rate": 1690,
+            "unit": "km"
+        },
+        "ETB": {
+            "rate": 14326,
+            "unit": "km"
+        },
+        "EUR": {
+            "rate": 30,
+            "unit": "km"
+        },
+        "FJD": {
+            "rate": 264,
+            "unit": "km"
+        },
+        "FKP": {
+            "rate": 90,
+            "unit": "km"
+        },
+        "GBP": {
+            "rate": 45,
+            "unit": "mi"
+        },
+        "GEL": {
+            "rate": 323,
+            "unit": "km"
+        },
+        "GHS": {
+            "rate": 1724,
+            "unit": "km"
+        },
+        "GIP": {
+            "rate": 90,
+            "unit": "km"
+        },
+        "GMD": {
+            "rate": 8111,
+            "unit": "km"
+        },
+        "GNF": {
+            "rate": 974619,
+            "unit": "km"
+        },
+        "GTQ": {
+            "rate": 872,
+            "unit": "km"
+        },
+        "GYD": {
+            "rate": 23585,
+            "unit": "km"
+        },
+        "HKD": {
+            "rate": 877,
+            "unit": "km"
+        },
+        "HNL": {
+            "rate": 2881,
+            "unit": "km"
+        },
+        "HRK": {
+            "rate": 814,
+            "unit": "km"
+        },
+        "HTG": {
+            "rate": 14734,
+            "unit": "km"
+        },
+        "HUF": {
+            "rate": 44127,
+            "unit": "km"
+        },
+        "IDR": {
+            "rate": 1830066,
+            "unit": "km"
+        },
+        "ILS": {
+            "rate": 540,
+            "unit": "km"
+        },
+        "INR": {
+            "rate": 9761,
+            "unit": "km"
+        },
+        "IQD": {
+            "rate": 147577,
+            "unit": "km"
+        },
+        "IRR": {
+            "rate": 4741290,
+            "unit": "km"
+        },
+        "ISK": {
+            "rate": 15772,
+            "unit": "km"
+        },
+        "JMD": {
+            "rate": 17738,
+            "unit": "km"
+        },
+        "JOD": {
+            "rate": 80,
+            "unit": "km"
+        },
+        "JPY": {
+            "rate": 17542,
+            "unit": "km"
+        },
+        "KES": {
+            "rate": 14589,
+            "unit": "km"
+        },
+        "KGS": {
+            "rate": 9852,
+            "unit": "km"
+        },
+        "KHR": {
+            "rate": 453066,
+            "unit": "km"
+        },
+        "KMF": {
+            "rate": 53269,
+            "unit": "km"
+        },
+        "KPW": {
+            "rate": 101389,
+            "unit": "km"
+        },
+        "KRW": {
+            "rate": 162705,
+            "unit": "km"
+        },
+        "KWD": {
+            "rate": 35,
+            "unit": "km"
+        },
+        "KYD": {
+            "rate": 93,
+            "unit": "km"
+        },
+        "KZT": {
+            "rate": 58319,
+            "unit": "km"
+        },
+        "LAK": {
+            "rate": 2452802,
+            "unit": "km"
+        },
+        "LBP": {
+            "rate": 10093809,
+            "unit": "km"
+        },
+        "LKR": {
+            "rate": 33423,
+            "unit": "km"
+        },
+        "LRD": {
+            "rate": 22185,
+            "unit": "km"
+        },
+        "LSL": {
+            "rate": 2099,
+            "unit": "km"
+        },
+        "LTL": {
+            "rate": 364,
+            "unit": "km"
+        },
+        "LVL": {
+            "rate": 74,
+            "unit": "km"
+        },
+        "LYD": {
+            "rate": 554,
+            "unit": "km"
+        },
+        "MAD": {
+            "rate": 1127,
+            "unit": "km"
+        },
+        "MDL": {
+            "rate": 2084,
+            "unit": "km"
+        },
+        "MGA": {
+            "rate": 529635,
+            "unit": "km"
+        },
+        "MKD": {
+            "rate": 6650,
+            "unit": "km"
+        },
+        "MMK": {
+            "rate": 236413,
+            "unit": "km"
+        },
+        "MNT": {
+            "rate": 382799,
+            "unit": "km"
+        },
+        "MOP": {
+            "rate": 904,
+            "unit": "km"
+        },
+        "MRO": {
+            "rate": 40234,
+            "unit": "km"
+        },
+        "MRU": {
+            "rate": 4506,
+            "unit": "km"
+        },
+        "MUR": {
+            "rate": 5226,
+            "unit": "km"
+        },
+        "MVR": {
+            "rate": 1735,
+            "unit": "km"
+        },
+        "MWK": {
+            "rate": 195485,
+            "unit": "km"
+        },
+        "MXN": {
+            "rate": 93,
+            "unit": "km"
+        },
+        "MYR": {
+            "rate": 494,
+            "unit": "km"
+        },
+        "MZN": {
+            "rate": 7199,
+            "unit": "km"
+        },
+        "NAD": {
+            "rate": 2099,
+            "unit": "km"
+        },
+        "NGN": {
+            "rate": 174979,
+            "unit": "km"
+        },
+        "NIO": {
+            "rate": 4147,
+            "unit": "km"
+        },
+        "NOK": {
+            "rate": 350,
+            "unit": "km"
+        },
+        "NPR": {
+            "rate": 15617,
+            "unit": "km"
+        },
+        "NZD": {
+            "rate": 104,
+            "unit": "km"
+        },
+        "OMR": {
+            "rate": 43,
+            "unit": "km"
+        },
+        "PAB": {
+            "rate": 113,
+            "unit": "km"
+        },
+        "PEN": {
+            "rate": 420,
+            "unit": "km"
+        },
+        "PGK": {
+            "rate": 455,
+            "unit": "km"
+        },
+        "PHP": {
+            "rate": 6582,
+            "unit": "km"
+        },
+        "PKR": {
+            "rate": 31411,
+            "unit": "km"
+        },
+        "PLN": {
+            "rate": 89,
+            "unit": "km"
+        },
+        "PYG": {
+            "rate": 890772,
+            "unit": "km"
+        },
+        "QAR": {
+            "rate": 410,
+            "unit": "km"
+        },
+        "RON": {
+            "rate": 538,
+            "unit": "km"
+        },
+        "RSD": {
+            "rate": 12656,
+            "unit": "km"
+        },
+        "RUB": {
+            "rate": 11182,
+            "unit": "km"
+        },
+        "RWF": {
+            "rate": 156589,
+            "unit": "km"
+        },
+        "SAR": {
+            "rate": 423,
+            "unit": "km"
+        },
+        "SBD": {
+            "rate": 951,
+            "unit": "km"
+        },
+        "SCR": {
+            "rate": 1611,
+            "unit": "km"
+        },
+        "SDG": {
+            "rate": 67705,
+            "unit": "km"
+        },
+        "SEK": {
+            "rate": 250,
+            "unit": "km"
+        },
+        "SGD": {
+            "rate": 151,
+            "unit": "km"
+        },
+        "SHP": {
+            "rate": 90,
+            "unit": "km"
+        },
+        "SLL": {
+            "rate": 2362357,
+            "unit": "km"
+        },
+        "SLE": {
+            "rate": 2363,
+            "unit": "km"
+        },
+        "SOS": {
+            "rate": 64374,
+            "unit": "km"
+        },
+        "SRD": {
+            "rate": 3954,
+            "unit": "km"
+        },
+        "STD": {
+            "rate": 2510095,
+            "unit": "km"
+        },
+        "STN": {
+            "rate": 2683,
+            "unit": "km"
+        },
+        "SVC": {
+            "rate": 987,
+            "unit": "km"
+        },
+        "SYP": {
+            "rate": 1464664,
+            "unit": "km"
+        },
+        "SZL": {
+            "rate": 2099,
+            "unit": "km"
+        },
+        "THB": {
+            "rate": 3801,
+            "unit": "km"
+        },
+        "TJS": {
+            "rate": 1228,
+            "unit": "km"
+        },
+        "TMT": {
+            "rate": 394,
+            "unit": "km"
+        },
+        "TND": {
+            "rate": 360,
+            "unit": "km"
+        },
+        "TOP": {
+            "rate": 274,
+            "unit": "km"
+        },
+        "TRY": {
+            "rate": 4035,
+            "unit": "km"
+        },
+        "TTD": {
+            "rate": 763,
+            "unit": "km"
+        },
+        "TWD": {
+            "rate": 3703,
+            "unit": "km"
+        },
+        "TZS": {
+            "rate": 286235,
+            "unit": "km"
+        },
+        "UAH": {
+            "rate": 4725,
+            "unit": "km"
+        },
+        "UGX": {
+            "rate": 416016,
+            "unit": "km"
+        },
+        "USD": {
+            "rate": 70,
+            "unit": "mi"
+        },
+        "UYU": {
+            "rate": 4888,
+            "unit": "km"
+        },
+        "UZS": {
+            "rate": 1462038,
+            "unit": "km"
+        },
+        "VEB": {
+            "rate": 709737,
+            "unit": "km"
+        },
+        "VEF": {
+            "rate": 27993155,
+            "unit": "km"
+        },
+        "VES": {
+            "rate": 6457,
+            "unit": "km"
+        },
+        "VND": {
+            "rate": 2825526,
+            "unit": "km"
+        },
+        "VUV": {
+            "rate": 13358,
+            "unit": "km"
+        },
+        "WST": {
+            "rate": 315,
+            "unit": "km"
+        },
+        "XAF": {
+            "rate": 70811,
+            "unit": "km"
+        },
+        "XCD": {
+            "rate": 304,
+            "unit": "km"
+        },
+        "XOF": {
+            "rate": 70811,
+            "unit": "km"
+        },
+        "XPF": {
+            "rate": 12875,
+            "unit": "km"
+        },
+        "YER": {
+            "rate": 28003,
+            "unit": "km"
+        },
+        "ZAR": {
+            "rate": 484,
+            "unit": "km"
+        },
+        "ZMK": {
+            "rate": 591756,
+            "unit": "km"
+        },
+        "ZMW": {
+            "rate": 3148,
+            "unit": "km"
+        }
+    }`),
     EXIT_SURVEY: {
         REASONS: {
             FEATURE_NOT_AVAILABLE: 'featureNotAvailable',
@@ -5740,12 +6375,11 @@ var CONST = {
             ATTENDEE: 'attendee',
         },
         get SEARCH_USER_FRIENDLY_VALUES_MAP() {
-            var _a;
-            return _a = {},
-                _a[this.TRANSACTION_TYPE.PER_DIEM] = 'per-diem',
-                _a[this.GROUP_BY.REPORTS] = 'report',
-                _a[this.STATUS.EXPENSE.DRAFTS] = 'draft',
-                _a;
+            return {
+                [this.TRANSACTION_TYPE.PER_DIEM]: 'per-diem',
+                [this.GROUP_BY.REPORTS]: 'report',
+                [this.STATUS.EXPENSE.DRAFTS]: 'draft',
+            };
         },
         DATE_MODIFIERS: {
             ON: 'On',
@@ -5856,79 +6490,77 @@ var CONST = {
     },
     DEFAULT_REPORT_METADATA: { isLoadingInitialReportActions: true },
     get UPGRADE_FEATURE_INTRO_MAPPING() {
-        var _a;
-        return _a = {
-                reportFields: {
-                    id: 'reportFields',
-                    alias: 'report-fields',
-                    name: 'Report Fields',
-                    title: 'workspace.upgrade.reportFields.title',
-                    description: 'workspace.upgrade.reportFields.description',
-                    icon: 'Pencil',
-                },
-                policyPreventMemberChangingTitle: {
-                    id: 'policyPreventMemberChangingTitle',
-                    alias: 'policy-prevent-member-changing-title',
-                    name: undefined,
-                },
-                categories: {
-                    id: 'categories',
-                    alias: 'categories',
-                    name: 'Categories',
-                    title: 'workspace.upgrade.categories.title',
-                    description: 'workspace.upgrade.categories.description',
-                    icon: 'FolderOpen',
-                },
-                multiLevelTags: {
-                    id: 'multiLevelTags',
-                    alias: 'multiLevelTags',
-                    name: 'Multi-level tags',
-                    title: 'workspace.upgrade.multiLevelTags.title',
-                    description: 'workspace.upgrade.multiLevelTags.description',
-                    icon: 'Tag',
-                }
+        return {
+            reportFields: {
+                id: 'reportFields',
+                alias: 'report-fields',
+                name: 'Report Fields',
+                title: 'workspace.upgrade.reportFields.title',
+                description: 'workspace.upgrade.reportFields.description',
+                icon: 'Pencil',
             },
-            _a[this.POLICY.CONNECTIONS.NAME.NETSUITE] = {
+            policyPreventMemberChangingTitle: {
+                id: 'policyPreventMemberChangingTitle',
+                alias: 'policy-prevent-member-changing-title',
+                name: undefined,
+            },
+            categories: {
+                id: 'categories',
+                alias: 'categories',
+                name: 'Categories',
+                title: 'workspace.upgrade.categories.title',
+                description: 'workspace.upgrade.categories.description',
+                icon: 'FolderOpen',
+            },
+            multiLevelTags: {
+                id: 'multiLevelTags',
+                alias: 'multiLevelTags',
+                name: 'Multi-level tags',
+                title: 'workspace.upgrade.multiLevelTags.title',
+                description: 'workspace.upgrade.multiLevelTags.description',
+                icon: 'Tag',
+            },
+            [this.POLICY.CONNECTIONS.NAME.NETSUITE]: {
                 id: this.POLICY.CONNECTIONS.NAME.NETSUITE,
                 alias: 'netsuite',
                 name: this.POLICY.CONNECTIONS.NAME_USER_FRIENDLY.netsuite,
-                title: "workspace.upgrade.".concat(this.POLICY.CONNECTIONS.NAME.NETSUITE, ".title"),
-                description: "workspace.upgrade.".concat(this.POLICY.CONNECTIONS.NAME.NETSUITE, ".description"),
+                title: `workspace.upgrade.${this.POLICY.CONNECTIONS.NAME.NETSUITE}.title`,
+                description: `workspace.upgrade.${this.POLICY.CONNECTIONS.NAME.NETSUITE}.description`,
                 icon: 'NetSuiteSquare',
             },
-            _a[this.POLICY.CONNECTIONS.NAME.SAGE_INTACCT] = {
+            [this.POLICY.CONNECTIONS.NAME.SAGE_INTACCT]: {
                 id: this.POLICY.CONNECTIONS.NAME.SAGE_INTACCT,
                 alias: 'sage-intacct',
                 name: this.POLICY.CONNECTIONS.NAME_USER_FRIENDLY.intacct,
-                title: "workspace.upgrade.".concat(this.POLICY.CONNECTIONS.NAME.SAGE_INTACCT, ".title"),
-                description: "workspace.upgrade.".concat(this.POLICY.CONNECTIONS.NAME.SAGE_INTACCT, ".description"),
+                title: `workspace.upgrade.${this.POLICY.CONNECTIONS.NAME.SAGE_INTACCT}.title`,
+                description: `workspace.upgrade.${this.POLICY.CONNECTIONS.NAME.SAGE_INTACCT}.description`,
                 icon: 'IntacctSquare',
             },
-            _a[this.POLICY.CONNECTIONS.NAME.QBD] = {
+            [this.POLICY.CONNECTIONS.NAME.QBD]: {
                 id: this.POLICY.CONNECTIONS.NAME.QBD,
                 alias: 'qbd',
                 name: this.POLICY.CONNECTIONS.NAME_USER_FRIENDLY.quickbooksDesktop,
-                title: "workspace.upgrade.".concat(this.POLICY.CONNECTIONS.NAME.QBD, ".title"),
-                description: "workspace.upgrade.".concat(this.POLICY.CONNECTIONS.NAME.QBD, ".description"),
+                title: `workspace.upgrade.${this.POLICY.CONNECTIONS.NAME.QBD}.title`,
+                description: `workspace.upgrade.${this.POLICY.CONNECTIONS.NAME.QBD}.description`,
                 icon: 'QBDSquare',
             },
-            _a.approvals = {
+            approvals: {
                 id: 'approvals',
                 alias: 'approvals',
                 name: 'Advanced Approvals',
-                title: "workspace.upgrade.approvals.title",
-                description: "workspace.upgrade.approvals.description",
+                title: `workspace.upgrade.approvals.title`,
+                description: `workspace.upgrade.approvals.description`,
                 icon: 'AdvancedApprovalsSquare',
             },
-            _a.multiApprovalLevels = {
+            multiApprovalLevels: {
                 id: 'multiApprovalLevels',
                 alias: 'multi-approval-levels',
                 name: 'Multiple approval levels',
-                title: "workspace.upgrade.multiApprovalLevels.title",
-                description: "workspace.upgrade.multiApprovalLevels.description",
+                title: `workspace.upgrade.multiApprovalLevels.title`,
+                description: `workspace.upgrade.multiApprovalLevels.description`,
                 icon: 'AdvancedApprovalsSquare',
             },
-            _a.glCodes = {
+            glCodes: {
                 id: 'glCodes',
                 alias: 'gl-codes',
                 name: 'GL codes',
@@ -5936,7 +6568,7 @@ var CONST = {
                 description: 'workspace.upgrade.glCodes.description',
                 icon: 'Tag',
             },
-            _a.glAndPayrollCodes = {
+            glAndPayrollCodes: {
                 id: 'glAndPayrollCodes',
                 alias: 'gl-and-payroll-codes',
                 name: 'GL & Payroll codes',
@@ -5944,7 +6576,7 @@ var CONST = {
                 description: 'workspace.upgrade.glAndPayrollCodes.description',
                 icon: 'FolderOpen',
             },
-            _a.taxCodes = {
+            taxCodes: {
                 id: 'taxCodes',
                 alias: 'tax-codes',
                 name: 'Tax codes',
@@ -5952,7 +6584,7 @@ var CONST = {
                 description: 'workspace.upgrade.taxCodes.description',
                 icon: 'Coins',
             },
-            _a.companyCards = {
+            companyCards: {
                 id: 'companyCards',
                 alias: 'company-cards',
                 name: 'Company Cards',
@@ -5960,7 +6592,7 @@ var CONST = {
                 description: 'workspace.upgrade.companyCards.description',
                 icon: 'CompanyCard',
             },
-            _a.rules = {
+            rules: {
                 id: 'rules',
                 alias: 'rules',
                 name: 'Rules',
@@ -5968,7 +6600,7 @@ var CONST = {
                 description: 'workspace.upgrade.rules.description',
                 icon: 'Rules',
             },
-            _a.perDiem = {
+            perDiem: {
                 id: 'perDiem',
                 alias: 'per-diem',
                 name: 'Per diem',
@@ -5976,7 +6608,7 @@ var CONST = {
                 description: 'workspace.upgrade.perDiem.description',
                 icon: 'PerDiem',
             },
-            _a.travel = {
+            travel: {
                 id: 'travel',
                 alias: 'travel',
                 name: 'Travel',
@@ -5984,7 +6616,7 @@ var CONST = {
                 description: 'workspace.upgrade.travel.description',
                 icon: 'Luggage',
             },
-            _a;
+        };
     },
     REPORT_FIELD_TYPES: {
         TEXT: 'text',
@@ -6008,7 +6640,7 @@ var CONST = {
     BOOT_SPLASH_STATE: {
         VISIBLE: 'visible',
         READY_TO_BE_HIDDEN: 'readyToBeHidden',
-        HIDDEN: "hidden",
+        HIDDEN: `hidden`,
     },
     CSV_IMPORT_COLUMNS: {
         EMAIL: 'email',
@@ -6257,7 +6889,7 @@ var CONST = {
         INVITE_ACCOUNTANT: 'inviteAccountant',
     },
 };
-var CONTINUATION_DETECTION_SEARCH_FILTER_KEYS = [
+const CONTINUATION_DETECTION_SEARCH_FILTER_KEYS = [
     CONST.SEARCH.SYNTAX_FILTER_KEYS.TO,
     CONST.SEARCH.SYNTAX_FILTER_KEYS.FROM,
     CONST.SEARCH.SYNTAX_FILTER_KEYS.ASSIGNEE,
@@ -6266,7 +6898,7 @@ var CONTINUATION_DETECTION_SEARCH_FILTER_KEYS = [
     CONST.SEARCH.SYNTAX_FILTER_KEYS.ATTENDEE,
 ];
 exports.CONTINUATION_DETECTION_SEARCH_FILTER_KEYS = CONTINUATION_DETECTION_SEARCH_FILTER_KEYS;
-var FEATURE_IDS = {
+const FEATURE_IDS = {
     CATEGORIES: 'categories',
     ACCOUNTING: 'accounting',
     COMPANY_CARDS: 'company-cards',
@@ -6279,11 +6911,11 @@ var FEATURE_IDS = {
     EXPENSIFY_CARD: 'expensify-card',
 };
 exports.FEATURE_IDS = FEATURE_IDS;
-var TASK_TO_FEATURE = (_q = {},
-    _q[CONST.ONBOARDING_TASK_TYPE.SETUP_CATEGORIES] = FEATURE_IDS.CATEGORIES,
-    _q[CONST.ONBOARDING_TASK_TYPE.ADD_ACCOUNTING_INTEGRATION] = FEATURE_IDS.ACCOUNTING,
-    _q[CONST.ONBOARDING_TASK_TYPE.CONNECT_CORPORATE_CARD] = FEATURE_IDS.COMPANY_CARDS,
-    _q[CONST.ONBOARDING_TASK_TYPE.SETUP_TAGS] = FEATURE_IDS.TAGS,
-    _q);
+const TASK_TO_FEATURE = {
+    [CONST.ONBOARDING_TASK_TYPE.SETUP_CATEGORIES]: FEATURE_IDS.CATEGORIES,
+    [CONST.ONBOARDING_TASK_TYPE.ADD_ACCOUNTING_INTEGRATION]: FEATURE_IDS.ACCOUNTING,
+    [CONST.ONBOARDING_TASK_TYPE.CONNECT_CORPORATE_CARD]: FEATURE_IDS.COMPANY_CARDS,
+    [CONST.ONBOARDING_TASK_TYPE.SETUP_TAGS]: FEATURE_IDS.TAGS,
+};
 exports.TASK_TO_FEATURE = TASK_TO_FEATURE;
 exports.default = CONST;

@@ -1,52 +1,51 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useNetwork_1 = require("@hooks/useNetwork");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePrevious_1 = require("@hooks/usePrevious");
-var Report_1 = require("@libs/actions/Report");
-var getComponentDisplayName_1 = require("@libs/getComponentDisplayName");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
-var LoadingPage_1 = require("@pages/LoadingPage");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var withReportOrNotFound_1 = require("./withReportOrNotFound");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullPageOfflineBlockingView_1 = require("@components/BlockingViews/FullPageOfflineBlockingView");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useNetwork_1 = require("@hooks/useNetwork");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePrevious_1 = require("@hooks/usePrevious");
+const Report_1 = require("@libs/actions/Report");
+const getComponentDisplayName_1 = require("@libs/getComponentDisplayName");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const NotFoundPage_1 = require("@pages/ErrorPage/NotFoundPage");
+const LoadingPage_1 = require("@pages/LoadingPage");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const withReportOrNotFound_1 = require("./withReportOrNotFound");
 function default_1(pageTitle) {
-    return function (WrappedComponent) {
+    return (WrappedComponent) => {
         // eslint-disable-next-line rulesdir/no-negated-variables
         function WithReportAndPrivateNotesOrNotFound(props) {
-            var _a, _b;
-            var translate = (0, useLocalize_1.default)().translate;
-            var isOffline = (0, useNetwork_1.default)().isOffline;
-            var session = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION)[0];
-            var route = props.route, report = props.report, reportMetadata = props.reportMetadata;
-            var reportNameValuePairs = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS).concat(report === null || report === void 0 ? void 0 : report.reportID))[0];
-            var accountID = ('accountID' in route.params && route.params.accountID) || '';
-            var isPrivateNotesFetchTriggered = (reportMetadata === null || reportMetadata === void 0 ? void 0 : reportMetadata.isLoadingPrivateNotes) !== undefined;
-            var prevIsOffline = (0, usePrevious_1.default)(isOffline);
-            var isReconnecting = prevIsOffline && !isOffline;
-            var isOtherUserNote = !!accountID && Number(session === null || session === void 0 ? void 0 : session.accountID) !== Number(accountID);
-            var isPrivateNotesFetchFinished = isPrivateNotesFetchTriggered && !reportMetadata.isLoadingPrivateNotes;
-            var isPrivateNotesUndefined = accountID ? ((_b = (_a = report === null || report === void 0 ? void 0 : report.privateNotes) === null || _a === void 0 ? void 0 : _a[Number(accountID)]) === null || _b === void 0 ? void 0 : _b.note) === undefined : (0, EmptyObject_1.isEmptyObject)(report === null || report === void 0 ? void 0 : report.privateNotes);
-            (0, react_1.useEffect)(function () {
+            const { translate } = (0, useLocalize_1.default)();
+            const { isOffline } = (0, useNetwork_1.default)();
+            const [session] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION);
+            const { route, report, reportMetadata } = props;
+            const [reportNameValuePairs] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS}${report?.reportID}`);
+            const accountID = ('accountID' in route.params && route.params.accountID) || '';
+            const isPrivateNotesFetchTriggered = reportMetadata?.isLoadingPrivateNotes !== undefined;
+            const prevIsOffline = (0, usePrevious_1.default)(isOffline);
+            const isReconnecting = prevIsOffline && !isOffline;
+            const isOtherUserNote = !!accountID && Number(session?.accountID) !== Number(accountID);
+            const isPrivateNotesFetchFinished = isPrivateNotesFetchTriggered && !reportMetadata.isLoadingPrivateNotes;
+            const isPrivateNotesUndefined = accountID ? report?.privateNotes?.[Number(accountID)]?.note === undefined : (0, EmptyObject_1.isEmptyObject)(report?.privateNotes);
+            (0, react_1.useEffect)(() => {
                 // Do not fetch private notes if isLoadingPrivateNotes is already defined, or if network is offline.
                 if ((isPrivateNotesFetchTriggered && !isReconnecting) || isOffline) {
                     return;
                 }
-                (0, Report_1.getReportPrivateNote)(report === null || report === void 0 ? void 0 : report.reportID);
+                (0, Report_1.getReportPrivateNote)(report?.reportID);
                 // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps -- do not add report.isLoadingPrivateNotes to dependencies
-            }, [report === null || report === void 0 ? void 0 : report.reportID, isOffline, isPrivateNotesFetchTriggered, isReconnecting]);
-            var shouldShowFullScreenLoadingIndicator = !isPrivateNotesFetchFinished;
+            }, [report?.reportID, isOffline, isPrivateNotesFetchTriggered, isReconnecting]);
+            const shouldShowFullScreenLoadingIndicator = !isPrivateNotesFetchFinished;
             // eslint-disable-next-line rulesdir/no-negated-variables
-            var shouldShowNotFoundPage = (0, react_1.useMemo)(function () {
+            const shouldShowNotFoundPage = (0, react_1.useMemo)(() => {
                 // Show not found view if the report is archived, or if the note is not of current user or if report is a self DM.
                 if ((0, ReportUtils_1.isArchivedReport)(reportNameValuePairs) || isOtherUserNote || (0, ReportUtils_1.isSelfDM)(report)) {
                     return true;
@@ -61,7 +60,7 @@ function default_1(pageTitle) {
             if (shouldShowFullScreenLoadingIndicator) {
                 if (isOffline) {
                     return (<ScreenWrapper_1.default shouldEnableMaxHeight includeSafeAreaPaddingBottom testID="PrivateNotesOfflinePage">
-                            <HeaderWithBackButton_1.default title={translate('privateNotes.title')} onBackButtonPress={function () { return Navigation_1.default.goBack(); }} shouldShowBackButton onCloseButtonPress={function () { return Navigation_1.default.dismissModal(); }}/>
+                            <HeaderWithBackButton_1.default title={translate('privateNotes.title')} onBackButtonPress={() => Navigation_1.default.goBack()} shouldShowBackButton onCloseButtonPress={() => Navigation_1.default.dismissModal()}/>
                             <FullPageOfflineBlockingView_1.default>
                                 <react_native_1.View />
                             </FullPageOfflineBlockingView_1.default>
@@ -74,9 +73,9 @@ function default_1(pageTitle) {
             }
             return (<WrappedComponent 
             // eslint-disable-next-line react/jsx-props-no-spreading
-            {...props} accountID={session === null || session === void 0 ? void 0 : session.accountID}/>);
+            {...props} accountID={session?.accountID}/>);
         }
-        WithReportAndPrivateNotesOrNotFound.displayName = "withReportAndPrivateNotesOrNotFound(".concat((0, getComponentDisplayName_1.default)(WrappedComponent), ")");
+        WithReportAndPrivateNotesOrNotFound.displayName = `withReportAndPrivateNotesOrNotFound(${(0, getComponentDisplayName_1.default)(WrappedComponent)})`;
         return (0, withReportOrNotFound_1.default)()(WithReportAndPrivateNotesOrNotFound);
     };
 }

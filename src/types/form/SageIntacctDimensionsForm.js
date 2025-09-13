@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var INPUT_IDS = {
+const INPUT_IDS = {
     INTEGRATION_NAME: 'integrationName',
     DIMENSION_TYPE: 'dimensionType',
 };

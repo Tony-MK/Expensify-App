@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var reportActionItemEventHandler = {
-    handleComposerLayoutChange: function () { return function () { }; },
+const reportActionItemEventHandler = {
+    handleComposerLayoutChange: () => () => { },
 };
 exports.default = reportActionItemEventHandler;

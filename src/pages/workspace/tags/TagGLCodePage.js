@@ -1,53 +1,51 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextInput_1 = require("@components/TextInput");
-var useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var usePolicy_1 = require("@hooks/usePolicy");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
-var Tag_1 = require("@userActions/Policy/Tag");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var SCREENS_1 = require("@src/SCREENS");
-var WorkspaceTagForm_1 = require("@src/types/form/WorkspaceTagForm");
-function TagGLCodePage(_a) {
-    var _b;
-    var route = _a.route;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var inputCallbackRef = (0, useAutoFocusInput_1.default)().inputCallbackRef;
-    var policyID = route.params.policyID;
-    var policy = (0, usePolicy_1.default)(policyID);
-    var backTo = route.params.backTo;
-    var policyTags = (0, useOnyx_1.default)("".concat(ONYXKEYS_1.default.COLLECTION.POLICY_TAGS).concat(policyID), { canBeMissing: true })[0];
-    var tagName = route.params.tagName;
-    var orderWeight = route.params.orderWeight;
-    var tags = (0, PolicyUtils_1.getTagListByOrderWeight)(policyTags, orderWeight).tags;
-    var glCode = (_b = tags === null || tags === void 0 ? void 0 : tags[route.params.tagName]) === null || _b === void 0 ? void 0 : _b['GL Code'];
-    var isQuickSettingsFlow = route.name === SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_GL_CODE;
-    var goBack = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextInput_1 = require("@components/TextInput");
+const useAutoFocusInput_1 = require("@hooks/useAutoFocusInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const usePolicy_1 = require("@hooks/usePolicy");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const AccessOrNotFoundWrapper_1 = require("@pages/workspace/AccessOrNotFoundWrapper");
+const Tag_1 = require("@userActions/Policy/Tag");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const SCREENS_1 = require("@src/SCREENS");
+const WorkspaceTagForm_1 = require("@src/types/form/WorkspaceTagForm");
+function TagGLCodePage({ route }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { inputCallbackRef } = (0, useAutoFocusInput_1.default)();
+    const policyID = route.params.policyID;
+    const policy = (0, usePolicy_1.default)(policyID);
+    const backTo = route.params.backTo;
+    const [policyTags] = (0, useOnyx_1.default)(`${ONYXKEYS_1.default.COLLECTION.POLICY_TAGS}${policyID}`, { canBeMissing: true });
+    const tagName = route.params.tagName;
+    const orderWeight = route.params.orderWeight;
+    const { tags } = (0, PolicyUtils_1.getTagListByOrderWeight)(policyTags, orderWeight);
+    const glCode = tags?.[route.params.tagName]?.['GL Code'];
+    const isQuickSettingsFlow = route.name === SCREENS_1.default.SETTINGS_TAGS.SETTINGS_TAG_GL_CODE;
+    const goBack = (0, react_1.useCallback)(() => {
         Navigation_1.default.goBack(isQuickSettingsFlow ? ROUTES_1.default.SETTINGS_TAG_SETTINGS.getRoute(policyID, orderWeight, tagName, backTo) : ROUTES_1.default.WORKSPACE_TAG_SETTINGS.getRoute(policyID, orderWeight, tagName));
     }, [orderWeight, policyID, tagName, isQuickSettingsFlow, backTo]);
-    var validate = (0, react_1.useCallback)(function (values) {
-        var errors = {};
-        var tagGLCode = values.glCode.trim();
+    const validate = (0, react_1.useCallback)((values) => {
+        const errors = {};
+        const tagGLCode = values.glCode.trim();
         if (tagGLCode.length > CONST_1.default.MAX_LENGTH_256) {
             errors.glCode = translate('common.error.characterLimitExceedCounter', { length: tagGLCode.length, limit: CONST_1.default.MAX_LENGTH_256 });
         }
         return errors;
     }, [translate]);
-    var editGLCode = (0, react_1.useCallback)(function (values) {
-        var newGLCode = values.glCode.trim();
+    const editGLCode = (0, react_1.useCallback)((values) => {
+        const newGLCode = values.glCode.trim();
         if (newGLCode !== glCode) {
             (0, Tag_1.setPolicyTagGLCode)(policyID, tagName, orderWeight, newGLCode);
         }

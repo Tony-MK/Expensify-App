@@ -20,22 +20,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param tooltipTargetWidth - The width of the tooltip's target
  * @param tooltipTargetHeight - The height of the tooltip's target
  */
-var isOverlappingAtTop = function (tooltip, xOffset, yOffset, tooltipTargetWidth, tooltipTargetHeight) {
+const isOverlappingAtTop = (tooltip, xOffset, yOffset, tooltipTargetWidth, tooltipTargetHeight) => {
     if (typeof document.elementFromPoint !== 'function') {
         return false;
     }
     // Use the x center position of the target to prevent wrong element returned by elementFromPoint
     // in case the target has a border radius or is a multiline text.
-    var targetCenterX = xOffset + tooltipTargetWidth / 2;
-    var elementAtTargetCenterX = document.elementFromPoint(targetCenterX, yOffset);
+    const targetCenterX = xOffset + tooltipTargetWidth / 2;
+    const elementAtTargetCenterX = document.elementFromPoint(targetCenterX, yOffset);
     // Ensure it's not the already rendered element of this very tooltip, so the tooltip doesn't try to "avoid" itself
     if (!elementAtTargetCenterX || ('contains' in tooltip && tooltip.contains(elementAtTargetCenterX))) {
         return false;
     }
-    var rectAtTargetCenterX = elementAtTargetCenterX.getBoundingClientRect();
+    const rectAtTargetCenterX = elementAtTargetCenterX.getBoundingClientRect();
     // Ensure it's not overlapping with another element by checking if the yOffset is greater than the top of the element
     // and less than the bottom of the element. Also ensure the tooltip target is not completely inside the elementAtTargetCenterX by vertical direction
-    var isOverlappingAtTargetCenterX = yOffset > rectAtTargetCenterX.top && yOffset < rectAtTargetCenterX.bottom && yOffset + tooltipTargetHeight > rectAtTargetCenterX.bottom;
+    const isOverlappingAtTargetCenterX = yOffset > rectAtTargetCenterX.top && yOffset < rectAtTargetCenterX.bottom && yOffset + tooltipTargetHeight > rectAtTargetCenterX.bottom;
     return isOverlappingAtTargetCenterX;
 };
 exports.default = isOverlappingAtTop;

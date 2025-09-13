@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var DatePicker_1 = require("@components/DatePicker");
-var FormProvider_1 = require("@components/Form/FormProvider");
-var InputWrapper_1 = require("@components/Form/InputWrapper");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-function EditReportFieldDatePage(_a) {
-    var fieldName = _a.fieldName, isRequired = _a.isRequired, onSubmit = _a.onSubmit, fieldValue = _a.fieldValue, fieldKey = _a.fieldKey;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var inputRef = (0, react_1.useRef)(null);
-    var validate = (0, react_1.useCallback)(function (value) {
-        var errors = {};
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const DatePicker_1 = require("@components/DatePicker");
+const FormProvider_1 = require("@components/Form/FormProvider");
+const InputWrapper_1 = require("@components/Form/InputWrapper");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+function EditReportFieldDatePage({ fieldName, isRequired, onSubmit, fieldValue, fieldKey }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const inputRef = (0, react_1.useRef)(null);
+    const validate = (0, react_1.useCallback)((value) => {
+        const errors = {};
         if (isRequired && value[fieldKey].trim() === '') {
             errors[fieldKey] = translate('common.error.fieldRequired');
         }

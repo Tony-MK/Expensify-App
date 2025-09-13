@@ -1,23 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_haptic_feedback_1 = require("react-native-haptic-feedback");
-var hapticFeedback = {
-    press: function () {
+const react_native_haptic_feedback_1 = require("react-native-haptic-feedback");
+const hapticFeedback = {
+    press: () => {
         react_native_haptic_feedback_1.default.trigger('impactLight', {
             enableVibrateFallback: true,
         });
     },
-    longPress: function () {
+    longPress: () => {
         react_native_haptic_feedback_1.default.trigger('impactHeavy', {
             enableVibrateFallback: true,
         });
     },
-    success: function () {
+    success: () => {
         react_native_haptic_feedback_1.default.trigger('notificationSuccess', {
             enableVibrateFallback: true,
         });
     },
-    error: function () {
+    error: () => {
         react_native_haptic_feedback_1.default.trigger('notificationError', {
             enableVibrateFallback: true,
         });

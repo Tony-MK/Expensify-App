@@ -1,39 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Modal_1 = require("@components/Modal");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var SelectionList_1 = require("@components/SelectionList");
-var RadioListItem_1 = require("@components/SelectionList/RadioListItem");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-function PaymentCardCurrencyModal(_a) {
-    var isVisible = _a.isVisible, currencies = _a.currencies, _b = _a.currentCurrency, currentCurrency = _b === void 0 ? CONST_1.default.PAYMENT_CARD_CURRENCY.USD : _b, onCurrencyChange = _a.onCurrencyChange, onClose = _a.onClose;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var sections = (0, react_1.useMemo)(function () { return ({
+const react_1 = require("react");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Modal_1 = require("@components/Modal");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const SelectionList_1 = require("@components/SelectionList");
+const RadioListItem_1 = require("@components/SelectionList/RadioListItem");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+function PaymentCardCurrencyModal({ isVisible, currencies, currentCurrency = CONST_1.default.PAYMENT_CARD_CURRENCY.USD, onCurrencyChange, onClose }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const { sections } = (0, react_1.useMemo)(() => ({
         sections: [
             {
-                data: currencies.map(function (currency) { return ({
+                data: currencies.map((currency) => ({
                     text: currency,
                     value: currency,
                     keyForList: currency,
                     isSelected: currency === currentCurrency,
-                }); }),
+                })),
             },
         ],
-    }); }, [currencies, currentCurrency]).sections;
-    return (<Modal_1.default type={CONST_1.default.MODAL.MODAL_TYPE.RIGHT_DOCKED} isVisible={isVisible} onClose={function () { return onClose === null || onClose === void 0 ? void 0 : onClose(); }} onModalHide={onClose} onBackdropPress={function () {
-            onClose === null || onClose === void 0 ? void 0 : onClose();
+    }), [currencies, currentCurrency]);
+    return (<Modal_1.default type={CONST_1.default.MODAL.MODAL_TYPE.RIGHT_DOCKED} isVisible={isVisible} onClose={() => onClose?.()} onModalHide={onClose} onBackdropPress={() => {
+            onClose?.();
             Navigation_1.default.dismissModal();
         }}>
             <ScreenWrapper_1.default style={styles.pb0} includePaddingTop={false} includeSafeAreaPaddingBottom={false} testID={PaymentCardCurrencyModal.displayName}>
                 <HeaderWithBackButton_1.default title={translate('common.currency')} onBackButtonPress={onClose}/>
-                <SelectionList_1.default sections={sections} onSelectRow={function (option) {
-            onCurrencyChange === null || onCurrencyChange === void 0 ? void 0 : onCurrencyChange(option.value);
+                <SelectionList_1.default sections={sections} onSelectRow={(option) => {
+            onCurrencyChange?.(option.value);
         }} initiallyFocusedOptionKey={currentCurrency} showScrollIndicator shouldStopPropagation shouldUseDynamicMaxToRenderPerBatch ListItem={RadioListItem_1.default}/>
             </ScreenWrapper_1.default>
         </Modal_1.default>);

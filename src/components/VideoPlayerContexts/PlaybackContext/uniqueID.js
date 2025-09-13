@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var uniqueIDForVideoWithoutReportRef = {
+const uniqueIDForVideoWithoutReportRef = {
     value: 1,
 };
 /**
@@ -30,7 +30,7 @@ var uniqueIDForVideoWithoutReportRef = {
 function uniqueIDForVideoWithoutReport() {
     return {
         get fakeReportID() {
-            return "NO_REPORT_ID_".concat(uniqueIDForVideoWithoutReportRef.value++);
+            return `NO_REPORT_ID_${uniqueIDForVideoWithoutReportRef.value++}`;
         },
     };
 }

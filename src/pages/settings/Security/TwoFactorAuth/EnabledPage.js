@@ -1,31 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var ConfirmModal_1 = require("@components/ConfirmModal");
-var Expensicons = require("@components/Icon/Expensicons");
-var Illustrations = require("@components/Icon/Illustrations");
-var MenuItem_1 = require("@components/MenuItem");
-var ScrollView_1 = require("@components/ScrollView");
-var Section_1 = require("@components/Section");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var TwoFactorAuthWrapper_1 = require("./TwoFactorAuthWrapper");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const ConfirmModal_1 = require("@components/ConfirmModal");
+const Expensicons = require("@components/Icon/Expensicons");
+const Illustrations = require("@components/Icon/Illustrations");
+const MenuItem_1 = require("@components/MenuItem");
+const ScrollView_1 = require("@components/ScrollView");
+const Section_1 = require("@components/Section");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const TwoFactorAuthWrapper_1 = require("./TwoFactorAuthWrapper");
 function EnabledPage() {
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var _a = (0, react_1.useState)(false), isVisible = _a[0], setIsVisible = _a[1];
-    var currentUserLogin = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: function (session) { return session === null || session === void 0 ? void 0 : session.email; } })[0];
-    var translate = (0, useLocalize_1.default)().translate;
-    var closeModal = (0, react_1.useCallback)(function () {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const [isVisible, setIsVisible] = (0, react_1.useState)(false);
+    const [currentUserLogin] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SESSION, { selector: (session) => session?.email });
+    const { translate } = (0, useLocalize_1.default)();
+    const closeModal = (0, react_1.useCallback)(() => {
         setIsVisible(false);
     }, []);
     return (<TwoFactorAuthWrapper_1.default stepName={CONST_1.default.TWO_FACTOR_AUTH_STEPS.ENABLED} title={translate('twoFactorAuth.headerTitle')} shouldEnableKeyboardAvoidingView={false}>
@@ -35,7 +35,7 @@ function EnabledPage() {
                         <Text_1.default style={styles.textLabel}>{translate('twoFactorAuth.whatIsTwoFactorAuth')}</Text_1.default>
                     </react_native_1.View>
                 </Section_1.default>
-                <MenuItem_1.default title={translate('twoFactorAuth.disableTwoFactorAuth')} onPress={function () {
+                <MenuItem_1.default title={translate('twoFactorAuth.disableTwoFactorAuth')} onPress={() => {
             if ((0, PolicyUtils_1.hasPolicyWithXeroConnection)(currentUserLogin)) {
                 setIsVisible(true);
                 return;

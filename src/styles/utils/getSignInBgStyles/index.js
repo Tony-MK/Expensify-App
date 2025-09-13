@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var getSignInBgStyles = function () { return ({}); };
+const getSignInBgStyles = () => ({});
 exports.default = getSignInBgStyles;

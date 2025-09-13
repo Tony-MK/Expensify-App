@@ -1,96 +1,92 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var MenuItem_1 = require("@components/MenuItem");
-var MenuItemList_1 = require("@components/MenuItemList");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var ProductTrainingContext_1 = require("@components/ProductTrainingContext");
-var ScrollOffsetContextProvider_1 = require("@components/ScrollOffsetContextProvider");
-var ScrollView_1 = require("@components/ScrollView");
-var SearchContext_1 = require("@components/Search/SearchContext");
-var Text_1 = require("@components/Text");
-var useDeleteSavedSearch_1 = require("@hooks/useDeleteSavedSearch");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useSearchTypeMenuSections_1 = require("@hooks/useSearchTypeMenuSections");
-var useSingleExecution_1 = require("@hooks/useSingleExecution");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Search_1 = require("@libs/actions/Search");
-var CardUtils_1 = require("@libs/CardUtils");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var PolicyUtils_1 = require("@libs/PolicyUtils");
-var SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
-var SearchUIUtils_1 = require("@libs/SearchUIUtils");
-var variables_1 = require("@styles/variables");
-var Expensicons = require("@src/components/Icon/Expensicons");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ROUTES_1 = require("@src/ROUTES");
-var SavedSearchItemThreeDotMenu_1 = require("./SavedSearchItemThreeDotMenu");
-function SearchTypeMenu(_a) {
-    var queryJSON = _a.queryJSON;
-    var _b = queryJSON !== null && queryJSON !== void 0 ? queryJSON : {}, hash = _b.hash, similarSearchHash = _b.similarSearchHash;
-    var styles = (0, useThemeStyles_1.default)();
-    var singleExecution = (0, useSingleExecution_1.default)().singleExecution;
-    var translate = (0, useLocalize_1.default)().translate;
-    var savedSearches = (0, useOnyx_1.default)(ONYXKEYS_1.default.SAVED_SEARCHES, { canBeMissing: true })[0];
-    var typeMenuSections = (0, useSearchTypeMenuSections_1.default)().typeMenuSections;
-    var isFocused = (0, native_1.useIsFocused)();
-    var _c = (0, ProductTrainingContext_1.useProductTrainingContext)(CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.RENAME_SAVED_SEARCH, !!typeMenuSections.find(function (section) { return section.translationPath === 'search.savedSearchesMenuItemTitle'; }) && isFocused), shouldShowSavedSearchTooltip = _c.shouldShowProductTrainingTooltip, renderSavedSearchTooltip = _c.renderProductTrainingTooltip, hideSavedSearchTooltip = _c.hideProductTrainingTooltip;
-    var _d = (0, ProductTrainingContext_1.useProductTrainingContext)(CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.EXPENSE_REPORTS_FILTER, true), shouldShowExpenseReportsTypeTooltip = _d.shouldShowProductTrainingTooltip, renderExpenseReportsTypeTooltip = _d.renderProductTrainingTooltip, hideExpenseReportsTypeTooltip = _d.hideProductTrainingTooltip;
-    var _e = (0, useDeleteSavedSearch_1.default)(), showDeleteModal = _e.showDeleteModal, DeleteConfirmModal = _e.DeleteConfirmModal;
-    var allPolicies = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true })[0];
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var reports = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: true })[0];
-    var userCardList = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: true })[0];
-    var workspaceCardFeeds = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: true })[0];
-    var allCards = (0, react_1.useMemo)(function () { return (0, CardUtils_1.mergeCardListWithWorkspaceFeeds)(workspaceCardFeeds !== null && workspaceCardFeeds !== void 0 ? workspaceCardFeeds : CONST_1.default.EMPTY_OBJECT, userCardList); }, [userCardList, workspaceCardFeeds]);
-    var allFeeds = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER, { canBeMissing: true })[0];
-    var taxRates = (0, PolicyUtils_1.getAllTaxRates)();
-    var clearSelectedTransactions = (0, SearchContext_1.useSearchContext)().clearSelectedTransactions;
-    var initialSearchKeys = (0, react_1.useRef)([]);
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const MenuItem_1 = require("@components/MenuItem");
+const MenuItemList_1 = require("@components/MenuItemList");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const ProductTrainingContext_1 = require("@components/ProductTrainingContext");
+const ScrollOffsetContextProvider_1 = require("@components/ScrollOffsetContextProvider");
+const ScrollView_1 = require("@components/ScrollView");
+const SearchContext_1 = require("@components/Search/SearchContext");
+const Text_1 = require("@components/Text");
+const useDeleteSavedSearch_1 = require("@hooks/useDeleteSavedSearch");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useSearchTypeMenuSections_1 = require("@hooks/useSearchTypeMenuSections");
+const useSingleExecution_1 = require("@hooks/useSingleExecution");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Search_1 = require("@libs/actions/Search");
+const CardUtils_1 = require("@libs/CardUtils");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const PolicyUtils_1 = require("@libs/PolicyUtils");
+const SearchQueryUtils_1 = require("@libs/SearchQueryUtils");
+const SearchUIUtils_1 = require("@libs/SearchUIUtils");
+const variables_1 = require("@styles/variables");
+const Expensicons = require("@src/components/Icon/Expensicons");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ROUTES_1 = require("@src/ROUTES");
+const SavedSearchItemThreeDotMenu_1 = require("./SavedSearchItemThreeDotMenu");
+function SearchTypeMenu({ queryJSON }) {
+    const { hash, similarSearchHash } = queryJSON ?? {};
+    const styles = (0, useThemeStyles_1.default)();
+    const { singleExecution } = (0, useSingleExecution_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [savedSearches] = (0, useOnyx_1.default)(ONYXKEYS_1.default.SAVED_SEARCHES, { canBeMissing: true });
+    const { typeMenuSections } = (0, useSearchTypeMenuSections_1.default)();
+    const isFocused = (0, native_1.useIsFocused)();
+    const { shouldShowProductTrainingTooltip: shouldShowSavedSearchTooltip, renderProductTrainingTooltip: renderSavedSearchTooltip, hideProductTrainingTooltip: hideSavedSearchTooltip, } = (0, ProductTrainingContext_1.useProductTrainingContext)(CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.RENAME_SAVED_SEARCH, !!typeMenuSections.find((section) => section.translationPath === 'search.savedSearchesMenuItemTitle') && isFocused);
+    const { shouldShowProductTrainingTooltip: shouldShowExpenseReportsTypeTooltip, renderProductTrainingTooltip: renderExpenseReportsTypeTooltip, hideProductTrainingTooltip: hideExpenseReportsTypeTooltip, } = (0, ProductTrainingContext_1.useProductTrainingContext)(CONST_1.default.PRODUCT_TRAINING_TOOLTIP_NAMES.EXPENSE_REPORTS_FILTER, true);
+    const { showDeleteModal, DeleteConfirmModal } = (0, useDeleteSavedSearch_1.default)();
+    const [allPolicies] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.POLICY, { canBeMissing: true });
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const [reports] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.REPORT, { canBeMissing: true });
+    const [userCardList] = (0, useOnyx_1.default)(ONYXKEYS_1.default.CARD_LIST, { canBeMissing: true });
+    const [workspaceCardFeeds] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.WORKSPACE_CARDS_LIST, { canBeMissing: true });
+    const allCards = (0, react_1.useMemo)(() => (0, CardUtils_1.mergeCardListWithWorkspaceFeeds)(workspaceCardFeeds ?? CONST_1.default.EMPTY_OBJECT, userCardList), [userCardList, workspaceCardFeeds]);
+    const [allFeeds] = (0, useOnyx_1.default)(ONYXKEYS_1.default.COLLECTION.SHARED_NVP_PRIVATE_DOMAIN_MEMBER, { canBeMissing: true });
+    const taxRates = (0, PolicyUtils_1.getAllTaxRates)();
+    const { clearSelectedTransactions } = (0, SearchContext_1.useSearchContext)();
+    const initialSearchKeys = (0, react_1.useRef)([]);
     // The first time we render all of the sections the user can see, we need to mark these as 'rendered', such that we
     // dont animate them in. We only animate in items that a user gains access to later on
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (initialSearchKeys.current.length) {
             return;
         }
-        initialSearchKeys.current = typeMenuSections.flatMap(function (section) {
-            return section.menuItems.map(function (item) { return item.key; });
+        initialSearchKeys.current = typeMenuSections.flatMap((section) => {
+            return section.menuItems.map((item) => item.key);
         });
     }, [typeMenuSections]);
-    var getOverflowMenu = (0, react_1.useCallback)(function (itemName, itemHash, itemQuery) { return (0, SearchUIUtils_1.getOverflowMenu)(itemName, itemHash, itemQuery, showDeleteModal); }, [showDeleteModal]);
-    var createSavedSearchMenuItem = (0, react_1.useCallback)(function (item, key, index) {
-        var _a;
-        var title = item.name;
+    const getOverflowMenu = (0, react_1.useCallback)((itemName, itemHash, itemQuery) => (0, SearchUIUtils_1.getOverflowMenu)(itemName, itemHash, itemQuery, showDeleteModal), [showDeleteModal]);
+    const createSavedSearchMenuItem = (0, react_1.useCallback)((item, key, index) => {
+        let title = item.name;
         if (title === item.query) {
-            var jsonQuery = (_a = (0, SearchQueryUtils_1.buildSearchQueryJSON)(item.query)) !== null && _a !== void 0 ? _a : {};
+            const jsonQuery = (0, SearchQueryUtils_1.buildSearchQueryJSON)(item.query) ?? {};
             title = (0, SearchQueryUtils_1.buildUserReadableQueryString)(jsonQuery, personalDetails, reports, taxRates, allCards, allFeeds, allPolicies);
         }
-        var isItemFocused = Number(key) === hash;
-        var baseMenuItem = (0, SearchUIUtils_1.createBaseSavedSearchMenuItem)(item, key, index, title, isItemFocused);
-        return __assign(__assign({}, baseMenuItem), { onPress: function () {
-                var _a;
+        const isItemFocused = Number(key) === hash;
+        const baseMenuItem = (0, SearchUIUtils_1.createBaseSavedSearchMenuItem)(item, key, index, title, isItemFocused);
+        return {
+            ...baseMenuItem,
+            onPress: () => {
                 (0, Search_1.clearAllFilters)();
-                Navigation_1.default.navigate(ROUTES_1.default.SEARCH_ROOT.getRoute({ query: (_a = item === null || item === void 0 ? void 0 : item.query) !== null && _a !== void 0 ? _a : '', name: item === null || item === void 0 ? void 0 : item.name }));
-            }, rightComponent: (<SavedSearchItemThreeDotMenu_1.default menuItems={getOverflowMenu(title, Number(key), item.query)} isDisabledItem={item.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE} hideProductTrainingTooltip={index === 0 && shouldShowSavedSearchTooltip ? hideSavedSearchTooltip : undefined} shouldRenderTooltip={index === 0 && shouldShowSavedSearchTooltip} renderTooltipContent={renderSavedSearchTooltip}/>), style: [styles.alignItemsCenter], tooltipAnchorAlignment: {
+                Navigation_1.default.navigate(ROUTES_1.default.SEARCH_ROOT.getRoute({ query: item?.query ?? '', name: item?.name }));
+            },
+            rightComponent: (<SavedSearchItemThreeDotMenu_1.default menuItems={getOverflowMenu(title, Number(key), item.query)} isDisabledItem={item.pendingAction === CONST_1.default.RED_BRICK_ROAD_PENDING_ACTION.DELETE} hideProductTrainingTooltip={index === 0 && shouldShowSavedSearchTooltip ? hideSavedSearchTooltip : undefined} shouldRenderTooltip={index === 0 && shouldShowSavedSearchTooltip} renderTooltipContent={renderSavedSearchTooltip}/>),
+            style: [styles.alignItemsCenter],
+            tooltipAnchorAlignment: {
                 horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.RIGHT,
                 vertical: CONST_1.default.MODAL.ANCHOR_ORIGIN_VERTICAL.BOTTOM,
-            }, tooltipShiftHorizontal: variables_1.default.savedSearchShiftHorizontal, tooltipShiftVertical: variables_1.default.savedSearchShiftVertical, tooltipWrapperStyle: [styles.mh4, styles.pv2, styles.productTrainingTooltipWrapper], renderTooltipContent: renderSavedSearchTooltip });
+            },
+            tooltipShiftHorizontal: variables_1.default.savedSearchShiftHorizontal,
+            tooltipShiftVertical: variables_1.default.savedSearchShiftVertical,
+            tooltipWrapperStyle: [styles.mh4, styles.pv2, styles.productTrainingTooltipWrapper],
+            renderTooltipContent: renderSavedSearchTooltip,
+        };
     }, [
         hash,
         getOverflowMenu,
@@ -108,10 +104,10 @@ function SearchTypeMenu(_a) {
         allFeeds,
         allPolicies,
     ]);
-    var route = (0, native_1.useRoute)();
-    var scrollViewRef = (0, react_1.useRef)(null);
-    var _f = (0, react_1.useContext)(ScrollOffsetContextProvider_1.ScrollOffsetContext), saveScrollOffset = _f.saveScrollOffset, getScrollOffset = _f.getScrollOffset;
-    var onScroll = (0, react_1.useCallback)(function (e) {
+    const route = (0, native_1.useRoute)();
+    const scrollViewRef = (0, react_1.useRef)(null);
+    const { saveScrollOffset, getScrollOffset } = (0, react_1.useContext)(ScrollOffsetContextProvider_1.ScrollOffsetContext);
+    const onScroll = (0, react_1.useCallback)((e) => {
         // If the layout measurement is 0, it means the flash list is not displayed but the onScroll may be triggered with offset value 0.
         // We should ignore this case.
         if (e.nativeEvent.layoutMeasurement.height === 0) {
@@ -119,24 +115,23 @@ function SearchTypeMenu(_a) {
         }
         saveScrollOffset(route, e.nativeEvent.contentOffset.y);
     }, [route, saveScrollOffset]);
-    (0, react_1.useLayoutEffect)(function () {
-        var scrollOffset = getScrollOffset(route);
+    (0, react_1.useLayoutEffect)(() => {
+        const scrollOffset = getScrollOffset(route);
         if (!scrollOffset || !scrollViewRef.current) {
             return;
         }
         scrollViewRef.current.scrollTo({ y: scrollOffset, animated: false });
     }, [getScrollOffset, route]);
-    var _g = (0, react_1.useMemo)(function () {
-        var savedSearchFocused = false;
+    const { savedSearchesMenuItems, isSavedSearchActive } = (0, react_1.useMemo)(() => {
+        let savedSearchFocused = false;
         if (!savedSearches) {
             return {
                 isSavedSearchActive: false,
                 savedSearchesMenuItems: [],
             };
         }
-        var menuItems = Object.entries(savedSearches).map(function (_a, index) {
-            var key = _a[0], item = _a[1];
-            var baseMenuItem = createSavedSearchMenuItem(item, key, index);
+        const menuItems = Object.entries(savedSearches).map(([key, item], index) => {
+            const baseMenuItem = createSavedSearchMenuItem(item, key, index);
             savedSearchFocused || (savedSearchFocused = !!baseMenuItem.focused);
             return baseMenuItem;
         });
@@ -144,19 +139,19 @@ function SearchTypeMenu(_a) {
             savedSearchesMenuItems: menuItems,
             isSavedSearchActive: savedSearchFocused,
         };
-    }, [createSavedSearchMenuItem, savedSearches]), savedSearchesMenuItems = _g.savedSearchesMenuItems, isSavedSearchActive = _g.isSavedSearchActive;
-    var renderSavedSearchesSection = (0, react_1.useCallback)(function (menuItems) { return (<MenuItemList_1.default menuItems={menuItems} wrapperStyle={styles.sectionMenuItem} icon={Expensicons.Bookmark} iconWidth={variables_1.default.iconSizeNormal} iconHeight={variables_1.default.iconSizeNormal} shouldUseSingleExecution/>); }, [styles]);
-    var activeItemIndex = (0, react_1.useMemo)(function () {
+    }, [createSavedSearchMenuItem, savedSearches]);
+    const renderSavedSearchesSection = (0, react_1.useCallback)((menuItems) => (<MenuItemList_1.default menuItems={menuItems} wrapperStyle={styles.sectionMenuItem} icon={Expensicons.Bookmark} iconWidth={variables_1.default.iconSizeNormal} iconHeight={variables_1.default.iconSizeNormal} shouldUseSingleExecution/>), [styles]);
+    const activeItemIndex = (0, react_1.useMemo)(() => {
         // If we have a suggested search, then none of the menu items are active
         if (isSavedSearchActive) {
             return -1;
         }
-        var flattenedMenuItems = typeMenuSections.map(function (section) { return section.menuItems; }).flat();
-        return flattenedMenuItems.findIndex(function (item) { return item.similarSearchHash === similarSearchHash; });
+        const flattenedMenuItems = typeMenuSections.map((section) => section.menuItems).flat();
+        return flattenedMenuItems.findIndex((item) => item.similarSearchHash === similarSearchHash);
     }, [similarSearchHash, isSavedSearchActive, typeMenuSections]);
     return (<ScrollView_1.default onScroll={onScroll} ref={scrollViewRef} showsVerticalScrollIndicator={false}>
             <react_native_1.View style={[styles.pb4, styles.mh3, styles.gap4]}>
-                {typeMenuSections.map(function (section, sectionIndex) { return (<react_native_1.View key={section.translationPath}>
+                {typeMenuSections.map((section, sectionIndex) => (<react_native_1.View key={section.translationPath}>
                         <Text_1.default style={styles.sectionTitle}>{translate(section.translationPath)}</Text_1.default>
 
                         {section.translationPath === 'search.savedSearchesMenuItemTitle' ? (<>
@@ -166,12 +161,12 @@ function SearchTypeMenu(_a) {
                 can play its exit animation instead of removing it instantly. */}
                                 {DeleteConfirmModal}
                             </>) : (<>
-                                {section.menuItems.map(function (item, itemIndex) {
-                    var previousItemCount = typeMenuSections.slice(0, sectionIndex).reduce(function (acc, sec) { return acc + sec.menuItems.length; }, 0);
-                    var flattenedIndex = previousItemCount + itemIndex;
-                    var focused = activeItemIndex === flattenedIndex;
-                    var shouldShowTooltip = item.translationPath === 'common.reports' && !focused && shouldShowExpenseReportsTypeTooltip;
-                    var onPress = singleExecution(function () {
+                                {section.menuItems.map((item, itemIndex) => {
+                    const previousItemCount = typeMenuSections.slice(0, sectionIndex).reduce((acc, sec) => acc + sec.menuItems.length, 0);
+                    const flattenedIndex = previousItemCount + itemIndex;
+                    const focused = activeItemIndex === flattenedIndex;
+                    const shouldShowTooltip = item.translationPath === 'common.reports' && !focused && shouldShowExpenseReportsTypeTooltip;
+                    const onPress = singleExecution(() => {
                         if (shouldShowTooltip) {
                             hideExpenseReportsTypeTooltip();
                         }
@@ -179,7 +174,7 @@ function SearchTypeMenu(_a) {
                         clearSelectedTransactions();
                         Navigation_1.default.navigate(ROUTES_1.default.SEARCH_ROOT.getRoute({ query: item.searchQuery }));
                     });
-                    var isInitialItem = !initialSearchKeys.current.length || initialSearchKeys.current.includes(item.key);
+                    const isInitialItem = !initialSearchKeys.current.length || initialSearchKeys.current.includes(item.key);
                     return (<react_native_reanimated_1.default.View key={item.translationPath} entering={!isInitialItem ? react_native_reanimated_1.FadeIn : undefined}>
                                             <MenuItem_1.default key={item.key} disabled={false} interactive title={translate(item.translationPath)} icon={item.icon} iconWidth={variables_1.default.iconSizeNormal} iconHeight={variables_1.default.iconSizeNormal} wrapperStyle={styles.sectionMenuItem} focused={focused} onPress={onPress} shouldIconUseAutoWidthStyle shouldRenderTooltip={shouldShowTooltip} renderTooltipContent={renderExpenseReportsTypeTooltip} tooltipAnchorAlignment={{
                             horizontal: CONST_1.default.MODAL.ANCHOR_ORIGIN_HORIZONTAL.LEFT,
@@ -188,7 +183,7 @@ function SearchTypeMenu(_a) {
                                         </react_native_reanimated_1.default.View>);
                 })}
                             </>)}
-                    </react_native_1.View>); })}
+                    </react_native_1.View>))}
             </react_native_1.View>
         </ScrollView_1.default>);
 }

@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
-var Modal_1 = require("@components/TestDrive/Modal");
-var createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
-var animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
-var SCREENS_1 = require("@src/SCREENS");
-var Stack = (0, createPlatformStackNavigator_1.default)();
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const NoDropZone_1 = require("@components/DragAndDrop/NoDropZone");
+const Modal_1 = require("@components/TestDrive/Modal");
+const createPlatformStackNavigator_1 = require("@libs/Navigation/PlatformStackNavigation/createPlatformStackNavigator");
+const animation_1 = require("@libs/Navigation/PlatformStackNavigation/navigationOptions/animation");
+const SCREENS_1 = require("@src/SCREENS");
+const Stack = (0, createPlatformStackNavigator_1.default)();
 function TestDriveModalNavigator() {
     return (<NoDropZone_1.default>
             <react_native_1.View>

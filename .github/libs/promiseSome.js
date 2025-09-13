@@ -7,18 +7,17 @@ exports.default = promiseSome;
  * If no promise passes the provided test, it rejects.
  */
 function promiseSome(promises, callbackFn) {
-    return new Promise(function (resolve, reject) {
-        for (var _i = 0, promises_1 = promises; _i < promises_1.length; _i++) {
-            var p = promises_1[_i];
+    return new Promise((resolve, reject) => {
+        for (const p of promises) {
             Promise.resolve(p)
-                .then(function (res) {
+                .then((res) => {
                 if (!callbackFn(res)) {
                     return;
                 }
                 resolve(true);
             })
-                .catch(function () { });
+                .catch(() => { });
         }
-        Promise.allSettled(promises).then(function () { return reject(); });
+        Promise.allSettled(promises).then(() => reject());
     });
 }

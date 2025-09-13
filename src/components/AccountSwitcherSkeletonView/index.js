@@ -1,21 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var react_native_svg_1 = require("react-native-svg");
-var SkeletonViewContentLoader_1 = require("@components/SkeletonViewContentLoader");
-var useStyleUtils_1 = require("@hooks/useStyleUtils");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-function AccountSwitcherSkeletonView(_a) {
-    var _b = _a.shouldAnimate, shouldAnimate = _b === void 0 ? true : _b, _c = _a.avatarSize, avatarSize = _c === void 0 ? CONST_1.default.AVATAR_SIZE.DEFAULT : _c;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var StyleUtils = (0, useStyleUtils_1.default)();
-    var avatarPlaceholderSize = StyleUtils.getAvatarSize(avatarSize);
-    var avatarPlaceholderRadius = avatarPlaceholderSize / 2;
-    var startPositionX = avatarPlaceholderRadius;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const react_native_svg_1 = require("react-native-svg");
+const SkeletonViewContentLoader_1 = require("@components/SkeletonViewContentLoader");
+const useStyleUtils_1 = require("@hooks/useStyleUtils");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+function AccountSwitcherSkeletonView({ shouldAnimate = true, avatarSize = CONST_1.default.AVATAR_SIZE.DEFAULT }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const StyleUtils = (0, useStyleUtils_1.default)();
+    const avatarPlaceholderSize = StyleUtils.getAvatarSize(avatarSize);
+    const avatarPlaceholderRadius = avatarPlaceholderSize / 2;
+    const startPositionX = avatarPlaceholderRadius;
     return (<react_native_1.View style={styles.avatarSectionWrapperSkeleton}>
             <SkeletonViewContentLoader_1.default animate={shouldAnimate} backgroundColor={theme.skeletonLHNIn} foregroundColor={theme.skeletonLHNOut} height={avatarPlaceholderSize}>
                 <react_native_svg_1.Circle cx={startPositionX} cy={avatarPlaceholderRadius} r={avatarPlaceholderRadius}/>

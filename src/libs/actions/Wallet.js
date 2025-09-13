@@ -13,12 +13,12 @@ exports.setKYCWallSource = setKYCWallSource;
 exports.resetWalletAdditionalDetailsDraft = resetWalletAdditionalDetailsDraft;
 exports.issuerEncryptPayloadCallback = issuerEncryptPayloadCallback;
 exports.createDigitalGoogleWallet = createDigitalGoogleWallet;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var Log_1 = require("@libs/Log");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var package_json_1 = require("../../../package.json");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const Log_1 = require("@libs/Log");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const package_json_1 = require("../../../package.json");
 /**
  * Fetch and save locally the Onfido SDK token and applicantID
  * - The sdkToken is used to initialize the Onfido SDK client
@@ -26,7 +26,7 @@ var package_json_1 = require("../../../package.json");
  *   identity check. Note: This happens in Web-Secure when we call Activate_Wallet during the OnfidoStep.
  */
 function openOnfidoFlow() {
-    var optimisticData = [
+    const optimisticData = [
         {
             // Use Onyx.set() since we are resetting the Onfido flow completely.
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
@@ -36,7 +36,7 @@ function openOnfidoFlow() {
             },
         },
     ];
-    var finallyData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.WALLET_ONFIDO,
@@ -45,23 +45,22 @@ function openOnfidoFlow() {
             },
         },
     ];
-    API.read(types_1.READ_COMMANDS.OPEN_ONFIDO_FLOW, null, { optimisticData: optimisticData, finallyData: finallyData });
+    API.read(types_1.READ_COMMANDS.OPEN_ONFIDO_FLOW, null, { optimisticData, finallyData });
 }
 function setAdditionalDetailsQuestions(questions, idNumber) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_ADDITIONAL_DETAILS, { questions: questions, idNumber: idNumber });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_ADDITIONAL_DETAILS, { questions, idNumber });
 }
 /**
  * Save the source that triggered the KYC wall and optionally the chat report ID associated with the IOU
  */
-function setKYCWallSource(source, chatReportID) {
-    if (chatReportID === void 0) { chatReportID = ''; }
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TERMS, { source: source, chatReportID: chatReportID });
+function setKYCWallSource(source, chatReportID = '') {
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.WALLET_TERMS, { source, chatReportID });
 }
 /**
  * Validates a user's provided details against a series of checks
  */
 function updatePersonalDetails(personalDetails) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.WALLET_ADDITIONAL_DETAILS,
@@ -72,7 +71,7 @@ function updatePersonalDetails(personalDetails) {
             },
         },
     ];
-    var finallyData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.WALLET_ADDITIONAL_DETAILS,
@@ -82,8 +81,8 @@ function updatePersonalDetails(personalDetails) {
         },
     ];
     API.write(types_1.WRITE_COMMANDS.UPDATE_PERSONAL_DETAILS_FOR_WALLET, personalDetails, {
-        optimisticData: optimisticData,
-        finallyData: finallyData,
+        optimisticData,
+        finallyData,
     });
 }
 /**
@@ -93,7 +92,7 @@ function updatePersonalDetails(personalDetails) {
  * API request to fetch the userWallet after we call VerifyIdentity
  */
 function verifyIdentity(parameters) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.WALLET_ONFIDO,
@@ -111,7 +110,7 @@ function verifyIdentity(parameters) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.WALLET_ONFIDO,
@@ -121,7 +120,7 @@ function verifyIdentity(parameters) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.WALLET_ONFIDO,
@@ -132,9 +131,9 @@ function verifyIdentity(parameters) {
         },
     ];
     API.write(types_1.WRITE_COMMANDS.VERIFY_IDENTITY, parameters, {
-        optimisticData: optimisticData,
-        successData: successData,
-        failureData: failureData,
+        optimisticData,
+        successData,
+        failureData,
     });
 }
 /**
@@ -143,7 +142,7 @@ function verifyIdentity(parameters) {
  * @param parameters.chatReportID When accepting the terms of wallet to pay an IOU, indicates the parent chat ID of the IOU
  */
 function acceptWalletTerms(parameters) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.WALLET_TERMS,
@@ -152,7 +151,7 @@ function acceptWalletTerms(parameters) {
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.WALLET_TERMS,
@@ -162,7 +161,7 @@ function acceptWalletTerms(parameters) {
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.USER_WALLET,
@@ -179,8 +178,8 @@ function acceptWalletTerms(parameters) {
             },
         },
     ];
-    var requestParams = { hasAcceptedTerms: parameters.hasAcceptedTerms, reportID: parameters.reportID };
-    API.write(types_1.WRITE_COMMANDS.ACCEPT_WALLET_TERMS, requestParams, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    const requestParams = { hasAcceptedTerms: parameters.hasAcceptedTerms, reportID: parameters.reportID };
+    API.write(types_1.WRITE_COMMANDS.ACCEPT_WALLET_TERMS, requestParams, { optimisticData, successData, failureData });
 }
 /**
  * Fetches data when the user opens the InitialSettingsPage
@@ -195,11 +194,11 @@ function openEnablePaymentsPage() {
     API.read(types_1.READ_COMMANDS.OPEN_ENABLE_PAYMENTS_PAGE, null);
 }
 function updateCurrentStep(currentStep) {
-    react_native_onyx_1.default.merge(ONYXKEYS_1.default.USER_WALLET, { currentStep: currentStep });
+    react_native_onyx_1.default.merge(ONYXKEYS_1.default.USER_WALLET, { currentStep });
 }
 function answerQuestionsForWallet(answers, idNumber) {
-    var idologyAnswers = JSON.stringify(answers);
-    var optimisticData = [
+    const idologyAnswers = JSON.stringify(answers);
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.WALLET_ADDITIONAL_DETAILS,
@@ -208,7 +207,7 @@ function answerQuestionsForWallet(answers, idNumber) {
             },
         },
     ];
-    var finallyData = [
+    const finallyData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
             key: ONYXKEYS_1.default.FORMS.WALLET_ADDITIONAL_DETAILS,
@@ -217,13 +216,13 @@ function answerQuestionsForWallet(answers, idNumber) {
             },
         },
     ];
-    var requestParams = {
-        idologyAnswers: idologyAnswers,
-        idNumber: idNumber,
+    const requestParams = {
+        idologyAnswers,
+        idNumber,
     };
     API.write(types_1.WRITE_COMMANDS.ANSWER_QUESTIONS_FOR_WALLET, requestParams, {
-        optimisticData: optimisticData,
-        finallyData: finallyData,
+        optimisticData,
+        finallyData,
     });
 }
 function resetWalletAdditionalDetailsDraft() {
@@ -234,20 +233,20 @@ function issuerEncryptPayloadCallback(nonce, nonceSignature, certificates) {
     return API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.CREATE_DIGITAL_WALLET, {
         platform: 'ios',
         appVersion: package_json_1.default.version,
-        certificates: JSON.stringify({ certificates: certificates }),
-        nonce: nonce,
-        nonceSignature: nonceSignature,
+        certificates: JSON.stringify({ certificates }),
+        nonce,
+        nonceSignature,
     })
-        .then(function (response) {
-        var data = response;
+        .then((response) => {
+        const data = response;
         return {
             encryptedPassData: data.encryptedPassData,
             activationData: data.activationData,
             ephemeralPublicKey: data.ephemeralPublicKey,
         };
     })
-        .catch(function (error) {
-        Log_1.default.warn("issuerEncryptPayloadCallback error: ".concat(error));
+        .catch((error) => {
+        Log_1.default.warn(`issuerEncryptPayloadCallback error: ${error}`);
         return {};
     });
 }
@@ -257,22 +256,21 @@ function issuerEncryptPayloadCallback(nonce, nonceSignature, certificates) {
  * @param walletAccountID ID of the wallet on user's phone
  * @param deviceID ID of user's phone
  */
-function createDigitalGoogleWallet(_a) {
-    var walletAccountID = _a.walletAccountID, deviceID = _a.deviceID, cardID = _a.cardID, cardHolderName = _a.cardHolderName;
+function createDigitalGoogleWallet({ walletAccountID, deviceID, cardID, cardHolderName, }) {
     // eslint-disable-next-line rulesdir/no-api-side-effects-method
     return API.makeRequestWithSideEffects(types_1.SIDE_EFFECT_REQUEST_COMMANDS.CREATE_DIGITAL_WALLET, {
         platform: 'android',
         appVersion: package_json_1.default.version,
-        walletAccountID: walletAccountID,
-        deviceID: deviceID,
-        cardID: cardID,
+        walletAccountID,
+        deviceID,
+        cardID,
     })
-        .then(function (response) {
-        var data = response;
+        .then((response) => {
+        const data = response;
         return {
             network: data.network,
             opaquePaymentCard: data.opaquePaymentCard,
-            cardHolderName: cardHolderName,
+            cardHolderName,
             lastDigits: data.lastDigits,
             userAddress: {
                 name: data.userAddress.name,
@@ -286,8 +284,8 @@ function createDigitalGoogleWallet(_a) {
             },
         };
     })
-        .catch(function (error) {
-        Log_1.default.warn("createDigitalGoogleWallet error: ".concat(error));
+        .catch((error) => {
+        Log_1.default.warn(`createDigitalGoogleWallet error: ${error}`);
         return {};
     });
 }

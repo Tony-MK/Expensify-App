@@ -2,18 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initialize = initialize;
 exports.getUpdateContext = getUpdateContext;
-var react_native_onyx_1 = require("react-native-onyx");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var betas;
-var betaConfiguration;
-var allReports;
-var allPolicies;
-var allReportNameValuePairs;
-var allTransactions;
-var isInitialized = false;
-var connectionsInitializedCount = 0;
-var totalConnections = 6;
-var initializationPromise = null;
+const react_native_onyx_1 = require("react-native-onyx");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+let betas;
+let betaConfiguration;
+let allReports;
+let allPolicies;
+let allReportNameValuePairs;
+let allTransactions;
+let isInitialized = false;
+let connectionsInitializedCount = 0;
+const totalConnections = 6;
+let initializationPromise = null;
 /**
  * Initialize persistent connections to Onyx data needed for OptimisticReportNames
  * This is called lazily when OptimisticReportNames functionality is first used
@@ -32,8 +32,8 @@ function initialize() {
     if (initializationPromise) {
         return initializationPromise;
     }
-    initializationPromise = new Promise(function (resolve) {
-        var incrementInitialization = function () {
+    initializationPromise = new Promise((resolve) => {
+        const incrementInitialization = () => {
             connectionsInitializedCount++;
             if (connectionsInitializedCount === totalConnections) {
                 isInitialized = true;
@@ -43,7 +43,7 @@ function initialize() {
         // Connect to BETAS
         react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.BETAS,
-            callback: function (val) {
+            callback: (val) => {
                 betas = val;
                 incrementInitialization();
             },
@@ -51,7 +51,7 @@ function initialize() {
         // Connect to BETA_CONFIGURATION
         react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.BETA_CONFIGURATION,
-            callback: function (val) {
+            callback: (val) => {
                 betaConfiguration = val;
                 incrementInitialization();
             },
@@ -60,9 +60,8 @@ function initialize() {
         react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.COLLECTION.REPORT,
             waitForCollectionCallback: true,
-            callback: function (val) {
-                var _a;
-                allReports = (_a = val) !== null && _a !== void 0 ? _a : {};
+            callback: (val) => {
+                allReports = val ?? {};
                 incrementInitialization();
             },
         });
@@ -70,9 +69,8 @@ function initialize() {
         react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.COLLECTION.POLICY,
             waitForCollectionCallback: true,
-            callback: function (val) {
-                var _a;
-                allPolicies = (_a = val) !== null && _a !== void 0 ? _a : {};
+            callback: (val) => {
+                allPolicies = val ?? {};
                 incrementInitialization();
             },
         });
@@ -80,9 +78,8 @@ function initialize() {
         react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.COLLECTION.REPORT_NAME_VALUE_PAIRS,
             waitForCollectionCallback: true,
-            callback: function (val) {
-                var _a;
-                allReportNameValuePairs = (_a = val) !== null && _a !== void 0 ? _a : {};
+            callback: (val) => {
+                allReportNameValuePairs = val ?? {};
                 incrementInitialization();
             },
         });
@@ -90,9 +87,8 @@ function initialize() {
         react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.COLLECTION.TRANSACTION,
             waitForCollectionCallback: true,
-            callback: function (val) {
-                var _a;
-                allTransactions = (_a = val) !== null && _a !== void 0 ? _a : {};
+            callback: (val) => {
+                allTransactions = val ?? {};
                 incrementInitialization();
             },
         });
@@ -108,11 +104,11 @@ function getUpdateContext() {
         throw new Error('OptimisticReportNamesConnectionManager not initialized. Call initialize() first.');
     }
     return {
-        betas: betas,
-        betaConfiguration: betaConfiguration,
-        allReports: allReports !== null && allReports !== void 0 ? allReports : {},
-        allPolicies: allPolicies !== null && allPolicies !== void 0 ? allPolicies : {},
-        allReportNameValuePairs: allReportNameValuePairs !== null && allReportNameValuePairs !== void 0 ? allReportNameValuePairs : {},
-        allTransactions: allTransactions !== null && allTransactions !== void 0 ? allTransactions : {},
+        betas,
+        betaConfiguration,
+        allReports: allReports ?? {},
+        allPolicies: allPolicies ?? {},
+        allReportNameValuePairs: allReportNameValuePairs ?? {},
+        allTransactions: allTransactions ?? {},
     };
 }

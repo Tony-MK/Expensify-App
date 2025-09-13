@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var TextWithTooltip_1 = require("@components/TextWithTooltip");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Parser_1 = require("@libs/Parser");
-function MerchantOrDescriptionCell(_a) {
-    var merchantOrDescription = _a.merchantOrDescription, shouldShowTooltip = _a.shouldShowTooltip, shouldUseNarrowLayout = _a.shouldUseNarrowLayout, isDescription = _a.isDescription;
-    var styles = (0, useThemeStyles_1.default)();
-    var text = (0, react_1.useMemo)(function () {
+const react_1 = require("react");
+const TextWithTooltip_1 = require("@components/TextWithTooltip");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Parser_1 = require("@libs/Parser");
+function MerchantOrDescriptionCell({ merchantOrDescription, shouldShowTooltip, shouldUseNarrowLayout, isDescription, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const text = (0, react_1.useMemo)(() => {
         if (!isDescription) {
             return merchantOrDescription;
         }

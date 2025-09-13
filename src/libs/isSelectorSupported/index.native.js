@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // Native platforms do not support the selector
-var isSelectorSupported = function () { return false; };
+const isSelectorSupported = () => false;
 exports.default = isSelectorSupported;

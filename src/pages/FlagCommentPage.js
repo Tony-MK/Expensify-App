@@ -1,35 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var Expensicons = require("@components/Icon/Expensicons");
-var MenuItem_1 = require("@components/MenuItem");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var ScrollView_1 = require("@components/ScrollView");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useReportIsArchived_1 = require("@hooks/useReportIsArchived");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Navigation_1 = require("@libs/Navigation/Navigation");
-var ReportUtils_1 = require("@libs/ReportUtils");
-var Report_1 = require("@userActions/Report");
-var Session_1 = require("@userActions/Session");
-var CONST_1 = require("@src/CONST");
-var withReportAndReportActionOrNotFound_1 = require("./home/report/withReportAndReportActionOrNotFound");
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const FullPageNotFoundView_1 = require("@components/BlockingViews/FullPageNotFoundView");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const Expensicons = require("@components/Icon/Expensicons");
+const MenuItem_1 = require("@components/MenuItem");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const ScrollView_1 = require("@components/ScrollView");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useReportIsArchived_1 = require("@hooks/useReportIsArchived");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Navigation_1 = require("@libs/Navigation/Navigation");
+const ReportUtils_1 = require("@libs/ReportUtils");
+const Report_1 = require("@userActions/Report");
+const Session_1 = require("@userActions/Session");
+const CONST_1 = require("@src/CONST");
+const withReportAndReportActionOrNotFound_1 = require("./home/report/withReportAndReportActionOrNotFound");
 /**
  * Get the reportID for the associated chatReport
  */
 function getReportID(route) {
     return route.params.reportID.toString();
 }
-function FlagCommentPage(_a) {
-    var parentReportAction = _a.parentReportAction, route = _a.route, report = _a.report, parentReport = _a.parentReport, reportAction = _a.reportAction;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var isReportArchived = (0, useReportIsArchived_1.default)(report === null || report === void 0 ? void 0 : report.reportID);
-    var severities = [
+function FlagCommentPage({ parentReportAction, route, report, parentReport, reportAction }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const isReportArchived = (0, useReportIsArchived_1.default)(report?.reportID);
+    const severities = [
         {
             severity: CONST_1.default.MODERATION.FLAG_SEVERITY_SPAM,
             name: translate('moderation.spam'),
@@ -79,23 +78,21 @@ function FlagCommentPage(_a) {
             furtherDetailsIcon: Expensicons.FlagLevelThree,
         },
     ];
-    var flagComment = function (severity) {
-        var reportID = getReportID(route);
+    const flagComment = (severity) => {
+        let reportID = getReportID(route);
         // Handle threads if needed
-        if ((0, ReportUtils_1.isChatThread)(report) && (reportAction === null || reportAction === void 0 ? void 0 : reportAction.reportActionID) === (parentReportAction === null || parentReportAction === void 0 ? void 0 : parentReportAction.reportActionID)) {
-            reportID = parentReport === null || parentReport === void 0 ? void 0 : parentReport.reportID;
+        if ((0, ReportUtils_1.isChatThread)(report) && reportAction?.reportActionID === parentReportAction?.reportActionID) {
+            reportID = parentReport?.reportID;
         }
         if (reportAction && (0, ReportUtils_1.canFlagReportAction)(reportAction, reportID)) {
             (0, Report_1.flagComment)(reportID, reportAction, severity);
         }
         Navigation_1.default.dismissModal();
     };
-    var severityMenuItems = severities.map(function (item) { return (<MenuItem_1.default key={"".concat(item.severity)} shouldShowRightIcon title={item.name} description={item.description} onPress={(0, Session_1.callFunctionIfActionIsAllowed)(function () { return flagComment(item.severity); })} style={[styles.pt2, styles.pb4, styles.ph5, styles.flexRow]} furtherDetails={item.furtherDetails} furtherDetailsIcon={item.furtherDetailsIcon}/>); });
+    const severityMenuItems = severities.map((item) => (<MenuItem_1.default key={`${item.severity}`} shouldShowRightIcon title={item.name} description={item.description} onPress={(0, Session_1.callFunctionIfActionIsAllowed)(() => flagComment(item.severity))} style={[styles.pt2, styles.pb4, styles.ph5, styles.flexRow]} furtherDetails={item.furtherDetails} furtherDetailsIcon={item.furtherDetailsIcon}/>));
     return (<ScreenWrapper_1.default includeSafeAreaPaddingBottom={false} testID={FlagCommentPage.displayName}>
-            {function (_a) {
-            var safeAreaPaddingBottomStyle = _a.safeAreaPaddingBottomStyle;
-            return (<FullPageNotFoundView_1.default shouldShow={!(0, ReportUtils_1.shouldShowFlagComment)(reportAction, report, isReportArchived)}>
-                    <HeaderWithBackButton_1.default title={translate('reportActionContextMenu.flagAsOffensive')} onBackButtonPress={function () { return Navigation_1.default.goBack(route.params.backTo); }}/>
+            {({ safeAreaPaddingBottomStyle }) => (<FullPageNotFoundView_1.default shouldShow={!(0, ReportUtils_1.shouldShowFlagComment)(reportAction, report, isReportArchived)}>
+                    <HeaderWithBackButton_1.default title={translate('reportActionContextMenu.flagAsOffensive')} onBackButtonPress={() => Navigation_1.default.goBack(route.params.backTo)}/>
                     <ScrollView_1.default contentContainerStyle={safeAreaPaddingBottomStyle} style={styles.settingsPageBackground}>
                         <react_native_1.View style={styles.pageWrapper}>
                             <react_native_1.View style={styles.settingsPageBody}>
@@ -105,8 +102,7 @@ function FlagCommentPage(_a) {
                         <Text_1.default style={[styles.ph5, styles.textLabelSupporting, styles.mb1]}>{translate('moderation.chooseAReason')}</Text_1.default>
                         {severityMenuItems}
                     </ScrollView_1.default>
-                </FullPageNotFoundView_1.default>);
-        }}
+                </FullPageNotFoundView_1.default>)}
         </ScreenWrapper_1.default>);
 }
 FlagCommentPage.displayName = 'FlagCommentPage';

@@ -4,25 +4,23 @@ exports.saveExitReason = saveExitReason;
 exports.saveResponse = saveResponse;
 exports.switchToOldDot = switchToOldDot;
 exports.resetExitSurveyForm = resetExitSurveyForm;
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var ExitSurveyReasonForm_1 = require("@src/types/form/ExitSurveyReasonForm");
-var ExitSurveyResponseForm_1 = require("@src/types/form/ExitSurveyResponseForm");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const ExitSurveyReasonForm_1 = require("@src/types/form/ExitSurveyReasonForm");
+const ExitSurveyResponseForm_1 = require("@src/types/form/ExitSurveyResponseForm");
 function saveExitReason(reason) {
-    var _a;
-    react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM, (_a = {}, _a[ExitSurveyReasonForm_1.default.REASON] = reason, _a));
+    react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM, { [ExitSurveyReasonForm_1.default.REASON]: reason });
 }
 function saveResponse(response) {
-    var _a;
-    react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM, (_a = {}, _a[ExitSurveyResponseForm_1.default.RESPONSE] = response, _a));
+    react_native_onyx_1.default.set(ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM, { [ExitSurveyResponseForm_1.default.RESPONSE]: response });
 }
 /**
  * Save the user's response to the mandatory exit survey in the back-end.
  */
 function switchToOldDot(exitReason, exitSurveyResponse) {
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.SET,
             key: ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM,
@@ -48,17 +46,16 @@ function switchToOldDot(exitReason, exitSurveyResponse) {
     API.write(types_1.WRITE_COMMANDS.SWITCH_TO_OLD_DOT, {
         reason: exitReason,
         surveyResponse: exitSurveyResponse,
-    }, { optimisticData: optimisticData });
+    }, { optimisticData });
 }
 /**
  * Clear the exit survey form data.
  */
 function resetExitSurveyForm(callback) {
-    var _a;
-    react_native_onyx_1.default.multiSet((_a = {},
-        _a[ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM] = null,
-        _a[ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM_DRAFT] = null,
-        _a[ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM] = null,
-        _a[ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM_DRAFT] = null,
-        _a)).then(callback);
+    react_native_onyx_1.default.multiSet({
+        [ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM]: null,
+        [ONYXKEYS_1.default.FORMS.EXIT_SURVEY_REASON_FORM_DRAFT]: null,
+        [ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM]: null,
+        [ONYXKEYS_1.default.FORMS.EXIT_SURVEY_RESPONSE_FORM_DRAFT]: null,
+    }).then(callback);
 }

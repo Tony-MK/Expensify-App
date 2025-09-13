@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var CameraPermission = {
+const CameraPermission = {
     requestCameraPermission: undefined,
     getCameraPermissionStatus: undefined,
 };

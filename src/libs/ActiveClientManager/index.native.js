@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isReady = exports.isClientTheLeader = exports.init = void 0;
-var init = function () { };
+const init = () => { };
 exports.init = init;
-var isClientTheLeader = function () { return true; };
+const isClientTheLeader = () => true;
 exports.isClientTheLeader = isClientTheLeader;
-var isReady = function () { return Promise.resolve(); };
+const isReady = () => Promise.resolve();
 exports.isReady = isReady;

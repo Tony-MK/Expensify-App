@@ -1,45 +1,45 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_native_onyx_1 = require("react-native-onyx");
-var API = require("@libs/API");
-var types_1 = require("@libs/API/types");
-var Log_1 = require("@libs/Log");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
+const react_native_onyx_1 = require("react-native-onyx");
+const API = require("@libs/API");
+const types_1 = require("@libs/API/types");
+const Log_1 = require("@libs/Log");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
 function OpenWorkspacePlanPage(policyID) {
     if (!policyID) {
-        Log_1.default.warn('OpenWorkspacePlanPage invalid params', { policyID: policyID });
+        Log_1.default.warn('OpenWorkspacePlanPage invalid params', { policyID });
         return;
     }
-    var optimisticData = [
+    const optimisticData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 isLoading: true,
             },
         },
     ];
-    var successData = [
+    const successData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 isLoading: false,
             },
         },
     ];
-    var failureData = [
+    const failureData = [
         {
             onyxMethod: react_native_onyx_1.default.METHOD.MERGE,
-            key: "".concat(ONYXKEYS_1.default.COLLECTION.POLICY).concat(policyID),
+            key: `${ONYXKEYS_1.default.COLLECTION.POLICY}${policyID}`,
             value: {
                 isLoading: false,
             },
         },
     ];
-    var params = {
-        policyID: policyID,
+    const params = {
+        policyID,
     };
-    API.read(types_1.READ_COMMANDS.OPEN_WORKSPACE_PLAN_PAGE, params, { optimisticData: optimisticData, successData: successData, failureData: failureData });
+    API.read(types_1.READ_COMMANDS.OPEN_WORKSPACE_PLAN_PAGE, params, { optimisticData, successData, failureData });
 }
 exports.default = OpenWorkspacePlanPage;

@@ -1,24 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
-var ScreenWrapper_1 = require("@components/ScreenWrapper");
-var TextLink_1 = require("@components/TextLink");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Search_1 = require("@libs/actions/Search");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var AdvancedSearchFilters_1 = require("./AdvancedSearchFilters");
+const react_1 = require("react");
+const HeaderWithBackButton_1 = require("@components/HeaderWithBackButton");
+const ScreenWrapper_1 = require("@components/ScreenWrapper");
+const TextLink_1 = require("@components/TextLink");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Search_1 = require("@libs/actions/Search");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const AdvancedSearchFilters_1 = require("./AdvancedSearchFilters");
 function SearchAdvancedFiltersPage() {
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _a = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true })[0], searchAdvancedFilters = _a === void 0 ? (0, EmptyObject_1.getEmptyObject)() : _a;
-    var shouldShowResetFilters = Object.entries(searchAdvancedFilters)
-        .filter(function (_a) {
-        var key = _a[0], value = _a[1];
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [searchAdvancedFilters = (0, EmptyObject_1.getEmptyObject)()] = (0, useOnyx_1.default)(ONYXKEYS_1.default.FORMS.SEARCH_ADVANCED_FILTERS_FORM, { canBeMissing: true });
+    const shouldShowResetFilters = Object.entries(searchAdvancedFilters)
+        .filter(([key, value]) => {
         if (key === CONST_1.default.SEARCH.SYNTAX_ROOT_KEYS.GROUP_BY) {
             return false;
         }
@@ -30,10 +29,7 @@ function SearchAdvancedFiltersPage() {
         }
         return true;
     })
-        .some(function (_a) {
-        var value = _a[1];
-        return (Array.isArray(value) ? value.length !== 0 : !!value);
-    });
+        .some(([, value]) => (Array.isArray(value) ? value.length !== 0 : !!value));
     return (<ScreenWrapper_1.default testID={SearchAdvancedFiltersPage.displayName} shouldShowOfflineIndicatorInWideScreen offlineIndicatorStyle={styles.mtAuto} includeSafeAreaPaddingBottom>
             <HeaderWithBackButton_1.default title={translate('search.filtersHeader')}>
                 {shouldShowResetFilters && <TextLink_1.default onPress={Search_1.clearAdvancedFilters}>{translate('search.resetFilters')}</TextLink_1.default>}

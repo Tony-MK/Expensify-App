@@ -1,41 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var Button_1 = require("@components/Button");
-var OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
-var Text_1 = require("@components/Text");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var Member_1 = require("@libs/actions/Policy/Member");
-var WorkspacesSettingsUtils_1 = require("@libs/WorkspacesSettingsUtils");
-var Navigation_1 = require("@navigation/Navigation");
-var CONST_1 = require("@src/CONST");
-var ROUTES_1 = require("@src/ROUTES");
-function WorkspaceOwnerChangeCheck(_a) {
-    var policy = _a.policy, accountID = _a.accountID, error = _a.error;
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
-    var _b = (0, react_1.useState)({
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const Button_1 = require("@components/Button");
+const OnyxListItemProvider_1 = require("@components/OnyxListItemProvider");
+const Text_1 = require("@components/Text");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const Member_1 = require("@libs/actions/Policy/Member");
+const WorkspacesSettingsUtils_1 = require("@libs/WorkspacesSettingsUtils");
+const Navigation_1 = require("@navigation/Navigation");
+const CONST_1 = require("@src/CONST");
+const ROUTES_1 = require("@src/ROUTES");
+function WorkspaceOwnerChangeCheck({ policy, accountID, error }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
+    const [displayTexts, setDisplayTexts] = (0, react_1.useState)({
         title: '',
         text: '',
         buttonText: '',
-    }), displayTexts = _b[0], setDisplayTexts = _b[1];
-    var personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
-    var policyID = policy === null || policy === void 0 ? void 0 : policy.id;
-    var updateDisplayTexts = (0, react_1.useCallback)(function () {
-        var _a, _b, _c;
-        var changeOwnerErrors = Object.keys((_b = (_a = policy === null || policy === void 0 ? void 0 : policy.errorFields) === null || _a === void 0 ? void 0 : _a.changeOwner) !== null && _b !== void 0 ? _b : {});
+    });
+    const personalDetails = (0, OnyxListItemProvider_1.usePersonalDetails)();
+    const policyID = policy?.id;
+    const updateDisplayTexts = (0, react_1.useCallback)(() => {
+        const changeOwnerErrors = Object.keys(policy?.errorFields?.changeOwner ?? {});
         if (error !== changeOwnerErrors.at(0)) {
             return;
         }
-        var texts = (0, WorkspacesSettingsUtils_1.getOwnershipChecksDisplayText)(error, translate, policy, (_c = personalDetails === null || personalDetails === void 0 ? void 0 : personalDetails[accountID]) === null || _c === void 0 ? void 0 : _c.login);
+        const texts = (0, WorkspacesSettingsUtils_1.getOwnershipChecksDisplayText)(error, translate, policy, personalDetails?.[accountID]?.login);
         setDisplayTexts(texts);
     }, [accountID, error, personalDetails, policy, translate]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         updateDisplayTexts();
     }, [updateDisplayTexts]);
-    var confirm = (0, react_1.useCallback)(function () {
+    const confirm = (0, react_1.useCallback)(() => {
         if (!policyID) {
             return;
         }

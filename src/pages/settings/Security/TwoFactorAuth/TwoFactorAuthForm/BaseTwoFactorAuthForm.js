@@ -1,41 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var native_1 = require("@react-navigation/native");
-var react_1 = require("react");
-var MagicCodeInput_1 = require("@components/MagicCodeInput");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useOnyx_1 = require("@hooks/useOnyx");
-var Browser_1 = require("@libs/Browser");
-var canFocusInputOnScreenFocus_1 = require("@libs/canFocusInputOnScreenFocus");
-var ErrorUtils_1 = require("@libs/ErrorUtils");
-var ValidationUtils_1 = require("@libs/ValidationUtils");
-var Session_1 = require("@userActions/Session");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var isMobile = !(0, canFocusInputOnScreenFocus_1.default)();
-function BaseTwoFactorAuthForm(_a, ref) {
-    var _b, _c;
-    var autoComplete = _a.autoComplete, validateInsteadOfDisable = _a.validateInsteadOfDisable, onFocus = _a.onFocus, _d = _a.shouldAutoFocusOnMobile, shouldAutoFocusOnMobile = _d === void 0 ? true : _d;
-    var translate = (0, useLocalize_1.default)().translate;
-    var _e = (0, react_1.useState)({}), formError = _e[0], setFormError = _e[1];
-    var account = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: false })[0];
-    var _f = (0, react_1.useState)(''), twoFactorAuthCode = _f[0], setTwoFactorAuthCode = _f[1];
-    var inputRef = (0, react_1.useRef)(null);
-    var shouldClearData = (_b = account === null || account === void 0 ? void 0 : account.needsTwoFactorAuthSetup) !== null && _b !== void 0 ? _b : false;
+const native_1 = require("@react-navigation/native");
+const react_1 = require("react");
+const MagicCodeInput_1 = require("@components/MagicCodeInput");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useOnyx_1 = require("@hooks/useOnyx");
+const Browser_1 = require("@libs/Browser");
+const canFocusInputOnScreenFocus_1 = require("@libs/canFocusInputOnScreenFocus");
+const ErrorUtils_1 = require("@libs/ErrorUtils");
+const ValidationUtils_1 = require("@libs/ValidationUtils");
+const Session_1 = require("@userActions/Session");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const isMobile = !(0, canFocusInputOnScreenFocus_1.default)();
+function BaseTwoFactorAuthForm({ autoComplete, validateInsteadOfDisable, onFocus, shouldAutoFocusOnMobile = true }, ref) {
+    const { translate } = (0, useLocalize_1.default)();
+    const [formError, setFormError] = (0, react_1.useState)({});
+    const [account] = (0, useOnyx_1.default)(ONYXKEYS_1.default.ACCOUNT, { canBeMissing: false });
+    const [twoFactorAuthCode, setTwoFactorAuthCode] = (0, react_1.useState)('');
+    const inputRef = (0, react_1.useRef)(null);
+    const shouldClearData = account?.needsTwoFactorAuthSetup ?? false;
     /**
      * Handle text input and clear formError upon text change
      */
-    var onTextInput = (0, react_1.useCallback)(function (text) {
+    const onTextInput = (0, react_1.useCallback)((text) => {
         setTwoFactorAuthCode(text);
         setFormError({});
-        if (account === null || account === void 0 ? void 0 : account.errors) {
+        if (account?.errors) {
             (0, Session_1.clearAccountMessages)();
         }
-    }, [account === null || account === void 0 ? void 0 : account.errors]);
+    }, [account?.errors]);
     /**
      * Check that all the form fields are valid, then trigger the submit callback
      */
-    var validateAndSubmitForm = (0, react_1.useCallback)(function () {
+    const validateAndSubmitForm = (0, react_1.useCallback)(() => {
         if (inputRef.current) {
             inputRef.current.blur();
         }
@@ -54,42 +52,39 @@ function BaseTwoFactorAuthForm(_a, ref) {
         }
         (0, Session_1.toggleTwoFactorAuth)(false, twoFactorAuthCode);
     }, [twoFactorAuthCode, validateInsteadOfDisable, translate, shouldClearData]);
-    (0, react_1.useImperativeHandle)(ref, function () { return ({
-        validateAndSubmitForm: function () {
+    (0, react_1.useImperativeHandle)(ref, () => ({
+        validateAndSubmitForm() {
             validateAndSubmitForm();
         },
-        focus: function () {
+        focus() {
             if (!inputRef.current) {
                 return;
             }
             inputRef.current.focus();
         },
-        focusLastSelected: function () {
+        focusLastSelected() {
             if (!inputRef.current) {
                 return;
             }
-            setTimeout(function () {
-                var _a;
-                (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focusLastSelected();
+            setTimeout(() => {
+                inputRef.current?.focusLastSelected();
             }, CONST_1.default.ANIMATED_TRANSITION);
         },
-    }); });
-    (0, native_1.useFocusEffect)((0, react_1.useCallback)(function () {
-        var _a;
+    }));
+    (0, native_1.useFocusEffect)((0, react_1.useCallback)(() => {
         if (!inputRef.current || (isMobile && !shouldAutoFocusOnMobile)) {
             return;
         }
         // Keyboard won't show if we focus the input with a delay, so we need to focus immediately.
         if (!(0, Browser_1.isMobileSafari)()) {
-            setTimeout(function () {
-                var _a;
-                (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focusLastSelected();
+            setTimeout(() => {
+                inputRef.current?.focusLastSelected();
             }, CONST_1.default.ANIMATED_TRANSITION);
         }
         else {
-            (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focusLastSelected();
+            inputRef.current?.focusLastSelected();
         }
     }, [shouldAutoFocusOnMobile]));
-    return (<MagicCodeInput_1.default autoComplete={autoComplete} name="twoFactorAuthCode" value={twoFactorAuthCode} onChangeText={onTextInput} onFocus={onFocus} onFulfill={validateAndSubmitForm} errorText={(_c = formError.twoFactorAuthCode) !== null && _c !== void 0 ? _c : (0, ErrorUtils_1.getLatestErrorMessage)(account)} ref={inputRef} autoFocus={false}/>);
+    return (<MagicCodeInput_1.default autoComplete={autoComplete} name="twoFactorAuthCode" value={twoFactorAuthCode} onChangeText={onTextInput} onFocus={onFocus} onFulfill={validateAndSubmitForm} errorText={formError.twoFactorAuthCode ?? (0, ErrorUtils_1.getLatestErrorMessage)(account)} ref={inputRef} autoFocus={false}/>);
 }
 exports.default = (0, react_1.forwardRef)(BaseTwoFactorAuthForm);

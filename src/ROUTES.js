@@ -1,30 +1,17 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VERIFY_ACCOUNT = exports.SHARED_ROUTE_PARAMS = exports.PUBLIC_SCREENS_ROUTES = void 0;
-var Log_1 = require("./libs/Log");
-var SCREENS_1 = require("./SCREENS");
+const Log_1 = require("./libs/Log");
+const SCREENS_1 = require("./SCREENS");
 // This is a file containing constants for all the routes we want to be able to go to
 /**
  * Builds a URL with an encoded URI component for the `backTo` param which can be added to the end of URLs
  */
-function getUrlWithBackToParam(url, backTo, shouldEncodeURIComponent) {
-    if (shouldEncodeURIComponent === void 0) { shouldEncodeURIComponent = true; }
-    var backToParam = backTo ? "".concat(url.includes('?') ? '&' : '?', "backTo=").concat(shouldEncodeURIComponent ? encodeURIComponent(backTo) : backTo) : '';
-    return "".concat(url).concat(backToParam);
+function getUrlWithBackToParam(url, backTo, shouldEncodeURIComponent = true) {
+    const backToParam = backTo ? `${url.includes('?') ? '&' : '?'}backTo=${shouldEncodeURIComponent ? encodeURIComponent(backTo) : backTo}` : '';
+    return `${url}${backToParam}`;
 }
-var PUBLIC_SCREENS_ROUTES = {
+const PUBLIC_SCREENS_ROUTES = {
     // If the user opens this route, we'll redirect them to the path saved in the last visited path or to the home page if the last visited path is empty.
     ROOT: '',
     TRANSITION_BETWEEN_APPS: 'transition',
@@ -38,2484 +25,2904 @@ var PUBLIC_SCREENS_ROUTES = {
 };
 exports.PUBLIC_SCREENS_ROUTES = PUBLIC_SCREENS_ROUTES;
 // Exported for identifying a url as a verify-account route, associated with a page extending the VerifyAccountPageBase component
-var VERIFY_ACCOUNT = 'verify-account';
+const VERIFY_ACCOUNT = 'verify-account';
 exports.VERIFY_ACCOUNT = VERIFY_ACCOUNT;
-var ROUTES = __assign(__assign({}, PUBLIC_SCREENS_ROUTES), { 
+const ROUTES = {
+    ...PUBLIC_SCREENS_ROUTES,
     // This route renders the list of reports.
-    HOME: 'home', 
+    HOME: 'home',
     // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-    WORKSPACES_LIST: { route: 'workspaces', getRoute: function (backTo) { return getUrlWithBackToParam('workspaces', backTo); } }, SEARCH_ROOT: {
+    WORKSPACES_LIST: { route: 'workspaces', getRoute: (backTo) => getUrlWithBackToParam('workspaces', backTo) },
+    SEARCH_ROOT: {
         route: 'search',
-        getRoute: function (_a) {
-            var query = _a.query, name = _a.name;
-            return "search?q=".concat(encodeURIComponent(query)).concat(name ? "&name=".concat(name) : '');
+        getRoute: ({ query, name }) => {
+            return `search?q=${encodeURIComponent(query)}${name ? `&name=${name}` : ''}`;
         },
-    }, SEARCH_SAVED_SEARCH_RENAME: {
+    },
+    SEARCH_SAVED_SEARCH_RENAME: {
         route: 'search/saved-search/rename',
-        getRoute: function (_a) {
-            var name = _a.name, jsonQuery = _a.jsonQuery;
-            return "search/saved-search/rename?name=".concat(name, "&q=").concat(jsonQuery);
-        },
-    }, SEARCH_ADVANCED_FILTERS: {
+        getRoute: ({ name, jsonQuery }) => `search/saved-search/rename?name=${name}&q=${jsonQuery}`,
+    },
+    SEARCH_ADVANCED_FILTERS: {
         route: 'search/filters/:filterKey?',
-        getRoute: function (filterKey) {
-            return "search/filters/".concat(filterKey !== null && filterKey !== void 0 ? filterKey : '');
+        getRoute: (filterKey) => {
+            return `search/filters/${filterKey ?? ''}`;
         },
-    }, SEARCH_REPORT: {
+    },
+    SEARCH_REPORT: {
         route: 'search/view/:reportID/:reportActionID?',
-        getRoute: function (_a) {
-            var reportID = _a.reportID, reportActionID = _a.reportActionID, backTo = _a.backTo;
+        getRoute: ({ reportID, reportActionID, backTo }) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the SEARCH_REPORT route');
             }
-            var baseRoute = reportActionID ? "search/view/".concat(reportID, "/").concat(reportActionID) : "search/view/".concat(reportID);
+            const baseRoute = reportActionID ? `search/view/${reportID}/${reportActionID}` : `search/view/${reportID}`;
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
             return getUrlWithBackToParam(baseRoute, backTo);
         },
-    }, SEARCH_MONEY_REQUEST_REPORT: {
+    },
+    SEARCH_MONEY_REQUEST_REPORT: {
         route: 'search/r/:reportID',
-        getRoute: function (_a) {
-            var reportID = _a.reportID, backTo = _a.backTo;
-            var baseRoute = "search/r/".concat(reportID);
+        getRoute: ({ reportID, backTo }) => {
+            const baseRoute = `search/r/${reportID}`;
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
             return getUrlWithBackToParam(baseRoute, backTo);
         },
-    }, SEARCH_MONEY_REQUEST_REPORT_HOLD_TRANSACTIONS: {
+    },
+    SEARCH_MONEY_REQUEST_REPORT_HOLD_TRANSACTIONS: {
         route: 'search/r/:reportID/hold',
-        getRoute: function (_a) {
-            var reportID = _a.reportID, backTo = _a.backTo;
-            var baseRoute = "search/r/".concat(reportID, "/hold");
+        getRoute: ({ reportID, backTo }) => {
+            const baseRoute = `search/r/${reportID}/hold`;
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
             return getUrlWithBackToParam(baseRoute, backTo);
         },
-    }, TRANSACTION_HOLD_REASON_RHP: 'search/hold', MOVE_TRANSACTIONS_SEARCH_RHP: 'search/move-transactions', 
+    },
+    TRANSACTION_HOLD_REASON_RHP: 'search/hold',
+    MOVE_TRANSACTIONS_SEARCH_RHP: 'search/move-transactions',
     // This is a utility route used to go to the user's concierge chat, or the sign-in page if the user's not authenticated
-    CONCIERGE: 'concierge', TRACK_EXPENSE: 'track-expense', SUBMIT_EXPENSE: 'submit-expense', FLAG_COMMENT: {
+    CONCIERGE: 'concierge',
+    TRACK_EXPENSE: 'track-expense',
+    SUBMIT_EXPENSE: 'submit-expense',
+    FLAG_COMMENT: {
         route: 'flag/:reportID/:reportActionID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, reportActionID, backTo) { return getUrlWithBackToParam("flag/".concat(reportID, "/").concat(reportActionID), backTo); },
-    }, PROFILE: {
+        getRoute: (reportID, reportActionID, backTo) => getUrlWithBackToParam(`flag/${reportID}/${reportActionID}`, backTo),
+    },
+    PROFILE: {
         route: 'a/:accountID',
-        getRoute: function (accountID, backTo, login) {
+        getRoute: (accountID, backTo, login) => {
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            var baseRoute = getUrlWithBackToParam("a/".concat(accountID), backTo);
-            var loginParam = login ? "?login=".concat(encodeURIComponent(login)) : '';
-            return "".concat(baseRoute).concat(loginParam);
+            const baseRoute = getUrlWithBackToParam(`a/${accountID}`, backTo);
+            const loginParam = login ? `?login=${encodeURIComponent(login)}` : '';
+            return `${baseRoute}${loginParam}`;
         },
-    }, PROFILE_AVATAR: {
+    },
+    PROFILE_AVATAR: {
         route: 'a/:accountID/avatar',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (accountID, backTo) { return getUrlWithBackToParam("a/".concat(accountID, "/avatar"), backTo); },
-    }, DESKTOP_SIGN_IN_REDIRECT: 'desktop-signin-redirect', 
+        getRoute: (accountID, backTo) => getUrlWithBackToParam(`a/${accountID}/avatar`, backTo),
+    },
+    DESKTOP_SIGN_IN_REDIRECT: 'desktop-signin-redirect',
     // This is a special validation URL that will take the user to /workspace/new after validation. This is used
     // when linking users from e.com in order to share a session in this app.
-    ENABLE_PAYMENTS: 'enable-payments', WALLET_STATEMENT_WITH_DATE: 'statements/:yearMonth', SIGN_IN_MODAL: 'sign-in-modal', REQUIRE_TWO_FACTOR_AUTH: '2fa-required', BANK_ACCOUNT: 'bank-account', BANK_ACCOUNT_NEW: 'bank-account/new', BANK_ACCOUNT_PERSONAL: 'bank-account/personal', BANK_ACCOUNT_WITH_STEP_TO_OPEN: {
+    ENABLE_PAYMENTS: 'enable-payments',
+    WALLET_STATEMENT_WITH_DATE: 'statements/:yearMonth',
+    SIGN_IN_MODAL: 'sign-in-modal',
+    REQUIRE_TWO_FACTOR_AUTH: '2fa-required',
+    BANK_ACCOUNT: 'bank-account',
+    BANK_ACCOUNT_NEW: 'bank-account/new',
+    BANK_ACCOUNT_PERSONAL: 'bank-account/personal',
+    BANK_ACCOUNT_WITH_STEP_TO_OPEN: {
         route: 'bank-account/:stepToOpen?',
-        getRoute: function (policyID, stepToOpen, backTo) {
-            if (stepToOpen === void 0) { stepToOpen = ''; }
+        getRoute: (policyID, stepToOpen = '', backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the BANK_ACCOUNT_WITH_STEP_TO_OPEN route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("bank-account/".concat(stepToOpen, "?policyID=").concat(policyID), backTo);
+            return getUrlWithBackToParam(`bank-account/${stepToOpen}?policyID=${policyID}`, backTo);
         },
-    }, BANK_ACCOUNT_ENTER_SIGNER_INFO: {
+    },
+    BANK_ACCOUNT_ENTER_SIGNER_INFO: {
         route: 'bank-account/enter-signer-info',
-        getRoute: function (policyID, bankAccountID, isCompleted) {
+        getRoute: (policyID, bankAccountID, isCompleted) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the BANK_ACCOUNT_ENTER_SIGNER_INFO route');
             }
-            return "bank-account/enter-signer-info?policyID=".concat(policyID, "&bankAccountID=").concat(bankAccountID, "&isCompleted=").concat(isCompleted);
+            return `bank-account/enter-signer-info?policyID=${policyID}&bankAccountID=${bankAccountID}&isCompleted=${isCompleted}`;
         },
-    }, PUBLIC_CONSOLE_DEBUG: {
+    },
+    PUBLIC_CONSOLE_DEBUG: {
         route: 'troubleshoot/console',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("troubleshoot/console", backTo); },
-    }, SETTINGS: 'settings', SETTINGS_PROFILE: {
+        getRoute: (backTo) => getUrlWithBackToParam(`troubleshoot/console`, backTo),
+    },
+    SETTINGS: 'settings',
+    SETTINGS_PROFILE: {
         route: 'settings/profile',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/profile', backTo); },
-    }, SETTINGS_CHANGE_CURRENCY: 'settings/add-payment-card/change-currency', SETTINGS_SHARE_CODE: 'settings/shareCode', SETTINGS_DISPLAY_NAME: 'settings/profile/display-name', SETTINGS_TIMEZONE: 'settings/profile/timezone', SETTINGS_TIMEZONE_SELECT: 'settings/profile/timezone/select', SETTINGS_PRONOUNS: 'settings/profile/pronouns', SETTINGS_PREFERENCES: 'settings/preferences', SETTINGS_SUBSCRIPTION: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/profile', backTo),
+    },
+    SETTINGS_CHANGE_CURRENCY: 'settings/add-payment-card/change-currency',
+    SETTINGS_SHARE_CODE: 'settings/shareCode',
+    SETTINGS_DISPLAY_NAME: 'settings/profile/display-name',
+    SETTINGS_TIMEZONE: 'settings/profile/timezone',
+    SETTINGS_TIMEZONE_SELECT: 'settings/profile/timezone/select',
+    SETTINGS_PRONOUNS: 'settings/profile/pronouns',
+    SETTINGS_PREFERENCES: 'settings/preferences',
+    SETTINGS_SUBSCRIPTION: {
         route: 'settings/subscription',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/subscription', backTo); },
-    }, SETTINGS_SUBSCRIPTION_SIZE: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/subscription', backTo),
+    },
+    SETTINGS_SUBSCRIPTION_SIZE: {
         route: 'settings/subscription/subscription-size',
-        getRoute: function (canChangeSize) { return "settings/subscription/subscription-size?canChangeSize=".concat(canChangeSize); },
-    }, SETTINGS_SUBSCRIPTION_SETTINGS_DETAILS: 'settings/subscription/details', SETTINGS_SUBSCRIPTION_ADD_PAYMENT_CARD: 'settings/subscription/add-payment-card', SETTINGS_SUBSCRIPTION_CHANGE_BILLING_CURRENCY: 'settings/subscription/change-billing-currency', SETTINGS_SUBSCRIPTION_CHANGE_PAYMENT_CURRENCY: 'settings/subscription/add-payment-card/change-payment-currency', SETTINGS_SUBSCRIPTION_DISABLE_AUTO_RENEW_SURVEY: 'settings/subscription/disable-auto-renew-survey', SETTINGS_SUBSCRIPTION_REQUEST_EARLY_CANCELLATION: 'settings/subscription/request-early-cancellation-survey', SETTINGS_SUBSCRIPTION_DOWNGRADE_BLOCKED: {
+        getRoute: (canChangeSize) => `settings/subscription/subscription-size?canChangeSize=${canChangeSize}`,
+    },
+    SETTINGS_SUBSCRIPTION_SETTINGS_DETAILS: 'settings/subscription/details',
+    SETTINGS_SUBSCRIPTION_ADD_PAYMENT_CARD: 'settings/subscription/add-payment-card',
+    SETTINGS_SUBSCRIPTION_CHANGE_BILLING_CURRENCY: 'settings/subscription/change-billing-currency',
+    SETTINGS_SUBSCRIPTION_CHANGE_PAYMENT_CURRENCY: 'settings/subscription/add-payment-card/change-payment-currency',
+    SETTINGS_SUBSCRIPTION_DISABLE_AUTO_RENEW_SURVEY: 'settings/subscription/disable-auto-renew-survey',
+    SETTINGS_SUBSCRIPTION_REQUEST_EARLY_CANCELLATION: 'settings/subscription/request-early-cancellation-survey',
+    SETTINGS_SUBSCRIPTION_DOWNGRADE_BLOCKED: {
         route: 'settings/subscription/downgrade-blocked',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/subscription/downgrade-blocked', backTo); },
-    }, SETTINGS_PRIORITY_MODE: 'settings/preferences/priority-mode', SETTINGS_LANGUAGE: 'settings/preferences/language', SETTINGS_PAYMENT_CURRENCY: 'setting/preferences/payment-currency', SETTINGS_THEME: 'settings/preferences/theme', SETTINGS_SECURITY: 'settings/security', SETTINGS_CLOSE: 'settings/security/closeAccount', SETTINGS_MERGE_ACCOUNTS: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/subscription/downgrade-blocked', backTo),
+    },
+    SETTINGS_PRIORITY_MODE: 'settings/preferences/priority-mode',
+    SETTINGS_LANGUAGE: 'settings/preferences/language',
+    SETTINGS_PAYMENT_CURRENCY: 'setting/preferences/payment-currency',
+    SETTINGS_THEME: 'settings/preferences/theme',
+    SETTINGS_SECURITY: 'settings/security',
+    SETTINGS_CLOSE: 'settings/security/closeAccount',
+    SETTINGS_MERGE_ACCOUNTS: {
         route: 'settings/security/merge-accounts',
-        getRoute: function (email) { return "settings/security/merge-accounts".concat(email ? "?email=".concat(encodeURIComponent(email)) : ''); },
-    }, SETTINGS_MERGE_ACCOUNTS_MAGIC_CODE: {
+        getRoute: (email) => `settings/security/merge-accounts${email ? `?email=${encodeURIComponent(email)}` : ''}`,
+    },
+    SETTINGS_MERGE_ACCOUNTS_MAGIC_CODE: {
         route: 'settings/security/merge-accounts/:login/magic-code',
-        getRoute: function (login) { return "settings/security/merge-accounts/".concat(encodeURIComponent(login), "/magic-code"); },
-    }, SETTINGS_MERGE_ACCOUNTS_RESULT: {
+        getRoute: (login) => `settings/security/merge-accounts/${encodeURIComponent(login)}/magic-code`,
+    },
+    SETTINGS_MERGE_ACCOUNTS_RESULT: {
         route: 'settings/security/merge-accounts/:login/result/:result',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (login, result, backTo) { return getUrlWithBackToParam("settings/security/merge-accounts/".concat(encodeURIComponent(login), "/result/").concat(result), backTo); },
-    }, SETTINGS_LOCK_ACCOUNT: 'settings/security/lock-account', SETTINGS_UNLOCK_ACCOUNT: 'settings/security/unlock-account', SETTINGS_FAILED_TO_LOCK_ACCOUNT: 'settings/security/failed-to-lock-account', SETTINGS_DELEGATE_VERIFY_ACCOUNT: "settings/security/delegate/".concat(VERIFY_ACCOUNT), SETTINGS_ADD_DELEGATE: 'settings/security/delegate', SETTINGS_DELEGATE_ROLE: {
+        getRoute: (login, result, backTo) => getUrlWithBackToParam(`settings/security/merge-accounts/${encodeURIComponent(login)}/result/${result}`, backTo),
+    },
+    SETTINGS_LOCK_ACCOUNT: 'settings/security/lock-account',
+    SETTINGS_UNLOCK_ACCOUNT: 'settings/security/unlock-account',
+    SETTINGS_FAILED_TO_LOCK_ACCOUNT: 'settings/security/failed-to-lock-account',
+    SETTINGS_DELEGATE_VERIFY_ACCOUNT: `settings/security/delegate/${VERIFY_ACCOUNT}`,
+    SETTINGS_ADD_DELEGATE: 'settings/security/delegate',
+    SETTINGS_DELEGATE_ROLE: {
         route: 'settings/security/delegate/:login/role/:role',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (login, role, backTo) { return getUrlWithBackToParam("settings/security/delegate/".concat(encodeURIComponent(login), "/role/").concat(role), backTo); },
-    }, SETTINGS_UPDATE_DELEGATE_ROLE: {
+        getRoute: (login, role, backTo) => getUrlWithBackToParam(`settings/security/delegate/${encodeURIComponent(login)}/role/${role}`, backTo),
+    },
+    SETTINGS_UPDATE_DELEGATE_ROLE: {
         route: 'settings/security/delegate/:login/update-role/:currentRole',
-        getRoute: function (login, currentRole) { return "settings/security/delegate/".concat(encodeURIComponent(login), "/update-role/").concat(currentRole); },
-    }, SETTINGS_DELEGATE_CONFIRM: {
+        getRoute: (login, currentRole) => `settings/security/delegate/${encodeURIComponent(login)}/update-role/${currentRole}`,
+    },
+    SETTINGS_DELEGATE_CONFIRM: {
         route: 'settings/security/delegate/:login/role/:role/confirm',
-        getRoute: function (login, role, showValidateActionModal) {
-            var validateActionModalParam = showValidateActionModal ? "?showValidateActionModal=true" : '';
-            return "settings/security/delegate/".concat(encodeURIComponent(login), "/role/").concat(role, "/confirm").concat(validateActionModalParam);
+        getRoute: (login, role, showValidateActionModal) => {
+            const validateActionModalParam = showValidateActionModal ? `?showValidateActionModal=true` : '';
+            return `settings/security/delegate/${encodeURIComponent(login)}/role/${role}/confirm${validateActionModalParam}`;
         },
-    }, SETTINGS_ABOUT: 'settings/about', SETTINGS_APP_DOWNLOAD_LINKS: 'settings/about/app-download-links', SETTINGS_WALLET: 'settings/wallet', SETTINGS_WALLET_DOMAIN_CARD: {
+    },
+    SETTINGS_ABOUT: 'settings/about',
+    SETTINGS_APP_DOWNLOAD_LINKS: 'settings/about/app-download-links',
+    SETTINGS_WALLET: 'settings/wallet',
+    SETTINGS_WALLET_DOMAIN_CARD: {
         route: 'settings/wallet/card/:cardID?',
-        getRoute: function (cardID) { return "settings/wallet/card/".concat(cardID); },
-    }, SETTINGS_DOMAIN_CARD_DETAIL: {
+        getRoute: (cardID) => `settings/wallet/card/${cardID}`,
+    },
+    SETTINGS_DOMAIN_CARD_DETAIL: {
         route: 'settings/card/:cardID?',
-        getRoute: function (cardID) { return "settings/card/".concat(cardID); },
-    }, SETTINGS_REPORT_FRAUD: {
+        getRoute: (cardID) => `settings/card/${cardID}`,
+    },
+    SETTINGS_REPORT_FRAUD: {
         route: 'settings/wallet/card/:cardID/report-virtual-fraud',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (cardID, backTo) { return getUrlWithBackToParam("settings/wallet/card/".concat(cardID, "/report-virtual-fraud"), backTo); },
-    }, SETTINGS_REPORT_FRAUD_CONFIRMATION: {
+        getRoute: (cardID, backTo) => getUrlWithBackToParam(`settings/wallet/card/${cardID}/report-virtual-fraud`, backTo),
+    },
+    SETTINGS_REPORT_FRAUD_CONFIRMATION: {
         route: 'settings/wallet/card/:cardID/report-virtual-fraud-confirm',
-        getRoute: function (cardID) { return "settings/wallet/card/".concat(cardID, "/report-virtual-fraud-confirm"); },
-    }, SETTINGS_DOMAIN_CARD_REPORT_FRAUD: {
+        getRoute: (cardID) => `settings/wallet/card/${cardID}/report-virtual-fraud-confirm`,
+    },
+    SETTINGS_DOMAIN_CARD_REPORT_FRAUD: {
         route: 'settings/card/:cardID/report-virtual-fraud',
-        getRoute: function (cardID) { return "settings/card/".concat(cardID, "/report-virtual-fraud"); },
-    }, SETTINGS_ADD_DEBIT_CARD: 'settings/wallet/add-debit-card', SETTINGS_ADD_BANK_ACCOUNT: {
+        getRoute: (cardID) => `settings/card/${cardID}/report-virtual-fraud`,
+    },
+    SETTINGS_ADD_DEBIT_CARD: 'settings/wallet/add-debit-card',
+    SETTINGS_ADD_BANK_ACCOUNT: {
         route: 'settings/wallet/add-bank-account',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/wallet/add-bank-account', backTo); },
-    }, SETTINGS_ADD_US_BANK_ACCOUNT: 'settings/wallet/add-us-bank-account', SETTINGS_ENABLE_PAYMENTS: 'settings/wallet/enable-payments', SETTINGS_WALLET_ENABLE_GLOBAL_REIMBURSEMENTS: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/wallet/add-bank-account', backTo),
+    },
+    SETTINGS_ADD_US_BANK_ACCOUNT: 'settings/wallet/add-us-bank-account',
+    SETTINGS_ENABLE_PAYMENTS: 'settings/wallet/enable-payments',
+    SETTINGS_WALLET_ENABLE_GLOBAL_REIMBURSEMENTS: {
         route: 'settings/wallet/:bankAccountID/enable-global-reimbursements',
-        getRoute: function (bankAccountID) { return "settings/wallet/".concat(bankAccountID, "/enable-global-reimbursements"); },
-    }, SETTINGS_WALLET_CARD_DIGITAL_DETAILS_UPDATE_ADDRESS: {
+        getRoute: (bankAccountID) => `settings/wallet/${bankAccountID}/enable-global-reimbursements`,
+    },
+    SETTINGS_WALLET_CARD_DIGITAL_DETAILS_UPDATE_ADDRESS: {
         route: 'settings/wallet/card/:domain/digital-details/update-address',
-        getRoute: function (domain) { return "settings/wallet/card/".concat(domain, "/digital-details/update-address"); },
-    }, SETTINGS_WALLET_TRANSFER_BALANCE: 'settings/wallet/transfer-balance', SETTINGS_WALLET_CHOOSE_TRANSFER_ACCOUNT: 'settings/wallet/choose-transfer-account', SETTINGS_WALLET_REPORT_CARD_LOST_OR_DAMAGED: {
+        getRoute: (domain) => `settings/wallet/card/${domain}/digital-details/update-address`,
+    },
+    SETTINGS_WALLET_TRANSFER_BALANCE: 'settings/wallet/transfer-balance',
+    SETTINGS_WALLET_CHOOSE_TRANSFER_ACCOUNT: 'settings/wallet/choose-transfer-account',
+    SETTINGS_WALLET_REPORT_CARD_LOST_OR_DAMAGED: {
         route: 'settings/wallet/card/:cardID/report-card-lost-or-damaged',
-        getRoute: function (cardID) { return "settings/wallet/card/".concat(cardID, "/report-card-lost-or-damaged"); },
-    }, SETTINGS_WALLET_CARD_ACTIVATE: {
+        getRoute: (cardID) => `settings/wallet/card/${cardID}/report-card-lost-or-damaged`,
+    },
+    SETTINGS_WALLET_CARD_ACTIVATE: {
         route: 'settings/wallet/card/:cardID/activate',
-        getRoute: function (cardID) { return "settings/wallet/card/".concat(cardID, "/activate"); },
-    }, SETTINGS_LEGAL_NAME: 'settings/profile/legal-name', SETTINGS_DATE_OF_BIRTH: 'settings/profile/date-of-birth', SETTINGS_PHONE_NUMBER: 'settings/profile/phone', SETTINGS_ADDRESS: 'settings/profile/address', SETTINGS_ADDRESS_COUNTRY: {
+        getRoute: (cardID) => `settings/wallet/card/${cardID}/activate`,
+    },
+    SETTINGS_LEGAL_NAME: 'settings/profile/legal-name',
+    SETTINGS_DATE_OF_BIRTH: 'settings/profile/date-of-birth',
+    SETTINGS_PHONE_NUMBER: 'settings/profile/phone',
+    SETTINGS_ADDRESS: 'settings/profile/address',
+    SETTINGS_ADDRESS_COUNTRY: {
         route: 'settings/profile/address/country',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (country, backTo) { return getUrlWithBackToParam("settings/profile/address/country?country=".concat(country), backTo); },
-    }, SETTINGS_ADDRESS_STATE: {
+        getRoute: (country, backTo) => getUrlWithBackToParam(`settings/profile/address/country?country=${country}`, backTo),
+    },
+    SETTINGS_ADDRESS_STATE: {
         route: 'settings/profile/address/state',
-        getRoute: function (state, backTo, label) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return ("".concat(getUrlWithBackToParam("settings/profile/address/state".concat(state ? "?state=".concat(encodeURIComponent(state)) : ''), backTo)).concat(
-            // the label param can be an empty string so we cannot use a nullish ?? operator
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            label ? "".concat(backTo || state ? '&' : '?', "label=").concat(encodeURIComponent(label)) : ''));
-        },
-    }, SETTINGS_CONTACT_METHODS: {
+        getRoute: (state, backTo, label) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        `${getUrlWithBackToParam(`settings/profile/address/state${state ? `?state=${encodeURIComponent(state)}` : ''}`, backTo)}${
+        // the label param can be an empty string so we cannot use a nullish ?? operator
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        label ? `${backTo || state ? '&' : '?'}label=${encodeURIComponent(label)}` : ''}`,
+    },
+    SETTINGS_CONTACT_METHODS: {
         route: 'settings/profile/contact-methods',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/profile/contact-methods', backTo); },
-    }, SETTINGS_CONTACT_METHOD_DETAILS: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/profile/contact-methods', backTo),
+    },
+    SETTINGS_CONTACT_METHOD_DETAILS: {
         route: 'settings/profile/contact-methods/:contactMethod/details',
-        getRoute: function (contactMethod, backTo, shouldSkipInitialValidation) {
-            var encodedMethod = encodeURIComponent(contactMethod);
+        getRoute: (contactMethod, backTo, shouldSkipInitialValidation) => {
+            const encodedMethod = encodeURIComponent(contactMethod);
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/profile/contact-methods/".concat(encodedMethod, "/details").concat(shouldSkipInitialValidation ? "?shouldSkipInitialValidation=true" : ""), backTo);
+            return getUrlWithBackToParam(`settings/profile/contact-methods/${encodedMethod}/details${shouldSkipInitialValidation ? `?shouldSkipInitialValidation=true` : ``}`, backTo);
         },
-    }, SETTINGS_NEW_CONTACT_METHOD: {
+    },
+    SETTINGS_NEW_CONTACT_METHOD: {
         route: 'settings/profile/contact-methods/new',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/profile/contact-methods/new', backTo); },
-    }, SETTINGS_CONTACT_METHOD_VERIFY_ACCOUNT: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/profile/contact-methods/new', backTo),
+    },
+    SETTINGS_CONTACT_METHOD_VERIFY_ACCOUNT: {
         route: 'settings/profile/contact-methods/verify',
-        getRoute: function (backTo, forwardTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam(forwardTo ? "settings/profile/contact-methods/verify?forwardTo=".concat(encodeURIComponent(forwardTo)) : 'settings/profile/contact-methods/verify', backTo);
-        },
-    }, SETTINGS_2FA_ROOT: {
+        getRoute: (backTo, forwardTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(forwardTo ? `settings/profile/contact-methods/verify?forwardTo=${encodeURIComponent(forwardTo)}` : 'settings/profile/contact-methods/verify', backTo),
+    },
+    SETTINGS_2FA_ROOT: {
         route: 'settings/security/two-factor-auth',
-        getRoute: function (backTo, forwardTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam(forwardTo ? "settings/security/two-factor-auth?forwardTo=".concat(encodeURIComponent(forwardTo)) : 'settings/security/two-factor-auth', backTo);
-        },
-    }, SETTINGS_2FA_VERIFY: {
+        getRoute: (backTo, forwardTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(forwardTo ? `settings/security/two-factor-auth?forwardTo=${encodeURIComponent(forwardTo)}` : 'settings/security/two-factor-auth', backTo),
+    },
+    SETTINGS_2FA_VERIFY: {
         route: 'settings/security/two-factor-auth/verify',
-        getRoute: function (backTo, forwardTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam(forwardTo ? "settings/security/two-factor-auth/verify?forwardTo=".concat(encodeURIComponent(forwardTo)) : 'settings/security/two-factor-auth/verify', backTo);
-        },
-    }, SETTINGS_2FA_SUCCESS: {
+        getRoute: (backTo, forwardTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(forwardTo ? `settings/security/two-factor-auth/verify?forwardTo=${encodeURIComponent(forwardTo)}` : 'settings/security/two-factor-auth/verify', backTo),
+    },
+    SETTINGS_2FA_SUCCESS: {
         route: 'settings/security/two-factor-auth/success',
-        getRoute: function (backTo, forwardTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam(forwardTo ? "settings/security/two-factor-auth/success?forwardTo=".concat(encodeURIComponent(forwardTo)) : 'settings/security/two-factor-auth/success', backTo);
-        },
-    }, SETTINGS_2FA_DISABLED: 'settings/security/two-factor-auth/disabled', SETTINGS_2FA_DISABLE: 'settings/security/two-factor-auth/disable', SETTINGS_STATUS: 'settings/profile/status', SETTINGS_STATUS_CLEAR_AFTER: 'settings/profile/status/clear-after', SETTINGS_STATUS_CLEAR_AFTER_DATE: 'settings/profile/status/clear-after/date', SETTINGS_STATUS_CLEAR_AFTER_TIME: 'settings/profile/status/clear-after/time', SETTINGS_VACATION_DELEGATE: 'settings/profile/status/vacation-delegate', SETTINGS_TROUBLESHOOT: 'settings/troubleshoot', SETTINGS_CONSOLE: {
+        getRoute: (backTo, forwardTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(forwardTo ? `settings/security/two-factor-auth/success?forwardTo=${encodeURIComponent(forwardTo)}` : 'settings/security/two-factor-auth/success', backTo),
+    },
+    SETTINGS_2FA_DISABLED: 'settings/security/two-factor-auth/disabled',
+    SETTINGS_2FA_DISABLE: 'settings/security/two-factor-auth/disable',
+    SETTINGS_STATUS: 'settings/profile/status',
+    SETTINGS_STATUS_CLEAR_AFTER: 'settings/profile/status/clear-after',
+    SETTINGS_STATUS_CLEAR_AFTER_DATE: 'settings/profile/status/clear-after/date',
+    SETTINGS_STATUS_CLEAR_AFTER_TIME: 'settings/profile/status/clear-after/time',
+    SETTINGS_VACATION_DELEGATE: 'settings/profile/status/vacation-delegate',
+    SETTINGS_TROUBLESHOOT: 'settings/troubleshoot',
+    SETTINGS_CONSOLE: {
         route: 'settings/troubleshoot/console',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("settings/troubleshoot/console", backTo); },
-    }, SETTINGS_SHARE_LOG: {
+        getRoute: (backTo) => getUrlWithBackToParam(`settings/troubleshoot/console`, backTo),
+    },
+    SETTINGS_SHARE_LOG: {
         route: 'settings/troubleshoot/console/share-log',
-        getRoute: function (source) { return "settings/troubleshoot/console/share-log?source=".concat(encodeURI(source)); },
-    }, SETTINGS_EXIT_SURVEY_REASON: {
+        getRoute: (source) => `settings/troubleshoot/console/share-log?source=${encodeURI(source)}`,
+    },
+    SETTINGS_EXIT_SURVEY_REASON: {
         route: 'settings/exit-survey/reason',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/exit-survey/reason', backTo); },
-    }, SETTINGS_EXIT_SURVEY_RESPONSE: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/exit-survey/reason', backTo),
+    },
+    SETTINGS_EXIT_SURVEY_RESPONSE: {
         route: 'settings/exit-survey/response',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reason, backTo) { return getUrlWithBackToParam("settings/exit-survey/response".concat(reason ? "?reason=".concat(encodeURIComponent(reason)) : ''), backTo); },
-    }, SETTINGS_EXIT_SURVEY_CONFIRM: {
+        getRoute: (reason, backTo) => getUrlWithBackToParam(`settings/exit-survey/response${reason ? `?reason=${encodeURIComponent(reason)}` : ''}`, backTo),
+    },
+    SETTINGS_EXIT_SURVEY_CONFIRM: {
         route: 'settings/exit-survey/confirm',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('settings/exit-survey/confirm', backTo); },
-    }, SETTINGS_SAVE_THE_WORLD: 'settings/teachersunite', KEYBOARD_SHORTCUTS: {
+        getRoute: (backTo) => getUrlWithBackToParam('settings/exit-survey/confirm', backTo),
+    },
+    SETTINGS_SAVE_THE_WORLD: 'settings/teachersunite',
+    KEYBOARD_SHORTCUTS: {
         route: 'keyboard-shortcuts',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('keyboard-shortcuts', backTo); },
-    }, NEW: 'new', NEW_CHAT: 'new/chat', NEW_CHAT_CONFIRM: 'new/chat/confirm', NEW_CHAT_EDIT_NAME: 'new/chat/confirm/name/edit', NEW_ROOM: 'new/room', NEW_REPORT_WORKSPACE_SELECTION: 'new-report-workspace-selection', REPORT: 'r', REPORT_WITH_ID: {
+        getRoute: (backTo) => getUrlWithBackToParam('keyboard-shortcuts', backTo),
+    },
+    NEW: 'new',
+    NEW_CHAT: 'new/chat',
+    NEW_CHAT_CONFIRM: 'new/chat/confirm',
+    NEW_CHAT_EDIT_NAME: 'new/chat/confirm/name/edit',
+    NEW_ROOM: 'new/room',
+    NEW_REPORT_WORKSPACE_SELECTION: 'new-report-workspace-selection',
+    REPORT: 'r',
+    REPORT_WITH_ID: {
         route: 'r/:reportID?/:reportActionID?',
-        getRoute: function (reportID, reportActionID, referrer, backTo) {
+        getRoute: (reportID, reportActionID, referrer, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the REPORT_WITH_ID route');
             }
-            var baseRoute = reportActionID ? "r/".concat(reportID, "/").concat(reportActionID) : "r/".concat(reportID);
-            var queryParams = [];
+            const baseRoute = reportActionID ? `r/${reportID}/${reportActionID}` : `r/${reportID}`;
+            const queryParams = [];
             if (referrer) {
-                queryParams.push("referrer=".concat(encodeURIComponent(referrer)));
+                queryParams.push(`referrer=${encodeURIComponent(referrer)}`);
             }
-            var queryString = queryParams.length > 0 ? "?".concat(queryParams.join('&')) : '';
+            const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(baseRoute).concat(queryString), backTo);
+            return getUrlWithBackToParam(`${baseRoute}${queryString}`, backTo);
         },
-    }, REPORT_AVATAR: {
+    },
+    REPORT_AVATAR: {
         route: 'r/:reportID/avatar',
-        getRoute: function (reportID, policyID) {
+        getRoute: (reportID, policyID) => {
             if (policyID) {
-                return "r/".concat(reportID, "/avatar?policyID=").concat(policyID);
+                return `r/${reportID}/avatar?policyID=${policyID}`;
             }
-            return "r/".concat(reportID, "/avatar");
+            return `r/${reportID}/avatar`;
         },
-    }, ATTACHMENTS: {
+    },
+    ATTACHMENTS: {
         route: 'attachment',
-        getRoute: function (params) { return getAttachmentModalScreenRoute('attachment', params); },
-    }, EDIT_CURRENCY_REQUEST: {
+        getRoute: (params) => getAttachmentModalScreenRoute('attachment', params),
+    },
+    EDIT_CURRENCY_REQUEST: {
         route: 'r/:threadReportID/edit/currency',
-        getRoute: function (threadReportID, currency, backTo) { return "r/".concat(threadReportID, "/edit/currency?currency=").concat(currency, "&backTo=").concat(backTo); },
-    }, EDIT_REPORT_FIELD_REQUEST: {
+        getRoute: (threadReportID, currency, backTo) => `r/${threadReportID}/edit/currency?currency=${currency}&backTo=${backTo}`,
+    },
+    EDIT_REPORT_FIELD_REQUEST: {
         route: 'r/:reportID/edit/policyField/:policyID/:fieldID',
-        getRoute: function (reportID, policyID, fieldID, backTo) {
+        getRoute: (reportID, policyID, fieldID, backTo) => {
             if (!policyID || !reportID) {
                 Log_1.default.warn('Invalid policyID or reportID is used to build the EDIT_REPORT_FIELD_REQUEST route', {
-                    policyID: policyID,
-                    reportID: reportID,
+                    policyID,
+                    reportID,
                 });
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/edit/policyField/").concat(policyID, "/").concat(encodeURIComponent(fieldID)), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/edit/policyField/${policyID}/${encodeURIComponent(fieldID)}`, backTo);
         },
-    }, REPORT_WITH_ID_DETAILS_SHARE_CODE: {
+    },
+    REPORT_WITH_ID_DETAILS_SHARE_CODE: {
         route: 'r/:reportID/details/shareCode',
-        getRoute: function (reportID, backTo) {
+        getRoute: (reportID, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the REPORT_WITH_ID_DETAILS_SHARE_CODE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/details/shareCode"), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/details/shareCode`, backTo);
         },
-    }, REPORT_PARTICIPANTS: {
+    },
+    REPORT_PARTICIPANTS: {
         route: 'r/:reportID/participants',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/participants"), backTo); },
-    }, REPORT_PARTICIPANTS_INVITE: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/participants`, backTo),
+    },
+    REPORT_PARTICIPANTS_INVITE: {
         route: 'r/:reportID/participants/invite',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/participants/invite"), backTo); },
-    }, REPORT_PARTICIPANTS_DETAILS: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/participants/invite`, backTo),
+    },
+    REPORT_PARTICIPANTS_DETAILS: {
         route: 'r/:reportID/participants/:accountID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, accountID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/participants/").concat(accountID), backTo); },
-    }, REPORT_PARTICIPANTS_ROLE_SELECTION: {
+        getRoute: (reportID, accountID, backTo) => getUrlWithBackToParam(`r/${reportID}/participants/${accountID}`, backTo),
+    },
+    REPORT_PARTICIPANTS_ROLE_SELECTION: {
         route: 'r/:reportID/participants/:accountID/role',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, accountID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/participants/").concat(accountID, "/role"), backTo); },
-    }, REPORT_WITH_ID_DETAILS: {
+        getRoute: (reportID, accountID, backTo) => getUrlWithBackToParam(`r/${reportID}/participants/${accountID}/role`, backTo),
+    },
+    REPORT_WITH_ID_DETAILS: {
         route: 'r/:reportID/details',
-        getRoute: function (reportID, backTo) {
+        getRoute: (reportID, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the REPORT_WITH_ID_DETAILS route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/details"), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/details`, backTo);
         },
-    }, REPORT_WITH_ID_DETAILS_EXPORT: {
+    },
+    REPORT_WITH_ID_DETAILS_EXPORT: {
         route: 'r/:reportID/details/export/:connectionName',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, connectionName, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/details/export/").concat(connectionName), backTo); },
-    }, REPORT_WITH_ID_CHANGE_WORKSPACE: {
+        getRoute: (reportID, connectionName, backTo) => getUrlWithBackToParam(`r/${reportID}/details/export/${connectionName}`, backTo),
+    },
+    REPORT_WITH_ID_CHANGE_WORKSPACE: {
         route: 'r/:reportID/change-workspace',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/change-workspace"), backTo); },
-    }, REPORT_SETTINGS: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/change-workspace`, backTo),
+    },
+    REPORT_SETTINGS: {
         route: 'r/:reportID/settings',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/settings"), backTo); },
-    }, REPORT_SETTINGS_NAME: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/settings`, backTo),
+    },
+    REPORT_SETTINGS_NAME: {
         route: 'r/:reportID/settings/name',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/settings/name"), backTo); },
-    }, REPORT_SETTINGS_NOTIFICATION_PREFERENCES: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/settings/name`, backTo),
+    },
+    REPORT_SETTINGS_NOTIFICATION_PREFERENCES: {
         route: 'r/:reportID/settings/notification-preferences',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/settings/notification-preferences"), backTo); },
-    }, REPORT_SETTINGS_WRITE_CAPABILITY: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/settings/notification-preferences`, backTo),
+    },
+    REPORT_SETTINGS_WRITE_CAPABILITY: {
         route: 'r/:reportID/settings/who-can-post',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/settings/who-can-post"), backTo); },
-    }, REPORT_SETTINGS_VISIBILITY: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/settings/who-can-post`, backTo),
+    },
+    REPORT_SETTINGS_VISIBILITY: {
         route: 'r/:reportID/settings/visibility',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/settings/visibility"), backTo); },
-    }, REPORT_CHANGE_APPROVER: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/settings/visibility`, backTo),
+    },
+    REPORT_CHANGE_APPROVER: {
         route: 'r/:reportID/change-approver',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/change-approver"), backTo); },
-    }, REPORT_CHANGE_APPROVER_ADD_APPROVER: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/change-approver`, backTo),
+    },
+    REPORT_CHANGE_APPROVER_ADD_APPROVER: {
         route: 'r/:reportID/change-approver/add',
-        getRoute: function (reportID) { return "r/".concat(reportID, "/change-approver/add"); },
-    }, SPLIT_BILL_DETAILS: {
+        getRoute: (reportID) => `r/${reportID}/change-approver/add`,
+    },
+    SPLIT_BILL_DETAILS: {
         route: 'r/:reportID/split/:reportActionID',
-        getRoute: function (reportID, reportActionID, backTo) {
+        getRoute: (reportID, reportActionID, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the SPLIT_BILL_DETAILS route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/split/").concat(reportActionID), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/split/${reportActionID}`, backTo);
         },
-    }, TASK_TITLE: {
+    },
+    TASK_TITLE: {
         route: 'r/:reportID/title',
-        getRoute: function (reportID, backTo) {
+        getRoute: (reportID, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the TASK_TITLE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/title"), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/title`, backTo);
         },
-    }, REPORT_DESCRIPTION: {
+    },
+    REPORT_DESCRIPTION: {
         route: 'r/:reportID/description',
-        getRoute: function (reportID, backTo) {
+        getRoute: (reportID, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the REPORT_DESCRIPTION route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/description"), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/description`, backTo);
         },
-    }, TASK_ASSIGNEE: {
+    },
+    TASK_ASSIGNEE: {
         route: 'r/:reportID/assignee',
-        getRoute: function (reportID, backTo) {
+        getRoute: (reportID, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the TASK_ASSIGNEE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/assignee"), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/assignee`, backTo);
         },
-    }, PRIVATE_NOTES_LIST: {
+    },
+    PRIVATE_NOTES_LIST: {
         route: 'r/:reportID/notes',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/notes"), backTo); },
-    }, PRIVATE_NOTES_EDIT: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/notes`, backTo),
+    },
+    PRIVATE_NOTES_EDIT: {
         route: 'r/:reportID/notes/:accountID/edit',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, accountID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/notes/").concat(accountID, "/edit"), backTo); },
-    }, ROOM_MEMBERS: {
+        getRoute: (reportID, accountID, backTo) => getUrlWithBackToParam(`r/${reportID}/notes/${accountID}/edit`, backTo),
+    },
+    ROOM_MEMBERS: {
         route: 'r/:reportID/members',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/members"), backTo); },
-    }, ROOM_MEMBER_DETAILS: {
+        getRoute: (reportID, backTo) => getUrlWithBackToParam(`r/${reportID}/members`, backTo),
+    },
+    ROOM_MEMBER_DETAILS: {
         route: 'r/:reportID/members/:accountID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (reportID, accountID, backTo) { return getUrlWithBackToParam("r/".concat(reportID, "/members/").concat(accountID), backTo); },
-    }, ROOM_INVITE: {
+        getRoute: (reportID, accountID, backTo) => getUrlWithBackToParam(`r/${reportID}/members/${accountID}`, backTo),
+    },
+    ROOM_INVITE: {
         route: 'r/:reportID/invite',
-        getRoute: function (reportID, backTo) {
+        getRoute: (reportID, backTo) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the ROOM_INVITE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/invite"), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/invite`, backTo);
         },
-    }, SPLIT_EXPENSE: {
+    },
+    SPLIT_EXPENSE: {
         route: 'create/split-expense/overview/:reportID/:transactionID/:splitExpenseTransactionID?',
-        getRoute: function (reportID, originalTransactionID, splitExpenseTransactionID, backTo) {
+        getRoute: (reportID, originalTransactionID, splitExpenseTransactionID, backTo) => {
             if (!reportID || !originalTransactionID) {
-                Log_1.default.warn("Invalid ".concat(reportID, "(reportID) or ").concat(originalTransactionID, "(transactionID) is used to build the SPLIT_EXPENSE route"));
+                Log_1.default.warn(`Invalid ${reportID}(reportID) or ${originalTransactionID}(transactionID) is used to build the SPLIT_EXPENSE route`);
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("create/split-expense/overview/".concat(reportID, "/").concat(originalTransactionID).concat(splitExpenseTransactionID ? "/".concat(splitExpenseTransactionID) : ''), backTo);
+            return getUrlWithBackToParam(`create/split-expense/overview/${reportID}/${originalTransactionID}${splitExpenseTransactionID ? `/${splitExpenseTransactionID}` : ''}`, backTo);
         },
-    }, SPLIT_EXPENSE_EDIT: {
+    },
+    SPLIT_EXPENSE_EDIT: {
         route: 'edit/split-expense/overview/:reportID/:transactionID/:splitExpenseTransactionID?',
-        getRoute: function (reportID, originalTransactionID, splitExpenseTransactionID, backTo) {
+        getRoute: (reportID, originalTransactionID, splitExpenseTransactionID, backTo) => {
             if (!reportID || !originalTransactionID) {
-                Log_1.default.warn("Invalid ".concat(reportID, "(reportID) or ").concat(originalTransactionID, "(transactionID) is used to build the SPLIT_EXPENSE_EDIT route"));
+                Log_1.default.warn(`Invalid ${reportID}(reportID) or ${originalTransactionID}(transactionID) is used to build the SPLIT_EXPENSE_EDIT route`);
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("edit/split-expense/overview/".concat(reportID, "/").concat(originalTransactionID).concat(splitExpenseTransactionID ? "/".concat(splitExpenseTransactionID) : ''), backTo);
+            return getUrlWithBackToParam(`edit/split-expense/overview/${reportID}/${originalTransactionID}${splitExpenseTransactionID ? `/${splitExpenseTransactionID}` : ''}`, backTo);
         },
-    }, MONEY_REQUEST_HOLD_REASON: {
+    },
+    MONEY_REQUEST_HOLD_REASON: {
         route: ':type/edit/reason/:transactionID?/:searchHash?',
-        getRoute: function (type, transactionID, reportID, backTo, searchHash) {
-            var searchPart = searchHash ? "/".concat(searchHash) : '';
-            var reportPart = reportID ? "&reportID=".concat(reportID) : '';
-            return "".concat(type, "/edit/reason/").concat(transactionID).concat(searchPart, "/?backTo=").concat(backTo).concat(reportPart);
+        getRoute: (type, transactionID, reportID, backTo, searchHash) => {
+            const searchPart = searchHash ? `/${searchHash}` : '';
+            const reportPart = reportID ? `&reportID=${reportID}` : '';
+            return `${type}/edit/reason/${transactionID}${searchPart}/?backTo=${backTo}${reportPart}`;
         },
-    }, MONEY_REQUEST_CREATE: {
+    },
+    MONEY_REQUEST_CREATE: {
         route: ':action/:iouType/start/:transactionID/:reportID/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "".concat(action, "/").concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, MONEY_REQUEST_STEP_SEND_FROM: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `${action}/${iouType}/start/${transactionID}/${reportID}/${backToReport ?? ''}`,
+    },
+    MONEY_REQUEST_STEP_SEND_FROM: {
         route: 'create/:iouType/from/:transactionID/:reportID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("create/".concat(iouType, "/from/").concat(transactionID, "/").concat(reportID), backTo);
-        },
-    }, MONEY_REQUEST_STEP_COMPANY_INFO: {
+        getRoute: (iouType, transactionID, reportID, backTo = '') => getUrlWithBackToParam(`create/${iouType}/from/${transactionID}/${reportID}`, backTo),
+    },
+    MONEY_REQUEST_STEP_COMPANY_INFO: {
         route: 'create/:iouType/company-info/:transactionID/:reportID',
-        getRoute: function (iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("create/".concat(iouType, "/company-info/").concat(transactionID, "/").concat(reportID), backTo);
-        },
-    }, MONEY_REQUEST_STEP_CONFIRMATION: {
+        getRoute: (iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`create/${iouType}/company-info/${transactionID}/${reportID}`, backTo),
+    },
+    MONEY_REQUEST_STEP_CONFIRMATION: {
         route: ':action/:iouType/confirmation/:transactionID/:reportID/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport, participantsAutoAssigned, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/confirmation/").concat(transactionID, "/").concat(reportID, "/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '').concat(participantsAutoAssigned ? '?participantsAutoAssigned=true' : ''), backTo);
-        },
-    }, MONEY_REQUEST_STEP_AMOUNT: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport, participantsAutoAssigned, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/confirmation/${transactionID}/${reportID}/${backToReport ?? ''}${participantsAutoAssigned ? '?participantsAutoAssigned=true' : ''}`, backTo),
+    },
+    MONEY_REQUEST_STEP_AMOUNT: {
         route: ':action/:iouType/amount/:transactionID/:reportID/:reportActionID?/:pageIndex?/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, reportActionID, pageIndex, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, reportActionID, pageIndex, backTo = '') => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_AMOUNT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/amount/").concat(transactionID, "/").concat(reportID, "/").concat(reportActionID ? "".concat(reportActionID, "/") : '').concat(pageIndex), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/amount/${transactionID}/${reportID}/${reportActionID ? `${reportActionID}/` : ''}${pageIndex}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_TAX_RATE: {
+    },
+    MONEY_REQUEST_STEP_TAX_RATE: {
         route: ':action/:iouType/taxRate/:transactionID/:reportID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_TAX_RATE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/taxRate/").concat(transactionID, "/").concat(reportID), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/taxRate/${transactionID}/${reportID}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_TAX_AMOUNT: {
+    },
+    MONEY_REQUEST_STEP_TAX_AMOUNT: {
         route: ':action/:iouType/taxAmount/:transactionID/:reportID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_TAX_AMOUNT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/taxAmount/").concat(transactionID, "/").concat(reportID), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/taxAmount/${transactionID}/${reportID}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_CATEGORY: {
+    },
+    MONEY_REQUEST_STEP_CATEGORY: {
         route: ':action/:iouType/category/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '', reportActionID) => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_CATEGORY route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/category/").concat(transactionID, "/").concat(reportID).concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/category/${transactionID}/${reportID}${reportActionID ? `/${reportActionID}` : ''}`, backTo);
         },
-    }, MONEY_REQUEST_ATTENDEE: {
+    },
+    MONEY_REQUEST_ATTENDEE: {
         route: ':action/:iouType/attendees/:transactionID/:reportID',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_ATTENDEE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/attendees/").concat(transactionID, "/").concat(reportID), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/attendees/${transactionID}/${reportID}`, backTo);
         },
-    }, MONEY_REQUEST_ACCOUNTANT: {
+    },
+    MONEY_REQUEST_ACCOUNTANT: {
         route: ':action/:iouType/accountant/:transactionID/:reportID',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_ACCOUNTANT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/accountant/").concat(transactionID, "/").concat(reportID), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/accountant/${transactionID}/${reportID}`, backTo);
         },
-    }, MONEY_REQUEST_UPGRADE: {
+    },
+    MONEY_REQUEST_UPGRADE: {
         route: ':action/:iouType/upgrade/:transactionID/:reportID',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/upgrade/").concat(transactionID, "/").concat(reportID), backTo);
-        },
-    }, MONEY_REQUEST_STEP_DESTINATION: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/upgrade/${transactionID}/${reportID}`, backTo),
+    },
+    MONEY_REQUEST_STEP_DESTINATION: {
         route: ':action/:iouType/destination/:transactionID/:reportID',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/destination/").concat(transactionID, "/").concat(reportID), backTo);
-        },
-    }, MONEY_REQUEST_STEP_TIME: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/destination/${transactionID}/${reportID}`, backTo),
+    },
+    MONEY_REQUEST_STEP_TIME: {
         route: ':action/:iouType/time/:transactionID/:reportID',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/time/").concat(transactionID, "/").concat(reportID), backTo);
-        },
-    }, MONEY_REQUEST_STEP_SUBRATE: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/time/${transactionID}/${reportID}`, backTo),
+    },
+    MONEY_REQUEST_STEP_SUBRATE: {
         route: ':action/:iouType/subrate/:transactionID/:reportID/:pageIndex',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/subrate/").concat(transactionID, "/").concat(reportID, "/0"), backTo);
-        },
-    }, MONEY_REQUEST_STEP_DESTINATION_EDIT: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/subrate/${transactionID}/${reportID}/0`, backTo),
+    },
+    MONEY_REQUEST_STEP_DESTINATION_EDIT: {
         route: ':action/:iouType/destination/:transactionID/:reportID/edit',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/destination/").concat(transactionID, "/").concat(reportID, "/edit"), backTo);
-        },
-    }, MONEY_REQUEST_STEP_TIME_EDIT: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/destination/${transactionID}/${reportID}/edit`, backTo),
+    },
+    MONEY_REQUEST_STEP_TIME_EDIT: {
         route: ':action/:iouType/time/:transactionID/:reportID/edit',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/time/").concat(transactionID, "/").concat(reportID, "/edit"), backTo);
-        },
-    }, MONEY_REQUEST_STEP_SUBRATE_EDIT: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/time/${transactionID}/${reportID}/edit`, backTo),
+    },
+    MONEY_REQUEST_STEP_SUBRATE_EDIT: {
         route: ':action/:iouType/subrate/:transactionID/:reportID/edit/:pageIndex',
-        getRoute: function (action, iouType, transactionID, reportID, pageIndex, backTo) {
-            if (pageIndex === void 0) { pageIndex = 0; }
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/subrate/").concat(transactionID, "/").concat(reportID, "/edit/").concat(pageIndex), backTo);
-        },
-    }, MONEY_REQUEST_STEP_REPORT: {
+        getRoute: (action, iouType, transactionID, reportID, pageIndex = 0, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/subrate/${transactionID}/${reportID}/edit/${pageIndex}`, backTo),
+    },
+    MONEY_REQUEST_STEP_REPORT: {
         route: ':action/:iouType/report/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/report/").concat(transactionID, "/").concat(reportID).concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
-        },
-    }, MONEY_REQUEST_RECEIPT_PREVIEW: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '', reportActionID) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/report/${transactionID}/${reportID}${reportActionID ? `/${reportActionID}` : ''}`, backTo),
+    },
+    MONEY_REQUEST_RECEIPT_PREVIEW: {
         route: ':action/:iouType/receipt/:transactionID/:reportID',
-        getRoute: function (reportID, transactionID, action, iouType) {
+        getRoute: (reportID, transactionID, action, iouType) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the MONEY_REQUEST_RECEIPT_PREVIEW route');
             }
             if (!transactionID) {
                 Log_1.default.warn('Invalid transactionID is used to build the MONEY_REQUEST_RECEIPT_PREVIEW route');
             }
-            return "".concat(action, "/").concat(iouType, "/receipt/").concat(transactionID, "/").concat(reportID, "?readonly=false");
+            return `${action}/${iouType}/receipt/${transactionID}/${reportID}?readonly=false`;
         },
-    }, MONEY_REQUEST_EDIT_REPORT: {
+    },
+    MONEY_REQUEST_EDIT_REPORT: {
         route: ':action/:iouType/report/:reportID/edit',
-        getRoute: function (action, iouType, reportID, shouldTurnOffSelectionMode, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, reportID, shouldTurnOffSelectionMode, backTo = '') => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID while building route MONEY_REQUEST_EDIT_REPORT');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/report/").concat(reportID, "/edit").concat(shouldTurnOffSelectionMode ? '?shouldTurnOffSelectionMode=true' : ''), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/report/${reportID}/edit${shouldTurnOffSelectionMode ? '?shouldTurnOffSelectionMode=true' : ''}`, backTo);
         },
-    }, SETTINGS_TAGS_ROOT: {
+    },
+    SETTINGS_TAGS_ROOT: {
         route: 'settings/:policyID/tags',
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (policyID, backTo = '') => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID while building route SETTINGS_TAGS_ROOT');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tags"), backTo);
+            return getUrlWithBackToParam(`settings/${policyID}/tags`, backTo);
         },
-    }, SETTINGS_TAGS_SETTINGS: {
+    },
+    SETTINGS_TAGS_SETTINGS: {
         route: 'settings/:policyID/tags/settings',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tags/settings"), backTo);
-        },
-    }, SETTINGS_TAGS_EDIT: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/tags/settings`, backTo),
+    },
+    SETTINGS_TAGS_EDIT: {
         route: 'settings/:policyID/tags/:orderWeight/edit',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, orderWeight, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tags/").concat(orderWeight, "/edit"), backTo);
-        },
-    }, SETTINGS_TAG_CREATE: {
+        getRoute: (policyID, orderWeight, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/tags/${orderWeight}/edit`, backTo),
+    },
+    SETTINGS_TAG_CREATE: {
         route: 'settings/:policyID/tags/new',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tags/new"), backTo);
-        },
-    }, SETTINGS_TAG_EDIT: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/tags/new`, backTo),
+    },
+    SETTINGS_TAG_EDIT: {
         route: 'settings/:policyID/tag/:orderWeight/:tagName/edit',
-        getRoute: function (policyID, orderWeight, tagName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName), "/edit"), backTo);
-        },
-    }, SETTINGS_TAG_SETTINGS: {
+        getRoute: (policyID, orderWeight, tagName, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`settings/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}/edit`, backTo),
+    },
+    SETTINGS_TAG_SETTINGS: {
         route: 'settings/:policyID/tag/:orderWeight/:tagName',
-        getRoute: function (policyID, orderWeight, tagName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName)), backTo);
-        },
-    }, SETTINGS_TAG_APPROVER: {
+        getRoute: (policyID, orderWeight, tagName, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`settings/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}`, backTo),
+    },
+    SETTINGS_TAG_APPROVER: {
         route: 'settings/:policyID/tag/:orderWeight/:tagName/approver',
-        getRoute: function (policyID, orderWeight, tagName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName), "/approver"), backTo);
-        },
-    }, SETTINGS_TAG_LIST_VIEW: {
+        getRoute: (policyID, orderWeight, tagName, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`settings/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}/approver`, backTo),
+    },
+    SETTINGS_TAG_LIST_VIEW: {
         route: 'settings/:policyID/tag-list/:orderWeight',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, orderWeight, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tag-list/").concat(orderWeight), backTo);
-        },
-    }, SETTINGS_TAG_GL_CODE: {
+        getRoute: (policyID, orderWeight, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/tag-list/${orderWeight}`, backTo),
+    },
+    SETTINGS_TAG_GL_CODE: {
         route: 'settings/:policyID/tag/:orderWeight/:tagName/gl-code',
-        getRoute: function (policyID, orderWeight, tagName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName), "/gl-code"), backTo);
-        },
-    }, SETTINGS_TAGS_IMPORT: {
+        getRoute: (policyID, orderWeight, tagName, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`settings/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}/gl-code`, backTo),
+    },
+    SETTINGS_TAGS_IMPORT: {
         route: 'settings/:policyID/tags/import',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tags/import"), backTo);
-        },
-    }, SETTINGS_TAGS_IMPORTED: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/tags/import`, backTo),
+    },
+    SETTINGS_TAGS_IMPORTED: {
         route: 'settings/:policyID/tags/imported',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/tags/imported"), backTo);
-        },
-    }, SETTINGS_CATEGORIES_ROOT: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/tags/imported`, backTo),
+    },
+    SETTINGS_CATEGORIES_ROOT: {
         route: 'settings/:policyID/categories',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/categories"), backTo);
-        },
-    }, SETTINGS_CATEGORY_SETTINGS: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/categories`, backTo),
+    },
+    SETTINGS_CATEGORY_SETTINGS: {
         route: 'settings/:policyID/category/:categoryName',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, categoryName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName)), backTo);
-        },
-    }, SETTINGS_CATEGORIES_SETTINGS: {
+        getRoute: (policyID, categoryName, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/category/${encodeURIComponent(categoryName)}`, backTo),
+    },
+    SETTINGS_CATEGORIES_SETTINGS: {
         route: 'settings/:policyID/categories/settings',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/categories/settings"), backTo);
-        },
-    }, SETTINGS_CATEGORY_CREATE: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/categories/settings`, backTo),
+    },
+    SETTINGS_CATEGORY_CREATE: {
         route: 'settings/:policyID/categories/new',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/categories/new"), backTo);
-        },
-    }, SETTINGS_CATEGORY_EDIT: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/categories/new`, backTo),
+    },
+    SETTINGS_CATEGORY_EDIT: {
         route: 'settings/:policyID/category/:categoryName/edit',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, categoryName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/edit"), backTo);
-        },
-    }, SETTINGS_CATEGORIES_IMPORT: {
+        getRoute: (policyID, categoryName, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/category/${encodeURIComponent(categoryName)}/edit`, backTo),
+    },
+    SETTINGS_CATEGORIES_IMPORT: {
         route: 'settings/:policyID/categories/import',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/categories/import"), backTo);
-        },
-    }, SETTINGS_CATEGORIES_IMPORTED: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/categories/import`, backTo),
+    },
+    SETTINGS_CATEGORIES_IMPORTED: {
         route: 'settings/:policyID/categories/imported',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            return getUrlWithBackToParam("settings/".concat(policyID, "/categories/imported"), backTo);
-        },
-    }, SETTINGS_CATEGORY_PAYROLL_CODE: {
+        getRoute: (policyID, backTo = '') => getUrlWithBackToParam(`settings/${policyID}/categories/imported`, backTo),
+    },
+    SETTINGS_CATEGORY_PAYROLL_CODE: {
         route: 'settings/:policyID/category/:categoryName/payroll-code',
-        getRoute: function (policyID, categoryName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/payroll-code"), backTo);
-        },
-    }, SETTINGS_CATEGORY_GL_CODE: {
+        getRoute: (policyID, categoryName, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`settings/${policyID}/category/${encodeURIComponent(categoryName)}/payroll-code`, backTo),
+    },
+    SETTINGS_CATEGORY_GL_CODE: {
         route: 'settings/:policyID/category/:categoryName/gl-code',
-        getRoute: function (policyID, categoryName, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("settings/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/gl-code"), backTo);
-        },
-    }, MONEY_REQUEST_STEP_CURRENCY: {
+        getRoute: (policyID, categoryName, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`settings/${policyID}/category/${encodeURIComponent(categoryName)}/gl-code`, backTo),
+    },
+    MONEY_REQUEST_STEP_CURRENCY: {
         route: ':action/:iouType/currency/:transactionID/:reportID/:pageIndex?',
-        getRoute: function (action, iouType, transactionID, reportID, pageIndex, currency, backTo) {
-            if (pageIndex === void 0) { pageIndex = ''; }
-            if (currency === void 0) { currency = ''; }
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/currency/").concat(transactionID, "/").concat(reportID, "/").concat(pageIndex, "?currency=").concat(currency), backTo);
-        },
-    }, MONEY_REQUEST_STEP_DATE: {
+        getRoute: (action, iouType, transactionID, reportID, pageIndex = '', currency = '', backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/currency/${transactionID}/${reportID}/${pageIndex}?currency=${currency}`, backTo),
+    },
+    MONEY_REQUEST_STEP_DATE: {
         route: ':action/:iouType/date/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '', reportActionID) => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_DATE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/date/").concat(transactionID, "/").concat(reportID).concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/date/${transactionID}/${reportID}${reportActionID ? `/${reportActionID}` : ''}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_DESCRIPTION: {
+    },
+    MONEY_REQUEST_STEP_DESCRIPTION: {
         route: ':action/:iouType/description/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '', reportActionID) => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_DESCRIPTION route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/description/").concat(transactionID, "/").concat(reportID).concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/description/${transactionID}/${reportID}${reportActionID ? `/${reportActionID}` : ''}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_DISTANCE: {
+    },
+    MONEY_REQUEST_STEP_DISTANCE: {
         route: ':action/:iouType/distance/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '', reportActionID) => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_DISTANCE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/distance/").concat(transactionID, "/").concat(reportID).concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/distance/${transactionID}/${reportID}${reportActionID ? `/${reportActionID}` : ''}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_DISTANCE_RATE: {
+    },
+    MONEY_REQUEST_STEP_DISTANCE_RATE: {
         route: ':action/:iouType/distanceRate/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '', reportActionID) => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_DISTANCE_RATE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/distanceRate/").concat(transactionID, "/").concat(reportID).concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/distanceRate/${transactionID}/${reportID}${reportActionID ? `/${reportActionID}` : ''}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_MERCHANT: {
+    },
+    MONEY_REQUEST_STEP_MERCHANT: {
         route: ':action/:iouType/merchant/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '', reportActionID) => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_MERCHANT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/merchant/").concat(transactionID, "/").concat(reportID).concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/merchant/${transactionID}/${reportID}${reportActionID ? `/${reportActionID}` : ''}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_PARTICIPANTS: {
+    },
+    MONEY_REQUEST_STEP_PARTICIPANTS: {
         route: ':action/:iouType/participants/:transactionID/:reportID',
-        getRoute: function (iouType, transactionID, reportID, backTo, action) {
-            if (backTo === void 0) { backTo = ''; }
-            if (action === void 0) { action = 'create'; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/participants/").concat(transactionID, "/").concat(reportID), backTo);
-        },
-    }, MONEY_REQUEST_STEP_SPLIT_PAYER: {
+        getRoute: (iouType, transactionID, reportID, backTo = '', action = 'create') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/participants/${transactionID}/${reportID}`, backTo),
+    },
+    MONEY_REQUEST_STEP_SPLIT_PAYER: {
         route: ':action/:iouType/confirmation/:transactionID/:reportID/payer',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/confirmation/").concat(transactionID, "/").concat(reportID, "/payer"), backTo);
-        },
-    }, MONEY_REQUEST_STEP_SCAN: {
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/confirmation/${transactionID}/${reportID}/payer`, backTo),
+    },
+    MONEY_REQUEST_STEP_SCAN: {
         route: ':action/:iouType/scan/:transactionID/:reportID',
-        getRoute: function (action, iouType, transactionID, reportID, backTo) {
-            if (backTo === void 0) { backTo = ''; }
+        getRoute: (action, iouType, transactionID, reportID, backTo = '') => {
             if (!transactionID || !reportID) {
                 Log_1.default.warn('Invalid transactionID or reportID is used to build the MONEY_REQUEST_STEP_SCAN route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/scan/").concat(transactionID, "/").concat(reportID), backTo);
+            return getUrlWithBackToParam(`${action}/${iouType}/scan/${transactionID}/${reportID}`, backTo);
         },
-    }, MONEY_REQUEST_STEP_TAG: {
+    },
+    MONEY_REQUEST_STEP_TAG: {
         route: ':action/:iouType/tag/:orderWeight/:transactionID/:reportID/:reportActionID?',
-        getRoute: function (action, iouType, orderWeight, transactionID, reportID, backTo, reportActionID) {
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/tag/").concat(orderWeight, "/").concat(transactionID).concat(reportID ? "/".concat(reportID) : '').concat(reportActionID ? "/".concat(reportActionID) : ''), backTo);
-        },
-    }, MONEY_REQUEST_STEP_WAYPOINT: {
+        getRoute: (action, iouType, orderWeight, transactionID, reportID, backTo = '', reportActionID) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/tag/${orderWeight}/${transactionID}${reportID ? `/${reportID}` : ''}${reportActionID ? `/${reportActionID}` : ''}`, backTo),
+    },
+    MONEY_REQUEST_STEP_WAYPOINT: {
         route: ':action/:iouType/waypoint/:transactionID/:reportID/:pageIndex',
-        getRoute: function (action, iouType, transactionID, reportID, pageIndex, backTo) {
-            if (pageIndex === void 0) { pageIndex = ''; }
-            if (backTo === void 0) { backTo = ''; }
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("".concat(action, "/").concat(iouType, "/waypoint/").concat(transactionID, "/").concat(reportID, "/").concat(pageIndex), backTo);
-        },
-    }, 
+        getRoute: (action, iouType, transactionID, reportID, pageIndex = '', backTo = '') => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`${action}/${iouType}/waypoint/${transactionID}/${reportID}/${pageIndex}`, backTo),
+    },
     // This URL is used as a redirect to one of the create tabs below. This is so that we can message users with a link
     // straight to those flows without needing to have optimistic transaction and report IDs.
     MONEY_REQUEST_START: {
         route: 'start/:iouType/:iouRequestType',
-        getRoute: function (iouType, iouRequestType) { return "start/".concat(iouType, "/").concat(iouRequestType); },
-    }, MONEY_REQUEST_CREATE_TAB_DISTANCE: {
+        getRoute: (iouType, iouRequestType) => `start/${iouType}/${iouRequestType}`,
+    },
+    MONEY_REQUEST_CREATE_TAB_DISTANCE: {
         route: 'distance/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "create/".concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/distance/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, MONEY_REQUEST_CREATE_TAB_MANUAL: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `create/${iouType}/start/${transactionID}/${reportID}/distance/${backToReport ?? ''}`,
+    },
+    MONEY_REQUEST_CREATE_TAB_MANUAL: {
         route: 'manual/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "".concat(action, "/").concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/manual/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, MONEY_REQUEST_CREATE_TAB_SCAN: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `${action}/${iouType}/start/${transactionID}/${reportID}/manual/${backToReport ?? ''}`,
+    },
+    MONEY_REQUEST_CREATE_TAB_SCAN: {
         route: 'scan/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "create/".concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/scan/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, MONEY_REQUEST_CREATE_TAB_PER_DIEM: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `create/${iouType}/start/${transactionID}/${reportID}/scan/${backToReport ?? ''}`,
+    },
+    MONEY_REQUEST_CREATE_TAB_PER_DIEM: {
         route: 'per-diem/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "create/".concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/per-diem/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, MONEY_REQUEST_RECEIPT_VIEW: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `create/${iouType}/start/${transactionID}/${reportID}/per-diem/${backToReport ?? ''}`,
+    },
+    MONEY_REQUEST_RECEIPT_VIEW: {
         route: 'receipt-view/:transactionID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (transactionID, backTo) { return getUrlWithBackToParam("receipt-view/".concat(transactionID), backTo); },
-    }, MONEY_REQUEST_STATE_SELECTOR: {
+        getRoute: (transactionID, backTo) => getUrlWithBackToParam(`receipt-view/${transactionID}`, backTo),
+    },
+    MONEY_REQUEST_STATE_SELECTOR: {
         route: 'submit/state',
-        getRoute: function (state, backTo, label) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return ("".concat(getUrlWithBackToParam("submit/state".concat(state ? "?state=".concat(encodeURIComponent(state)) : ''), backTo)).concat(
-            // the label param can be an empty string so we cannot use a nullish ?? operator
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            label ? "".concat(backTo || state ? '&' : '?', "label=").concat(encodeURIComponent(label)) : ''));
-        },
-    }, DISTANCE_REQUEST_CREATE: {
+        getRoute: (state, backTo, label) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        `${getUrlWithBackToParam(`submit/state${state ? `?state=${encodeURIComponent(state)}` : ''}`, backTo)}${
+        // the label param can be an empty string so we cannot use a nullish ?? operator
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        label ? `${backTo || state ? '&' : '?'}label=${encodeURIComponent(label)}` : ''}`,
+    },
+    DISTANCE_REQUEST_CREATE: {
         route: ':action/:iouType/start/:transactionID/:reportID/distance-new/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "".concat(action, "/").concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/distance-new/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, DISTANCE_REQUEST_CREATE_TAB_MAP: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `${action}/${iouType}/start/${transactionID}/${reportID}/distance-new/${backToReport ?? ''}`,
+    },
+    DISTANCE_REQUEST_CREATE_TAB_MAP: {
         route: 'distance-map/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "".concat(action, "/").concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/distance-new/distance-map/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, DISTANCE_REQUEST_CREATE_TAB_MANUAL: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `${action}/${iouType}/start/${transactionID}/${reportID}/distance-new/distance-map/${backToReport ?? ''}`,
+    },
+    DISTANCE_REQUEST_CREATE_TAB_MANUAL: {
         route: 'distance-manual/:backToReport?',
-        getRoute: function (action, iouType, transactionID, reportID, backToReport) {
-            return "".concat(action, "/").concat(iouType, "/start/").concat(transactionID, "/").concat(reportID, "/distance-new/distance-manual/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : '');
-        },
-    }, IOU_SEND_ADD_BANK_ACCOUNT: 'pay/new/add-bank-account', IOU_SEND_ADD_DEBIT_CARD: 'pay/new/add-debit-card', IOU_SEND_ENABLE_PAYMENTS: 'pay/new/enable-payments', NEW_TASK: {
+        getRoute: (action, iouType, transactionID, reportID, backToReport) => `${action}/${iouType}/start/${transactionID}/${reportID}/distance-new/distance-manual/${backToReport ?? ''}`,
+    },
+    IOU_SEND_ADD_BANK_ACCOUNT: 'pay/new/add-bank-account',
+    IOU_SEND_ADD_DEBIT_CARD: 'pay/new/add-debit-card',
+    IOU_SEND_ENABLE_PAYMENTS: 'pay/new/enable-payments',
+    NEW_TASK: {
         route: 'new/task',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('new/task', backTo); },
-    }, NEW_TASK_ASSIGNEE: {
+        getRoute: (backTo) => getUrlWithBackToParam('new/task', backTo),
+    },
+    NEW_TASK_ASSIGNEE: {
         route: 'new/task/assignee',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('new/task/assignee', backTo); },
-    }, NEW_TASK_SHARE_DESTINATION: 'new/task/share-destination', NEW_TASK_DETAILS: {
+        getRoute: (backTo) => getUrlWithBackToParam('new/task/assignee', backTo),
+    },
+    NEW_TASK_SHARE_DESTINATION: 'new/task/share-destination',
+    NEW_TASK_DETAILS: {
         route: 'new/task/details',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('new/task/details', backTo); },
-    }, NEW_TASK_TITLE: {
+        getRoute: (backTo) => getUrlWithBackToParam('new/task/details', backTo),
+    },
+    NEW_TASK_TITLE: {
         route: 'new/task/title',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('new/task/title', backTo); },
-    }, NEW_TASK_DESCRIPTION: {
+        getRoute: (backTo) => getUrlWithBackToParam('new/task/title', backTo),
+    },
+    NEW_TASK_DESCRIPTION: {
         route: 'new/task/description',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('new/task/description', backTo); },
-    }, TEACHERS_UNITE: 'settings/teachersunite', I_KNOW_A_TEACHER: 'settings/teachersunite/i-know-a-teacher', I_AM_A_TEACHER: 'settings/teachersunite/i-am-a-teacher', INTRO_SCHOOL_PRINCIPAL: 'settings/teachersunite/intro-school-principal', ERECEIPT: {
+        getRoute: (backTo) => getUrlWithBackToParam('new/task/description', backTo),
+    },
+    TEACHERS_UNITE: 'settings/teachersunite',
+    I_KNOW_A_TEACHER: 'settings/teachersunite/i-know-a-teacher',
+    I_AM_A_TEACHER: 'settings/teachersunite/i-am-a-teacher',
+    INTRO_SCHOOL_PRINCIPAL: 'settings/teachersunite/intro-school-principal',
+    ERECEIPT: {
         route: 'eReceipt/:transactionID',
-        getRoute: function (transactionID) { return "eReceipt/".concat(transactionID); },
-    }, WORKSPACE_NEW: 'workspace/new', WORKSPACE_NEW_ROOM: 'workspace/new-room', WORKSPACE_INITIAL: {
+        getRoute: (transactionID) => `eReceipt/${transactionID}`,
+    },
+    WORKSPACE_NEW: 'workspace/new',
+    WORKSPACE_NEW_ROOM: 'workspace/new-room',
+    WORKSPACE_INITIAL: {
         route: 'workspaces/:policyID',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_INITIAL route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return "".concat(getUrlWithBackToParam("workspaces/".concat(policyID), backTo));
+            return `${getUrlWithBackToParam(`workspaces/${policyID}`, backTo)}`;
         },
-    }, WORKSPACE_INVITE: {
+    },
+    WORKSPACE_INVITE: {
         route: 'workspaces/:policyID/invite',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return "".concat(getUrlWithBackToParam("workspaces/".concat(policyID, "/invite"), backTo)); },
-    }, WORKSPACE_INVITE_MESSAGE: {
+        getRoute: (policyID, backTo) => `${getUrlWithBackToParam(`workspaces/${policyID}/invite`, backTo)}`,
+    },
+    WORKSPACE_INVITE_MESSAGE: {
         route: 'workspaces/:policyID/invite-message',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return "".concat(getUrlWithBackToParam("workspaces/".concat(policyID, "/invite-message"), backTo)); },
-    }, WORKSPACE_INVITE_MESSAGE_ROLE: {
+        getRoute: (policyID, backTo) => `${getUrlWithBackToParam(`workspaces/${policyID}/invite-message`, backTo)}`,
+    },
+    WORKSPACE_INVITE_MESSAGE_ROLE: {
         route: 'workspaces/:policyID/invite-message/role',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return "".concat(getUrlWithBackToParam("workspaces/".concat(policyID, "/invite-message/role"), backTo)); },
-    }, WORKSPACE_OVERVIEW: {
+        getRoute: (policyID, backTo) => `${getUrlWithBackToParam(`workspaces/${policyID}/invite-message/role`, backTo)}`,
+    },
+    WORKSPACE_OVERVIEW: {
         route: 'workspaces/:policyID/overview',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_OVERVIEW route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/overview"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/overview`, backTo);
         },
-    }, WORKSPACE_OVERVIEW_ADDRESS: {
+    },
+    WORKSPACE_OVERVIEW_ADDRESS: {
         route: 'workspaces/:policyID/overview/address',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_OVERVIEW_ADDRESS route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/overview/address"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/overview/address`, backTo);
         },
-    }, WORKSPACE_OVERVIEW_PLAN: {
+    },
+    WORKSPACE_OVERVIEW_PLAN: {
         route: 'workspaces/:policyID/overview/plan',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/overview/plan"), backTo); },
-    }, WORKSPACE_ACCOUNTING: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/overview/plan`, backTo),
+    },
+    WORKSPACE_ACCOUNTING: {
         route: 'workspaces/:policyID/accounting',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting"); },
-    }, WORKSPACE_OVERVIEW_CURRENCY: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting`,
+    },
+    WORKSPACE_OVERVIEW_CURRENCY: {
         route: 'workspaces/:policyID/overview/currency',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/overview/currency"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT: {
+        getRoute: (policyID) => `workspaces/${policyID}/overview/currency`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export"), backTo, false);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export`, backTo, false);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/company-card-expense-account',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/company-card-expense-account"), backTo); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/company-card-expense-account`, backTo),
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/company-card-expense-account/account-select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/company-card-expense-account/account-select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/company-card-expense-account/account-select`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/company-card-expense-account/default-vendor-select',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT route');
             }
-            return "workspaces/".concat(policyID, "/accounting/quickbooks-online/export/company-card-expense-account/default-vendor-select");
+            return `workspaces/${policyID}/accounting/quickbooks-online/export/company-card-expense-account/default-vendor-select`;
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/company-card-expense-account/card-select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_COMPANY_CARD_EXPENSE_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/company-card-expense-account/card-select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/company-card-expense-account/card-select`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_INVOICE_ACCOUNT_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_INVOICE_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/invoice-account-select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/invoice-account-select"), backTo); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_PREFERRED_EXPORTER: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/invoice-account-select`, backTo),
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_PREFERRED_EXPORTER: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/preferred-exporter',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/preferred-exporter"), backTo); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/preferred-exporter`, backTo),
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/out-of-pocket-expense',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/out-of-pocket-expense"), backTo); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/out-of-pocket-expense`, backTo),
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/out-of-pocket-expense/account-select',
-        getRoute: function (policyID, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/out-of-pocket-expense/account-select"), backTo);
-        },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT: {
+        getRoute: (policyID, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/out-of-pocket-expense/account-select`, backTo),
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/out-of-pocket-expense/entity-select',
-        getRoute: function (policyID, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/out-of-pocket-expense/entity-select"), backTo);
-        },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_DATE_SELECT: {
+        getRoute: (policyID, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/out-of-pocket-expense/entity-select`, backTo),
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_EXPORT_DATE_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/export/date-select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-online/export/date-select"), backTo); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-online/export/date-select`, backTo),
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/company-card-expense-account/account-select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/company-card-expense-account/account-select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/company-card-expense-account/account-select`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/company-card-expense-account/card-select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/company-card-expense-account/card-select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/company-card-expense-account/card-select`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/company-card-expense-account/default-vendor-select',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_NON_REIMBURSABLE_DEFAULT_VENDOR_SELECT route');
             }
-            return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/company-card-expense-account/default-vendor-select");
+            return `workspaces/${policyID}/accounting/quickbooks-desktop/export/company-card-expense-account/default-vendor-select`;
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/company-card-expense-account',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_COMPANY_CARD_EXPENSE_ACCOUNT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/company-card-expense-account"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/company-card-expense-account`, backTo);
         },
-    }, WORKSPACE_ACCOUNTING_QUICKBOOKS_DESKTOP_ADVANCED: {
+    },
+    WORKSPACE_ACCOUNTING_QUICKBOOKS_DESKTOP_ADVANCED: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/advanced',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_ACCOUNTING_QUICKBOOKS_DESKTOP_ADVANCED route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/advanced"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/advanced`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_DATE_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_DATE_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/date-select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_DATE_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/date-select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/date-select`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_PREFERRED_EXPORTER: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_PREFERRED_EXPORTER: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/preferred-exporter',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_PREFERRED_EXPORTER route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/preferred-exporter"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/preferred-exporter`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/out-of-pocket-expense',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/out-of-pocket-expense"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/out-of-pocket-expense`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/out-of-pocket-expense/account-select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_ACCOUNT_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/out-of-pocket-expense/account-select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/out-of-pocket-expense/account-select`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export/out-of-pocket-expense/entity-select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT_OUT_OF_POCKET_EXPENSES_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export/out-of-pocket-expense/entity-select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export/out-of-pocket-expense/entity-select`, backTo);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/export',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_EXPORT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/quickbooks-desktop/export"), backTo, false);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/quickbooks-desktop/export`, backTo, false);
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_SETUP_MODAL: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_SETUP_MODAL: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/setup-modal',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/setup-modal"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_SETUP_REQUIRED_DEVICE_MODAL: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/setup-modal`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_SETUP_REQUIRED_DEVICE_MODAL: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/setup-required-device',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/setup-required-device"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_TRIGGER_FIRST_SYNC: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/setup-required-device`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_TRIGGER_FIRST_SYNC: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/trigger-first-sync',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/trigger-first-sync"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_IMPORT: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/trigger-first-sync`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_IMPORT: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/import"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CHART_OF_ACCOUNTS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/import`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CHART_OF_ACCOUNTS: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/import/accounts',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/import/accounts"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CLASSES: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/import/accounts`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CLASSES: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/import/classes',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/import/classes"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CLASSES_DISPLAYED_AS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/import/classes`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CLASSES_DISPLAYED_AS: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/import/classes/displayed_as',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/import/classes/displayed_as"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CUSTOMERS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/import/classes/displayed_as`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CUSTOMERS: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/import/customers',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/import/customers"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CUSTOMERS_DISPLAYED_AS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/import/customers`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_CUSTOMERS_DISPLAYED_AS: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/import/customers/displayed_as',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/import/customers/displayed_as"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_ITEMS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/import/customers/displayed_as`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_DESKTOP_ITEMS: {
         route: 'workspaces/:policyID/accounting/quickbooks-desktop/import/items',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-desktop/import/items"); },
-    }, WORKSPACE_OVERVIEW_NAME: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-desktop/import/items`,
+    },
+    WORKSPACE_OVERVIEW_NAME: {
         route: 'workspaces/:policyID/overview/name',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/overview/name"); },
-    }, WORKSPACE_OVERVIEW_DESCRIPTION: {
+        getRoute: (policyID) => `workspaces/${policyID}/overview/name`,
+    },
+    WORKSPACE_OVERVIEW_DESCRIPTION: {
         route: 'workspaces/:policyID/overview/description',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_OVERVIEW_DESCRIPTION route');
             }
-            return "workspaces/".concat(policyID, "/overview/description");
+            return `workspaces/${policyID}/overview/description`;
         },
-    }, WORKSPACE_OVERVIEW_SHARE: {
+    },
+    WORKSPACE_OVERVIEW_SHARE: {
         route: 'workspaces/:policyID/overview/share',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/overview/share"); },
-    }, WORKSPACE_AVATAR: {
+        getRoute: (policyID) => `workspaces/${policyID}/overview/share`,
+    },
+    WORKSPACE_AVATAR: {
         route: 'workspaces/:policyID/avatar',
-        getRoute: function (policyID, fallbackLetter) { return "workspaces/".concat(policyID, "/avatar").concat(fallbackLetter ? "?letter=".concat(fallbackLetter) : ''); },
-    }, WORKSPACE_JOIN_USER: {
+        getRoute: (policyID, fallbackLetter) => `workspaces/${policyID}/avatar${fallbackLetter ? `?letter=${fallbackLetter}` : ''}`,
+    },
+    WORKSPACE_JOIN_USER: {
         route: 'workspaces/:policyID/join',
-        getRoute: function (policyID, inviterEmail) { return "workspaces/".concat(policyID, "/join?email=").concat(inviterEmail); },
-    }, WORKSPACE_SETTINGS_CURRENCY: {
+        getRoute: (policyID, inviterEmail) => `workspaces/${policyID}/join?email=${inviterEmail}`,
+    },
+    WORKSPACE_SETTINGS_CURRENCY: {
         route: 'workspaces/:policyID/settings/currency',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/settings/currency"); },
-    }, WORKSPACE_WORKFLOWS: {
+        getRoute: (policyID) => `workspaces/${policyID}/settings/currency`,
+    },
+    WORKSPACE_WORKFLOWS: {
         route: 'workspaces/:policyID/workflows',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_WORKFLOWS route');
             }
-            return "workspaces/".concat(policyID, "/workflows");
+            return `workspaces/${policyID}/workflows`;
         },
-    }, WORKSPACE_WORKFLOWS_APPROVALS_NEW: {
+    },
+    WORKSPACE_WORKFLOWS_APPROVALS_NEW: {
         route: 'workspaces/:policyID/workflows/approvals/new',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/workflows/approvals/new"); },
-    }, WORKSPACE_WORKFLOWS_APPROVALS_EDIT: {
+        getRoute: (policyID) => `workspaces/${policyID}/workflows/approvals/new`,
+    },
+    WORKSPACE_WORKFLOWS_APPROVALS_EDIT: {
         route: 'workspaces/:policyID/workflows/approvals/:firstApproverEmail/edit',
-        getRoute: function (policyID, firstApproverEmail) { return "workspaces/".concat(policyID, "/workflows/approvals/").concat(encodeURIComponent(firstApproverEmail), "/edit"); },
-    }, WORKSPACE_WORKFLOWS_APPROVALS_EXPENSES_FROM: {
+        getRoute: (policyID, firstApproverEmail) => `workspaces/${policyID}/workflows/approvals/${encodeURIComponent(firstApproverEmail)}/edit`,
+    },
+    WORKSPACE_WORKFLOWS_APPROVALS_EXPENSES_FROM: {
         route: 'workspaces/:policyID/workflows/approvals/expenses-from',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/workflows/approvals/expenses-from"), backTo); },
-    }, WORKSPACE_WORKFLOWS_APPROVALS_APPROVER: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/workflows/approvals/expenses-from`, backTo),
+    },
+    WORKSPACE_WORKFLOWS_APPROVALS_APPROVER: {
         route: 'workspaces/:policyID/workflows/approvals/approver',
-        getRoute: function (policyID, approverIndex, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/workflows/approvals/approver?approverIndex=").concat(approverIndex), backTo);
-        },
-    }, WORKSPACE_WORKFLOWS_PAYER: {
+        getRoute: (policyID, approverIndex, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/workflows/approvals/approver?approverIndex=${approverIndex}`, backTo),
+    },
+    WORKSPACE_WORKFLOWS_PAYER: {
         route: 'workspaces/:policyID/workflows/payer',
-        getRoute: function (policyId) { return "workspaces/".concat(policyId, "/workflows/payer"); },
-    }, WORKSPACE_WORKFLOWS_AUTOREPORTING_FREQUENCY: {
+        getRoute: (policyId) => `workspaces/${policyId}/workflows/payer`,
+    },
+    WORKSPACE_WORKFLOWS_AUTOREPORTING_FREQUENCY: {
         route: 'workspaces/:policyID/workflows/auto-reporting-frequency',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/workflows/auto-reporting-frequency"); },
-    }, WORKSPACE_WORKFLOWS_AUTOREPORTING_MONTHLY_OFFSET: {
+        getRoute: (policyID) => `workspaces/${policyID}/workflows/auto-reporting-frequency`,
+    },
+    WORKSPACE_WORKFLOWS_AUTOREPORTING_MONTHLY_OFFSET: {
         route: 'workspaces/:policyID/workflows/auto-reporting-frequency/monthly-offset',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_WORKFLOWS_AUTOREPORTING_MONTHLY_OFFSET route');
             }
-            return "workspaces/".concat(policyID, "/workflows/auto-reporting-frequency/monthly-offset");
+            return `workspaces/${policyID}/workflows/auto-reporting-frequency/monthly-offset`;
         },
-    }, WORKSPACE_INVOICES: {
+    },
+    WORKSPACE_INVOICES: {
         route: 'workspaces/:policyID/invoices',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_INVOICES route');
             }
-            return "workspaces/".concat(policyID, "/invoices");
+            return `workspaces/${policyID}/invoices`;
         },
-    }, WORKSPACE_INVOICES_COMPANY_NAME: {
+    },
+    WORKSPACE_INVOICES_COMPANY_NAME: {
         route: 'workspaces/:policyID/invoices/company-name',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/invoices/company-name"); },
-    }, WORKSPACE_INVOICES_COMPANY_WEBSITE: {
+        getRoute: (policyID) => `workspaces/${policyID}/invoices/company-name`,
+    },
+    WORKSPACE_INVOICES_COMPANY_WEBSITE: {
         route: 'workspaces/:policyID/invoices/company-website',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/invoices/company-website"); },
-    }, WORKSPACE_MEMBERS: {
+        getRoute: (policyID) => `workspaces/${policyID}/invoices/company-website`,
+    },
+    WORKSPACE_MEMBERS: {
         route: 'workspaces/:policyID/members',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_MEMBERS route');
             }
-            return "workspaces/".concat(policyID, "/members");
+            return `workspaces/${policyID}/members`;
         },
-    }, WORKSPACE_MEMBERS_IMPORT: {
+    },
+    WORKSPACE_MEMBERS_IMPORT: {
         route: 'workspaces/:policyID/members/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/members/import"); },
-    }, WORKSPACE_MEMBERS_IMPORTED: {
+        getRoute: (policyID) => `workspaces/${policyID}/members/import`,
+    },
+    WORKSPACE_MEMBERS_IMPORTED: {
         route: 'workspaces/:policyID/members/imported',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/members/imported"); },
-    }, WORKSPACE_MEMBERS_IMPORTED_CONFIRMATION: {
+        getRoute: (policyID) => `workspaces/${policyID}/members/imported`,
+    },
+    WORKSPACE_MEMBERS_IMPORTED_CONFIRMATION: {
         route: 'workspaces/:policyID/members/imported/confirmation',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/members/imported/confirmation"); },
-    }, POLICY_ACCOUNTING: {
+        getRoute: (policyID) => `workspaces/${policyID}/members/imported/confirmation`,
+    },
+    POLICY_ACCOUNTING: {
         route: 'workspaces/:policyID/accounting',
-        getRoute: function (policyID, newConnectionName, integrationToDisconnect, shouldDisconnectIntegrationBeforeConnecting) {
+        getRoute: (policyID, newConnectionName, integrationToDisconnect, shouldDisconnectIntegrationBeforeConnecting) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING route');
             }
-            var queryParams = '';
+            let queryParams = '';
             if (newConnectionName) {
-                queryParams += "?newConnectionName=".concat(newConnectionName);
+                queryParams += `?newConnectionName=${newConnectionName}`;
                 if (integrationToDisconnect) {
-                    queryParams += "&integrationToDisconnect=".concat(integrationToDisconnect);
+                    queryParams += `&integrationToDisconnect=${integrationToDisconnect}`;
                 }
                 if (shouldDisconnectIntegrationBeforeConnecting !== undefined) {
-                    queryParams += "&shouldDisconnectIntegrationBeforeConnecting=".concat(shouldDisconnectIntegrationBeforeConnecting);
+                    queryParams += `&shouldDisconnectIntegrationBeforeConnecting=${shouldDisconnectIntegrationBeforeConnecting}`;
                 }
             }
-            return "workspaces/".concat(policyID, "/accounting").concat(queryParams);
+            return `workspaces/${policyID}/accounting${queryParams}`;
         },
-    }, WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_ADVANCED: {
+    },
+    WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_ADVANCED: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/advanced',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_ADVANCED route');
             }
-            return "workspaces/".concat(policyID, "/accounting/quickbooks-online/advanced");
+            return `workspaces/${policyID}/accounting/quickbooks-online/advanced`;
         },
-    }, WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_ACCOUNT_SELECTOR: {
+    },
+    WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_ACCOUNT_SELECTOR: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/account-selector',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/account-selector"); },
-    }, WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_INVOICE_ACCOUNT_SELECTOR: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/account-selector`,
+    },
+    WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_INVOICE_ACCOUNT_SELECTOR: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/invoice-account-selector',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/invoice-account-selector"); },
-    }, WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_AUTO_SYNC: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/invoice-account-selector`,
+    },
+    WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_AUTO_SYNC: {
         route: 'workspaces/:policyID/connections/quickbooks-online/advanced/autosync',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/quickbooks-online/advanced/autosync"), backTo); },
-    }, WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_ACCOUNTING_METHOD: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/connections/quickbooks-online/advanced/autosync`, backTo),
+    },
+    WORKSPACE_ACCOUNTING_QUICKBOOKS_ONLINE_ACCOUNTING_METHOD: {
         route: 'workspaces/:policyID/connections/quickbooks-online/advanced/autosync/accounting-method',
-        getRoute: function (policyID, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/quickbooks-online/advanced/autosync/accounting-method"), backTo);
-        },
-    }, WORKSPACE_ACCOUNTING_CARD_RECONCILIATION: {
+        getRoute: (policyID, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/connections/quickbooks-online/advanced/autosync/accounting-method`, backTo),
+    },
+    WORKSPACE_ACCOUNTING_CARD_RECONCILIATION: {
         route: 'workspaces/:policyID/accounting/:connection/card-reconciliation',
-        getRoute: function (policyID, connection) { return "workspaces/".concat(policyID, "/accounting/").concat(connection, "/card-reconciliation"); },
-    }, WORKSPACE_ACCOUNTING_RECONCILIATION_ACCOUNT_SETTINGS: {
+        getRoute: (policyID, connection) => `workspaces/${policyID}/accounting/${connection}/card-reconciliation`,
+    },
+    WORKSPACE_ACCOUNTING_RECONCILIATION_ACCOUNT_SETTINGS: {
         route: 'workspaces/:policyID/accounting/:connection/card-reconciliation/account',
-        getRoute: function (policyID, connection, backTo) {
+        getRoute: (policyID, connection, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_ACCOUNTING_RECONCILIATION_ACCOUNT_SETTINGS route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/").concat(connection, "/card-reconciliation/account"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/${connection}/card-reconciliation/account`, backTo);
         },
-    }, WORKSPACE_CATEGORIES: {
+    },
+    WORKSPACE_CATEGORIES: {
         route: 'workspaces/:policyID/categories',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_CATEGORIES route');
             }
-            return "workspaces/".concat(policyID, "/categories");
+            return `workspaces/${policyID}/categories`;
         },
-    }, WORKSPACE_CATEGORY_SETTINGS: {
+    },
+    WORKSPACE_CATEGORY_SETTINGS: {
         route: 'workspaces/:policyID/category/:categoryName',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName)); },
-    }, WORKSPACE_UPGRADE: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}`,
+    },
+    WORKSPACE_UPGRADE: {
         route: 'workspaces/:policyID?/upgrade/:featureName?',
-        getRoute: function (policyID, featureName, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam(policyID ? "workspaces/".concat(policyID, "/upgrade/").concat(encodeURIComponent(featureName !== null && featureName !== void 0 ? featureName : '')) : "workspaces/upgrade", backTo);
-        },
-    }, WORKSPACE_DOWNGRADE: {
+        getRoute: (policyID, featureName, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(policyID ? `workspaces/${policyID}/upgrade/${encodeURIComponent(featureName ?? '')}` : `workspaces/upgrade`, backTo),
+    },
+    WORKSPACE_DOWNGRADE: {
         route: 'workspaces/:policyID?/downgrade/',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam(policyID ? "workspaces/".concat(policyID, "/downgrade/") : "workspaces/downgrade", backTo); },
-    }, WORKSPACE_PAY_AND_DOWNGRADE: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(policyID ? `workspaces/${policyID}/downgrade/` : `workspaces/downgrade`, backTo),
+    },
+    WORKSPACE_PAY_AND_DOWNGRADE: {
         route: 'workspaces/pay-and-downgrade/',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("workspaces/pay-and-downgrade", backTo); },
-    }, WORKSPACE_CATEGORIES_SETTINGS: {
+        getRoute: (backTo) => getUrlWithBackToParam(`workspaces/pay-and-downgrade`, backTo),
+    },
+    WORKSPACE_CATEGORIES_SETTINGS: {
         route: 'workspaces/:policyID/categories/settings',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/categories/settings"); },
-    }, WORKSPACE_CATEGORIES_IMPORT: {
+        getRoute: (policyID) => `workspaces/${policyID}/categories/settings`,
+    },
+    WORKSPACE_CATEGORIES_IMPORT: {
         route: 'workspaces/:policyID/categories/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/categories/import"); },
-    }, WORKSPACE_CATEGORIES_IMPORTED: {
+        getRoute: (policyID) => `workspaces/${policyID}/categories/import`,
+    },
+    WORKSPACE_CATEGORIES_IMPORTED: {
         route: 'workspaces/:policyID/categories/imported',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/categories/imported"); },
-    }, WORKSPACE_CATEGORY_CREATE: {
+        getRoute: (policyID) => `workspaces/${policyID}/categories/imported`,
+    },
+    WORKSPACE_CATEGORY_CREATE: {
         route: 'workspaces/:policyID/categories/new',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/categories/new"); },
-    }, WORKSPACE_CATEGORY_EDIT: {
+        getRoute: (policyID) => `workspaces/${policyID}/categories/new`,
+    },
+    WORKSPACE_CATEGORY_EDIT: {
         route: 'workspaces/:policyID/category/:categoryName/edit',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/edit"); },
-    }, WORKSPACE_CATEGORY_PAYROLL_CODE: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/edit`,
+    },
+    WORKSPACE_CATEGORY_PAYROLL_CODE: {
         route: 'workspaces/:policyID/category/:categoryName/payroll-code',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/payroll-code"); },
-    }, WORKSPACE_CATEGORY_GL_CODE: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/payroll-code`,
+    },
+    WORKSPACE_CATEGORY_GL_CODE: {
         route: 'workspaces/:policyID/category/:categoryName/gl-code',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/gl-code"); },
-    }, WORKSPACE_CATEGORY_DEFAULT_TAX_RATE: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/gl-code`,
+    },
+    WORKSPACE_CATEGORY_DEFAULT_TAX_RATE: {
         route: 'workspaces/:policyID/category/:categoryName/tax-rate',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/tax-rate"); },
-    }, WORKSPACE_CATEGORY_FLAG_AMOUNTS_OVER: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/tax-rate`,
+    },
+    WORKSPACE_CATEGORY_FLAG_AMOUNTS_OVER: {
         route: 'workspaces/:policyID/category/:categoryName/flag-amounts',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/flag-amounts"); },
-    }, WORKSPACE_CATEGORY_DESCRIPTION_HINT: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/flag-amounts`,
+    },
+    WORKSPACE_CATEGORY_DESCRIPTION_HINT: {
         route: 'workspaces/:policyID/category/:categoryName/description-hint',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/description-hint"); },
-    }, WORKSPACE_CATEGORY_REQUIRE_RECEIPTS_OVER: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/description-hint`,
+    },
+    WORKSPACE_CATEGORY_REQUIRE_RECEIPTS_OVER: {
         route: 'workspaces/:policyID/category/:categoryName/require-receipts-over',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/require-receipts-over"); },
-    }, WORKSPACE_CATEGORY_APPROVER: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/require-receipts-over`,
+    },
+    WORKSPACE_CATEGORY_APPROVER: {
         route: 'workspaces/:policyID/category/:categoryName/approver',
-        getRoute: function (policyID, categoryName) { return "workspaces/".concat(policyID, "/category/").concat(encodeURIComponent(categoryName), "/approver"); },
-    }, WORKSPACE_MORE_FEATURES: {
+        getRoute: (policyID, categoryName) => `workspaces/${policyID}/category/${encodeURIComponent(categoryName)}/approver`,
+    },
+    WORKSPACE_MORE_FEATURES: {
         route: 'workspaces/:policyID/more-features',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_MORE_FEATURES route');
             }
-            return "workspaces/".concat(policyID, "/more-features");
+            return `workspaces/${policyID}/more-features`;
         },
-    }, WORKSPACE_TAGS: {
+    },
+    WORKSPACE_TAGS: {
         route: 'workspaces/:policyID/tags',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_TAGS route');
             }
-            return "workspaces/".concat(policyID, "/tags");
+            return `workspaces/${policyID}/tags`;
         },
-    }, WORKSPACE_TAG_CREATE: {
+    },
+    WORKSPACE_TAG_CREATE: {
         route: 'workspaces/:policyID/tags/new',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/tags/new"); },
-    }, WORKSPACE_TAGS_SETTINGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/tags/new`,
+    },
+    WORKSPACE_TAGS_SETTINGS: {
         route: 'workspaces/:policyID/tags/settings',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/tags/settings"); },
-    }, WORKSPACE_EDIT_TAGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/tags/settings`,
+    },
+    WORKSPACE_EDIT_TAGS: {
         route: 'workspaces/:policyID/tags/:orderWeight/edit',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, orderWeight, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/tags/").concat(orderWeight, "/edit"), backTo); },
-    }, WORKSPACE_TAG_EDIT: {
+        getRoute: (policyID, orderWeight, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/tags/${orderWeight}/edit`, backTo),
+    },
+    WORKSPACE_TAG_EDIT: {
         route: 'workspaces/:policyID/tag/:orderWeight/:tagName/edit',
-        getRoute: function (policyID, orderWeight, tagName) { return "workspaces/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName), "/edit"); },
-    }, WORKSPACE_TAG_SETTINGS: {
+        getRoute: (policyID, orderWeight, tagName) => `workspaces/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}/edit`,
+    },
+    WORKSPACE_TAG_SETTINGS: {
         route: 'workspaces/:policyID/tag/:orderWeight/:tagName',
-        getRoute: function (policyID, orderWeight, tagName, parentTagsFilter) {
-            var queryParams = '';
+        getRoute: (policyID, orderWeight, tagName, parentTagsFilter) => {
+            let queryParams = '';
             if (parentTagsFilter) {
-                queryParams += "?parentTagsFilter=".concat(parentTagsFilter);
+                queryParams += `?parentTagsFilter=${parentTagsFilter}`;
             }
-            return "workspaces/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName)).concat(queryParams);
+            return `workspaces/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}${queryParams}`;
         },
-    }, WORKSPACE_TAG_APPROVER: {
+    },
+    WORKSPACE_TAG_APPROVER: {
         route: 'workspaces/:policyID/tag/:orderWeight/:tagName/approver',
-        getRoute: function (policyID, orderWeight, tagName) { return "workspaces/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName), "/approver"); },
-    }, WORKSPACE_TAG_LIST_VIEW: {
+        getRoute: (policyID, orderWeight, tagName) => `workspaces/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}/approver`,
+    },
+    WORKSPACE_TAG_LIST_VIEW: {
         route: 'workspaces/:policyID/tag-list/:orderWeight',
-        getRoute: function (policyID, orderWeight) { return "workspaces/".concat(policyID, "/tag-list/").concat(orderWeight); },
-    }, WORKSPACE_TAG_GL_CODE: {
+        getRoute: (policyID, orderWeight) => `workspaces/${policyID}/tag-list/${orderWeight}`,
+    },
+    WORKSPACE_TAG_GL_CODE: {
         route: 'workspaces/:policyID/tag/:orderWeight/:tagName/gl-code',
-        getRoute: function (policyID, orderWeight, tagName) { return "workspaces/".concat(policyID, "/tag/").concat(orderWeight, "/").concat(encodeURIComponent(tagName), "/gl-code"); },
-    }, WORKSPACE_TAGS_IMPORT: {
+        getRoute: (policyID, orderWeight, tagName) => `workspaces/${policyID}/tag/${orderWeight}/${encodeURIComponent(tagName)}/gl-code`,
+    },
+    WORKSPACE_TAGS_IMPORT: {
         route: 'workspaces/:policyID/tags/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/tags/import"); },
-    }, WORKSPACE_MULTI_LEVEL_TAGS_IMPORT_SETTINGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/tags/import`,
+    },
+    WORKSPACE_MULTI_LEVEL_TAGS_IMPORT_SETTINGS: {
         route: 'workspaces/:policyID/tags/import/multi-level',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/tags/import/multi-level"); },
-    }, WORKSPACE_TAGS_IMPORT_OPTIONS: {
+        getRoute: (policyID) => `workspaces/${policyID}/tags/import/multi-level`,
+    },
+    WORKSPACE_TAGS_IMPORT_OPTIONS: {
         route: 'workspaces/:policyID/tags/import/import-options',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/tags/import/import-options"); },
-    }, WORKSPACE_TAGS_IMPORTED: {
+        getRoute: (policyID) => `workspaces/${policyID}/tags/import/import-options`,
+    },
+    WORKSPACE_TAGS_IMPORTED: {
         route: 'workspaces/:policyID/tags/imported',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/tags/imported"); },
-    }, WORKSPACE_TAGS_IMPORTED_MULTI_LEVEL: {
+        getRoute: (policyID) => `workspaces/${policyID}/tags/imported`,
+    },
+    WORKSPACE_TAGS_IMPORTED_MULTI_LEVEL: {
         route: 'workspaces/:policyID/tags/imported/multi-level',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/tags/imported/multi-level"); },
-    }, WORKSPACE_TAXES: {
+        getRoute: (policyID) => `workspaces/${policyID}/tags/imported/multi-level`,
+    },
+    WORKSPACE_TAXES: {
         route: 'workspaces/:policyID/taxes',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_TAXES route');
             }
-            return "workspaces/".concat(policyID, "/taxes");
+            return `workspaces/${policyID}/taxes`;
         },
-    }, WORKSPACE_TAXES_SETTINGS: {
+    },
+    WORKSPACE_TAXES_SETTINGS: {
         route: 'workspaces/:policyID/taxes/settings',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/taxes/settings"); },
-    }, WORKSPACE_TAXES_SETTINGS_WORKSPACE_CURRENCY_DEFAULT: {
+        getRoute: (policyID) => `workspaces/${policyID}/taxes/settings`,
+    },
+    WORKSPACE_TAXES_SETTINGS_WORKSPACE_CURRENCY_DEFAULT: {
         route: 'workspaces/:policyID/taxes/settings/workspace-currency',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/taxes/settings/workspace-currency"); },
-    }, WORKSPACE_TAXES_SETTINGS_FOREIGN_CURRENCY_DEFAULT: {
+        getRoute: (policyID) => `workspaces/${policyID}/taxes/settings/workspace-currency`,
+    },
+    WORKSPACE_TAXES_SETTINGS_FOREIGN_CURRENCY_DEFAULT: {
         route: 'workspaces/:policyID/taxes/settings/foreign-currency',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/taxes/settings/foreign-currency"); },
-    }, WORKSPACE_TAXES_SETTINGS_CUSTOM_TAX_NAME: {
+        getRoute: (policyID) => `workspaces/${policyID}/taxes/settings/foreign-currency`,
+    },
+    WORKSPACE_TAXES_SETTINGS_CUSTOM_TAX_NAME: {
         route: 'workspaces/:policyID/taxes/settings/tax-name',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/taxes/settings/tax-name"); },
-    }, WORKSPACE_MEMBER_DETAILS: {
+        getRoute: (policyID) => `workspaces/${policyID}/taxes/settings/tax-name`,
+    },
+    WORKSPACE_MEMBER_DETAILS: {
         route: 'workspaces/:policyID/members/:accountID',
-        getRoute: function (policyID, accountID) { return "workspaces/".concat(policyID, "/members/").concat(accountID); },
-    }, WORKSPACE_CUSTOM_FIELDS: {
+        getRoute: (policyID, accountID) => `workspaces/${policyID}/members/${accountID}`,
+    },
+    WORKSPACE_CUSTOM_FIELDS: {
         route: 'workspaces/:policyID/members/:accountID/:customFieldType',
-        getRoute: function (policyID, accountID, customFieldType) { return "/workspaces/".concat(policyID, "/members/").concat(accountID, "/").concat(customFieldType); },
-    }, WORKSPACE_MEMBER_NEW_CARD: {
+        getRoute: (policyID, accountID, customFieldType) => `/workspaces/${policyID}/members/${accountID}/${customFieldType}`,
+    },
+    WORKSPACE_MEMBER_NEW_CARD: {
         route: 'workspaces/:policyID/members/:accountID/new-card',
-        getRoute: function (policyID, accountID) { return "workspaces/".concat(policyID, "/members/").concat(accountID, "/new-card"); },
-    }, WORKSPACE_MEMBER_ROLE_SELECTION: {
+        getRoute: (policyID, accountID) => `workspaces/${policyID}/members/${accountID}/new-card`,
+    },
+    WORKSPACE_MEMBER_ROLE_SELECTION: {
         route: 'workspaces/:policyID/members/:accountID/role-selection',
-        getRoute: function (policyID, accountID) { return "workspaces/".concat(policyID, "/members/").concat(accountID, "/role-selection"); },
-    }, WORKSPACE_OWNER_CHANGE_SUCCESS: {
+        getRoute: (policyID, accountID) => `workspaces/${policyID}/members/${accountID}/role-selection`,
+    },
+    WORKSPACE_OWNER_CHANGE_SUCCESS: {
         route: 'workspaces/:policyID/change-owner/:accountID/success',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, accountID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/change-owner/").concat(accountID, "/success"), backTo); },
-    }, WORKSPACE_OWNER_CHANGE_ERROR: {
+        getRoute: (policyID, accountID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/change-owner/${accountID}/success`, backTo),
+    },
+    WORKSPACE_OWNER_CHANGE_ERROR: {
         route: 'workspaces/:policyID/change-owner/:accountID/failure',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, accountID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/change-owner/").concat(accountID, "/failure"), backTo); },
-    }, WORKSPACE_OWNER_CHANGE_CHECK: {
+        getRoute: (policyID, accountID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/change-owner/${accountID}/failure`, backTo),
+    },
+    WORKSPACE_OWNER_CHANGE_CHECK: {
         route: 'workspaces/:policyID/change-owner/:accountID/:error',
-        getRoute: function (policyID, accountID, error, backTo) {
+        getRoute: (policyID, accountID, error, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_OWNER_CHANGE_CHECK route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/change-owner/").concat(accountID, "/").concat(error), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/change-owner/${accountID}/${error}`, backTo);
         },
-    }, WORKSPACE_TAX_CREATE: {
+    },
+    WORKSPACE_TAX_CREATE: {
         route: 'workspaces/:policyID/taxes/new',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/taxes/new"); },
-    }, WORKSPACE_TAX_EDIT: {
+        getRoute: (policyID) => `workspaces/${policyID}/taxes/new`,
+    },
+    WORKSPACE_TAX_EDIT: {
         route: 'workspaces/:policyID/tax/:taxID',
-        getRoute: function (policyID, taxID) { return "workspaces/".concat(policyID, "/tax/").concat(encodeURIComponent(taxID)); },
-    }, WORKSPACE_TAX_NAME: {
+        getRoute: (policyID, taxID) => `workspaces/${policyID}/tax/${encodeURIComponent(taxID)}`,
+    },
+    WORKSPACE_TAX_NAME: {
         route: 'workspaces/:policyID/tax/:taxID/name',
-        getRoute: function (policyID, taxID) { return "workspaces/".concat(policyID, "/tax/").concat(encodeURIComponent(taxID), "/name"); },
-    }, WORKSPACE_TAX_VALUE: {
+        getRoute: (policyID, taxID) => `workspaces/${policyID}/tax/${encodeURIComponent(taxID)}/name`,
+    },
+    WORKSPACE_TAX_VALUE: {
         route: 'workspaces/:policyID/tax/:taxID/value',
-        getRoute: function (policyID, taxID) { return "workspaces/".concat(policyID, "/tax/").concat(encodeURIComponent(taxID), "/value"); },
-    }, WORKSPACE_TAX_CODE: {
+        getRoute: (policyID, taxID) => `workspaces/${policyID}/tax/${encodeURIComponent(taxID)}/value`,
+    },
+    WORKSPACE_TAX_CODE: {
         route: 'workspaces/:policyID/tax/:taxID/tax-code',
-        getRoute: function (policyID, taxID) { return "workspaces/".concat(policyID, "/tax/").concat(encodeURIComponent(taxID), "/tax-code"); },
-    }, WORKSPACE_REPORTS: {
+        getRoute: (policyID, taxID) => `workspaces/${policyID}/tax/${encodeURIComponent(taxID)}/tax-code`,
+    },
+    WORKSPACE_REPORTS: {
         route: 'workspaces/:policyID/reports',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_REPORTS route');
             }
-            return "workspaces/".concat(policyID, "/reports");
+            return `workspaces/${policyID}/reports`;
         },
-    }, WORKSPACE_CREATE_REPORT_FIELD: {
+    },
+    WORKSPACE_CREATE_REPORT_FIELD: {
         route: 'workspaces/:policyID/reports/newReportField',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/reports/newReportField"); },
-    }, WORKSPACE_REPORT_FIELDS_SETTINGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/reports/newReportField`,
+    },
+    WORKSPACE_REPORT_FIELDS_SETTINGS: {
         route: 'workspaces/:policyID/reports/:reportFieldID/edit',
-        getRoute: function (policyID, reportFieldID) { return "workspaces/".concat(policyID, "/reports/").concat(encodeURIComponent(reportFieldID), "/edit"); },
-    }, WORKSPACE_REPORT_FIELDS_LIST_VALUES: {
+        getRoute: (policyID, reportFieldID) => `workspaces/${policyID}/reports/${encodeURIComponent(reportFieldID)}/edit`,
+    },
+    WORKSPACE_REPORT_FIELDS_LIST_VALUES: {
         route: 'workspaces/:policyID/reports/listValues/:reportFieldID?',
-        getRoute: function (policyID, reportFieldID) { return "workspaces/".concat(policyID, "/reports/listValues/").concat(reportFieldID ? encodeURIComponent(reportFieldID) : ''); },
-    }, WORKSPACE_REPORT_FIELDS_ADD_VALUE: {
+        getRoute: (policyID, reportFieldID) => `workspaces/${policyID}/reports/listValues/${reportFieldID ? encodeURIComponent(reportFieldID) : ''}`,
+    },
+    WORKSPACE_REPORT_FIELDS_ADD_VALUE: {
         route: 'workspaces/:policyID/reports/addValue/:reportFieldID?',
-        getRoute: function (policyID, reportFieldID) { return "workspaces/".concat(policyID, "/reports/addValue/").concat(reportFieldID ? encodeURIComponent(reportFieldID) : ''); },
-    }, WORKSPACE_REPORT_FIELDS_VALUE_SETTINGS: {
+        getRoute: (policyID, reportFieldID) => `workspaces/${policyID}/reports/addValue/${reportFieldID ? encodeURIComponent(reportFieldID) : ''}`,
+    },
+    WORKSPACE_REPORT_FIELDS_VALUE_SETTINGS: {
         route: 'workspaces/:policyID/reports/:valueIndex/:reportFieldID?',
-        getRoute: function (policyID, valueIndex, reportFieldID) {
-            return "workspaces/".concat(policyID, "/reports/").concat(valueIndex, "/").concat(reportFieldID ? encodeURIComponent(reportFieldID) : '');
-        },
-    }, WORKSPACE_REPORT_FIELDS_EDIT_VALUE: {
+        getRoute: (policyID, valueIndex, reportFieldID) => `workspaces/${policyID}/reports/${valueIndex}/${reportFieldID ? encodeURIComponent(reportFieldID) : ''}`,
+    },
+    WORKSPACE_REPORT_FIELDS_EDIT_VALUE: {
         route: 'workspaces/:policyID/reports/newReportField/:valueIndex/edit',
-        getRoute: function (policyID, valueIndex) { return "workspaces/".concat(policyID, "/reports/newReportField/").concat(valueIndex, "/edit"); },
-    }, WORKSPACE_EDIT_REPORT_FIELDS_INITIAL_VALUE: {
+        getRoute: (policyID, valueIndex) => `workspaces/${policyID}/reports/newReportField/${valueIndex}/edit`,
+    },
+    WORKSPACE_EDIT_REPORT_FIELDS_INITIAL_VALUE: {
         route: 'workspaces/:policyID/reports/:reportFieldID/edit/initialValue',
-        getRoute: function (policyID, reportFieldID) { return "workspaces/".concat(policyID, "/reports/").concat(encodeURIComponent(reportFieldID), "/edit/initialValue"); },
-    }, WORKSPACE_COMPANY_CARDS: {
+        getRoute: (policyID, reportFieldID) => `workspaces/${policyID}/reports/${encodeURIComponent(reportFieldID)}/edit/initialValue`,
+    },
+    WORKSPACE_COMPANY_CARDS: {
         route: 'workspaces/:policyID/company-cards',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_COMPANY_CARDS route');
             }
-            return "workspaces/".concat(policyID, "/company-cards");
+            return `workspaces/${policyID}/company-cards`;
         },
-    }, WORKSPACE_COMPANY_CARDS_BANK_CONNECTION: {
+    },
+    WORKSPACE_COMPANY_CARDS_BANK_CONNECTION: {
         route: 'workspaces/:policyID/company-cards/:bankName/bank-connection',
-        getRoute: function (policyID, bankName, backTo) {
+        getRoute: (policyID, bankName, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_COMPANY_CARDS_BANK_CONNECTION route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/company-cards/").concat(bankName, "/bank-connection"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/company-cards/${bankName}/bank-connection`, backTo);
         },
-    }, WORKSPACE_COMPANY_CARDS_ADD_NEW: {
+    },
+    WORKSPACE_COMPANY_CARDS_ADD_NEW: {
         route: 'workspaces/:policyID/company-cards/add-card-feed',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/company-cards/add-card-feed"), backTo); },
-    }, WORKSPACE_COMPANY_CARDS_SELECT_FEED: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/company-cards/add-card-feed`, backTo),
+    },
+    WORKSPACE_COMPANY_CARDS_SELECT_FEED: {
         route: 'workspaces/:policyID/company-cards/select-feed',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/company-cards/select-feed"); },
-    }, WORKSPACE_COMPANY_CARDS_ASSIGN_CARD: {
+        getRoute: (policyID) => `workspaces/${policyID}/company-cards/select-feed`,
+    },
+    WORKSPACE_COMPANY_CARDS_ASSIGN_CARD: {
         route: 'workspaces/:policyID/company-cards/:feed/assign-card',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, feed, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/company-cards/").concat(feed, "/assign-card"), backTo); },
-    }, WORKSPACE_COMPANY_CARDS_TRANSACTION_START_DATE: {
+        getRoute: (policyID, feed, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/company-cards/${feed}/assign-card`, backTo),
+    },
+    WORKSPACE_COMPANY_CARDS_TRANSACTION_START_DATE: {
         route: 'workspaces/:policyID/company-cards/:feed/assign-card/transaction-start-date',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, feed, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/company-cards/").concat(feed, "/assign-card/transaction-start-date"), backTo); },
-    }, WORKSPACE_COMPANY_CARD_DETAILS: {
+        getRoute: (policyID, feed, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/company-cards/${feed}/assign-card/transaction-start-date`, backTo),
+    },
+    WORKSPACE_COMPANY_CARD_DETAILS: {
         route: 'workspaces/:policyID/company-cards/:bank/:cardID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, bank, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/company-cards/").concat(bank, "/").concat(cardID), backTo); },
-    }, WORKSPACE_COMPANY_CARD_NAME: {
+        getRoute: (policyID, cardID, bank, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/company-cards/${bank}/${cardID}`, backTo),
+    },
+    WORKSPACE_COMPANY_CARD_NAME: {
         route: 'workspaces/:policyID/company-cards/:bank/:cardID/edit/name',
-        getRoute: function (policyID, cardID, bank) { return "workspaces/".concat(policyID, "/company-cards/").concat(bank, "/").concat(cardID, "/edit/name"); },
-    }, WORKSPACE_COMPANY_CARD_EXPORT: {
+        getRoute: (policyID, cardID, bank) => `workspaces/${policyID}/company-cards/${bank}/${cardID}/edit/name`,
+    },
+    WORKSPACE_COMPANY_CARD_EXPORT: {
         route: 'workspaces/:policyID/company-cards/:bank/:cardID/edit/export',
-        getRoute: function (policyID, cardID, bank, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/company-cards/").concat(bank, "/").concat(cardID, "/edit/export"), backTo, false);
-        },
-    }, WORKSPACE_EXPENSIFY_CARD: {
+        getRoute: (policyID, cardID, bank, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/company-cards/${bank}/${cardID}/edit/export`, backTo, false),
+    },
+    WORKSPACE_EXPENSIFY_CARD: {
         route: 'workspaces/:policyID/expensify-card',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_EXPENSIFY_CARD route');
             }
-            return "workspaces/".concat(policyID, "/expensify-card");
+            return `workspaces/${policyID}/expensify-card`;
         },
-    }, WORKSPACE_EXPENSIFY_CARD_DETAILS: {
+    },
+    WORKSPACE_EXPENSIFY_CARD_DETAILS: {
         route: 'workspaces/:policyID/expensify-card/:cardID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/expensify-card/").concat(cardID), backTo); },
-    }, EXPENSIFY_CARD_DETAILS: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/expensify-card/${cardID}`, backTo),
+    },
+    EXPENSIFY_CARD_DETAILS: {
         route: 'settings/:policyID/expensify-card/:cardID',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("settings/".concat(policyID, "/expensify-card/").concat(cardID), backTo); },
-    }, WORKSPACE_EXPENSIFY_CARD_NAME: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`settings/${policyID}/expensify-card/${cardID}`, backTo),
+    },
+    WORKSPACE_EXPENSIFY_CARD_NAME: {
         route: 'workspaces/:policyID/expensify-card/:cardID/edit/name',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/expensify-card/").concat(cardID, "/edit/name"), backTo); },
-    }, EXPENSIFY_CARD_NAME: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/expensify-card/${cardID}/edit/name`, backTo),
+    },
+    EXPENSIFY_CARD_NAME: {
         route: 'settings/:policyID/expensify-card/:cardID/edit/name',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("settings/".concat(policyID, "/expensify-card/").concat(cardID, "/edit/name"), backTo); },
-    }, WORKSPACE_EXPENSIFY_CARD_LIMIT: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`settings/${policyID}/expensify-card/${cardID}/edit/name`, backTo),
+    },
+    WORKSPACE_EXPENSIFY_CARD_LIMIT: {
         route: 'workspaces/:policyID/expensify-card/:cardID/edit/limit',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/expensify-card/").concat(cardID, "/edit/limit"), backTo); },
-    }, EXPENSIFY_CARD_LIMIT: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/expensify-card/${cardID}/edit/limit`, backTo),
+    },
+    EXPENSIFY_CARD_LIMIT: {
         route: 'settings/:policyID/expensify-card/:cardID/edit/limit',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("settings/".concat(policyID, "/expensify-card/").concat(cardID, "/edit/limit"), backTo); },
-    }, WORKSPACE_EXPENSIFY_CARD_LIMIT_TYPE: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`settings/${policyID}/expensify-card/${cardID}/edit/limit`, backTo),
+    },
+    WORKSPACE_EXPENSIFY_CARD_LIMIT_TYPE: {
         route: 'workspaces/:policyID/expensify-card/:cardID/edit/limit-type',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/expensify-card/").concat(cardID, "/edit/limit-type"), backTo); },
-    }, EXPENSIFY_CARD_LIMIT_TYPE: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/expensify-card/${cardID}/edit/limit-type`, backTo),
+    },
+    EXPENSIFY_CARD_LIMIT_TYPE: {
         route: 'settings/:policyID/expensify-card/:cardID/edit/limit-type',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, cardID, backTo) { return getUrlWithBackToParam("settings/".concat(policyID, "/expensify-card/").concat(cardID, "/edit/limit-type"), backTo); },
-    }, WORKSPACE_EXPENSIFY_CARD_ISSUE_NEW: {
+        getRoute: (policyID, cardID, backTo) => getUrlWithBackToParam(`settings/${policyID}/expensify-card/${cardID}/edit/limit-type`, backTo),
+    },
+    WORKSPACE_EXPENSIFY_CARD_ISSUE_NEW: {
         route: 'workspaces/:policyID/expensify-card/issue-new',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/expensify-card/issue-new"), backTo); },
-    }, WORKSPACE_EXPENSIFY_CARD_BANK_ACCOUNT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/expensify-card/issue-new`, backTo),
+    },
+    WORKSPACE_EXPENSIFY_CARD_BANK_ACCOUNT: {
         route: 'workspaces/:policyID/expensify-card/choose-bank-account',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_EXPENSIFY_CARD_BANK_ACCOUNT route');
             }
-            return "workspaces/".concat(policyID, "/expensify-card/choose-bank-account");
+            return `workspaces/${policyID}/expensify-card/choose-bank-account`;
         },
-    }, WORKSPACE_EXPENSIFY_CARD_SETTINGS: {
+    },
+    WORKSPACE_EXPENSIFY_CARD_SETTINGS: {
         route: 'workspaces/:policyID/expensify-card/settings',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/expensify-card/settings"); },
-    }, WORKSPACE_EXPENSIFY_CARD_SETTINGS_ACCOUNT: {
+        getRoute: (policyID) => `workspaces/${policyID}/expensify-card/settings`,
+    },
+    WORKSPACE_EXPENSIFY_CARD_SETTINGS_ACCOUNT: {
         route: 'workspaces/:policyID/expensify-card/settings/account',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/expensify-card/settings/account"), backTo); },
-    }, WORKSPACE_EXPENSIFY_CARD_SELECT_FEED: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/expensify-card/settings/account`, backTo),
+    },
+    WORKSPACE_EXPENSIFY_CARD_SELECT_FEED: {
         route: 'workspaces/:policyID/expensify-card/select-feed',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/expensify-card/select-feed"), backTo); },
-    }, WORKSPACE_EXPENSIFY_CARD_SETTINGS_FREQUENCY: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/expensify-card/select-feed`, backTo),
+    },
+    WORKSPACE_EXPENSIFY_CARD_SETTINGS_FREQUENCY: {
         route: 'workspaces/:policyID/expensify-card/settings/frequency',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/expensify-card/settings/frequency"); },
-    }, WORKSPACE_COMPANY_CARDS_SETTINGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/expensify-card/settings/frequency`,
+    },
+    WORKSPACE_COMPANY_CARDS_SETTINGS: {
         route: 'workspaces/:policyID/company-cards/settings',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/company-cards/settings"); },
-    }, WORKSPACE_COMPANY_CARDS_SETTINGS_FEED_NAME: {
+        getRoute: (policyID) => `workspaces/${policyID}/company-cards/settings`,
+    },
+    WORKSPACE_COMPANY_CARDS_SETTINGS_FEED_NAME: {
         route: 'workspaces/:policyID/company-cards/settings/feed-name',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/company-cards/settings/feed-name"); },
-    }, WORKSPACE_COMPANY_CARDS_SETTINGS_STATEMENT_CLOSE_DATE: {
+        getRoute: (policyID) => `workspaces/${policyID}/company-cards/settings/feed-name`,
+    },
+    WORKSPACE_COMPANY_CARDS_SETTINGS_STATEMENT_CLOSE_DATE: {
         route: 'workspaces/:policyID/company-cards/settings/statement-close-date',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/company-cards/settings/statement-close-date"); },
-    }, WORKSPACE_RULES: {
+        getRoute: (policyID) => `workspaces/${policyID}/company-cards/settings/statement-close-date`,
+    },
+    WORKSPACE_RULES: {
         route: 'workspaces/:policyID/rules',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_RULES route');
             }
-            return "workspaces/".concat(policyID, "/rules");
+            return `workspaces/${policyID}/rules`;
         },
-    }, WORKSPACE_DISTANCE_RATES: {
+    },
+    WORKSPACE_DISTANCE_RATES: {
         route: 'workspaces/:policyID/distance-rates',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_DISTANCE_RATES route');
             }
-            return "workspaces/".concat(policyID, "/distance-rates");
+            return `workspaces/${policyID}/distance-rates`;
         },
-    }, WORKSPACE_CREATE_DISTANCE_RATE: {
+    },
+    WORKSPACE_CREATE_DISTANCE_RATE: {
         route: 'workspaces/:policyID/distance-rates/new',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/distance-rates/new"); },
-    }, WORKSPACE_DISTANCE_RATES_SETTINGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/distance-rates/new`,
+    },
+    WORKSPACE_DISTANCE_RATES_SETTINGS: {
         route: 'workspaces/:policyID/distance-rates/settings',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/distance-rates/settings"); },
-    }, WORKSPACE_DISTANCE_RATE_DETAILS: {
+        getRoute: (policyID) => `workspaces/${policyID}/distance-rates/settings`,
+    },
+    WORKSPACE_DISTANCE_RATE_DETAILS: {
         route: 'workspaces/:policyID/distance-rates/:rateID',
-        getRoute: function (policyID, rateID) { return "workspaces/".concat(policyID, "/distance-rates/").concat(rateID); },
-    }, WORKSPACE_DISTANCE_RATE_EDIT: {
+        getRoute: (policyID, rateID) => `workspaces/${policyID}/distance-rates/${rateID}`,
+    },
+    WORKSPACE_DISTANCE_RATE_EDIT: {
         route: 'workspaces/:policyID/distance-rates/:rateID/edit',
-        getRoute: function (policyID, rateID) { return "workspaces/".concat(policyID, "/distance-rates/").concat(rateID, "/edit"); },
-    }, WORKSPACE_DISTANCE_RATE_NAME_EDIT: {
+        getRoute: (policyID, rateID) => `workspaces/${policyID}/distance-rates/${rateID}/edit`,
+    },
+    WORKSPACE_DISTANCE_RATE_NAME_EDIT: {
         route: 'workspaces/:policyID/distance-rates/:rateID/name/edit',
-        getRoute: function (policyID, rateID) { return "workspaces/".concat(policyID, "/distance-rates/").concat(rateID, "/name/edit"); },
-    }, WORKSPACE_DISTANCE_RATE_TAX_RECLAIMABLE_ON_EDIT: {
+        getRoute: (policyID, rateID) => `workspaces/${policyID}/distance-rates/${rateID}/name/edit`,
+    },
+    WORKSPACE_DISTANCE_RATE_TAX_RECLAIMABLE_ON_EDIT: {
         route: 'workspaces/:policyID/distance-rates/:rateID/tax-reclaimable/edit',
-        getRoute: function (policyID, rateID) { return "workspaces/".concat(policyID, "/distance-rates/").concat(rateID, "/tax-reclaimable/edit"); },
-    }, WORKSPACE_DISTANCE_RATE_TAX_RATE_EDIT: {
+        getRoute: (policyID, rateID) => `workspaces/${policyID}/distance-rates/${rateID}/tax-reclaimable/edit`,
+    },
+    WORKSPACE_DISTANCE_RATE_TAX_RATE_EDIT: {
         route: 'workspaces/:policyID/distance-rates/:rateID/tax-rate/edit',
-        getRoute: function (policyID, rateID) { return "workspaces/".concat(policyID, "/distance-rates/").concat(rateID, "/tax-rate/edit"); },
-    }, WORKSPACE_PER_DIEM: {
+        getRoute: (policyID, rateID) => `workspaces/${policyID}/distance-rates/${rateID}/tax-rate/edit`,
+    },
+    WORKSPACE_PER_DIEM: {
         route: 'workspaces/:policyID/per-diem',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_PER_DIEM route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/per-diem"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/per-diem`, backTo);
         },
-    }, WORKSPACE_DUPLICATE: {
+    },
+    WORKSPACE_DUPLICATE: {
         route: 'workspace/:policyID/duplicate',
-        getRoute: function (policyID) { return "workspace/".concat(policyID, "/duplicate"); },
-    }, WORKSPACE_DUPLICATE_SELECT_FEATURES: {
+        getRoute: (policyID) => `workspace/${policyID}/duplicate`,
+    },
+    WORKSPACE_DUPLICATE_SELECT_FEATURES: {
         route: 'workspace/:policyID/duplicate/select-features',
-        getRoute: function (policyID) { return "workspace/".concat(policyID, "/duplicate/select-features"); },
-    }, WORKSPACE_RECEIPT_PARTNERS: {
+        getRoute: (policyID) => `workspace/${policyID}/duplicate/select-features`,
+    },
+    WORKSPACE_RECEIPT_PARTNERS: {
         route: 'workspaces/:policyID/receipt-partners',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_RECEIPT_PARTNERS route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/receipt-partners"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/receipt-partners`, backTo);
         },
-    }, WORKSPACE_RECEIPT_PARTNERS_INVITE: {
+    },
+    WORKSPACE_RECEIPT_PARTNERS_INVITE: {
         route: 'workspaces/:policyID/receipt-partners/:integration/invite',
-        getRoute: function (policyID, integration, backTo) {
+        getRoute: (policyID, integration, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_RECEIPT_PARTNERS_INVITE route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/receipt-partners/").concat(integration, "/invite"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/receipt-partners/${integration}/invite`, backTo);
         },
-    }, WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT: {
+    },
+    WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT: {
         route: 'workspaces/:policyID/receipt-partners/:integration/invite/edit',
-        getRoute: function (policyID, integration, backTo) {
+        getRoute: (policyID, integration, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/receipt-partners/").concat(integration, "/invite/edit"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/receipt-partners/${integration}/invite/edit`, backTo);
         },
-    }, WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT_ALL: 'workspaces/:policyID/receipt-partners/:integration/invite/edit/ReceiptPartnersAllTab', WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT_LINKED: 'workspaces/:policyID/receipt-partners/:integration/invite/edit/ReceiptPartnersLinkedTab', WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT_OUTSTANDING: 'workspaces/:policyID/receipt-partners/:integration/invite/edit/ReceiptPartnersOutstandingTab', WORKSPACE_PER_DIEM_IMPORT: {
+    },
+    WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT_ALL: 'workspaces/:policyID/receipt-partners/:integration/invite/edit/ReceiptPartnersAllTab',
+    WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT_LINKED: 'workspaces/:policyID/receipt-partners/:integration/invite/edit/ReceiptPartnersLinkedTab',
+    WORKSPACE_RECEIPT_PARTNERS_INVITE_EDIT_OUTSTANDING: 'workspaces/:policyID/receipt-partners/:integration/invite/edit/ReceiptPartnersOutstandingTab',
+    WORKSPACE_PER_DIEM_IMPORT: {
         route: 'workspaces/:policyID/per-diem/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/per-diem/import"); },
-    }, WORKSPACE_PER_DIEM_IMPORTED: {
+        getRoute: (policyID) => `workspaces/${policyID}/per-diem/import`,
+    },
+    WORKSPACE_PER_DIEM_IMPORTED: {
         route: 'workspaces/:policyID/per-diem/imported',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/per-diem/imported"); },
-    }, WORKSPACE_PER_DIEM_SETTINGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/per-diem/imported`,
+    },
+    WORKSPACE_PER_DIEM_SETTINGS: {
         route: 'workspaces/:policyID/per-diem/settings',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/per-diem/settings"); },
-    }, WORKSPACE_PER_DIEM_DETAILS: {
+        getRoute: (policyID) => `workspaces/${policyID}/per-diem/settings`,
+    },
+    WORKSPACE_PER_DIEM_DETAILS: {
         route: 'workspaces/:policyID/per-diem/details/:rateID/:subRateID',
-        getRoute: function (policyID, rateID, subRateID) { return "workspaces/".concat(policyID, "/per-diem/details/").concat(rateID, "/").concat(subRateID); },
-    }, WORKSPACE_PER_DIEM_EDIT_DESTINATION: {
+        getRoute: (policyID, rateID, subRateID) => `workspaces/${policyID}/per-diem/details/${rateID}/${subRateID}`,
+    },
+    WORKSPACE_PER_DIEM_EDIT_DESTINATION: {
         route: 'workspaces/:policyID/per-diem/edit/destination/:rateID/:subRateID',
-        getRoute: function (policyID, rateID, subRateID) { return "workspaces/".concat(policyID, "/per-diem/edit/destination/").concat(rateID, "/").concat(subRateID); },
-    }, WORKSPACE_PER_DIEM_EDIT_SUBRATE: {
+        getRoute: (policyID, rateID, subRateID) => `workspaces/${policyID}/per-diem/edit/destination/${rateID}/${subRateID}`,
+    },
+    WORKSPACE_PER_DIEM_EDIT_SUBRATE: {
         route: 'workspaces/:policyID/per-diem/edit/subrate/:rateID/:subRateID',
-        getRoute: function (policyID, rateID, subRateID) { return "workspaces/".concat(policyID, "/per-diem/edit/subrate/").concat(rateID, "/").concat(subRateID); },
-    }, WORKSPACE_PER_DIEM_EDIT_AMOUNT: {
+        getRoute: (policyID, rateID, subRateID) => `workspaces/${policyID}/per-diem/edit/subrate/${rateID}/${subRateID}`,
+    },
+    WORKSPACE_PER_DIEM_EDIT_AMOUNT: {
         route: 'workspaces/:policyID/per-diem/edit/amount/:rateID/:subRateID',
-        getRoute: function (policyID, rateID, subRateID) { return "workspaces/".concat(policyID, "/per-diem/edit/amount/").concat(rateID, "/").concat(subRateID); },
-    }, WORKSPACE_PER_DIEM_EDIT_CURRENCY: {
+        getRoute: (policyID, rateID, subRateID) => `workspaces/${policyID}/per-diem/edit/amount/${rateID}/${subRateID}`,
+    },
+    WORKSPACE_PER_DIEM_EDIT_CURRENCY: {
         route: 'workspaces/:policyID/per-diem/edit/currency/:rateID/:subRateID',
-        getRoute: function (policyID, rateID, subRateID) { return "workspaces/".concat(policyID, "/per-diem/edit/currency/").concat(rateID, "/").concat(subRateID); },
-    }, REPORTS_DEFAULT_TITLE: {
+        getRoute: (policyID, rateID, subRateID) => `workspaces/${policyID}/per-diem/edit/currency/${rateID}/${subRateID}`,
+    },
+    REPORTS_DEFAULT_TITLE: {
         route: 'workspaces/:policyID/reports/name',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/reports/name"); },
-    }, RULES_AUTO_APPROVE_REPORTS_UNDER: {
+        getRoute: (policyID) => `workspaces/${policyID}/reports/name`,
+    },
+    RULES_AUTO_APPROVE_REPORTS_UNDER: {
         route: 'workspaces/:policyID/rules/auto-approve',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/auto-approve"); },
-    }, RULES_RANDOM_REPORT_AUDIT: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/auto-approve`,
+    },
+    RULES_RANDOM_REPORT_AUDIT: {
         route: 'workspaces/:policyID/rules/audit',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/audit"); },
-    }, RULES_AUTO_PAY_REPORTS_UNDER: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/audit`,
+    },
+    RULES_AUTO_PAY_REPORTS_UNDER: {
         route: 'workspaces/:policyID/rules/auto-pay',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/auto-pay"); },
-    }, RULES_RECEIPT_REQUIRED_AMOUNT: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/auto-pay`,
+    },
+    RULES_RECEIPT_REQUIRED_AMOUNT: {
         route: 'workspaces/:policyID/rules/receipt-required-amount',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/receipt-required-amount"); },
-    }, RULES_MAX_EXPENSE_AMOUNT: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/receipt-required-amount`,
+    },
+    RULES_MAX_EXPENSE_AMOUNT: {
         route: 'workspaces/:policyID/rules/max-expense-amount',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/max-expense-amount"); },
-    }, RULES_MAX_EXPENSE_AGE: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/max-expense-amount`,
+    },
+    RULES_MAX_EXPENSE_AGE: {
         route: 'workspaces/:policyID/rules/max-expense-age',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/max-expense-age"); },
-    }, RULES_BILLABLE_DEFAULT: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/max-expense-age`,
+    },
+    RULES_BILLABLE_DEFAULT: {
         route: 'workspaces/:policyID/rules/billable',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/billable"); },
-    }, RULES_REIMBURSABLE_DEFAULT: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/billable`,
+    },
+    RULES_REIMBURSABLE_DEFAULT: {
         route: 'workspaces/:policyID/rules/reimbursable',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/reimbursable"); },
-    }, RULES_PROHIBITED_DEFAULT: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/reimbursable`,
+    },
+    RULES_PROHIBITED_DEFAULT: {
         route: 'workspaces/:policyID/rules/prohibited',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/rules/prohibited"); },
-    }, RULES_CUSTOM: {
+        getRoute: (policyID) => `workspaces/${policyID}/rules/prohibited`,
+    },
+    RULES_CUSTOM: {
         route: 'workspaces/:policyID/overview/policy',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/overview/policy"); },
-    }, 
+        getRoute: (policyID) => `workspaces/${policyID}/overview/policy`,
+    },
     // Referral program promotion
     REFERRAL_DETAILS_MODAL: {
         route: 'referral/:contentType',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (contentType, backTo) { return getUrlWithBackToParam("referral/".concat(contentType), backTo); },
-    }, SHARE_ROOT: 'share/root', SHARE_ROOT_SHARE: 'share/root/share', SHARE_ROOT_SUBMIT: 'share/root/submit', SHARE_DETAILS: {
+        getRoute: (contentType, backTo) => getUrlWithBackToParam(`referral/${contentType}`, backTo),
+    },
+    SHARE_ROOT: 'share/root',
+    SHARE_ROOT_SHARE: 'share/root/share',
+    SHARE_ROOT_SUBMIT: 'share/root/submit',
+    SHARE_DETAILS: {
         route: 'share/share-details/:reportOrAccountID',
-        getRoute: function (reportOrAccountID) { return "share/share-details/".concat(reportOrAccountID); },
-    }, SHARE_SUBMIT_DETAILS: {
+        getRoute: (reportOrAccountID) => `share/share-details/${reportOrAccountID}`,
+    },
+    SHARE_SUBMIT_DETAILS: {
         route: 'share/submit-details/:reportOrAccountID',
-        getRoute: function (reportOrAccountID) { return "share/submit-details/".concat(reportOrAccountID); },
-    }, PROCESS_MONEY_REQUEST_HOLD: {
+        getRoute: (reportOrAccountID) => `share/submit-details/${reportOrAccountID}`,
+    },
+    PROCESS_MONEY_REQUEST_HOLD: {
         route: 'hold-expense-educational',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('hold-expense-educational', backTo); },
-    }, CHANGE_POLICY_EDUCATIONAL: {
+        getRoute: (backTo) => getUrlWithBackToParam('hold-expense-educational', backTo),
+    },
+    CHANGE_POLICY_EDUCATIONAL: {
         route: 'change-workspace-educational',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('change-workspace-educational', backTo); },
-    }, TRAVEL_MY_TRIPS: 'travel', TRAVEL_DOT_LINK_WEB_VIEW: {
+        getRoute: (backTo) => getUrlWithBackToParam('change-workspace-educational', backTo),
+    },
+    TRAVEL_MY_TRIPS: 'travel',
+    TRAVEL_DOT_LINK_WEB_VIEW: {
         route: 'travel-dot-link',
-        getRoute: function (token, isTestAccount) { return "travel-dot-link?token=".concat(token, "&isTestAccount=").concat(isTestAccount); },
-    }, TRAVEL_TCS: {
+        getRoute: (token, isTestAccount) => `travel-dot-link?token=${token}&isTestAccount=${isTestAccount}`,
+    },
+    TRAVEL_TCS: {
         route: 'travel/terms/:domain/accept',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (domain, backTo) { return getUrlWithBackToParam("travel/terms/".concat(domain, "/accept"), backTo); },
-    }, TRAVEL_UPGRADE: {
+        getRoute: (domain, backTo) => getUrlWithBackToParam(`travel/terms/${domain}/accept`, backTo),
+    },
+    TRAVEL_UPGRADE: {
         route: 'travel/upgrade',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('travel/upgrade', backTo); },
-    }, TRACK_TRAINING_MODAL: 'track-training', TRAVEL_TRIP_SUMMARY: {
+        getRoute: (backTo) => getUrlWithBackToParam('travel/upgrade', backTo),
+    },
+    TRACK_TRAINING_MODAL: 'track-training',
+    TRAVEL_TRIP_SUMMARY: {
         route: 'r/:reportID/trip/:transactionID',
-        getRoute: function (reportID, transactionID, backTo) {
+        getRoute: (reportID, transactionID, backTo) => {
             if (!reportID || !transactionID) {
                 Log_1.default.warn('Invalid reportID or transactionID is used to build the TRAVEL_TRIP_SUMMARY route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/trip/").concat(transactionID), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/trip/${transactionID}`, backTo);
         },
-    }, TRAVEL_TRIP_DETAILS: {
+    },
+    TRAVEL_TRIP_DETAILS: {
         route: 'r/:reportID/trip/:transactionID/:pnr/:sequenceIndex',
-        getRoute: function (reportID, transactionID, pnr, sequenceIndex, backTo) {
+        getRoute: (reportID, transactionID, pnr, sequenceIndex, backTo) => {
             if (!reportID || !transactionID || !pnr) {
                 Log_1.default.warn('Invalid reportID, transactionID or pnr is used to build the TRAVEL_TRIP_DETAILS route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("r/".concat(reportID, "/trip/").concat(transactionID, "/").concat(pnr, "/").concat(sequenceIndex), backTo);
+            return getUrlWithBackToParam(`r/${reportID}/trip/${transactionID}/${pnr}/${sequenceIndex}`, backTo);
         },
-    }, TRAVEL_DOMAIN_SELECTOR: {
+    },
+    TRAVEL_DOMAIN_SELECTOR: {
         route: 'travel/domain-selector',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("travel/domain-selector", backTo); },
-    }, TRAVEL_DOMAIN_PERMISSION_INFO: {
+        getRoute: (backTo) => getUrlWithBackToParam(`travel/domain-selector`, backTo),
+    },
+    TRAVEL_DOMAIN_PERMISSION_INFO: {
         route: 'travel/domain-permission/:domain/info',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (domain, backTo) { return getUrlWithBackToParam("travel/domain-permission/".concat(domain, "/info"), backTo); },
-    }, TRAVEL_PUBLIC_DOMAIN_ERROR: {
+        getRoute: (domain, backTo) => getUrlWithBackToParam(`travel/domain-permission/${domain}/info`, backTo),
+    },
+    TRAVEL_PUBLIC_DOMAIN_ERROR: {
         route: 'travel/public-domain-error',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("travel/public-domain-error", backTo); },
-    }, TRAVEL_WORKSPACE_ADDRESS: {
+        getRoute: (backTo) => getUrlWithBackToParam(`travel/public-domain-error`, backTo),
+    },
+    TRAVEL_WORKSPACE_ADDRESS: {
         route: 'travel/:domain/workspace-address',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (domain, backTo) { return getUrlWithBackToParam("travel/".concat(domain, "/workspace-address"), backTo); },
-    }, ONBOARDING_ROOT: {
+        getRoute: (domain, backTo) => getUrlWithBackToParam(`travel/${domain}/workspace-address`, backTo),
+    },
+    ONBOARDING_ROOT: {
         route: 'onboarding',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding", backTo); },
-    }, ONBOARDING_PERSONAL_DETAILS: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding`, backTo),
+    },
+    ONBOARDING_PERSONAL_DETAILS: {
         route: 'onboarding/personal-details',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/personal-details", backTo); },
-    }, ONBOARDING_PRIVATE_DOMAIN: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/personal-details`, backTo),
+    },
+    ONBOARDING_PRIVATE_DOMAIN: {
         route: 'onboarding/private-domain',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/private-domain", backTo); },
-    }, ONBOARDING_EMPLOYEES: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/private-domain`, backTo),
+    },
+    ONBOARDING_EMPLOYEES: {
         route: 'onboarding/employees',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/employees", backTo); },
-    }, ONBOARDING_ACCOUNTING: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/employees`, backTo),
+    },
+    ONBOARDING_ACCOUNTING: {
         route: 'onboarding/accounting',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/accounting", backTo); },
-    }, ONBOARDING_INTERESTED_FEATURES: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/accounting`, backTo),
+    },
+    ONBOARDING_INTERESTED_FEATURES: {
         route: 'onboarding/interested-features',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (userReportedIntegration, backTo) { return getUrlWithBackToParam("onboarding/interested-features?userReportedIntegration=".concat(userReportedIntegration), backTo); },
-    }, ONBOARDING_PURPOSE: {
+        getRoute: (userReportedIntegration, backTo) => getUrlWithBackToParam(`onboarding/interested-features?userReportedIntegration=${userReportedIntegration}`, backTo),
+    },
+    ONBOARDING_PURPOSE: {
         route: 'onboarding/purpose',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/purpose", backTo); },
-    }, ONBOARDING_WORKSPACES: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/purpose`, backTo),
+    },
+    ONBOARDING_WORKSPACES: {
         route: 'onboarding/join-workspaces',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/join-workspaces", backTo); },
-    }, ONBOARDING_WORK_EMAIL: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/join-workspaces`, backTo),
+    },
+    ONBOARDING_WORK_EMAIL: {
         route: 'onboarding/work-email',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/work-email", backTo); },
-    }, ONBOARDING_WORK_EMAIL_VALIDATION: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/work-email`, backTo),
+    },
+    ONBOARDING_WORK_EMAIL_VALIDATION: {
         route: 'onboarding/work-email-validation',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/work-email-validation", backTo); },
-    }, ONBOARDING_WORKSPACE: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/work-email-validation`, backTo),
+    },
+    ONBOARDING_WORKSPACE: {
         route: 'onboarding/create-workspace',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/create-workspace", backTo); },
-    }, ONBOARDING_WORKSPACE_CONFIRMATION: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/create-workspace`, backTo),
+    },
+    ONBOARDING_WORKSPACE_CONFIRMATION: {
         route: 'onboarding/workspace-confirmation',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/workspace-confirmation", backTo); },
-    }, ONBOARDING_WORKSPACE_CURRENCY: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/workspace-confirmation`, backTo),
+    },
+    ONBOARDING_WORKSPACE_CURRENCY: {
         route: 'onboarding/workspace-currency',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/workspace-currency", backTo); },
-    }, ONBOARDING_WORKSPACE_INVITE: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/workspace-currency`, backTo),
+    },
+    ONBOARDING_WORKSPACE_INVITE: {
         route: 'onboarding/workspace-invite',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("onboarding/workspace-invite", backTo); },
-    }, EXPLANATION_MODAL_ROOT: 'onboarding/explanation', TEST_DRIVE_MODAL_ROOT: {
+        getRoute: (backTo) => getUrlWithBackToParam(`onboarding/workspace-invite`, backTo),
+    },
+    EXPLANATION_MODAL_ROOT: 'onboarding/explanation',
+    TEST_DRIVE_MODAL_ROOT: {
         route: 'onboarding/test-drive',
-        getRoute: function (bossEmail) { return "onboarding/test-drive".concat(bossEmail ? "?bossEmail=".concat(encodeURIComponent(bossEmail)) : ''); },
-    }, TEST_DRIVE_DEMO_ROOT: 'onboarding/test-drive/demo', AUTO_SUBMIT_MODAL_ROOT: '/auto-submit', WORKSPACE_CONFIRMATION: {
+        getRoute: (bossEmail) => `onboarding/test-drive${bossEmail ? `?bossEmail=${encodeURIComponent(bossEmail)}` : ''}`,
+    },
+    TEST_DRIVE_DEMO_ROOT: 'onboarding/test-drive/demo',
+    AUTO_SUBMIT_MODAL_ROOT: '/auto-submit',
+    WORKSPACE_CONFIRMATION: {
         route: 'workspace/confirmation',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam("workspace/confirmation", backTo); },
-    }, MIGRATED_USER_WELCOME_MODAL: {
+        getRoute: (backTo) => getUrlWithBackToParam(`workspace/confirmation`, backTo),
+    },
+    MIGRATED_USER_WELCOME_MODAL: {
         route: 'onboarding/migrated-user-welcome',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (shouldOpenSearch) { return getUrlWithBackToParam("onboarding/migrated-user-welcome?".concat(shouldOpenSearch ? 'shouldOpenSearch=true' : ''), undefined, false); },
-    }, TRANSACTION_RECEIPT: {
+        getRoute: (shouldOpenSearch) => getUrlWithBackToParam(`onboarding/migrated-user-welcome?${shouldOpenSearch ? 'shouldOpenSearch=true' : ''}`, undefined, false),
+    },
+    TRANSACTION_RECEIPT: {
         route: 'r/:reportID/transaction/:transactionID/receipt/:action?/:iouType?',
-        getRoute: function (reportID, transactionID, readonly, isFromReviewDuplicates, mergeTransactionID) {
-            if (readonly === void 0) { readonly = false; }
-            if (isFromReviewDuplicates === void 0) { isFromReviewDuplicates = false; }
+        getRoute: (reportID, transactionID, readonly = false, isFromReviewDuplicates = false, mergeTransactionID) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the TRANSACTION_RECEIPT route');
             }
             if (!transactionID) {
                 Log_1.default.warn('Invalid transactionID is used to build the TRANSACTION_RECEIPT route');
             }
-            return "r/".concat(reportID, "/transaction/").concat(transactionID, "/receipt?readonly=").concat(readonly).concat(isFromReviewDuplicates ? '&isFromReviewDuplicates=true' : '').concat(mergeTransactionID ? "&mergeTransactionID=".concat(mergeTransactionID) : '');
+            return `r/${reportID}/transaction/${transactionID}/receipt?readonly=${readonly}${isFromReviewDuplicates ? '&isFromReviewDuplicates=true' : ''}${mergeTransactionID ? `&mergeTransactionID=${mergeTransactionID}` : ''}`;
         },
-    }, TRANSACTION_DUPLICATE_REVIEW_PAGE: {
+    },
+    TRANSACTION_DUPLICATE_REVIEW_PAGE: {
         route: 'r/:threadReportID/duplicates/review',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review"), backTo); },
-    }, TRANSACTION_DUPLICATE_REVIEW_MERCHANT_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review`, backTo),
+    },
+    TRANSACTION_DUPLICATE_REVIEW_MERCHANT_PAGE: {
         route: 'r/:threadReportID/duplicates/review/merchant',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review/merchant"), backTo); },
-    }, TRANSACTION_DUPLICATE_REVIEW_CATEGORY_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review/merchant`, backTo),
+    },
+    TRANSACTION_DUPLICATE_REVIEW_CATEGORY_PAGE: {
         route: 'r/:threadReportID/duplicates/review/category',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review/category"), backTo); },
-    }, TRANSACTION_DUPLICATE_REVIEW_TAG_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review/category`, backTo),
+    },
+    TRANSACTION_DUPLICATE_REVIEW_TAG_PAGE: {
         route: 'r/:threadReportID/duplicates/review/tag',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review/tag"), backTo); },
-    }, TRANSACTION_DUPLICATE_REVIEW_TAX_CODE_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review/tag`, backTo),
+    },
+    TRANSACTION_DUPLICATE_REVIEW_TAX_CODE_PAGE: {
         route: 'r/:threadReportID/duplicates/review/tax-code',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review/tax-code"), backTo); },
-    }, TRANSACTION_DUPLICATE_REVIEW_DESCRIPTION_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review/tax-code`, backTo),
+    },
+    TRANSACTION_DUPLICATE_REVIEW_DESCRIPTION_PAGE: {
         route: 'r/:threadReportID/duplicates/review/description',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review/description"), backTo); },
-    }, TRANSACTION_DUPLICATE_REVIEW_REIMBURSABLE_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review/description`, backTo),
+    },
+    TRANSACTION_DUPLICATE_REVIEW_REIMBURSABLE_PAGE: {
         route: 'r/:threadReportID/duplicates/review/reimbursable',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review/reimbursable"), backTo); },
-    }, TRANSACTION_DUPLICATE_REVIEW_BILLABLE_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review/reimbursable`, backTo),
+    },
+    TRANSACTION_DUPLICATE_REVIEW_BILLABLE_PAGE: {
         route: 'r/:threadReportID/duplicates/review/billable',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/review/billable"), backTo); },
-    }, TRANSACTION_DUPLICATE_CONFIRMATION_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/review/billable`, backTo),
+    },
+    TRANSACTION_DUPLICATE_CONFIRMATION_PAGE: {
         route: 'r/:threadReportID/duplicates/confirm',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (threadReportID, backTo) { return getUrlWithBackToParam("r/".concat(threadReportID, "/duplicates/confirm"), backTo); },
-    }, MERGE_TRANSACTION_LIST_PAGE: {
+        getRoute: (threadReportID, backTo) => getUrlWithBackToParam(`r/${threadReportID}/duplicates/confirm`, backTo),
+    },
+    MERGE_TRANSACTION_LIST_PAGE: {
         route: 'r/:transactionID/merge',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (transactionID, backTo) { return getUrlWithBackToParam("r/".concat(transactionID, "/merge"), backTo); },
-    }, MERGE_TRANSACTION_RECEIPT_PAGE: {
+        getRoute: (transactionID, backTo) => getUrlWithBackToParam(`r/${transactionID}/merge`, backTo),
+    },
+    MERGE_TRANSACTION_RECEIPT_PAGE: {
         route: 'r/:transactionID/merge/receipt',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (transactionID, backTo) { return getUrlWithBackToParam("r/".concat(transactionID, "/merge/receipt"), backTo); },
-    }, MERGE_TRANSACTION_DETAILS_PAGE: {
+        getRoute: (transactionID, backTo) => getUrlWithBackToParam(`r/${transactionID}/merge/receipt`, backTo),
+    },
+    MERGE_TRANSACTION_DETAILS_PAGE: {
         route: 'r/:transactionID/merge/details',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (transactionID, backTo) { return getUrlWithBackToParam("r/".concat(transactionID, "/merge/details"), backTo); },
-    }, MERGE_TRANSACTION_CONFIRMATION_PAGE: {
+        getRoute: (transactionID, backTo) => getUrlWithBackToParam(`r/${transactionID}/merge/details`, backTo),
+    },
+    MERGE_TRANSACTION_CONFIRMATION_PAGE: {
         route: 'r/:transactionID/merge/confirmation',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (transactionID, backTo) { return getUrlWithBackToParam("r/".concat(transactionID, "/merge/confirmation"), backTo); },
-    }, POLICY_ACCOUNTING_XERO_IMPORT: {
+        getRoute: (transactionID, backTo) => getUrlWithBackToParam(`r/${transactionID}/merge/confirmation`, backTo),
+    },
+    POLICY_ACCOUNTING_XERO_IMPORT: {
         route: 'workspaces/:policyID/accounting/xero/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/xero/import"); },
-    }, POLICY_ACCOUNTING_XERO_CHART_OF_ACCOUNTS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/xero/import`,
+    },
+    POLICY_ACCOUNTING_XERO_CHART_OF_ACCOUNTS: {
         route: 'workspaces/:policyID/accounting/xero/import/accounts',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/xero/import/accounts"); },
-    }, POLICY_ACCOUNTING_XERO_ORGANIZATION: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/xero/import/accounts`,
+    },
+    POLICY_ACCOUNTING_XERO_ORGANIZATION: {
         route: 'workspaces/:policyID/accounting/xero/organization/:currentOrganizationID',
-        getRoute: function (policyID, currentOrganizationID) {
+        getRoute: (policyID, currentOrganizationID) => {
             if (!policyID || !currentOrganizationID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_XERO_ORGANIZATION route');
             }
-            return "workspaces/".concat(policyID, "/accounting/xero/organization/").concat(currentOrganizationID);
+            return `workspaces/${policyID}/accounting/xero/organization/${currentOrganizationID}`;
         },
-    }, POLICY_ACCOUNTING_XERO_TRACKING_CATEGORIES: {
+    },
+    POLICY_ACCOUNTING_XERO_TRACKING_CATEGORIES: {
         route: 'workspaces/:policyID/accounting/xero/import/tracking-categories',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_XERO_TRACKING_CATEGORIES route');
             }
-            return "workspaces/".concat(policyID, "/accounting/xero/import/tracking-categories");
+            return `workspaces/${policyID}/accounting/xero/import/tracking-categories`;
         },
-    }, POLICY_ACCOUNTING_XERO_TRACKING_CATEGORIES_MAP: {
+    },
+    POLICY_ACCOUNTING_XERO_TRACKING_CATEGORIES_MAP: {
         route: 'workspaces/:policyID/accounting/xero/import/tracking-categories/mapping/:categoryId/:categoryName',
-        getRoute: function (policyID, categoryId, categoryName) {
-            return "workspaces/".concat(policyID, "/accounting/xero/import/tracking-categories/mapping/").concat(categoryId, "/").concat(encodeURIComponent(categoryName));
-        },
-    }, POLICY_ACCOUNTING_XERO_CUSTOMER: {
+        getRoute: (policyID, categoryId, categoryName) => `workspaces/${policyID}/accounting/xero/import/tracking-categories/mapping/${categoryId}/${encodeURIComponent(categoryName)}`,
+    },
+    POLICY_ACCOUNTING_XERO_CUSTOMER: {
         route: 'workspaces/:policyID/accounting/xero/import/customers',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/xero/import/customers"); },
-    }, POLICY_ACCOUNTING_XERO_TAXES: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/xero/import/customers`,
+    },
+    POLICY_ACCOUNTING_XERO_TAXES: {
         route: 'workspaces/:policyID/accounting/xero/import/taxes',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/xero/import/taxes"); },
-    }, POLICY_ACCOUNTING_XERO_EXPORT: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/xero/import/taxes`,
+    },
+    POLICY_ACCOUNTING_XERO_EXPORT: {
         route: 'workspaces/:policyID/accounting/xero/export',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/xero/export"), backTo, false); },
-    }, POLICY_ACCOUNTING_XERO_PREFERRED_EXPORTER_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/xero/export`, backTo, false),
+    },
+    POLICY_ACCOUNTING_XERO_PREFERRED_EXPORTER_SELECT: {
         route: 'workspaces/:policyID/connections/xero/export/preferred-exporter/select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/xero/export/preferred-exporter/select"), backTo); },
-    }, POLICY_ACCOUNTING_XERO_EXPORT_PURCHASE_BILL_DATE_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/connections/xero/export/preferred-exporter/select`, backTo),
+    },
+    POLICY_ACCOUNTING_XERO_EXPORT_PURCHASE_BILL_DATE_SELECT: {
         route: 'workspaces/:policyID/accounting/xero/export/purchase-bill-date-select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/xero/export/purchase-bill-date-select"), backTo); },
-    }, POLICY_ACCOUNTING_XERO_EXPORT_BANK_ACCOUNT_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/xero/export/purchase-bill-date-select`, backTo),
+    },
+    POLICY_ACCOUNTING_XERO_EXPORT_BANK_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/accounting/xero/export/bank-account-select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/xero/export/bank-account-select"), backTo); },
-    }, POLICY_ACCOUNTING_XERO_ADVANCED: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/xero/export/bank-account-select`, backTo),
+    },
+    POLICY_ACCOUNTING_XERO_ADVANCED: {
         route: 'workspaces/:policyID/accounting/xero/advanced',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_XERO_ADVANCED route');
             }
-            return "workspaces/".concat(policyID, "/accounting/xero/advanced");
+            return `workspaces/${policyID}/accounting/xero/advanced`;
         },
-    }, POLICY_ACCOUNTING_XERO_AUTO_SYNC: {
+    },
+    POLICY_ACCOUNTING_XERO_AUTO_SYNC: {
         route: 'workspaces/:policyID/accounting/xero/advanced/autosync',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_XERO_AUTO_SYNC route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/xero/advanced/autosync"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/xero/advanced/autosync`, backTo);
         },
-    }, POLICY_ACCOUNTING_XERO_ACCOUNTING_METHOD: {
+    },
+    POLICY_ACCOUNTING_XERO_ACCOUNTING_METHOD: {
         route: 'workspaces/:policyID/accounting/xero/advanced/autosync/accounting-method',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_XERO_ACCOUNTING_METHOD route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/xero/advanced/autosync/accounting-method"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/accounting/xero/advanced/autosync/accounting-method`, backTo);
         },
-    }, POLICY_ACCOUNTING_XERO_BILL_STATUS_SELECTOR: {
+    },
+    POLICY_ACCOUNTING_XERO_BILL_STATUS_SELECTOR: {
         route: 'workspaces/:policyID/accounting/xero/export/purchase-bill-status-selector',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/xero/export/purchase-bill-status-selector"), backTo); },
-    }, POLICY_ACCOUNTING_XERO_INVOICE_SELECTOR: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/xero/export/purchase-bill-status-selector`, backTo),
+    },
+    POLICY_ACCOUNTING_XERO_INVOICE_SELECTOR: {
         route: 'workspaces/:policyID/accounting/xero/advanced/invoice-account-selector',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_XERO_INVOICE_SELECTOR route');
             }
-            return "workspaces/".concat(policyID, "/accounting/xero/advanced/invoice-account-selector");
+            return `workspaces/${policyID}/accounting/xero/advanced/invoice-account-selector`;
         },
-    }, POLICY_ACCOUNTING_XERO_BILL_PAYMENT_ACCOUNT_SELECTOR: {
+    },
+    POLICY_ACCOUNTING_XERO_BILL_PAYMENT_ACCOUNT_SELECTOR: {
         route: 'workspaces/:policyID/accounting/xero/advanced/bill-payment-account-selector',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_XERO_BILL_PAYMENT_ACCOUNT_SELECTOR route');
             }
-            return "workspaces/".concat(policyID, "/accounting/xero/advanced/bill-payment-account-selector");
+            return `workspaces/${policyID}/accounting/xero/advanced/bill-payment-account-selector`;
         },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_IMPORT: {
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_IMPORT: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CHART_OF_ACCOUNTS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CHART_OF_ACCOUNTS: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/accounts',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/accounts"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CLASSES: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/accounts`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CLASSES: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/classes',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/classes"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CLASSES_DISPLAYED_AS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/classes`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CLASSES_DISPLAYED_AS: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/classes/displayed-as',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/classes/displayed-as"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CUSTOMERS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/classes/displayed-as`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CUSTOMERS: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/customers',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/customers"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CUSTOMERS_DISPLAYED_AS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/customers`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_CUSTOMERS_DISPLAYED_AS: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/customers/displayed-as',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/customers/displayed-as"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_LOCATIONS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/customers/displayed-as`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_LOCATIONS: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/locations',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/locations"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_LOCATIONS_DISPLAYED_AS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/locations`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_LOCATIONS_DISPLAYED_AS: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/locations/displayed-as',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/locations/displayed-as"); },
-    }, POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_TAXES: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/locations/displayed-as`,
+    },
+    POLICY_ACCOUNTING_QUICKBOOKS_ONLINE_TAXES: {
         route: 'workspaces/:policyID/accounting/quickbooks-online/import/taxes',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/quickbooks-online/import/taxes"); },
-    }, RESTRICTED_ACTION: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/quickbooks-online/import/taxes`,
+    },
+    RESTRICTED_ACTION: {
         route: 'restricted-action/workspace/:policyID',
-        getRoute: function (policyID) { return "restricted-action/workspace/".concat(policyID); },
-    }, MISSING_PERSONAL_DETAILS: 'missing-personal-details', POLICY_ACCOUNTING_NETSUITE_SUBSIDIARY_SELECTOR: {
+        getRoute: (policyID) => `restricted-action/workspace/${policyID}`,
+    },
+    MISSING_PERSONAL_DETAILS: 'missing-personal-details',
+    POLICY_ACCOUNTING_NETSUITE_SUBSIDIARY_SELECTOR: {
         route: 'workspaces/:policyID/accounting/netsuite/subsidiary-selector',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_SUBSIDIARY_SELECTOR route');
             }
-            return "workspaces/".concat(policyID, "/accounting/netsuite/subsidiary-selector");
+            return `workspaces/${policyID}/accounting/netsuite/subsidiary-selector`;
         },
-    }, POLICY_ACCOUNTING_NETSUITE_EXISTING_CONNECTIONS: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXISTING_CONNECTIONS: {
         route: 'workspaces/:policyID/accounting/netsuite/existing-connections',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/netsuite/existing-connections"); },
-    }, POLICY_ACCOUNTING_NETSUITE_TOKEN_INPUT: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/netsuite/existing-connections`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_TOKEN_INPUT: {
         route: 'workspaces/:policyID/accounting/netsuite/token-input',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/netsuite/token-input"); },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/netsuite/token-input`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT: {
         route: 'workspaces/:policyID/accounting/netsuite/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/netsuite/import"); },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_MAPPING: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/netsuite/import`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_MAPPING: {
         route: 'workspaces/:policyID/accounting/netsuite/import/mapping/:importField',
-        getRoute: function (policyID, importField) {
-            return "workspaces/".concat(policyID, "/accounting/netsuite/import/mapping/").concat(importField);
-        },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_MAPPING: {
+        getRoute: (policyID, importField) => `workspaces/${policyID}/accounting/netsuite/import/mapping/${importField}`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_MAPPING: {
         route: 'workspaces/:policyID/accounting/netsuite/import/custom/:importCustomField',
-        getRoute: function (policyID, importCustomField) {
+        getRoute: (policyID, importCustomField) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_MAPPING route');
             }
-            return "workspaces/".concat(policyID, "/accounting/netsuite/import/custom/").concat(importCustomField);
+            return `workspaces/${policyID}/accounting/netsuite/import/custom/${importCustomField}`;
         },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_VIEW: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_VIEW: {
         route: 'workspaces/:policyID/accounting/netsuite/import/custom/:importCustomField/view/:valueIndex',
-        getRoute: function (policyID, importCustomField, valueIndex) {
-            return "workspaces/".concat(policyID, "/accounting/netsuite/import/custom/").concat(importCustomField, "/view/").concat(valueIndex);
-        },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_EDIT: {
+        getRoute: (policyID, importCustomField, valueIndex) => `workspaces/${policyID}/accounting/netsuite/import/custom/${importCustomField}/view/${valueIndex}`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_EDIT: {
         route: 'workspaces/:policyID/accounting/netsuite/import/custom/:importCustomField/edit/:valueIndex/:fieldName',
-        getRoute: function (policyID, importCustomField, valueIndex, fieldName) {
+        getRoute: (policyID, importCustomField, valueIndex, fieldName) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_FIELD_EDIT route');
             }
-            return "workspaces/".concat(policyID, "/accounting/netsuite/import/custom/").concat(importCustomField, "/edit/").concat(valueIndex, "/").concat(fieldName);
+            return `workspaces/${policyID}/accounting/netsuite/import/custom/${importCustomField}/edit/${valueIndex}/${fieldName}`;
         },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_LIST_ADD: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_LIST_ADD: {
         route: 'workspaces/:policyID/accounting/netsuite/import/custom-list/new',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/netsuite/import/custom-list/new"); },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_SEGMENT_ADD: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/netsuite/import/custom-list/new`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOM_SEGMENT_ADD: {
         route: 'workspaces/:policyID/accounting/netsuite/import/custom-segment/new',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/netsuite/import/custom-segment/new"); },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/netsuite/import/custom-segment/new`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS: {
         route: 'workspaces/:policyID/accounting/netsuite/import/customer-projects',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/netsuite/import/customer-projects"); },
-    }, POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS_SELECT: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/netsuite/import/customer-projects`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_IMPORT_CUSTOMERS_OR_PROJECTS_SELECT: {
         route: 'workspaces/:policyID/accounting/netsuite/import/customer-projects/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/netsuite/import/customer-projects/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_EXPORT: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/netsuite/import/customer-projects/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXPORT: {
         route: 'workspaces/:policyID/connections/netsuite/export/',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_EXPORT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/"), backTo, false);
+            return getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/`, backTo, false);
         },
-    }, POLICY_ACCOUNTING_NETSUITE_PREFERRED_EXPORTER_SELECT: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_PREFERRED_EXPORTER_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/preferred-exporter/select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/preferred-exporter/select"), backTo); },
-    }, POLICY_ACCOUNTING_NETSUITE_DATE_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/preferred-exporter/select`, backTo),
+    },
+    POLICY_ACCOUNTING_NETSUITE_DATE_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/date/select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/date/select"), backTo); },
-    }, POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/date/select`, backTo),
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES: {
         route: 'workspaces/:policyID/connections/netsuite/export/expenses/:expenseType',
-        getRoute: function (policyID, expenseType, backTo) {
+        getRoute: (policyID, expenseType, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/expenses/").concat(expenseType), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/expenses/${expenseType}`, backTo);
         },
-    }, POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_DESTINATION_SELECT: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_DESTINATION_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/expenses/:expenseType/destination/select',
-        getRoute: function (policyID, expenseType, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/expenses/").concat(expenseType, "/destination/select"), backTo);
-        },
-    }, POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_VENDOR_SELECT: {
+        getRoute: (policyID, expenseType, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/expenses/${expenseType}/destination/select`, backTo),
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_VENDOR_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/expenses/:expenseType/vendor/select',
-        getRoute: function (policyID, expenseType, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/expenses/").concat(expenseType, "/vendor/select"), backTo);
-        },
-    }, POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_PAYABLE_ACCOUNT_SELECT: {
+        getRoute: (policyID, expenseType, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/expenses/${expenseType}/vendor/select`, backTo),
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_PAYABLE_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/expenses/:expenseType/payable-account/select',
-        getRoute: function (policyID, expenseType, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/expenses/").concat(expenseType, "/payable-account/select"), backTo);
-        },
-    }, POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_JOURNAL_POSTING_PREFERENCE_SELECT: {
+        getRoute: (policyID, expenseType, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/expenses/${expenseType}/payable-account/select`, backTo),
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXPORT_EXPENSES_JOURNAL_POSTING_PREFERENCE_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/expenses/:expenseType/journal-posting-preference/select',
-        getRoute: function (policyID, expenseType, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/expenses/").concat(expenseType, "/journal-posting-preference/select"), backTo);
-        },
-    }, POLICY_ACCOUNTING_NETSUITE_RECEIVABLE_ACCOUNT_SELECT: {
+        getRoute: (policyID, expenseType, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/expenses/${expenseType}/journal-posting-preference/select`, backTo),
+    },
+    POLICY_ACCOUNTING_NETSUITE_RECEIVABLE_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/receivable-account/select',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/receivable-account/select"), backTo); },
-    }, POLICY_ACCOUNTING_NETSUITE_INVOICE_ITEM_PREFERENCE_SELECT: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/receivable-account/select`, backTo),
+    },
+    POLICY_ACCOUNTING_NETSUITE_INVOICE_ITEM_PREFERENCE_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/invoice-item-preference/select',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_INVOICE_ITEM_PREFERENCE_SELECT route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/export/invoice-item-preference/select"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/export/invoice-item-preference/select`, backTo);
         },
-    }, POLICY_ACCOUNTING_NETSUITE_INVOICE_ITEM_SELECT: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_INVOICE_ITEM_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/invoice-item-preference/invoice-item/select',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_INVOICE_ITEM_SELECT route');
             }
-            return "workspaces/".concat(policyID, "/connections/netsuite/export/invoice-item-preference/invoice-item/select");
+            return `workspaces/${policyID}/connections/netsuite/export/invoice-item-preference/invoice-item/select`;
         },
-    }, POLICY_ACCOUNTING_NETSUITE_TAX_POSTING_ACCOUNT_SELECT: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_TAX_POSTING_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/tax-posting-account/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/export/tax-posting-account/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_PROVINCIAL_TAX_POSTING_ACCOUNT_SELECT: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/export/tax-posting-account/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_PROVINCIAL_TAX_POSTING_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/export/provincial-tax-posting-account/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/export/provincial-tax-posting-account/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_ADVANCED: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/export/provincial-tax-posting-account/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_ADVANCED: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_ADVANCED route');
             }
-            return "workspaces/".concat(policyID, "/connections/netsuite/advanced/");
+            return `workspaces/${policyID}/connections/netsuite/advanced/`;
         },
-    }, POLICY_ACCOUNTING_NETSUITE_REIMBURSEMENT_ACCOUNT_SELECT: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_REIMBURSEMENT_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/reimbursement-account/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/advanced/reimbursement-account/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_COLLECTION_ACCOUNT_SELECT: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/advanced/reimbursement-account/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_COLLECTION_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/collection-account/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/advanced/collection-account/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_EXPENSE_REPORT_APPROVAL_LEVEL_SELECT: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/advanced/collection-account/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_EXPENSE_REPORT_APPROVAL_LEVEL_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/expense-report-approval-level/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/advanced/expense-report-approval-level/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_VENDOR_BILL_APPROVAL_LEVEL_SELECT: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/advanced/expense-report-approval-level/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_VENDOR_BILL_APPROVAL_LEVEL_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/vendor-bill-approval-level/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/advanced/vendor-bill-approval-level/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_JOURNAL_ENTRY_APPROVAL_LEVEL_SELECT: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/advanced/vendor-bill-approval-level/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_JOURNAL_ENTRY_APPROVAL_LEVEL_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/journal-entry-approval-level/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/advanced/journal-entry-approval-level/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_APPROVAL_ACCOUNT_SELECT: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/advanced/journal-entry-approval-level/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_APPROVAL_ACCOUNT_SELECT: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/approval-account/select',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/connections/netsuite/advanced/approval-account/select"); },
-    }, POLICY_ACCOUNTING_NETSUITE_CUSTOM_FORM_ID: {
+        getRoute: (policyID) => `workspaces/${policyID}/connections/netsuite/advanced/approval-account/select`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_CUSTOM_FORM_ID: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/custom-form-id/:expenseType',
-        getRoute: function (policyID, expenseType) {
-            return "workspaces/".concat(policyID, "/connections/netsuite/advanced/custom-form-id/").concat(expenseType);
-        },
-    }, POLICY_ACCOUNTING_NETSUITE_AUTO_SYNC: {
+        getRoute: (policyID, expenseType) => `workspaces/${policyID}/connections/netsuite/advanced/custom-form-id/${expenseType}`,
+    },
+    POLICY_ACCOUNTING_NETSUITE_AUTO_SYNC: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/autosync',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_AUTO_SYNC route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/advanced/autosync"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/advanced/autosync`, backTo);
         },
-    }, POLICY_ACCOUNTING_NETSUITE_ACCOUNTING_METHOD: {
+    },
+    POLICY_ACCOUNTING_NETSUITE_ACCOUNTING_METHOD: {
         route: 'workspaces/:policyID/connections/netsuite/advanced/autosync/accounting-method',
-        getRoute: function (policyID, backTo) {
+        getRoute: (policyID, backTo) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_NETSUITE_ACCOUNTING_METHOD route');
             }
             // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/connections/netsuite/advanced/autosync/accounting-method"), backTo);
+            return getUrlWithBackToParam(`workspaces/${policyID}/connections/netsuite/advanced/autosync/accounting-method`, backTo);
         },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_PREREQUISITES: {
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_PREREQUISITES: {
         route: 'workspaces/:policyID/accounting/sage-intacct/prerequisites',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/prerequisites"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_ENTER_CREDENTIALS: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/prerequisites`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_ENTER_CREDENTIALS: {
         route: 'workspaces/:policyID/accounting/sage-intacct/enter-credentials',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/enter-credentials"); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_EXISTING_CONNECTIONS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/sage-intacct/enter-credentials`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_EXISTING_CONNECTIONS: {
         route: 'workspaces/:policyID/accounting/sage-intacct/existing-connections',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/existing-connections"); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_ENTITY: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/sage-intacct/existing-connections`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_ENTITY: {
         route: 'workspaces/:policyID/accounting/sage-intacct/entity',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_SAGE_INTACCT_ENTITY route');
             }
-            return "workspaces/".concat(policyID, "/accounting/sage-intacct/entity");
+            return `workspaces/${policyID}/accounting/sage-intacct/entity`;
         },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_IMPORT: {
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_IMPORT: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import"); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_TOGGLE_MAPPINGS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/sage-intacct/import`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_TOGGLE_MAPPINGS: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import/toggle-mapping/:mapping',
-        getRoute: function (policyID, mapping) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import/toggle-mapping/").concat(mapping); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_MAPPINGS_TYPE: {
+        getRoute: (policyID, mapping) => `workspaces/${policyID}/accounting/sage-intacct/import/toggle-mapping/${mapping}`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_MAPPINGS_TYPE: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import/mapping-type/:mapping',
-        getRoute: function (policyID, mapping) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import/mapping-type/").concat(mapping); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_IMPORT_TAX: {
+        getRoute: (policyID, mapping) => `workspaces/${policyID}/accounting/sage-intacct/import/mapping-type/${mapping}`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_IMPORT_TAX: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import/tax',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import/tax"); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_IMPORT_TAX_MAPPING: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/sage-intacct/import/tax`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_IMPORT_TAX_MAPPING: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import/tax/mapping',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import/tax/mapping"); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_USER_DIMENSIONS: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/sage-intacct/import/tax/mapping`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_USER_DIMENSIONS: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import/user-dimensions',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import/user-dimensions"); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_ADD_USER_DIMENSION: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/sage-intacct/import/user-dimensions`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_ADD_USER_DIMENSION: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import/add-user-dimension',
-        getRoute: function (policyID) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import/add-user-dimension"); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_EDIT_USER_DIMENSION: {
+        getRoute: (policyID) => `workspaces/${policyID}/accounting/sage-intacct/import/add-user-dimension`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_EDIT_USER_DIMENSION: {
         route: 'workspaces/:policyID/accounting/sage-intacct/import/edit-user-dimension/:dimensionName',
-        getRoute: function (policyID, dimensionName) { return "workspaces/".concat(policyID, "/accounting/sage-intacct/import/edit-user-dimension/").concat(dimensionName); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_EXPORT: {
+        getRoute: (policyID, dimensionName) => `workspaces/${policyID}/accounting/sage-intacct/import/edit-user-dimension/${dimensionName}`,
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_EXPORT: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export"), backTo, false); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_PREFERRED_EXPORTER: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export`, backTo, false),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_PREFERRED_EXPORTER: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/preferred-exporter',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/preferred-exporter"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_EXPORT_DATE: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/preferred-exporter`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_EXPORT_DATE: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/date',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/date"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_REIMBURSABLE_EXPENSES: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/date`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_REIMBURSABLE_EXPENSES: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/reimbursable',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/reimbursable"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/reimbursable`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_NON_REIMBURSABLE_EXPENSES: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/nonreimbursable',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/nonreimbursable"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_REIMBURSABLE_DESTINATION: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/nonreimbursable`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_REIMBURSABLE_DESTINATION: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/reimbursable/destination',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/reimbursable/destination"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_NON_REIMBURSABLE_DESTINATION: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/reimbursable/destination`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_NON_REIMBURSABLE_DESTINATION: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/nonreimbursable/destination',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/nonreimbursable/destination"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_DEFAULT_VENDOR: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/nonreimbursable/destination`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_DEFAULT_VENDOR: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/:reimbursable/default-vendor',
-        getRoute: function (policyID, reimbursable, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/").concat(reimbursable, "/default-vendor"), backTo);
-        },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_NON_REIMBURSABLE_CREDIT_CARD_ACCOUNT: {
+        getRoute: (policyID, reimbursable, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/${reimbursable}/default-vendor`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_NON_REIMBURSABLE_CREDIT_CARD_ACCOUNT: {
         route: 'workspaces/:policyID/accounting/sage-intacct/export/nonreimbursable/credit-card-account',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (policyID, backTo) { return getUrlWithBackToParam("workspaces/".concat(policyID, "/accounting/sage-intacct/export/nonreimbursable/credit-card-account"), backTo); },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_ADVANCED: {
+        getRoute: (policyID, backTo) => getUrlWithBackToParam(`workspaces/${policyID}/accounting/sage-intacct/export/nonreimbursable/credit-card-account`, backTo),
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_ADVANCED: {
         route: 'workspaces/:policyID/accounting/sage-intacct/advanced',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_SAGE_INTACCT_ADVANCED route');
             }
-            return "workspaces/".concat(policyID, "/accounting/sage-intacct/advanced");
+            return `workspaces/${policyID}/accounting/sage-intacct/advanced`;
         },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_PAYMENT_ACCOUNT: {
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_PAYMENT_ACCOUNT: {
         route: 'workspaces/:policyID/accounting/sage-intacct/advanced/payment-account',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_SAGE_INTACCT_PAYMENT_ACCOUNT route');
             }
-            return "workspaces/".concat(policyID, "/accounting/sage-intacct/advanced/payment-account");
+            return `workspaces/${policyID}/accounting/sage-intacct/advanced/payment-account`;
         },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_AUTO_SYNC: {
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_AUTO_SYNC: {
         route: 'workspaces/:policyID/accounting/sage-intacct/advanced/autosync',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_SAGE_INTACCT_AUTO_SYNC route');
             }
-            return "workspaces/".concat(policyID, "/accounting/sage-intacct/advanced/autosync");
+            return `workspaces/${policyID}/accounting/sage-intacct/advanced/autosync`;
         },
-    }, POLICY_ACCOUNTING_SAGE_INTACCT_ACCOUNTING_METHOD: {
+    },
+    POLICY_ACCOUNTING_SAGE_INTACCT_ACCOUNTING_METHOD: {
         route: 'workspaces/:policyID/accounting/sage-intacct/advanced/autosync/accounting-method',
-        getRoute: function (policyID) {
+        getRoute: (policyID) => {
             if (!policyID) {
                 Log_1.default.warn('Invalid policyID is used to build the POLICY_ACCOUNTING_SAGE_INTACCT_ACCOUNTING_METHOD route');
             }
-            return "workspaces/".concat(policyID, "/accounting/sage-intacct/advanced/autosync/accounting-method");
+            return `workspaces/${policyID}/accounting/sage-intacct/advanced/autosync/accounting-method`;
         },
-    }, ADD_UNREPORTED_EXPENSE: {
+    },
+    ADD_UNREPORTED_EXPENSE: {
         route: 'search/r/:reportID/add-unreported-expense/:backToReport?',
-        getRoute: function (reportID, backToReport) { return "search/r/".concat(reportID, "/add-unreported-expense/").concat(backToReport !== null && backToReport !== void 0 ? backToReport : ''); },
-    }, DEBUG_REPORT: {
+        getRoute: (reportID, backToReport) => `search/r/${reportID}/add-unreported-expense/${backToReport ?? ''}`,
+    },
+    DEBUG_REPORT: {
         route: 'debug/report/:reportID',
-        getRoute: function (reportID) { return "debug/report/".concat(reportID); },
-    }, DEBUG_REPORT_TAB_DETAILS: {
+        getRoute: (reportID) => `debug/report/${reportID}`,
+    },
+    DEBUG_REPORT_TAB_DETAILS: {
         route: 'debug/report/:reportID/details',
-        getRoute: function (reportID) { return "debug/report/".concat(reportID, "/details"); },
-    }, DEBUG_REPORT_TAB_JSON: {
+        getRoute: (reportID) => `debug/report/${reportID}/details`,
+    },
+    DEBUG_REPORT_TAB_JSON: {
         route: 'debug/report/:reportID/json',
-        getRoute: function (reportID) { return "debug/report/".concat(reportID, "/json"); },
-    }, DEBUG_REPORT_TAB_ACTIONS: {
+        getRoute: (reportID) => `debug/report/${reportID}/json`,
+    },
+    DEBUG_REPORT_TAB_ACTIONS: {
         route: 'debug/report/:reportID/actions',
-        getRoute: function (reportID) { return "debug/report/".concat(reportID, "/actions"); },
-    }, DEBUG_REPORT_ACTION: {
+        getRoute: (reportID) => `debug/report/${reportID}/actions`,
+    },
+    DEBUG_REPORT_ACTION: {
         route: 'debug/report/:reportID/actions/:reportActionID',
-        getRoute: function (reportID, reportActionID) {
+        getRoute: (reportID, reportActionID) => {
             if (!reportID) {
                 Log_1.default.warn('Invalid reportID is used to build the DEBUG_REPORT_ACTION route');
             }
-            return "debug/report/".concat(reportID, "/actions/").concat(reportActionID);
+            return `debug/report/${reportID}/actions/${reportActionID}`;
         },
-    }, DEBUG_REPORT_ACTION_CREATE: {
+    },
+    DEBUG_REPORT_ACTION_CREATE: {
         route: 'debug/report/:reportID/actions/create',
-        getRoute: function (reportID) { return "debug/report/".concat(reportID, "/actions/create"); },
-    }, DEBUG_REPORT_ACTION_TAB_DETAILS: {
+        getRoute: (reportID) => `debug/report/${reportID}/actions/create`,
+    },
+    DEBUG_REPORT_ACTION_TAB_DETAILS: {
         route: 'debug/report/:reportID/actions/:reportActionID/details',
-        getRoute: function (reportID, reportActionID) { return "debug/report/".concat(reportID, "/actions/").concat(reportActionID, "/details"); },
-    }, DEBUG_REPORT_ACTION_TAB_JSON: {
+        getRoute: (reportID, reportActionID) => `debug/report/${reportID}/actions/${reportActionID}/details`,
+    },
+    DEBUG_REPORT_ACTION_TAB_JSON: {
         route: 'debug/report/:reportID/actions/:reportActionID/json',
-        getRoute: function (reportID, reportActionID) { return "debug/report/".concat(reportID, "/actions/").concat(reportActionID, "/json"); },
-    }, DEBUG_REPORT_ACTION_TAB_PREVIEW: {
+        getRoute: (reportID, reportActionID) => `debug/report/${reportID}/actions/${reportActionID}/json`,
+    },
+    DEBUG_REPORT_ACTION_TAB_PREVIEW: {
         route: 'debug/report/:reportID/actions/:reportActionID/preview',
-        getRoute: function (reportID, reportActionID) { return "debug/report/".concat(reportID, "/actions/").concat(reportActionID, "/preview"); },
-    }, DETAILS_CONSTANT_PICKER_PAGE: {
+        getRoute: (reportID, reportActionID) => `debug/report/${reportID}/actions/${reportActionID}/preview`,
+    },
+    DETAILS_CONSTANT_PICKER_PAGE: {
         route: 'debug/:formType/details/constant/:fieldName',
-        getRoute: function (formType, fieldName, fieldValue, policyID, backTo) {
-            // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-            return getUrlWithBackToParam("debug/".concat(formType, "/details/constant/").concat(fieldName, "?fieldValue=").concat(fieldValue, "&policyID=").concat(policyID), backTo);
-        },
-    }, DETAILS_DATE_TIME_PICKER_PAGE: {
+        getRoute: (formType, fieldName, fieldValue, policyID, backTo) => 
+        // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
+        getUrlWithBackToParam(`debug/${formType}/details/constant/${fieldName}?fieldValue=${fieldValue}&policyID=${policyID}`, backTo),
+    },
+    DETAILS_DATE_TIME_PICKER_PAGE: {
         route: 'debug/details/datetime/:fieldName',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (fieldName, fieldValue, backTo) { return getUrlWithBackToParam("debug/details/datetime/".concat(fieldName, "?fieldValue=").concat(fieldValue), backTo); },
-    }, DEBUG_TRANSACTION: {
+        getRoute: (fieldName, fieldValue, backTo) => getUrlWithBackToParam(`debug/details/datetime/${fieldName}?fieldValue=${fieldValue}`, backTo),
+    },
+    DEBUG_TRANSACTION: {
         route: 'debug/transaction/:transactionID',
-        getRoute: function (transactionID) { return "debug/transaction/".concat(transactionID); },
-    }, DEBUG_TRANSACTION_TAB_DETAILS: {
+        getRoute: (transactionID) => `debug/transaction/${transactionID}`,
+    },
+    DEBUG_TRANSACTION_TAB_DETAILS: {
         route: 'debug/transaction/:transactionID/details',
-        getRoute: function (transactionID) { return "debug/transaction/".concat(transactionID, "/details"); },
-    }, DEBUG_TRANSACTION_TAB_JSON: {
+        getRoute: (transactionID) => `debug/transaction/${transactionID}/details`,
+    },
+    DEBUG_TRANSACTION_TAB_JSON: {
         route: 'debug/transaction/:transactionID/json',
-        getRoute: function (transactionID) { return "debug/transaction/".concat(transactionID, "/json"); },
-    }, DEBUG_TRANSACTION_TAB_VIOLATIONS: {
+        getRoute: (transactionID) => `debug/transaction/${transactionID}/json`,
+    },
+    DEBUG_TRANSACTION_TAB_VIOLATIONS: {
         route: 'debug/transaction/:transactionID/violations',
-        getRoute: function (transactionID) { return "debug/transaction/".concat(transactionID, "/violations"); },
-    }, DEBUG_TRANSACTION_VIOLATION_CREATE: {
+        getRoute: (transactionID) => `debug/transaction/${transactionID}/violations`,
+    },
+    DEBUG_TRANSACTION_VIOLATION_CREATE: {
         route: 'debug/transaction/:transactionID/violations/create',
-        getRoute: function (transactionID) { return "debug/transaction/".concat(transactionID, "/violations/create"); },
-    }, DEBUG_TRANSACTION_VIOLATION: {
+        getRoute: (transactionID) => `debug/transaction/${transactionID}/violations/create`,
+    },
+    DEBUG_TRANSACTION_VIOLATION: {
         route: 'debug/transaction/:transactionID/violations/:index',
-        getRoute: function (transactionID, index) { return "debug/transaction/".concat(transactionID, "/violations/").concat(index); },
-    }, DEBUG_TRANSACTION_VIOLATION_TAB_DETAILS: {
+        getRoute: (transactionID, index) => `debug/transaction/${transactionID}/violations/${index}`,
+    },
+    DEBUG_TRANSACTION_VIOLATION_TAB_DETAILS: {
         route: 'debug/transaction/:transactionID/violations/:index/details',
-        getRoute: function (transactionID, index) { return "debug/transaction/".concat(transactionID, "/violations/").concat(index, "/details"); },
-    }, DEBUG_TRANSACTION_VIOLATION_TAB_JSON: {
+        getRoute: (transactionID, index) => `debug/transaction/${transactionID}/violations/${index}/details`,
+    },
+    DEBUG_TRANSACTION_VIOLATION_TAB_JSON: {
         route: 'debug/transaction/:transactionID/violations/:index/json',
-        getRoute: function (transactionID, index) { return "debug/transaction/".concat(transactionID, "/violations/").concat(index, "/json"); },
-    }, REJECT_MONEY_REQUEST_REASON: {
+        getRoute: (transactionID, index) => `debug/transaction/${transactionID}/violations/${index}/json`,
+    },
+    REJECT_MONEY_REQUEST_REASON: {
         route: 'reject/reason/:transactionID',
-        getRoute: function (transactionID, reportID, backTo) { return "reject/reason/".concat(transactionID, "?reportID=").concat(reportID, "&backTo=").concat(backTo); },
-    }, SCHEDULE_CALL_BOOK: {
+        getRoute: (transactionID, reportID, backTo) => `reject/reason/${transactionID}?reportID=${reportID}&backTo=${backTo}`,
+    },
+    SCHEDULE_CALL_BOOK: {
         route: 'r/:reportID/schedule-call/book',
-        getRoute: function (reportID) { return "r/".concat(reportID, "/schedule-call/book"); },
-    }, SCHEDULE_CALL_CONFIRMATION: {
+        getRoute: (reportID) => `r/${reportID}/schedule-call/book`,
+    },
+    SCHEDULE_CALL_CONFIRMATION: {
         route: 'r/:reportID/schedule-call/confirmation',
-        getRoute: function (reportID) { return "r/".concat(reportID, "/schedule-call/confirmation"); },
-    }, TEST_TOOLS_MODAL: {
+        getRoute: (reportID) => `r/${reportID}/schedule-call/confirmation`,
+    },
+    TEST_TOOLS_MODAL: {
         route: 'test-tools',
         // eslint-disable-next-line no-restricted-syntax -- Legacy route generation
-        getRoute: function (backTo) { return getUrlWithBackToParam('test-tools', backTo); },
-    } });
+        getRoute: (backTo) => getUrlWithBackToParam('test-tools', backTo),
+    },
+};
 /**
  * Configuration for shared parameters that can be passed between routes.
  * These parameters are commonly used across multiple screens and are preserved
@@ -2525,23 +2932,23 @@ var ROUTES = __assign(__assign({}, PUBLIC_SCREENS_ROUTES), {
  * - `backTo`: Specifies the route to return to when navigating back, preserving
  *   navigation context in split-screen and central screen
  */
-var SHARED_ROUTE_PARAMS = (_a = {},
-    _a[SCREENS_1.default.WORKSPACE.INITIAL] = ['backTo'],
-    _a);
+const SHARED_ROUTE_PARAMS = {
+    [SCREENS_1.default.WORKSPACE.INITIAL]: ['backTo'],
+};
 exports.SHARED_ROUTE_PARAMS = SHARED_ROUTE_PARAMS;
 exports.default = ROUTES;
 function getAttachmentModalScreenRoute(url, params) {
-    if (!(params === null || params === void 0 ? void 0 : params.source)) {
+    if (!params?.source) {
         return url;
     }
-    var source = params.source, attachmentID = params.attachmentID, type = params.type, reportID = params.reportID, accountID = params.accountID, isAuthTokenRequired = params.isAuthTokenRequired, originalFileName = params.originalFileName, attachmentLink = params.attachmentLink;
-    var sourceParam = "?source=".concat(encodeURIComponent(source));
-    var attachmentIDParam = attachmentID ? "&attachmentID=".concat(attachmentID) : '';
-    var typeParam = type ? "&type=".concat(type) : '';
-    var reportIDParam = reportID ? "&reportID=".concat(reportID) : '';
-    var accountIDParam = accountID ? "&accountID=".concat(accountID) : '';
-    var authTokenParam = isAuthTokenRequired ? '&isAuthTokenRequired=true' : '';
-    var fileNameParam = originalFileName ? "&originalFileName=".concat(originalFileName) : '';
-    var attachmentLinkParam = attachmentLink ? "&attachmentLink=".concat(attachmentLink) : '';
-    return "".concat(url).concat(sourceParam).concat(typeParam).concat(reportIDParam).concat(attachmentIDParam).concat(accountIDParam).concat(authTokenParam).concat(fileNameParam).concat(attachmentLinkParam, " ");
+    const { source, attachmentID, type, reportID, accountID, isAuthTokenRequired, originalFileName, attachmentLink } = params;
+    const sourceParam = `?source=${encodeURIComponent(source)}`;
+    const attachmentIDParam = attachmentID ? `&attachmentID=${attachmentID}` : '';
+    const typeParam = type ? `&type=${type}` : '';
+    const reportIDParam = reportID ? `&reportID=${reportID}` : '';
+    const accountIDParam = accountID ? `&accountID=${accountID}` : '';
+    const authTokenParam = isAuthTokenRequired ? '&isAuthTokenRequired=true' : '';
+    const fileNameParam = originalFileName ? `&originalFileName=${originalFileName}` : '';
+    const attachmentLinkParam = attachmentLink ? `&attachmentLink=${attachmentLink}` : '';
+    return `${url}${sourceParam}${typeParam}${reportIDParam}${attachmentIDParam}${accountIDParam}${authTokenParam}${fileNameParam}${attachmentLinkParam} `;
 }

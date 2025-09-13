@@ -1,29 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var Log_1 = require("@libs//Log");
-var BaseErrorBoundary_1 = require("./BaseErrorBoundary");
-var logError = function (errorMessage, error, errorInfo) {
+const react_1 = require("react");
+const Log_1 = require("@libs//Log");
+const BaseErrorBoundary_1 = require("./BaseErrorBoundary");
+const logError = (errorMessage, error, errorInfo) => {
     // Log the error to the server
-    Log_1.default.alert("".concat(errorMessage, " - ").concat(error.message), { errorInfo: errorInfo }, false);
+    Log_1.default.alert(`${errorMessage} - ${error.message}`, { errorInfo }, false);
 };
-var onUnhandledRejection = function (event) {
-    var rejection = event.reason;
+const onUnhandledRejection = (event) => {
+    let rejection = event.reason;
     if (event.reason instanceof Error) {
-        Log_1.default.alert("Unhandled Promise Rejection: ".concat(event.reason.message, "\nStack: ").concat(event.reason.stack), {}, false);
+        Log_1.default.alert(`Unhandled Promise Rejection: ${event.reason.message}\nStack: ${event.reason.stack}`, {}, false);
         return;
     }
     if (typeof event.reason === 'object' && event.reason !== null) {
         rejection = JSON.stringify(event.reason);
     }
-    Log_1.default.alert("Unhandled Promise Rejection: ".concat(String(rejection)), {}, false);
+    Log_1.default.alert(`Unhandled Promise Rejection: ${String(rejection)}`, {}, false);
 };
-function ErrorBoundary(_a) {
-    var errorMessage = _a.errorMessage, children = _a.children;
+function ErrorBoundary({ errorMessage, children }) {
     // Log unhandled promise rejections to the server
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         window.addEventListener('unhandledrejection', onUnhandledRejection);
-        return function () { return window.removeEventListener('unhandledrejection', onUnhandledRejection); };
+        return () => window.removeEventListener('unhandledrejection', onUnhandledRejection);
     }, []);
     return (<BaseErrorBoundary_1.default errorMessage={errorMessage} logError={logError}>
             {children}

@@ -1,22 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var useIsScrollBarVisible = function (ref, value) {
-    var _a = (0, react_1.useState)(false), isScrollBarVisible = _a[0], setIsScrollBarVisible = _a[1];
-    var handleResize = (0, react_1.useCallback)(function () {
+const react_1 = require("react");
+const useIsScrollBarVisible = (ref, value) => {
+    const [isScrollBarVisible, setIsScrollBarVisible] = (0, react_1.useState)(false);
+    const handleResize = (0, react_1.useCallback)(() => {
         if (!ref.current) {
             return;
         }
-        var _a = ref.current, scrollHeight = _a.scrollHeight, clientHeight = _a.clientHeight;
+        const { scrollHeight, clientHeight } = ref.current;
         setIsScrollBarVisible(scrollHeight > clientHeight);
     }, [ref]);
-    (0, react_1.useEffect)(function () {
+    (0, react_1.useEffect)(() => {
         if (!ref.current || !('ResizeObserver' in (window || {}))) {
             return;
         }
-        var resizeObserver = new ResizeObserver(handleResize);
+        const resizeObserver = new ResizeObserver(handleResize);
         resizeObserver.observe(ref.current);
-        return function () {
+        return () => {
             resizeObserver.disconnect();
         };
     }, [handleResize, ref, value]);

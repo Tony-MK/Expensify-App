@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/naming-convention */
-var enEmojis = {
+const enEmojis = {
     '😀': {
         keywords: ['smile', 'happy', 'face', 'grin'],
     },

@@ -1,41 +1,30 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setDeviceID = setDeviceID;
 exports.getDeviceInfoWithID = getDeviceInfoWithID;
-var react_native_onyx_1 = require("react-native-onyx");
-var Log_1 = require("@libs/Log");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var generateDeviceID_1 = require("./generateDeviceID");
-var getDeviceInfo_1 = require("./getDeviceInfo");
-var deviceID = null;
+const react_native_onyx_1 = require("react-native-onyx");
+const Log_1 = require("@libs/Log");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const generateDeviceID_1 = require("./generateDeviceID");
+const getDeviceInfo_1 = require("./getDeviceInfo");
+let deviceID = null;
 /**
  * @returns - device ID string or null in case of failure
  */
 function getDeviceID() {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
         if (deviceID) {
             resolve(deviceID);
             return;
         }
         // Use connectWithoutView because this is a one-time data fetch that disconnects immediately without triggering UI updates
         // and this onyx key is created for non-UI task only.
-        var connection = react_native_onyx_1.default.connectWithoutView({
+        const connection = react_native_onyx_1.default.connectWithoutView({
             key: ONYXKEYS_1.default.DEVICE_ID,
-            callback: function (id) {
+            callback: (id) => {
                 react_native_onyx_1.default.disconnect(connection);
-                deviceID = id !== null && id !== void 0 ? id : null;
-                return resolve(id !== null && id !== void 0 ? id : null);
+                deviceID = id ?? null;
+                return resolve(id ?? null);
             },
         });
     });
@@ -45,27 +34,28 @@ function getDeviceID() {
  */
 function setDeviceID() {
     getDeviceID()
-        .then(function (existingDeviceID) {
+        .then((existingDeviceID) => {
         if (!existingDeviceID) {
             return Promise.resolve();
         }
         throw new Error(existingDeviceID);
     })
         .then(generateDeviceID_1.default)
-        .then(function (uniqueID) {
+        .then((uniqueID) => {
         Log_1.default.info('Got new deviceID', false, uniqueID);
         react_native_onyx_1.default.set(ONYXKEYS_1.default.DEVICE_ID, uniqueID);
     })
-        .catch(function (error) { return Log_1.default.info('Found existing deviceID', false, error.message); });
+        .catch((error) => Log_1.default.info('Found existing deviceID', false, error.message));
 }
 /**
  * Returns a string object with device info and uniqueID
  * @returns - device info with ID
  */
 function getDeviceInfoWithID() {
-    return new Promise(function (resolve) {
-        getDeviceID().then(function (currentDeviceID) {
-            return resolve(JSON.stringify(__assign(__assign({}, (0, getDeviceInfo_1.default)()), { deviceID: currentDeviceID })));
-        });
+    return new Promise((resolve) => {
+        getDeviceID().then((currentDeviceID) => resolve(JSON.stringify({
+            ...(0, getDeviceInfo_1.default)(),
+            deviceID: currentDeviceID,
+        })));
     });
 }

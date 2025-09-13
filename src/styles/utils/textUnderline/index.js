@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var textUnderline = {
+const textUnderline = {
     textUnderlinePositionUnder: {
         textUnderlinePosition: 'under',
     },

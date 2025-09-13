@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useLocalize_1 = require("@hooks/useLocalize");
-var useTheme_1 = require("@hooks/useTheme");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var EmptyObject_1 = require("@src/types/utils/EmptyObject");
-var DotIndicatorMessage_1 = require("./DotIndicatorMessage");
-var Icon_1 = require("./Icon");
-var Expensicons = require("./Icon/Expensicons");
-var PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
-var Tooltip_1 = require("./Tooltip");
-function MessagesRow(_a) {
-    var _b = _a.messages, messages = _b === void 0 ? {} : _b, type = _a.type, _c = _a.onClose, onClose = _c === void 0 ? function () { } : _c, containerStyles = _a.containerStyles, _d = _a.canDismiss, canDismiss = _d === void 0 ? true : _d, _e = _a.dismissError, dismissError = _e === void 0 ? function () { } : _e;
-    var theme = (0, useTheme_1.default)();
-    var styles = (0, useThemeStyles_1.default)();
-    var translate = (0, useLocalize_1.default)().translate;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useLocalize_1 = require("@hooks/useLocalize");
+const useTheme_1 = require("@hooks/useTheme");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const EmptyObject_1 = require("@src/types/utils/EmptyObject");
+const DotIndicatorMessage_1 = require("./DotIndicatorMessage");
+const Icon_1 = require("./Icon");
+const Expensicons = require("./Icon/Expensicons");
+const PressableWithoutFeedback_1 = require("./Pressable/PressableWithoutFeedback");
+const Tooltip_1 = require("./Tooltip");
+function MessagesRow({ messages = {}, type, onClose = () => { }, containerStyles, canDismiss = true, dismissError = () => { } }) {
+    const theme = (0, useTheme_1.default)();
+    const styles = (0, useThemeStyles_1.default)();
+    const { translate } = (0, useLocalize_1.default)();
     if ((0, EmptyObject_1.isEmptyObject)(messages)) {
         return null;
     }

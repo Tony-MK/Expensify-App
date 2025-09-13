@@ -1,29 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable no-param-reassign */
-var react_1 = require("react");
-var react_native_gesture_handler_1 = require("react-native-gesture-handler");
-var react_native_reanimated_1 = require("react-native-reanimated");
-var constants_1 = require("./constants");
-var usePinchGesture = function (_a) {
-    var canvasSize = _a.canvasSize, zoomScale = _a.zoomScale, zoomRange = _a.zoomRange, offsetX = _a.offsetX, offsetY = _a.offsetY, totalPinchTranslateX = _a.pinchTranslateX, totalPinchTranslateY = _a.pinchTranslateY, pinchScale = _a.pinchScale, shouldDisableTransformationGestures = _a.shouldDisableTransformationGestures, stopAnimation = _a.stopAnimation, onScaleChanged = _a.onScaleChanged;
+const react_1 = require("react");
+const react_native_gesture_handler_1 = require("react-native-gesture-handler");
+const react_native_reanimated_1 = require("react-native-reanimated");
+const constants_1 = require("./constants");
+const usePinchGesture = ({ canvasSize, zoomScale, zoomRange, offsetX, offsetY, pinchTranslateX: totalPinchTranslateX, pinchTranslateY: totalPinchTranslateY, pinchScale, shouldDisableTransformationGestures, stopAnimation, onScaleChanged, }) => {
     // The current pinch gesture event scale
-    var currentPinchScale = (0, react_native_reanimated_1.useSharedValue)(1);
+    const currentPinchScale = (0, react_native_reanimated_1.useSharedValue)(1);
     // Origin of the pinch gesture
-    var pinchOrigin = {
+    const pinchOrigin = {
         x: (0, react_native_reanimated_1.useSharedValue)(0),
         y: (0, react_native_reanimated_1.useSharedValue)(0),
     };
     // How much the content is translated during the pinch gesture
     // While the pinch gesture is running, the pan gesture is disabled
     // Therefore we need to add the translation separately
-    var pinchTranslateX = (0, react_native_reanimated_1.useSharedValue)(0);
-    var pinchTranslateY = (0, react_native_reanimated_1.useSharedValue)(0);
+    const pinchTranslateX = (0, react_native_reanimated_1.useSharedValue)(0);
+    const pinchTranslateY = (0, react_native_reanimated_1.useSharedValue)(0);
     // In order to keep track of the "bounce" effect when "over-zooming"/"under-zooming",
     // we need to have extra "bounce" translation variables
-    var pinchBounceTranslateX = (0, react_native_reanimated_1.useSharedValue)(0);
-    var pinchBounceTranslateY = (0, react_native_reanimated_1.useSharedValue)(0);
-    var triggerScaleChangedEvent = function () {
+    const pinchBounceTranslateX = (0, react_native_reanimated_1.useSharedValue)(0);
+    const pinchBounceTranslateY = (0, react_native_reanimated_1.useSharedValue)(0);
+    const triggerScaleChangedEvent = () => {
         'worklet';
         if (onScaleChanged === undefined) {
             return;
@@ -31,8 +30,7 @@ var usePinchGesture = function (_a) {
         (0, react_native_reanimated_1.runOnJS)(onScaleChanged)(zoomScale.get());
     };
     // Update the total (pinch) translation based on the regular pinch + bounce
-    (0, react_native_reanimated_1.useAnimatedReaction)(function () { return [pinchTranslateX.get(), pinchTranslateY.get(), pinchBounceTranslateX.get(), pinchBounceTranslateY.get()]; }, function (_a) {
-        var translateX = _a[0], translateY = _a[1], bounceX = _a[2], bounceY = _a[3];
+    (0, react_native_reanimated_1.useAnimatedReaction)(() => [pinchTranslateX.get(), pinchTranslateY.get(), pinchBounceTranslateX.get(), pinchBounceTranslateY.get()], ([translateX, translateY, bounceX, bounceY]) => {
         // eslint-disable-next-line react-compiler/react-compiler
         totalPinchTranslateX.set(translateX + bounceX);
         totalPinchTranslateY.set(translateY + bounceY);
@@ -41,7 +39,7 @@ var usePinchGesture = function (_a) {
      * Calculates the adjusted focal point of the pinch gesture,
      * based on the canvas size and the current offset
      */
-    var getAdjustedFocal = (0, react_1.useCallback)(function (focalX, focalY) {
+    const getAdjustedFocal = (0, react_1.useCallback)((focalX, focalY) => {
         'worklet';
         return {
             x: focalX - (canvasSize.width / 2 + offsetX.get()),
@@ -50,17 +48,17 @@ var usePinchGesture = function (_a) {
     }, [canvasSize.width, canvasSize.height, offsetX, offsetY]);
     // The pinch gesture is disabled when we release one of the fingers
     // On the next render, we need to re-enable the pinch gesture
-    var _b = (0, react_1.useState)(true), pinchEnabled = _b[0], setPinchEnabled = _b[1];
-    (0, react_1.useEffect)(function () {
+    const [pinchEnabled, setPinchEnabled] = (0, react_1.useState)(true);
+    (0, react_1.useEffect)(() => {
         if (pinchEnabled) {
             return;
         }
         setPinchEnabled(true);
     }, [pinchEnabled]);
-    var pinchGesture = react_native_gesture_handler_1.Gesture.Pinch()
+    const pinchGesture = react_native_gesture_handler_1.Gesture.Pinch()
         .enabled(pinchEnabled)
         // The first argument is not used, but must be defined
-        .onTouchesDown(function (_evt, state) {
+        .onTouchesDown((_evt, state) => {
         // react-compiler optimization unintentionally make all the callbacks run on the JS thread.
         // Adding the worklet directive here will make all the callbacks run on UI thread back.
         'worklet';
@@ -70,14 +68,14 @@ var usePinchGesture = function (_a) {
         }
         state.fail();
     })
-        .onStart(function (evt) {
+        .onStart((evt) => {
         stopAnimation();
         // Set the origin focal point of the pinch gesture at the start of the gesture
-        var adjustedFocal = getAdjustedFocal(evt.focalX, evt.focalY);
+        const adjustedFocal = getAdjustedFocal(evt.focalX, evt.focalY);
         pinchOrigin.x.set(adjustedFocal.x);
         pinchOrigin.y.set(adjustedFocal.y);
     })
-        .onChange(function (evt) {
+        .onChange((evt) => {
         'worklet';
         // Disable the pinch gesture if one finger is released,
         // to prevent the content from shaking/jumping
@@ -85,7 +83,7 @@ var usePinchGesture = function (_a) {
             (0, react_native_reanimated_1.runOnJS)(setPinchEnabled)(false);
             return;
         }
-        var newZoomScale = pinchScale.get() * evt.scale;
+        const newZoomScale = pinchScale.get() * evt.scale;
         // Limit the zoom scale to zoom range including bounce range
         if (zoomScale.get() >= zoomRange.min * constants_1.ZOOM_RANGE_BOUNCE_FACTORS.min && zoomScale.get() <= zoomRange.max * constants_1.ZOOM_RANGE_BOUNCE_FACTORS.max) {
             zoomScale.set(newZoomScale);
@@ -93,9 +91,9 @@ var usePinchGesture = function (_a) {
             triggerScaleChangedEvent();
         }
         // Calculate new pinch translation
-        var adjustedFocal = getAdjustedFocal(evt.focalX, evt.focalY);
-        var newPinchTranslateX = adjustedFocal.x + currentPinchScale.get() * pinchOrigin.x.get() * -1;
-        var newPinchTranslateY = adjustedFocal.y + currentPinchScale.get() * pinchOrigin.y.get() * -1;
+        const adjustedFocal = getAdjustedFocal(evt.focalX, evt.focalY);
+        const newPinchTranslateX = adjustedFocal.x + currentPinchScale.get() * pinchOrigin.x.get() * -1;
+        const newPinchTranslateY = adjustedFocal.y + currentPinchScale.get() * pinchOrigin.y.get() * -1;
         // If the zoom scale is within the zoom range, we perform the regular pinch translation
         // Otherwise it means that we are "over-zoomed" or "under-zoomed", so we need to bounce back
         if (zoomScale.get() >= zoomRange.min && zoomScale.get() <= zoomRange.max) {
@@ -109,10 +107,10 @@ var usePinchGesture = function (_a) {
             pinchBounceTranslateY.set(newPinchTranslateY - pinchTranslateY.get());
         }
     })
-        .onEnd(function () {
+        .onEnd(() => {
         // Add pinch translation to total offset and reset gesture variables
-        offsetX.set(function (value) { return value + pinchTranslateX.get(); });
-        offsetY.set(function (value) { return value + pinchTranslateY.get(); });
+        offsetX.set((value) => value + pinchTranslateX.get());
+        offsetY.set((value) => value + pinchTranslateY.get());
         pinchTranslateX.set(0);
         pinchTranslateY.set(0);
         currentPinchScale.set(1);

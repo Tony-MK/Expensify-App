@@ -1,38 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DisplayMultipleEReceipts = exports.DisplayEReceipt = exports.ThreePlusTenImages = exports.ThreePlusTwoImages = exports.FourImages = exports.ThreeImages = exports.TwoImages = exports.Default = void 0;
-var react_1 = require("react");
-var PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
-var ReportActionItemImages_1 = require("@components/ReportActionItem/ReportActionItemImages");
+const react_1 = require("react");
+const PressableWithoutFeedback_1 = require("@components/Pressable/PressableWithoutFeedback");
+const ReportActionItemImages_1 = require("@components/ReportActionItem/ReportActionItemImages");
 /**
  * We use the Component Story Format for writing stories. Follow the docs here:
  *
  * https://storybook.js.org/docs/react/writing-stories/introduction#component-story-format
  */
-var story = {
+const story = {
     title: 'Components/ReportActionItemImages',
     component: ReportActionItemImages_1.default,
 };
 function Template(props) {
     return (<PressableWithoutFeedback_1.default accessibilityLabel="ReportActionItemImages Story" style={{ flex: 1 }}>
-            {function (_a) {
-            var hovered = _a.hovered;
-            return (<ReportActionItemImages_1.default 
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...props} isHovered={hovered}/>);
-        }}
+            {({ hovered }) => (<ReportActionItemImages_1.default 
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props} isHovered={hovered}/>)}
         </PressableWithoutFeedback_1.default>);
 }
 // Arguments can be passed to the component by binding
 // See: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-var Default = Template.bind({});
+const Default = Template.bind({});
 exports.Default = Default;
 Default.args = {
     images: [{ image: 'https://c02.purpledshub.com/uploads/sites/41/2021/05/sleeping-cat-27126ee.jpg', thumbnail: '' }],
     size: 1,
     total: 1,
 };
-var DisplayEReceipt = Template.bind({});
+const DisplayEReceipt = Template.bind({});
 exports.DisplayEReceipt = DisplayEReceipt;
 DisplayEReceipt.args = {
     images: [
@@ -56,7 +53,7 @@ DisplayEReceipt.args = {
     size: 1,
     total: 1,
 };
-var DisplayMultipleEReceipts = Template.bind({});
+const DisplayMultipleEReceipts = Template.bind({});
 exports.DisplayMultipleEReceipts = DisplayMultipleEReceipts;
 DisplayMultipleEReceipts.args = {
     images: [
@@ -112,7 +109,7 @@ DisplayMultipleEReceipts.args = {
     size: 3,
     total: 3,
 };
-var TwoImages = Template.bind({});
+const TwoImages = Template.bind({});
 exports.TwoImages = TwoImages;
 TwoImages.args = {
     images: [
@@ -128,7 +125,7 @@ TwoImages.args = {
     size: 2,
     total: 2,
 };
-var ThreeImages = Template.bind({});
+const ThreeImages = Template.bind({});
 exports.ThreeImages = ThreeImages;
 ThreeImages.args = {
     images: [
@@ -148,7 +145,7 @@ ThreeImages.args = {
     size: 3,
     total: 3,
 };
-var FourImages = Template.bind({});
+const FourImages = Template.bind({});
 exports.FourImages = FourImages;
 FourImages.args = {
     images: [
@@ -172,7 +169,7 @@ FourImages.args = {
     size: 4,
     total: 4,
 };
-var ThreePlusTwoImages = Template.bind({});
+const ThreePlusTwoImages = Template.bind({});
 exports.ThreePlusTwoImages = ThreePlusTwoImages;
 ThreePlusTwoImages.args = {
     images: [
@@ -192,7 +189,7 @@ ThreePlusTwoImages.args = {
     size: 3,
     total: 5,
 };
-var ThreePlusTenImages = Template.bind({});
+const ThreePlusTenImages = Template.bind({});
 exports.ThreePlusTenImages = ThreePlusTenImages;
 ThreePlusTenImages.args = {
     images: [

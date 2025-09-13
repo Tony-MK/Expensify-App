@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var shouldRenderTransferOwnerButton = function () { return true; };
+const shouldRenderTransferOwnerButton = () => true;
 exports.default = shouldRenderTransferOwnerButton;

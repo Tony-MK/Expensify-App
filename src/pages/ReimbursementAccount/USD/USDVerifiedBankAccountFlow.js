@@ -1,24 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_1 = require("react");
-var react_native_1 = require("react-native");
-var useOnyx_1 = require("@hooks/useOnyx");
-var useThemeStyles_1 = require("@hooks/useThemeStyles");
-var CONST_1 = require("@src/CONST");
-var ONYXKEYS_1 = require("@src/ONYXKEYS");
-var BankInfo_1 = require("./BankInfo/BankInfo");
-var BeneficialOwnersStep_1 = require("./BeneficialOwnerInfo/BeneficialOwnersStep");
-var BusinessInfo_1 = require("./BusinessInfo/BusinessInfo");
-var CompleteVerification_1 = require("./CompleteVerification/CompleteVerification");
-var ConnectBankAccount_1 = require("./ConnectBankAccount/ConnectBankAccount");
-var Country_1 = require("./Country");
-var RequestorStep_1 = require("./Requestor/RequestorStep");
-function USDVerifiedBankAccountFlow(_a) {
-    var _b;
-    var USDBankAccountStep = _a.USDBankAccountStep, _c = _a.policyID, policyID = _c === void 0 ? '' : _c, onBackButtonPress = _a.onBackButtonPress, requestorStepRef = _a.requestorStepRef, onfidoToken = _a.onfidoToken, setUSDBankAccountStep = _a.setUSDBankAccountStep, setShouldShowConnectedVerifiedBankAccount = _a.setShouldShowConnectedVerifiedBankAccount;
-    var styles = (0, useThemeStyles_1.default)();
-    var reimbursementAccount = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false })[0];
-    var CurrentStep;
+const react_1 = require("react");
+const react_native_1 = require("react-native");
+const useOnyx_1 = require("@hooks/useOnyx");
+const useThemeStyles_1 = require("@hooks/useThemeStyles");
+const CONST_1 = require("@src/CONST");
+const ONYXKEYS_1 = require("@src/ONYXKEYS");
+const BankInfo_1 = require("./BankInfo/BankInfo");
+const BeneficialOwnersStep_1 = require("./BeneficialOwnerInfo/BeneficialOwnersStep");
+const BusinessInfo_1 = require("./BusinessInfo/BusinessInfo");
+const CompleteVerification_1 = require("./CompleteVerification/CompleteVerification");
+const ConnectBankAccount_1 = require("./ConnectBankAccount/ConnectBankAccount");
+const Country_1 = require("./Country");
+const RequestorStep_1 = require("./Requestor/RequestorStep");
+function USDVerifiedBankAccountFlow({ USDBankAccountStep, policyID = '', onBackButtonPress, requestorStepRef, onfidoToken, setUSDBankAccountStep, setShouldShowConnectedVerifiedBankAccount, }) {
+    const styles = (0, useThemeStyles_1.default)();
+    const [reimbursementAccount] = (0, useOnyx_1.default)(ONYXKEYS_1.default.REIMBURSEMENT_ACCOUNT, { canBeMissing: false });
+    let CurrentStep;
     switch (USDBankAccountStep) {
         case CONST_1.default.BANK_ACCOUNT.STEP.COUNTRY:
             CurrentStep = (<Country_1.default onBackButtonPress={onBackButtonPress} policyID={policyID} setUSDBankAccountStep={setUSDBankAccountStep} stepNames={CONST_1.default.BANK_ACCOUNT.STEP_NAMES}/>);
@@ -27,7 +25,7 @@ function USDVerifiedBankAccountFlow(_a) {
             CurrentStep = (<BankInfo_1.default onBackButtonPress={onBackButtonPress} policyID={policyID} setUSDBankAccountStep={setUSDBankAccountStep}/>);
             break;
         case CONST_1.default.BANK_ACCOUNT.STEP.REQUESTOR:
-            CurrentStep = (<RequestorStep_1.default ref={requestorStepRef} shouldShowOnfido={!!(onfidoToken && !((_b = reimbursementAccount === null || reimbursementAccount === void 0 ? void 0 : reimbursementAccount.achData) === null || _b === void 0 ? void 0 : _b.isOnfidoSetupComplete))} onBackButtonPress={onBackButtonPress}/>);
+            CurrentStep = (<RequestorStep_1.default ref={requestorStepRef} shouldShowOnfido={!!(onfidoToken && !reimbursementAccount?.achData?.isOnfidoSetupComplete)} onBackButtonPress={onBackButtonPress}/>);
             break;
         case CONST_1.default.BANK_ACCOUNT.STEP.COMPANY:
             CurrentStep = <BusinessInfo_1.default onBackButtonPress={onBackButtonPress}/>;
