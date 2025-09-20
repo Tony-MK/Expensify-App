@@ -94,6 +94,7 @@ function AddPersonalBankAccountPage() {
                             buttonText={translate('common.continue')}
                             onButtonPress={() => exitFlow(true)}
                             containerStyle={styles.h100}
+                            footerStyle={styles.mh5}
                         />
                     </ScrollView>
                 ) : (
@@ -105,6 +106,7 @@ function AddPersonalBankAccountPage() {
                         onSubmit={submitBankAccountForm}
                         validate={validatePlaidSelection}
                         style={[styles.flex1]}
+                        submitButtonStyles={styles.mh5}
                         shouldHideFixErrorsAlert
                     >
                         <InputWrapper
