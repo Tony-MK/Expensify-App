@@ -127,6 +127,7 @@ import {
 } from './ReportUtils';
 import {getTaskReportActionMessage} from './TaskUtils';
 import {getTransactionID} from './TransactionUtils';
+import { SearchTransaction } from '@src/types/onyx/SearchResults';
 
 type WelcomeMessage = {phrase1?: string; messageText?: string; messageHtml?: string};
 
@@ -576,6 +577,7 @@ function shouldShowRedBrickRoad(
 function getOptionData({
     report,
     reportAttributes,
+    transactions,
     oneTransactionThreadReport,
     reportNameValuePairs,
     personalDetails,
@@ -592,6 +594,7 @@ function getOptionData({
     movedToReport,
 }: {
     report: OnyxEntry<Report>;
+    transactions: SearchTransaction[];
     oneTransactionThreadReport: OnyxEntry<Report>;
     reportNameValuePairs: OnyxEntry<ReportNameValuePairs>;
     personalDetails: OnyxEntry<PersonalDetailsList>;
@@ -912,7 +915,7 @@ function getOptionData({
         result.phoneNumber = personalDetail?.phoneNumber ?? '';
     }
 
-    const reportName = getReportName(report, policy, undefined, undefined, invoiceReceiverPolicy, undefined, undefined, isReportArchived);
+    const reportName = getReportName(report, policy, undefined, undefined, invoiceReceiverPolicy, undefined, transactions, isReportArchived);
 
     result.text = reportName;
     result.subtitle = subtitle;
