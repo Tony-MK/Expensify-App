@@ -47,6 +47,7 @@ import type {WaypointCollection} from '@src/types/onyx/Transaction';
 import type TransactionState from '@src/types/utils/TransactionStateType';
 import {getPolicyCategoriesData} from './Policy/Category';
 import {getPolicyTagsData} from './Policy/Tag';
+import { SearchTransaction } from '@src/types/onyx/SearchResults';
 
 let recentWaypoints: RecentWaypoint[] = [];
 Onyx.connect({
@@ -972,7 +973,7 @@ function changeTransactionsReport(
         let transactionThreadReportID = newIOUAction.childReportID;
         let transactionThreadCreatedReportActionID;
         if (!transactionThreadReportID) {
-            const optimisticTransactionThread = buildTransactionThread(newIOUAction, reportID === CONST.REPORT.UNREPORTED_REPORT_ID ? undefined : newReport);
+            const optimisticTransactionThread = buildTransactionThread(newIOUAction, reportID === CONST.REPORT.UNREPORTED_REPORT_ID ? undefined : newReport, undefined, undefined, transaction);
             const optimisticCreatedActionForTransactionThread = buildOptimisticCreatedReportAction(email ?? '');
             transactionThreadReportID = optimisticTransactionThread.reportID;
             transactionThreadCreatedReportActionID = optimisticCreatedActionForTransactionThread.reportActionID;

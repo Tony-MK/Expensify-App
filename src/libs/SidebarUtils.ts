@@ -13,6 +13,7 @@ import type Policy from '@src/types/onyx/Policy';
 import type PriorityMode from '@src/types/onyx/PriorityMode';
 import type Report from '@src/types/onyx/Report';
 import type ReportAction from '@src/types/onyx/ReportAction';
+import type {SearchTransaction} from '@src/types/onyx/SearchResults';
 import {hasValidDraftComment} from './DraftCommentUtils';
 import {translateLocal} from './Localize';
 import {getLastActorDisplayName, getLastMessageTextForReport, getPersonalDetailsForAccountIDs, shouldShowLastActorDisplayName} from './OptionsListUtils';
@@ -127,7 +128,6 @@ import {
 } from './ReportUtils';
 import {getTaskReportActionMessage} from './TaskUtils';
 import {getTransactionID} from './TransactionUtils';
-import { SearchTransaction } from '@src/types/onyx/SearchResults';
 
 type WelcomeMessage = {phrase1?: string; messageText?: string; messageHtml?: string};
 
@@ -915,7 +915,7 @@ function getOptionData({
         result.phoneNumber = personalDetail?.phoneNumber ?? '';
     }
 
-    const reportName = getReportName(report, policy, undefined, undefined, invoiceReceiverPolicy, undefined, transactions, isReportArchived);
+    const reportName = getReportName(report, policy, parentReportAction, undefined, invoiceReceiverPolicy, undefined, transactions, isReportArchived);
 
     result.text = reportName;
     result.subtitle = subtitle;

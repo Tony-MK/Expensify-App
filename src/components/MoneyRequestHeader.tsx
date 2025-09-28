@@ -352,6 +352,7 @@ function MoneyRequestHeader({report, parentReportAction, policy, onBackButtonPre
                 shouldShowBorderBottom={false}
                 shouldShowReportAvatarWithDisplay
                 shouldShowPinButton={false}
+                transaction={transaction}
                 report={
                     reportID
                         ? {

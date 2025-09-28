@@ -11091,7 +11091,7 @@ function putOnHold(transactionID: string, comment: string, initialReportID: stri
         transactionThreadReport = allReports?.[`${ONYXKEYS.COLLECTION.REPORT}${initialReportID}`] ?? ({} as OnyxTypes.Report);
     } else {
         const moneyRequestReport = getReportOrDraftReport(transaction?.reportID);
-        transactionThreadReport = buildTransactionThread(iouAction, moneyRequestReport, undefined, reportID);
+        transactionThreadReport = buildTransactionThread(iouAction, moneyRequestReport, undefined, reportID, transaction);
     }
 
     const optimisticCreatedAction = buildOptimisticCreatedReportAction(currentUserEmail);

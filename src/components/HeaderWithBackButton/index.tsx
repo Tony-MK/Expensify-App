@@ -24,6 +24,7 @@ import variables from '@styles/variables';
 import CONST from '@src/CONST';
 import ROUTES from '@src/ROUTES';
 import type HeaderWithBackButtonProps from './types';
+import { TransactionListItemType } from '@components/SelectionListWithSections/types';
 
 function HeaderWithBackButton({
     icon,
@@ -36,6 +37,7 @@ function HeaderWithBackButton({
     onDownloadButtonPress = () => {},
     onThreeDotsButtonPress = () => {},
     report,
+    transaction,
     policyAvatar,
     shouldShowReportAvatarWithDisplay = false,
     shouldDisplayStatus,
@@ -78,7 +80,6 @@ function HeaderWithBackButton({
     const StyleUtils = useStyleUtils();
     const [isDownloadButtonActive, temporarilyDisableDownloadButton] = useThrottledButtonState();
     const {translate} = useLocalize();
-
     const middleContent = useMemo(() => {
         if (progressBarPercentage) {
             return (
@@ -99,6 +100,7 @@ function HeaderWithBackButton({
             return (
                 <AvatarWithDisplayName
                     report={report}
+                    transactions={transaction ? [transaction] as TransactionListItemType[] : []}
                     shouldDisplayStatus={shouldDisplayStatus}
                     shouldEnableDetailPageNavigation={shouldEnableDetailPageNavigation}
                     openParentReportInCurrentTab={openParentReportInCurrentTab}

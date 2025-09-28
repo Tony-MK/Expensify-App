@@ -10,8 +10,8 @@ import {getMovedReportID} from '@src/libs/ModifiedExpenseMessage';
 import type {OptionData} from '@src/libs/ReportUtils';
 import ONYXKEYS from '@src/ONYXKEYS';
 import OptionRowLHN from './OptionRowLHN';
+import type {SearchTransaction} from '@src/types/onyx/SearchResults';
 import type {OptionRowLHNDataProps} from './types';
-import { SearchTransaction } from '@src/types/onyx/SearchResults';
 
 /*
  * This component gets the data from onyx for the actual
@@ -53,17 +53,14 @@ function OptionRowLHNData({
     // Check the report errors equality to avoid re-rendering when there are no changes
     const prevReportErrors = usePrevious(reportAttributes?.reportErrors);
     const areReportErrorsEqual = useMemo(() => deepEqual(prevReportErrors, reportAttributes?.reportErrors), [prevReportErrors, reportAttributes?.reportErrors]);
-    
+
     const card = useGetExpensifyCardFromReportAction({reportAction: lastAction, policyID: fullReport?.policyID});
 
     const optionItem = useMemo(() => {
         // Note: ideally we'd have this as a dependent selector in onyx!
         const item = SidebarUtils.getOptionData({
             report: fullReport,
-            transactions: [
-                transaction,
-                ...Object.values(receiptTransactions ?? {})
-            ].filter(Boolean) as SearchTransaction[],
+            transactions: [transaction, ...Object.values(receiptTransactions ?? {})].filter(Boolean) as SearchTransaction[],
             reportAttributes,
             oneTransactionThreadReport,
             reportNameValuePairs,
