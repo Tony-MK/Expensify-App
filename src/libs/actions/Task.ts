@@ -1083,7 +1083,7 @@ function getNavigationUrlOnTaskDelete(report: OnyxEntry<OnyxTypes.Report>): stri
 /**
  * Cancels a task by setting the report state to SUBMITTED and status to CLOSED
  */
-function deleteTask(report: OnyxEntry<OnyxTypes.Report>, isReportArchived: boolean, currentUserAccountID: number, ancestors: ReportUtils.Ancestor[] = []) {
+function deleteTask(report: OnyxEntry<OnyxTypes.Report>, isReportArchived: boolean, currentUserAccountID: number) {
     if (!report) {
         return;
     }
@@ -1148,12 +1148,6 @@ function deleteTask(report: OnyxEntry<OnyxTypes.Report>, isReportArchived: boole
             value: optimisticReportActions as OnyxTypes.ReportActions,
         },
     ];
-
-    // Update optimistic data for parent report action if the report is a child report and the task report has no visible child
-    const childVisibleActionCount = parentReportAction?.childVisibleActionCount ?? 0;
-    if (childVisibleActionCount === 0) {
-        optimisticData.push(...ReportUtils.getOptimisticDataForAncestors(ancestors, parentReport?.lastVisibleActionCreated ?? '', CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE));
-    }
 
     const successData: OnyxUpdate[] = [
         {
