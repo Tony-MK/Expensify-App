@@ -1004,15 +1004,19 @@ function setPolicyRequiresTag(policyData: PolicyData, requiresTag: boolean) {
         ],
     };
 
-    const getUpdatedTagsData = (required: boolean): PolicyTagLists => ({
-        ...Object.keys(policyData.tags).reduce<PolicyTagLists>((acc, key) => {
+    const getUpdatedTagsData = (required: boolean): PolicyTagLists =>
+        Object.keys(policyData.tags ?? {}).reduce<PolicyTagLists>((acc, key) => {
+            const tagList = policyData.tags?.[key];
+            if (!tagList) {
+                return acc;
+            }
+
             acc[key] = {
-                ...acc[key],
+                ...tagList,
                 required,
             };
             return acc;
-        }, {}),
-    });
+        }, {});
 
     const getUpdatedTagsOnyxData = (required: boolean): OnyxUpdate<typeof ONYXKEYS.COLLECTION.POLICY_TAGS> => ({
         key: `${ONYXKEYS.COLLECTION.POLICY_TAGS}${policyID}`,
