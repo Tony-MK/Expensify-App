@@ -95,6 +95,7 @@ function Confirmation() {
         };
     }, [reviewDuplicatesTaxCode, reviewDuplicatesTaxAmount, taxRates, duplicatedTransactionTaxCode]);
     const isReportOwner = iouReport?.ownerAccountID === currentUserPersonalDetails?.accountID;
+    const isApproverOnSubmittedReport = iouReport?.managerID === currentUserPersonalDetails?.accountID && ReportUtils.isProcessingReport(iouReport);
     const currentUserAccountID = currentUserPersonalDetails.accountID;
     const currentUserLogin = currentUserPersonalDetails?.login;
     const childReportID = reportAction?.childReportID;
@@ -197,7 +198,7 @@ function Confirmation() {
                             success
                             onPress={() => {
                                 isDismissingRef.current = true;
-                                if (!isReportOwner) {
+                                if (!isReportOwner && !isApproverOnSubmittedReport) {
                                     handleResolveDuplicates();
                                     return;
                                 }
