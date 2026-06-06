@@ -95,7 +95,8 @@ function Confirmation() {
         };
     }, [reviewDuplicatesTaxCode, reviewDuplicatesTaxAmount, taxRates, duplicatedTransactionTaxCode]);
     const isReportOwner = iouReport?.ownerAccountID === currentUserPersonalDetails?.accountID;
-    const isApproverOnSubmittedReport = iouReport?.managerID === currentUserPersonalDetails?.accountID && ReportUtils.isProcessingReport(iouReport);
+    const isReportSubmitted = Object.values(reportActions ?? {}).some((action) => action.actionName === CONST.REPORT.ACTIONS.TYPE.SUBMITTED);
+    const isApproverOnSubmittedReport = iouReport?.managerID === currentUserPersonalDetails?.accountID && isReportSubmitted;
     const currentUserAccountID = currentUserPersonalDetails.accountID;
     const currentUserLogin = currentUserPersonalDetails?.login;
     const childReportID = reportAction?.childReportID;
