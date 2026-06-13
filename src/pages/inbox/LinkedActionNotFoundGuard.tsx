@@ -11,7 +11,7 @@ import useThemeStyles from '@hooks/useThemeStyles';
 import getNonEmptyStringOnyxID from '@libs/getNonEmptyStringOnyxID';
 import Log from '@libs/Log';
 import Navigation from '@libs/Navigation/Navigation';
-import {isReportActionVisible, isWhisperAction} from '@libs/ReportActionsUtils';
+import {isMoneyRequestAction, isReportActionVisible, isWhisperAction} from '@libs/ReportActionsUtils';
 import {canUserPerformWriteAction} from '@libs/ReportUtils';
 import ONYXKEYS from '@src/ONYXKEYS';
 import ROUTES from '@src/ROUTES';
@@ -69,6 +69,17 @@ function LinkedActionNotFoundGate({reportActionIDFromRoute, children}: LinkedAct
     });
     const [visibleReportActionsData] = useOnyx(ONYXKEYS.DERIVED.VISIBLE_REPORT_ACTIONS);
 
+    // For one-transaction IOU/expense reports, the linked action may live in the
+    // transaction thread's Onyx collection rather than the parent's raw actions.
+    // Find the thread report ID by locating the IOU request action that has a child report.
+    const [transactionThreadReportID] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT_ACTIONS}${reportIDFromRoute}`, {
+        selector: (actions: OnyxEntry<ReportActions>): string | undefined =>
+            Object.values(actions ?? {}).find((action) => isMoneyRequestAction(action) && !!action?.childReportID)?.childReportID,
+    });
+    const [linkedActionInThread] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT_ACTIONS}${getNonEmptyStringOnyxID(transactionThreadReportID)}`, {
+        selector: (actions: OnyxEntry<ReportActions>) => getReportActionByIDSelector(actions, reportActionIDFromRoute),
+    });
+
     const isReportArchived = useReportIsArchived(reportIDFromRoute);
 
     // --- Linked action status ---
@@ -84,7 +95,7 @@ function LinkedActionNotFoundGate({reportActionIDFromRoute, children}: LinkedAct
     // Set during render (React-supported pattern for adjusting state based on props).
     // The key={reportActionIDFromRoute} on the gate ensures this resets on navigation to a different action.
     const [wasEverVisible, setWasEverVisible] = useState(false);
-    if (linkedAction && !isLinkedActionDeleted && !wasEverVisible) {
+    if ((linkedAction ?? linkedActionInThread) && !isLinkedActionDeleted && !wasEverVisible) {
         setWasEverVisible(true);
     }
 
@@ -108,7 +119,7 @@ function LinkedActionNotFoundGate({reportActionIDFromRoute, children}: LinkedAct
     // Note: the inaccessible whisper case is handled separately by the whisper effect.
 
     const shouldShowNotFoundLinkedAction =
-        !wasEverVisible && !isLinkedActionInaccessibleWhisper && (isLinkedActionDeleted || (hasSeenLoadingCycle && !isLoadingInitialReportActions && !linkedAction));
+        !wasEverVisible && !isLinkedActionInaccessibleWhisper && (isLinkedActionDeleted || (hasSeenLoadingCycle && !isLoadingInitialReportActions && !linkedAction && !linkedActionInThread));
 
     useEffect(() => {
         if (!shouldShowNotFoundLinkedAction) {

@@ -14,6 +14,7 @@ import useReportTransactionsCollection from '@hooks/useReportTransactionsCollect
 import useResponsiveLayout from '@hooks/useResponsiveLayout';
 import getNonEmptyStringOnyxID from '@libs/getNonEmptyStringOnyxID';
 import {getAllNonDeletedTransactions} from '@libs/MoneyRequestReportUtils';
+import Navigation from '@libs/Navigation/Navigation';
 import type {PlatformStackRouteProp} from '@libs/Navigation/PlatformStackNavigation/types';
 import {getFilteredReportActionsForReportView, getIOUActionForReportID, getOneTransactionThreadReportID, isCreatedAction} from '@libs/ReportActionsUtils';
 import {
@@ -40,6 +41,7 @@ import {
 } from '@userActions/Report';
 import CONST from '@src/CONST';
 import ONYXKEYS from '@src/ONYXKEYS';
+import ROUTES from '@src/ROUTES';
 import SCREENS from '@src/SCREENS';
 import type {Transaction} from '@src/types/onyx';
 
@@ -116,13 +118,27 @@ function ReportFetchHandler() {
 
     const isTransactionThreadView = isReportTransactionThread(report);
 
+    // When viewing the parent IOU combined view, the linked action may live in the transaction
+    // thread's Onyx collection rather than the parent's raw report actions.
+    const [transactionThreadActions] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT_ACTIONS}${getNonEmptyStringOnyxID(transactionThreadReportID)}`);
+
+    // When viewing a CHAT-type transaction thread directly, subscribe to the parent IOU report
+    // so we can determine whether this is a one-transaction context before redirecting.
+    const [parentIouReport] = useOnyx(`${ONYXKEYS.COLLECTION.REPORT}${getNonEmptyStringOnyxID(report?.parentReportID)}`);
+
     // Track whether the current route is an own workspace chat. See issue #84248.
     const isCurrentRouteOwnWorkspaceChatRef = useIsOwnWorkspaceChatRef(report, reportIDFromRoute);
 
     const indexOfLinkedMessage = reportActionIDFromRoute ? reportActions.findIndex((obj) => String(obj.reportActionID) === String(reportActionIDFromRoute)) : -1;
     const doesCreatedActionExists = !!reportActions?.findLast((action) => isCreatedAction(action));
-    const isLinkedMessageAvailable = indexOfLinkedMessage > -1;
-    const isLinkedMessagePageReady = isLinkedMessageAvailable && (reportActions.length - indexOfLinkedMessage >= CONST.REPORT.MIN_INITIAL_REPORT_ACTION_COUNT || doesCreatedActionExists);
+    // Also treat the linked action as available when it lives in the transaction thread's
+    // actions collection (cross-collection deep link into the parent IOU combined view).
+    const isLinkedMessageInThread = !!reportActionIDFromRoute && !!transactionThreadReportID && !!transactionThreadActions?.[reportActionIDFromRoute];
+    const isLinkedMessageAvailable = indexOfLinkedMessage > -1 || isLinkedMessageInThread;
+    // When the linked action is in the thread collection, the page is immediately ready —
+    // the combined view includes the thread's actions, so no additional page fetch is needed.
+    const isLinkedMessagePageReady =
+        isLinkedMessageInThread || (isLinkedMessageAvailable && (reportActions.length - indexOfLinkedMessage >= CONST.REPORT.MIN_INITIAL_REPORT_ACTION_COUNT || doesCreatedActionExists));
 
     const isInviteOnboardingComplete = introSelected?.isInviteOnboardingComplete ?? false;
     const isOnboardingCompleted = onboarding?.hasCompletedGuidedSetupFlow ?? false;
@@ -216,6 +232,16 @@ function ReportFetchHandler() {
         }
         navigation.setParams({reportActionID: ''});
     }, [transactionThreadReportID, route?.params?.reportActionID, linkedAction, reportID, navigation, report, childReport]);
+
+    // Redirect CHAT-type transaction thread URLs to the parent IOU report so the one-transaction
+    // combined view (which includes SUBMITTED and other parent actions) is used as the canonical URL.
+    // This covers existing links shared before the useOriginalReportID fix.
+    useEffect(() => {
+        if (!isTransactionThreadView || !report?.parentReportID || !isOneTransactionThread(report, parentIouReport, undefined)) {
+            return;
+        }
+        Navigation.navigate(ROUTES.REPORT_WITH_ID.getRoute(report.parentReportID, reportActionIDFromRoute));
+    }, [isTransactionThreadView, report?.parentReportID, reportActionIDFromRoute, parentIouReport, report]);
 
     useEffect(() => {
         if (!isAnonymousUser) {

@@ -63,10 +63,12 @@ function useOriginalReportID(reportID: string | undefined, reportAction: OnyxInp
 
     // If we have a uniqueTransactionThreadReportID, then we are viewing an expense report with a single transaction and merging reportActions
     // In that case, we need to check if the reportActionID belongs to the transaction thread.
+    // We return reportID (the parent IOU) instead of uniqueTransactionThreadReportID so that
+    // copy-links always point to the canonical parent combined view, not the CHAT-type thread.
     if (uniqueTransactionThreadReportID && reportActionID) {
         const uniqueTransactionThreadReportAction = uniqueTransactionThreadReportActions?.[reportActionID];
         if (Object.keys(uniqueTransactionThreadReportAction ?? {}).length > 0) {
-            return uniqueTransactionThreadReportID;
+            return reportID;
         }
     }
 
