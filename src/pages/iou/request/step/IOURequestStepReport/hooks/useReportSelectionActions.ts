@@ -174,6 +174,46 @@ function useReportSelectionActions({
             return;
         }
 
+        // When editing an expense and the user just created a brand-new workspace report,
+        // navigate forward to the new report rather than dismissing back to the old
+        // transaction thread. handleGoBack() would reveal the thread during the ~300ms
+        // Android dismiss animation, exactly when changeTransactionsReport is about to
+        // blank its parent IOU action — causing the "Hmm it's not here" flash. By
+        // navigating to the new report the user never observes the orphaned thread state.
+        // Writes stay deferred inside runAfterInteractions so animation smoothness is preserved.
+        if (isEditing && report?.pendingFields?.createReport === CONST.RED_BRICK_ROAD_PENDING_ACTION.ADD) {
+            Navigation.navigate(ROUTES.REPORT_WITH_ID.getRoute(item.value));
+            InteractionManager.runAfterInteractions(() => {
+                Navigation.setNavigationActionToMicrotaskQueue(() => {
+                    const participants = buildParticipants(report);
+                    setTransactionReport(
+                        transaction.transactionID,
+                        {
+                            reportID: item.value,
+                            participants,
+                        },
+                        false,
+                    );
+                    const policyTagList = item?.policyID ? allPolicyTags?.[`${ONYXKEYS.COLLECTION.POLICY_TAGS}${item.policyID}`] : {};
+                    changeTransactionsReport({
+                        transactionIDs: [transaction.transactionID],
+                        isASAPSubmitBetaEnabled,
+                        accountID: session?.accountID ?? CONST.DEFAULT_NUMBER_ID,
+                        email: session?.email ?? '',
+                        newReport: report,
+                        policy: allPolicies?.[`${ONYXKEYS.COLLECTION.POLICY}${item.policyID}`],
+                        reportNextStep: undefined,
+                        policyCategories: allPolicyCategories?.[`${ONYXKEYS.COLLECTION.POLICY_CATEGORIES}${item.policyID}`],
+                        allTransactions,
+                        policyTagList,
+                        allTransactionViolation: transactionViolations,
+                    });
+                    removeTransaction(transaction.transactionID);
+                });
+            });
+            return;
+        }
+
         handleGoBack();
         InteractionManager.runAfterInteractions(() => {
             Navigation.setNavigationActionToMicrotaskQueue(() => {
